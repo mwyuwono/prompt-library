@@ -354,6 +354,197 @@ All options work identically (static files only).
 - JSON file loaded via fetch (requires http:// or https://)
 - For local testing, use `python -m http.server` or similar
 
+## Managing Prompts
+
+### Adding a New Prompt
+
+To add a new prompt, edit `prompts.json` and append a new object to the array:
+
+```json
+{
+  "id": "unique-identifier",
+  "title": "Prompt Display Name",
+  "description": "Brief description of what this prompt does",
+  "category": "Category Name",
+  "template": "Your prompt template with {{variable}} placeholders",
+  "variables": [
+    {
+      "name": "variable",
+      "label": "Variable Display Label",
+      "placeholder": "Example value for guidance",
+      "value": ""
+    }
+  ],
+  "locked": true
+}
+```
+
+**Important fields:**
+- `id`: Must be unique across all prompts (use kebab-case)
+- `title`: Shown as the card heading
+- `description`: Brief explanation of the prompt's purpose
+- `category`: Used for filtering (creates filter chips automatically)
+- `template`: The prompt text with `{{variableName}}` placeholders
+- `variables[].name`: Must match the placeholder name in template (without `{{}}`)
+- `variables[].value`: Always set to `""` for new prompts
+- `locked`: Always set to `true` for new prompts
+
+**Example - Adding a "Meeting Notes" prompt:**
+
+```json
+{
+  "id": "meeting-notes",
+  "title": "Meeting Notes Generator",
+  "description": "Create structured meeting notes with action items",
+  "category": "Business",
+  "template": "Create comprehensive meeting notes for: {{meeting_title}}\n\nAttendees: {{attendees}}\nDate: {{date}}\n\nKey discussion points:\n{{discussion_points}}\n\nDecisions made:\n{{decisions}}\n\nAction items:\n{{action_items}}\n\nNext steps:\n{{next_steps}}",
+  "variables": [
+    {
+      "name": "meeting_title",
+      "label": "Meeting Title",
+      "placeholder": "e.g., Q4 Planning Session",
+      "value": ""
+    },
+    {
+      "name": "attendees",
+      "label": "Attendees",
+      "placeholder": "List of meeting participants",
+      "value": ""
+    },
+    {
+      "name": "date",
+      "label": "Date",
+      "placeholder": "e.g., January 15, 2025",
+      "value": ""
+    },
+    {
+      "name": "discussion_points",
+      "label": "Discussion Points",
+      "placeholder": "Main topics discussed",
+      "value": ""
+    },
+    {
+      "name": "decisions",
+      "label": "Decisions Made",
+      "placeholder": "Key decisions from the meeting",
+      "value": ""
+    },
+    {
+      "name": "action_items",
+      "label": "Action Items",
+      "placeholder": "Tasks and owners",
+      "value": ""
+    },
+    {
+      "name": "next_steps",
+      "label": "Next Steps",
+      "placeholder": "What happens next",
+      "value": ""
+    }
+  ],
+  "locked": true
+}
+```
+
+### Editing an Existing Prompt
+
+1. Locate the prompt object by its `id` in `prompts.json`
+2. Modify the desired fields:
+   - Update `title` or `description` to change display text
+   - Edit `template` to change the prompt text
+   - Add/remove/edit variables as needed
+3. **Important**: If you rename a variable's `name`, update all `{{variableName}}` references in the template
+
+**Example - Adding a new variable to an existing prompt:**
+
+```json
+{
+  "id": "email-writer",
+  "template": "Write a professional email about {{topic}}.\n\nTone: {{tone}}\nRecipient: {{recipient}}\nDeadline: {{deadline}}\n\n...",
+  "variables": [
+    // ... existing variables ...
+    {
+      "name": "deadline",
+      "label": "Deadline (if any)",
+      "placeholder": "e.g., End of week",
+      "value": ""
+    }
+  ]
+}
+```
+
+### Removing a Prompt
+
+1. Locate the prompt object in `prompts.json`
+2. Delete the entire object including the surrounding curly braces `{ }`
+3. **Important**: Ensure the JSON remains valid:
+   - Remove the trailing comma if it's the last item in the array
+   - Keep commas between remaining objects
+
+**Before:**
+```json
+[
+  { "id": "prompt-1", ... },
+  { "id": "prompt-to-remove", ... },
+  { "id": "prompt-3", ... }
+]
+```
+
+**After:**
+```json
+[
+  { "id": "prompt-1", ... },
+  { "id": "prompt-3", ... }
+]
+```
+
+### Best Practices
+
+1. **Validate JSON**: Use a JSON validator or tool like Claude Code to ensure syntax is correct
+2. **Test locally**: Run the app locally after changes to verify everything works
+3. **Backup**: Keep a copy of `prompts.json` before major changes
+4. **Consistent categories**: Use existing category names to avoid fragmenting the filter chips
+5. **Clear variable names**: Use descriptive `name` values that match the template context
+6. **Helpful placeholders**: Provide concrete examples in placeholder text
+
+### Common Mistakes to Avoid
+
+❌ **Mismatched variable names**
+```json
+"template": "Write about {{topic}}",
+"variables": [{ "name": "subject", ... }]  // Wrong: 'subject' ≠ 'topic'
+```
+
+✅ **Correct**
+```json
+"template": "Write about {{topic}}",
+"variables": [{ "name": "topic", ... }]  // Correct: names match
+```
+
+❌ **Invalid JSON (trailing comma)**
+```json
+[
+  { "id": "prompt-1", ... },
+  { "id": "prompt-2", ... },  // ← Remove this comma if it's the last item
+]
+```
+
+✅ **Valid JSON**
+```json
+[
+  { "id": "prompt-1", ... },
+  { "id": "prompt-2", ... }  // ← No comma on last item
+]
+```
+
+❌ **Duplicate IDs**
+```json
+[
+  { "id": "email-writer", ... },
+  { "id": "email-writer", ... }  // ← Duplicate ID will cause issues
+]
+```
+
 ## Future Extensibility
 
 The architecture should support future additions:
