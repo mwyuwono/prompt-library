@@ -64,12 +64,21 @@ button.addEventListener('click', (e) => {
 });
 ```
 
-**Card Re-rendering**: State changes trigger full card re-render via `replaceWith()`
+**Card & Modal Sync**: State changes update the summary card and any open modal in one pass
 ```javascript
-toggleLock(index) {
-    prompt.locked = !prompt.locked;
-    const newCard = this.createPromptCard(prompt, index);
-    card.replaceWith(newCard);
+refreshPromptViews(index) {
+    if (index !== null && index !== undefined) {
+        this.updatePromptCard(index);
+    }
+
+    if (this.activePromptId && this.promptModal?.classList.contains('show')) {
+        const modalIndex = this.filteredPrompts.findIndex(p => p.id === this.activePromptId);
+        if (modalIndex === -1) {
+            this.closePromptModal();
+            return;
+        }
+        this.renderPromptModalContent(this.filteredPrompts[modalIndex], modalIndex);
+    }
 }
 ```
 
@@ -104,7 +113,9 @@ The actual implementation uses this structure (differs from requirements doc):
                 "name": "variable",      // Used in {{variable}} syntax
                 "label": "Display Label",
                 "placeholder": "Example value",
-                "value": ""              // Runtime state
+                "value": "",
+                "inputType": "textarea",
+                "rows": 8
             }
         ],
         "locked": true  // Runtime state
@@ -114,15 +125,39 @@ The actual implementation uses this structure (differs from requirements doc):
 
 **Important**: JSON structure is a flat array, not wrapped in `{"prompts": [...]}`.
 
+`inputType` and `rows` are optional runtime hints; when omitted, the app infers when to render a textarea for long-form input and picks a sensible default height.
+
 ## UI Components
+
+### Global UI Patterns
+
+- Header uses a three-column grid: title anchored left, logo centered, and nav actions (AI Tools + hamburger) aligned right
+- Buttons share a `.btn` base (uppercase, pill-shaped) with `.btn-primary` (purple fill) and `.btn-secondary` (neutral surface) variants reused across the app; `.btn-sm` is available for compact contexts (e.g., modal header controls)
+- The global search control mirrors the same pill silhouette to keep top-level inputs cohesive
+
+### Prompt Summary Cards
+
+- Display title, category chip, short description, and a variable count badge
+- Entire card is keyboard-focusable and opens the modal on click/Enter/Space
+- Material Symbols supply iconography where needed (e.g., buttons inside cards and modals)
+
+### Prompt Detail Modal
+
+- Opens as an overlay when a summary card is activated (mirrors the AI tools modal pattern)
+- Header shows the prompt title and category
+- Toolbar surfaces an `Edit prompt` call-to-action button (with lock icons) that toggles edit mode
+- Modal body height animates between state changes (e.g., switching tabs) to soften large content shifts
+- Modal remains open while state changes propagate back to the underlying summary card via `refreshPromptViews()`
+- Only the scroll area containing prompt variables/template scrolls; the header, description, and action buttons remain fixed for consistent access
+- Template editor textarea is capped at viewport height and scrollable so the modal chrome stays fixed
 
 ### Tab Interface (Locked State)
 
-When a prompt card is locked (default), it shows:
-- **Variables tab** (default) - Input fields for all variables
-- **Preview tab** - Compiled prompt with variables substituted
+When the prompt remains locked inside the modal:
+- **Variables tab** (default) – Input fields for variable substitution
+- **Preview tab** – Compiled prompt rendered with current variable values
 
-Preview updates in real-time as variables are typed.
+Preview updates in real time as variables change.
 
 ### Filter Chips
 
@@ -131,10 +166,10 @@ Categories are displayed as clickable chips above the grid:
 - Clicking a category filters the grid
 - Active chip highlighted in purple
 
-### Card States
+### Modal States
 
-- **Locked** (default): Shows tabs (Variables/Preview), lock icon 🔒, "Copy to Clipboard" button
-- **Unlocked**: Shows editable textarea, unlock icon 🔓, "Save Changes" button
+- **Locked** (default): Shows Variables/Preview tabs, "Copy to Clipboard" + "Download" buttons, and the `Edit prompt` CTA that unlocks the template
+- **Editable**: Displays a full-width textarea for direct template edits, lock icon on the CTA switches to open state, and actions collapse to a "Save Changes" button
 
 ## Implementation Notes
 
@@ -145,6 +180,20 @@ Edit `prompts.json` - no code changes needed. Ensure:
 - Valid `category` (will auto-populate in filter chips)
 - Variables use `{{name}}` syntax matching variable objects
 - Variable `name` field matches placeholder text in template
+
+### Category Conventions
+
+- Current taxonomy is consolidated to `Productivity`, `Expertise`, and `Travel & Shopping`
+- Reuse existing labels when introducing new prompts to keep chip filters consistent
+
+### Variable Input Heuristics
+
+- Long-form variables (labels/placeholders mentioning "text", "notes", "email", etc.) automatically render as multi-line textareas
+- These textarea inputs auto-resize up to a 50vh cap and persist values via the same localStorage mechanism as single-line fields
+
+### Feedback
+
+- Toast notifications sit above modals (`z-index` > overlay) so confirmations like “Copied!” remain visible
 
 ### Clipboard API
 
@@ -211,7 +260,7 @@ The implementation differs from `prompt-library-requirements.md` in these ways:
 1. **Architecture**: Single class in `app.js` instead of separate component modules
 2. **JSON structure**: Flat array instead of wrapped object
 3. **Data attributes**: Uses `name` instead of `key` for variables
-4. **UI additions**: Tab interface and category chips not in original spec
+4. **UI workflow**: Uses summary cards + modal overlay rather than inline expansion described in the original spec
 5. **State properties**: Uses `locked` and `activeTab` on prompt objects directly
 
 When making changes, follow the actual implementation patterns rather than the requirements document.

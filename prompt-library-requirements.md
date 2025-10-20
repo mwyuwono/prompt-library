@@ -55,6 +55,8 @@ Application maintains three state objects (session-only):
 }
 ```
 
+`inputType` and `rows` are optional helpers; when omitted, the app infers long-form fields from the label/placeholder and defaults to single-line text inputs.
+
 ## Technical Architecture
 
 ### File Structure
@@ -95,7 +97,9 @@ Application maintains three state objects (session-only):
         {
           "key": "variable",
           "label": "Variable Label",
-          "placeholder": "Example value"
+          "placeholder": "Example value",
+          "inputType": "textarea",
+          "rows": 8
         }
       ]
     }
@@ -114,14 +118,12 @@ Application maintains three state objects (session-only):
 **Returns**: HTML string
 
 **Responsibilities**:
-- Render prompt title and description
-- Generate input fields for each variable
-- Display template in locked or unlocked state
-- Render action buttons based on state
+- Render prompt summary (title, category chip, short description)
+- Display a variable count badge using Material Symbols styling
+- Provide data attributes / hooks so `app.js` can open the detail modal on click or keyboard activation
 
 **States**:
-- **Locked** (default): Variables visible, template hidden, "Copy" + "Unlock" buttons
-- **Unlocked**: Variables hidden, editable template visible, "Save Changes" button
+- Summary card always displays the same layout; editing happens inside the modal, not inline on the card
 
 #### templateParser.js
 
@@ -141,6 +143,18 @@ Application maintains three state objects (session-only):
 - Empty variable values → Replace with empty string
 - Multiple instances of same variable → Replace all
 
+#### promptModal (managed by app.js)
+
+**Purpose**: Display full prompt details inside an overlay
+
+**Responsibilities**:
+- Mirror the AI tools modal pattern with title, category, and close affordances
+- Surface an `Edit prompt` CTA (toggles the prompt into edit mode)
+- Render locked view (Variables + Preview tabs) or unlocked view (textarea editor)
+- Forward actions (copy, download, save) back through `app.js`
+- Animate body height between state changes to avoid abrupt jumps
+- Present long-form variable fields (detected heuristically) as multi-line textareas
+
 #### app.js
 
 **Purpose**: Application orchestration
@@ -149,54 +163,70 @@ Application maintains three state objects (session-only):
 1. Fetch prompts.json on page load
 2. Initialize state object
 3. Render all prompt cards
-4. Set up event delegation on container
-5. Handle user interactions:
+4. Manage prompt detail modal lifecycle (open, close, sync state)
+5. Set up event delegation on container
+6. Handle user interactions:
    - Variable input changes
    - Copy to clipboard
    - Unlock/lock toggle
    - Template editing
    - Save changes
+7. Infer variable display types (text vs. textarea) based on labels/placeholders and persist values
 
 **Event Handling Pattern**:
-Use event delegation on `#prompts-container` with data attributes:
-- `data-action="copy"` → Copy handler
-- `data-action="unlock"` → Unlock handler
-- `data-action="save"` → Save handler
-- `data-id="promptId"` → Identify target prompt
+Use event delegation on the modal/card containers with data attributes:
+- `data-action="toggle-lock"` → Toggle edit mode (Edit prompt / Lock prompt)
+- `data-action="copy"` → Copy compiled prompt
+- `data-action="download"` → Download compiled prompt as `.txt`
+- `data-action="save"` → Save template changes
+- `data-action="switch-tab"` → Swap between Variables and Preview
+- `data-action="clear-variables"` → Reset variable inputs
 
 ## User Interface Requirements
 
 ### Layout
 
-- Single-column layout for prompt cards
-- Maximum width: 800px, centered
-- Responsive: Stack elements vertically on mobile
+- Responsive grid of summary cards (auto-fill, minimum width ≈ 350px)
+- Scrollable prompt area with persistent controls (search + category chips) pinned above
+- Modal overlays the page content while open, matching the existing AI tools modal treatment
+- Header aligns the title on the left, centers the logo, and places nav actions (AI tools / hamburger) on the right within a single horizontal row
 
 ### Prompt Card Design
 
 **Elements** (in order):
-1. **Header**: Title + description
-2. **Variables Section**: Input fields (visible in locked state)
-3. **Template Section**: Editable textarea (visible in unlocked state)
-4. **Actions**: Button row (changes based on state)
+1. **Header**: Title and category chip
+2. **Description**: Short blurb
+3. **Meta Row**: Variable count badge
 
-**Visual States**:
-- Default: Subtle border, white background
-- Unlocked: Highlighted border (e.g., blue accent)
-- Focus: Clear focus indicators for accessibility
+**Interaction**:
+- Entire card is keyboard-focusable (`tabindex="0"`) and opens the modal on click, Enter, or Space
+
+### Prompt Detail Modal
+
+- Reuses category badge + title and surfaces an `Edit prompt` CTA to unlock
+- Locked view: Variables/Preview tabs with inline "Clear All"
+- Editable view: Auto-resizing textarea, `Save Changes` button, and lock icon swaps to open state
+- Actions include `Copy to Clipboard` and `Download` while locked
+- Template editor textarea is capped (~60vh) and scrollable so long prompts don't force the modal to scroll
+- Modal body height eases between tab/content changes to avoid jarring jumps
+- Header description and action buttons remain fixed; only the prompt content area scrolls so controls stay accessible
 
 ### Interactions
 
-- **Copy Success**: Brief toast/message ("Copied!")
-- **Button States**: Clear hover/active states
-- **Textarea**: Auto-resize to content height when unlocked
+- **Open Modal**: Activate any card (mouse or keyboard)
+- **Enter Edit Mode**: Click the `Edit prompt` CTA (updates to `Lock prompt` when already editing)
+- **Copy Success**: Toast notification ("Copied!")
+- **Keyboard Support**: Esc closes the modal; Ctrl/Cmd+K focuses search; Ctrl/Cmd+/ opens shortcut help
 
 ### Styling Guidelines
 
-- Clean, minimal aesthetic
-- Adequate whitespace between cards
-- Clear visual hierarchy (title > description > inputs)
-- Accessible: WCAG AA contrast ratios, keyboard navigation
+- Clean, minimal aesthetic with generous spacing and subtle shadows
+- Consistent use of Google Material Symbols for all icons
+- Clear focus indicators on interactive elements (cards, buttons, tabs)
+- Accessible: WCAG AA contrast ratios, keyboard navigation, semantic announcements
+- Toast notifications must appear above all modals (`z-index` higher than overlay)
+- Buttons share a unified pill treatment (`.btn` base) with two variants: `.btn-primary` (purple fill) and `.btn-secondary` (neutral surface); `.btn-sm` exists for compact contexts (e.g., modal header) and the search field mirrors this pill silhouette for cohesion
+- Category taxonomy is consolidated to `Productivity`, `Expertise`, and `Travel & Shopping`; reuse these labels when adding prompts
 
 ## Example Prompts
 

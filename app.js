@@ -15,6 +15,14 @@ class PromptLibrary {
         this.categoryChips = document.getElementById('categoryChips');
         this.emptyState = document.getElementById('emptyState');
         this.toast = document.getElementById('toast');
+        this.promptModal = null;
+        this.promptModalBody = null;
+        this.promptModalTitle = null;
+        this.promptModalCategory = null;
+        this.promptModalLockButton = null;
+        this.activePromptIndex = null;
+        this.activePromptId = null;
+        this.modalBodyAnimationCleanup = null;
 
         this.init();
     }
@@ -24,6 +32,7 @@ class PromptLibrary {
      */
     async init() {
         await this.loadPrompts();
+        this.createPromptModal();
         this.setupEventListeners();
         this.setupKeyboardShortcuts();
         this.populateCategoryFilter();
@@ -41,6 +50,7 @@ class PromptLibrary {
             // Load saved variable values and metadata from localStorage
             this.prompts.forEach(prompt => {
                 if (prompt.variables) {
+                    this.applyVariableDisplayHints(prompt);
                     this.loadVariableValues(prompt.id, prompt.variables);
                 }
                 // Load metadata (usage count, favorites, last used)
@@ -81,12 +91,13 @@ class PromptLibrary {
         }
 
         document.addEventListener('keydown', (e) => {
-            // Escape - Collapse currently expanded card
+            // Escape - Close prompt modal or shortcuts modal
             if (e.key === 'Escape') {
-                const expandedIndex = this.filteredPrompts.findIndex(p => p.expanded);
-                if (expandedIndex !== -1) {
-                    this.toggleExpand(expandedIndex);
+                if (this.promptModal && this.promptModal.classList.contains('show')) {
+                    this.closePromptModal();
+                    return;
                 }
+                this.hideShortcutsModal();
             }
 
             // Cmd/Ctrl + K - Focus search input
@@ -186,9 +197,11 @@ class PromptLibrary {
         // Show/hide empty state
         if (this.filteredPrompts.length === 0) {
             this.emptyState.style.display = 'block';
+            this.promptGrid.style.display = 'none';
             return;
         } else {
             this.emptyState.style.display = 'none';
+            this.promptGrid.style.display = 'grid';
         }
 
         // Render each prompt card
@@ -205,56 +218,56 @@ class PromptLibrary {
         const card = document.createElement('div');
         card.className = 'prompt-card';
         card.dataset.index = index;
-        card.dataset.locked = prompt.locked !== false; // Default to locked
-        card.dataset.expanded = prompt.expanded || false; // Default to collapsed
+        card.dataset.locked = prompt.locked !== false;
+        card.setAttribute('role', 'button');
+        card.setAttribute('aria-label', `Open prompt ${prompt.title}`);
+        card.tabIndex = 0;
 
-        card.innerHTML = this.getCardHTML(prompt, index);
+        card.innerHTML = this.getCardSummaryHTML(prompt);
 
         // Attach event listeners
-        this.attachCardEventListeners(card, prompt, index);
+        this.attachCardEventListeners(card, index);
 
         return card;
     }
 
     /**
-     * Get HTML for a prompt card
+     * Get HTML for a prompt summary card
      */
-    getCardHTML(prompt, index) {
-        const isLocked = prompt.locked !== false;
-        const isExpanded = prompt.expanded || false;
+    getCardSummaryHTML(prompt) {
         const variableCount = prompt.variables?.length || 0;
-
         return `
-            <div class="card-header" data-action="toggle-expand">
-                <div class="card-title-wrapper" data-action="toggle-expand">
+            <div class="card-header">
+                <div class="card-title-wrapper">
                     <h3 class="card-title">${this.highlightText(prompt.title, this.searchTerm)}</h3>
                     <span class="card-category">${this.highlightText(prompt.category, this.searchTerm)}</span>
-                    ${!isExpanded && variableCount > 0 ?
-                        `<span class="variable-count-badge">${variableCount} variable${variableCount > 1 ? 's' : ''}</span>`
-                        : ''}
-                </div>
-                <div class="card-header-actions" data-action="toggle-expand">
-                    ${isExpanded ? `
-                        <button class="lock-button" data-action="toggle-lock" onclick="event.stopPropagation()">
-                            <span class="material-symbols-outlined">${isLocked ? 'lock' : 'lock_open'}</span>
-                        </button>
-                    ` : ''}
-                    <span class="expand-button" data-action="toggle-expand">
-                        <span class="material-symbols-outlined">${isExpanded ? 'expand_less' : 'expand_more'}</span>
-                    </span>
                 </div>
             </div>
-            <p class="card-description" data-action="toggle-expand">${this.highlightText(prompt.description, this.searchTerm)}</p>
+            <p class="card-description">${this.highlightText(prompt.description, this.searchTerm)}</p>
+            <div class="card-meta">
+                ${variableCount > 0 ?
+                    `<span class="variable-count-badge">${variableCount} variable${variableCount > 1 ? 's' : ''}</span>` :
+                    `<span class="variable-count-badge">No variables</span>`
+                }
+            </div>
+        `;
+    }
 
-            <div class="card-content ${isExpanded ? 'expanded' : 'collapsed'}">
-                ${isLocked ? this.getLockedViewHTML(prompt, index) : this.getEditorHTML(prompt)}
+    /**
+     * Get HTML for modal prompt content
+     */
+    getPromptDetailHTML(prompt, index) {
+        const isLocked = prompt.locked !== false;
 
-                <div class="card-actions">
-                    ${isLocked ?
-                        `<button class="btn btn-primary" data-action="copy">Copy to Clipboard</button>
-                         <button class="btn btn-secondary" data-action="download">Download</button>` :
-                        `<button class="btn btn-secondary" data-action="save">Save Changes</button>`
-                    }
+        return `
+            <p class="prompt-modal-description">${this.escapeHTML(prompt.description)}</p>
+            <div class="modal-body-content">
+                <div class="modal-scroll-area">
+                    ${isLocked ? this.getLockedViewHTML(prompt, index) : this.getEditorHTML(prompt)}
+                </div>
+                <div class="modal-actions card-actions">
+                    <button class="btn btn-primary" data-action="copy">Copy to Clipboard</button>
+                    <button class="btn btn-secondary" data-action="download">Download</button>
                 </div>
             </div>
         `;
@@ -331,17 +344,36 @@ class PromptLibrary {
                 ${prompt.variables.map(variable => `
                     <div class="variable-group">
                         <label class="variable-label">${this.escapeHTML(variable.label)}</label>
-                        <input
-                            type="text"
-                            class="variable-input ${variable.value ? 'has-value' : ''}"
-                            data-variable="${this.escapeHTML(variable.name)}"
-                            placeholder="${this.escapeHTML(variable.placeholder || '')}"
-                            value="${this.escapeHTML(variable.value || '')}"
-                        >
+                        ${this.getVariableInputHTML(variable)}
                     </div>
                 `).join('')}
             </div>
         `;
+    }
+
+    /**
+     * Render variable input element based on configuration
+     */
+    getVariableInputHTML(variable) {
+        const inputType = variable.inputType || 'text';
+        const baseClasses = ['variable-input'];
+        if (inputType === 'textarea') {
+            baseClasses.push('variable-textarea');
+        }
+        if (variable.value) {
+            baseClasses.push('has-value');
+        }
+
+        const className = baseClasses.join(' ');
+        const dataAttr = `data-variable="${this.escapeHTML(variable.name)}"`;
+        const placeholder = this.escapeHTML(variable.placeholder || '');
+
+        if (inputType === 'textarea') {
+            const value = this.escapeHTML(variable.value || '');
+            return `<textarea class="${className}" ${dataAttr} placeholder="${placeholder}" rows="${variable.rows || 6}">${value}</textarea>`;
+        }
+
+        return `<input type="text" class="${className}" ${dataAttr} placeholder="${placeholder}" value="${this.escapeHTML(variable.value || '')}">`;
     }
 
     /**
@@ -361,113 +393,419 @@ class PromptLibrary {
     /**
      * Attach event listeners to card elements
      */
-    attachCardEventListeners(card, prompt, index) {
-        // Expand/collapse toggle - multiple elements can trigger it
-        const expandElements = card.querySelectorAll('[data-action="toggle-expand"]');
-        expandElements.forEach(element => {
-            element.addEventListener('click', (e) => {
-                // Don't expand if clicking on lock button
-                if (e.target.dataset.action === 'toggle-lock') return;
-                this.toggleExpand(index);
-            });
+    attachCardEventListeners(card, index) {
+        const openPrompt = () => this.openPromptModal(index);
+
+        card.addEventListener('click', (event) => {
+            event.preventDefault();
+            openPrompt();
         });
 
-        // Lock/unlock toggle
-        const lockButton = card.querySelector('[data-action="toggle-lock"]');
-        if (lockButton) {
-            lockButton.addEventListener('click', () => this.toggleLock(index));
+        card.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                openPrompt();
+            }
+        });
+    }
+
+    /**
+     * Create modal container for prompt details
+     */
+    createPromptModal() {
+        if (this.promptModal) return;
+
+        this.promptModal = document.createElement('div');
+        this.promptModal.id = 'promptModal';
+        this.promptModal.className = 'modal prompt-modal';
+        this.promptModal.innerHTML = `
+            <div class="modal-overlay" data-action="close-prompt"></div>
+            <div class="modal-content prompt-modal-content">
+                <div class="modal-header">
+                    <div class="modal-header-text">
+                        <h2 id="promptModalTitle"></h2>
+                        <div class="modal-subtitle">
+                            <span class="card-category" id="promptModalCategory"></span>
+                        </div>
+                    </div>
+                    <div class="modal-header-actions">
+                        <button class="btn btn-primary btn-sm lock-button" id="promptModalLockButton" data-action="toggle-lock">
+                            <span class="material-symbols-outlined">mode_edit</span>
+                            Edit Prompt
+                        </button>
+                        <button class="modal-close" data-action="close-prompt" aria-label="Close prompt dialog">&times;</button>
+                    </div>
+                </div>
+                <div class="modal-body"></div>
+            </div>
+        `;
+
+        document.body.appendChild(this.promptModal);
+        this.promptModalBody = this.promptModal.querySelector('.modal-body');
+        this.promptModalTitle = this.promptModal.querySelector('#promptModalTitle');
+        this.promptModalCategory = this.promptModal.querySelector('#promptModalCategory');
+        this.promptModalLockButton = this.promptModal.querySelector('#promptModalLockButton');
+
+        this.promptModal.querySelectorAll('[data-action="close-prompt"]').forEach(element => {
+            element.addEventListener('click', () => this.closePromptModal());
+        });
+
+        if (this.promptModalLockButton) {
+            this.promptModalLockButton.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                this.handleLockButtonClick();
+            });
+        }
+    }
+
+    /**
+     * Open prompt modal with selected prompt details
+     */
+    openPromptModal(index) {
+        const prompt = this.filteredPrompts[index];
+        if (!prompt) return;
+
+        if (!this.promptModal) {
+            this.createPromptModal();
         }
 
-        // Copy button
-        const copyButton = card.querySelector('[data-action="copy"]');
+        this.activePromptIndex = index;
+        this.activePromptId = prompt.id;
+
+        if (this.promptModalTitle) {
+            this.promptModalTitle.textContent = prompt.title;
+        }
+        if (this.promptModalCategory) {
+            this.promptModalCategory.textContent = prompt.category;
+        }
+
+        this.updateLockButton(prompt);
+
+        this.renderPromptModalContent(prompt, index);
+
+        this.promptModal.classList.add('show');
+        document.body.classList.add('modal-open');
+    }
+
+    /**
+     * Close prompt modal and reset active prompt
+     */
+    closePromptModal() {
+        if (!this.promptModal) return;
+
+        this.promptModal.classList.remove('show');
+        document.body.classList.remove('modal-open');
+        this.activePromptIndex = null;
+        this.activePromptId = null;
+        this.cancelModalBodyAnimation();
+        this.resetModalBodyAnimation(this.promptModalBody);
+    }
+
+    /**
+     * Render modal body content for selected prompt
+     */
+    renderPromptModalContent(prompt, index) {
+        if (!this.promptModalBody) return;
+
+        this.updateLockButton(prompt);
+
+        const modalBody = this.promptModalBody;
+        const isModalVisible = this.promptModal?.classList.contains('show');
+        const shouldAnimate = isModalVisible && modalBody.childElementCount > 0;
+        const previousHeight = modalBody.offsetHeight;
+
+        if (shouldAnimate) {
+            this.prepareModalBodyForAnimation(modalBody, previousHeight);
+        } else {
+            this.cancelModalBodyAnimation();
+            this.resetModalBodyAnimation(modalBody);
+        }
+
+        modalBody.innerHTML = this.getPromptDetailHTML(prompt, index);
+        this.bindPromptInteractions(modalBody, prompt, index);
+        this.initializeVariableTextareas(modalBody);
+
+        if (prompt.locked !== false) {
+            const firstInput = modalBody.querySelector('.variable-input');
+            if (firstInput) {
+                firstInput.focus({ preventScroll: false });
+            }
+        } else {
+            const textarea = modalBody.querySelector('[data-action="edit-template"]');
+            if (textarea) {
+                this.autoResizeTextarea(textarea);
+                textarea.focus({ preventScroll: false });
+            }
+        }
+
+        if (shouldAnimate) {
+            this.animateModalBodyHeight(modalBody);
+        }
+    }
+
+    handleLockButtonClick() {
+        if (this.activePromptIndex === null || this.activePromptIndex === undefined) return;
+        const prompt = this.filteredPrompts[this.activePromptIndex];
+        if (!prompt) return;
+
+        if (prompt.locked !== false) {
+            this.toggleLock(this.activePromptIndex);
+        } else {
+            this.saveChanges(this.activePromptIndex);
+        }
+    }
+
+    updateLockButton(prompt) {
+        if (!this.promptModalLockButton || !prompt) return;
+
+        const isLocked = prompt.locked !== false;
+        const icon = isLocked ? 'mode_edit' : 'check';
+        const label = isLocked ? 'Edit Prompt' : 'Save changes';
+        const ariaLabel = isLocked ? 'Enable editing for this prompt' : 'Save changes to this prompt';
+
+        this.promptModalLockButton.innerHTML = `
+            <span class="material-symbols-outlined">${icon}</span>
+            ${label}
+        `;
+
+        this.promptModalLockButton.classList.remove('btn-primary', 'btn-secondary', 'btn-sm');
+        this.promptModalLockButton.classList.add('btn-sm', 'btn-primary');
+        this.promptModalLockButton.setAttribute('aria-label', ariaLabel);
+    }
+
+    /**
+     * Bind prompt interaction handlers within a container (card or modal)
+     */
+    bindPromptInteractions(container, prompt, index) {
+        if (!container || !prompt) return;
+
+        const copyButton = container.querySelector('[data-action="copy"]');
         if (copyButton) {
-            copyButton.addEventListener('click', () => this.copyToClipboard(index));
+            copyButton.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                this.copyToClipboard(index);
+            });
         }
 
-        // Download button
-        const downloadButton = card.querySelector('[data-action="download"]');
+        const downloadButton = container.querySelector('[data-action="download"]');
         if (downloadButton) {
-            downloadButton.addEventListener('click', () => this.downloadPrompt(index));
+            downloadButton.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                this.downloadPrompt(index);
+            });
         }
 
-        // Save button
-        const saveButton = card.querySelector('[data-action="save"]');
+        const saveButton = container.querySelector('[data-action="save"]');
         if (saveButton) {
-            saveButton.addEventListener('click', () => this.saveChanges(index));
+            saveButton.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                this.saveChanges(index);
+            });
         }
 
-        // Tab switching buttons
-        const tabButtons = card.querySelectorAll('[data-action="switch-tab"]');
+        const tabButtons = container.querySelectorAll('[data-action="switch-tab"]');
         tabButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                const tab = e.target.dataset.tab;
+            button.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                const tab = event.currentTarget.dataset.tab;
                 this.switchTab(index, tab);
             });
         });
 
-        // Clear variables button
-        const clearButton = card.querySelector('[data-action="clear-variables"]');
+        const clearButton = container.querySelector('[data-action="clear-variables"]');
         if (clearButton) {
-            clearButton.addEventListener('click', () => this.clearVariables(index));
+            clearButton.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                this.clearVariables(index);
+            });
         }
 
-        // Variable inputs - update values and preview in real-time
-        const variableInputs = card.querySelectorAll('.variable-input');
+        const variableInputs = container.querySelectorAll('.variable-input');
         variableInputs.forEach(input => {
-            input.addEventListener('input', (e) => {
-                const variableName = e.target.dataset.variable;
-                const variable = prompt.variables.find(v => v.name === variableName);
+            if (input.tagName === 'TEXTAREA') {
+                this.autoResizeTextarea(input);
+            }
+
+            input.addEventListener('input', (event) => {
+                const variableName = event.target.dataset.variable;
+                const variables = prompt.variables || [];
+                const variable = variables.find(v => v.name === variableName);
                 if (variable) {
-                    variable.value = e.target.value;
-                    // Update preview tab content
-                    this.updatePreview(card, prompt);
-                    // Save to localStorage
-                    this.saveVariableValues(prompt.id, prompt.variables);
+                    variable.value = event.target.value;
+                    this.updatePreview(container, prompt);
+                    this.saveVariableValues(prompt.id, variables);
+                }
+
+                if (event.target.tagName === 'TEXTAREA') {
+                    this.autoResizeTextarea(event.target);
                 }
             });
         });
 
-        // Template editor
-        const templateEditor = card.querySelector('[data-action="edit-template"]');
+        const templateEditor = container.querySelector('[data-action="edit-template"]');
         if (templateEditor) {
-            templateEditor.addEventListener('input', (e) => {
-                prompt.template = e.target.value;
-                this.autoResizeTextarea(e.target);
+            templateEditor.addEventListener('input', (event) => {
+                prompt.template = event.target.value;
+                this.autoResizeTextarea(event.target);
             });
 
-            // Initial resize
             this.autoResizeTextarea(templateEditor);
         }
     }
 
     /**
-     * Toggle expand/collapse state of a prompt card
+     * Apply display hints for variables that expect long-form text
      */
-    toggleExpand(index) {
-        const prompt = this.filteredPrompts[index];
-        prompt.expanded = !prompt.expanded;
+    applyVariableDisplayHints(prompt) {
+        if (!prompt.variables) return;
 
-        // Re-render the card
-        const card = this.promptGrid.querySelector(`[data-index="${index}"]`);
-        if (card) {
-            const newCard = this.createPromptCard(prompt, index);
-            card.replaceWith(newCard);
-        }
+        const longTextPattern = /(paste|text|notes|email|message|context|description|details|outline|summary)/i;
+
+        prompt.variables.forEach(variable => {
+            if (variable.inputType) return;
+            const label = variable.label || '';
+            const placeholder = variable.placeholder || '';
+            if (longTextPattern.test(label) || longTextPattern.test(placeholder)) {
+                variable.inputType = 'textarea';
+                if (!variable.rows) {
+                    variable.rows = 8;
+                }
+            }
+        });
     }
 
+    /**
+     * Ensure variable textareas size to content on initial render
+     */
+    initializeVariableTextareas(container) {
+        container.querySelectorAll('.variable-textarea').forEach(textarea => {
+            this.autoResizeTextarea(textarea);
+        });
+    }
+
+    /**
+     * Prepare modal body for height animation
+     */
+    prepareModalBodyForAnimation(modalBody, previousHeight) {
+        this.cancelModalBodyAnimation();
+        modalBody.style.height = `${previousHeight}px`;
+        modalBody.style.overflow = 'hidden';
+        modalBody.style.transition = '';
+    }
+
+    /**
+     * Animate modal body height to fit new content
+     */
+    animateModalBodyHeight(modalBody) {
+        const targetHeight = modalBody.scrollHeight;
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (prefersReducedMotion) {
+            this.resetModalBodyAnimation(modalBody);
+            this.modalBodyAnimationCleanup = null;
+            return;
+        }
+
+        requestAnimationFrame(() => {
+            modalBody.style.transition = 'height 0.35s cubic-bezier(0.4, 0, 0.2, 1)';
+            const currentHeight = parseFloat(modalBody.style.height) || modalBody.offsetHeight;
+
+            if (Math.abs(targetHeight - currentHeight) < 1) {
+                this.resetModalBodyAnimation(modalBody);
+                this.modalBodyAnimationCleanup = null;
+                return;
+            }
+
+            modalBody.style.height = `${targetHeight}px`;
+
+            const cleanup = (event) => {
+                if (event.target !== modalBody) return;
+                this.resetModalBodyAnimation(modalBody);
+                modalBody.removeEventListener('transitionend', cleanup);
+                this.modalBodyAnimationCleanup = null;
+            };
+
+            modalBody.addEventListener('transitionend', cleanup, { once: true });
+            this.modalBodyAnimationCleanup = () => {
+                modalBody.removeEventListener('transitionend', cleanup);
+                this.resetModalBodyAnimation(modalBody);
+                this.modalBodyAnimationCleanup = null;
+            };
+        });
+    }
+
+    /**
+     * Cancel in-flight modal body animation
+     */
+    cancelModalBodyAnimation() {
+        if (typeof this.modalBodyAnimationCleanup === 'function') {
+            this.modalBodyAnimationCleanup();
+        }
+        this.modalBodyAnimationCleanup = null;
+    }
+
+    /**
+     * Clear inline animation styles from modal body
+     */
+    resetModalBodyAnimation(modalBody) {
+        if (!modalBody) return;
+        modalBody.style.height = '';
+        modalBody.style.overflow = '';
+        modalBody.style.transition = '';
+    }
+
+    /**
+     * Replace a prompt card in the grid
+     */
+    updatePromptCard(index) {
+        const prompt = this.filteredPrompts[index];
+        if (!prompt) return;
+
+        const card = this.promptGrid.querySelector(`[data-index="${index}"]`);
+        if (!card) return;
+
+        const newCard = this.createPromptCard(prompt, index);
+        card.replaceWith(newCard);
+    }
+
+    /**
+     * Refresh card and modal views when prompt state updates
+     */
+    refreshPromptViews(index) {
+        if (index !== null && index !== undefined) {
+            this.updatePromptCard(index);
+        }
+
+        if (this.activePromptId && this.promptModal && this.promptModal.classList.contains('show')) {
+            const modalIndex = this.filteredPrompts.findIndex(p => p.id === this.activePromptId);
+            if (modalIndex === -1) {
+                this.closePromptModal();
+                return;
+            }
+
+            this.activePromptIndex = modalIndex;
+            this.renderPromptModalContent(this.filteredPrompts[modalIndex], modalIndex);
+        }
+    }
     /**
      * Toggle lock/unlock state of a prompt card
      */
     toggleLock(index) {
         const prompt = this.filteredPrompts[index];
-        prompt.locked = !prompt.locked;
+        if (!prompt) return;
 
-        // Re-render the card
-        const card = this.promptGrid.querySelector(`[data-index="${index}"]`);
-        if (card) {
-            const newCard = this.createPromptCard(prompt, index);
-            card.replaceWith(newCard);
+        prompt.locked = !prompt.locked;
+        if (prompt.locked && !prompt.activeTab) {
+            prompt.activeTab = 'variables';
         }
+
+        this.refreshPromptViews(index);
     }
 
     /**
@@ -475,14 +813,10 @@ class PromptLibrary {
      */
     switchTab(index, tabName) {
         const prompt = this.filteredPrompts[index];
-        prompt.activeTab = tabName;
+        if (!prompt) return;
 
-        // Re-render the card
-        const card = this.promptGrid.querySelector(`[data-index="${index}"]`);
-        if (card) {
-            const newCard = this.createPromptCard(prompt, index);
-            card.replaceWith(newCard);
-        }
+        prompt.activeTab = tabName;
+        this.refreshPromptViews(index);
     }
 
     /**
@@ -490,18 +824,12 @@ class PromptLibrary {
      */
     clearVariables(index) {
         const prompt = this.filteredPrompts[index];
-        if (prompt.variables) {
+        if (prompt?.variables) {
             prompt.variables.forEach(v => v.value = '');
             localStorage.removeItem(`prompt_vars_${prompt.id}`);
         }
 
-        // Re-render the card
-        const card = this.promptGrid.querySelector(`[data-index="${index}"]`);
-        if (card) {
-            const newCard = this.createPromptCard(prompt, index);
-            card.replaceWith(newCard);
-        }
-
+        this.refreshPromptViews(index);
         this.showToast('Variables cleared');
     }
 
@@ -521,14 +849,10 @@ class PromptLibrary {
      */
     saveChanges(index) {
         const prompt = this.filteredPrompts[index];
-        prompt.locked = true;
+        if (!prompt) return;
 
-        // Re-render the card
-        const card = this.promptGrid.querySelector(`[data-index="${index}"]`);
-        if (card) {
-            const newCard = this.createPromptCard(prompt, index);
-            card.replaceWith(newCard);
-        }
+        prompt.locked = true;
+        this.refreshPromptViews(index);
 
         this.showToast('Changes saved!');
     }
@@ -639,8 +963,21 @@ class PromptLibrary {
      * Auto-resize textarea to fit content
      */
     autoResizeTextarea(textarea) {
+        if (!textarea) return;
+
         textarea.style.height = 'auto';
-        textarea.style.height = textarea.scrollHeight + 'px';
+
+        const computedStyle = window.getComputedStyle(textarea);
+        const maxHeightValue = computedStyle.maxHeight;
+        const maxHeight = parseInt(maxHeightValue, 10);
+        const scrollHeight = textarea.scrollHeight;
+
+        if (!Number.isNaN(maxHeight) && maxHeight > 0) {
+            const clampedHeight = Math.min(scrollHeight, maxHeight);
+            textarea.style.height = `${clampedHeight}px`;
+        } else {
+            textarea.style.height = `${scrollHeight}px`;
+        }
     }
 
     /**
@@ -724,7 +1061,7 @@ class PromptLibrary {
                         <div class="shortcut-list">
                             <div class="shortcut-item">
                                 <span class="shortcut-keys"><kbd>Esc</kbd></span>
-                                <span class="shortcut-description">Collapse expanded card</span>
+                                <span class="shortcut-description">Close open dialogs</span>
                             </div>
                             <div class="shortcut-item">
                                 <span class="shortcut-keys"><kbd>${modKey}</kbd> + <kbd>K</kbd></span>

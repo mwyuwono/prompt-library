@@ -13,12 +13,10 @@
         <header class="header">
             <div class="container">
                 <div class="header-content">
-                    <div class="header-text">
-                        <h1 class="header-title">Prompt Library</h1>
-                        <p class="header-subtitle">Manage and customize your AI prompts</p>
-                    </div>
+                    <h1 class="header-title">Prompt Library</h1>
+                    <img src="public/images/prompts-logo.svg" alt="Prompt Library logo" class="header-logo">
                     <nav class="header-nav">
-                        <button class="nav-link" id="openLinksModal">AI Tools</button>
+                        <button class="btn btn-secondary nav-link" id="openLinksModal">AI Tools</button>
                         <button class="hamburger" id="hamburgerMenu" aria-label="Menu">
                             <span></span>
                             <span></span>
@@ -31,7 +29,7 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <div class="container">
+            <div class="container main-container">
                 <!-- Controls Bar -->
                 <div class="controls-bar">
                     <div class="search-wrapper">
@@ -52,14 +50,16 @@
                     <!-- Chips will be dynamically inserted here -->
                 </div>
 
-                <!-- Prompt Cards Grid -->
-                <div id="promptGrid" class="prompt-grid">
-                    <!-- Cards will be dynamically inserted here -->
-                </div>
+                <div class="prompt-area">
+                    <!-- Prompt Cards Grid -->
+                    <div id="promptGrid" class="prompt-grid">
+                        <!-- Cards will be dynamically inserted here -->
+                    </div>
 
-                <!-- Empty State -->
-                <div id="emptyState" class="empty-state" style="display: none;">
-                    <p>No prompts found matching your criteria.</p>
+                    <!-- Empty State -->
+                    <div id="emptyState" class="empty-state" style="display: none;">
+                        <p>No prompts found matching your criteria.</p>
+                    </div>
                 </div>
             </div>
         </main>
