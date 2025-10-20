@@ -142,6 +142,12 @@ body {
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 1rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+.card-header:hover {
+    opacity: 0.9;
 }
 
 .card-title-wrapper {
@@ -165,6 +171,12 @@ body {
     font-weight: 500;
 }
 
+.card-header-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
 .lock-button {
     background: none;
     border: none;
@@ -179,11 +191,48 @@ body {
     opacity: 1;
 }
 
+.expand-button {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    color: #667eea;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.expand-button:hover {
+    transform: scale(1.1);
+}
+
 .card-description {
     color: #666;
     font-size: 0.95rem;
     margin-bottom: 1.25rem;
     line-height: 1.5;
+    cursor: pointer;
+}
+
+.card-description:hover {
+    color: #555;
+}
+
+/* Card Content - Collapsible Section */
+.card-content {
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+.card-content.collapsed {
+    max-height: 0;
+    opacity: 0;
+    margin: 0;
+}
+
+.card-content.expanded {
+    max-height: 2000px;
+    opacity: 1;
 }
 
 /* Tabs Container */

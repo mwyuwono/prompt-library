@@ -155,6 +155,7 @@ class PromptLibrary {
         card.className = 'prompt-card';
         card.dataset.index = index;
         card.dataset.locked = prompt.locked !== false; // Default to locked
+        card.dataset.expanded = prompt.expanded || false; // Default to collapsed
 
         card.innerHTML = this.getCardHTML(prompt, index);
 
@@ -169,26 +170,36 @@ class PromptLibrary {
      */
     getCardHTML(prompt, index) {
         const isLocked = prompt.locked !== false;
+        const isExpanded = prompt.expanded || false;
 
         return `
-            <div class="card-header">
+            <div class="card-header" data-action="toggle-expand">
                 <div class="card-title-wrapper">
                     <h3 class="card-title">${this.escapeHTML(prompt.title)}</h3>
                     <span class="card-category">${this.escapeHTML(prompt.category)}</span>
                 </div>
-                <button class="lock-button" data-action="toggle-lock">
-                    ${isLocked ? '🔒' : '🔓'}
-                </button>
+                <div class="card-header-actions">
+                    ${isExpanded ? `
+                        <button class="lock-button" data-action="toggle-lock" onclick="event.stopPropagation()">
+                            ${isLocked ? '🔒' : '🔓'}
+                        </button>
+                    ` : ''}
+                    <button class="expand-button" data-action="toggle-expand">
+                        ${isExpanded ? '▲' : '▼'}
+                    </button>
+                </div>
             </div>
-            <p class="card-description">${this.escapeHTML(prompt.description)}</p>
+            <p class="card-description" data-action="toggle-expand">${this.escapeHTML(prompt.description)}</p>
 
-            ${isLocked ? this.getLockedViewHTML(prompt, index) : this.getEditorHTML(prompt)}
+            <div class="card-content ${isExpanded ? 'expanded' : 'collapsed'}">
+                ${isLocked ? this.getLockedViewHTML(prompt, index) : this.getEditorHTML(prompt)}
 
-            <div class="card-actions">
-                ${isLocked ?
-                    `<button class="btn btn-primary" data-action="copy">Copy to Clipboard</button>` :
-                    `<button class="btn btn-secondary" data-action="save">Save Changes</button>`
-                }
+                <div class="card-actions">
+                    ${isLocked ?
+                        `<button class="btn btn-primary" data-action="copy">Copy to Clipboard</button>` :
+                        `<button class="btn btn-secondary" data-action="save">Save Changes</button>`
+                    }
+                </div>
             </div>
         `;
     }
@@ -292,9 +303,21 @@ class PromptLibrary {
      * Attach event listeners to card elements
      */
     attachCardEventListeners(card, prompt, index) {
+        // Expand/collapse toggle - multiple elements can trigger it
+        const expandElements = card.querySelectorAll('[data-action="toggle-expand"]');
+        expandElements.forEach(element => {
+            element.addEventListener('click', (e) => {
+                // Don't expand if clicking on lock button
+                if (e.target.dataset.action === 'toggle-lock') return;
+                this.toggleExpand(index);
+            });
+        });
+
         // Lock/unlock toggle
         const lockButton = card.querySelector('[data-action="toggle-lock"]');
-        lockButton.addEventListener('click', () => this.toggleLock(index));
+        if (lockButton) {
+            lockButton.addEventListener('click', () => this.toggleLock(index));
+        }
 
         // Copy button
         const copyButton = card.querySelector('[data-action="copy"]');
@@ -341,6 +364,21 @@ class PromptLibrary {
 
             // Initial resize
             this.autoResizeTextarea(templateEditor);
+        }
+    }
+
+    /**
+     * Toggle expand/collapse state of a prompt card
+     */
+    toggleExpand(index) {
+        const prompt = this.filteredPrompts[index];
+        prompt.expanded = !prompt.expanded;
+
+        // Re-render the card
+        const card = this.promptGrid.querySelector(`[data-index="${index}"]`);
+        if (card) {
+            const newCard = this.createPromptCard(prompt, index);
+            card.replaceWith(newCard);
         }
     }
 
