@@ -174,19 +174,19 @@ class PromptLibrary {
 
         return `
             <div class="card-header" data-action="toggle-expand">
-                <div class="card-title-wrapper">
+                <div class="card-title-wrapper" data-action="toggle-expand">
                     <h3 class="card-title">${this.escapeHTML(prompt.title)}</h3>
                     <span class="card-category">${this.escapeHTML(prompt.category)}</span>
                 </div>
-                <div class="card-header-actions">
+                <div class="card-header-actions" data-action="toggle-expand">
                     ${isExpanded ? `
                         <button class="lock-button" data-action="toggle-lock" onclick="event.stopPropagation()">
                             ${isLocked ? '🔒' : '🔓'}
                         </button>
                     ` : ''}
-                    <button class="expand-button" data-action="toggle-expand">
+                    <span class="expand-button" data-action="toggle-expand">
                         ${isExpanded ? '▲' : '▼'}
-                    </button>
+                    </span>
                 </div>
             </div>
             <p class="card-description" data-action="toggle-expand">${this.escapeHTML(prompt.description)}</p>
