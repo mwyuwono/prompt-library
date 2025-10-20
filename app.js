@@ -91,6 +91,17 @@ class PromptLibrary {
         }
 
         document.addEventListener('keydown', (e) => {
+            // Escape while search is focused clears query
+            if (e.key === 'Escape' && document.activeElement === this.searchInput) {
+                if (this.searchTerm) {
+                    this.searchTerm = '';
+                    this.searchInput.value = '';
+                    this.filterPrompts();
+                }
+                this.searchInput.blur();
+                return;
+            }
+
             // Escape - Close prompt modal or shortcuts modal
             if (e.key === 'Escape') {
                 if (this.promptModal && this.promptModal.classList.contains('show')) {
@@ -240,16 +251,13 @@ class PromptLibrary {
             <div class="card-header">
                 <div class="card-title-wrapper">
                     <h3 class="card-title">${this.highlightText(prompt.title, this.searchTerm)}</h3>
-                    <span class="card-category">${this.highlightText(prompt.category, this.searchTerm)}</span>
+                    <div class="card-meta-inline">
+                        <span class="card-category">${this.highlightText(prompt.category, this.searchTerm)}</span>
+                        <span class="variable-count-badge">${variableCount > 0 ? `${variableCount} variable${variableCount > 1 ? 's' : ''}` : 'No variables'}</span>
+                    </div>
                 </div>
             </div>
             <p class="card-description">${this.highlightText(prompt.description, this.searchTerm)}</p>
-            <div class="card-meta">
-                ${variableCount > 0 ?
-                    `<span class="variable-count-badge">${variableCount} variable${variableCount > 1 ? 's' : ''}</span>` :
-                    `<span class="variable-count-badge">No variables</span>`
-                }
-            </div>
         `;
     }
 

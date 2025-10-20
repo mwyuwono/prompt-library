@@ -419,12 +419,12 @@ body.modal-open {
     font-weight: 500;
 }
 
-.card-meta {
+.card-meta-inline {
     display: flex;
-    justify-content: flex-start;
     align-items: center;
-    gap: var(--space-sm);
+    gap: var(--space-xs);
     flex-wrap: wrap;
+    margin-top: 0.35em;
     font-family: var(--font-sans);
 }
 

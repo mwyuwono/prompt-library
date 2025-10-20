@@ -247,10 +247,10 @@ git push origin main
 
 ### Requirements Document Maintenance
 
-The `prompt-library-requirements.md` file should be kept synchronized with the actual implementation. When making significant changes:
+The `prompt-library-documentation.md` file should be kept synchronized with the actual implementation. When making significant changes:
 
 1. **Update code files** first
-2. **Update `prompt-library-requirements.md`** to reflect implementation changes
+2. **Update `prompt-library-documentation.md`** to reflect implementation changes
 3. **Update this CLAUDE.md** if architectural patterns change
 4. **Commit all changes together** so documentation stays in sync
 
@@ -258,7 +258,7 @@ The `prompt-library-requirements.md` file should be kept synchronized with the a
 
 ## Important Deviations from Requirements
 
-The implementation differs from `prompt-library-requirements.md` in these ways:
+The implementation differs from the original requirements draft in these ways:
 
 1. **Architecture**: Single class in `app.js` instead of separate component modules
 2. **JSON structure**: Flat array instead of wrapped object
