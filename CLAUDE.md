@@ -214,7 +214,7 @@ All user inputs are escaped via `escapeHTML()` before rendering to prevent injec
 
 This project is hosted on GitHub and automatically deploys to Vercel on every push to `main`.
 
-- `vercel.json` pins the deployment to static hosting (`@vercel/static`) and rewrites all routes to `index.html`; update it whenever new top-level assets or routes are introduced
+- `vercel.json` pins the deployment to static hosting (`@vercel/static`); update it whenever new top-level assets need to be explicitly listed
 - Custom domain (`p.weaver-yuwono.com`) is managed in Vercel; domain must remain pointed at Vercel's CNAME
 
 ### Repository Information
