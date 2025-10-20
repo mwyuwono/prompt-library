@@ -374,7 +374,8 @@ No IE11 support required.
 
 1. **GitHub Pages**: Push to repo, enable in settings
 2. **Netlify**: Drag-and-drop deployment
-3. **Local**: Open `index.html` in browser
+3. **Vercel**: Project configured via `vercel.json` (static build); all pushes to `main` auto-deploy to `p.weaver-yuwono.com`
+4. **Local**: Open `index.html` in browser
 
 All options work identically (static files only).
 
