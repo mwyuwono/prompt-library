@@ -1,7 +1,7 @@
 [
     {
         "category": "Large Language Models",
-        "icon": "🧠",
+        "icon": "psychology",
         "links": [
             {
                 "name": "Claude",
@@ -42,7 +42,7 @@
     },
     {
         "category": "Specialized Tools",
-        "icon": "🛠️",
+        "icon": "build",
         "links": [
             {
                 "name": "Perchance",
@@ -58,7 +58,7 @@
     },
     {
         "category": "Image Generation",
-        "icon": "🎨",
+        "icon": "palette",
         "links": [
             {
                 "name": "Black Forest Labs",

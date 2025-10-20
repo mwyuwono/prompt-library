@@ -12,6 +12,17 @@ body {
     background-color: #f5f5f5;
 }
 
+/* Material Symbols */
+.material-symbols-outlined {
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+    user-select: none;
+    vertical-align: middle;
+}
+
 /* Layout */
 .page-wrapper {
     min-height: 100vh;
@@ -274,26 +285,35 @@ body {
 .lock-button {
     background: none;
     border: none;
-    font-size: 1.25rem;
     cursor: pointer;
     padding: 0.25rem;
     opacity: 0.6;
-    transition: opacity 0.2s;
+    transition: all 0.2s;
+    color: #718096;
+}
+
+.lock-button .material-symbols-outlined {
+    font-size: 20px;
 }
 
 .lock-button:hover {
     opacity: 1;
+    color: #667eea;
 }
 
 .expand-button {
     background: none;
     border: none;
-    font-size: 1rem;
     cursor: pointer;
     padding: 0.25rem 0.5rem;
     color: #667eea;
-    font-weight: bold;
     transition: all 0.2s;
+    display: flex;
+    align-items: center;
+}
+
+.expand-button .material-symbols-outlined {
+    font-size: 20px;
 }
 
 .expand-button:hover {

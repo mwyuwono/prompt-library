@@ -236,11 +236,11 @@ class PromptLibrary {
                 <div class="card-header-actions" data-action="toggle-expand">
                     ${isExpanded ? `
                         <button class="lock-button" data-action="toggle-lock" onclick="event.stopPropagation()">
-                            ${isLocked ? '🔒' : '🔓'}
+                            <span class="material-symbols-outlined">${isLocked ? 'lock' : 'lock_open'}</span>
                         </button>
                     ` : ''}
                     <span class="expand-button" data-action="toggle-expand">
-                        ${isExpanded ? '▲' : '▼'}
+                        <span class="material-symbols-outlined">${isExpanded ? 'expand_less' : 'expand_more'}</span>
                     </span>
                 </div>
             </div>

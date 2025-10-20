@@ -73,7 +73,7 @@ class LinksManager {
         this.linksContainer.innerHTML = this.links.map(category => `
             <div class="links-category">
                 <h3 class="links-category-title">
-                    <span class="links-category-icon">${category.icon}</span>
+                    <span class="links-category-icon material-symbols-outlined">${category.icon}</span>
                     ${category.category}
                 </h3>
                 <div class="links-grid">
@@ -91,11 +91,7 @@ class LinksManager {
             <a href="${link.url}" class="link-card" target="_blank" rel="noopener noreferrer">
                 <div class="link-card-header">
                     <h4 class="link-card-name">${this.escapeHTML(link.name)}</h4>
-                    <div class="link-card-arrow">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                            <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                        </svg>
-                    </div>
+                    <span class="link-card-arrow material-symbols-outlined">arrow_forward</span>
                 </div>
                 <p class="link-card-company">${this.escapeHTML(link.company)}</p>
             </a>
