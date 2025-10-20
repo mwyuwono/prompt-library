@@ -104,6 +104,7 @@ Key points:
 - Design tokens (colors, spacing, typography) are defined in `styles.css`
 - `.btn` is the shared button base; `.btn-primary`, `.btn-secondary`, and `.btn-sm` supply color and size variants
 - Material Symbols weight can be tuned globally via the comment next to `.material-symbols-outlined`
+- **Styling note**: the maintainer is actively adjusting CSS manually—avoid touching existing styles unless explicitly requested or when introducing a new feature (initial styles are acceptable, but plan for follow-up refinements)
 
 ## Adding or Editing Prompts
 
@@ -134,4 +135,3 @@ Static file hosting is required for `fetch('prompts.json')` to succeed; opening 
 - Keep documentation (`CLAUDE.md`, this file) synchronized with UI updates
 - When adjusting layout or hover states, verify the experience on both desktop and mobile breakpoints
 - If a deployment serves an unstyled page, ensure static assets aren’t being rewritten (see `vercel.json` history)
-

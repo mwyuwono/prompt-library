@@ -133,6 +133,7 @@ The actual implementation uses this structure (differs from requirements doc):
 
 - Header uses a three-column grid: title anchored left, logo centered, and nav actions (AI Tools + hamburger) aligned right
 - Buttons share a `.btn` base (uppercase, pill-shaped) with `.btn-primary` (purple fill) and `.btn-secondary` (neutral surface) variants reused across the app; `.btn-sm` is available for compact contexts (e.g., modal header controls)
+- **Important**: CSS is currently under manual refinement by the maintainer—do not adjust existing styling unless explicitly asked or you are styling a brand-new component. When implementing new features, you may provide initial styling, but expect follow-up refinements.
 - The global search control mirrors the same pill silhouette to keep top-level inputs cohesive
 
 ### Prompt Summary Cards
