@@ -161,6 +161,49 @@ try {
 
 All user inputs are escaped via `escapeHTML()` before rendering to prevent injection attacks.
 
+## Git Workflow and Deployment
+
+This project is hosted on GitHub and automatically deploys to Vercel on every push to `main`.
+
+### Repository Information
+- **GitHub**: https://github.com/mwyuwono/prompt-library
+- **Live Site**: https://oct-19-prompts-rebuild-nbpz1n873-weaver-yuwono.vercel.app
+
+### When Making Changes
+
+**IMPORTANT**: Always commit changes to Git and keep the repository up to date.
+
+```bash
+# After making changes, commit them
+git add .
+git commit -m "Description of changes
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+
+# Push to GitHub (auto-deploys to Vercel)
+git push origin main
+```
+
+### Commit Guidelines
+
+- Create commits for all meaningful changes
+- Use descriptive commit messages that explain the "why"
+- Include the Claude Code attribution footer
+- Push to trigger automatic deployment
+
+### Requirements Document Maintenance
+
+The `prompt-library-requirements.md` file should be kept synchronized with the actual implementation. When making significant changes:
+
+1. **Update code files** first
+2. **Update `prompt-library-requirements.md`** to reflect implementation changes
+3. **Update this CLAUDE.md** if architectural patterns change
+4. **Commit all changes together** so documentation stays in sync
+
+**Note**: The requirements document may lag behind implementation. When in doubt, the actual code is the source of truth.
+
 ## Important Deviations from Requirements
 
 The implementation differs from `prompt-library-requirements.md` in these ways:
