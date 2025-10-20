@@ -1,0 +1,218 @@
+[
+    {
+        "id": "email-writer",
+        "title": "Professional Email Writer",
+        "description": "Generate professional emails for various business scenarios",
+        "category": "Business",
+        "template": "Write a professional email about {{topic}}.\n\nTone: {{tone}}\nRecipient: {{recipient}}\n\nKey points to include:\n{{key_points}}\n\nPlease keep it concise and appropriate for a business context.",
+        "variables": [
+            {
+                "name": "topic",
+                "label": "Email Topic",
+                "placeholder": "e.g., Project update, Meeting request",
+                "value": ""
+            },
+            {
+                "name": "tone",
+                "label": "Tone",
+                "placeholder": "e.g., Formal, Friendly, Urgent",
+                "value": ""
+            },
+            {
+                "name": "recipient",
+                "label": "Recipient",
+                "placeholder": "e.g., CEO, Team, Client",
+                "value": ""
+            },
+            {
+                "name": "key_points",
+                "label": "Key Points",
+                "placeholder": "List the main points to cover",
+                "value": ""
+            }
+        ],
+        "locked": true
+    },
+    {
+        "id": "code-reviewer",
+        "title": "Code Review Assistant",
+        "description": "Get detailed code reviews focusing on best practices and potential issues",
+        "category": "Development",
+        "template": "Please review the following {{language}} code:\n\n```{{language}}\n{{code}}\n```\n\nFocus areas:\n{{focus_areas}}\n\nProvide feedback on:\n- Code quality and readability\n- Potential bugs or edge cases\n- Performance considerations\n- Best practices and patterns",
+        "variables": [
+            {
+                "name": "language",
+                "label": "Programming Language",
+                "placeholder": "e.g., JavaScript, Python, Java",
+                "value": ""
+            },
+            {
+                "name": "code",
+                "label": "Code to Review",
+                "placeholder": "Paste your code here",
+                "value": ""
+            },
+            {
+                "name": "focus_areas",
+                "label": "Focus Areas",
+                "placeholder": "e.g., Security, Performance, Architecture",
+                "value": ""
+            }
+        ],
+        "locked": true
+    },
+    {
+        "id": "blog-outline",
+        "title": "Blog Post Outline Generator",
+        "description": "Create structured outlines for blog posts and articles",
+        "category": "Content",
+        "template": "Create a detailed blog post outline for an article titled: \"{{title}}\"\n\nTarget audience: {{audience}}\nDesired word count: {{word_count}}\nKey topics to cover: {{topics}}\n\nPlease include:\n- An engaging introduction hook\n- 3-5 main sections with subpoints\n- A conclusion with call-to-action\n- SEO considerations",
+        "variables": [
+            {
+                "name": "title",
+                "label": "Blog Post Title",
+                "placeholder": "e.g., 10 Tips for Better Productivity",
+                "value": ""
+            },
+            {
+                "name": "audience",
+                "label": "Target Audience",
+                "placeholder": "e.g., Small business owners, Developers",
+                "value": ""
+            },
+            {
+                "name": "word_count",
+                "label": "Word Count",
+                "placeholder": "e.g., 1500-2000 words",
+                "value": ""
+            },
+            {
+                "name": "topics",
+                "label": "Key Topics",
+                "placeholder": "List main topics to cover",
+                "value": ""
+            }
+        ],
+        "locked": true
+    },
+    {
+        "id": "bug-analyzer",
+        "title": "Bug Analysis & Solution",
+        "description": "Analyze bugs and get step-by-step solutions",
+        "category": "Development",
+        "template": "I'm encountering the following bug:\n\nError message: {{error_message}}\nContext: {{context}}\nSteps to reproduce:\n{{steps}}\n\nEnvironment:\n- Platform: {{platform}}\n- Version: {{version}}\n\nPlease help me:\n1. Understand what's causing this error\n2. Provide a step-by-step solution\n3. Suggest ways to prevent this in the future",
+        "variables": [
+            {
+                "name": "error_message",
+                "label": "Error Message",
+                "placeholder": "Paste the error message",
+                "value": ""
+            },
+            {
+                "name": "context",
+                "label": "Context",
+                "placeholder": "What were you trying to do?",
+                "value": ""
+            },
+            {
+                "name": "steps",
+                "label": "Steps to Reproduce",
+                "placeholder": "List steps to reproduce the bug",
+                "value": ""
+            },
+            {
+                "name": "platform",
+                "label": "Platform",
+                "placeholder": "e.g., Node.js, Browser, Mobile",
+                "value": ""
+            },
+            {
+                "name": "version",
+                "label": "Version",
+                "placeholder": "e.g., v18.0.0",
+                "value": ""
+            }
+        ],
+        "locked": true
+    },
+    {
+        "id": "social-media-post",
+        "title": "Social Media Post Creator",
+        "description": "Generate engaging social media content for different platforms",
+        "category": "Marketing",
+        "template": "Create a {{platform}} post about: {{topic}}\n\nBrand voice: {{brand_voice}}\nTarget audience: {{audience}}\nGoal: {{goal}}\n\nRequirements:\n- Include relevant hashtags\n- Make it engaging and shareable\n- Keep it within platform character limits\n- Include a call-to-action",
+        "variables": [
+            {
+                "name": "platform",
+                "label": "Platform",
+                "placeholder": "e.g., Twitter, LinkedIn, Instagram",
+                "value": ""
+            },
+            {
+                "name": "topic",
+                "label": "Topic",
+                "placeholder": "What is the post about?",
+                "value": ""
+            },
+            {
+                "name": "brand_voice",
+                "label": "Brand Voice",
+                "placeholder": "e.g., Professional, Casual, Humorous",
+                "value": ""
+            },
+            {
+                "name": "audience",
+                "label": "Target Audience",
+                "placeholder": "Who are you trying to reach?",
+                "value": ""
+            },
+            {
+                "name": "goal",
+                "label": "Goal",
+                "placeholder": "e.g., Drive traffic, Increase engagement",
+                "value": ""
+            }
+        ],
+        "locked": true
+    },
+    {
+        "id": "learning-plan",
+        "title": "Personalized Learning Plan",
+        "description": "Create structured learning plans for new skills or technologies",
+        "category": "Education",
+        "template": "Create a personalized learning plan for: {{skill}}\n\nCurrent level: {{current_level}}\nGoal: {{goal}}\nTime available: {{time_commitment}}\nLearning style: {{learning_style}}\n\nPlease provide:\n- A week-by-week breakdown\n- Recommended resources (books, courses, tutorials)\n- Practice projects\n- Milestones and checkpoints\n- Tips for staying motivated",
+        "variables": [
+            {
+                "name": "skill",
+                "label": "Skill to Learn",
+                "placeholder": "e.g., React, Machine Learning, Spanish",
+                "value": ""
+            },
+            {
+                "name": "current_level",
+                "label": "Current Level",
+                "placeholder": "e.g., Beginner, Intermediate, Advanced",
+                "value": ""
+            },
+            {
+                "name": "goal",
+                "label": "Learning Goal",
+                "placeholder": "What do you want to achieve?",
+                "value": ""
+            },
+            {
+                "name": "time_commitment",
+                "label": "Time Commitment",
+                "placeholder": "e.g., 5 hours/week for 3 months",
+                "value": ""
+            },
+            {
+                "name": "learning_style",
+                "label": "Learning Style",
+                "placeholder": "e.g., Video, Reading, Hands-on",
+                "value": ""
+            }
+        ],
+        "locked": true
+    }
+]

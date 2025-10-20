@@ -1,0 +1,17 @@
+# Vercel
+.vercel
+
+# macOS
+.DS_Store
+*.swp
+*.swo
+*~
+
+# Editor directories
+.vscode/
+.idea/
+
+# Local env files
+.env
+.env.local
+.env.*.local
