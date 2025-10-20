@@ -11,8 +11,20 @@
         <!-- Header -->
         <header class="header">
             <div class="container">
-                <h1 class="header-title">Prompt Library</h1>
-                <p class="header-subtitle">Manage and customize your AI prompts</p>
+                <div class="header-content">
+                    <div class="header-text">
+                        <h1 class="header-title">Prompt Library</h1>
+                        <p class="header-subtitle">Manage and customize your AI prompts</p>
+                    </div>
+                    <nav class="header-nav">
+                        <button class="nav-link" id="openLinksModal">AI Tools</button>
+                        <button class="hamburger" id="hamburgerMenu" aria-label="Menu">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
+                    </nav>
+                </div>
             </div>
         </header>
 
@@ -53,8 +65,23 @@
 
         <!-- Toast Notification -->
         <div id="toast" class="toast">Copied!</div>
+
+        <!-- Links Modal -->
+        <div id="linksModal" class="modal">
+            <div class="modal-overlay" data-action="close-links"></div>
+            <div class="modal-content links-modal-content">
+                <div class="modal-header">
+                    <h2>AI Tools</h2>
+                    <button class="modal-close" data-action="close-links">&times;</button>
+                </div>
+                <div class="modal-body" id="linksContainer">
+                    <!-- Links will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="app.js"></script>
+    <script src="links.js"></script>
 </body>
 </html>

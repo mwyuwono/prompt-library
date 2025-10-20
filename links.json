@@ -1,0 +1,90 @@
+[
+    {
+        "category": "Large Language Models",
+        "icon": "🧠",
+        "links": [
+            {
+                "name": "Claude",
+                "company": "Anthropic",
+                "url": "https://claude.ai"
+            },
+            {
+                "name": "ChatGPT",
+                "company": "OpenAI",
+                "url": "https://chat.openai.com"
+            },
+            {
+                "name": "Gemini",
+                "company": "Google",
+                "url": "https://gemini.google.com"
+            },
+            {
+                "name": "AI Studio",
+                "company": "Google",
+                "url": "https://aistudio.google.com"
+            },
+            {
+                "name": "Perplexity",
+                "company": "Perplexity",
+                "url": "https://perplexity.ai"
+            },
+            {
+                "name": "Poe",
+                "company": "Quora",
+                "url": "https://poe.com"
+            },
+            {
+                "name": "Qwen",
+                "company": "Alibaba Cloud",
+                "url": "https://tongyi.aliyun.com"
+            }
+        ]
+    },
+    {
+        "category": "Specialized Tools",
+        "icon": "🛠️",
+        "links": [
+            {
+                "name": "Perchance",
+                "company": "Perchance",
+                "url": "https://perchance.org"
+            },
+            {
+                "name": "NotebookLM",
+                "company": "Google",
+                "url": "https://notebooklm.google.com"
+            }
+        ]
+    },
+    {
+        "category": "Image Generation",
+        "icon": "🎨",
+        "links": [
+            {
+                "name": "Black Forest Labs",
+                "company": "Black Forest Labs",
+                "url": "https://blackforestlabs.ai"
+            },
+            {
+                "name": "Midjourney",
+                "company": "Midjourney",
+                "url": "https://midjourney.com"
+            },
+            {
+                "name": "Revere",
+                "company": "Revere",
+                "url": "https://revere.ai"
+            },
+            {
+                "name": "ImageFX",
+                "company": "Google Labs",
+                "url": "https://aitestkitchen.withgoogle.com/tools/image-fx"
+            },
+            {
+                "name": "Image Outpainter",
+                "company": "Hugging Face",
+                "url": "https://huggingface.co/spaces/fffiloni/Image-Outpainter"
+            }
+        ]
+    }
+]
