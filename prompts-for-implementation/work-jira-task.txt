@@ -1,0 +1,22 @@
+Project Notes:
+""": 
+‍
+
+Given the text provided above, I want you to extract project details and tasks to create a simplified Jira task entry. The purpose of this Jira task is to track specific tasks and their associated to-do items effectively. It is important to note that the text provided does not offer a comprehensive overview of the project. Your goal is to identify and organize essential details and actionable items directly relevant to the project, as presented in the text.
+
+Please avoid including any filler content or extraneous details not explicitly mentioned in the text. Focus on what is directly relevant and actionable, based on the given information. If further context is required to accurately complete this task, do not hesitate to request additional information.
+
+When presenting the results, format them in a way that is easily transferable to a Jira task entry. This format should include sections for a title, background, and action items, all of which should be clearly delineated. Utilize Markup syntax to enhance the readability and organization of the output, ensuring that it is user-friendly and ready to be copied directly into Jira.
+
+Example of the desired output format (please adapt as needed based on the task details):
+
+"""Title: [Insert Task Title Here]
+
+Background:
+
+Brief description of the project or task context.
+Key objectives or goals.
+Action Items:
+
+[Action Item 1]: Description and any relevant details.
+[Action Item 2]: Description and any relevant details...."""

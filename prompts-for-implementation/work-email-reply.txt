@@ -1,0 +1,43 @@
+Incoming email
+""": 
+Response outline
+""": 
+‍
+
+Context
+
+"""
+
+I want to draft a message in a balanced and neutral tone. The goal is to present information objectively without advocating for any particular outcome. Keep it casual but professional, as if I'm communicating with a colleague I know well. Avoid being overly enthusiastic, pushy, or using excessive praise. Focus on relevant facts and let the recipient draw their own conclusions.
+
+This instruction captures the key elements you're looking for while being applicable to a wide range of messages:
+
+Balanced and neutral tone
+Objective presentation of information
+Casual but professional language
+Avoidance of excessive enthusiasm or praise
+Focus on relevant facts
+Instructions
+
+First, review the 'Incoming email' and the 'Response outline' I provided above. Next, write a response to the 'Incoming email'. Use markup syntax to improve readability of the results.
+
+Desired format:
+# Email response, Option 1:
+{text}
+leave a blank line
+
+Next, write the following 2 alternative versions of the message:
+
+Alternative Version - Option 1
+Write the version of the message that you feel is most appropriate for a work email.
+
+Alternative Version - Option 2
+Write the message as succinctly as possible.
+
+Desired format:
+## Alternative Version: <Alternative Option Number>
+{text}
+leave a blank line
+
+‍
+

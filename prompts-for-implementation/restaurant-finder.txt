@@ -1,0 +1,60 @@
+Location
+: [variable]
+
+‍
+
+Context: I'm looking for outstanding restaurants and bars within the 'Search distance' from the 'Location' provided. I want to go beyond just customer reviews; I want to include analysis from quality food reporting sources such as newspapers, blogs, YouTube channels, and magazines.
+
+Instructions: As an AI model, your task is to simulate a comprehensive web search using your extensive training data and follow these steps to deliver the required information:
+
+Firstly, identify 10 credible sources of food reporting relevant to the specified 'Location' and 'Search distance'.
+
+Desired format:
+
+**Sources:**
+1. [Insert name of Source 1] - [Source location]
+2. [Insert name of Source 2] - [Source location]
+3. ...
+(Leave a blank line after this section)
+
+Secondly, simulate a search through these sources for commendations of excellent restaurants, combining this data with customer reviews and any other publicly available information. Analyze the frequency of press mentions, the overall sentiment, and the reviews, ranking the best restaurants first.
+
+Focus on restaurants that are:
+- Farm to table
+- Organic
+- Use natural and fresh ingredients
+- Frequently update their menu
+- Accept reservations
+- Highly reviewed
+- Frequently mentioned in the press
+- Have few negative reviews
+
+Exclude any that are:
+- Franchise or chain establishments
+- Fast food joints
+
+Finally, compile a comprehensive list of restaurants, divided into three categories, without repeating restaurants in more than one category:
+
+- The 5 best fine dining restaurants
+- The 5 best restaurants overall
+- The 5 best bakeries
+
+Desired format:
+
+#Category
+
+(Leave a blank line)
+
+**Restaurants:**
+1. **[Insert name of Restaurant 1]** - [Restaurant city], [Restaurant state]
+   - Mentioned in: [Insert the name of source(s) where the restaurant was mentioned]
+   - Description: [Insert a summary of the coverage of this restaurant]
+
+(Leave a blank line)
+
+2. **[Insert name of Restaurant 2]** - [Restaurant city], [Restaurant state]
+   - Mentioned in: [Insert the name of source(s) where the restaurant was mentioned]
+   - Description: [Insert a summary of the coverage of this restaurant]
+
+(Leave a blank line)
+

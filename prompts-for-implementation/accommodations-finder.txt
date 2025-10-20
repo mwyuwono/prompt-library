@@ -1,0 +1,63 @@
+Location
+: [variable]
+Special requirements
+: [variable]
+‍
+
+Context: I'm seeking exceptional accommodations in or around a specified 'Location' that meet the 'Special requirements' above. My search aims to go beyond customer reviews; I want to consider analysis from quality publications and sources such as newspapers, travel magazines, blogs, and other reputable cultural publications.
+
+Instructions: As an AI model, you are to simulate a comprehensive web search using your extensive training data. Your task involves the following steps:
+
+1. Identify 10 credible publications relevant to the 'Location', referred to as 'Sources'.
+
+Desired format:
+
+**Sources:**
+1. [Insert name of Source 1] - [Source location]
+2. [Insert name of Source 2] - [Source location]
+3. ...
+
+Leave a blank line after this section.
+
+2. Simulate a search through these sources for excellent hotels, inns, or other luxury accommodations. Combine this data with customer reviews and any other publicly available information. Analyze the frequency of press mentions, the overall sentiment, and the reviews.
+
+Consider accommodations that meet the following requirements, as well as the 'Special requirements' provided above:
+
+Boutique
+Independently owned
+Members of high-quality hotel groups such as Relais and Chateaux
+Highly praised
+Frequently mentioned in the press
+Have few negative reviews
+Exclude any that:
+
+Are considered economy accommodations
+Have average customer reviews of 3.5 stars or less
+3. Compile a comprehensive list of highly-regarded accommodations that meet the 'Special requirements'. Divide the list into 'Hotels' and 'Other accommodations' categories.‍
+
+Desired format:
+
+# Hotels
+
+**[Insert name of Hotel 1]** - [Hotel city], [Hotel state]
+- Requirement: [Insert the rationale for why this result meets the 'Special requirements']
+- Mentioned in: [Insert the name of source(s) where the hotel was mentioned]
+- Description: [Insert a summary of the coverage of this hotel]
+  [Insert website]
+**[Insert name of Hotel 2]** - [Hotel city], [Hotel state]
+- Requirement: [Insert the rationale for why this result meets the 'Special requirements']
+- Mentioned in: [Insert the name of source(s) where the hotel was mentioned]
+- Description: [Insert a summary of the coverage of this hotel]
+  [Insert website]
+...
+# Other accommodations
+
+**[Insert name of other accommodation]** - **Type:**: [type of accommodation]
+[accommodation city], [accommodation state]
+- Requirement: [Insert the rationale for why this result meets the 'Special requirements']
+- Mentioned in: [Insert the name of source(s) where the accommodation was mentioned]
+- Description: [Insert a summary of the coverage of this accommodation]
+[Insert website]
+...
+Include as many options as are relevant for the selected location. In your output, please use Markup syntax for improved readability.
+

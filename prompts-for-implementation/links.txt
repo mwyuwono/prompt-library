@@ -1,0 +1,257 @@
+<div class="services-grid">
+          
+        <div class="service-category" data-category="llm">
+          <h3 class="service-category__title">
+            <span class="service-category__icon">🧠</span>
+            Large Language Models
+          </h3>
+          <div class="service-category__grid">
+            
+      <a href="https://claude.ai" class="service-card" target="_blank" rel="noopener noreferrer" data-service="claude">
+        <div class="service-card__content">
+          <div class="service-card__header">
+            <h4 class="service-card__name">Claude</h4>
+            
+              <div class="service-card__arrow">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+            
+          </div>
+          <p class="service-card__company">Anthropic</p>
+        </div>
+      </a>
+    
+      <a href="https://chat.openai.com" class="service-card" target="_blank" rel="noopener noreferrer" data-service="chatgpt">
+        <div class="service-card__content">
+          <div class="service-card__header">
+            <h4 class="service-card__name">ChatGPT</h4>
+            
+              <div class="service-card__arrow">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+            
+          </div>
+          <p class="service-card__company">OpenAI</p>
+        </div>
+      </a>
+    
+      <a href="https://gemini.google.com" class="service-card" target="_blank" rel="noopener noreferrer" data-service="gemini">
+        <div class="service-card__content">
+          <div class="service-card__header">
+            <h4 class="service-card__name">Gemini</h4>
+            
+              <div class="service-card__arrow">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+            
+          </div>
+          <p class="service-card__company">Google</p>
+        </div>
+      </a>
+    
+      <a href="https://aistudio.google.com" class="service-card" target="_blank" rel="noopener noreferrer" data-service="ai-studio">
+        <div class="service-card__content">
+          <div class="service-card__header">
+            <h4 class="service-card__name">AI Studio</h4>
+            
+              <div class="service-card__arrow">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+            
+          </div>
+          <p class="service-card__company">Google</p>
+        </div>
+      </a>
+    
+      <a href="https://perplexity.ai" class="service-card" target="_blank" rel="noopener noreferrer" data-service="perplexity">
+        <div class="service-card__content">
+          <div class="service-card__header">
+            <h4 class="service-card__name">Perplexity</h4>
+            
+              <div class="service-card__arrow">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+            
+          </div>
+          <p class="service-card__company">Perplexity</p>
+        </div>
+      </a>
+    
+      <a href="https://poe.com" class="service-card" target="_blank" rel="noopener noreferrer" data-service="poe">
+        <div class="service-card__content">
+          <div class="service-card__header">
+            <h4 class="service-card__name">Poe</h4>
+            
+              <div class="service-card__arrow">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+            
+          </div>
+          <p class="service-card__company">Quora</p>
+        </div>
+      </a>
+    
+      <a href="https://tongyi.aliyun.com" class="service-card" target="_blank" rel="noopener noreferrer" data-service="qwen">
+        <div class="service-card__content">
+          <div class="service-card__header">
+            <h4 class="service-card__name">Qwen</h4>
+            
+              <div class="service-card__arrow">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+            
+          </div>
+          <p class="service-card__company">Alibaba Cloud</p>
+        </div>
+      </a>
+    
+          </div>
+        </div>
+      
+        <div class="service-category" data-category="specialized">
+          <h3 class="service-category__title">
+            <span class="service-category__icon">🛠️</span>
+            Specialized Tools
+          </h3>
+          <div class="service-category__grid">
+            
+      <a href="https://perchance.org" class="service-card" target="_blank" rel="noopener noreferrer" data-service="perchance">
+        <div class="service-card__content">
+          <div class="service-card__header">
+            <h4 class="service-card__name">Perchance</h4>
+            
+              <div class="service-card__arrow">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+            
+          </div>
+          <p class="service-card__company">Perchance</p>
+        </div>
+      </a>
+    
+      <a href="https://notebooklm.google.com" class="service-card" target="_blank" rel="noopener noreferrer" data-service="notebook-lm">
+        <div class="service-card__content">
+          <div class="service-card__header">
+            <h4 class="service-card__name">NotebookLM</h4>
+            
+              <div class="service-card__arrow">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+            
+          </div>
+          <p class="service-card__company">Google</p>
+        </div>
+      </a>
+    
+          </div>
+        </div>
+      
+        <div class="service-category" data-category="image">
+          <h3 class="service-category__title">
+            <span class="service-category__icon">🎨</span>
+            Image Generation
+          </h3>
+          <div class="service-category__grid">
+            
+      <a href="https://blackforestlabs.ai" class="service-card" target="_blank" rel="noopener noreferrer" data-service="black-forest-labs">
+        <div class="service-card__content">
+          <div class="service-card__header">
+            <h4 class="service-card__name">Black Forest Labs</h4>
+            
+              <div class="service-card__arrow">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+            
+          </div>
+          <p class="service-card__company">Black Forest Labs</p>
+        </div>
+      </a>
+    
+      <a href="https://midjourney.com" class="service-card" target="_blank" rel="noopener noreferrer" data-service="midjourney">
+        <div class="service-card__content">
+          <div class="service-card__header">
+            <h4 class="service-card__name">Midjourney</h4>
+            
+              <div class="service-card__arrow">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+            
+          </div>
+          <p class="service-card__company">Midjourney</p>
+        </div>
+      </a>
+    
+      <a href="https://revere.ai" class="service-card" target="_blank" rel="noopener noreferrer" data-service="revere">
+        <div class="service-card__content">
+          <div class="service-card__header">
+            <h4 class="service-card__name">Revere</h4>
+            
+              <div class="service-card__arrow">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+            
+          </div>
+          <p class="service-card__company">Revere</p>
+        </div>
+      </a>
+    
+      <a href="https://aitestkitchen.withgoogle.com/tools/image-fx" class="service-card" target="_blank" rel="noopener noreferrer" data-service="imagefx">
+        <div class="service-card__content">
+          <div class="service-card__header">
+            <h4 class="service-card__name">ImageFX</h4>
+            
+              <div class="service-card__arrow">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+            
+          </div>
+          <p class="service-card__company">Google Labs</p>
+        </div>
+      </a>
+    
+      <a href="https://huggingface.co/spaces/fffiloni/Image-Outpainter" class="service-card" target="_blank" rel="noopener noreferrer" data-service="image-outpainter">
+        <div class="service-card__content">
+          <div class="service-card__header">
+            <h4 class="service-card__name">Image Outpainter</h4>
+            
+              <div class="service-card__arrow">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+            
+          </div>
+          <p class="service-card__company">Hugging Face</p>
+        </div>
+      </a>
+    
+          </div>
+        </div>
+      
+        </div>

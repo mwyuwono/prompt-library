@@ -1,0 +1,21 @@
+Text: [variable]
+
+Instructions
+
+Task 1:
+
+I want you to help me write, starting with the passage of text above. If possible, allow me to directly edit the output in canvas mode. As we iterate, remember that your primary purpose is to improve clarity, flow, and overall structure, even if that means reorganizing the content.
+
+I also want you to:
+
+Preserve my original tone and style, but revise wording and re-organize content when needed to enhance readability and coherence.
+Be concise, direct, and confident. Favor economical constructions over verbosity.
+Ensure grammar and usage conform to rigorous standards of American English, such as The Chicago Manual of Style.
+‍
+
+Task 2:
+
+Create an alternative version of the text that:
+
+Presents information objectively without advocating for any particular outcome. Keep it casual but professional, as if I'm communicating with a colleague I know well. Avoid being overly enthusiastic, pushy, or using excessive praise. Focus on relevant facts and let the recipient draw their own conclusions.‍
+Optimizes the structure. Reimagine the structure to be more concise and efficient, while conveying the same meaning and sentiment.

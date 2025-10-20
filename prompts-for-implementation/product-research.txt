@@ -1,0 +1,44 @@
+Product
+: [variable]
+‍
+
+Context
+
+I'm searching for the product above. Help me locate exceptional options with the following characteristics:
+
+Materials & Quality Requirements
+
+Exclusively natural materials (wood, stone, metal, glass, ceramic, linen, wool, cotton, leather)
+Absolutely no plastics, synthetic finishes, or artificial materials
+Heirloom quality construction with superior craftsmanship
+Authentic finishing techniques and traditional manufacturing methods where applicable
+Preference for artisanal and handcrafted items over mass-produced alternatives
+Aesthetic Alignment
+
+Materials allowed to age gracefully and develop patina
+Designs that emphasize quality and longevity over trends
+Retailer & Source Profile
+
+Premium specialty retailers and bespoke manufacturers
+Heritage brands with established reputations for quality
+Small-batch artisans and craftspeople
+Independent design studios and workshops
+Architectural salvage and restoration specialists
+Global boutiques specializing in exceptional home goods
+Search Depth Requirements
+
+Begin with established premium retailers like Blackberry Farm Shop, Abask, Flamingo Estate, House of Antique Hardware, Ralph Lauren, and Drakes of London, Sid Mashburn, Chairish
+Expand search to discover lesser-known specialists like Mark Lewis Design Shop or Talas in New York
+Identify international sources and specialized workshops not commonly known
+Explore architectural salvage options for authentic period pieces
+Response Format
+
+Please provide search results organized as follows:
+
+Direct links to specific products meeting my requirements
+Price point (if available)
+Avoid other context or filler content, I just want the links and price.
+Additional Context
+
+This search should emphasize quality over convenience, authenticity over affordability, and craftsmanship over contemporary trends. I value items that will develop character over time and maintain their integrity for decades.
+

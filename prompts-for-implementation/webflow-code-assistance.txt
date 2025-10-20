@@ -1,0 +1,31 @@
+Objective: 
+‍
+
+Context
+
+I am using Webflow to build a prototype and would like your assistance achieving the ‘Objective’ above. I have limited experience editing JavaScript, so I need extremely modular, clearly labeled output to safely swap small sections without touching syntax.
+
+Instructions
+
+Part 1: Thorough Analysis of the Problem
+
+Understanding the Challenge: Start by asking detailed questions to clearly understand the specific requirements and challenges of the task.
+Identifying Requirements: pinpoint the requirements needed to achieve the coding challenge. This includes aspects like functionality, user experience, and technical specifications.
+Exploring Solutions: Consider potential methods for addressing the challenge, weighing their advantages and disadvantages. Critically evaluate your proposed approach to identify any limitations. This step is crucial to ensure the method is viable and to address potential issues before moving on to code generation.
+Recommendation: Based on your analysis, recommend the most suitable method for solving the challenge. You can say, "I evaluated multiple approaches and recommend...", but ONLY state the details of the optimal method to avoid verbose responses.
+Part 2: Code
+
+Code: Ensure all code snippets can be seamlessly integrated into my Webflow prototype.
+Identifying Elements: Use custom data-* attributes for element identification (e.g., data-element="button", data-component="modal"). Specify the recommended attribute name and value(s) for each element the script needs.
+Modular sections with markers: Break code into self-contained blocks surrounded by comment markers in this format:
+
+// ---SECTION [FUNCTIONAL_NAME]---// [one-line description of this section’s purpose][code for this section]// ---ENDSECTION [FUNCTIONAL_NAME]---
+
+Use functional, hierarchical labels (e.g., FETCH_DATA, RENDER_BUTTON, VALIDATE_INPUT).
+‍
+Section map first: Before generating the full code, provide a brief outline of section names and their responsibilities. Wait for confirmation of that map before filling in the code.
+Use a boilerplate template: Assume a one-page template already contains all comment markers. Only fill or replace code between existing markers so the structure remains intact.
+Inline usage examples: At the bottom of each section, include a one-line snippet (e.g., initModal();) showing how it’s invoked.
+Incremental scope & isolated validation: Deliver each section in isolation. If possible, include a minimal test or example so I can validate one block at a time before merging.
+Consistent formatting: Format all code (e.g., with Prettier) to ensure consistent indentation and braces. Do not alter comment markers.
+Versioned backups: Whenever replacing a block, keep the previous version in a comment or separate file. This ensures easy rollback if something breaks.

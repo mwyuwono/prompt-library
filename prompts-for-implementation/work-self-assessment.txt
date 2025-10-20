@@ -1,0 +1,54 @@
+Project Description: [varaible] 
+‍
+
+Context: [varaible]
+
+Annual Self-Assessment
+
+For my annual performance review, I aim to measure my impact based on the provided set of impact markers. I require your assistance in synthesizing summaries for each of my projects, highlighting my contributions and aligning them with relevant impact markers.
+
+Instructions:
+
+Preliminary Research: Before diving into the Impact Statements, briefly study my background, professional style, and the provided impact markers to grasp the full context of my role, preferred methods of communication, and key performance indicators.
+Project Deep Dive: Go beyond merely reading the project descriptions. Analyze them to understand the inherent challenges, strategic objectives, and the innovation they bring to the table.
+Impact Statement Draft: Create an initial 'Impact Statement' for each project, synthesizing the project description with relevant impact markers. This statement should be a compelling narrative that highlights my role and contributions. Feel free to rearrange or rephrase elements for enhanced clarity and flow, while retaining the essence of each component.
+Impact Metrics: For each Impact Statement, include specific metrics or quantifiable achievements that demonstrate the impact made. This could be in terms of cost savings, efficiency gains, or client engagement levels.
+Enhanced Impact Statement: Generate an "Enhanced Impact Statement" that incorporates at least three specific refinements for clarity, impact, or strategic alignment. This version should not just be a reiteration but a polished narrative that builds upon the original Impact Statement, making it more persuasive and impactful.
+Relevance Highlight: Conclude each Enhanced Impact Statement by explicitly indicating which impact markers were most crucial in shaping the project's success. This reinforces the alignment with organizational goals and objectives.
+Narrative Flow: Ensure that both versions of the Impact Statement have a logical flow, transitioning smoothly from introducing the project, to discussing challenges, solutions, and finally, the impact created.
+Background:
+
+I'm a seasoned Product Designer at a prominent consulting firm, leading user experience design for our Global Banking Practice. As one of the four key figures in the central leadership team called the 'Global Banking Hub', my purview extends across the design and user experience of all banking solutions we offer. My approach hinges on the Human-Centered Design methodology for product design, ensuring that our tools are intuitive and effective for our end users. In product development, I adhere to Agile methodology, maintaining flexibility and responsiveness to deliver efficient, high-quality results. For problem solving and workshops, I rely on Design Thinking best practices..
+
+Professional Style:
+
+My communication style prioritizes clarity and conciseness, without compromising on detail. I aim for substance and measurable impact, avoiding overconfidence and self-aggrandizement.
+
+Impact Markers:
+
+Impact Market Category: Discover
+
+‍Research: Defines approach for a wide range of methods‍
+Creativity: Diagnoses key opportunities by applying multiple creative lens to make connections and push ideas‍
+Workshop: Strategizes and oversees workshops to generate maximum client input & participation‍
+Strategy: Shapes and translates business problems into digital services and functionality
+Impact Market Category: Create
+
+Creativity: Establishes the creative direction and problem solving by applying guiding principles to generate new solutions for complex systems that address consumer and business goals
+Concepting: Guides teams on how to best frame & communicate design logic
+Prototype: Establishes direction for developing testable prototypes to evaluate and measure trade-offs using qual and quant techniques
+Value Prop: Understands & shapes approach for teams to compellingly communicate value prop/ vision across all lenses
+Design Problem Solving: Shares perspective / feedback during design PS sessions
+Impact Market Category: Build
+
+Experience: Shapes the building frameworks approach for a successful design and production of a relevant, engaging and intuitive experience
+Develop: Decides on the final approach for developer-ready designs taking into account business & tech constraints, often including best practice tools, design systems, component library etc.
+Visual: Sets appropriate internal selection of systems, processes, business considerations, external requirements (e.g. App Store Guidelines) for production
+Production: Oversees and shapes the implementation/ path-to-production, alerting team of potential design bugs
+Cross-team: Shapes client/ CST/ cross-functional team approach to implementation providing direction across all lenses
+Impact Market Category: Scale
+
+Talent: Begins to help clients by mapping out specific talent needs, implementing tools and processes to achieve world class design
+Ops Capabilities: Begins to implement tools and processes to help scale to achieve world class design operations and systems
+Culture: Develops programs to help organizations to put the customer at the heart of the organization
+Evangelism: Starts to craft design impact stories

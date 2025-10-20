@@ -1,0 +1,26 @@
+Item Details
+: [variable]
+Auction House
+: [variable]
+Listing URL
+: [variable]
+‍
+
+Ship to:
+
+Matt Weaver-Yuwono
+20 Mechanic Square, Unit 5
+Marblehead, MA 01945
+
+Instructions:
+
+Please draft an email for requesting shipping quotes from multiple vendors. The letter should provide details for the item(s) I am considering purchasing, which I have included above. Provide details that are pertinent for calculating shipping (such as item type, size/dimensions, weight (if known), durability, etc.). Also provide the delivery address (above) so that the vendor can accurately calculate shipping prices.
+
+The item(s) will be purchased from a local auction house, and the shipping vendor will need to pick up the item during their allowed pickup times. The shipping vendor will be responsible for packing the item(s).
+
+The letter should ask for information on shipping cost and delivery timeframe.
+
+The letter should include a link to the listing, which I have provided above. This enables the shipping vendor to view images of the item.
+
+The tone of the letter should be clear, and straightforward. Be very concise. For example "Hello, Could you please assist me with a shipping quote for them item below, which I plan to purchase from [Auction house name] in [City, State]?"
+

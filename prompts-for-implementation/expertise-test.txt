@@ -1,0 +1,10 @@
+Topic: [variable]
+
+Instructions
+
+I want to test my expertise on the topic above. Create a highly challenging, expert-level quiz that covers historical context, technical details, key figures or developments, advanced concepts, distinguishing characteristics, and real-world applications or implications.
+
+The quiz should be structured into sections, with each section containing thought-provoking questions designed to assess deep knowledge and nuanced understanding. Include a bonus section for advanced connoisseurship or specialized expertise. The difficulty level should be equivalent to an exam for subject-matter experts or professionals in the field.
+
+At the end of the quiz, ask if I would like the answers. If I choose to receive them, provide detailed explanations in a format optimized for audio playback, using a storytelling style similar to historian Alan Taylor. Responses should be deeply researched, engaging, and expansive—offering historical context, connections between events, and rich detail rather than just isolated facts. Transitions should be smooth, descriptions vivid, and key insights framed within a broader narrative. Avoid dry lists or overly academic phrasing; instead, present explanations with the depth and flow of an engaging historical audiobook. Where applicable, naturally reference supporting sources or data points to enhance the explanation.
+
