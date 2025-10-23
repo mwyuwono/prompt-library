@@ -502,6 +502,26 @@ class PromptLibrary {
     closePromptModal() {
         if (!this.promptModal) return;
 
+        // Check if in edit mode with unsaved changes
+        if (this.activePromptIndex !== null && this.activePromptIndex !== undefined) {
+            const prompt = this.filteredPrompts[this.activePromptIndex];
+            if (prompt && prompt.locked === false) {
+                // In edit mode - check for unsaved changes
+                if (prompt.originalTemplate && prompt.template !== prompt.originalTemplate) {
+                    // Has unsaved changes - show confirmation
+                    const shouldClose = confirm('You have unsaved changes. Are you sure you want to close without saving?');
+                    if (!shouldClose) {
+                        return; // Don't close
+                    }
+                    // Restore original template
+                    prompt.template = prompt.originalTemplate;
+                }
+                // Reset to locked state
+                prompt.locked = true;
+                delete prompt.originalTemplate;
+            }
+        }
+
         this.promptModal.classList.remove('show');
         document.body.classList.remove('modal-open');
         this.activePromptIndex = null;
@@ -809,8 +829,16 @@ class PromptLibrary {
         if (!prompt) return;
 
         prompt.locked = !prompt.locked;
-        if (prompt.locked && !prompt.activeTab) {
-            prompt.activeTab = 'variables';
+
+        if (prompt.locked) {
+            // Locking - clean up original template
+            delete prompt.originalTemplate;
+            if (!prompt.activeTab) {
+                prompt.activeTab = 'variables';
+            }
+        } else {
+            // Unlocking - save original template for comparison
+            prompt.originalTemplate = prompt.template;
         }
 
         this.refreshPromptViews(index);
@@ -860,6 +888,7 @@ class PromptLibrary {
         if (!prompt) return;
 
         prompt.locked = true;
+        delete prompt.originalTemplate; // Clean up original template
         this.refreshPromptViews(index);
 
         this.showToast('Changes saved!');

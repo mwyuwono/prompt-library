@@ -106,6 +106,10 @@ body {
     height: 100%;
 }
 
+html {
+    scrollbar-gutter: stable;
+}
+
 body {
     font-family: var(--font-sans);
     font-size: var(--base-font-size);
@@ -406,6 +410,7 @@ body.modal-open {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     position: relative;
+    min-width: 240px;
 }
 
 .prompt-card:hover {
