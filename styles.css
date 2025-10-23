@@ -174,14 +174,13 @@ body {
 .main-content {
     flex: 1;
     display: flex;
-    overflow: hidden;
+    overflow-y: auto;
 }
 
 .main-container {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    overflow: hidden;
+    width: 100%;
 }
 
 .prompt-area {
@@ -189,12 +188,10 @@ body {
     display: flex;
     flex-direction: column;
     gap: var(--space-lg);
-    overflow: hidden;
     position: relative;
 }
 
 .prompt-grid {
-    flex: auto overflow-y: auto;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(20vw, 1fr));
     gap: var(--space-lg);
@@ -221,7 +218,6 @@ body.modal-open {
 /* Header */
 .header {
     background-color: var(--surface-elevated);
-    border-bottom: 1px solid var(--border-subtle);
     padding: var(--space-lg) var(--space-xl);
 }
 
@@ -287,7 +283,7 @@ body.modal-open {
     gap: var(--space-lg);
     padding: var(--space-xl) var(--space-xl) var(--space-lg);
     flex-wrap: wrap;
-    background-color: var(--surface-elevated);
+    background-color: var(--surface-cream);
 }
 
 .search-wrapper {
@@ -405,7 +401,7 @@ body.modal-open {
     background: var(--surface-elevated);
     border-radius: 16px;
     padding: var(--space-xl);
-    border: 1px solid var(--border-subtle);
+    border: none;
     box-shadow: var(--shadow-soft);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
@@ -415,7 +411,6 @@ body.modal-open {
 .prompt-card:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-lifted);
-    border-color: var(--border-medium);
 }
 
 .prompt-card:active {
@@ -502,7 +497,6 @@ body.modal-open {
 .prompt-card:focus-visible {
     outline: none;
     box-shadow: var(--shadow-medium), 0 0 0 3px var(--accent-tint);
-    border-color: var(--accent-base);
 }
 
 .lock-button {
@@ -889,7 +883,8 @@ body.modal-open {
     border-radius: 20px;
     max-width: 840px;
     width: 90%;
-    max-height: 90vh;
+    height: 85vh;
+    max-height: 85vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -989,11 +984,10 @@ body.modal-open {
 
 .modal-body {
     padding: var(--space-xl);
-    will-change: height;
     display: flex;
     flex-direction: column;
     flex: 1;
-    overflow: hidden;
+    overflow-y: auto;
     gap: var(--space-lg);
 }
 
