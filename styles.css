@@ -30,9 +30,9 @@
     --warning-bg: #b5bab2;
     --warning-text: #92400e;
 
-    /* Typography Scale - inspired by Mr Porter */
-    --font-serif: Georgia, 'Times New Roman', serif;
-    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    /* Typography Scale - Editorial elegance */
+    --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    --font-sans: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
     /* Base font size for rem/em calculations */
     --base-font-size: 16px;
