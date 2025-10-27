@@ -129,9 +129,10 @@ The application supports two view modes toggled via icon buttons in the controls
 ## Styling System
 
 **Design Tokens**:
-- Material Design 3 tokens (`--md-sys-*`) define colors, elevation, motion, and typography
-- Category colors (`--category-productivity-*`, `--category-expertise-*`, `--category-travel-*`) stored as CSS variables
-- Modal effects (`--modal-blur-amount`, `--modal-shadow`) easily adjustable
+- Core palette uses eight descriptive variables (`--color-page-background`, `--color-card-surface`, `--color-surface-hover`, `--color-border-subtle`, `--color-text-primary`, `--color-text-secondary`, `--color-action-primary`, `--color-action-primary-hover`)
+- Category accents supply per-chip hues (`--color-category-productivity`, `--color-category-expertise`, `--color-category-travel`, `--color-category-lifestyle`, `--color-category-inspiration`)
+- Material tokens (`--md-sys-*`) now focus on motion, typography, state-layer opacity, and elevation
+- Modal effects (`--modal-blur-amount`) remain tweakable in `:root`
 
 **Interactive States**:
 - All hover/focus/pressed states use M3 state layers (pseudo-element overlays)

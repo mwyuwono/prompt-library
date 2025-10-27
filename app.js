@@ -251,11 +251,7 @@ class PromptLibrary {
         const variableCounts = document.querySelectorAll('.variable-count-badge');
 
         descriptions.forEach(desc => {
-            if (this.showDetails) {
-                desc.classList.remove('hidden');
-            } else {
-                desc.classList.add('hidden');
-            }
+            this.animateDetailVisibility(desc, this.showDetails);
         });
 
         variableCounts.forEach(badge => {
@@ -265,6 +261,99 @@ class PromptLibrary {
                 badge.classList.add('hidden');
             }
         });
+    }
+
+    /**
+     * Smoothly animate show/hide for collapsible descriptions
+     */
+    animateDetailVisibility(element, shouldShow) {
+        if (!element) {
+            return;
+        }
+
+        const prefersReducedMotion = typeof window !== 'undefined' &&
+            typeof window.matchMedia === 'function' &&
+            window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (element.__detailToggleHandler) {
+            element.removeEventListener('transitionend', element.__detailToggleHandler);
+            element.__detailToggleHandler = null;
+        }
+
+        if (prefersReducedMotion) {
+            if (shouldShow) {
+                element.classList.remove('hidden');
+            } else {
+                element.classList.add('hidden');
+            }
+            element.style.height = '';
+            element.style.opacity = '';
+            return;
+        }
+
+        if (shouldShow) {
+            if (!element.classList.contains('hidden')) {
+                element.style.height = '';
+                element.style.opacity = '';
+                return;
+            }
+
+            element.classList.remove('hidden');
+            element.style.transition = 'none';
+            const targetHeight = element.scrollHeight;
+            element.style.height = '0px';
+            element.style.opacity = '0';
+            element.offsetHeight; // force reflow at height 0
+            element.style.transition = '';
+
+            requestAnimationFrame(() => {
+                element.style.height = `${targetHeight}px`;
+                element.style.opacity = '1';
+            });
+
+            const onEnd = (event) => {
+                if (event.propertyName !== 'height') {
+                    return;
+                }
+                element.style.height = '';
+                element.style.opacity = '';
+                element.__detailToggleHandler = null;
+                element.removeEventListener('transitionend', onEnd);
+            };
+
+            element.__detailToggleHandler = onEnd;
+            element.addEventListener('transitionend', onEnd);
+        } else {
+            if (element.classList.contains('hidden')) {
+                element.style.height = '';
+                element.style.opacity = '';
+                return;
+            }
+
+            const startHeight = element.scrollHeight;
+            element.style.height = `${startHeight}px`;
+            element.style.opacity = '1';
+            element.offsetHeight; // force reflow with current height
+
+            requestAnimationFrame(() => {
+                element.style.height = '0px';
+                element.style.opacity = '0';
+            });
+
+            const onEnd = (event) => {
+                if (event.propertyName !== 'height') {
+                    return;
+                }
+                element.classList.add('hidden');
+                element.style.height = '';
+                element.style.opacity = '';
+                element.__detailToggleHandler = null;
+                element.removeEventListener('transitionend', onEnd);
+            };
+
+            element.__detailToggleHandler = onEnd;
+            element.addEventListener('transitionend', onEnd);
+        }
     }
 
     /**
@@ -366,11 +455,11 @@ class PromptLibrary {
             <div class="prompt-list-item-content">
                 <div class="prompt-list-item-header">
                     <h3 class="prompt-list-item-title">${this.highlightText(prompt.title, this.searchTerm)}</h3>
-                    <div class="prompt-list-item-badges">
-                        <span class="variable-count-badge ${hiddenClass}">${variableCount > 0 ? `${variableCount} variable${variableCount > 1 ? 's' : ''}` : 'No variables'}</span>
-                    </div>
                 </div>
                 <p class="prompt-list-item-description ${hiddenClass}">${this.highlightText(prompt.description, this.searchTerm)}</p>
+            </div>
+            <div class="prompt-list-item-meta">
+                <span class="variable-count-badge ${hiddenClass}">${variableCount > 0 ? `${variableCount} variable${variableCount > 1 ? 's' : ''}` : 'No variables'}</span>
             </div>
         `;
 

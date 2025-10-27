@@ -210,12 +210,9 @@ Edit `prompts.json` - no code changes needed. Ensure:
 
 ### Category Conventions
 
-- Current taxonomy is consolidated to `Productivity`, `Expertise`, and `Travel & Shopping`
+- Current taxonomy is consolidated to `Productivity`, `Expertise`, and `Travel & Shopping` (with optional `Lifestyle` / `Inspiration` accents ready)
 - Reuse existing labels when introducing new prompts to keep chip filters consistent
-- Category colors are defined as CSS variables and apply only in grid view:
-  - `--category-productivity-*` (blue tones)
-  - `--category-expertise-*` (purple tones)
-  - `--category-travel-*` (green tones)
+- Category badges derive from the accent tokens (`--color-category-*`) with `color-mix()` to create soft backgrounds
 
 ### Variable Input Heuristics
 
@@ -249,10 +246,10 @@ All user inputs are escaped via `escapeHTML()` before rendering to prevent injec
 - Avoid changing background colors directly on hover; use pseudo-element overlays instead
 
 **Variables**:
-- Extract hardcoded colors, shadows, and effects to CSS variables in `:root`
-- Modal effects use `--modal-blur-amount` and `--modal-shadow`
-- Category colors use `--category-{name}-{property}` pattern
-- All Material Design 3 tokens prefixed with `--md-sys-`
+- Keep colors within the new descriptive palette (`--color-page-background`, `--color-card-surface`, `--color-surface-hover`, `--color-border-subtle`, `--color-text-primary`, `--color-text-secondary`, `--color-action-primary`, `--color-action-primary-hover`)
+- Category accents live in `--color-category-*`
+- Modal effects use `--modal-blur-amount`
+- Motion/typography/state tokens still rely on the existing `--md-sys-*` variables
 
 **Transitions**:
 - Description/badge visibility uses smooth max-height and opacity transitions
