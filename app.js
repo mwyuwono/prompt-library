@@ -836,8 +836,43 @@ class PromptLibrary {
         const prompt = this.filteredPrompts[index];
         if (!prompt) return;
 
+        // Update the prompt's active tab
         prompt.activeTab = tabName;
-        this.refreshPromptViews(index);
+
+        // Update tab buttons and panes directly in the DOM instead of re-rendering
+        if (this.promptModalBody) {
+            const tabButtons = this.promptModalBody.querySelectorAll('.tab-button');
+            const tabPanes = this.promptModalBody.querySelectorAll('.tab-pane');
+            const clearButton = this.promptModalBody.querySelector('[data-action="clear-variables"]');
+
+            // Update button active states
+            tabButtons.forEach(button => {
+                const buttonTab = button.dataset.tab;
+                if (buttonTab === tabName) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            });
+
+            // Update pane active states
+            tabPanes.forEach(pane => {
+                const paneTab = pane.dataset.tab;
+                if (paneTab === tabName) {
+                    pane.classList.add('active');
+                } else {
+                    pane.classList.remove('active');
+                }
+            });
+
+            // Show/hide Clear All button based on active tab
+            if (clearButton) {
+                clearButton.style.display = tabName === 'variables' ? '' : 'none';
+            }
+        }
+
+        // Update the card if needed
+        this.updatePromptCard(index);
     }
 
     /**
