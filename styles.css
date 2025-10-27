@@ -1,5 +1,43 @@
 /* CSS Variables */
 :root {
+    /* Material Design 3 Expressive Color Tokens (for cards demo) */
+    /* Primary palette */
+    --md-sys-color-primary: #006590;
+    --md-sys-color-on-primary: #ffffff;
+    --md-sys-color-primary-container: #c7e7ff;
+    --md-sys-color-on-primary-container: #001e2e;
+
+    /* Surface colors */
+    --md-sys-color-surface: #fdfcfb;
+    --md-sys-color-surface-dim: #ded9d1;
+    --md-sys-color-surface-bright: #fdfcfb;
+    --md-sys-color-surface-container-lowest: #ffffff;
+    --md-sys-color-surface-container-low: #f8f3ea;
+    --md-sys-color-surface-container: #f2ede5;
+    --md-sys-color-surface-container-high: #ede8df;
+    --md-sys-color-surface-container-highest: #e7e2d9;
+    --md-sys-color-on-surface: #1c1b1f;
+    --md-sys-color-on-surface-variant: #45464e;
+
+    /* M3 Elevation/Shadow tokens */
+    --md-sys-elevation-level0: none;
+    --md-sys-elevation-level1: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+    --md-sys-elevation-level2: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15);
+    --md-sys-elevation-level3: 0px 4px 8px 3px rgba(0, 0, 0, 0.15), 0px 1px 3px rgba(0, 0, 0, 0.3);
+    --md-sys-elevation-level4: 0px 6px 10px 4px rgba(0, 0, 0, 0.15), 0px 2px 3px rgba(0, 0, 0, 0.3);
+    --md-sys-elevation-level5: 0px 8px 12px 6px rgba(0, 0, 0, 0.15), 0px 4px 4px rgba(0, 0, 0, 0.3);
+
+    /* M3 State layer opacities */
+    --md-sys-state-hover-opacity: 0.08;
+    --md-sys-state-focus-opacity: 0.12;
+    --md-sys-state-pressed-opacity: 0.12;
+
+    /* M3 Shape tokens (Expressive uses larger values) */
+    --md-sys-shape-corner-extra-large: 28px;
+    --md-sys-shape-corner-large: 16px;
+    --md-sys-shape-corner-medium: 12px;
+    --md-sys-shape-corner-small: 8px;
+
     /* Editorial Color System - Classic but Fresh */
 
     /* Primary Ink Tones - Deep charcoal/black for sophistication */
@@ -401,25 +439,68 @@ body.modal-open {
 
 
 
-/* Prompt Card */
+/* Prompt Card - M3 Expressive Elevated Card */
 .prompt-card {
-    background: var(--surface-elevated);
-    border-radius: 16px;
+    /* M3 Surface */
+    background: var(--md-sys-color-surface-container-low);
+
+    /* M3 Expressive: Extra-large corner for bold, friendly appearance */
+    border-radius: var(--md-sys-shape-corner-extra-large);
+
+    /* M3 spacing (16dp standard) */
     padding: var(--space-xl);
+
     border: none;
-    box-shadow: var(--shadow-soft);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* M3 Elevation Level 1 (resting state) */
+    box-shadow: var(--md-sys-elevation-level1);
+
+    /* M3 motion: emphasized easing */
+    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+
     cursor: pointer;
     position: relative;
+
+    /* Prepare for state layer overlay */
+    overflow: hidden;
+}
+
+/* M3 State Layer - Hover */
+.prompt-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--md-sys-color-on-surface);
+    opacity: 0;
+    transition: opacity 0.2s cubic-bezier(0.2, 0, 0, 1);
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+.prompt-card:hover::before {
+    opacity: var(--md-sys-state-hover-opacity);
 }
 
 .prompt-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lifted);
+    /* M3 Elevation Level 2 (hover state) */
+    box-shadow: var(--md-sys-elevation-level2);
+
+    /* Subtle lift for feedback */
+    transform: translateY(-2px);
+}
+
+/* M3 State Layer - Pressed */
+.prompt-card:active::before {
+    opacity: var(--md-sys-state-pressed-opacity);
 }
 
 .prompt-card:active {
-    transform: translateY(-2px);
+    /* Return to Level 1 elevation when pressed */
+    box-shadow: var(--md-sys-elevation-level1);
+    transform: translateY(0);
 }
 
 .card-header {
@@ -451,10 +532,16 @@ body.modal-open {
     font-size: var(--text-xs);
     font-weight: var(--weight-medium);
     line-height: var(--leading-tight);
-    color: var(--accent-dark);
-    background-color: var(--accent-tint);
+
+    /* M3: Use primary container for category badge */
+    color: var(--md-sys-color-on-primary-container);
+    background-color: var(--md-sys-color-primary-container);
+
     padding: 0.375rem 0.75rem;
-    border-radius: 12px;
+
+    /* M3 small corner radius for compact elements */
+    border-radius: var(--md-sys-shape-corner-small);
+
     letter-spacing: var(--tracking-wider);
     text-transform: uppercase;
 }
@@ -468,11 +555,17 @@ body.modal-open {
     font-weight: var(--weight-medium);
     line-height: var(--leading-tight);
     letter-spacing: var(--tracking-wide);
-    color: var(--text-secondary);
-    background-color: var(--surface-warm);
+
+    /* M3: Use surface-container-highest for badges */
+    color: var(--md-sys-color-on-surface-variant);
+    background-color: var(--md-sys-color-surface-container-highest);
+
     padding: 0.375rem 0.75rem;
-    border-radius: 12px;
-    border: 1px solid var(--border-subtle);
+
+    /* M3 small corner radius for compact elements */
+    border-radius: var(--md-sys-shape-corner-small);
+
+    border: none;
 }
 
 .card-meta-inline {
@@ -495,13 +588,19 @@ body.modal-open {
 }
 
 
+/* M3 Focus indicator */
 .prompt-card:focus {
     outline: none;
 }
 
 .prompt-card:focus-visible {
-    outline: none;
-    box-shadow: var(--shadow-medium), 0 0 0 3px var(--accent-tint);
+    outline: 3px solid var(--md-sys-color-primary);
+    outline-offset: 2px;
+    box-shadow: var(--md-sys-elevation-level1);
+}
+
+.prompt-card:focus-visible::before {
+    opacity: var(--md-sys-state-focus-opacity);
 }
 
 .lock-button {
