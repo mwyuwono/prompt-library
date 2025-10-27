@@ -213,5 +213,14 @@
             }
         ],
         "locked": true
+    },
+    {
+        "id": "image-style-transfer",
+        "title": "Image Style Transfer",
+        "description": "Apply the complete visual style of one image to another while preserving subject identity",
+        "category": "Expertise",
+        "template": "Re-render image 2 using the complete visual style (e.g., color, texture, medium) of image 1. Preserve the original subject matter's identity, composition, and physical features in image 2.",
+        "variables": [],
+        "locked": true
     }
 ]
