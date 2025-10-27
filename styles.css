@@ -417,8 +417,14 @@ body {
     color: var(--primary-color);
 }
 
+/* Prevent scroll on body when modal is open */
 body.modal-open {
     overflow: hidden;
+    /* Prevent scroll chaining on touch devices */
+    position: fixed;
+    width: 100%;
+    /* Preserve scroll position - will be set via JS */
+    top: 0;
 }
 
 /* M3 Top App Bar */
@@ -1366,6 +1372,9 @@ body.modal-open {
     justify-content: center;
     opacity: 0;
 
+    /* Prevent scroll chaining */
+    overscroll-behavior: contain;
+
     /* M3 motion */
     transition: opacity var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
 }
@@ -1384,6 +1393,9 @@ body.modal-open {
     background-color: transparent;
     cursor: pointer;
 
+    /* Prevent touch events from reaching background */
+    touch-action: none;
+
     /* M3 motion */
     transition: background-color var(--md-sys-motion-duration-medium4) var(--md-sys-motion-easing-emphasized);
 }
@@ -1392,6 +1404,8 @@ body.modal-open {
     /* M3 scrim */
     background-color: var(--md-sys-color-scrim);
     backdrop-filter: blur(8px);
+    /* Ensure backdrop filter is supported */
+    -webkit-backdrop-filter: blur(8px);
 }
 
 .modal-content {
@@ -1422,6 +1436,12 @@ body.modal-open {
 
     /* M3 emphasized motion */
     transition: all var(--md-sys-motion-duration-medium4) var(--md-sys-motion-easing-emphasized-decelerate);
+
+    /* Prevent scroll chaining - scrolling within modal won't affect body */
+    overscroll-behavior: contain;
+
+    /* Ensure pointer events work */
+    pointer-events: auto;
 }
 
 .modal.show .modal-content {
@@ -1544,7 +1564,17 @@ body.modal-open {
     display: flex;
     flex-direction: column;
     flex: 1;
+
+    /* Enable scrolling within modal only */
     overflow-y: auto;
+    overflow-x: hidden;
+
+    /* Prevent scroll chaining to parent/body */
+    overscroll-behavior: contain;
+
+    /* Smooth scrolling */
+    -webkit-overflow-scrolling: touch;
+
     gap: var(--space-lg);
 }
 
@@ -1559,11 +1589,18 @@ body.modal-open {
 .modal-scroll-area {
     flex: 1;
     overflow-y: auto;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
     gap: var(--space-lg);
     padding-right: calc(var(--space-sm) / 2);
     min-height: 0;
+
+    /* Prevent scroll chaining */
+    overscroll-behavior: contain;
+
+    /* Smooth scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
 }
 
 .prompt-modal-description {
