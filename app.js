@@ -289,9 +289,14 @@ class PromptLibrary {
         const hasVariables = prompt.variables && prompt.variables.length > 0;
         const activeTab = prompt.activeTab || 'variables';
 
+        console.log('getLockedViewHTML:', { promptId: prompt.id, activeTab, hasVariables, variablesCount: prompt.variables?.length });
+
         if (!hasVariables) {
             return this.getPreviewHTML(compiledPrompt);
         }
+
+        const variablesHTML = this.getVariablesHTML(prompt);
+        console.log('Variables HTML length:', variablesHTML.length);
 
         return `
             <div class="tabs-container">
@@ -308,7 +313,7 @@ class PromptLibrary {
                 </div>
                 <div class="tabs-content">
                     <div class="tab-pane ${activeTab === 'variables' ? 'active' : ''}" data-tab="variables">
-                        ${this.getVariablesHTML(prompt)}
+                        ${variablesHTML}
                     </div>
                     <div class="tab-pane ${activeTab === 'preview' ? 'active' : ''}" data-tab="preview">
                         ${this.getPreviewContentHTML(compiledPrompt)}
@@ -836,7 +841,9 @@ class PromptLibrary {
         const prompt = this.filteredPrompts[index];
         if (!prompt) return;
 
+        console.log('switchTab called:', { index, tabName, promptId: prompt.id, currentTab: prompt.activeTab });
         prompt.activeTab = tabName;
+        console.log('After setting activeTab:', prompt.activeTab);
         this.refreshPromptViews(index);
     }
 
