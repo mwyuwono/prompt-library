@@ -115,6 +115,7 @@ body {
     background-color: var(--surface-cream);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
 }
 
 /* Refined Scrollbar Styling */
@@ -284,6 +285,8 @@ body.modal-open {
     padding: var(--space-xl) var(--space-xl) var(--space-lg);
     flex-wrap: wrap;
     background-color: var(--surface-cream);
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 .search-wrapper {
@@ -356,6 +359,8 @@ body.modal-open {
     gap: var(--space-sm);
     flex-wrap: wrap;
     margin: 0;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 .category-chip {
@@ -1131,6 +1136,13 @@ body.modal-open {
     .category-chips {
         width: 100%;
         flex: 1 1 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .category-chip {
+        white-space: nowrap;
+        flex-shrink: 0;
     }
 
     /* Prompt grid - reduce padding */
