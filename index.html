@@ -19,10 +19,10 @@
         <header class="header">
             <div class="container">
                 <div class="header-content">
-                    <h1 class="header-title">Prompt Library</h1>
                     <img src="public/images/prompts-logo.svg" alt="Prompt Library logo" class="header-logo">
+                    <h1 class="header-title">Prompt Library</h1>
                     <nav class="header-nav">
-                        <button class="btn btn-secondary nav-link" id="openLinksModal">AI Tools</button>
+                        <button class="btn btn-secondary btn-sm nav-link" id="openLinksModal">AI Tools</button>
                         <button class="hamburger" id="hamburgerMenu" aria-label="Menu">
                             <span></span>
                             <span></span>
@@ -45,13 +45,37 @@
                         </div>
                     </div>
 
+                    <!-- View Toggle Buttons -->
+                    <div class="view-toggle">
+                        <button class="view-toggle-btn active" data-view="list" aria-label="List view">
+                            <span class="material-symbols-outlined">view_list</span>
+                        </button>
+                        <button class="view-toggle-btn" data-view="grid" aria-label="Grid view">
+                            <span class="material-symbols-outlined">grid_view</span>
+                        </button>
+                    </div>
+
+                    <!-- Toggle Switch for Descriptions -->
+                    <div class="toggle-wrapper">
+                        <label class="toggle-label">
+                            <input type="checkbox" id="showDetailsToggle" class="toggle-input">
+                            <span class="toggle-slider"></span>
+                            <span class="toggle-text">Descriptions</span>
+                        </label>
+                    </div>
+
                     <!-- Category Filter Chips -->
                     <div id="categoryChips" class="category-chips">
                         <!-- Chips will be dynamically inserted here -->
                     </div>
                 </div>
 
-                <div class="prompt-area">
+                <div class="prompt-area view-list">
+                    <!-- Prompt List View -->
+                    <div id="promptList" class="prompt-list">
+                        <!-- List items will be dynamically inserted here -->
+                    </div>
+
                     <!-- Prompt Cards Grid -->
                     <div id="promptGrid" class="prompt-grid">
                         <!-- Cards will be dynamically inserted here -->

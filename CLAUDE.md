@@ -47,11 +47,14 @@ The `PromptLibrary` class maintains state through:
 - `filteredPrompts` - Currently displayed prompts after search/filter
 - `selectedCategory` - Active category filter
 - `searchTerm` - Current search query
+- `currentView` - Active view mode ('list' or 'grid', defaults to 'list')
+- `showDetails` - Whether descriptions and variable counts are visible (defaults to false)
 
 Each prompt object can have runtime properties:
 - `locked` - Boolean for edit mode (default: true)
 - `activeTab` - Current tab ('variables' or 'preview')
 - `variables[].value` - User-entered values for substitution
+- `category` - Used for color coding in grid view (set as data attribute on cards)
 
 ### Key Architectural Patterns
 
@@ -131,20 +134,43 @@ The actual implementation uses this structure (differs from requirements doc):
 
 ### Global UI Patterns
 
-- Header uses a three-column grid: title anchored left, logo centered, and nav actions (AI Tools + hamburger) aligned right
-- Buttons share a `.btn` base (uppercase, pill-shaped) with `.btn-primary` (purple fill) and `.btn-secondary` (neutral surface) variants reused across the app; `.btn-sm` is available for compact contexts (e.g., modal header controls)
-- **Important**: CSS is currently under manual refinement by the maintainer—do not adjust existing styling unless explicitly asked or you are styling a brand-new component. When implementing new features, you may provide initial styling, but expect follow-up refinements.
-- The global search control mirrors the same pill silhouette to keep top-level inputs cohesive
+- **Header**: Flexbox layout with logo on left, title beside it, and nav actions (AI Tools + hamburger) on right
+- **Controls Bar**: Compact 64px min-height bar with search, view toggle (list/grid), descriptions toggle, and category chips
+- **Buttons**: Share a `.btn` base (uppercase, pill-shaped) with `.btn-primary` and `.btn-secondary` variants; `.btn-sm` for compact contexts
+- **Search**: Compact input without keyboard shortcut hint, focuses main content on interaction
+- **Hover States**: Consistent Material Design 3 state layers (`--md-sys-state-hover-opacity`) across all interactive elements
+- **CSS Variables**: Modal blur (`--modal-blur-amount`), category colors (`--category-*`), and M3 design tokens are defined in `:root`
 
-### Prompt Summary Cards
+### View Modes
 
-- Display title, category chip, short description, and a variable count badge
+**List View (Default)**:
+- Prompts organized by category with section headers
+- Table-like rows with transparent backgrounds, no gaps, no border-radius
+- Minimal padding for information density
+- Shows title and badges; descriptions/variable counts hidden by default
+
+**Grid View**:
+- Fixed 300px card width, auto-fills horizontally
+- Category badges color-coded per category (blue/Productivity, purple/Expertise, green/Travel & Shopping)
+- Cards maintain neutral background with rounded corners and elevation
+
+### Prompt Cards (Grid View)
+
+- Display title below category badge header
+- Category badge and variable count badge in top-left corner
+- Descriptions and variable counts toggle-able via controls bar
 - Entire card is keyboard-focusable and opens the modal on click/Enter/Space
-- Material Symbols supply iconography where needed (e.g., buttons inside cards and modals)
+- Material Symbols supply iconography where needed
 
 ### Prompt Detail Modal
 
-- Opens as an overlay when a summary card is activated (mirrors the AI tools modal pattern)
+**Animation & Appearance**:
+- Opens with spring-like animation: scales from 85% to 102% to 100% over 0.45s
+- Closes faster (0.25s) with simple scale/fade
+- Background uses 16px blur with saturation boost, no dark overlay
+- Enhanced shadow for visibility against blurred background
+
+**Layout**:
 - Header shows the prompt title and category
 - Toolbar surfaces an `Edit prompt` call-to-action button (with lock icons) that toggles edit mode
 - Modal body height animates between state changes (e.g., switching tabs) to soften large content shifts
@@ -186,6 +212,10 @@ Edit `prompts.json` - no code changes needed. Ensure:
 
 - Current taxonomy is consolidated to `Productivity`, `Expertise`, and `Travel & Shopping`
 - Reuse existing labels when introducing new prompts to keep chip filters consistent
+- Category colors are defined as CSS variables and apply only in grid view:
+  - `--category-productivity-*` (blue tones)
+  - `--category-expertise-*` (purple tones)
+  - `--category-travel-*` (green tones)
 
 ### Variable Input Heuristics
 
@@ -210,6 +240,24 @@ try {
 ### XSS Protection
 
 All user inputs are escaped via `escapeHTML()` before rendering to prevent injection attacks.
+
+### CSS Quality Standards
+
+**Consistency**:
+- All interactive elements use Material Design 3 state layers for hover/focus/pressed states
+- State layer opacity controlled by `--md-sys-state-hover-opacity`, `--md-sys-state-focus-opacity`, `--md-sys-state-pressed-opacity`
+- Avoid changing background colors directly on hover; use pseudo-element overlays instead
+
+**Variables**:
+- Extract hardcoded colors, shadows, and effects to CSS variables in `:root`
+- Modal effects use `--modal-blur-amount` and `--modal-shadow`
+- Category colors use `--category-{name}-{property}` pattern
+- All Material Design 3 tokens prefixed with `--md-sys-`
+
+**Transitions**:
+- Description/badge visibility uses smooth max-height and opacity transitions
+- Modal animations use spring-like easing: `cubic-bezier(0.34, 1.56, 0.64, 1)`
+- Standard interactions use M3 motion durations and easing curves
 
 ## Git Workflow and Deployment
 

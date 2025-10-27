@@ -8,13 +8,19 @@ class PromptLibrary {
         this.filteredPrompts = [];
         this.searchTerm = '';
         this.selectedCategory = '';
+        this.showDetails = false; // Default to hidden
+        this.currentView = 'list'; // Default to list view
 
         // DOM elements
         this.promptGrid = document.getElementById('promptGrid');
+        this.promptList = document.getElementById('promptList');
+        this.promptArea = document.querySelector('.prompt-area');
         this.searchInput = document.getElementById('searchInput');
         this.categoryChips = document.getElementById('categoryChips');
         this.emptyState = document.getElementById('emptyState');
         this.toast = document.getElementById('toast');
+        this.showDetailsToggle = document.getElementById('showDetailsToggle');
+        this.viewToggleBtns = document.querySelectorAll('.view-toggle-btn');
         this.promptModal = null;
         this.promptModalBody = null;
         this.promptModalTitle = null;
@@ -77,6 +83,45 @@ class PromptLibrary {
             this.searchTerm = e.target.value.toLowerCase();
             this.filterPrompts();
         });
+
+        // Show details toggle
+        if (this.showDetailsToggle) {
+            this.showDetailsToggle.addEventListener('change', (e) => {
+                this.showDetails = e.target.checked;
+                this.updateCardDetailsVisibility();
+            });
+        }
+
+        // View toggle buttons
+        this.viewToggleBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const view = btn.dataset.view;
+                this.switchView(view);
+            });
+        });
+    }
+
+    /**
+     * Switch between list and grid views
+     */
+    switchView(view) {
+        this.currentView = view;
+
+        // Update button states
+        this.viewToggleBtns.forEach(btn => {
+            if (btn.dataset.view === view) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+
+        // Update prompt area class
+        this.promptArea.classList.remove('view-list', 'view-grid');
+        this.promptArea.classList.add(`view-${view}`);
+
+        // Re-render with current view
+        this.renderPrompts();
     }
 
     /**
@@ -199,20 +244,53 @@ class PromptLibrary {
     }
 
     /**
-     * Render all prompts to the grid
+     * Update card details visibility based on toggle state
+     */
+    updateCardDetailsVisibility() {
+        const descriptions = document.querySelectorAll('.card-description, .prompt-list-item-description');
+        const variableCounts = document.querySelectorAll('.variable-count-badge');
+
+        descriptions.forEach(desc => {
+            if (this.showDetails) {
+                desc.classList.remove('hidden');
+            } else {
+                desc.classList.add('hidden');
+            }
+        });
+
+        variableCounts.forEach(badge => {
+            if (this.showDetails) {
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        });
+    }
+
+    /**
+     * Render all prompts (list or grid view)
      */
     renderPrompts() {
+        if (this.currentView === 'list') {
+            this.renderListView();
+        } else {
+            this.renderGridView();
+        }
+    }
+
+    /**
+     * Render prompts in grid view
+     */
+    renderGridView() {
         // Clear grid
         this.promptGrid.innerHTML = '';
 
         // Show/hide empty state
         if (this.filteredPrompts.length === 0) {
             this.emptyState.style.display = 'block';
-            this.promptGrid.style.display = 'none';
             return;
         } else {
             this.emptyState.style.display = 'none';
-            this.promptGrid.style.display = 'grid';
         }
 
         // Render each prompt card
@@ -223,12 +301,111 @@ class PromptLibrary {
     }
 
     /**
+     * Render prompts in list view organized by category
+     */
+    renderListView() {
+        // Clear list
+        this.promptList.innerHTML = '';
+
+        // Show/hide empty state
+        if (this.filteredPrompts.length === 0) {
+            this.emptyState.style.display = 'block';
+            return;
+        } else {
+            this.emptyState.style.display = 'none';
+        }
+
+        // Group prompts by category
+        const promptsByCategory = this.filteredPrompts.reduce((acc, prompt, index) => {
+            const category = prompt.category;
+            if (!acc[category]) {
+                acc[category] = [];
+            }
+            acc[category].push({ prompt, index });
+            return acc;
+        }, {});
+
+        // Render each category section
+        Object.keys(promptsByCategory).sort().forEach(category => {
+            const section = document.createElement('div');
+            section.className = 'category-section';
+
+            const header = document.createElement('h2');
+            header.className = 'category-section-header';
+            header.textContent = category;
+            section.appendChild(header);
+
+            const itemsContainer = document.createElement('div');
+            itemsContainer.className = 'category-items';
+
+            promptsByCategory[category].forEach(({ prompt, index }) => {
+                const item = this.createListItem(prompt, index);
+                itemsContainer.appendChild(item);
+            });
+
+            section.appendChild(itemsContainer);
+            this.promptList.appendChild(section);
+        });
+    }
+
+    /**
+     * Create a list item for list view
+     */
+    createListItem(prompt, index) {
+        const item = document.createElement('div');
+        item.className = 'prompt-list-item';
+        item.dataset.index = index;
+        item.setAttribute('role', 'button');
+        item.setAttribute('aria-label', `Open prompt ${prompt.title}`);
+        item.tabIndex = 0;
+
+        const variableCount = prompt.variables?.length || 0;
+        const hiddenClass = this.showDetails ? '' : 'hidden';
+
+        item.innerHTML = `
+            <div class="prompt-list-item-content">
+                <div class="prompt-list-item-header">
+                    <h3 class="prompt-list-item-title">${this.highlightText(prompt.title, this.searchTerm)}</h3>
+                    <div class="prompt-list-item-badges">
+                        <span class="variable-count-badge ${hiddenClass}">${variableCount > 0 ? `${variableCount} variable${variableCount > 1 ? 's' : ''}` : 'No variables'}</span>
+                    </div>
+                </div>
+                <p class="prompt-list-item-description ${hiddenClass}">${this.highlightText(prompt.description, this.searchTerm)}</p>
+            </div>
+        `;
+
+        // Attach event listeners
+        this.attachListItemEventListeners(item, index);
+
+        return item;
+    }
+
+    /**
+     * Attach event listeners to a list item
+     */
+    attachListItemEventListeners(item, index) {
+        const openModal = () => {
+            this.openPromptModal(index);
+        };
+
+        item.addEventListener('click', openModal);
+
+        item.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openModal();
+            }
+        });
+    }
+
+    /**
      * Create a prompt card element
      */
     createPromptCard(prompt, index) {
         const card = document.createElement('div');
         card.className = 'prompt-card';
         card.dataset.index = index;
+        card.dataset.category = prompt.category; // Add category for color coding
         card.dataset.locked = prompt.locked !== false;
         card.setAttribute('role', 'button');
         card.setAttribute('aria-label', `Open prompt ${prompt.title}`);
@@ -247,17 +424,14 @@ class PromptLibrary {
      */
     getCardSummaryHTML(prompt) {
         const variableCount = prompt.variables?.length || 0;
+        const hiddenClass = this.showDetails ? '' : 'hidden';
         return `
             <div class="card-header">
-                <div class="card-title-wrapper">
-                    <h3 class="card-title">${this.highlightText(prompt.title, this.searchTerm)}</h3>
-                    <div class="card-meta-inline">
-                        <span class="card-category">${this.highlightText(prompt.category, this.searchTerm)}</span>
-                        <span class="variable-count-badge">${variableCount > 0 ? `${variableCount} variable${variableCount > 1 ? 's' : ''}` : 'No variables'}</span>
-                    </div>
-                </div>
+                <span class="card-category">${this.highlightText(prompt.category, this.searchTerm)}</span>
+                <span class="variable-count-badge ${hiddenClass}">${variableCount > 0 ? `${variableCount} variable${variableCount > 1 ? 's' : ''}` : 'No variables'}</span>
             </div>
-            <p class="card-description">${this.highlightText(prompt.description, this.searchTerm)}</p>
+            <h3 class="card-title">${this.highlightText(prompt.title, this.searchTerm)}</h3>
+            <p class="card-description ${hiddenClass}">${this.highlightText(prompt.description, this.searchTerm)}</p>
         `;
     }
 
