@@ -422,7 +422,7 @@ body {
     background: var(--color-page-background);
     border-radius: 0;
     cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+    transition: all var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
     position: relative;
     overflow: hidden;
 }
@@ -436,7 +436,7 @@ body {
     bottom: 0;
     background-color: var(--color-action-primary);
     opacity: 0;
-    transition: opacity 0.2s cubic-bezier(0.2, 0, 0, 1);
+    transition: opacity var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
     pointer-events: none;
 }
 
@@ -446,6 +446,11 @@ body {
 
 .prompt-list-item:active::before {
     opacity: var(--md-sys-state-pressed-opacity);
+}
+
+.prompt-list-item:focus-visible {
+    outline: 3px solid var(--color-action-primary);
+    outline-offset: 2px;
 }
 
 .prompt-list-item-content {
@@ -506,7 +511,7 @@ body {
 }
 
 .prompt-list-item-description.hidden {
-    display: block !important;
+    display: block;
     height: 0;
     opacity: 0;
     margin-top: 0;
@@ -695,11 +700,16 @@ body.modal-open {
     border: none;
     cursor: pointer;
     padding: var(--space-sm);
-    transition: opacity 0.2s ease;
+    transition: opacity var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
 }
 
 .hamburger:hover {
     opacity: 0.7;
+}
+
+.hamburger:focus-visible {
+    outline: 3px solid var(--color-action-primary);
+    outline-offset: 2px;
 }
 
 .hamburger span {
@@ -708,7 +718,7 @@ body.modal-open {
     height: 2px;
     background: var(--color-action-primary);
     border-radius: 2px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-legacy);
 }
 
 /* Controls Bar - Compact and integrated */
@@ -811,7 +821,7 @@ body.modal-open {
     border-radius: var(--md-sys-shape-corner-extra-small);
     cursor: pointer;
     /* Enhanced transition for smoother feel */
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-legacy);
     position: relative;
     overflow: hidden;
 }
@@ -871,6 +881,12 @@ body.modal-open {
     gap: var(--space-sm);
     cursor: pointer;
     user-select: none;
+    border-radius: var(--md-sys-shape-corner-small);
+}
+
+.toggle-label:focus-within {
+    outline: 2px solid var(--color-action-primary);
+    outline-offset: 2px;
 }
 
 .toggle-input {
@@ -887,7 +903,7 @@ body.modal-open {
     background-color: var(--color-card-surface);
     border: 2px solid var(--color-border-subtle);
     border-radius: var(--md-sys-shape-corner-full);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-legacy);
 }
 
 .toggle-slider::before {
@@ -899,7 +915,7 @@ body.modal-open {
     top: 50%;
     transform: translateY(-50%);
     background-color: var(--color-border-subtle);
-    border-radius: 50%;
+    border-radius: var(--md-sys-shape-corner-full);
     /* Enhanced spring-like motion for toggle */
     transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -911,6 +927,7 @@ body.modal-open {
 
 .toggle-input:checked+.toggle-slider::before {
     left: calc(100% - 18px);
+    /* 2px border + 16px thumb = 18px */
     background-color: var(--color-page-background);
     /* Slight scale on checked state for emphasis */
     transform: translateY(-50%) scale(1.1);
@@ -952,7 +969,7 @@ body.modal-open {
 
     /* Solid fill for neutral chip */
     border: none;
-    background-color: var(--color-action-primary);
+    background-color: var(--color-border-subtle);
 
     /* M3 small corner for chips */
     border-radius: var(--md-sys-shape-corner-small);
@@ -964,7 +981,7 @@ body.modal-open {
     line-height: var(--md-sys-typescale-label-medium-line-height);
     letter-spacing: var(--md-sys-typescale-label-medium-tracking);
 
-    color: var(--color-text-secondary);
+    color: var(--color-text-primary);
     cursor: pointer;
 
     /* M3 motion */
@@ -1004,7 +1021,7 @@ body.modal-open {
 /* M3 Selected state */
 .category-chip.active {
     background-color: var(--color-action-primary-hover);
-    color: var(--color-text-secondary);
+    color: var(--color-page-background);
     transform: scale(1.05);
 }
 
@@ -1051,35 +1068,35 @@ body.modal-open {
 /* Category Color Coding - Applied to Badges Only (Grid View) */
 .view-grid .prompt-card[data-category="Productivity"] .card-category {
     --category-color: var(--color-category-productivity);
-    background-color: color-mix(in srgb, var(--category-color) 16%, #ffffff);
+    background-color: color-mix(in srgb, var(--category-color) 16%, var(--color-card-surface));
     color: var(--color-category-productivity);
     border: 1px solid color-mix(in srgb, var(--category-color) 35%, transparent);
 }
 
 .view-grid .prompt-card[data-category="Expertise"] .card-category {
     --category-color: var(--color-category-expertise);
-    background-color: color-mix(in srgb, var(--category-color) 16%, #ffffff);
+    background-color: color-mix(in srgb, var(--category-color) 16%, var(--color-card-surface));
     color: var(--color-category-expertise);
     border: 1px solid color-mix(in srgb, var(--category-color) 35%, transparent);
 }
 
 .view-grid .prompt-card[data-category="Travel & Shopping"] .card-category {
     --category-color: var(--color-category-travel);
-    background-color: color-mix(in srgb, var(--category-color) 16%, #ffffff);
+    background-color: color-mix(in srgb, var(--category-color) 16%, var(--color-card-surface));
     color: var(--color-category-travel);
     border: 1px solid color-mix(in srgb, var(--category-color) 35%, transparent);
 }
 
 .view-grid .prompt-card[data-category="Lifestyle"] .card-category {
     --category-color: var(--color-category-lifestyle);
-    background-color: color-mix(in srgb, var(--category-color) 16%, #ffffff);
+    background-color: color-mix(in srgb, var(--category-color) 16%, var(--color-card-surface));
     color: var(--color-category-lifestyle);
     border: 1px solid color-mix(in srgb, var(--category-color) 35%, transparent);
 }
 
 .view-grid .prompt-card[data-category="Inspiration"] .card-category {
     --category-color: var(--color-category-inspiration);
-    background-color: color-mix(in srgb, var(--category-color) 16%, #ffffff);
+    background-color: color-mix(in srgb, var(--category-color) 16%, var(--color-card-surface));
     color: var(--color-category-inspiration);
     border: 1px solid color-mix(in srgb, var(--category-color) 35%, transparent);
 }
@@ -1188,6 +1205,10 @@ body.modal-open {
 
     border: none;
     flex-shrink: 0;
+
+    /* Smooth transitions for show/hide */
+    transition: opacity 0.35s var(--md-sys-motion-easing-standard),
+        transform 0.4s var(--md-sys-motion-easing-emphasized);
 }
 
 .card-meta-inline {
@@ -1220,14 +1241,9 @@ body.modal-open {
         opacity 0.35s var(--md-sys-motion-easing-standard) 0.05s;
 }
 
-.variable-count-badge {
-    transition: opacity 0.35s var(--md-sys-motion-easing-standard),
-        transform 0.4s var(--md-sys-motion-easing-emphasized);
-}
-
 /* Hide/Show classes for toggle functionality */
 .card-description.hidden {
-    display: block !important;
+    display: block;
     height: 0;
     opacity: 0;
     margin: 0;
@@ -1274,24 +1290,6 @@ body.modal-open {
 /* Tabs Container */
 .tabs-container {
     margin-bottom: 1.25rem;
-}
-
-.btn-text {
-    margin-left: auto;
-    padding: 0.5rem 0.75rem;
-    background: none;
-    border: none;
-    color: var(--color-action-primary);
-    font-size: 0.85rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.btn-text:hover {
-    color: var(--color-action-primary-hover);
-    background-color: color-mix(in srgb, var(--color-action-primary) 12%, #ffffff);
-    border-radius: 6px;
 }
 
 /* M3 Tabs */
@@ -1600,8 +1598,6 @@ body.modal-open {
     background-color: var(--color-page-background);
 }
 
-.btn-primary:hover {}
-
 .btn-primary:hover::before {
     opacity: var(--md-sys-state-hover-opacity);
 }
@@ -1628,8 +1624,6 @@ body.modal-open {
 .btn-secondary::before {
     background-color: var(--color-text-primary);
 }
-
-.btn-secondary:hover {}
 
 .btn-secondary:hover::before {
     opacity: var(--md-sys-state-hover-opacity);
@@ -2277,10 +2271,6 @@ body.modal-open {
         padding: 0.5rem 0.75rem;
     }
 
-    .search-input:focus {
-        padding: calc(0.5rem - 1px) calc(0.75rem - 1px);
-    }
-
     .category-chip {
         padding: 0.25rem 0.625rem;
         min-height: 1.625rem;
@@ -2508,6 +2498,7 @@ mark {
 }
 
 /* Utility Classes */
+[hidden],
 .hidden {
-    display: none !important;
+    display: none;
 }
