@@ -289,14 +289,9 @@ class PromptLibrary {
         const hasVariables = prompt.variables && prompt.variables.length > 0;
         const activeTab = prompt.activeTab || 'variables';
 
-        console.log('getLockedViewHTML:', { promptId: prompt.id, activeTab, hasVariables, variablesCount: prompt.variables?.length });
-
         if (!hasVariables) {
             return this.getPreviewHTML(compiledPrompt);
         }
-
-        const variablesHTML = this.getVariablesHTML(prompt);
-        console.log('Variables HTML length:', variablesHTML.length);
 
         return `
             <div class="tabs-container">
@@ -313,7 +308,7 @@ class PromptLibrary {
                 </div>
                 <div class="tabs-content">
                     <div class="tab-pane ${activeTab === 'variables' ? 'active' : ''}" data-tab="variables">
-                        ${variablesHTML}
+                        ${this.getVariablesHTML(prompt)}
                     </div>
                     <div class="tab-pane ${activeTab === 'preview' ? 'active' : ''}" data-tab="preview">
                         ${this.getPreviewContentHTML(compiledPrompt)}
@@ -841,10 +836,43 @@ class PromptLibrary {
         const prompt = this.filteredPrompts[index];
         if (!prompt) return;
 
-        console.log('switchTab called:', { index, tabName, promptId: prompt.id, currentTab: prompt.activeTab });
+        // Update the prompt's active tab
         prompt.activeTab = tabName;
-        console.log('After setting activeTab:', prompt.activeTab);
-        this.refreshPromptViews(index);
+
+        // Update tab buttons and panes directly in the DOM instead of re-rendering
+        if (this.promptModalBody) {
+            const tabButtons = this.promptModalBody.querySelectorAll('.tab-button');
+            const tabPanes = this.promptModalBody.querySelectorAll('.tab-pane');
+            const clearButton = this.promptModalBody.querySelector('[data-action="clear-variables"]');
+
+            // Update button active states
+            tabButtons.forEach(button => {
+                const buttonTab = button.dataset.tab;
+                if (buttonTab === tabName) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            });
+
+            // Update pane active states
+            tabPanes.forEach(pane => {
+                const paneTab = pane.dataset.tab;
+                if (paneTab === tabName) {
+                    pane.classList.add('active');
+                } else {
+                    pane.classList.remove('active');
+                }
+            });
+
+            // Show/hide Clear All button based on active tab
+            if (clearButton) {
+                clearButton.style.display = tabName === 'variables' ? '' : 'none';
+            }
+        }
+
+        // Update the card if needed
+        this.updatePromptCard(index);
     }
 
     /**
