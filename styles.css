@@ -441,6 +441,12 @@ body {
 
     /* Add top padding to create space after controls */
     padding: var(--space-lg) var(--space-xl);
+
+    /* Smooth view transition animations */
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.35s var(--md-sys-motion-easing-emphasized),
+                transform 0.35s var(--md-sys-motion-easing-emphasized);
 }
 
 /* List View Styles */
@@ -449,6 +455,12 @@ body {
     flex-direction: column;
     gap: var(--space-xl);
     padding: var(--space-lg) var(--space-xl);
+
+    /* Smooth view transition animations */
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.35s var(--md-sys-motion-easing-emphasized),
+                transform 0.35s var(--md-sys-motion-easing-emphasized);
 }
 
 .category-section {
@@ -549,37 +561,88 @@ body {
     color: var(--md-sys-color-on-surface-variant);
     margin: 0;
 
-    /* Smooth transition */
+    /* Enhanced smooth transition matching card descriptions */
     max-height: 500px;
     opacity: 1;
     overflow: hidden;
-    transition: max-height 0.3s var(--md-sys-motion-easing-emphasized),
-                opacity 0.3s var(--md-sys-motion-easing-standard),
-                margin 0.3s var(--md-sys-motion-easing-standard);
+    transition: max-height 0.4s var(--md-sys-motion-easing-emphasized-decelerate),
+                opacity 0.35s var(--md-sys-motion-easing-standard) 0.05s,
+                margin 0.4s var(--md-sys-motion-easing-emphasized-decelerate);
 }
 
 .prompt-list-item-description.hidden {
     max-height: 0;
     opacity: 0;
     margin: 0;
+    transition: max-height 0.35s var(--md-sys-motion-easing-emphasized-accelerate),
+                opacity 0.25s var(--md-sys-motion-easing-standard),
+                margin 0.35s var(--md-sys-motion-easing-emphasized-accelerate);
 }
 
-/* Hide grid when list view is active */
+/* Animated view transitions */
 .view-list .prompt-grid {
     display: none;
+    pointer-events: none;
 }
 
 .view-list .prompt-list {
     display: flex;
+    opacity: 1;
+    transform: translateY(0);
 }
 
-/* Hide list when grid view is active */
 .view-grid .prompt-list {
     display: none;
+    pointer-events: none;
 }
 
 .view-grid .prompt-grid {
     display: grid;
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Staggered animation for category sections in list view */
+.view-list .category-section {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeInUp 0.4s var(--md-sys-motion-easing-emphasized) forwards;
+}
+
+.view-list .category-section:nth-child(1) { animation-delay: 0.05s; }
+.view-list .category-section:nth-child(2) { animation-delay: 0.1s; }
+.view-list .category-section:nth-child(3) { animation-delay: 0.15s; }
+.view-list .category-section:nth-child(4) { animation-delay: 0.2s; }
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Staggered animation for cards in grid view */
+.view-grid .prompt-card {
+    opacity: 0;
+    transform: scale(0.9);
+    animation: cardAppear 0.35s var(--md-sys-motion-easing-emphasized) forwards;
+}
+
+.view-grid .prompt-card:nth-child(1) { animation-delay: 0.03s; }
+.view-grid .prompt-card:nth-child(2) { animation-delay: 0.06s; }
+.view-grid .prompt-card:nth-child(3) { animation-delay: 0.09s; }
+.view-grid .prompt-card:nth-child(4) { animation-delay: 0.12s; }
+.view-grid .prompt-card:nth-child(5) { animation-delay: 0.15s; }
+.view-grid .prompt-card:nth-child(6) { animation-delay: 0.18s; }
+.view-grid .prompt-card:nth-child(7) { animation-delay: 0.21s; }
+.view-grid .prompt-card:nth-child(8) { animation-delay: 0.24s; }
+.view-grid .prompt-card:nth-child(9) { animation-delay: 0.27s; }
+
+@keyframes cardAppear {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 .empty-state {
@@ -777,7 +840,8 @@ body.modal-open {
     color: var(--md-sys-color-on-surface-variant);
     border-radius: var(--md-sys-shape-corner-extra-small);
     cursor: pointer;
-    transition: all var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+    /* Enhanced transition for smoother feel */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
 }
@@ -786,6 +850,7 @@ body.modal-open {
     font-size: 20px;
     position: relative;
     z-index: 1;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .view-toggle-btn::before {
@@ -797,7 +862,7 @@ body.modal-open {
     bottom: 0;
     background-color: var(--md-sys-color-on-surface);
     opacity: 0;
-    transition: opacity var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+    transition: opacity 0.2s var(--md-sys-motion-easing-standard);
 }
 
 .view-toggle-btn:hover::before {
@@ -807,10 +872,20 @@ body.modal-open {
 .view-toggle-btn.active {
     background-color: var(--md-sys-color-secondary-container);
     color: var(--md-sys-color-on-secondary-container);
+    transform: scale(1.05);
 }
 
 .view-toggle-btn.active::before {
     background-color: var(--md-sys-color-on-secondary-container);
+}
+
+.view-toggle-btn.active .material-symbols-outlined {
+    transform: scale(1.1);
+}
+
+/* Press animation */
+.view-toggle-btn:active {
+    transform: scale(0.95);
 }
 
 /* Toggle Switch for Show Details */
@@ -842,7 +917,7 @@ body.modal-open {
     background-color: var(--md-sys-color-surface-container-highest);
     border: 2px solid var(--md-sys-color-outline);
     border-radius: var(--md-sys-shape-corner-full);
-    transition: all var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .toggle-slider::before {
@@ -855,7 +930,9 @@ body.modal-open {
     transform: translateY(-50%);
     background-color: var(--md-sys-color-outline);
     border-radius: 50%;
-    transition: all var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized);
+    /* Enhanced spring-like motion for toggle */
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .toggle-input:checked + .toggle-slider {
@@ -866,6 +943,13 @@ body.modal-open {
 .toggle-input:checked + .toggle-slider::before {
     left: calc(100% - 18px);
     background-color: var(--md-sys-color-on-primary);
+    /* Slight scale on checked state for emphasis */
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Active state - press down effect */
+.toggle-input:active + .toggle-slider::before {
+    transform: translateY(-50%) scale(0.95);
 }
 
 .toggle-input:focus-visible + .toggle-slider {
@@ -954,10 +1038,19 @@ body.modal-open {
     border-color: transparent;
     color: var(--md-sys-color-on-secondary-container);
     box-shadow: var(--md-sys-elevation-level0);
+    transform: scale(1.05);
 }
 
 .category-chip.active::before {
     background-color: var(--md-sys-color-on-secondary-container);
+}
+
+/* Smooth transition when filtering prompts */
+.prompt-card,
+.prompt-list-item,
+.category-section {
+    transition: opacity 0.25s var(--md-sys-motion-easing-standard),
+                transform 0.25s var(--md-sys-motion-easing-standard);
 }
 
 .category-chip:focus-visible {
@@ -1142,18 +1235,18 @@ body.modal-open {
     margin-bottom: 0;
     cursor: pointer;
 
-    /* Smooth transition */
+    /* Enhanced smooth transition with slight delay for elegance */
     max-height: 500px;
     opacity: 1;
     overflow: hidden;
-    transition: max-height 0.3s var(--md-sys-motion-easing-emphasized),
-                opacity 0.3s var(--md-sys-motion-easing-standard),
-                margin 0.3s var(--md-sys-motion-easing-standard);
+    transition: max-height 0.4s var(--md-sys-motion-easing-emphasized-decelerate),
+                opacity 0.35s var(--md-sys-motion-easing-standard) 0.05s,
+                margin 0.4s var(--md-sys-motion-easing-emphasized-decelerate);
 }
 
 .variable-count-badge {
-    transition: opacity 0.3s var(--md-sys-motion-easing-standard),
-                transform 0.3s var(--md-sys-motion-easing-emphasized);
+    transition: opacity 0.35s var(--md-sys-motion-easing-standard),
+                transform 0.4s var(--md-sys-motion-easing-emphasized);
 }
 
 /* Hide/Show classes for toggle functionality */
@@ -1161,11 +1254,14 @@ body.modal-open {
     max-height: 0;
     opacity: 0;
     margin: 0;
+    transition: max-height 0.35s var(--md-sys-motion-easing-emphasized-accelerate),
+                opacity 0.25s var(--md-sys-motion-easing-standard),
+                margin 0.35s var(--md-sys-motion-easing-emphasized-accelerate);
 }
 
 .variable-count-badge.hidden {
     opacity: 0;
-    transform: scale(0.8);
+    transform: scale(0.7);
     pointer-events: none;
 }
 
