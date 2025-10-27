@@ -1347,7 +1347,7 @@ body.modal-open {
 
 .tabs-content {
     position: relative;
-    border: 1px solid var(--color-border-subtle);
+    border: 1px solid var(--color-action-primary);
     border-radius: var(--md-sys-shape-corner-small);
     padding: var(--space-lg);
 }
@@ -1688,6 +1688,13 @@ body.modal-open {
 .btn-text:focus-visible {
     outline: 2px solid var(--color-action-primary);
     outline-offset: 2px;
+}
+
+/* Clear All button styling */
+[data-action="clear-variables"] {
+    border: 0;
+    outline: 0;
+    margin-left: auto;
 }
 
 /* Empty State */
