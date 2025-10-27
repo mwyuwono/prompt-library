@@ -102,8 +102,15 @@ class LinksManager {
      * Open the modal
      */
     openModal() {
+        // Store current scroll position before locking body
+        const scrollY = window.scrollY;
+        this.bodyScrollPosition = scrollY;
+
         this.modal.classList.add('show');
-        document.body.style.overflow = 'hidden';
+        document.body.classList.add('modal-open');
+
+        // Set body top position to preserve scroll appearance
+        document.body.style.top = `-${scrollY}px`;
     }
 
     /**
@@ -111,7 +118,12 @@ class LinksManager {
      */
     closeModal() {
         this.modal.classList.remove('show');
-        document.body.style.overflow = '';
+        document.body.classList.remove('modal-open');
+
+        // Restore scroll position
+        const scrollY = this.bodyScrollPosition || 0;
+        document.body.style.top = '';
+        window.scrollTo(0, scrollY);
     }
 
     /**

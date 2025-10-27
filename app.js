@@ -492,8 +492,15 @@ class PromptLibrary {
 
         this.renderPromptModalContent(prompt, index);
 
+        // Store current scroll position before locking body
+        const scrollY = window.scrollY;
+        this.bodyScrollPosition = scrollY;
+
         this.promptModal.classList.add('show');
         document.body.classList.add('modal-open');
+
+        // Set body top position to preserve scroll appearance
+        document.body.style.top = `-${scrollY}px`;
     }
 
     /**
@@ -504,6 +511,12 @@ class PromptLibrary {
 
         this.promptModal.classList.remove('show');
         document.body.classList.remove('modal-open');
+
+        // Restore scroll position
+        const scrollY = this.bodyScrollPosition || 0;
+        document.body.style.top = '';
+        window.scrollTo(0, scrollY);
+
         this.activePromptIndex = null;
         this.activePromptId = null;
         this.cancelModalBodyAnimation();
