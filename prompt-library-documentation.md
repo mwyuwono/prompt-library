@@ -148,6 +148,43 @@ The application supports two view modes toggled via icon buttons in the controls
 - Modal: spring-like easing `cubic-bezier(0.34, 1.56, 0.64, 1)` for opening
 - Standard interactions: M3 motion durations and easing curves
 
+### CSS Quality Guidelines
+
+When modifying `styles.css`, follow these critical best practices:
+
+**DO NOT Use `!important`**:
+- **Never** use `!important` declarations (they break cascade and make maintenance difficult)
+- Resolve specificity conflicts by increasing selector specificity or reordering rules
+- Only exception: true utility classes like `[hidden]` that must override everything
+
+**Always Use CSS Variables**:
+- Never use hardcoded colors like `#ffffff`, `#000000`, etc.
+- Always reference design tokens: `var(--color-card-surface)`, `var(--color-text-primary)`
+- Use `color-mix()` with variables for tints: `color-mix(in srgb, var(--category-color) 16%, var(--color-card-surface))`
+
+**Use Motion Tokens for Animations**:
+- Never use magic numbers like `0.2s` or `300ms`
+- Always use motion tokens: `var(--md-sys-motion-duration-short4)`, `var(--md-sys-motion-easing-standard)`
+- Common patterns:
+  - Short interactions: 200ms (`--md-sys-motion-duration-short4`)
+  - Medium interactions: 300ms (`--md-sys-motion-duration-medium2`)
+  - Long interactions: 450ms (`--md-sys-motion-duration-long1`)
+
+**State Layers for Hover/Focus**:
+- Never change `background-color` directly on `:hover`
+- Always use pseudo-element overlays (`::before` or `::after`) with opacity changes
+- Example: `.element::before` with `opacity: var(--md-sys-state-hover-opacity)` on hover
+
+**Accessibility Requirements**:
+- All interactive elements need `:focus-visible` states
+- Standard pattern: `outline: 3px solid var(--color-action-primary); outline-offset: 2px;`
+- Ensure WCAG AA contrast ratios (dark backgrounds need light text)
+
+**Code Quality**:
+- Remove empty rulesets
+- Consolidate duplicate selectors
+- Group properties logically (position → box model → typography → visual → animation)
+
 ## Adding or Editing Prompts
 
 1. Duplicate an existing object in `prompts.json`

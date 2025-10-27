@@ -240,21 +240,69 @@ All user inputs are escaped via `escapeHTML()` before rendering to prevent injec
 
 ### CSS Quality Standards
 
+**CRITICAL: NO !important Declarations**:
+- **NEVER use `!important`** in CSS except for true utility classes that must override everything
+- If specificity conflicts arise, resolve them by:
+  - Increasing selector specificity (e.g., adding a class or parent selector)
+  - Reordering rules in the source file
+  - Using attribute selectors `[hidden]` for utilities
+- `!important` breaks the cascade and makes maintenance extremely difficult
+
 **Consistency**:
 - All interactive elements use Material Design 3 state layers for hover/focus/pressed states
 - State layer opacity controlled by `--md-sys-state-hover-opacity`, `--md-sys-state-focus-opacity`, `--md-sys-state-pressed-opacity`
-- Avoid changing background colors directly on hover; use pseudo-element overlays instead
+- **NEVER change background colors directly on hover**; always use pseudo-element overlays (`:before` or `:after`) instead
+- Example pattern:
+  ```css
+  .element {
+    position: relative;
+    overflow: hidden;
+  }
+  .element::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: var(--color-action-primary);
+    opacity: 0;
+    transition: opacity var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+    pointer-events: none;
+  }
+  .element:hover::before {
+    opacity: var(--md-sys-state-hover-opacity);
+  }
+  ```
 
 **Variables**:
-- Keep colors within the new descriptive palette (`--color-page-background`, `--color-card-surface`, `--color-surface-hover`, `--color-border-subtle`, `--color-text-primary`, `--color-text-secondary`, `--color-action-primary`, `--color-action-primary-hover`)
+- Keep colors within the descriptive palette (`--color-page-background`, `--color-card-surface`, `--color-surface-hover`, `--color-border-subtle`, `--color-text-primary`, `--color-text-secondary`, `--color-action-primary`, `--color-action-primary-hover`)
+- **NEVER use hardcoded color values** like `#ffffff` or `#000000` - always use CSS variables
+- Use `color-mix()` with variables: `color-mix(in srgb, var(--category-color) 16%, var(--color-card-surface))`
 - Category accents live in `--color-category-*`
 - Modal effects use `--modal-blur-amount`
-- Motion/typography/state tokens still rely on the existing `--md-sys-*` variables
+- Motion/typography/state tokens rely on `--md-sys-*` variables
 
-**Transitions**:
+**Transitions & Animations**:
+- **Always use motion token variables** for durations and easing curves
+- Common patterns:
+  - Short interactions: `var(--md-sys-motion-duration-short4)` (200ms) with `var(--md-sys-motion-easing-standard)`
+  - Medium interactions: `var(--md-sys-motion-duration-medium2)` (300ms) with `var(--md-sys-motion-easing-legacy)`
+  - Long interactions: `var(--md-sys-motion-duration-long1)` (450ms) with `var(--md-sys-motion-easing-emphasized)`
+- **NEVER use magic numbers** like `0.2s` or `0.3s` - always reference the motion tokens
 - Description/badge visibility uses smooth max-height and opacity transitions
 - Modal animations use spring-like easing: `cubic-bezier(0.34, 1.56, 0.64, 1)`
-- Standard interactions use M3 motion durations and easing curves
+
+**Accessibility**:
+- All interactive elements must have `:focus-visible` states with clear outlines
+- Standard pattern: `outline: 3px solid var(--color-action-primary); outline-offset: 2px;`
+- Ensure adequate color contrast (WCAG AA minimum):
+  - Dark backgrounds require light text (`var(--color-page-background)`)
+  - Light backgrounds use `var(--color-text-primary)` or `var(--color-text-secondary)`
+- Toggle controls should use `:focus-within` for the label container
+
+**Code Organization**:
+- Remove empty rulesets - they serve no purpose
+- Consolidate duplicate rules - check for multiple declarations of the same selector
+- Group related properties together (positioning, box model, typography, visual, animation)
+- Comment major sections clearly
 
 ## Git Workflow and Deployment
 
