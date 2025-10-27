@@ -393,7 +393,7 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: var(--space-lg);
+    gap: 0;
     position: relative;
 }
 
@@ -500,7 +500,7 @@ body.modal-open {
     gap: var(--space-lg);
     padding: var(--space-xl) var(--space-xl) var(--space-lg);
     flex-wrap: wrap;
-    background-color: var(--surface-cream);
+    background-color: var(--md-sys-color-surface);
     max-width: 100%;
     overflow-x: hidden;
 }
@@ -1709,8 +1709,11 @@ body.modal-open {
     /* Controls bar - reduce padding */
     .controls-bar {
         flex-direction: column;
-        padding: var(--space-lg) var(--space-md) var(--space-md);
+        padding: var(--space-lg) var(--space-md) var(--space-lg);
         gap: var(--space-md);
+        /* Ensure controls are above the grid */
+        position: relative;
+        z-index: 10;
     }
 
     .search-wrapper {
@@ -1738,8 +1741,10 @@ body.modal-open {
     /* Prompt grid - reduce padding */
     .prompt-grid {
         grid-template-columns: 1fr;
-        padding: var(--space-lg) var(--space-md);
+        padding: var(--space-md);
         gap: var(--space-md);
+        /* Ensure proper spacing below controls-bar */
+        padding-top: 0;
     }
 
     /* Modal adjustments */
@@ -1827,11 +1832,12 @@ body.modal-open {
     }
 
     .controls-bar {
-        padding: var(--space-md) var(--space-sm) var(--space-sm);
+        padding: var(--space-md) var(--space-sm) var(--space-md);
     }
 
     .prompt-grid {
-        padding: var(--space-md) var(--space-sm);
+        padding: var(--space-sm);
+        padding-top: 0;
     }
 
     .modal-header,
