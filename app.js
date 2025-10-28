@@ -529,35 +529,12 @@ class PromptLibrary {
      */
     getPromptDetailHTML(prompt, index) {
         const isLocked = prompt.locked !== false;
-
-        return `
-            <p class="prompt-modal-description">${this.escapeHTML(prompt.description)}</p>
-            <div class="modal-body-content">
-                <div class="modal-scroll-area">
-                    ${isLocked ? this.getLockedViewHTML(prompt, index) : this.getEditorHTML(prompt)}
-                </div>
-                <div class="modal-actions card-actions">
-                    <button class="btn btn-primary" data-action="copy">Copy to Clipboard</button>
-                    <button class="btn btn-secondary" data-action="download">Download</button>
-                </div>
-            </div>
-        `;
-    }
-
-    /**
-     * Get HTML for locked view (tab interface with variables and preview)
-     */
-    getLockedViewHTML(prompt, index) {
-        const compiledPrompt = this.compilePrompt(prompt);
         const hasVariables = prompt.variables && prompt.variables.length > 0;
         const activeTab = prompt.activeTab || 'variables';
 
-        if (!hasVariables) {
-            return this.getPreviewHTML(compiledPrompt);
-        }
-
         return `
-            <div class="tabs-container">
+            <p class="prompt-modal-description">${this.escapeHTML(prompt.description)}</p>
+            ${isLocked && hasVariables ? `
                 <div class="tabs-header">
                     <button class="tab-button ${activeTab === 'variables' ? 'active' : ''}" data-action="switch-tab" data-tab="variables">
                         Variables
@@ -569,13 +546,43 @@ class PromptLibrary {
                         <button class="btn-text" data-action="clear-variables" onclick="event.stopPropagation()">Clear All</button>
                     ` : ''}
                 </div>
-                <div class="tabs-content">
-                    <div class="tab-pane ${activeTab === 'variables' ? 'active' : ''}" data-tab="variables">
-                        ${this.getVariablesHTML(prompt)}
-                    </div>
-                    <div class="tab-pane ${activeTab === 'preview' ? 'active' : ''}" data-tab="preview">
-                        ${this.getPreviewContentHTML(compiledPrompt)}
-                    </div>
+            ` : ''}
+            <div class="modal-body-content">
+                <div class="modal-scroll-area">
+                    ${isLocked ? this.getLockedViewContent(prompt, index) : this.getEditorHTML(prompt)}
+                </div>
+                <div class="modal-actions card-actions">
+                    ${isLocked ? `
+                        <button class="btn btn-primary" data-action="copy">Copy to Clipboard</button>
+                        <button class="btn btn-secondary" data-action="download">Download</button>
+                    ` : `
+                        <button class="btn btn-secondary" data-action="cancel-edit">Cancel</button>
+                        <button class="btn btn-primary" data-action="save-template">Save Changes</button>
+                    `}
+                </div>
+            </div>
+        `;
+    }
+
+    /**
+     * Get HTML for locked view content (tab content only, tabs-header is outside scroll area)
+     */
+    getLockedViewContent(prompt, index) {
+        const compiledPrompt = this.compilePrompt(prompt);
+        const hasVariables = prompt.variables && prompt.variables.length > 0;
+        const activeTab = prompt.activeTab || 'variables';
+
+        if (!hasVariables) {
+            return this.getPreviewHTML(compiledPrompt);
+        }
+
+        return `
+            <div class="tabs-content">
+                <div class="tab-pane ${activeTab === 'variables' ? 'active' : ''}" data-tab="variables">
+                    ${this.getVariablesHTML(prompt)}
+                </div>
+                <div class="tab-pane ${activeTab === 'preview' ? 'active' : ''}" data-tab="preview">
+                    ${this.getPreviewContentHTML(compiledPrompt)}
                 </div>
             </div>
         `;
@@ -651,6 +658,11 @@ class PromptLibrary {
      * Get HTML for template editor (unlocked state)
      */
     getEditorHTML(prompt) {
+        // Store original template for cancel functionality
+        if (!prompt._originalTemplate) {
+            prompt._originalTemplate = prompt.template;
+        }
+
         return `
             <div class="template-editor">
                 <textarea
@@ -772,6 +784,19 @@ class PromptLibrary {
     closePromptModal() {
         if (!this.promptModal) return;
 
+        // Check for unsaved changes
+        if (this.hasUnsavedChanges()) {
+            if (!confirm('You have unsaved changes. Discard them?')) {
+                return; // Don't close if user cancels
+            }
+            // Restore original template if discarding changes
+            const prompt = this.filteredPrompts[this.activePromptIndex];
+            if (prompt && prompt._originalTemplate) {
+                prompt.template = prompt._originalTemplate;
+                delete prompt._originalTemplate;
+            }
+        }
+
         this.promptModal.classList.remove('show');
         document.body.classList.remove('modal-open');
 
@@ -888,6 +913,24 @@ class PromptLibrary {
                 event.preventDefault();
                 event.stopPropagation();
                 this.saveChanges(index);
+            });
+        }
+
+        const saveTemplateButton = container.querySelector('[data-action="save-template"]');
+        if (saveTemplateButton) {
+            saveTemplateButton.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                this.saveTemplateChanges(index);
+            });
+        }
+
+        const cancelEditButton = container.querySelector('[data-action="cancel-edit"]');
+        if (cancelEditButton) {
+            cancelEditButton.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                this.cancelEdit(index);
             });
         }
 
@@ -1150,6 +1193,58 @@ class PromptLibrary {
 
         this.refreshPromptViews(index);
         this.showToast('Variables cleared');
+    }
+
+    /**
+     * Save template changes
+     */
+    saveTemplateChanges(index) {
+        const prompt = this.filteredPrompts[index];
+        if (!prompt) return;
+
+        // Clear the original template marker since changes are saved
+        delete prompt._originalTemplate;
+        prompt.locked = true;
+
+        this.refreshPromptViews(index);
+        this.showToast('Changes saved');
+    }
+
+    /**
+     * Cancel template editing
+     */
+    cancelEdit(index) {
+        const prompt = this.filteredPrompts[index];
+        if (!prompt) return;
+
+        // Check if there are unsaved changes
+        const hasChanges = prompt._originalTemplate && prompt._originalTemplate !== prompt.template;
+
+        if (hasChanges) {
+            if (confirm('Discard unsaved changes?')) {
+                // Restore original template
+                prompt.template = prompt._originalTemplate;
+                delete prompt._originalTemplate;
+                prompt.locked = true;
+                this.refreshPromptViews(index);
+            }
+        } else {
+            // No changes, just cancel edit mode
+            delete prompt._originalTemplate;
+            prompt.locked = true;
+            this.refreshPromptViews(index);
+        }
+    }
+
+    /**
+     * Check for unsaved changes before closing modal
+     */
+    hasUnsavedChanges() {
+        if (this.activePromptIndex === null || this.activePromptIndex === undefined) return false;
+        const prompt = this.filteredPrompts[this.activePromptIndex];
+        if (!prompt) return false;
+
+        return prompt._originalTemplate && prompt._originalTemplate !== prompt.template;
     }
 
     /**
