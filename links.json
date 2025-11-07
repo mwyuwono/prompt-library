@@ -37,6 +37,11 @@
                 "name": "Qwen",
                 "company": "Alibaba Cloud",
                 "url": "https://tongyi.aliyun.com"
+            },
+            {
+                "name": "Kimi",
+                "company": "Moonshot AI",
+                "url": "https://www.kimi.com/"
             }
         ]
     },
