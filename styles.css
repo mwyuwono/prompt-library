@@ -1984,6 +1984,11 @@ body.modal-open {
     flex: none;
 }
 
+/* Links modal should appear above prompt modal */
+#linksModal {
+    z-index: 3000;
+}
+
 #linksModal .modal-content {
     max-width: 90%;
     height: auto;
