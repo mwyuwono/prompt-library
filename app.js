@@ -7,9 +7,9 @@ class PromptLibrary {
         this.prompts = [];
         this.filteredPrompts = [];
         this.searchTerm = '';
-        this.selectedCategory = '';
+        this.selectedCategory = 'Favorites'; // Default to Favorites
         this.showDetails = false; // Default to hidden
-        this.currentView = 'list'; // Default to list view
+        this.currentView = 'grid'; // Default to grid view
 
         // DOM elements
         this.promptGrid = document.getElementById('promptGrid');
@@ -179,8 +179,12 @@ class PromptLibrary {
         // Clear existing chips
         this.categoryChips.innerHTML = '';
 
+        // Add "Favorites" chip (active by default)
+        const favoritesChip = this.createCategoryChip('Favorites', 'Favorites', true);
+        this.categoryChips.appendChild(favoritesChip);
+
         // Add "All" chip
-        const allChip = this.createCategoryChip('', 'All', true);
+        const allChip = this.createCategoryChip('', 'All', false);
         this.categoryChips.appendChild(allChip);
 
         // Add category chips
@@ -234,8 +238,12 @@ class PromptLibrary {
                 prompt.category.toLowerCase().includes(searchLower) ||
                 prompt.template.toLowerCase().includes(searchLower);
 
-            const matchesCategory = !this.selectedCategory ||
-                prompt.category === this.selectedCategory;
+            let matchesCategory = true;
+            if (this.selectedCategory === 'Favorites') {
+                matchesCategory = prompt.isFavorite === true;
+            } else if (this.selectedCategory) {
+                matchesCategory = prompt.category === this.selectedCategory;
+            }
 
             return matchesSearch && matchesCategory;
         });
@@ -514,9 +522,14 @@ class PromptLibrary {
     getCardSummaryHTML(prompt) {
         const variableCount = prompt.variables?.length || 0;
         const hiddenClass = this.showDetails ? '' : 'hidden';
+        const isFavorite = prompt.isFavorite === true;
+        const heartIcon = isFavorite ? 'favorite' : 'favorite_border';
         return `
             <div class="card-header">
                 <span class="card-category">${this.highlightText(prompt.category, this.searchTerm)}</span>
+                <button class="favorite-button" data-action="toggle-favorite" aria-label="${isFavorite ? 'Remove from favorites' : 'Add to favorites'}" onclick="event.stopPropagation()">
+                    <span class="material-symbols-outlined">${heartIcon}</span>
+                </button>
                 <span class="variable-count-badge ${hiddenClass}">${variableCount > 0 ? `${variableCount} variable${variableCount > 1 ? 's' : ''}` : 'No variables'}</span>
             </div>
             <h3 class="card-title">${this.highlightText(prompt.title, this.searchTerm)}</h3>
@@ -679,6 +692,16 @@ class PromptLibrary {
     attachCardEventListeners(card, index) {
         const openPrompt = () => this.openPromptModal(index);
 
+        // Handle favorite button
+        const favoriteButton = card.querySelector('[data-action="toggle-favorite"]');
+        if (favoriteButton) {
+            favoriteButton.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                this.toggleFavorite(index);
+            });
+        }
+
         card.addEventListener('click', (event) => {
             event.preventDefault();
             openPrompt();
@@ -712,6 +735,9 @@ class PromptLibrary {
                         </div>
                     </div>
                     <div class="modal-header-actions">
+                        <button class="favorite-button modal-favorite-button" id="promptModalFavoriteButton" data-action="toggle-modal-favorite" aria-label="Toggle favorite">
+                            <span class="material-symbols-outlined">favorite_border</span>
+                        </button>
                         <button class="btn btn-primary btn-sm lock-button" id="promptModalLockButton" data-action="toggle-lock">
                             <span class="material-symbols-outlined">mode_edit</span>
                             Edit Prompt
@@ -728,6 +754,7 @@ class PromptLibrary {
         this.promptModalTitle = this.promptModal.querySelector('#promptModalTitle');
         this.promptModalCategory = this.promptModal.querySelector('#promptModalCategory');
         this.promptModalLockButton = this.promptModal.querySelector('#promptModalLockButton');
+        this.promptModalFavoriteButton = this.promptModal.querySelector('#promptModalFavoriteButton');
 
         this.promptModal.querySelectorAll('[data-action="close-prompt"]').forEach(element => {
             element.addEventListener('click', () => this.closePromptModal());
@@ -738,6 +765,16 @@ class PromptLibrary {
                 event.preventDefault();
                 event.stopPropagation();
                 this.handleLockButtonClick();
+            });
+        }
+
+        if (this.promptModalFavoriteButton) {
+            this.promptModalFavoriteButton.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                if (this.activePromptIndex !== null && this.activePromptIndex !== undefined) {
+                    this.toggleFavorite(this.activePromptIndex);
+                }
             });
         }
     }
@@ -764,6 +801,7 @@ class PromptLibrary {
         }
 
         this.updateLockButton(prompt);
+        this.updateFavoriteButton(prompt);
 
         this.renderPromptModalContent(prompt, index);
 
@@ -818,6 +856,7 @@ class PromptLibrary {
         if (!this.promptModalBody) return;
 
         this.updateLockButton(prompt);
+        this.updateFavoriteButton(prompt);
 
         const modalBody = this.promptModalBody;
         const isModalVisible = this.promptModal?.classList.contains('show');
@@ -881,6 +920,20 @@ class PromptLibrary {
         this.promptModalLockButton.classList.remove('btn-primary', 'btn-secondary', 'btn-sm');
         this.promptModalLockButton.classList.add('btn-sm', 'btn-primary');
         this.promptModalLockButton.setAttribute('aria-label', ariaLabel);
+    }
+
+    updateFavoriteButton(prompt) {
+        if (!this.promptModalFavoriteButton || !prompt) return;
+
+        const isFavorite = prompt.isFavorite === true;
+        const icon = isFavorite ? 'favorite' : 'favorite_border';
+        const ariaLabel = isFavorite ? 'Remove from favorites' : 'Add to favorites';
+
+        this.promptModalFavoriteButton.innerHTML = `
+            <span class="material-symbols-outlined">${icon}</span>
+        `;
+
+        this.promptModalFavoriteButton.setAttribute('aria-label', ariaLabel);
     }
 
     /**
@@ -1136,6 +1189,34 @@ class PromptLibrary {
     }
 
     /**
+     * Toggle favorite status of a prompt
+     */
+    toggleFavorite(index) {
+        const prompt = this.filteredPrompts[index];
+        if (!prompt) return;
+
+        prompt.isFavorite = !prompt.isFavorite;
+
+        // Save to localStorage
+        this.savePromptMetadata(prompt.id, {
+            lastUsed: prompt.lastUsed || null,
+            useCount: prompt.useCount || 0,
+            isFavorite: prompt.isFavorite
+        });
+
+        // If we're on the Favorites view and unfavoriting, re-filter
+        if (this.selectedCategory === 'Favorites' && !prompt.isFavorite) {
+            this.filterPrompts();
+        } else {
+            // Just update the card visuals
+            this.refreshPromptViews(index);
+        }
+
+        const message = prompt.isFavorite ? 'Added to favorites' : 'Removed from favorites';
+        this.showToast(message);
+    }
+
+    /**
      * Switch active tab
      */
     switchTab(index, tabName) {
@@ -1291,6 +1372,14 @@ class PromptLibrary {
             });
 
             this.showToast('Copied!');
+
+            // Auto-open AI Tools modal
+            setTimeout(() => {
+                const aiToolsButton = document.getElementById('openLinksModal');
+                if (aiToolsButton) {
+                    aiToolsButton.click();
+                }
+            }, 500); // Small delay to let the toast appear first
         } catch (error) {
             console.error('Failed to copy:', error);
             // Fallback for older browsers
