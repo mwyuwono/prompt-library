@@ -239,7 +239,7 @@
     --md-sys-typescale-label-small-tracking: 0.5px;
 
     /* Typeface stacks */
-    --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    --font-serif: 'Bodoni Moda', Georgia, 'Times New Roman', serif;
     --font-sans: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
     /* ========================================
@@ -1139,6 +1139,66 @@ body.modal-open {
     cursor: pointer;
     user-select: none;
     min-height: 28px;
+}
+
+/* Favorite Button */
+.favorite-button {
+    background: none;
+    border: none;
+    padding: var(--space-xs);
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--md-sys-shape-corner-full);
+    position: relative;
+    overflow: hidden;
+    transition: all var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+}
+
+.favorite-button .material-symbols-outlined {
+    font-size: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.favorite-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: var(--color-action-primary);
+    opacity: 0;
+    transition: opacity var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+    pointer-events: none;
+}
+
+.favorite-button:hover::before {
+    opacity: var(--md-sys-state-hover-opacity);
+}
+
+.favorite-button:active::before {
+    opacity: var(--md-sys-state-pressed-opacity);
+}
+
+.favorite-button:focus-visible {
+    outline: 2px solid var(--color-action-primary);
+    outline-offset: 2px;
+}
+
+/* Filled favorite icon */
+.favorite-button .material-symbols-outlined[aria-hidden] {
+    font-variation-settings: 'FILL' 1;
+}
+
+/* Modal favorite button styling */
+.modal-favorite-button {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.modal-favorite-button .material-symbols-outlined {
+    font-size: 24px;
 }
 
 .card-title-wrapper {
