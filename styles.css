@@ -1141,6 +1141,11 @@ body.modal-open {
     min-height: 28px;
 }
 
+/* Hide category badge in grid view since filters show categories */
+.prompt-card .card-category {
+    display: none;
+}
+
 /* Favorite Button */
 .favorite-button {
     background: none;
