@@ -93,7 +93,6 @@ class LinksManager {
                     <h4 class="link-card-name">${this.escapeHTML(link.name)}</h4>
                     <span class="link-card-arrow material-symbols-outlined">arrow_forward</span>
                 </div>
-                <p class="link-card-company">${this.escapeHTML(link.company)}</p>
             </a>
         `;
     }
