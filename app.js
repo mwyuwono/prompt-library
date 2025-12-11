@@ -180,12 +180,12 @@ class PromptLibrary {
         this.categoryChips.innerHTML = '';
 
         // Add "All" chip
-        const allChip = this.createCategoryChip('', 'All', false);
+        const allChip = this.createCategoryChip('', 'All', this.selectedCategory === '');
         this.categoryChips.appendChild(allChip);
 
         // Add category chips
         categories.forEach(category => {
-            const chip = this.createCategoryChip(category, category, false);
+            const chip = this.createCategoryChip(category, category, this.selectedCategory === category);
             this.categoryChips.appendChild(chip);
         });
     }
