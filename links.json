@@ -58,6 +58,11 @@
                 "name": "NotebookLM",
                 "company": "Google",
                 "url": "https://notebooklm.google.com"
+            },
+            {
+                "name": "Google Stitch",
+                "company": "Google",
+                "url": "https://stitch.withgoogle.com"
             }
         ]
     },
