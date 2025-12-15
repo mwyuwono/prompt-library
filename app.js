@@ -648,6 +648,29 @@ class PromptLibrary {
         const dataAttr = `data-variable="${this.escapeHTML(variable.name)}"`;
         const placeholder = this.escapeHTML(variable.placeholder || '');
 
+        if (inputType === 'toggle') {
+            const isChecked = variable.value === 'true' || variable.value === true;
+            const option1 = this.escapeHTML(variable.options?.[0] || 'Option 1');
+            const option2 = this.escapeHTML(variable.options?.[1] || 'Option 2');
+            return `
+                <div class="variable-toggle-wrapper">
+                    <label class="variable-toggle-label">
+                        <div class="variable-toggle-labels">
+                            <span class="variable-toggle-option ${!isChecked ? 'active' : ''}">${option1}</span>
+                            <span class="variable-toggle-option ${isChecked ? 'active' : ''}">${option2}</span>
+                        </div>
+                        <input
+                            type="checkbox"
+                            class="variable-toggle-input"
+                            ${dataAttr}
+                            ${isChecked ? 'checked' : ''}
+                        >
+                        <span class="variable-toggle-slider"></span>
+                    </label>
+                </div>
+            `;
+        }
+
         if (inputType === 'textarea') {
             const value = this.escapeHTML(variable.value || '');
             return `<textarea class="${className}" ${dataAttr} placeholder="${placeholder}" rows="${variable.rows || 6}">${value}</textarea>`;
@@ -836,6 +859,7 @@ class PromptLibrary {
         modalBody.innerHTML = this.getPromptDetailHTML(prompt, index);
         this.bindPromptInteractions(modalBody, prompt, index);
         this.initializeVariableTextareas(modalBody);
+        this.updateDependentVariables(modalBody, prompt, prompt.variables || []);
 
         if (prompt.locked !== false) {
             const firstInput = modalBody.querySelector('.variable-input');
@@ -977,6 +1001,38 @@ class PromptLibrary {
             });
         });
 
+        // Handle toggle inputs
+        const toggleInputs = container.querySelectorAll('.variable-toggle-input');
+        toggleInputs.forEach(input => {
+            input.addEventListener('change', (event) => {
+                const variableName = event.target.dataset.variable;
+                const variables = prompt.variables || [];
+                const variable = variables.find(v => v.name === variableName);
+                if (variable) {
+                    variable.value = event.target.checked ? 'true' : '';
+
+                    // Update toggle label highlighting
+                    const wrapper = event.target.closest('.variable-toggle-wrapper');
+                    if (wrapper) {
+                        const options = wrapper.querySelectorAll('.variable-toggle-option');
+                        options.forEach((option, i) => {
+                            if (i === 0) {
+                                option.classList.toggle('active', !event.target.checked);
+                            } else {
+                                option.classList.toggle('active', event.target.checked);
+                            }
+                        });
+                    }
+
+                    // Handle conditional visibility for dependent variables
+                    this.updateDependentVariables(container, prompt, variables);
+
+                    this.updatePreview(container, prompt);
+                    this.saveVariableValues(prompt.id, variables);
+                }
+            });
+        });
+
         const templateEditor = container.querySelector('[data-action="edit-template"]');
         if (templateEditor) {
             templateEditor.addEventListener('input', (event) => {
@@ -1015,6 +1071,36 @@ class PromptLibrary {
     initializeVariableTextareas(container) {
         container.querySelectorAll('.variable-textarea').forEach(textarea => {
             this.autoResizeTextarea(textarea);
+        });
+    }
+
+    /**
+     * Update visibility of dependent variables based on toggle state
+     */
+    updateDependentVariables(container, prompt, variables) {
+        if (!prompt.variables) return;
+
+        // Find all variable groups in the container
+        const variableGroups = container.querySelectorAll('.variable-group');
+
+        prompt.variables.forEach((variable, index) => {
+            if (variable.dependsOn) {
+                const dependency = variables.find(v => v.name === variable.dependsOn);
+                if (dependency && dependency.inputType === 'toggle') {
+                    const shouldHide = dependency.value === variable.hideWhen ||
+                                     (!dependency.value && variable.hideWhen === '');
+
+                    // Find the corresponding variable group element
+                    const variableGroup = variableGroups[index];
+                    if (variableGroup) {
+                        if (shouldHide) {
+                            variableGroup.style.display = 'none';
+                        } else {
+                            variableGroup.style.display = '';
+                        }
+                    }
+                }
+            }
         });
     }
 
@@ -1340,8 +1426,13 @@ class PromptLibrary {
         if (prompt.variables) {
             prompt.variables.forEach(variable => {
                 const placeholder = `{{${variable.name}}}`;
-                const value = variable.value || '';
-                compiled = compiled.split(placeholder).join(value);
+                // Skip variables that should be hidden in preview
+                if (variable.hideInPreview) {
+                    compiled = compiled.split(placeholder).join('');
+                } else {
+                    const value = variable.value || '';
+                    compiled = compiled.split(placeholder).join(value);
+                }
             });
         }
 
