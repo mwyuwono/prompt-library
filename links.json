@@ -86,6 +86,11 @@
                 "url": "https://revere.ai"
             },
             {
+                "name": "OpenAI Image Playground",
+                "company": "OpenAI",
+                "url": "https://platform.openai.com/playground/images"
+            },
+            {
                 "name": "ImageFX",
                 "company": "Google Labs",
                 "url": "https://aitestkitchen.withgoogle.com/tools/image-fx"
