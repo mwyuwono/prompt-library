@@ -130,6 +130,93 @@ The actual implementation uses this structure (differs from requirements doc):
 
 `inputType` and `rows` are optional runtime hints; when omitted, the app infers when to render a textarea for long-form input and picks a sensible default height.
 
+### Variable Types and Input Controls
+
+Variables in prompts use simple string substitution via `{{variable_name}}` syntax. The application supports different input types for collecting user data:
+
+#### Standard Text Input (Default)
+```json
+{
+    "name": "variable_name",
+    "label": "Display Label",
+    "placeholder": "Example value",
+    "value": ""
+}
+```
+When `inputType` is omitted, renders as a single-line text input.
+
+#### Textarea Input
+```json
+{
+    "name": "variable_name",
+    "label": "Display Label",
+    "placeholder": "Example value",
+    "value": "",
+    "inputType": "textarea",
+    "rows": 10
+}
+```
+For multi-line text input. The `rows` property controls initial height.
+
+#### Select Dropdown
+```json
+{
+    "name": "variable_name",
+    "label": "Display Label",
+    "inputType": "select",
+    "options": [
+        "First option text",
+        "Second option text"
+    ],
+    "value": "First option text"
+}
+```
+Renders a dropdown menu. When user selects an option, `{{variable_name}}` is replaced with the selected option's text.
+
+**Use case**: Conditional text insertion
+- First option can be an empty string `""` to output nothing
+- Second option contains the text to insert when needed
+- Example: Optional masking instructions
+
+**Important**: The `toggle` inputType is **not recommended** due to implementation issues. Use `select` with clear option text instead.
+
+#### Best Practices for Conditional Content
+
+When you need to conditionally include text in a prompt:
+
+**Option 1: Select with empty first option (RECOMMENDED)**
+```json
+{
+    "name": "optional_instructions",
+    "label": "Feature Name",
+    "inputType": "select",
+    "options": [
+        "",  // Default: nothing inserted
+        "Full instruction text here"  // User selects this to include
+    ],
+    "value": ""
+}
+```
+
+**Option 2: Embedded conditional phrasing**
+```
+Template text...
+
+If [specific condition applies], then follow these additional instructions: [details].
+```
+No variable needed; instruction is always present but phrased conditionally.
+
+**Option 3: Manual paste field**
+```json
+{
+    "name": "optional_instructions",
+    "label": "Optional Instructions",
+    "placeholder": "Leave blank or paste: [instruction text]",
+    "value": ""
+}
+```
+Users manually paste instruction text when needed.
+
 ## UI Components
 
 ### Global UI Patterns
