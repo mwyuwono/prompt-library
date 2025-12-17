@@ -132,9 +132,9 @@ The actual implementation uses this structure (differs from requirements doc):
 
 ### Variable Types and Input Controls
 
-Variables in prompts use simple string substitution via `{{variable_name}}` syntax. The application supports different input types for collecting user data:
+Variables in prompts use simple string substitution via `{{variable_name}}` syntax. The application supports the following input types:
 
-#### Standard Text Input (Default)
+#### Standard Text Input (Default) ✅ SUPPORTED
 ```json
 {
     "name": "variable_name",
@@ -143,9 +143,9 @@ Variables in prompts use simple string substitution via `{{variable_name}}` synt
     "value": ""
 }
 ```
-When `inputType` is omitted, renders as a single-line text input.
+When `inputType` is omitted, renders as a single-line text input. **This is the most reliable input type.**
 
-#### Textarea Input
+#### Textarea Input ✅ SUPPORTED
 ```json
 {
     "name": "variable_name",
@@ -158,42 +158,38 @@ When `inputType` is omitted, renders as a single-line text input.
 ```
 For multi-line text input. The `rows` property controls initial height.
 
-#### Select Dropdown
-```json
-{
-    "name": "variable_name",
-    "label": "Display Label",
-    "inputType": "select",
-    "options": [
-        "First option text",
-        "Second option text"
-    ],
-    "value": "First option text"
-}
-```
-Renders a dropdown menu. When user selects an option, `{{variable_name}}` is replaced with the selected option's text.
+#### Unsupported Input Types ❌ DO NOT USE
 
-**Use case**: Conditional text insertion
-- First option can be an empty string `""` to output nothing
-- Second option contains the text to insert when needed
-- Example: Optional masking instructions
+The following input types are **not supported** and will cause rendering issues:
 
-**Important**: The `toggle` inputType is **not recommended** due to implementation issues. Use `select` with clear option text instead.
+- **`inputType: "select"`** - Does not render as dropdown; falls back to text input with broken placeholder
+- **`inputType: "toggle"`** - Does not work correctly; outputs "True" instead of option text
+- **`inputType: "checkbox"`** - Not implemented
+- **`inputType: "radio"`** - Not implemented
+
+**Never use these in prompt definitions.**
 
 #### Best Practices for Conditional Content
 
 When you need to conditionally include text in a prompt:
 
-**Option 1: Select with empty first option (RECOMMENDED)**
+**Option 1: Manual paste field (RECOMMENDED)**
 ```json
 {
     "name": "optional_instructions",
-    "label": "Feature Name",
-    "inputType": "select",
-    "options": [
-        "",  // Default: nothing inserted
-        "Full instruction text here"  // User selects this to include
-    ],
+    "label": "Optional Instructions",
+    "placeholder": "Leave blank to skip. To include, paste: [full instruction text here]",
+    "value": ""
+}
+```
+Users manually paste instruction text when needed. This is the most reliable approach since it only uses supported input types.
+
+Example from Ceramic Vessel Scene prompt:
+```json
+{
+    "name": "mask_instructions",
+    "label": "Limit Edits to Masked Areas? (optional)",
+    "placeholder": "Leave blank to edit full image. To limit edits to masked areas only, paste: Limit all edits to only the areas masked by the user. Ensure the mask is not visible in the resulting image.",
     "value": ""
 }
 ```
@@ -204,18 +200,7 @@ Template text...
 
 If [specific condition applies], then follow these additional instructions: [details].
 ```
-No variable needed; instruction is always present but phrased conditionally.
-
-**Option 3: Manual paste field**
-```json
-{
-    "name": "optional_instructions",
-    "label": "Optional Instructions",
-    "placeholder": "Leave blank or paste: [instruction text]",
-    "value": ""
-}
-```
-Users manually paste instruction text when needed.
+No variable needed; instruction is always present but phrased conditionally. Use when the conditional instruction doesn't need to be toggled by the user.
 
 ## UI Components
 
