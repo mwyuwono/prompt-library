@@ -91,8 +91,9 @@ class LinksManager {
             <a href="${link.url}" class="link-card" target="_blank" rel="noopener noreferrer">
                 <div class="link-card-header">
                     <h4 class="link-card-name">${this.escapeHTML(link.name)}</h4>
-                    <span class="link-card-arrow material-symbols-outlined">arrow_forward</span>
+                    <div class="link-card-company">${this.escapeHTML(link.company)}</div>
                 </div>
+                <span class="link-card-arrow material-symbols-outlined">arrow_forward</span>
             </a>
         `;
     }

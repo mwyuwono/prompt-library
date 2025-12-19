@@ -2522,8 +2522,7 @@ mark {
 }
 
 .link-card {
-    display: flex;
-    align-items: center;
+    display: block;
     padding: var(--space-md);
     border-radius: var(--md-sys-shape-corner-medium);
     background-color: var(--color-card-surface);
@@ -2601,8 +2600,8 @@ mark {
 
 .link-card-header {
     display: flex;
-    flex-direction: column;
-    flex: 1;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .link-card-name {
@@ -2613,6 +2612,8 @@ mark {
     margin: 0;
     transition: color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
 }
+
+
 
 
 

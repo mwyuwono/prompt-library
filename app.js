@@ -650,8 +650,8 @@ class PromptLibrary {
 
         if (inputType === 'toggle') {
             const isChecked = (variable.options && variable.value === variable.options[1]) || variable.value === 'true' || variable.value === true;
-            const option1 = this.escapeHTML(variable.options?.[0] || 'Option 1');
-            const option2 = this.escapeHTML(variable.options?.[1] || 'Option 2');
+            const option1 = this.escapeHTML(variable.options?.[0] || 'Disabled');
+            const option2 = this.escapeHTML(variable.options?.[1] || 'Enabled');
             return `
                 <div class="variable-toggle-wrapper">
                     <label class="variable-toggle-label">
