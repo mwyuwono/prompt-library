@@ -29,8 +29,12 @@
             },
             {
                 "name": "mask_instructions",
-                "label": "Limit Edits to Masked Areas? (optional)",
-                "placeholder": "Leave blank to edit full image. To limit edits to masked areas only, paste: Limit all edits to only the areas masked by the user. Ensure the mask is not visible in the resulting image.",
+                "label": "Masked Image",
+                "inputType": "toggle",
+                "options": [
+                    "",
+                    "Limit all edits to only the areas masked by the user. Ensure the mask is not visible in the resulting image."
+                ],
                 "value": ""
             }
         ]
