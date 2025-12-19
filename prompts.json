@@ -312,5 +312,13 @@
                 "hideWhen": ""
             }
         ]
+    },
+    {
+        "id": "tina-barney-style",
+        "title": "Tina Barney Style Photo",
+        "description": "Transform photographs into fine-art, museum-grade images inspired by Tina Barney's photographic style",
+        "category": "Creativity",
+        "template": "Convert this photograph while preserving the original characters, setting, composition, and narrative context exactly as captured. Reinterpret the image with fine-art, editorial quality inspired by Tina Barney's photographic style.\n\nApply the visual language of large-format, museum-grade color photography: naturalistic yet deliberate color, soft but controlled contrast, and a restrained, painterly palette. Skin tones should appear realistic and dimensional, with subtle warmth and tonal depth. Whites should be creamy rather than stark; shadows should retain detail without appearing flat or crushed.\n\nMaintain a sense of quiet psychological presence and observational intimacy. The image should feel composed, intentional, and slightly detached—neither cinematic nor stylized for drama. Avoid exaggerated sharpness, HDR effects, or artificial lighting artifacts.\n\nUpgrade the technical quality to resemble a contemporary high-end digital or medium-format camera: refined dynamic range, clean micro-detail, smooth tonal transitions, and film-like color depth without visible grain. Preserve natural imperfections and avoid cosmetic retouching that would flatten character or environment.\n\nThe final result should read as gallery-ready fine art photography—editorial in rigor, restrained in execution, and suitable for museum or print publication.",
+        "variables": []
     }
 ]
