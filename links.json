@@ -4,11 +4,6 @@
         "icon": "psychology",
         "links": [
             {
-                "name": "Claude",
-                "company": "Anthropic",
-                "url": "https://claude.ai"
-            },
-            {
                 "name": "ChatGPT",
                 "company": "OpenAI",
                 "url": "https://chat.openai.com"
@@ -19,9 +14,9 @@
                 "url": "https://gemini.google.com"
             },
             {
-                "name": "AI Studio",
-                "company": "Google",
-                "url": "https://aistudio.google.com"
+                "name": "Claude",
+                "company": "Anthropic",
+                "url": "https://www.claude.com"
             },
             {
                 "name": "Perplexity",
@@ -32,37 +27,6 @@
                 "name": "Poe",
                 "company": "Quora",
                 "url": "https://poe.com"
-            },
-            {
-                "name": "Qwen",
-                "company": "Alibaba Cloud",
-                "url": "https://tongyi.aliyun.com"
-            },
-            {
-                "name": "Kimi",
-                "company": "Moonshot AI",
-                "url": "https://www.kimi.com/"
-            }
-        ]
-    },
-    {
-        "category": "Specialized Tools",
-        "icon": "build",
-        "links": [
-            {
-                "name": "Perchance",
-                "company": "Perchance",
-                "url": "https://perchance.org"
-            },
-            {
-                "name": "NotebookLM",
-                "company": "Google",
-                "url": "https://notebooklm.google.com"
-            },
-            {
-                "name": "Google Stitch",
-                "company": "Google",
-                "url": "https://stitch.withgoogle.com"
             }
         ]
     },
@@ -70,6 +34,16 @@
         "category": "Image Generation",
         "icon": "palette",
         "links": [
+            {
+                "name": "AI Studio",
+                "company": "Google",
+                "url": "https://aistudio.google.com"
+            },
+            {
+                "name": "OpenAI Image Playground",
+                "company": "OpenAI",
+                "url": "https://platform.openai.com/playground/images"
+            },
             {
                 "name": "Black Forest Labs",
                 "company": "Black Forest Labs",
@@ -86,11 +60,6 @@
                 "url": "https://revere.ai"
             },
             {
-                "name": "OpenAI Image Playground",
-                "company": "OpenAI",
-                "url": "https://platform.openai.com/playground/images"
-            },
-            {
                 "name": "ImageFX",
                 "company": "Google Labs",
                 "url": "https://aitestkitchen.withgoogle.com/tools/image-fx"
@@ -99,6 +68,80 @@
                 "name": "Image Outpainter",
                 "company": "Hugging Face",
                 "url": "https://huggingface.co/spaces/fffiloni/Image-Outpainter"
+            }
+        ]
+    },
+    {
+        "category": "Video Generation",
+        "icon": "videocam",
+        "links": [
+            {
+                "name": "Runway",
+                "company": "Runway",
+                "url": "https://runwayml.com"
+            },
+            {
+                "name": "Pika",
+                "company": "Pika",
+                "url": "https://pika.art"
+            },
+            {
+                "name": "Luma Labs",
+                "company": "Luma Labs",
+                "url": "https://lumalabs.ai"
+            }
+        ]
+    },
+    {
+        "category": "Music Generation",
+        "icon": "music_note",
+        "links": [
+            {
+                "name": "Suno",
+                "company": "Suno",
+                "url": "https://suno.com"
+            },
+            {
+                "name": "Udio",
+                "company": "Udio",
+                "url": "https://udio.com"
+            }
+        ]
+    },
+    {
+        "category": "AI Marketplaces",
+        "icon": "storefront",
+        "links": [
+            {
+                "name": "Civitai",
+                "company": "Civitai",
+                "url": "https://civitai.com"
+            },
+            {
+                "name": "Hugging Face",
+                "company": "Hugging Face",
+                "url": "https://huggingface.co"
+            }
+        ]
+    },
+    {
+        "category": "Specialized Tools",
+        "icon": "science",
+        "links": [
+            {
+                "name": "NotebookLM",
+                "company": "Google",
+                "url": "https://notebooklm.google.com"
+            },
+            {
+                "name": "Perchance",
+                "company": "Perchance",
+                "url": "https://perchance.org"
+            },
+            {
+                "name": "Google Stitch",
+                "company": "Google",
+                "url": "https://stitch.withgoogle.com"
             }
         ]
     }
