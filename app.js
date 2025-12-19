@@ -649,7 +649,7 @@ class PromptLibrary {
         const placeholder = this.escapeHTML(variable.placeholder || '');
 
         if (inputType === 'toggle') {
-            const isChecked = variable.value === 'true' || variable.value === true;
+            const isChecked = (variable.options && variable.value === variable.options[1]) || variable.value === 'true' || variable.value === true;
             const option1 = this.escapeHTML(variable.options?.[0] || 'Option 1');
             const option2 = this.escapeHTML(variable.options?.[1] || 'Option 2');
             return `
@@ -1009,7 +1009,7 @@ class PromptLibrary {
                 const variables = prompt.variables || [];
                 const variable = variables.find(v => v.name === variableName);
                 if (variable) {
-                    variable.value = event.target.checked ? 'true' : '';
+                    variable.value = event.target.checked ? (variable.options?.[1] || 'true') : (variable.options?.[0] || '');
 
                     // Update toggle label highlighting
                     const wrapper = event.target.closest('.variable-toggle-wrapper');

@@ -313,7 +313,7 @@
                 "placeholder": "e.g., A young athlete holding a discus, Hellenistic period influence",
                 "value": "",
                 "dependsOn": "mode",
-                "hideWhen": ""
+                "hideWhen": "Convert uploaded image"
             }
         ]
     },
