@@ -650,19 +650,23 @@ class PromptLibrary {
 
         if (inputType === 'toggle') {
             const isChecked = (variable.options && variable.value === variable.options[1]) || variable.value === 'true' || variable.value === true;
+            const usesDefaultToggleLabels = !variable.options || variable.options.length < 2;
             const option1 = this.escapeHTML(variable.options?.[0] || 'Disabled');
             const option2 = this.escapeHTML(variable.options?.[1] || 'Enabled');
+            const offLabel = usesDefaultToggleLabels && isChecked ? option2 : option1;
+            const onLabel = usesDefaultToggleLabels ? option2 : option2;
             return `
                 <div class="variable-toggle-wrapper">
                     <label class="variable-toggle-label">
                         <div class="variable-toggle-labels">
-                            <span class="variable-toggle-option ${!isChecked ? 'active' : ''}">${option1}</span>
-                            <span class="variable-toggle-option ${isChecked ? 'active' : ''}">${option2}</span>
+                            <span class="variable-toggle-option ${!isChecked ? 'active' : ''}">${offLabel}</span>
+                            <span class="variable-toggle-option ${isChecked ? 'active' : ''}">${onLabel}</span>
                         </div>
                         <input
                             type="checkbox"
                             class="variable-toggle-input"
                             ${dataAttr}
+                            data-default-toggle="${usesDefaultToggleLabels ? 'true' : 'false'}"
                             ${isChecked ? 'checked' : ''}
                         >
                         <span class="variable-toggle-slider"></span>
@@ -1015,11 +1019,18 @@ class PromptLibrary {
                     const wrapper = event.target.closest('.variable-toggle-wrapper');
                     if (wrapper) {
                         const options = wrapper.querySelectorAll('.variable-toggle-option');
+                        const isDefaultToggle = event.target.dataset.defaultToggle === 'true';
                         options.forEach((option, i) => {
                             if (i === 0) {
                                 option.classList.toggle('active', !event.target.checked);
+                                if (isDefaultToggle) {
+                                    option.textContent = event.target.checked ? 'Enabled' : 'Disabled';
+                                }
                             } else {
                                 option.classList.toggle('active', event.target.checked);
+                                if (isDefaultToggle) {
+                                    option.textContent = 'Enabled';
+                                }
                             }
                         });
                     }
