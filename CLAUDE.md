@@ -158,49 +158,68 @@ When `inputType` is omitted, renders as a single-line text input. **This is the 
 ```
 For multi-line text input. The `rows` property controls initial height.
 
+#### Toggle Input ✅ SUPPORTED
+```json
+{
+    "name": "variable_name",
+    "label": "Display Label",
+    "inputType": "toggle",
+    "options": [
+        "Text when toggle is OFF",
+        "Text when toggle is ON"
+    ],
+    "value": ""
+}
+```
+Renders as a Material Design toggle switch. When toggled:
+- **OFF** (default): Inserts `options[0]` into the template
+- **ON**: Inserts `options[1]` into the template
+
+**Common pattern for optional instructions:**
+```json
+{
+    "name": "mask_instructions",
+    "label": "Masked Image",
+    "inputType": "toggle",
+    "options": [
+        "",
+        "Limit all edits to only the areas masked by the user. Ensure the mask is not visible in the resulting image."
+    ],
+    "value": ""
+}
+```
+When OFF, inserts nothing (empty string). When ON, inserts the full instruction text.
+
+**Conditional field visibility:**
+Use `dependsOn` and `hideWhen` to show/hide fields based on toggle state:
+```json
+{
+    "name": "mode",
+    "label": "Mode",
+    "inputType": "toggle",
+    "options": ["Option A", "Option B"],
+    "value": ""
+},
+{
+    "name": "conditional_field",
+    "label": "Conditional Field",
+    "placeholder": "Only shown when Option A is selected",
+    "value": "",
+    "dependsOn": "mode",
+    "hideWhen": "Option A"
+}
+```
+The `conditional_field` is hidden when `mode` value equals "Option A", and shown otherwise.
+
 #### Unsupported Input Types ❌ DO NOT USE
 
 The following input types are **not supported** and will cause rendering issues:
 
 - **`inputType: "select"`** - Does not render as dropdown; falls back to text input with broken placeholder
-- **`inputType: "toggle"`** - Does not work correctly; outputs "True" instead of option text
 - **`inputType: "checkbox"`** - Not implemented
 - **`inputType: "radio"`** - Not implemented
 
 **Never use these in prompt definitions.**
-
-#### Best Practices for Conditional Content
-
-When you need to conditionally include text in a prompt:
-
-**Option 1: Manual paste field (RECOMMENDED)**
-```json
-{
-    "name": "optional_instructions",
-    "label": "Optional Instructions",
-    "placeholder": "Leave blank to skip. To include, paste: [full instruction text here]",
-    "value": ""
-}
-```
-Users manually paste instruction text when needed. This is the most reliable approach since it only uses supported input types.
-
-Example from Ceramic Vessel Scene prompt:
-```json
-{
-    "name": "mask_instructions",
-    "label": "Limit Edits to Masked Areas? (optional)",
-    "placeholder": "Leave blank to edit full image. To limit edits to masked areas only, paste: Limit all edits to only the areas masked by the user. Ensure the mask is not visible in the resulting image.",
-    "value": ""
-}
-```
-
-**Option 2: Embedded conditional phrasing**
-```
-Template text...
-
-If [specific condition applies], then follow these additional instructions: [details].
-```
-No variable needed; instruction is always present but phrased conditionally. Use when the conditional instruction doesn't need to be toggled by the user.
 
 ## UI Components
 
