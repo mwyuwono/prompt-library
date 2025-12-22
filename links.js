@@ -8,6 +8,8 @@ class LinksManager {
         this.linksContainer = document.getElementById('linksContainer');
         this.openButton = document.getElementById('openLinksModal');
         this.hamburger = document.getElementById('hamburgerMenu');
+        this.isClosing = false;
+        this.closeTimeout = null;
 
         this.init();
     }
@@ -48,17 +50,35 @@ class LinksManager {
         }
 
         // Close modal
-        const closeElements = this.modal.querySelectorAll('[data-action="close-links"]');
-        closeElements.forEach(element => {
-            element.addEventListener('click', () => this.closeModal());
-        });
+        if (this.modal) {
+            const closeElements = this.modal.querySelectorAll('[data-action="close-links"]');
+            closeElements.forEach(element => {
+                element.addEventListener('click', () => this.closeModal());
+            });
 
-        // Close on Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.modal.classList.contains('show')) {
-                this.closeModal();
-            }
-        });
+            // Close on Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && this.modal.classList.contains('show')) {
+                    this.closeModal();
+                }
+            });
+        }
+
+        // Close modal when a link inside the modal is activated
+        if (this.linksContainer) {
+            this.linksContainer.addEventListener('click', (event) => {
+                const link = event.target.closest('.link-card');
+                if (link) {
+                    this.closeModal();
+                }
+            });
+
+            this.linksContainer.addEventListener('keydown', (event) => {
+                if ((event.key === 'Enter' || event.key === ' ') && event.target.closest('.link-card')) {
+                    this.closeModal();
+                }
+            });
+        }
     }
 
     /**
@@ -106,6 +126,17 @@ class LinksManager {
         const scrollY = window.scrollY;
         this.bodyScrollPosition = scrollY;
 
+        if (!this.modal) {
+            return;
+        }
+
+        if (this.closeTimeout) {
+            clearTimeout(this.closeTimeout);
+            this.closeTimeout = null;
+        }
+
+        this.isClosing = false;
+        this.modal.classList.remove('closing');
         this.modal.classList.add('show');
         document.body.classList.add('modal-open');
 
@@ -117,7 +148,45 @@ class LinksManager {
      * Close the modal
      */
     closeModal() {
-        this.modal.classList.remove('show');
+        if (!this.modal || this.isClosing) {
+            return;
+        }
+
+        if (!this.modal.classList.contains('show')) {
+            this.cleanupBodyScroll();
+            return;
+        }
+
+        const finishClose = () => {
+            this.modal.classList.remove('show', 'closing');
+            this.modal.removeEventListener('transitionend', handleTransitionEnd);
+            this.cleanupBodyScroll();
+            this.isClosing = false;
+            if (this.closeTimeout) {
+                clearTimeout(this.closeTimeout);
+                this.closeTimeout = null;
+            }
+        };
+
+        const handleTransitionEnd = (event) => {
+            if (event.target === this.modal) {
+                finishClose();
+                this.modal.removeEventListener('transitionend', handleTransitionEnd);
+            }
+        };
+
+        this.isClosing = true;
+        this.modal.addEventListener('transitionend', handleTransitionEnd);
+        this.modal.classList.add('closing');
+
+        // Fallback in case transitionend doesn't fire
+        this.closeTimeout = setTimeout(finishClose, 500);
+    }
+
+    /**
+     * Cleanup body scroll state after modal closes
+     */
+    cleanupBodyScroll() {
         document.body.classList.remove('modal-open');
 
         // Restore scroll position
