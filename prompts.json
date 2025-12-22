@@ -282,7 +282,7 @@
         "title": "Davis Architectural Rendering",
         "description": "Transform images into 19th-century American architectural renderings in Alexander Jackson Davis style",
         "category": "Creativity",
-        "template": "Turn this image into A 19th-century American architectural rendering in the style of Alexander Jackson Davis depicted as a precise front elevation orthographic drawing with no vanishing point. The artwork should utilize strict ruled ink lines overlaid with translucent watercolor washes in warm cream and pale yellow stone tones. Include a smooth graded wash sky fading from blue to white, deep calculated cast shadows to simulate depth within recesses, and high-contrast dark windows with intricate lattice work. Finish the composition with verdigris green accents on metal elements, a tiny human scale figure at the entrance to establish grandeur, and faint greyed-out flanking structures to frame the subject.",
+        "template": "Turn this image into A 19th-century American architectural rendering in the style of Alexander Jackson Davis depicted as a precise front elevation orthographic drawing with no vanishing point. The artwork should utilize strict ruled ink lines overlaid with translucent watercolor washes in warm cream and pale yellow stone tones. Include a smooth graded wash sky fading from blue to white, deep calculated cast shadows to simulate depth within recesses, and high-contrast dark windows that maintain the window pattern of the reference. Any metal accents should be finished with verdigris green . Add a human scale figure at the entrance to establish scale, and faint greyed-out flanking structures to frame the subject.",
         "variables": []
     },
     {
