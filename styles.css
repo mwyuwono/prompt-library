@@ -1303,6 +1303,8 @@ body.modal-open {
     gap: var(--space-sm);
     align-items: center;
     margin-bottom: var(--space-md);
+    border-bottom: 2px solid var(--color-border-subtle);
+    position: relative;
 }
 
 .tab-button {
@@ -1312,6 +1314,8 @@ body.modal-open {
 
     background: none;
     border: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
 
     /* M3 Title Small */
     font-family: var(--md-sys-typescale-title-small-font);
@@ -1355,6 +1359,7 @@ body.modal-open {
 
 .tab-button.active {
     color: var(--color-action-primary);
+    border-bottom-color: var(--color-action-primary);
 }
 
 .tabs-content {
@@ -2337,28 +2342,52 @@ body.modal-open {
     }
 
     .modal-header {
-        padding: var(--space-lg) var(--space-md);
+        padding: var(--space-md);
     }
 
     .modal-header h2 {
-        font-size: var(--text-xl);
+        font-size: 1.25rem;
+        line-height: 1.3;
+    }
+
+    .modal-header-actions .btn {
+        padding: 0.5rem 0.875rem;
+        font-size: var(--md-sys-typescale-label-small-size);
     }
 
     .modal-body {
-        padding: var(--space-lg) var(--space-md);
+        padding: var(--space-md);
     }
 
     .modal-scroll-area {
-        padding-right: 0;
+        padding: var(--space-md);
+        padding-right: var(--space-md);
+    }
+
+    .prompt-modal-description {
+        font-size: var(--md-sys-typescale-body-small-size);
+        line-height: 1.4;
+        margin-bottom: var(--space-md);
     }
 
     .modal-actions {
         flex-direction: column;
         gap: var(--space-sm);
+        padding: var(--space-md);
     }
 
     .modal-actions .btn {
         width: 100%;
+    }
+
+    .tabs-container {
+        margin-bottom: var(--space-md);
+    }
+
+    .tab-button {
+        padding: 0.75rem 0.875rem;
+        min-height: 2.5rem;
+        font-size: var(--md-sys-typescale-label-large-size);
     }
 
     /* Links modal */
@@ -2440,11 +2469,24 @@ body.modal-open {
     .modal-header,
     .modal-body,
     #linksModal .modal-body {
-        padding: var(--space-md);
+        padding: var(--space-sm) var(--space-md);
+    }
+
+    .modal-header h2 {
+        font-size: 1.125rem;
+    }
+
+    .modal-scroll-area {
+        padding: var(--space-sm);
     }
 
     .prompt-card {
         padding: var(--space-md);
+    }
+
+    .card-category {
+        font-size: 0.625rem;
+        padding: 0.2rem 0.4rem;
     }
 
     .card-title {
