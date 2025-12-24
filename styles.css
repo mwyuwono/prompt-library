@@ -2247,7 +2247,8 @@ body.modal-open {
 
     /* M3 Top App Bar - Mobile */
     .header {
-        padding: var(--space-sm) var(--space-lg);
+        padding: var(--space-sm) var(--space-md);
+        height: 56px;
     }
 
     .header-content {
@@ -2285,7 +2286,8 @@ body.modal-open {
     /* Controls bar - mobile compact */
     .controls-bar {
         flex-direction: column;
-        padding: var(--space-md);
+        padding: var(--space-sm);
+        margin-top: var(--space-sm);
         gap: var(--space-sm);
         /* Ensure controls are above the grid */
         position: relative;
@@ -2317,8 +2319,13 @@ body.modal-open {
     /* Prompt grid - mobile */
     .prompt-grid {
         grid-template-columns: 1fr;
-        padding: var(--space-md);
+        padding: var(--space-sm) var(--space-md);
         gap: var(--space-md);
+    }
+
+    /* Prompt list - mobile */
+    .prompt-list {
+        padding: var(--space-sm) var(--space-md);
     }
 
     /* Modal adjustments */
@@ -2395,6 +2402,7 @@ body.modal-open {
 @media (max-width: 480px) {
     .header {
         padding: var(--space-sm) var(--space-md);
+        height: 52px;
     }
 
     .header-title {
@@ -2407,9 +2415,14 @@ body.modal-open {
 
     .controls-bar {
         padding: var(--space-sm);
+        margin-top: var(--space-xs);
     }
 
     .prompt-grid {
+        padding: var(--space-sm);
+    }
+
+    .prompt-list {
         padding: var(--space-sm);
     }
 
