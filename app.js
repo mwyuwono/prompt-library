@@ -42,7 +42,7 @@ class PromptLibrary {
         this.setupEventListeners();
         this.setupKeyboardShortcuts();
         this.populateCategoryFilter();
-        this.renderPrompts();
+        this.filterPrompts();
     }
 
     /**
@@ -180,12 +180,12 @@ class PromptLibrary {
         this.categoryChips.innerHTML = '';
 
         // Add "All" chip
-        const allChip = this.createCategoryChip('', 'All', false);
+        const allChip = this.createCategoryChip('', 'All', this.selectedCategory === '');
         this.categoryChips.appendChild(allChip);
 
         // Add category chips
         categories.forEach(category => {
-            const chip = this.createCategoryChip(category, category, false);
+            const chip = this.createCategoryChip(category, category, category === this.selectedCategory);
             this.categoryChips.appendChild(chip);
         });
     }
@@ -1099,7 +1099,7 @@ class PromptLibrary {
                 const dependency = variables.find(v => v.name === variable.dependsOn);
                 if (dependency && dependency.inputType === 'toggle') {
                     const shouldHide = dependency.value === variable.hideWhen ||
-                                     (!dependency.value && variable.hideWhen === '');
+                        (!dependency.value && variable.hideWhen === '');
 
                     // Find the corresponding variable group element
                     const variableGroup = variableGroups[index];

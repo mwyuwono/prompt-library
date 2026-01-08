@@ -2073,9 +2073,8 @@ body.modal-open {
 
 .modal-header h2 {
     /* M3 Headline Small */
-    font-family: var(--md-sys-typescale-headline-small-font);
-    font-size: var(--md-sys-typescale-headline-small-size);
-    font-weight: var(--md-sys-typescale-headline-small-weight);
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif font-size: var(--md-sys-typescale-headline-small-size);
+    font-weight: var(--weight-medium);
     line-height: var(--md-sys-typescale-headline-small-line-height);
     letter-spacing: var(--md-sys-typescale-headline-small-tracking);
 
