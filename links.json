@@ -1,6 +1,6 @@
 [
     {
-        "category": "Large Language Models",
+        "category": "Models",
         "icon": "psychology",
         "links": [
             {
@@ -31,7 +31,7 @@
         ]
     },
     {
-        "category": "Image Generation",
+        "category": "Images",
         "icon": "palette",
         "links": [
             {
@@ -55,11 +55,6 @@
                 "url": "https://midjourney.com"
             },
             {
-                "name": "Revere",
-                "company": "Revere",
-                "url": "https://revere.ai"
-            },
-            {
                 "name": "ImageFX",
                 "company": "Google Labs",
                 "url": "https://aitestkitchen.withgoogle.com/tools/image-fx"
@@ -72,60 +67,7 @@
         ]
     },
     {
-        "category": "Video Generation",
-        "icon": "videocam",
-        "links": [
-            {
-                "name": "Runway",
-                "company": "Runway",
-                "url": "https://runwayml.com"
-            },
-            {
-                "name": "Pika",
-                "company": "Pika",
-                "url": "https://pika.art"
-            },
-            {
-                "name": "Luma Labs",
-                "company": "Luma Labs",
-                "url": "https://lumalabs.ai"
-            }
-        ]
-    },
-    {
-        "category": "Music Generation",
-        "icon": "music_note",
-        "links": [
-            {
-                "name": "Suno",
-                "company": "Suno",
-                "url": "https://suno.com"
-            },
-            {
-                "name": "Udio",
-                "company": "Udio",
-                "url": "https://udio.com"
-            }
-        ]
-    },
-    {
-        "category": "AI Marketplaces",
-        "icon": "storefront",
-        "links": [
-            {
-                "name": "Civitai",
-                "company": "Civitai",
-                "url": "https://civitai.com"
-            },
-            {
-                "name": "Hugging Face",
-                "company": "Hugging Face",
-                "url": "https://huggingface.co"
-            }
-        ]
-    },
-    {
-        "category": "Specialized Tools",
+        "category": "Specialized",
         "icon": "science",
         "links": [
             {
@@ -142,17 +84,27 @@
                 "name": "Google Stitch",
                 "company": "Google",
                 "url": "https://stitch.withgoogle.com"
-            }
-        ]
-    },
-    {
-        "category": "Learning & Resources",
-        "icon": "school",
-        "links": [
+            },
             {
                 "name": "OpenAI Academy",
                 "company": "OpenAI",
                 "url": "https://academy.openai.com/home/tags/prompt-packs-6849a0f98c613939acef841c"
+            }
+        ]
+    },
+    {
+        "category": "Music",
+        "icon": "music_note",
+        "links": [
+            {
+                "name": "Suno",
+                "company": "Suno",
+                "url": "https://suno.com"
+            },
+            {
+                "name": "Udio",
+                "company": "Udio",
+                "url": "https://udio.com"
             }
         ]
     }

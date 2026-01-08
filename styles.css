@@ -2,10 +2,12 @@
 :root {
     /* Core color system inspired by Flamingo Estate */
     --color-page-background: #fafafa;
+    --color-emphasis-background: #4b64401a;
     --color-card-surface: #ffffff;
     --color-surface-hover: #E4DDCF;
     --color-border-subtle: #d6cebc4c;
     --color-text-primary: #252b21;
+    --color-text-contrast: #ffffff;
     --color-text-secondary: #66705F;
     --color-action-primary: #4B6440;
     --color-action-primary-hover: #3F5636;
@@ -273,7 +275,6 @@ body {
 
     /* M3 Colors */
     color: var(--color-text-primary);
-    background-color: var(--color-page-background);
 
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -539,7 +540,9 @@ body {
 }
 
 .view-grid .prompt-grid {
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
     opacity: 1;
     transform: scale(1);
 }
@@ -729,7 +732,6 @@ body.modal-open {
 
     /* Reduced padding for compactness */
     padding: var(--space-sm) var(--space-xl);
-    margin-top: 1rem;
 
     flex-wrap: wrap;
 
@@ -766,7 +768,7 @@ body.modal-open {
 
     /* M3 outlined text field */
     border: 1px solid var(--color-border-subtle);
-    border-radius: var(--md-sys-shape-corner-small);
+    border-radius: var(--md-sys-shape-corner-full);
 
     /* M3 Body Medium typography for compactness */
     font-family: var(--md-sys-typescale-body-medium-font);
@@ -964,10 +966,10 @@ body.modal-open {
 
     /* Solid fill for neutral chip */
     border: none;
-    background-color: var(--color-border-subtle);
+    background-color: var(--color-emphasis-background);
 
     /* M3 small corner for chips */
-    border-radius: var(--md-sys-shape-corner-small);
+    border-radius: var(--md-sys-shape-corner-full);
 
     /* M3 Label Medium typography for compactness */
     font-family: var(--md-sys-typescale-label-medium-font);
@@ -1038,19 +1040,17 @@ body.modal-open {
 /* Prompt Card - M3 Expressive Elevated Card */
 .prompt-card {
     /* M3 Surface */
-    background: var(--color-card-surface);
+    background: var(--color-text-primary);
 
     /* M3 Expressive: Extra-large corner for bold, friendly appearance */
-    border-radius: var(--md-sys-shape-corner-medium);
+    border-radius: var(--md-sys-shape-corner-extra-large);
 
     /* Improved padding and min-height for better visual breathing room */
-    padding: var(--space-md) var(--space-lg);
-    min-height: 80px;
-
+    padding: var(--space-sm) var(--space-md);
+    align-content: center;
     border: none;
 
-
-
+    color: var(--color-text-contrast);
     /* M3 motion: emphasized easing */
     transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
 
@@ -1105,7 +1105,8 @@ body.modal-open {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: var(--color-surface-hover);
+    background-color: var(--color-text-primary);
+    color: var(--color-text-contrast);
     opacity: 0;
     transition: opacity 0.2s cubic-bezier(0.2, 0, 0, 1);
     pointer-events: none;
@@ -1138,13 +1139,12 @@ body.modal-open {
     top: var(--space-xs);
     right: var(--space-xs);
     display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
+    justify-content: center;
+    align-items: center;
     gap: var(--space-sm);
     margin-bottom: var(--space-md);
     cursor: pointer;
     user-select: none;
-    min-height: 28px;
 }
 
 /* Hide category badge in grid view since filters show categories */
@@ -1160,12 +1160,9 @@ body.modal-open {
     /* M3 Headline Small - reduced for better density */
     font-family: Work Sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     font-size: 1.1rem;
-    font-weight: var(--md-sys-typescale-headline-small-weight);
+    font-weight: var(--weight-normal);
     line-height: var(--md-sys-typescale-headline-small-line-height);
     letter-spacing: var(--md-sys-typescale-headline-small-tracking);
-
-    color: var(--color-text-primary);
-    margin-bottom: var(--space-sm);
 }
 
 .card-category {
@@ -1190,7 +1187,7 @@ body.modal-open {
 }
 
 .variable-count-badge {
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     font-family: var(--font-sans);
@@ -1203,7 +1200,7 @@ body.modal-open {
     color: var(--color-text-secondary);
     background-color: var(--color-page-background);
 
-    padding: 0.25rem 0.5rem;
+    padding: 0.1rem 0.25rem;
 
     /* M3 small corner radius for compact elements */
     border-radius: var(--md-sys-shape-corner-small);
@@ -1232,15 +1229,14 @@ body.modal-open {
     font-weight: var(--md-sys-typescale-body-medium-weight);
     line-height: var(--md-sys-typescale-body-medium-line-height);
     letter-spacing: var(--md-sys-typescale-body-medium-tracking);
-
-    color: var(--color-text-secondary);
-    margin-bottom: 0;
+    opacity: 0.7;
+    margin-bottom: var(--space-sm);
     cursor: pointer;
+    max-width: 25vw;
 
     /* Enhanced smooth transition with slight delay for elegance */
     will-change: height, opacity;
     height: auto;
-    opacity: 1;
     overflow: hidden;
     transition: height 0.4s var(--md-sys-motion-easing-emphasized-decelerate),
         opacity 0.35s var(--md-sys-motion-easing-standard) 0.05s;
@@ -1248,7 +1244,7 @@ body.modal-open {
 
 /* Hide/Show classes for toggle functionality */
 .card-description.hidden {
-    display: block;
+    display: none;
     height: 0;
     opacity: 0;
     margin: 0;
@@ -1720,7 +1716,7 @@ body.modal-open {
 
 /* M3 Tonal Button (Secondary) */
 .btn-secondary {
-    background-color: var(--color-card-surface);
+    background-color: var(--color-emphasis-background);
     color: var(--color-text-primary);
 }
 
@@ -2027,7 +2023,7 @@ body.modal-open {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--space-xl);
+    padding: var(--space-md) var(--space-md) 0;
 
     /* M3: no border in dialogs */
     border-bottom: none;
@@ -2067,7 +2063,7 @@ body.modal-open {
     display: block;
     flex: 1;
     overflow-y: auto;
-    padding: var(--space-xl) var(--space-lg);
+    padding: var(--space-md) var(--space-md);
 }
 
 #linksContainer {
@@ -2293,7 +2289,6 @@ body.modal-open {
     .controls-bar {
         flex-direction: column;
         padding: var(--space-sm);
-        margin-top: var(--space-sm);
         gap: var(--space-sm);
         /* Ensure controls are above the grid */
         position: relative;
@@ -2445,7 +2440,7 @@ body.modal-open {
 
     .controls-bar {
         padding: var(--space-sm);
-        margin-top: var(--space-xs);
+
     }
 
     .prompt-grid {
@@ -2459,6 +2454,7 @@ body.modal-open {
     .search-input {
         min-height: 2.5rem;
         padding: 0.5rem 0.75rem;
+        border-radius: var(--md-sys-shape-corner-full);
     }
 
     .category-chip {
@@ -2482,7 +2478,7 @@ body.modal-open {
     }
 
     .prompt-card {
-        padding: var(--space-md);
+        padding: var(--space-sm);
     }
 
     .card-category {
@@ -2524,8 +2520,10 @@ mark {
 }
 
 .links-category {
+    display: flex;
+    flex-direction: row;
     margin-bottom: 0;
-    padding: var(--space-xl) 0;
+    padding: var(--space-md) 0;
     border-bottom: 1px solid var(--color-border-subtle);
     opacity: 0;
     transform: translateY(20px);
@@ -2567,22 +2565,21 @@ mark {
 }
 
 .links-category-title {
+    min-width: 130px;
     font-family: var(--font-sans);
-    font-size: 0.8125rem;
-    font-weight: 600;
-    line-height: var(--leading-tight);
+    font-size: var(--md-sys-typescale-title-medium-size);
+    font-weight: var(--md-sys-typescale-title-medium-weight);
+    line-height: var(--md-sys-typescale-title-medium-line-height);
     color: var(--color-text-secondary);
-    margin-bottom: var(--space-lg);
+    margin-left: var(--space-sm);
     display: flex;
     align-items: center;
     gap: var(--space-sm);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
 }
 
 .links-category-icon {
     font-size: 1.5rem;
-    display: inline-block;
+    display: none;
     animation: iconBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -2601,20 +2598,19 @@ mark {
 }
 
 .links-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: var(--space-md);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
 }
 
 .link-card {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--space-md);
-    padding: var(--space-lg);
-    border-radius: var(--md-sys-shape-corner-medium);
-    background-color: var(--color-card-surface);
-    border: 1px solid var(--color-border-subtle);
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--md-sys-shape-corner-full);
+    background-color: var(--color-emphasis-background);
     text-decoration: none;
     position: relative;
     overflow: hidden;
@@ -2662,10 +2658,7 @@ mark {
 }
 
 .link-card:hover {
-    transform: translateY(-2px);
-    border-color: color-mix(in srgb, var(--color-action-primary) 40%, transparent);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
-    background-color: color-mix(in srgb, var(--color-action-primary) 4%, var(--color-card-surface));
+    background-color: color-mix(in srgb, var(--color-action-primary) 4%, var(--color-emphasis-background));
 }
 
 .link-card:focus-visible {
@@ -2692,7 +2685,7 @@ mark {
 }
 
 .link-card-company {
-    display: block;
+    display: none;
     font-family: var(--font-sans);
     font-size: var(--md-sys-typescale-label-small-size);
     font-weight: var(--weight-normal);
@@ -2704,7 +2697,7 @@ mark {
     flex-shrink: 0;
     font-size: 1.25rem;
     color: var(--color-action-primary);
-    opacity: 0.6;
+    opacity: 0;
     transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized);
 }
 
