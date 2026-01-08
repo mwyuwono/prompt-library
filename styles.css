@@ -670,8 +670,7 @@ body.modal-open {
 }
 
 .header-logo {
-    height: 2rem;
-    width: auto;
+    width: 2.5rem;
     flex-shrink: 0;
 }
 
@@ -1161,7 +1160,6 @@ body.modal-open {
     font-family: Work Sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     font-size: 1.1rem;
     font-weight: var(--weight-normal);
-    line-height: var(--md-sys-typescale-headline-small-line-height);
     letter-spacing: var(--md-sys-typescale-headline-small-tracking);
 }
 
@@ -2266,7 +2264,6 @@ body.modal-open {
     }
 
     .header-logo {
-        height: 2rem;
         order: 1;
         justify-self: start;
     }
@@ -2286,7 +2283,7 @@ body.modal-open {
 
     /* Controls bar - mobile compact */
     .controls-bar {
-        flex-direction: column;
+        flex-direction: row;
         padding: var(--space-sm);
         gap: var(--space-sm);
         /* Ensure controls are above the grid */
@@ -2411,10 +2408,6 @@ body.modal-open {
         text-align: center;
     }
 
-    /* Prompt card padding */
-    .prompt-card {
-        padding: var(--space-lg);
-    }
 
     /* Template textarea */
     .template-textarea {
@@ -2433,9 +2426,7 @@ body.modal-open {
         font-size: var(--text-lg);
     }
 
-    .header-logo {
-        height: 1.75rem;
-    }
+
 
     .controls-bar {
         padding: var(--space-sm);
@@ -2477,7 +2468,7 @@ body.modal-open {
     }
 
     .prompt-card {
-        padding: var(--space-sm);
+        padding: var(--space-xs) var(--space-md);
     }
 
     .card-category {
@@ -2487,7 +2478,7 @@ body.modal-open {
 
     .card-title {
         /* M3 Title Large on mobile */
-        font-size: var(--md-sys-typescale-title-large-size);
+        font-size: var(--text-base);
     }
 
     .btn {
