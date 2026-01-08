@@ -144,5 +144,16 @@
                 "url": "https://stitch.withgoogle.com"
             }
         ]
+    },
+    {
+        "category": "Learning & Resources",
+        "icon": "school",
+        "links": [
+            {
+                "name": "OpenAI Academy",
+                "company": "OpenAI",
+                "url": "https://academy.openai.com/home/tags/prompt-packs-6849a0f98c613939acef841c"
+            }
+        ]
     }
 ]

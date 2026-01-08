@@ -1494,7 +1494,10 @@ class PromptLibrary {
 
         const computedStyle = window.getComputedStyle(textarea);
         const maxHeightValue = computedStyle.maxHeight;
-        const maxHeight = parseInt(maxHeightValue, 10);
+        let maxHeight = parseInt(maxHeightValue, 10);
+        if (Number.isNaN(maxHeight) || maxHeight <= 0) {
+            maxHeight = Math.floor(window.innerHeight * 0.5);
+        }
         const scrollHeight = textarea.scrollHeight;
 
         if (!Number.isNaN(maxHeight) && maxHeight > 0) {

@@ -1588,6 +1588,7 @@ body.modal-open {
 .template-textarea {
     width: 100%;
     min-height: 240px;
+    max-height: 50vh;
     padding: var(--space-lg);
 
     /* M3 outlined text field */
@@ -1604,7 +1605,7 @@ body.modal-open {
     background-color: var(--color-card-surface);
 
     resize: vertical;
-    overflow-y: hidden;
+    overflow-y: auto;
 
     /* M3 motion */
     transition: all var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
