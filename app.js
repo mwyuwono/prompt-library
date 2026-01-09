@@ -516,13 +516,17 @@ class PromptLibrary {
     getCardSummaryHTML(prompt) {
         const variableCount = prompt.variables?.length || 0;
         const hiddenClass = this.showDetails ? '' : 'hidden';
+        const imageHTML = prompt.image ? `<div class="card-thumbnail"><img src="${prompt.image}" alt="${prompt.title}"></div>` : '';
         return `
-            <div class="card-header">
-                <span class="card-category">${this.highlightText(prompt.category, this.searchTerm)}</span>
-                <span class="variable-count-badge ${hiddenClass}">${variableCount > 0 ? `${variableCount} variable${variableCount > 1 ? 's' : ''}` : 'No variables'}</span>
+            ${imageHTML}
+            <div class="card-content">
+                <div class="card-header">
+                    <span class="card-category">${this.highlightText(prompt.category, this.searchTerm)}</span>
+                    <span class="variable-count-badge ${hiddenClass}">${variableCount > 0 ? `${variableCount} variable${variableCount > 1 ? 's' : ''}` : 'No variables'}</span>
+                </div>
+                <h3 class="card-title">${this.highlightText(prompt.title, this.searchTerm)}</h3>
+                <p class="card-description ${hiddenClass}">${this.highlightText(prompt.description, this.searchTerm)}</p>
             </div>
-            <h3 class="card-title">${this.highlightText(prompt.title, this.searchTerm)}</h3>
-            <p class="card-description ${hiddenClass}">${this.highlightText(prompt.description, this.searchTerm)}</p>
         `;
     }
 
@@ -533,8 +537,10 @@ class PromptLibrary {
         const isLocked = prompt.locked !== false;
         const hasVariables = prompt.variables && prompt.variables.length > 0;
         const activeTab = prompt.activeTab || 'variables';
+        const imageHTML = prompt.image ? `<div class="modal-preview-image"><img src="${prompt.image}" alt="${prompt.title}"></div>` : '';
 
         return `
+            ${imageHTML}
             <p class="prompt-modal-description">${this.escapeHTML(prompt.description)}</p>
             ${isLocked && hasVariables ? `
                 <div class="tabs-header">
@@ -556,7 +562,7 @@ class PromptLibrary {
                 <div class="modal-actions card-actions">
                     ${isLocked ? `
                         <button class="btn btn-primary" data-action="copy">Copy to Clipboard</button>
-                        <button class="btn btn-secondary" data-action="download">Download</button>
+                        <button class="btn btn-outlined" data-action="download">Download</button>
                     ` : `
                         <button class="btn btn-secondary" data-action="cancel-edit">Cancel</button>
                         <button class="btn btn-primary" data-action="save-template">Save Changes</button>
@@ -741,7 +747,7 @@ class PromptLibrary {
                         </div>
                     </div>
                     <div class="modal-header-actions">
-                        <button class="btn btn-primary btn-sm lock-button" id="promptModalLockButton" data-action="toggle-lock">
+                        <button class="btn btn-outlined btn-sm lock-button" id="promptModalLockButton" data-action="toggle-lock">
                             <span class="material-symbols-outlined">mode_edit</span>
                             Edit Prompt
                         </button>
@@ -1061,7 +1067,7 @@ class PromptLibrary {
     applyVariableDisplayHints(prompt) {
         if (!prompt.variables) return;
 
-        const longTextPattern = /(paste|text|notes|email|message|context|description|details|outline|summary)/i;
+        const longTextPattern = /(paste|text|notes|email|message|context|description|details|outline|summary|topic|prompt|instructions|content)/i;
 
         prompt.variables.forEach(variable => {
             if (variable.inputType) return;
@@ -1070,7 +1076,7 @@ class PromptLibrary {
             if (longTextPattern.test(label) || longTextPattern.test(placeholder)) {
                 variable.inputType = 'textarea';
                 if (!variable.rows) {
-                    variable.rows = 8;
+                    variable.rows = 2; // Start small and expand
                 }
             }
         });
