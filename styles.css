@@ -1,23 +1,33 @@
 /* CSS Variables */
 :root {
-    /* Core color system inspired by Flamingo Estate */
-    --color-page-background: #fafafa;
+    /* Core color system from reference design */
+    --color-primary: #3C4235;
+    --color-page-background: #FAF9F6;
+    --color-background-dark: #1C1C1E;
     --color-emphasis-background: #4b64401a;
-    --color-card-surface: #ffffff;
+    --color-card-surface: #FFFFFF;
+    --color-card-dark: #2C2C2E;
     --color-surface-hover: #E4DDCF;
     --color-border-subtle: #d6cebc4c;
     --color-text-primary: #252b21;
     --color-text-contrast: #ffffff;
     --color-text-secondary: #66705F;
-    --color-action-primary: #4B6440;
+    --color-action-primary: #4A5D45;
     --color-action-primary-hover: #3F5636;
+    --color-accent-green: #4A5D45;
 
-    /* Category accents */
+    /* Category accents - updated for reference design */
     --color-category-productivity: #6E8B5A;
     --color-category-expertise: #A17B56;
     --color-category-travel: #5D7C73;
     --color-category-lifestyle: #C4806A;
     --color-category-inspiration: #8F84A0;
+    --color-category-creativity: #A17B56;
+    --color-category-editing: #8F84A0;
+    --color-category-audio: #C4806A;
+    --color-category-architecture: #5D7C73;
+    --color-category-education: #6E8B5A;
+    --color-category-photography: #A17B56;
 
     /* Base font size */
     --base-font-size: 17px;
@@ -240,9 +250,13 @@
     --md-sys-typescale-label-small-weight: 500;
     --md-sys-typescale-label-small-tracking: 0.5px;
 
-    /* Typeface stacks */
+    /* Typeface stacks - Original fonts for non-image cards */
     --font-serif: 'Bodoni Moda', Georgia, 'Times New Roman', serif;
     --font-sans: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+    /* Reference design fonts for image cards */
+    --font-serif-ref: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    --font-sans-ref: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
     /* ========================================
        MODAL & OVERLAY EFFECTS
@@ -362,18 +376,46 @@ body {
 
 .prompt-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-    gap: var(--space-lg);
+    /* Reference design: 1 column mobile, 2 tablet, 3 desktop, 4 xl */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
     justify-content: start;
 
-    /* Add top padding to create space after controls */
-    padding: var(--space-lg) var(--space-xl);
+    /* Reference design spacing */
+    padding: 2rem;
 
     /* Smooth view transition animations */
     opacity: 0;
     transform: scale(0.95);
     transition: opacity 0.35s var(--md-sys-motion-easing-emphasized),
         transform 0.35s var(--md-sys-motion-easing-emphasized);
+}
+
+/* Responsive grid columns */
+@media (min-width: 768px) {
+    .prompt-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .prompt-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1280px) {
+    .prompt-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Tablet adjustments */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .prompt-grid {
+        gap: 1.25rem;
+        padding: 1.5rem;
+    }
 }
 
 /* List View Styles */
@@ -1044,9 +1086,13 @@ body.modal-open {
     /* M3 Expressive: Extra-large corner for bold, friendly appearance */
     border-radius: var(--md-sys-shape-corner-extra-large);
 
-    /* Improved padding and min-height for better visual breathing room */
+    /* Reference design: fixed height with flex layout */
+    height: 400px;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+
     padding: 0;
-    align-content: stretch;
     border: none;
 
     color: var(--color-text-contrast);
@@ -1133,18 +1179,30 @@ body.modal-open {
 }
 
 .card-thumbnail {
-    height: 25vh;
-    aspect-ratio: 16 / 9;
+    /* Reference design: image takes up half the card height */
+    height: 50%;
+    flex-shrink: 0;
     overflow: hidden;
     position: relative;
     background-color: var(--color-emphasis-background);
+}
+
+/* Gradient overlay on thumbnail images */
+.card-thumbnail::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, transparent 60%);
+    opacity: 0.6;
+    pointer-events: none;
+    z-index: 1;
 }
 
 .card-thumbnail img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.5s var(--md-sys-motion-easing-emphasized);
+    transition: transform 0.7s var(--md-sys-motion-easing-emphasized);
 }
 
 .prompt-card:hover .card-thumbnail img {
@@ -1152,10 +1210,13 @@ body.modal-open {
 }
 
 .card-content {
-    padding: var(--space-md);
+    /* Reference design: content fills remaining half */
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     flex: 1;
+    min-height: 0;
 }
 
 .modal-preview-image {
@@ -1174,10 +1235,15 @@ body.modal-open {
     object-fit: cover;
 }
 
+/* Card Header - Only visible with images */
 .card-header {
-    display: none;
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
 }
 
+/* Position badges over image for cards with thumbnails */
 .card-thumbnail+.card-content .card-header {
     position: absolute;
     top: var(--space-md);
@@ -1185,6 +1251,12 @@ body.modal-open {
     right: var(--space-md);
     margin-bottom: 0;
     z-index: 2;
+}
+
+/* Cards without images - full height content area */
+.prompt-card:not(.has-image):not([data-has-image="true"]) .card-content {
+    padding: 2rem;
+    height: 100%;
 }
 
 /* Ensure badges look good on images */
@@ -1210,30 +1282,32 @@ body.modal-open {
 }
 
 .card-title {
-    /* M3 Headline Small - reduced for better density */
-    font-family: Work Sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    font-size: 1.25rem;
-    font-weight: var(--weight-medium);
-    letter-spacing: var(--md-sys-typescale-headline-small-tracking);
+    /* Reference design: larger, more prominent titles */
+    font-family: var(--font-sans);
+    font-size: 1.5rem;
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+    margin-bottom: var(--space-xs);
 }
 
 .card-category {
     display: inline-block;
     font-family: var(--font-sans);
     font-size: var(--text-xs);
-    font-weight: var(--weight-medium);
+    font-weight: var(--weight-semibold);
     line-height: var(--leading-tight);
 
     /* M3: Use primary container for category badge */
     color: var(--color-text-primary);
     background-color: var(--color-surface-hover);
 
-    padding: 0.25rem 0.5rem;
+    padding: 0.35rem 0.75rem;
 
     /* M3 small corner radius for compact elements */
     border-radius: var(--md-sys-shape-corner-small);
 
-    letter-spacing: var(--tracking-wider);
+    letter-spacing: var(--tracking-widest);
     text-transform: uppercase;
     flex-shrink: 0;
 }
@@ -1275,12 +1349,12 @@ body.modal-open {
 }
 
 .card-description {
-    /* M3 Body Medium */
-    font-family: var(--md-sys-typescale-body-medium-font);
-    font-size: var(--md-sys-typescale-body-medium-size);
-    font-weight: var(--md-sys-typescale-body-medium-weight);
-    line-height: var(--md-sys-typescale-body-medium-line-height);
-    letter-spacing: var(--md-sys-typescale-body-medium-tracking);
+    /* Reference design: lighter, more refined descriptions */
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-light);
+    line-height: var(--leading-relaxed);
+    letter-spacing: var(--tracking-normal);
     opacity: 0.7;
     margin-bottom: var(--space-sm);
     cursor: pointer;
@@ -1311,6 +1385,38 @@ body.modal-open {
     pointer-events: none;
 }
 
+/* ========================================
+   FONT SWITCHING FOR IMAGE CARDS
+   Reference design fonts for cards with images
+   ======================================== */
+
+/* Cards with images use Playfair Display + Inter */
+.prompt-card[data-has-image="true"] .card-title,
+.prompt-card.has-image .card-title {
+    font-family: var(--font-serif-ref);
+}
+
+.prompt-card[data-has-image="true"] .card-description,
+.prompt-card.has-image .card-description,
+.prompt-card[data-has-image="true"] .card-category,
+.prompt-card.has-image .card-category,
+.prompt-card[data-has-image="true"] .variable-count-badge,
+.prompt-card.has-image .variable-count-badge,
+.prompt-card[data-has-image="true"] .card-meta-inline,
+.prompt-card.has-image .card-meta-inline {
+    font-family: var(--font-sans-ref);
+}
+
+/* List view items with images */
+.prompt-list-item[data-has-image="true"] .prompt-list-item-title,
+.prompt-list-item.has-image .prompt-list-item-title {
+    font-family: var(--font-serif-ref);
+}
+
+.prompt-list-item[data-has-image="true"] .prompt-list-item-description,
+.prompt-list-item.has-image .prompt-list-item-description {
+    font-family: var(--font-sans-ref);
+}
 
 /* M3 Focus indicator */
 .prompt-card:focus {
@@ -2127,7 +2233,8 @@ body.modal-open {
 
 .modal-header h2 {
     /* M3 Headline Small */
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif font-size: var(--md-sys-typescale-headline-small-size);
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: var(--md-sys-typescale-headline-small-size);
     font-weight: var(--weight-medium);
     line-height: var(--md-sys-typescale-headline-small-line-height);
     letter-spacing: var(--md-sys-typescale-headline-small-tracking);
@@ -2377,11 +2484,17 @@ body.modal-open {
         flex-shrink: 0;
     }
 
-    /* Prompt grid - mobile */
+    /* Prompt grid - mobile: single column, smaller gap */
     .prompt-grid {
         grid-template-columns: 1fr;
-        padding: var(--space-sm) var(--space-md);
-        gap: var(--space-md);
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    /* Cards maintain fixed height on mobile for consistency */
+    .prompt-card {
+        height: 400px;
+        min-height: 400px;
     }
 
     /* Prompt list - mobile */
@@ -2531,8 +2644,9 @@ body.modal-open {
         padding: var(--space-sm);
     }
 
-    .prompt-card {
-        padding: var(--space-xs) var(--space-md);
+    /* Card content padding adjustments for mobile */
+    .card-content {
+        padding: 1.25rem;
     }
 
     .card-category {
