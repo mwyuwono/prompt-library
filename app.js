@@ -534,8 +534,16 @@ class PromptLibrary {
                     <span class="card-category">${this.highlightText(prompt.category, this.searchTerm)}</span>
                     <span class="variable-count-badge ${hiddenClass}">${variableCount > 0 ? `${variableCount} variable${variableCount > 1 ? 's' : ''}` : 'No variables'}</span>
                 </div>
-                <h3 class="card-title">${this.highlightText(prompt.title, this.searchTerm)}</h3>
-                <p class="card-description ${hiddenClass}">${this.highlightText(prompt.description, this.searchTerm)}</p>
+                <div>
+                    <h3 class="card-title">${this.highlightText(prompt.title, this.searchTerm)}</h3>
+                    <p class="card-description ${hiddenClass}">${this.highlightText(prompt.description, this.searchTerm)}</p>
+                </div>
+                <div class="card-footer">
+                    <span class="card-category">${this.highlightText(prompt.category, this.searchTerm)}</span>
+                    <div class="card-arrow-button">
+                        <span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span>
+                    </div>
+                </div>
             </div>
         `;
     }

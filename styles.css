@@ -1093,11 +1093,17 @@ body.modal-open {
     flex-direction: column;
 
     padding: 0;
-    border: none;
+    /* Reference design: subtle border */
+    border: 1px solid rgba(0, 0, 0, 0.08);
 
     color: var(--color-text-contrast);
-    /* M3 motion: emphasized easing */
-    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+
+    /* Reference design: subtle shadow that grows on hover */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px 3px 1px rgba(0, 0, 0, 0.08);
+
+    /* M3 motion: emphasized easing with shadow transition */
+    transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-legacy),
+                box-shadow var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized);
 
     cursor: pointer;
     position: relative;
@@ -1163,7 +1169,8 @@ body.modal-open {
 }
 
 .prompt-card:hover {
-
+    /* Reference design: enhanced shadow on hover */
+    box-shadow: 0 4px 8px 3px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.08);
     /* Subtle lift for feedback */
     transform: translateY(-2px);
 }
@@ -1217,6 +1224,8 @@ body.modal-open {
     justify-content: space-between;
     flex: 1;
     min-height: 0;
+    position: relative;
+    z-index: 1;
 }
 
 .modal-preview-image {
@@ -1237,20 +1246,28 @@ body.modal-open {
 
 /* Card Header - Only visible with images */
 .card-header {
-    display: flex;
+    display: none;
     align-items: center;
     gap: var(--space-sm);
     flex-wrap: wrap;
 }
 
-/* Position badges over image for cards with thumbnails */
+/* Show header only for cards with images */
+.prompt-card.has-image .card-header,
+.prompt-card[data-has-image="true"] .card-header {
+    display: flex;
+}
+
+/* Position badges over image for cards with thumbnails - Reference design */
 .card-thumbnail+.card-content .card-header {
     position: absolute;
-    top: var(--space-md);
-    left: var(--space-md);
-    right: var(--space-md);
+    top: 1rem;
+    left: 1rem;
+    right: 1rem;
     margin-bottom: 0;
     z-index: 2;
+    display: flex;
+    gap: var(--space-sm);
 }
 
 /* Cards without images - full height content area */
@@ -1259,17 +1276,85 @@ body.modal-open {
     height: 100%;
 }
 
-/* Ensure badges look good on images */
+/* Pattern overlay for dark cards without images - Reference design */
+.prompt-card:not(.has-image):not([data-has-image="true"])::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.1;
+    pointer-events: none;
+    z-index: 0;
+    border-radius: inherit;
+}
+
+/* Card footer with category and arrow - Reference design */
+.card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: var(--space-md);
+}
+
+.card-footer .card-category {
+    opacity: 0;
+    transition: opacity var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
+}
+
+.prompt-card:hover .card-footer .card-category {
+    opacity: 1;
+}
+
+.card-arrow-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--md-sys-shape-corner-full);
+    background-color: rgba(255, 255, 255, 0.15);
+    color: var(--color-text-contrast);
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized);
+}
+
+.prompt-card:hover .card-arrow-button {
+    opacity: 1;
+    transform: translateX(0);
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* For cards with images, adjust arrow button styling */
+.prompt-card.has-image .card-arrow-button,
+.prompt-card[data-has-image="true"] .card-arrow-button {
+    background-color: rgba(0, 0, 0, 0.15);
+}
+
+.prompt-card.has-image:hover .card-arrow-button,
+.prompt-card[data-has-image="true"]:hover .card-arrow-button {
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+/* Cards with images: hide footer category (shown in header) */
+.prompt-card.has-image .card-footer .card-category,
+.prompt-card[data-has-image="true"] .card-footer .card-category {
+    display: none;
+}
+
+/* Enhanced frosted glass badges over images - Reference design */
 .card-thumbnail+.card-content .card-header .card-category,
 .card-thumbnail+.card-content .card-header .variable-count-badge {
     background-color: rgba(30, 30, 30, 0.75);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    color: var(--color-text-contrast);
+    border: 1px solid rgba(255, 255, 255, 0.25);
     padding: 0.35rem 0.75rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    font-weight: 600;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-widest);
 }
 
 /* Show category badge in grid view when using images */
@@ -1288,7 +1373,8 @@ body.modal-open {
     font-weight: var(--weight-semibold);
     line-height: var(--leading-tight);
     letter-spacing: var(--tracking-tight);
-    margin-bottom: var(--space-xs);
+    margin-bottom: var(--space-sm);
+    color: var(--color-text-contrast);
 }
 
 .card-category {
@@ -1355,10 +1441,10 @@ body.modal-open {
     font-weight: var(--weight-light);
     line-height: var(--leading-relaxed);
     letter-spacing: var(--tracking-normal);
-    opacity: 0.7;
-    margin-bottom: var(--space-sm);
+    color: var(--color-text-contrast);
+    opacity: 0.8;
+    margin-bottom: 0;
     cursor: pointer;
-    max-width: 25vw;
 
     /* Enhanced smooth transition with slight delay for elegance */
     will-change: height, opacity;
