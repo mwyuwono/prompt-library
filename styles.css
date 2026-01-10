@@ -1,33 +1,30 @@
 /* CSS Variables */
 :root {
-    /* Core color system from reference design */
-    --color-primary: #3C4235;
-    --color-page-background: #FAF9F6;
-    --color-background-dark: #1C1C1E;
-    --color-emphasis-background: #4b64401a;
-    --color-card-surface: #FFFFFF;
-    --color-card-dark: #2C2C2E;
-    --color-surface-hover: #E4DDCF;
-    --color-border-subtle: #d6cebc4c;
-    --color-text-primary: #252b21;
-    --color-text-contrast: #ffffff;
-    --color-text-secondary: #66705F;
-    --color-action-primary: #4A5D45;
-    --color-action-primary-hover: #3F5636;
-    --color-accent-green: #4A5D45;
+    /* New Brand Color System - 5 Color Palette */
+    --color-linen: #F9F7F2;
+    --color-charcoal: #1C1C1C;
+    --color-white: #FFFFFF;
+    --color-olive: #3D4435;
+    --color-gold: #C4A484;
+    --color-warmgrey: #707070;
 
-    /* Category accents - updated for reference design */
-    --color-category-productivity: #6E8B5A;
-    --color-category-expertise: #A17B56;
-    --color-category-travel: #5D7C73;
-    --color-category-lifestyle: #C4806A;
-    --color-category-inspiration: #8F84A0;
-    --color-category-creativity: #A17B56;
-    --color-category-editing: #8F84A0;
-    --color-category-audio: #C4806A;
-    --color-category-architecture: #5D7C73;
-    --color-category-education: #6E8B5A;
-    --color-category-photography: #A17B56;
+    /* Semantic color mapping */
+    --color-page-background: var(--color-linen);
+    --color-card-surface: var(--color-white);
+    --color-card-dark: var(--color-olive);
+    --color-text-primary: var(--color-charcoal);
+    --color-text-secondary: var(--color-warmgrey);
+    --color-text-contrast: var(--color-white);
+    --color-primary: var(--color-olive);
+    --color-action-primary: var(--color-gold);
+    --color-action-primary-hover: #B89474;
+    --color-emphasis-background: rgba(196, 164, 132, 0.1);
+    --color-surface-hover: rgba(112, 112, 112, 0.1);
+    --color-border-subtle: rgba(112, 112, 112, 0.1);
+
+    /* Legacy aliases - deprecated, kept for compatibility */
+    --color-background-dark: #1C1C1E;
+    --color-accent-green: var(--color-gold);
 
     /* Base font size */
     --base-font-size: 17px;
@@ -93,6 +90,12 @@
     --md-sys-elevation-level4: 0px 6px 10px 4px rgba(0, 0, 0, 0.15), 0px 2px 3px rgba(0, 0, 0, 0.3);
     --md-sys-elevation-level5: 0px 8px 12px 6px rgba(0, 0, 0, 0.15), 0px 4px 4px rgba(0, 0, 0, 0.3);
 
+    /* New brand shadow system - Subtle and elegant */
+    --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.05);
+    --shadow-medium: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-large: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
     --md-sys-state-hover-opacity: 0.08;
     --md-sys-state-focus-opacity: 0.12;
     --md-sys-state-pressed-opacity: 0.12;
@@ -100,7 +103,7 @@
     --md-sys-state-disabled-opacity: 0.38;
     --md-sys-state-disabled-container-opacity: 0.12;
 
-    /* Shape tokens */
+    /* Shape tokens - Refined for new brand */
     --md-sys-shape-corner-none: 0px;
     --md-sys-shape-corner-extra-small: 4px;
     --md-sys-shape-corner-small: 8px;
@@ -108,6 +111,13 @@
     --md-sys-shape-corner-large: 16px;
     --md-sys-shape-corner-extra-large: 28px;
     --md-sys-shape-corner-full: 9999px;
+
+    /* New brand border radius scale */
+    --radius-sm: 0.5rem;    /* 8px */
+    --radius-md: 1rem;      /* 16px */
+    --radius-lg: 1.5rem;    /* 24px */
+    --radius-xl: 2rem;      /* 32px */
+    --radius-full: 9999px;
 
     /* Motion tokens */
     --md-sys-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
@@ -250,13 +260,9 @@
     --md-sys-typescale-label-small-weight: 500;
     --md-sys-typescale-label-small-tracking: 0.5px;
 
-    /* Typeface stacks - Original fonts for non-image cards */
-    --font-serif: 'Bodoni Moda', Georgia, 'Times New Roman', serif;
-    --font-sans: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-
-    /* Reference design fonts for image cards */
-    --font-serif-ref: 'Playfair Display', Georgia, 'Times New Roman', serif;
-    --font-sans-ref: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    /* Font family stacks - New brand uses Playfair Display and Inter universally */
+    --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
     /* ========================================
        MODAL & OVERLAY EFFECTS
@@ -293,6 +299,17 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+}
+
+/* New brand: Text selection uses gold */
+::selection {
+    background-color: var(--color-gold);
+    color: var(--color-white);
+}
+
+::-moz-selection {
+    background-color: var(--color-gold);
+    color: var(--color-white);
 }
 
 /* Refined Scrollbar Styling */
@@ -691,17 +708,22 @@ body.modal-open {
     top: 0;
 }
 
-/* M3 Top App Bar */
+/* Header - New brand with linen background */
 .header {
-    background-color: var(--color-card-surface);
+    background-color: rgba(249, 247, 242, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(112, 112, 112, 0.1);
     padding: var(--space-sm) var(--space-xl);
-
-    /* M3 elevation level 2 for top app bar */
 
     /* Fixed height */
     height: 64px;
     display: flex;
     align-items: center;
+
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 .header-content {
@@ -752,7 +774,7 @@ body.modal-open {
 }
 
 .hamburger:focus-visible {
-    outline: 3px solid var(--color-action-primary);
+    outline: 3px solid var(--color-gold);
     outline-offset: 2px;
 }
 
@@ -760,7 +782,7 @@ body.modal-open {
     display: block;
     width: 24px;
     height: 2px;
-    background: var(--color-action-primary);
+    background: var(--color-charcoal);
     border-radius: 2px;
     transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-legacy);
 }
@@ -1056,10 +1078,10 @@ body.modal-open {
     opacity: var(--md-sys-state-pressed-opacity);
 }
 
-/* M3 Selected state */
+/* New brand: Selected state */
 .category-chip.active {
-    background-color: var(--color-action-primary-hover);
-    color: var(--color-page-background);
+    background-color: var(--color-charcoal);
+    color: var(--color-white);
     transform: scale(1.05);
 }
 
@@ -1072,117 +1094,77 @@ body.modal-open {
 }
 
 .category-chip:focus-visible {
-    outline: 2px solid var(--color-action-primary);
+    outline: 3px solid var(--color-gold);
     outline-offset: 2px;
 }
 
 
 
-/* Prompt Card - M3 Expressive Elevated Card */
+/* Prompt Card - New Brand Standard White Card */
 .prompt-card {
-    /* M3 Surface */
-    background: var(--color-text-primary);
+    /* New brand: white background with soft border */
+    background: var(--color-white);
+    border: 1px solid rgba(112, 112, 112, 0.1);
+    border-radius: var(--radius-lg);
 
-    /* M3 Expressive: Extra-large corner for bold, friendly appearance */
-    border-radius: var(--md-sys-shape-corner-extra-large);
-
-    /* Reference design: fixed height with flex layout */
+    /* Fixed height with flex layout */
     height: 400px;
     min-height: 400px;
     display: flex;
     flex-direction: column;
 
     padding: 0;
-    /* Reference design: subtle border */
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    color: var(--color-text-primary);
 
-    color: var(--color-text-contrast);
+    /* Subtle shadow that enhances on hover */
+    box-shadow: var(--shadow-subtle);
 
-    /* Reference design: subtle shadow that grows on hover */
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px 3px 1px rgba(0, 0, 0, 0.08);
-
-    /* M3 motion: emphasized easing with shadow transition */
-    transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-legacy),
-                box-shadow var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized);
+    /* Smooth transitions */
+    transition: box-shadow var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized),
+                transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
 
     cursor: pointer;
     position: relative;
-
-    /* Prepare for state layer overlay */
     overflow: hidden;
 }
 
-/* Category Color Coding - Applied to Badges Only (Grid View) */
-.view-grid .prompt-card[data-category="Productivity"] .card-category {
-    --category-color: var(--color-category-productivity);
-    background-color: color-mix(in srgb, var(--category-color) 16%, var(--color-card-surface));
-    color: var(--color-category-productivity);
-    border: 1px solid color-mix(in srgb, var(--category-color) 35%, transparent);
+/* Featured Olive Card Variant (for cards without images or special prompts) */
+.prompt-card.featured-olive {
+    background: var(--color-olive);
+    border: none;
+    color: var(--color-white);
 }
 
-.view-grid .prompt-card[data-category="Expertise"] .card-category {
-    --category-color: var(--color-category-expertise);
-    background-color: color-mix(in srgb, var(--category-color) 16%, var(--color-card-surface));
-    color: var(--color-category-expertise);
-    border: 1px solid color-mix(in srgb, var(--category-color) 35%, transparent);
-}
-
-.view-grid .prompt-card[data-category="Travel & Shopping"] .card-category {
-    --category-color: var(--color-category-travel);
-    background-color: color-mix(in srgb, var(--category-color) 16%, var(--color-card-surface));
-    color: var(--color-category-travel);
-    border: 1px solid color-mix(in srgb, var(--category-color) 35%, transparent);
-}
-
-.view-grid .prompt-card[data-category="Lifestyle"] .card-category {
-    --category-color: var(--color-category-lifestyle);
-    background-color: color-mix(in srgb, var(--category-color) 16%, var(--color-card-surface));
-    color: var(--color-category-lifestyle);
-    border: 1px solid color-mix(in srgb, var(--category-color) 35%, transparent);
-}
-
-.view-grid .prompt-card[data-category="Inspiration"] .card-category {
-    --category-color: var(--color-category-inspiration);
-    background-color: color-mix(in srgb, var(--category-color) 16%, var(--color-card-surface));
-    color: var(--color-category-inspiration);
-    border: 1px solid color-mix(in srgb, var(--category-color) 35%, transparent);
-}
-
-/* M3 State Layer - Hover */
-.prompt-card::before {
+/* Soft glow effect for olive cards */
+.prompt-card.featured-olive::before {
     content: '';
     position: absolute;
     top: 0;
-    left: 0;
     right: 0;
-    bottom: 0;
-    background-color: var(--color-text-primary);
-    color: var(--color-text-contrast);
-    opacity: 0;
-    transition: opacity 0.2s cubic-bezier(0.2, 0, 0, 1);
+    width: 200px;
+    height: 200px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    filter: blur(60px);
     pointer-events: none;
-    border-radius: inherit;
 }
 
-.prompt-card:hover::before {
-    opacity: var(--md-sys-state-hover-opacity);
-}
+/* New Brand: 3-Color Badge System (moved to badge styles section below) */
 
+/* Card hover state - New brand elegant hover effect */
 .prompt-card:hover {
-    /* Reference design: enhanced shadow on hover */
-    box-shadow: 0 4px 8px 3px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.08);
-    /* Subtle lift for feedback */
+    box-shadow: var(--shadow-large);
     transform: translateY(-2px);
 }
 
-/* M3 State Layer - Pressed */
-.prompt-card:active::before {
-    opacity: var(--md-sys-state-pressed-opacity);
+.prompt-card:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-medium);
 }
 
-.prompt-card:active {
-    /* Return to Level 1 elevation when pressed */
-    transform: translateY(0);
+/* Featured olive card hover - Enhanced shadow */
+.prompt-card.featured-olive:hover {
+    box-shadow: var(--shadow-xl);
 }
 
 .card-thumbnail {
@@ -1310,11 +1292,12 @@ body.modal-open {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 2rem;
-    height: 2rem;
+    width: 2.5rem;
+    height: 2.5rem;
     border-radius: var(--md-sys-shape-corner-full);
-    background-color: rgba(255, 255, 255, 0.15);
-    color: var(--color-text-contrast);
+    background-color: transparent;
+    border: 1px solid rgba(112, 112, 112, 0.2);
+    color: var(--color-charcoal);
     opacity: 0;
     transform: translateX(-4px);
     transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized);
@@ -1323,18 +1306,25 @@ body.modal-open {
 .prompt-card:hover .card-arrow-button {
     opacity: 1;
     transform: translateX(0);
-    background-color: rgba(255, 255, 255, 0.2);
 }
 
-/* For cards with images, adjust arrow button styling */
-.prompt-card.has-image .card-arrow-button,
-.prompt-card[data-has-image="true"] .card-arrow-button {
-    background-color: rgba(0, 0, 0, 0.15);
+/* New brand: Arrow turns gold on hover */
+.card-arrow-button:hover {
+    background-color: var(--color-gold);
+    border-color: var(--color-gold);
+    color: var(--color-white);
 }
 
-.prompt-card.has-image:hover .card-arrow-button,
-.prompt-card[data-has-image="true"]:hover .card-arrow-button {
-    background-color: rgba(0, 0, 0, 0.25);
+/* Featured olive cards - white arrow that turns gold */
+.prompt-card.featured-olive .card-arrow-button {
+    border-color: rgba(255, 255, 255, 0.3);
+    color: var(--color-white);
+}
+
+.prompt-card.featured-olive .card-arrow-button:hover {
+    background-color: var(--color-gold);
+    border-color: var(--color-gold);
+    color: var(--color-white);
 }
 
 /* Cards with images: hide footer category (shown in header) */
@@ -1380,22 +1370,53 @@ body.modal-open {
 .card-category {
     display: inline-block;
     font-family: var(--font-sans);
-    font-size: var(--text-xs);
-    font-weight: var(--weight-semibold);
+    font-size: 0.75rem;
+    font-weight: 700;
     line-height: var(--leading-tight);
 
-    /* M3: Use primary container for category badge */
-    color: var(--color-text-primary);
-    background-color: var(--color-surface-hover);
-
+    /* New brand: soft background with colored text */
     padding: 0.35rem 0.75rem;
-
-    /* M3 small corner radius for compact elements */
     border-radius: var(--md-sys-shape-corner-small);
 
-    letter-spacing: var(--tracking-widest);
+    letter-spacing: 0.05em;
     text-transform: uppercase;
     flex-shrink: 0;
+}
+
+/* New Brand: 3-Color Badge System */
+/* Gold variant - Creativity, Lifestyle, Inspiration */
+.card-category.badge-gold,
+.prompt-card[data-category="Creativity"] .card-category,
+.prompt-card[data-category="Lifestyle"] .card-category,
+.prompt-card[data-category="Inspiration"] .card-category {
+    background-color: rgba(196, 164, 132, 0.1);
+    color: var(--color-gold);
+}
+
+/* Olive variant - Productivity, Expertise */
+.card-category.badge-olive,
+.prompt-card[data-category="Productivity"] .card-category,
+.prompt-card[data-category="Expertise"] .card-category {
+    background-color: rgba(61, 68, 53, 0.1);
+    color: var(--color-olive);
+}
+
+/* Warm Grey variant - Travel & Shopping, Editing, and others */
+.card-category.badge-grey,
+.prompt-card[data-category="Travel & Shopping"] .card-category,
+.prompt-card[data-category="Editing"] .card-category,
+.prompt-card[data-category="Architecture"] .card-category,
+.prompt-card[data-category="Education"] .card-category,
+.prompt-card[data-category="Photography"] .card-category,
+.prompt-card[data-category="Audio"] .card-category {
+    background-color: rgba(112, 112, 112, 0.1);
+    color: var(--color-warmgrey);
+}
+
+/* Featured olive cards - badges use white text */
+.prompt-card.featured-olive .card-category {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: var(--color-white);
 }
 
 .variable-count-badge {
@@ -1403,19 +1424,18 @@ body.modal-open {
     align-items: center;
     justify-content: center;
     font-family: var(--font-sans);
-    font-size: var(--text-xs);
-    font-weight: var(--weight-medium);
+    font-size: 0.75rem;
+    font-weight: 700;
     line-height: var(--leading-tight);
-    letter-spacing: var(--tracking-wide);
+    letter-spacing: 0.05em;
 
-    /* Soft badge treatment */
-    color: var(--color-text-secondary);
-    background-color: var(--color-page-background);
+    /* New brand: consistent with warm grey badge variant */
+    background-color: rgba(112, 112, 112, 0.1);
+    color: var(--color-warmgrey);
 
-    padding: 0.1rem 0.25rem;
-
-    /* M3 small corner radius for compact elements */
+    padding: 0.35rem 0.75rem;
     border-radius: var(--md-sys-shape-corner-small);
+    text-transform: uppercase;
 
     border: none;
     flex-shrink: 0;
@@ -1472,37 +1492,9 @@ body.modal-open {
 }
 
 /* ========================================
-   FONT SWITCHING FOR IMAGE CARDS
-   Reference design fonts for cards with images
+   TYPOGRAPHY - UNIVERSAL FONTS
+   All cards now use Playfair Display and Inter (no conditional switching)
    ======================================== */
-
-/* Cards with images use Playfair Display + Inter */
-.prompt-card[data-has-image="true"] .card-title,
-.prompt-card.has-image .card-title {
-    font-family: var(--font-serif-ref);
-}
-
-.prompt-card[data-has-image="true"] .card-description,
-.prompt-card.has-image .card-description,
-.prompt-card[data-has-image="true"] .card-category,
-.prompt-card.has-image .card-category,
-.prompt-card[data-has-image="true"] .variable-count-badge,
-.prompt-card.has-image .variable-count-badge,
-.prompt-card[data-has-image="true"] .card-meta-inline,
-.prompt-card.has-image .card-meta-inline {
-    font-family: var(--font-sans-ref);
-}
-
-/* List view items with images */
-.prompt-list-item[data-has-image="true"] .prompt-list-item-title,
-.prompt-list-item.has-image .prompt-list-item-title {
-    font-family: var(--font-serif-ref);
-}
-
-.prompt-list-item[data-has-image="true"] .prompt-list-item-description,
-.prompt-list-item.has-image .prompt-list-item-description {
-    font-family: var(--font-sans-ref);
-}
 
 /* M3 Focus indicator */
 .prompt-card:focus {
@@ -1510,12 +1502,8 @@ body.modal-open {
 }
 
 .prompt-card:focus-visible {
-    outline: 3px solid var(--color-action-primary);
+    outline: 3px solid var(--color-gold);
     outline-offset: 2px;
-}
-
-.prompt-card:focus-visible::before {
-    opacity: var(--md-sys-state-focus-opacity);
 }
 
 .lock-button {
@@ -1932,57 +1920,44 @@ body.modal-open {
     font-size: 18px;
 }
 
-/* M3 Filled Button (Primary) */
+/* Primary Button - New brand charcoal */
 .btn-primary {
-    background-color: var(--color-action-primary);
-    color: var(--color-page-background);
+    background-color: var(--color-charcoal);
+    color: var(--color-white);
+    font-weight: 500;
 }
 
-.btn-primary::before {
-    background-color: var(--color-page-background);
+.btn-primary:hover {
+    background-color: rgba(28, 28, 28, 0.9);
 }
 
-.btn-primary:hover::before {
-    opacity: var(--md-sys-state-hover-opacity);
-}
-
-.btn-primary:focus-visible::before {
-    opacity: var(--md-sys-state-focus-opacity);
-}
-
-.btn-primary:active::before {
-    opacity: var(--md-sys-state-pressed-opacity);
+.btn-primary:active {
+    background-color: var(--color-olive);
 }
 
 .btn-primary:focus-visible {
-    outline: 2px solid var(--color-action-primary);
+    outline: 3px solid var(--color-gold);
     outline-offset: 2px;
 }
 
-/* M3 Tonal Button (Secondary) */
+/* Secondary Button - New brand linen with border */
 .btn-secondary {
-    background-color: var(--color-emphasis-background);
-    color: var(--color-text-primary);
+    background-color: var(--color-linen);
+    color: var(--color-charcoal);
+    border: 1px solid rgba(112, 112, 112, 0.2);
 }
 
-.btn-secondary::before {
-    background-color: var(--color-text-primary);
+.btn-secondary:hover {
+    border-color: var(--color-gold);
+    background-color: rgba(249, 247, 242, 0.8);
 }
 
-.btn-secondary:hover::before {
-    opacity: var(--md-sys-state-hover-opacity);
-}
-
-.btn-secondary:focus-visible::before {
-    opacity: var(--md-sys-state-focus-opacity);
-}
-
-.btn-secondary:active::before {
-    opacity: var(--md-sys-state-pressed-opacity);
+.btn-secondary:active {
+    background-color: rgba(249, 247, 242, 0.6);
 }
 
 .btn-secondary:focus-visible {
-    outline: 2px solid var(--color-action-primary);
+    outline: 3px solid var(--color-gold);
     outline-offset: 2px;
 }
 
@@ -2010,7 +1985,7 @@ body.modal-open {
 }
 
 .btn-outlined:focus-visible {
-    outline: 2px solid var(--color-action-primary);
+    outline: 3px solid var(--color-gold);
     outline-offset: 2px;
 }
 
@@ -2038,7 +2013,7 @@ body.modal-open {
 }
 
 .btn-text:focus-visible {
-    outline: 2px solid var(--color-action-primary);
+    outline: 3px solid var(--color-gold);
     outline-offset: 2px;
 }
 
@@ -2060,32 +2035,27 @@ body.modal-open {
     line-height: var(--leading-relaxed);
 }
 
-/* M3 Snackbar (Toast) */
+/* Toast/Snackbar - New brand */
 .toast {
     position: fixed;
     top: var(--space-xl);
     right: var(--space-xl);
 
-    /* M3 snackbar surface */
-    background-color: var(--color-action-primary);
-    color: var(--color-page-background);
+    /* New brand: charcoal background */
+    background-color: var(--color-charcoal);
+    color: var(--color-white);
 
     padding: 0.875rem 1rem;
-
-    /* M3: small corner radius for snackbar */
     border-radius: var(--md-sys-shape-corner-small);
-
-    /* M3 elevation level 3 */
+    box-shadow: var(--shadow-large);
 
     opacity: 0;
     transform: translateY(-20px);
 
-    /* M3 motion */
     transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized);
 
     pointer-events: none;
 
-    /* M3 Body Medium */
     font-family: var(--md-sys-typescale-body-medium-font);
     font-size: var(--md-sys-typescale-body-medium-size);
     font-weight: var(--md-sys-typescale-body-medium-weight);
@@ -2182,11 +2152,11 @@ body.modal-open {
 .modal-content {
     position: relative;
 
-    /* M3 dialog surface */
-    background: var(--color-card-surface);
+    /* New brand: white surface */
+    background: var(--color-white);
 
-    /* M3 Expressive: large corner radius */
-    border-radius: var(--md-sys-shape-corner-extra-large);
+    /* New brand: 1.5rem border radius */
+    border-radius: var(--radius-lg);
 
     max-width: 840px;
     width: 90%;
@@ -2197,11 +2167,11 @@ body.modal-open {
     flex-direction: column;
     overflow: hidden;
 
-    /* Enhanced elevation for blur background */
-    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.15), 0 8px 16px rgba(0, 0, 0, 0.1);
+    /* New brand: subtle elegant shadow */
+    box-shadow: var(--shadow-xl);
 
-    /* Subtle border for pop against page */
-    border: 1px solid var(--color-border-subtle);
+    /* New brand: warm grey border */
+    border: 1px solid rgba(112, 112, 112, 0.1);
 
     /* Starting animation state - elegant entrance */
     transform: scale(0.92) translateY(30px);
@@ -2269,10 +2239,10 @@ body.modal-open {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--space-lg) var(--space-lg) 0;
+    padding: var(--space-lg) var(--space-lg);
 
-    /* M3: no border in dialogs */
-    border-bottom: none;
+    /* New brand: subtle border bottom */
+    border-bottom: 1px solid rgba(112, 112, 112, 0.1);
 
     background-color: transparent;
 }
@@ -2329,12 +2299,12 @@ body.modal-open {
     margin: 0;
 }
 
-/* M3 Icon Button for close */
+/* Modal close button - New brand with gold hover */
 .modal-close {
     background: none;
     border: none;
     font-size: 2rem;
-    color: var(--color-text-secondary);
+    color: var(--color-warmgrey);
     cursor: pointer;
     padding: 0;
     line-height: 1;
@@ -2344,35 +2314,18 @@ body.modal-open {
     align-items: center;
     justify-content: center;
 
-    /* M3 motion */
-    transition: all var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+    transition: color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
 
     border-radius: 50%;
-    position: relative;
-    overflow: hidden;
 }
 
-/* M3 state layer for icon button */
-.modal-close::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: var(--color-text-primary);
-    opacity: 0;
-    transition: opacity var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
-    pointer-events: none;
-    border-radius: inherit;
+.modal-close:hover {
+    color: var(--color-gold);
 }
 
-.modal-close:hover::before {
-    opacity: var(--md-sys-state-hover-opacity);
-}
-
-.modal-close:active::before {
-    opacity: var(--md-sys-state-pressed-opacity);
+.modal-close:focus-visible {
+    outline: 3px solid var(--color-gold);
+    outline-offset: 2px;
 }
 
 .modal-body {
