@@ -446,6 +446,11 @@ class PromptLibrary {
         const item = document.createElement('div');
         item.className = 'prompt-list-item';
         item.dataset.index = index;
+        // Add data-has-image for font switching
+        if (prompt.image) {
+            item.dataset.hasImage = 'true';
+            item.classList.add('has-image');
+        }
         item.setAttribute('role', 'button');
         item.setAttribute('aria-label', `Open prompt ${prompt.title}`);
         item.tabIndex = 0;
@@ -498,6 +503,11 @@ class PromptLibrary {
         card.dataset.index = index;
         card.dataset.category = prompt.category; // Add category for color coding
         card.dataset.locked = prompt.locked !== false;
+        // Add data-has-image for font switching
+        if (prompt.image) {
+            card.dataset.hasImage = 'true';
+            card.classList.add('has-image');
+        }
         card.setAttribute('role', 'button');
         card.setAttribute('aria-label', `Open prompt ${prompt.title}`);
         card.tabIndex = 0;
