@@ -1209,6 +1209,8 @@ body.modal-open {
     min-height: 0;
     position: relative;
     z-index: 1;
+    /* Ensure white background for cards with images */
+    background: var(--color-white);
 }
 
 .modal-preview-image {
@@ -1358,14 +1360,15 @@ body.modal-open {
 }
 
 .card-title {
-    /* Reference design: larger, more prominent titles */
-    font-family: var(--font-sans);
+    /* New brand: Playfair Display for all titles */
+    font-family: var(--font-serif);
     font-size: 1.5rem;
-    font-weight: var(--weight-semibold);
+    font-weight: 600;
     line-height: var(--leading-tight);
     letter-spacing: var(--tracking-tight);
     margin-bottom: var(--space-sm);
-    color: var(--color-text-contrast);
+    /* Default: Charcoal on white cards */
+    color: var(--color-charcoal);
 }
 
 .card-category {
@@ -1456,14 +1459,14 @@ body.modal-open {
 }
 
 .card-description {
-    /* Reference design: lighter, more refined descriptions */
+    /* New brand: Inter for all descriptions */
     font-family: var(--font-sans);
-    font-size: var(--text-sm);
-    font-weight: var(--weight-light);
-    line-height: var(--leading-relaxed);
+    font-size: 0.875rem;
+    font-weight: 300;
+    line-height: 1.625;
     letter-spacing: var(--tracking-normal);
-    color: var(--color-text-contrast);
-    opacity: 0.8;
+    /* Default: Warm Grey on white cards */
+    color: var(--color-warmgrey);
     margin-bottom: 0;
     cursor: pointer;
 
@@ -1473,6 +1476,19 @@ body.modal-open {
     overflow: hidden;
     transition: height 0.4s var(--md-sys-motion-easing-emphasized-decelerate),
         opacity 0.35s var(--md-sys-motion-easing-standard) 0.05s;
+}
+
+/* Featured olive cards: override background and text */
+.prompt-card.featured-olive .card-content {
+    background: transparent;
+}
+
+.prompt-card.featured-olive .card-title {
+    color: var(--color-white);
+}
+
+.prompt-card.featured-olive .card-description {
+    color: rgba(255, 255, 255, 0.85);
 }
 
 /* Hide/Show classes for toggle functionality */
