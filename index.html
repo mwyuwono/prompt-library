@@ -9,34 +9,27 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Original fonts for non-image cards -->
-    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Reference design fonts for image cards -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Brand fonts: Playfair Display and Inter -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="tokens.css">
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
     <div class="page-wrapper">
-        <!-- Header -->
-        <header class="header">
-            <div class="container">
-                <div class="header-content">
-                    <img src="public/images/prompts-logo.svg" alt="Prompt Library logo" class="header-logo">
-                    <h1 class="header-title">Prompt Library</h1>
-                    <nav class="header-nav">
-                        <a href="style-guide.html" class="btn btn-secondary btn-sm nav-link" style="text-decoration: none; display: inline-block;">Style Guide</a>
-                        <button class="btn btn-secondary btn-sm nav-link" id="openLinksModal">AI Tools</button>
-                        <button class="hamburger" id="hamburgerMenu" aria-label="Menu">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </button>
-                    </nav>
-                </div>
+        <!-- Brand Header (Minimalist) -->
+        <div class="header-top">
+            <div class="header-logo-group">
+                <div class="header-logo-circle">Wy</div>
+                <div class="header-logo-text">Design System</div>
             </div>
-        </header>
+            <div class="header-actions">
+                <span class="version-label">V1.0.2</span>
+                <button class="btn-download" id="openLinksModal">AI Tools</button>
+            </div>
+        </div>
 
         <!-- Gemini Loader -->
         <div id="geminiLoader" class="gemini-loader"></div>
@@ -47,7 +40,8 @@
                 <!-- Controls Bar -->
                 <div class="controls-bar">
                     <div class="search-wrapper">
-                        <input type="text" id="searchInput" class="search-input" placeholder="Search prompts..." autocomplete="off">
+                        <input type="text" id="searchInput" class="search-input" placeholder="Search prompts..."
+                            autocomplete="off">
                         <div class="search-hint" id="searchHint">
                             <kbd>⌘K</kbd>
                         </div>

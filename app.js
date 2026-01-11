@@ -503,11 +503,17 @@ class PromptLibrary {
         card.dataset.index = index;
         card.dataset.category = prompt.category; // Add category for color coding
         card.dataset.locked = prompt.locked !== false;
-        // Add data-has-image for font switching
+
+        // Handle variants based on prompt data
         if (prompt.image) {
             card.dataset.hasImage = 'true';
             card.classList.add('has-image');
+        } else if (prompt.featured) {
+            card.classList.add('featured-olive');
+        } else if (prompt.icon) {
+            card.classList.add('neutral-icon');
         }
+
         card.setAttribute('role', 'button');
         card.setAttribute('aria-label', `Open prompt ${prompt.title}`);
         card.tabIndex = 0;
@@ -524,24 +530,41 @@ class PromptLibrary {
      * Get HTML for a prompt summary card
      */
     getCardSummaryHTML(prompt) {
-        const variableCount = prompt.variables?.length || 0;
         const hiddenClass = this.showDetails ? '' : 'hidden';
+
+        // Image Thumbnail
         const imageHTML = prompt.image ? `<div class="card-thumbnail"><img src="${prompt.image}" alt="${prompt.title}"></div>` : '';
+
+        // Icon section for non-image cards
+        let iconHTML = '';
+        if (!prompt.image && (prompt.icon || prompt.featured)) {
+            const variantClass = prompt.featured ? 'icon-featured' : 'icon-neutral';
+            const iconName = prompt.featured ? 'auto_fix_high' : (prompt.icon || 'star');
+            iconHTML = `
+                <div class="card-icon-container ${variantClass}">
+                    <span class="material-symbols-outlined">${iconName}</span>
+                </div>
+            `;
+        }
+
+        // Tag/Badge section (Creativity, version, etc)
+        const badgeHTML = prompt.featured ? `
+            <div class="card-badge">CREATIVITY</div>
+        ` : '';
+
         return `
             ${imageHTML}
             <div class="card-content">
-                <div class="card-header">
-                    <span class="card-category">${this.highlightText(prompt.category, this.searchTerm)}</span>
-                    <span class="variable-count-badge ${hiddenClass}">${variableCount > 0 ? `${variableCount} variable${variableCount > 1 ? 's' : ''}` : 'No variables'}</span>
-                </div>
                 <div>
+                    ${badgeHTML}
+                    ${iconHTML}
                     <h3 class="card-title">${this.highlightText(prompt.title, this.searchTerm)}</h3>
                     <p class="card-description ${hiddenClass}">${this.highlightText(prompt.description, this.searchTerm)}</p>
                 </div>
                 <div class="card-footer">
-                    <span class="card-category">${this.highlightText(prompt.category, this.searchTerm)}</span>
+                    <span class="card-version">V 2.1</span>
                     <div class="card-arrow-button">
-                        <span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span>
+                        <span class="material-symbols-outlined">arrow_forward</span>
                     </div>
                 </div>
             </div>

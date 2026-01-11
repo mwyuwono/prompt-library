@@ -17,7 +17,7 @@
     --color-text-contrast: var(--color-white);
     --color-primary: var(--color-olive);
     --color-action-primary: var(--color-gold);
-    --color-action-primary-hover: #B89474;
+    --color-action-primary-hover: #B49474;
     --color-emphasis-background: rgba(196, 164, 132, 0.1);
     --color-surface-hover: rgba(112, 112, 112, 0.1);
     --color-border-subtle: rgba(112, 112, 112, 0.1);
@@ -114,10 +114,14 @@
     --md-sys-shape-corner-full: 9999px;
 
     /* New brand border radius scale */
-    --radius-sm: 0.5rem;    /* 8px */
-    --radius-md: 1rem;      /* 16px */
-    --radius-lg: 1.5rem;    /* 24px */
-    --radius-xl: 2rem;      /* 32px */
+    --radius-sm: 0.5rem;
+    /* 8px */
+    --radius-md: 0.75rem;
+    /* 12px */
+    --radius-lg: 1.5rem;
+    /* 24px */
+    --radius-xl: 2rem;
+    /* 32px */
     --radius-full: 9999px;
 
     /* Motion tokens */
@@ -272,6 +276,9 @@
     /* Background blur settings */
     --modal-blur-amount: 16px;
     --modal-blur-saturation: 180%;
+
+    /* Brand Identities */
+    --visual-identity-padding: 80px;
 }
 
 /* Reset and Base Styles */
@@ -295,6 +302,7 @@ body {
     letter-spacing: var(--md-sys-typescale-body-large-tracking);
 
     /* M3 Colors */
+    background-color: var(--color-page-background);
     color: var(--color-text-primary);
 
     -webkit-font-smoothing: antialiased;
@@ -338,6 +346,170 @@ body {
 
 *::-webkit-scrollbar-thumb:hover {
     background-color: var(--color-text-secondary);
+}
+
+/* ========================================
+   BRAND SYSTEM COMPONENTS
+   (Migrated from Style Guide)
+   ======================================== */
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-md) var(--space-xl);
+    border-bottom: 1px solid var(--color-border-subtle);
+    font-family: var(--font-sans);
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    background: var(--color-linen);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-logo-group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.header-logo-circle {
+    width: 32px;
+    height: 32px;
+    border: 1.5px solid var(--color-text-secondary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-serif);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.header-logo-text {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    color: var(--color-text-primary);
+    font-size: 14px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+}
+
+.version-label {
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.btn-download {
+    background: var(--color-charcoal);
+    color: var(--color-white);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: background-color var(--md-sys-motion-duration-short2);
+}
+
+.btn-download:hover {
+    background: var(--color-gold);
+}
+
+/* Visual Identity Section */
+.visual-identity-wrapper {
+    background: var(--color-linen);
+    border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.visual-identity {
+    padding: var(--visual-identity-padding) var(--space-xl);
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.visual-identity-content {
+    max-width: 500px;
+}
+
+.visual-identity-eyebrow {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    font-style: italic;
+    color: #D4A373;
+    margin-bottom: var(--space-sm);
+}
+
+.visual-identity-title {
+    font-family: var(--font-serif);
+    font-size: 64px;
+    line-height: 1.1;
+    font-weight: 400;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-lg);
+}
+
+.visual-identity-description {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+    font-weight: 300;
+    border-left: 2px solid var(--color-gold);
+    padding-left: var(--space-lg);
+}
+
+.visual-identity-visuals {
+    display: flex;
+    gap: var(--space-md);
+    align-items: center;
+}
+
+.circle-sample {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-serif);
+    font-size: 32px;
+}
+
+.circle-linen {
+    background: var(--color-white);
+    box-shadow: var(--shadow-subtle);
+    color: var(--color-text-primary);
+}
+
+.circle-olive {
+    background: var(--color-olive);
+    color: var(--color-white);
+}
+
+.circle-gold {
+    background: var(--color-gold);
+    color: var(--color-white);
+}
+
+/* Style Guide Container Helper */
+.style-guide-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--space-xl);
 }
 
 /* Material Symbols */
@@ -600,9 +772,7 @@ body {
 }
 
 .view-grid .prompt-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-sm);
+    display: grid;
     opacity: 1;
     transform: scale(1);
 }
@@ -1030,7 +1200,7 @@ body.modal-open {
 
     /* Solid fill for neutral chip */
     border: none;
-    background-color: var(--color-emphasis-background);
+    background-color: var(--color-border-subtle);
 
     /* M3 small corner for chips */
     border-radius: var(--md-sys-shape-corner-full);
@@ -1108,9 +1278,9 @@ body.modal-open {
     border: 1px solid rgba(112, 112, 112, 0.1);
     border-radius: var(--radius-lg);
 
-    /* Fixed height with flex layout */
-    height: 400px;
-    min-height: 400px;
+    /* Flexible height with flex layout */
+    height: auto;
+    /* Ensure it grows */
     display: flex;
     flex-direction: column;
 
@@ -1122,7 +1292,7 @@ body.modal-open {
 
     /* Smooth transitions */
     transition: box-shadow var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized),
-                transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+        transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
 
     cursor: pointer;
     position: relative;
@@ -1169,8 +1339,9 @@ body.modal-open {
 }
 
 .card-thumbnail {
-    /* Reference design: image takes up half the card height */
-    height: 50%;
+    /* Reference design: widescreen aspect ratio for height efficiency */
+    aspect-ratio: 16 / 9;
+    width: 100%;
     flex-shrink: 0;
     overflow: hidden;
     position: relative;
@@ -1192,7 +1363,7 @@ body.modal-open {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.7s var(--md-sys-motion-easing-emphasized);
+    transition: transform 0.7s var(--md-sys-motion-easing-emphasized) !important;
 }
 
 .prompt-card:hover .card-thumbnail img {
@@ -1204,13 +1375,12 @@ body.modal-open {
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
+    /* Changed from space-between to resolve olive layout */
     flex: 1;
     min-height: 0;
     position: relative;
     z-index: 1;
-    /* Ensure white background for cards with images */
-    background: var(--color-white);
 }
 
 .modal-preview-image {
@@ -1243,8 +1413,9 @@ body.modal-open {
     display: flex;
 }
 
-/* Position badges over image for cards with thumbnails - Reference design */
-.card-thumbnail+.card-content .card-header {
+/* Badges positioned over image for cards with thumbnails - Logic moved to cards with has-image */
+.prompt-card.has-image .card-header,
+.prompt-card[data-has-image="true"] .card-header {
     position: absolute;
     top: 1rem;
     left: 1rem;
@@ -1258,7 +1429,9 @@ body.modal-open {
 /* Cards without images - full height content area */
 .prompt-card:not(.has-image):not([data-has-image="true"]) .card-content {
     padding: 2rem;
-    height: 100%;
+    height: auto;
+    /* Ensure it grows */
+    flex-grow: 1;
 }
 
 /* Pattern overlay for dark cards without images - Reference design */
@@ -1291,6 +1464,33 @@ body.modal-open {
     opacity: 1;
 }
 
+/* Card Badge (e.g., CREATIVITY) */
+.card-badge {
+    position: absolute;
+    top: var(--space-lg);
+    left: var(--space-lg);
+    background: var(--color-linen);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border-radius: 4px;
+    z-index: 2;
+}
+
+/* Card Version Label */
+.card-version {
+    font-family: var(--font-sans);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
 .card-arrow-button {
     display: flex;
     align-items: center;
@@ -1301,22 +1501,17 @@ body.modal-open {
     background-color: transparent;
     border: 1px solid rgba(112, 112, 112, 0.2);
     color: var(--color-charcoal);
-    opacity: 0;
-    transform: translateX(-4px);
+    opacity: 1;
     transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized);
 }
 
 .prompt-card:hover .card-arrow-button {
-    opacity: 1;
-    transform: translateX(0);
-}
-
-/* New brand: Arrow turns gold on hover */
-.card-arrow-button:hover {
     background-color: var(--color-gold);
     border-color: var(--color-gold);
     color: var(--color-white);
 }
+
+
 
 /* Featured olive cards - white arrow that turns gold */
 .prompt-card.featured-olive .card-arrow-button {
@@ -1350,9 +1545,9 @@ body.modal-open {
     letter-spacing: var(--tracking-widest);
 }
 
-/* Show category badge in grid view when using images */
+/* Show category badge in grid view when using images - Actually hidden until hover per reference */
 .prompt-card .card-category {
-    display: inline-block;
+    display: none;
 }
 
 .card-title-wrapper {
@@ -1366,7 +1561,8 @@ body.modal-open {
     font-weight: 600;
     line-height: var(--leading-tight);
     letter-spacing: var(--tracking-tight);
-    margin-bottom: var(--space-sm);
+    margin-bottom: 0.75rem;
+    /* Match reference mb-3 */
     /* Default: Charcoal on white cards */
     color: var(--color-charcoal);
 }
@@ -1415,6 +1611,33 @@ body.modal-open {
 .prompt-card[data-category="Audio"] .card-category {
     background-color: rgba(112, 112, 112, 0.1);
     color: var(--color-warmgrey);
+}
+
+/* Card Icon Styles */
+.card-icon-container {
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-bottom: 1.5rem;
+    /* Match reference mb-6 */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-icon-container.icon-featured {
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(4px);
+    color: var(--color-white);
+}
+
+.card-icon-container.icon-neutral {
+    background-color: var(--color-emphasis-background);
+    color: var(--color-charcoal);
+}
+
+.card-icon-container .material-symbols-outlined {
+    font-size: 24px;
 }
 
 /* Featured olive cards - badges use white text */
@@ -1485,10 +1708,13 @@ body.modal-open {
 
 .prompt-card.featured-olive .card-title {
     color: var(--color-white);
+    margin-bottom: 1rem;
+    /* Match reference mb-4 */
 }
 
 .prompt-card.featured-olive .card-description {
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(255, 255, 255, 0.8);
+    /* Match reference white/80 */
 }
 
 /* Hide/Show classes for toggle functionality */
@@ -2547,10 +2773,9 @@ body.modal-open {
         gap: 1rem;
     }
 
-    /* Cards maintain fixed height on mobile for consistency */
+    /* Cards are responsive on mobile too */
     .prompt-card {
-        height: 400px;
-        min-height: 400px;
+        height: auto;
     }
 
     /* Prompt list - mobile */

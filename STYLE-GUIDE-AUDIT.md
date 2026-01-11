@@ -24,11 +24,11 @@
 | Color | Style Guide | Implementation | Status |
 |-------|-------------|----------------|--------|
 | Linen | `#F9F7F2` | `#F9F7F2` | ✅ |
-| Charcoal | `#1C1C1C` | `#1C1C1C` | ✅ |
+| Charcoal | `#1E1E1E` | `#1E1E1E` | ✅ |
 | White | `#FFFFFF` | `#FFFFFF` | ✅ |
-| Olive | `#3D4435` | `#3D4435` | ✅ |
-| Gold | `#C4A484` | `#C4A484` | ✅ |
-| Warm Grey | `#707070` | `#707070` | ✅ |
+| Olive Drab | `#3B443B` | `#3B443B` | ✅ |
+| Dusty Gold | `#CAA484` | `#CAA484` | ✅ |
+| Warm Grey | `#717171` | `#717171` | ✅ |
 
 **Result:** All core colors match specifications perfectly.
 
@@ -72,7 +72,7 @@
 | Size | Style Guide | Implementation | Status |
 |------|-------------|----------------|--------|
 | Small | 8px | `--radius-sm: 0.5rem` (8px) | ✅ |
-| Medium | 12px | `--radius-md: 1rem` (16px) | ⚠️ MISMATCH |
+| Medium | 12px | `--radius-md: 0.75rem` (12px) | ✅ |
 | Large | 24px | `--radius-lg: 1.5rem` (24px) | ✅ |
 | XL | 32px | `--radius-xl: 2rem` (32px) | ✅ |
 | Full | 9999px | `--radius-full: 9999px` | ✅ |
@@ -249,10 +249,10 @@ None - core design system is correctly implemented.
 
 ## Recommended Actions
 
-1. ✅ Fix shadow-xl opacity values in CSS
-2. ✅ Decide on medium border radius (12px vs 16px) and standardize
+1. ✅ Fix shadow-xl opacity values in CSS (Verified correctly in CSS)
+2. ✅ Decide on medium border radius (12px vs 16px) and standardize (Updated to 12px)
 3. 🔍 Verify toggle implementations
-4. 📝 Update style guide if intentional variations exist
+4. 📝 Update style guide if intentional variations exist (Updated to match screen.png)
 
 ---
 
