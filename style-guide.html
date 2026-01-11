@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Library - Live Style Guide</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <style>
+        /* Style Guide Specific Styles */
+        .style-guide-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--space-xl);
+        }
+
+        .style-guide-header {
+            margin-bottom: var(--space-2xl);
+            padding-bottom: var(--space-xl);
+            border-bottom: 2px solid var(--color-border-subtle);
+        }
+
+        .style-guide-header h1 {
+            font-family: var(--font-serif);
+            font-size: var(--text-3xl);
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .style-guide-header p {
+            font-family: var(--font-sans);
+            font-size: var(--text-lg);
+            color: var(--color-text-secondary);
+            font-weight: 300;
+            font-style: italic;
+        }
+
+        .section {
+            margin-bottom: var(--space-2xl);
+            padding: var(--space-xl);
+            background: var(--color-white);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-border-subtle);
+        }
+
+        .section-title {
+            font-family: var(--font-serif);
+            font-size: var(--text-2xl);
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-md);
+            border-bottom: 1px solid var(--color-border-subtle);
+        }
+
+        .subsection-title {
+            font-family: var(--font-serif);
+            font-size: var(--text-xl);
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin: var(--space-lg) 0 var(--space-md) 0;
+        }
+
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-md);
+            margin-top: var(--space-md);
+        }
+
+        .color-swatch {
+            border: 1px solid var(--color-border-subtle);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+
+        .color-preview {
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-sans);
+            font-weight: 500;
+            font-size: var(--text-sm);
+        }
+
+        .color-info {
+            padding: var(--space-md);
+            background: var(--color-white);
+        }
+
+        .color-name {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            font-size: var(--text-base);
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .color-value {
+            font-family: monospace;
+            font-size: var(--text-sm);
+            color: var(--color-text-secondary);
+        }
+
+        .typography-sample {
+            margin: var(--space-md) 0;
+            padding: var(--space-lg);
+            background: var(--color-page-background);
+            border-radius: var(--radius-md);
+        }
+
+        .component-showcase {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-lg);
+            margin-top: var(--space-md);
+            padding: var(--space-xl);
+            background: var(--color-page-background);
+            border-radius: var(--radius-md);
+        }
+
+        .component-example {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .example-label {
+            font-family: var(--font-sans);
+            font-size: var(--text-sm);
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--space-sm);
+        }
+
+        .shadow-demo {
+            width: 200px;
+            height: 120px;
+            background: var(--color-white);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-sans);
+            font-weight: 500;
+            color: var(--color-text-primary);
+        }
+
+        .badge-showcase {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-md);
+            align-items: center;
+        }
+
+        .code-block {
+            background: #1C1C1E;
+            color: #F9F7F2;
+            padding: var(--space-md);
+            border-radius: var(--radius-sm);
+            font-family: monospace;
+            font-size: var(--text-sm);
+            overflow-x: auto;
+            margin-top: var(--space-sm);
+        }
+
+        .spec-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: var(--space-md);
+            font-family: var(--font-sans);
+        }
+
+        .spec-table th {
+            background: var(--color-page-background);
+            padding: var(--space-sm) var(--space-md);
+            text-align: left;
+            font-weight: 600;
+            font-size: var(--text-sm);
+            color: var(--color-text-primary);
+            border-bottom: 2px solid var(--color-border-subtle);
+        }
+
+        .spec-table td {
+            padding: var(--space-sm) var(--space-md);
+            border-bottom: 1px solid var(--color-border-subtle);
+            font-size: var(--text-sm);
+            color: var(--color-text-secondary);
+        }
+
+        .spec-table code {
+            background: var(--color-page-background);
+            padding: 0.125rem 0.375rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.85em;
+            color: var(--color-text-primary);
+        }
+
+        /* Demo card styles */
+        .demo-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-lg);
+            margin-top: var(--space-md);
+        }
+
+        .demo-card {
+            background: var(--color-white);
+            border: 1px solid rgba(112, 112, 112, 0.1);
+            border-radius: var(--radius-lg);
+            height: 380px;
+            padding: var(--space-lg);
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-subtle);
+            transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized);
+        }
+
+        .demo-card:hover {
+            box-shadow: var(--shadow-large);
+            transform: translateY(-2px);
+        }
+
+        .demo-card-olive {
+            background: var(--color-olive);
+            border: none;
+            color: var(--color-white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .demo-card-olive::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            filter: blur(60px);
+            pointer-events: none;
+        }
+
+        .demo-card-olive:hover {
+            box-shadow: var(--shadow-xl);
+        }
+
+        .demo-card-icon {
+            font-size: 32px;
+            margin-bottom: var(--space-md);
+        }
+
+        .demo-card-title {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: var(--space-sm);
+        }
+
+        .demo-card-description {
+            font-family: var(--font-sans);
+            font-size: 0.875rem;
+            font-weight: 300;
+            line-height: 1.625;
+            margin-bottom: auto;
+        }
+
+        .demo-card-olive .demo-card-description {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .demo-card-footer {
+            margin-top: var(--space-md);
+            display: flex;
+            gap: var(--space-sm);
+        }
+
+        .nav-link {
+            display: inline-block;
+            margin-top: var(--space-lg);
+            font-family: var(--font-sans);
+            font-size: var(--text-base);
+            font-weight: 500;
+            color: var(--color-action-primary);
+            text-decoration: none;
+            transition: color var(--md-sys-motion-duration-short2);
+        }
+
+        .nav-link:hover {
+            color: var(--color-action-primary-hover);
+        }
+
+        .nav-link::before {
+            content: '← ';
+        }
+    </style>
+</head>
+<body>
+    <div class="style-guide-container">
+        <!-- Header -->
+        <div class="style-guide-header">
+            <h1>Prompt Library Style Guide</h1>
+            <p>Warm, elegant, refined — a gallery-like aesthetic that emphasizes clarity and sophistication</p>
+            <a href="index.html" class="nav-link">Back to Prompt Library</a>
+        </div>
+
+        <!-- 1. Color Palette -->
+        <section class="section">
+            <h2 class="section-title">1. Color Palette</h2>
+            <p style="font-family: var(--font-sans); color: var(--color-text-secondary); margin-bottom: var(--space-lg);">
+                The design uses a refined 5-color system that emphasizes warmth and elegance.
+            </p>
+
+            <div class="color-grid">
+                <div class="color-swatch">
+                    <div class="color-preview" style="background: #F9F7F2; color: #1C1C1C;">
+                        Linen
+                    </div>
+                    <div class="color-info">
+                        <div class="color-name">Linen</div>
+                        <div class="color-value">#F9F7F2</div>
+                        <div class="color-value">Page background</div>
+                    </div>
+                </div>
+
+                <div class="color-swatch">
+                    <div class="color-preview" style="background: #1C1C1C; color: #FFFFFF;">
+                        Charcoal
+                    </div>
+                    <div class="color-info">
+                        <div class="color-name">Charcoal</div>
+                        <div class="color-value">#1C1C1C</div>
+                        <div class="color-value">Primary text, buttons</div>
+                    </div>
+                </div>
+
+                <div class="color-swatch">
+                    <div class="color-preview" style="background: #FFFFFF; color: #1C1C1C; border: 1px solid rgba(112, 112, 112, 0.2);">
+                        White
+                    </div>
+                    <div class="color-info">
+                        <div class="color-name">White</div>
+                        <div class="color-value">#FFFFFF</div>
+                        <div class="color-value">Cards, text on dark</div>
+                    </div>
+                </div>
+
+                <div class="color-swatch">
+                    <div class="color-preview" style="background: #3D4435; color: #FFFFFF;">
+                        Olive
+                    </div>
+                    <div class="color-info">
+                        <div class="color-name">Olive</div>
+                        <div class="color-value">#3D4435</div>
+                        <div class="color-value">Featured cards</div>
+                    </div>
+                </div>
+
+                <div class="color-swatch">
+                    <div class="color-preview" style="background: #C4A484; color: #FFFFFF;">
+                        Gold
+                    </div>
+                    <div class="color-info">
+                        <div class="color-name">Gold</div>
+                        <div class="color-value">#C4A484</div>
+                        <div class="color-value">Accents, hover states</div>
+                    </div>
+                </div>
+
+                <div class="color-swatch">
+                    <div class="color-preview" style="background: #707070; color: #FFFFFF;">
+                        Warm Grey
+                    </div>
+                    <div class="color-info">
+                        <div class="color-name">Warm Grey</div>
+                        <div class="color-value">#707070</div>
+                        <div class="color-value">Secondary text, borders</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="subsection-title">Contextual Usage</h3>
+            <table class="spec-table">
+                <thead>
+                    <tr>
+                        <th>Context</th>
+                        <th>Primary Text</th>
+                        <th>Secondary Text</th>
+                        <th>Borders</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Light Backgrounds</strong><br>(White, Linen)</td>
+                        <td>Charcoal <code>#1C1C1C</code></td>
+                        <td>Warm Grey <code>#707070</code></td>
+                        <td>Warm Grey 10-20% <code>rgba(112,112,112,0.1)</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Dark Backgrounds</strong><br>(Olive)</td>
+                        <td>White <code>#FFFFFF</code></td>
+                        <td>White 80-90% <code>rgba(255,255,255,0.85)</code></td>
+                        <td>White 10-20% <code>rgba(255,255,255,0.2)</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 2. Typography -->
+        <section class="section">
+            <h2 class="section-title">2. Typography</h2>
+
+            <h3 class="subsection-title">Font Families</h3>
+            <p style="font-family: var(--font-sans); color: var(--color-text-secondary); margin-bottom: var(--space-md);">
+                <strong>Serif:</strong> Playfair Display (all card titles)<br>
+                <strong>Sans-Serif:</strong> Inter (all body text, descriptions, UI)
+            </p>
+
+            <div class="typography-sample">
+                <div style="font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 600; margin-bottom: 1rem; color: var(--color-text-primary);">
+                    Card Title Example
+                </div>
+                <div style="font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--color-text-primary);">
+                    Playfair Display
+                </div>
+                <div style="font-family: 'Playfair Display', serif; color: var(--color-text-secondary);">
+                    The quick brown fox jumps over the lazy dog. 1234567890
+                </div>
+            </div>
+
+            <div class="typography-sample">
+                <div style="font-family: 'Inter', sans-serif; font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--color-text-primary);">
+                    Inter
+                </div>
+                <div style="font-family: 'Inter', sans-serif; color: var(--color-text-secondary); margin-bottom: 0.5rem;">
+                    The quick brown fox jumps over the lazy dog. 1234567890
+                </div>
+                <div style="font-family: 'Inter', sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-primary);">
+                    BADGE TEXT EXAMPLE
+                </div>
+            </div>
+
+            <h3 class="subsection-title">Type Scale</h3>
+            <table class="spec-table">
+                <thead>
+                    <tr>
+                        <th>Element</th>
+                        <th>Font</th>
+                        <th>Weight</th>
+                        <th>Size</th>
+                        <th>Transform</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Card Title</td>
+                        <td>Playfair Display</td>
+                        <td>600</td>
+                        <td>24px (1.5rem)</td>
+                        <td>None</td>
+                    </tr>
+                    <tr>
+                        <td>Card Description</td>
+                        <td>Inter</td>
+                        <td>300-400</td>
+                        <td>14px (0.875rem)</td>
+                        <td>None</td>
+                    </tr>
+                    <tr>
+                        <td>Category Badge</td>
+                        <td>Inter</td>
+                        <td>700</td>
+                        <td>12px (0.75rem)</td>
+                        <td>Uppercase</td>
+                    </tr>
+                    <tr>
+                        <td>Button Text</td>
+                        <td>Inter</td>
+                        <td>500</td>
+                        <td>14-16px</td>
+                        <td>Uppercase</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 3. Components -->
+        <section class="section">
+            <h2 class="section-title">3. Components</h2>
+
+            <!-- 3.1 Cards -->
+            <h3 class="subsection-title">Cards</h3>
+            <div class="demo-card-grid">
+                <div class="demo-card">
+                    <span class="material-symbols-outlined demo-card-icon" style="color: var(--color-charcoal);">
+                        edit_note
+                    </span>
+                    <div class="demo-card-title">White Card Example</div>
+                    <div class="demo-card-description">
+                        Standard white card with subtle border, 24px radius, and elegant shadow. Hover to see the shadow transform.
+                    </div>
+                    <div class="demo-card-footer">
+                        <span class="card-category badge-olive">PRODUCTIVITY</span>
+                    </div>
+                </div>
+
+                <div class="demo-card demo-card-olive">
+                    <span class="material-symbols-outlined demo-card-icon">
+                        palette
+                    </span>
+                    <div class="demo-card-title">Olive Featured Card</div>
+                    <div class="demo-card-description">
+                        Featured olive card with soft glow effect in top-right corner. Used for highlighting special prompts.
+                    </div>
+                    <div class="demo-card-footer">
+                        <span class="card-category" style="background: rgba(255,255,255,0.2); color: white;">CREATIVITY</span>
+                    </div>
+                </div>
+
+                <div class="demo-card">
+                    <span class="material-symbols-outlined demo-card-icon" style="color: var(--color-charcoal);">
+                        shopping_bag
+                    </span>
+                    <div class="demo-card-title">Icon-Based Card</div>
+                    <div class="demo-card-description">
+                        Cards without images use icons at the top. Maintains same layout and spacing as image cards.
+                    </div>
+                    <div class="demo-card-footer">
+                        <span class="card-category badge-grey">TRAVEL & SHOPPING</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3.2 Badges -->
+            <h3 class="subsection-title">Badges (3-Color System)</h3>
+            <div class="component-showcase">
+                <div class="component-example">
+                    <div class="example-label">Gold Badges</div>
+                    <div class="badge-showcase">
+                        <span class="card-category badge-gold">CREATIVITY</span>
+                        <span class="card-category badge-gold">LIFESTYLE</span>
+                        <span class="card-category badge-gold">INSPIRATION</span>
+                    </div>
+                    <p style="font-family: var(--font-sans); font-size: 0.875rem; color: var(--color-text-secondary); margin-top: var(--space-sm);">
+                        Creative, expressive, lifestyle-focused categories
+                    </p>
+                </div>
+
+                <div class="component-example">
+                    <div class="example-label">Olive Badges</div>
+                    <div class="badge-showcase">
+                        <span class="card-category badge-olive">PRODUCTIVITY</span>
+                        <span class="card-category badge-olive">EXPERTISE</span>
+                    </div>
+                    <p style="font-family: var(--font-sans); font-size: 0.875rem; color: var(--color-text-secondary); margin-top: var(--space-sm);">
+                        Professional, productivity-focused categories
+                    </p>
+                </div>
+
+                <div class="component-example">
+                    <div class="example-label">Warm Grey Badges</div>
+                    <div class="badge-showcase">
+                        <span class="card-category badge-grey">EDITING</span>
+                        <span class="card-category badge-grey">ARCHITECTURE</span>
+                        <span class="card-category badge-grey">EDUCATION</span>
+                    </div>
+                    <p style="font-family: var(--font-sans); font-size: 0.875rem; color: var(--color-text-secondary); margin-top: var(--space-sm);">
+                        Specialized, technical, or niche categories
+                    </p>
+                </div>
+            </div>
+
+            <!-- 3.3 Buttons -->
+            <h3 class="subsection-title">Buttons</h3>
+            <div class="component-showcase">
+                <div class="component-example">
+                    <div class="example-label">Primary Button</div>
+                    <button class="btn btn-primary">Copy to Clipboard</button>
+                    <div class="code-block">Background: Charcoal #1C1C1C
+Text: White #FFFFFF
+Border Radius: Full (pill)</div>
+                </div>
+
+                <div class="component-example">
+                    <div class="example-label">Secondary Button</div>
+                    <button class="btn btn-secondary">Edit Prompt</button>
+                    <div class="code-block">Background: Linen #F9F7F2
+Border: 1px Warm Grey/20
+Hover Border: Gold #C4A484</div>
+                </div>
+            </div>
+
+            <!-- 3.4 Shadows -->
+            <h3 class="subsection-title">Shadow System</h3>
+            <div class="component-showcase">
+                <div class="component-example">
+                    <div class="example-label">Subtle</div>
+                    <div class="shadow-demo" style="box-shadow: var(--shadow-subtle);">
+                        Default Cards
+                    </div>
+                </div>
+
+                <div class="component-example">
+                    <div class="example-label">Medium</div>
+                    <div class="shadow-demo" style="box-shadow: var(--shadow-medium);">
+                        Elevated
+                    </div>
+                </div>
+
+                <div class="component-example">
+                    <div class="example-label">Large</div>
+                    <div class="shadow-demo" style="box-shadow: var(--shadow-large);">
+                        Card Hover
+                    </div>
+                </div>
+
+                <div class="component-example">
+                    <div class="example-label">XL</div>
+                    <div class="shadow-demo" style="box-shadow: var(--shadow-xl);">
+                        Olive Hover
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Border Radius -->
+        <section class="section">
+            <h2 class="section-title">4. Border Radius</h2>
+            <div class="component-showcase">
+                <div style="width: 100px; height: 100px; background: var(--color-gold); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-family: var(--font-sans); font-weight: 600;">8px<br>Small</div>
+                <div style="width: 100px; height: 100px; background: var(--color-olive); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-family: var(--font-sans); font-weight: 600;">12px<br>Medium</div>
+                <div style="width: 100px; height: 100px; background: var(--color-charcoal); border-radius: 24px; display: flex; align-items: center; justify-content: center; color: white; font-family: var(--font-sans); font-weight: 600;">24px<br>Large</div>
+                <div style="width: 100px; height: 100px; background: var(--color-warmgrey); border-radius: 32px; display: flex; align-items: center; justify-content: center; color: white; font-family: var(--font-sans); font-weight: 600;">32px<br>XL</div>
+                <div style="width: 100px; height: 100px; background: var(--color-gold); border-radius: 9999px; display: flex; align-items: center; justify-content: center; color: white; font-family: var(--font-sans); font-weight: 600;">Full<br>Circle</div>
+            </div>
+        </section>
+
+        <!-- 5. Spacing Scale -->
+        <section class="section">
+            <h2 class="section-title">5. Spacing Scale</h2>
+            <table class="spec-table">
+                <thead>
+                    <tr>
+                        <th>Token</th>
+                        <th>Size</th>
+                        <th>Visual</th>
+                        <th>Usage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>xs</code></td>
+                        <td>4px</td>
+                        <td><div style="width: 4px; height: 20px; background: var(--color-gold);"></div></td>
+                        <td>Tight spacing, icon gaps</td>
+                    </tr>
+                    <tr>
+                        <td><code>sm</code></td>
+                        <td>8px</td>
+                        <td><div style="width: 8px; height: 20px; background: var(--color-gold);"></div></td>
+                        <td>Small gaps, compact layouts</td>
+                    </tr>
+                    <tr>
+                        <td><code>md</code></td>
+                        <td>16px</td>
+                        <td><div style="width: 16px; height: 20px; background: var(--color-gold);"></div></td>
+                        <td>Standard spacing between elements</td>
+                    </tr>
+                    <tr>
+                        <td><code>lg</code></td>
+                        <td>24px</td>
+                        <td><div style="width: 24px; height: 20px; background: var(--color-gold);"></div></td>
+                        <td>Card padding, section spacing</td>
+                    </tr>
+                    <tr>
+                        <td><code>xl</code></td>
+                        <td>32px</td>
+                        <td><div style="width: 32px; height: 20px; background: var(--color-gold);"></div></td>
+                        <td>Container padding, large gaps</td>
+                    </tr>
+                    <tr>
+                        <td><code>2xl</code></td>
+                        <td>48px</td>
+                        <td><div style="width: 48px; height: 20px; background: var(--color-gold);"></div></td>
+                        <td>Section separators</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Footer -->
+        <div style="text-align: center; padding: var(--space-2xl) 0; color: var(--color-text-secondary); font-family: var(--font-sans); font-size: var(--text-sm);">
+            <p>Prompt Library Style Guide v2.0 • Last Updated: January 11, 2026</p>
+            <a href="index.html" class="nav-link" style="margin-top: var(--space-md);">Back to Prompt Library</a>
+        </div>
+    </div>
+</body>
+</html>
