@@ -573,7 +573,6 @@ class PromptLibrary {
                     <p class="card-description ${hiddenClass}">${this.highlightText(prompt.description, this.searchTerm)}</p>
                 </div>
                 <div class="card-footer">
-                    <span class="card-version">V 2.1</span>
                     <div class="card-arrow-button">
                         <span class="material-symbols-outlined">arrow_forward</span>
                     </div>
