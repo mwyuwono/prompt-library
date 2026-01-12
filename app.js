@@ -103,6 +103,14 @@ class PromptLibrary {
                 this.switchView(view);
             });
         });
+
+        // Mobile filters toggle
+        const toggleFiltersBtn = document.getElementById('toggleFiltersBtn');
+        if (toggleFiltersBtn) {
+            toggleFiltersBtn.addEventListener('click', () => {
+                this.toggleMobileFilters();
+            });
+        }
     }
 
     /**
@@ -126,6 +134,16 @@ class PromptLibrary {
 
         // Re-render with current view
         this.renderPrompts();
+    }
+
+    /**
+     * Toggle mobile filters visibility
+     */
+    toggleMobileFilters() {
+        const controlsBar = document.querySelector('.controls-bar');
+        if (controlsBar) {
+            controlsBar.classList.toggle('show');
+        }
     }
 
     /**
