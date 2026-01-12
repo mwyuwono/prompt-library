@@ -8,7 +8,7 @@ class PromptLibrary {
         this.filteredPrompts = [];
         this.searchTerm = '';
         this.selectedCategory = 'Creativity'; // Default to Creativity
-        this.showDetails = false; // Default to hidden
+        this.showDetails = true; // Default to visible on desktop
         this.currentView = 'grid'; // Default to grid view
 
         // DOM elements
@@ -547,17 +547,24 @@ class PromptLibrary {
             `;
         }
 
-        // Tag/Badge section (Creativity, version, etc)
-        const badgeHTML = prompt.featured ? `
-            <div class="card-badge">CREATIVITY</div>
+        // Tag/Badge section (Category badge for non-image cards only)
+        const badgeHTML = !prompt.image && prompt.category ? `
+            <div class="card-badge">${this.escapeHTML(prompt.category).toUpperCase()}</div>
+        ` : '';
+
+        // Header row for non-image cards (contains icon and badge)
+        const headerRowHTML = !prompt.image ? `
+            <div class="card-header-row">
+                ${iconHTML}
+                ${badgeHTML}
+            </div>
         ` : '';
 
         return `
             ${imageHTML}
             <div class="card-content">
                 <div>
-                    ${badgeHTML}
-                    ${iconHTML}
+                    ${headerRowHTML}
                     <h3 class="card-title">${this.highlightText(prompt.title, this.searchTerm)}</h3>
                     <p class="card-description ${hiddenClass}">${this.highlightText(prompt.description, this.searchTerm)}</p>
                 </div>

@@ -1464,11 +1464,26 @@ body.modal-open {
     opacity: 1;
 }
 
+/* Card Header Row - Contains icon and badge */
+.card-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+/* When no icon present (image cards), align badge to right */
+.card-header-row:not(:has(.card-icon-container)) {
+    justify-content: flex-end;
+}
+
+/* If header row only has badge, reduce bottom margin */
+.card-header-row:not(:has(.card-icon-container)) {
+    margin-bottom: 0;
+}
+
 /* Card Badge (e.g., CREATIVITY) */
 .card-badge {
-    position: absolute;
-    top: var(--space-lg);
-    left: var(--space-lg);
     background: var(--color-linen);
     color: var(--color-text-primary);
     font-family: var(--font-sans);
@@ -1478,7 +1493,7 @@ body.modal-open {
     text-transform: uppercase;
     padding: 6px 12px;
     border-radius: 4px;
-    z-index: 2;
+    white-space: nowrap;
 }
 
 /* Card Version Label */
@@ -1617,12 +1632,11 @@ body.modal-open {
 .card-icon-container {
     width: 2.5rem;
     height: 2.5rem;
-    margin-bottom: 1.5rem;
-    /* Match reference mb-6 */
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 }
 
 .card-icon-container.icon-featured {
@@ -2951,6 +2965,21 @@ body.modal-open {
         /* M3 tabs with larger touch target on mobile */
         padding: 1rem 0.875rem;
         min-height: 3rem;
+    }
+
+    /* Hide descriptions by default on mobile */
+    .card-description,
+    .prompt-list-item-description {
+        display: none;
+        height: 0;
+        opacity: 0;
+        margin: 0;
+        pointer-events: none;
+    }
+
+    /* Hide variable count badges on mobile */
+    .variable-count-badge {
+        display: none;
     }
 }
 
