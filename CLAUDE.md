@@ -53,6 +53,7 @@ The `PromptLibrary` class maintains state through:
 Each prompt object can have runtime properties:
 - `locked` - Boolean for edit mode (default: true)
 - `activeTab` - Current tab ('variables' or 'preview')
+- `activeVariationId` - ID of currently selected variation (if prompt has variations)
 - `variables[].value` - User-entered values for substitution
 - `category` - Used for color coding in grid view (set as data attribute on cards)
 
@@ -85,15 +86,24 @@ refreshPromptViews(index) {
 }
 ```
 
-**Template Compilation**: Variable substitution using string replacement
+**Template Compilation**: Variable substitution using string replacement, with support for variations
 ```javascript
 compilePrompt(prompt) {
-    let compiled = prompt.template;
+    let compiled = this.getActiveTemplate(prompt);
     prompt.variables.forEach(variable => {
         const placeholder = `{{${variable.name}}}`;
         compiled = compiled.split(placeholder).join(variable.value || '');
     });
     return compiled;
+}
+
+getActiveTemplate(prompt) {
+    if (prompt.variations && prompt.variations.length > 0) {
+        const activeId = prompt.activeVariationId || prompt.variations[0].id;
+        const variation = prompt.variations.find(v => v.id === activeId);
+        return variation?.template || prompt.template || '';
+    }
+    return prompt.template || '';
 }
 ```
 
@@ -129,6 +139,55 @@ The actual implementation uses this structure (differs from requirements doc):
 **Important**: JSON structure is a flat array, not wrapped in `{"prompts": [...]}`.
 
 `inputType` and `rows` are optional runtime hints; when omitted, the app infers when to render a textarea for long-form input and picks a sensible default height.
+
+### Prompt Variations
+
+Prompts can optionally include multiple template variations, allowing users to choose between different styles or approaches while keeping the same variables and description.
+
+```json
+[
+    {
+        "id": "writing-assistant",
+        "title": "Writing Assistant",
+        "description": "Improve clarity, flow, and structure with multiple style options",
+        "category": "Productivity",
+        "variables": [
+            {
+                "name": "text",
+                "label": "Text to Review",
+                "placeholder": "Paste your text here",
+                "value": ""
+            }
+        ],
+        "variations": [
+            {
+                "id": "standard",
+                "name": "Standard (with Objective Alternative)",
+                "template": "Text: {{text}}\n\nImprove clarity and flow..."
+            },
+            {
+                "id": "casual",
+                "name": "Casual & Conversational",
+                "template": "Text: {{text}}\n\nMake this casual and friendly..."
+            },
+            {
+                "id": "formal",
+                "name": "Formal & Professional",
+                "template": "Text: {{text}}\n\nMake this formal and professional..."
+            }
+        ]
+    }
+]
+```
+
+**Variations Behavior:**
+- When a prompt has variations, a dropdown selector appears in the modal above the variables section
+- The first variation is selected by default
+- User input values are preserved when switching between variations
+- Only the template changes; variables, description, and category remain the same
+- Download filenames include the variation name (e.g., `writing-assistant--casual-conversational.txt`)
+- Cards in the grid view do not indicate that variations exist
+- Prompts without a `variations` array continue to use the single `template` property (backward compatible)
 
 ### Variable Types and Input Controls
 
@@ -262,12 +321,16 @@ The following input types are **not supported** and will cause rendering issues:
 - Enhanced shadow for visibility against blurred background
 
 **Layout**:
-- Header shows the prompt title and category
+- Header shows the prompt title using display font (Playfair Display) and category
 - Toolbar surfaces an `Edit prompt` call-to-action button (with lock icons) that toggles edit mode
-- Modal body height animates between state changes (e.g., switching tabs) to soften large content shifts
+- Lock button is hidden entirely when in edit mode (not just relabeled)
+- Modal body has reduced spacing for visual tightness
+- Variation selector dropdown appears above the variables section (when variations exist)
+- Modal body height uses min-height to prevent jumping when switching tabs
 - Modal remains open while state changes propagate back to the underlying summary card via `refreshPromptViews()`
 - Only the scroll area containing prompt variables/template scrolls; the header, description, and action buttons remain fixed for consistent access
-- Template editor textarea is capped at viewport height and scrollable so the modal chrome stays fixed
+- Template editor textarea is capped at viewport height (max-height: 60vh) and scrollable so the modal chrome stays fixed
+- Action buttons are arranged horizontally with equal width on desktop, stack vertically on mobile
 
 ### Tab Interface (Locked State)
 
@@ -298,6 +361,46 @@ Edit `prompts.json` - no code changes needed. Ensure:
 - Valid `category` (will auto-populate in filter chips)
 - Variables use `{{name}}` syntax matching variable objects
 - Variable `name` field matches placeholder text in template
+
+### Adding Prompt Variations
+
+To add variations to an existing prompt:
+1. Remove the single `template` property
+2. Add a `variations` array with at least 2 variation objects
+3. Each variation needs: `id` (unique within prompt), `name` (display label), `template` (the prompt text)
+4. Variables remain at the prompt level and are shared across all variations
+5. The first variation in the array is selected by default
+6. Variation selector only appears when 2 or more variations exist
+
+Example workflow:
+```javascript
+// Before (single template):
+{
+    "id": "my-prompt",
+    "title": "My Prompt",
+    "template": "Original template with {{variable}}",
+    "variables": [...]
+}
+
+// After (with variations):
+{
+    "id": "my-prompt",
+    "title": "My Prompt",
+    "variations": [
+        {
+            "id": "style-a",
+            "name": "Style A",
+            "template": "Template A with {{variable}}"
+        },
+        {
+            "id": "style-b",
+            "name": "Style B",
+            "template": "Template B with {{variable}}"
+        }
+    ],
+    "variables": [...]
+}
+```
 
 ### Category Conventions
 

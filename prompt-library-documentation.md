@@ -100,9 +100,25 @@ The application supports two view modes toggled via icon buttons in the controls
 **Layout**:
 - Header row: left-aligned title/category, centered logo (outside modal), right-aligned small button (`btn-sm`) that toggles between **Edit Prompt** (`mode_edit`) and **Save changes** (`check`) and a close control
 - Description sits beneath the header and does not scroll
+- **Variation Selector** (when available): Dropdown menu appears below description, above variables section
+  - Only visible when a prompt has multiple variations
+  - Allows switching between different template styles
+  - User input is preserved when switching variations
 - Main content area scrolls independently; buttons along the bottom stay fixed
 - Locked state shows Variables / Preview tabs with "Clear All" action; unlocked state shows a resizable textarea that auto-grows without adding a second scrollbar
 - Actions provide **Copy** and **Download** buttons (copy updates usage metadata)
+
+### Prompt Variations
+
+Some prompts offer multiple variations - different template styles for the same purpose. For example, the Writing Assistant prompt includes variations like "Casual & Conversational", "Formal & Professional", and "Concise & Direct".
+
+**How Variations Work:**
+- A dropdown selector appears above the variables section when a prompt has multiple variations
+- Select a variation to change the underlying prompt template
+- Your input values are preserved when switching between variations
+- The Preview tab updates to show the compiled prompt with the selected variation
+- Downloaded files include the variation name in the filename (e.g., `writing-assistant--casual-conversational.txt`)
+- Cards in the main grid don't indicate whether variations exist - you'll see the selector when you open the modal
 
 ### Search & Filters
 
