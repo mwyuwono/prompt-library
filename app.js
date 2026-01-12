@@ -64,6 +64,10 @@ class PromptLibrary {
                 if (metadata) {
                     Object.assign(prompt, metadata);
                 }
+                // Initialize active variation ID (defaults to first variation)
+                if (prompt.variations && prompt.variations.length > 0) {
+                    prompt.activeVariationId = prompt.variations[0].id;
+                }
             });
 
             this.filteredPrompts = [...this.prompts];
@@ -585,11 +589,10 @@ class PromptLibrary {
         const isLocked = prompt.locked !== false;
         const hasVariables = prompt.variables && prompt.variables.length > 0;
         const activeTab = prompt.activeTab || 'variables';
-        const imageHTML = prompt.image ? `<div class="modal-preview-image"><img src="${prompt.image}" alt="${prompt.title}"></div>` : '';
 
         return `
-            ${imageHTML}
             <p class="prompt-modal-description">${this.escapeHTML(prompt.description)}</p>
+            ${this.getVariationSelectorHTML(prompt)}
             ${isLocked && hasVariables ? `
                 <div class="tabs-header">
                     <button class="tab-button ${activeTab === 'variables' ? 'active' : ''}" data-action="switch-tab" data-tab="variables">
@@ -650,6 +653,28 @@ class PromptLibrary {
     getPreviewContentHTML(compiledPrompt) {
         return `
             <div class="preview-content">${this.escapeHTML(compiledPrompt)}</div>
+        `;
+    }
+
+    /**
+     * Get HTML for variation selector dropdown (if prompt has multiple variations)
+     */
+    getVariationSelectorHTML(prompt) {
+        if (!prompt.variations || prompt.variations.length <= 1) return '';
+
+        const activeId = prompt.activeVariationId || prompt.variations[0].id;
+
+        return `
+            <div class="variation-selector-wrapper">
+                <label class="variation-selector-label">Style</label>
+                <select class="variation-selector" data-action="switch-variation">
+                    ${prompt.variations.map(v => `
+                        <option value="${v.id}" ${v.id === activeId ? 'selected' : ''}>
+                            ${this.escapeHTML(v.name)}
+                        </option>
+                    `).join('')}
+                </select>
+            </div>
         `;
     }
 
@@ -953,9 +978,18 @@ class PromptLibrary {
         if (!this.promptModalLockButton || !prompt) return;
 
         const isLocked = prompt.locked !== false;
-        const icon = isLocked ? 'mode_edit' : 'check';
-        const label = isLocked ? 'Edit Prompt' : 'Save changes';
-        const ariaLabel = isLocked ? 'Enable editing for this prompt' : 'Save changes to this prompt';
+
+        // Hide button entirely when in edit mode
+        if (!isLocked) {
+            this.promptModalLockButton.style.display = 'none';
+            return;
+        }
+
+        // Show and update for locked state
+        this.promptModalLockButton.style.display = '';
+        const icon = 'mode_edit';
+        const label = 'Edit Prompt';
+        const ariaLabel = 'Enable editing for this prompt';
 
         this.promptModalLockButton.innerHTML = `
             <span class="material-symbols-outlined">${icon}</span>
@@ -1034,6 +1068,13 @@ class PromptLibrary {
                 event.preventDefault();
                 event.stopPropagation();
                 this.clearVariables(index);
+            });
+        }
+
+        const variationSelector = container.querySelector('[data-action="switch-variation"]');
+        if (variationSelector) {
+            variationSelector.addEventListener('change', (event) => {
+                this.switchVariation(index, event.target.value);
             });
         }
 
@@ -1335,6 +1376,26 @@ class PromptLibrary {
     }
 
     /**
+     * Switch active variation
+     */
+    switchVariation(index, variationId) {
+        const prompt = this.filteredPrompts[index];
+        if (!prompt || !prompt.variations) return;
+
+        const variation = prompt.variations.find(v => v.id === variationId);
+        if (!variation) return;
+
+        // Update active variation
+        prompt.activeVariationId = variationId;
+
+        // Preserve variable values (already in memory)
+        // Preview will auto-update with new template
+
+        // Re-render modal content to show new template in preview
+        this.refreshPromptViews(index);
+    }
+
+    /**
      * Clear all variable values
      */
     clearVariables(index) {
@@ -1465,8 +1526,17 @@ class PromptLibrary {
         const prompt = this.filteredPrompts[index];
         const compiledPrompt = this.compilePrompt(prompt);
 
-        // Create filename from prompt title (sanitize for filesystem)
-        const filename = `${prompt.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.txt`;
+        // Build filename with variation name if applicable
+        let filename = prompt.title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+
+        if (prompt.variations && prompt.activeVariationId) {
+            const variation = prompt.variations.find(v => v.id === prompt.activeVariationId);
+            if (variation) {
+                filename += `--${variation.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+            }
+        }
+
+        filename += '.txt';
 
         // Create blob and download
         const blob = new Blob([compiledPrompt], { type: 'text/plain' });
@@ -1483,10 +1553,23 @@ class PromptLibrary {
     }
 
     /**
+     * Get the active template for a prompt (from variation or fallback to single template)
+     */
+    getActiveTemplate(prompt) {
+        if (prompt.variations && prompt.variations.length > 0) {
+            const activeId = prompt.activeVariationId || prompt.variations[0].id;
+            const variation = prompt.variations.find(v => v.id === activeId);
+            return variation?.template || prompt.template || '';
+        }
+        return prompt.template || '';
+    }
+
+    /**
      * Compile prompt template with variable values
      */
     compilePrompt(prompt) {
-        let compiled = prompt.template;
+        // Get template from active variation or fallback to single template
+        let compiled = this.getActiveTemplate(prompt);
 
         if (prompt.variables) {
             prompt.variables.forEach(variable => {
