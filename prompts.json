@@ -359,12 +359,23 @@
         ]
     },
     {
-        "id": "tina-barney-style",
-        "title": "Tina Barney Style Photo",
-        "description": "Transform photographs into fine-art, museum-grade images inspired by Tina Barney's photographic style",
+        "id": "restyle-image",
+        "title": "Restyle Image",
+        "description": "Transform photographs into fine-art image styles using selectable variations",
         "category": "Creativity",
         "icon": "camera_alt",
-        "template": "Convert this photograph while preserving the original characters, setting, composition, and narrative context exactly as captured. Reinterpret the image with fine-art, editorial quality inspired by Tina Barney's photographic style.\n\nApply the visual language of large-format, museum-grade color photography: naturalistic yet deliberate color, soft but controlled contrast, and a restrained, painterly palette. Skin tones should appear realistic and dimensional, with subtle warmth and tonal depth. Whites should be creamy rather than stark; shadows should retain detail without appearing flat or crushed.\n\nMaintain a sense of quiet psychological presence and observational intimacy. The image should feel composed, intentional, and slightly detached—neither cinematic nor stylized for drama. Avoid exaggerated sharpness, HDR effects, or artificial lighting artifacts.\n\nUpgrade the technical quality to resemble a contemporary high-end digital or medium-format camera: refined dynamic range, clean micro-detail, smooth tonal transitions, and film-like color depth without visible grain. Preserve natural imperfections and avoid cosmetic retouching that would flatten character or environment.\n\nThe final result should read as gallery-ready fine art photography—editorial in rigor, restrained in execution, and suitable for museum or print publication.",
-        "variables": []
+        "variables": [],
+        "variations": [
+            {
+                "id": "tina-barney",
+                "name": "Tina Barney Style Photo",
+                "template": "Convert this photograph while preserving the original characters, setting, composition, and narrative context exactly as captured. Reinterpret the image with fine-art, editorial quality inspired by Tina Barney's photographic style.\n\nApply the visual language of large-format, museum-grade color photography: naturalistic yet deliberate color, soft but controlled contrast, and a restrained, painterly palette. Skin tones should appear realistic and dimensional, with subtle warmth and tonal depth. Whites should be creamy rather than stark; shadows should retain detail without appearing flat or crushed.\n\nMaintain a sense of quiet psychological presence and observational intimacy. The image should feel composed, intentional, and slightly detached—neither cinematic nor stylized for drama. Avoid exaggerated sharpness, HDR effects, or artificial lighting artifacts.\n\nUpgrade the technical quality to resemble a contemporary high-end digital or medium-format camera: refined dynamic range, clean micro-detail, smooth tonal transitions, and film-like color depth without visible grain. Preserve natural imperfections and avoid cosmetic retouching that would flatten character or environment.\n\nThe final result should read as gallery-ready fine art photography—editorial in rigor, restrained in execution, and suitable for museum or print publication."
+            },
+            {
+                "id": "sally-mann",
+                "name": "Sally Mann Style Photo",
+                "template": "Keep the current subject but render the image as a large format black and white photograph in the style of Sally Mann's wet-plate collodion process. adjust the zoom if needed to achieve proper balance. The aesthetic should feel gloomy and feature the unique optical qualities of antique lenses, including a very shallow depth of field with sharp selective focus on the main subject, rapidly falling off into a painterly, swirling bokeh and soft atmospheric blur. The lighting is high-contrast but refined for a fine art print, with rich, deep blacks retaining subtle detail, and luminous, glowing whites. Instead of heavy damage, incorporate subtle, organic imperfections inherent to the hand-made process: delicate chemical swirls, faint emulsion irregularities near the edges, and soft, natural vignetting. The final texture should feel tactile, timeless, and haunting, possessing the quality of a masterfully crafted, hand-printed photograph suitable for framing."
+            }
+        ]
     }
 ]
