@@ -768,9 +768,12 @@ class PromptLibrary {
      * Get HTML for template editor (unlocked state)
      */
     getEditorHTML(prompt) {
+        // Get the active template (handles both single template and variations)
+        const currentTemplate = this.getActiveTemplate(prompt);
+
         // Store original template for cancel functionality
         if (!prompt._originalTemplate) {
-            prompt._originalTemplate = prompt.template;
+            prompt._originalTemplate = currentTemplate;
         }
 
         return `
@@ -778,7 +781,7 @@ class PromptLibrary {
                 <textarea
                     class="template-textarea"
                     data-action="edit-template"
-                >${this.escapeHTML(prompt.template)}</textarea>
+                >${this.escapeHTML(currentTemplate)}</textarea>
             </div>
         `;
     }
@@ -905,7 +908,16 @@ class PromptLibrary {
             // Restore original template if discarding changes
             const prompt = this.filteredPrompts[this.activePromptIndex];
             if (prompt && prompt._originalTemplate) {
-                prompt.template = prompt._originalTemplate;
+                // Restore to the right location
+                if (prompt.variations && prompt.variations.length > 0) {
+                    const activeId = prompt.activeVariationId || prompt.variations[0].id;
+                    const variation = prompt.variations.find(v => v.id === activeId);
+                    if (variation) {
+                        variation.template = prompt._originalTemplate;
+                    }
+                } else {
+                    prompt.template = prompt._originalTemplate;
+                }
                 delete prompt._originalTemplate;
             }
         }
@@ -1150,7 +1162,16 @@ class PromptLibrary {
         const templateEditor = container.querySelector('[data-action="edit-template"]');
         if (templateEditor) {
             templateEditor.addEventListener('input', (event) => {
-                prompt.template = event.target.value;
+                // Update the active template (either prompt.template or active variation)
+                if (prompt.variations && prompt.variations.length > 0) {
+                    const activeId = prompt.activeVariationId || prompt.variations[0].id;
+                    const variation = prompt.variations.find(v => v.id === activeId);
+                    if (variation) {
+                        variation.template = event.target.value;
+                    }
+                } else {
+                    prompt.template = event.target.value;
+                }
                 this.autoResizeTextarea(event.target);
             });
 
@@ -1439,13 +1460,24 @@ class PromptLibrary {
         const prompt = this.filteredPrompts[index];
         if (!prompt) return;
 
+        // Get current template value
+        const currentTemplate = this.getActiveTemplate(prompt);
+
         // Check if there are unsaved changes
-        const hasChanges = prompt._originalTemplate && prompt._originalTemplate !== prompt.template;
+        const hasChanges = prompt._originalTemplate && prompt._originalTemplate !== currentTemplate;
 
         if (hasChanges) {
             if (confirm('Discard unsaved changes?')) {
-                // Restore original template
-                prompt.template = prompt._originalTemplate;
+                // Restore original template to the right location
+                if (prompt.variations && prompt.variations.length > 0) {
+                    const activeId = prompt.activeVariationId || prompt.variations[0].id;
+                    const variation = prompt.variations.find(v => v.id === activeId);
+                    if (variation) {
+                        variation.template = prompt._originalTemplate;
+                    }
+                } else {
+                    prompt.template = prompt._originalTemplate;
+                }
                 delete prompt._originalTemplate;
                 prompt.locked = true;
                 this.refreshPromptViews(index);
@@ -1466,7 +1498,8 @@ class PromptLibrary {
         const prompt = this.filteredPrompts[this.activePromptIndex];
         if (!prompt) return false;
 
-        return prompt._originalTemplate && prompt._originalTemplate !== prompt.template;
+        const currentTemplate = this.getActiveTemplate(prompt);
+        return prompt._originalTemplate && prompt._originalTemplate !== currentTemplate;
     }
 
     /**

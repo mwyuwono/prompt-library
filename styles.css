@@ -3094,19 +3094,56 @@ body.modal-open {
         touch-action: manipulation;
     }
 
-    /* Hide descriptions by default on mobile */
-    .card-description,
-    .prompt-list-item-description {
-        display: none;
+    /* Hide descriptions by default on mobile, but allow them to be shown when toggled */
+    .card-description.hidden,
+    .prompt-list-item-description.hidden {
+        display: none !important;
         height: 0;
         opacity: 0;
         margin: 0;
         pointer-events: none;
     }
 
+    /* When not hidden, descriptions can be shown */
+    .card-description:not(.hidden),
+    .prompt-list-item-description:not(.hidden) {
+        display: block;
+        height: auto;
+        opacity: 1;
+    }
+
     /* Hide variable count badges on mobile */
-    .variable-count-badge {
+    .variable-count-badge.hidden {
         display: none;
+    }
+
+    /* Hide card images on mobile */
+    .card-image {
+        display: none;
+    }
+
+    /* Hide text label in edit button on mobile, show only icon */
+    .modal-header-actions .btn-sm {
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+    }
+
+    .modal-header-actions .btn-sm .material-symbols-outlined {
+        margin: 0;
+    }
+
+    /* Hide text content in edit button, keep only icon */
+    .modal-header-actions .btn-sm {
+        font-size: 0;
+    }
+
+    .modal-header-actions .btn-sm .material-symbols-outlined {
+        font-size: 1.25rem;
     }
 }
 
