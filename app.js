@@ -884,6 +884,9 @@ class PromptLibrary {
 
         // Set body top position to preserve scroll appearance
         document.body.style.top = `-${scrollY}px`;
+
+        // Handle keyboard visibility on mobile
+        this.setupKeyboardHandling();
     }
 
     /**
@@ -917,6 +920,9 @@ class PromptLibrary {
         this.activePromptId = null;
         this.cancelModalBodyAnimation();
         this.resetModalBodyAnimation(this.promptModalBody);
+
+        // Cleanup keyboard handling
+        this.cleanupKeyboardHandling();
     }
 
     /**
@@ -1789,6 +1795,82 @@ class PromptLibrary {
         const div = document.createElement('div');
         div.textContent = str;
         return div.innerHTML;
+    }
+
+    /**
+     * Setup keyboard handling for mobile devices
+     * Adjusts modal position when keyboard appears
+     */
+    setupKeyboardHandling() {
+        // Only setup if visualViewport is supported (modern mobile browsers)
+        if (!window.visualViewport) return;
+
+        this.keyboardHandler = () => {
+            if (!this.promptModal || !this.promptModal.classList.contains('show')) return;
+
+            const viewport = window.visualViewport;
+            const modalContent = this.promptModal.querySelector('.modal-content');
+            if (!modalContent) return;
+
+            // Calculate how much the viewport has been reduced by the keyboard
+            const keyboardHeight = window.innerHeight - viewport.height;
+            const isKeyboardVisible = keyboardHeight > 100; // Threshold to detect keyboard
+
+            if (isKeyboardVisible) {
+                // Keyboard is visible - adjust modal
+                modalContent.style.maxHeight = `${viewport.height * 0.9}px`;
+                modalContent.style.transform = `translateY(${viewport.offsetTop}px)`;
+
+                // Ensure active input is visible
+                const activeElement = document.activeElement;
+                if (activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA')) {
+                    // Small delay to let keyboard settle
+                    setTimeout(() => {
+                        activeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 100);
+                }
+            } else {
+                // Keyboard is hidden - reset
+                modalContent.style.maxHeight = '';
+                modalContent.style.transform = '';
+            }
+        };
+
+        // Listen for viewport changes
+        window.visualViewport.addEventListener('resize', this.keyboardHandler);
+        window.visualViewport.addEventListener('scroll', this.keyboardHandler);
+
+        // Also handle focus events on inputs
+        this.focusHandler = (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                setTimeout(this.keyboardHandler, 300);
+            }
+        };
+        document.addEventListener('focusin', this.focusHandler);
+    }
+
+    /**
+     * Cleanup keyboard handling when modal closes
+     */
+    cleanupKeyboardHandling() {
+        if (!window.visualViewport || !this.keyboardHandler) return;
+
+        window.visualViewport.removeEventListener('resize', this.keyboardHandler);
+        window.visualViewport.removeEventListener('scroll', this.keyboardHandler);
+
+        if (this.focusHandler) {
+            document.removeEventListener('focusin', this.focusHandler);
+        }
+
+        // Reset modal content styles
+        const modalContent = this.promptModal?.querySelector('.modal-content');
+        if (modalContent) {
+            modalContent.style.maxHeight = '';
+            modalContent.style.transform = '';
+        }
+
+        this.keyboardHandler = null;
+        this.focusHandler = null;
     }
 }
 

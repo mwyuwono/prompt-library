@@ -875,6 +875,8 @@ body.modal-open {
     /* Prevent scroll chaining on touch devices */
     position: fixed;
     width: 100%;
+    /* Prevent bounce/overscroll on mobile */
+    overscroll-behavior: none;
     /* Preserve scroll position - will be set via JS */
     top: 0;
 }
@@ -1775,6 +1777,8 @@ body.modal-open {
     border-bottom: 2px solid var(--color-border-subtle);
     position: relative;
     padding: 0 var(--space-lg);
+    /* Add bottom padding to prevent indicator clipping on mobile */
+    padding-bottom: 3px;
 }
 
 .tab-button {
@@ -1784,8 +1788,8 @@ body.modal-open {
 
     background: none;
     border: none;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -1px;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
 
     /* M3 Title Small */
     font-family: var(--md-sys-typescale-title-small-font);
@@ -1803,6 +1807,9 @@ body.modal-open {
     text-transform: uppercase;
     position: relative;
     overflow: hidden;
+
+    /* Prevent tap delay on mobile */
+    touch-action: manipulation;
 }
 
 /* M3 state layer for tabs */
@@ -2820,6 +2827,8 @@ body.modal-open {
         height: auto;
         max-height: 90vh;
         border-radius: 16px 16px 0 0;
+        /* Prevent tap delay on mobile */
+        touch-action: manipulation;
     }
 
     .modal-header {
@@ -2834,41 +2843,89 @@ body.modal-open {
     .modal-header-actions .btn {
         padding: 0.5rem 0.875rem;
         font-size: var(--md-sys-typescale-label-small-size);
+        /* Prevent tap delay */
+        touch-action: manipulation;
     }
 
     .modal-body {
-        padding: var(--space-md);
+        padding: var(--space-xs) 0;
     }
 
     .modal-scroll-area {
-        padding: var(--space-md);
+        padding: 0 var(--space-md) var(--space-md);
         padding-right: var(--space-md);
+        /* Stable height to prevent jumping when switching tabs */
+        min-height: 50vh;
+        /* Ensure smooth scrolling on iOS */
+        -webkit-overflow-scrolling: touch;
+        overflow-y: auto;
+        overflow-x: hidden;
+        overscroll-behavior: contain;
+        /* Allow momentum scrolling */
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Improve input field usability on mobile */
+    .variable-input,
+    .variable-textarea {
+        font-size: 16px; /* Prevent iOS zoom on focus */
+        padding: 0.875rem;
+        min-height: 48px;
+        /* Prevent tap delay */
+        touch-action: manipulation;
+    }
+
+    .variable-textarea {
+        min-height: 120px;
+        max-height: 40vh;
     }
 
     .prompt-modal-description {
         font-size: var(--md-sys-typescale-body-small-size);
         line-height: 1.4;
         margin-bottom: var(--space-md);
+        padding: 0 var(--space-md);
+    }
+
+    .variation-selector-wrapper {
+        padding: 0 var(--space-md);
     }
 
     .modal-actions {
         flex-direction: column;
-        gap: var(--space-sm);
+        gap: var(--space-md);
         padding: var(--space-md);
+        /* Ensure buttons stay visible above keyboard */
+        position: sticky;
+        bottom: 0;
+        background-color: var(--color-card-surface);
+        z-index: 20;
     }
 
     .modal-actions .btn {
         width: 100%;
+        /* Prevent tap delay */
+        touch-action: manipulation;
+        /* Minimum touch target */
+        min-height: 48px;
     }
 
     .tabs-container {
         margin-bottom: var(--space-md);
     }
 
+    .tabs-header {
+        padding: 0 var(--space-md);
+        /* Ensure indicator isn't clipped */
+        padding-bottom: 4px;
+    }
+
     .tab-button {
-        padding: 0.75rem 0.875rem;
-        min-height: 2.5rem;
+        padding: 0.875rem 1rem;
+        min-height: 48px;
         font-size: var(--md-sys-typescale-label-large-size);
+        /* Prevent tap delay */
+        touch-action: manipulation;
     }
 
     /* Links modal */
@@ -2901,6 +2958,11 @@ body.modal-open {
     /* Template textarea */
     .template-textarea {
         min-height: 200px;
+        max-height: 50vh;
+        font-size: 16px; /* Prevent iOS zoom on focus */
+        padding: 0.875rem;
+        /* Prevent tap delay */
+        touch-action: manipulation;
     }
 }
 
@@ -2945,7 +3007,7 @@ body.modal-open {
     .modal-header,
     .modal-body,
     #linksModal .modal-body {
-        padding: var(--space-sm) var(--space-md);
+        padding: var(--space-sm);
     }
 
     .modal-header h2 {
@@ -2953,7 +3015,28 @@ body.modal-open {
     }
 
     .modal-scroll-area {
-        padding: var(--space-sm);
+        padding: 0 var(--space-sm) var(--space-sm);
+        /* Ensure content is readable with reduced padding */
+        min-height: 45vh;
+    }
+
+    .prompt-modal-description {
+        padding: 0 var(--space-sm);
+    }
+
+    .variation-selector-wrapper {
+        padding: 0 var(--space-sm);
+    }
+
+    /* Reduce horizontal padding for better readability */
+    .variable-group {
+        padding: 0;
+    }
+
+    .template-textarea {
+        font-size: 16px; /* Prevent iOS zoom */
+        min-height: 180px;
+        max-height: 45vh;
     }
 
     /* Card content padding adjustments for mobile */
@@ -2974,14 +3057,17 @@ body.modal-open {
     .btn {
         /* M3 buttons maintain minimum touch target */
         padding: 0.625rem 1.25rem;
-        min-height: 2.75rem;
-        /* 44px minimum for mobile */
+        min-height: 48px;
+        /* Prevent tap delay */
+        touch-action: manipulation;
     }
 
     .tab-button {
         /* M3 tabs with larger touch target on mobile */
         padding: 1rem 0.875rem;
-        min-height: 3rem;
+        min-height: 48px;
+        /* Prevent tap delay */
+        touch-action: manipulation;
     }
 
     /* Hide descriptions by default on mobile */
