@@ -397,11 +397,13 @@ body {
     background: var(--color-charcoal);
     color: var(--color-white);
     border: none;
-    padding: 8px 16px;
+    height: 26px;
+    padding: 0 16px;
     border-radius: 20px;
     font-family: var(--font-sans);
     font-size: 10px;
     font-weight: 700;
+    line-height: 1;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     cursor: pointer;
@@ -412,7 +414,7 @@ body {
 }
 
 .btn-filters .material-symbols-outlined {
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .btn-filters:hover {
@@ -423,11 +425,13 @@ body {
     background: var(--color-charcoal);
     color: var(--color-white);
     border: none;
-    padding: 8px 16px;
+    height: 26px;
+    padding: 0 16px;
     border-radius: 20px;
     font-family: var(--font-sans);
     font-size: 10px;
     font-weight: 700;
+    line-height: 26px;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     cursor: pointer;
@@ -436,6 +440,48 @@ body {
 
 .btn-download:hover {
     background: var(--color-gold);
+}
+
+/* Quick Links - Desktop Only */
+.quick-links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.quick-link-btn {
+    background: var(--color-border-subtle);
+    color: var(--color-text-primary);
+    border: none;
+    height: 26px;
+    padding: 0 16px;
+    border-radius: 20px;
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 26px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+    white-space: nowrap;
+}
+
+.quick-link-btn:hover {
+    background: var(--color-surface-hover);
+}
+
+.quick-link-btn:focus-visible {
+    outline: 3px solid var(--color-action-primary);
+    outline-offset: 2px;
+}
+
+/* Hide quick links on mobile */
+@media (max-width: 768px) {
+    .quick-links {
+        display: none;
+    }
 }
 
 /* Visual Identity Section */
@@ -1453,15 +1499,6 @@ body.modal-open {
     padding-top: var(--space-md);
 }
 
-.card-footer .card-category {
-    opacity: 0;
-    transition: opacity var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
-}
-
-.prompt-card:hover .card-footer .card-category {
-    opacity: 1;
-}
-
 /* Card Header Row - Contains icon and badge */
 .card-header-row {
     display: flex;
@@ -1492,6 +1529,19 @@ body.modal-open {
     padding: 6px 12px;
     border-radius: 4px;
     white-space: nowrap;
+    opacity: 0;
+    transition: opacity var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
+}
+
+.prompt-card:hover .card-badge {
+    opacity: 1;
+}
+
+/* Hide card badge on mobile (no hover capability) */
+@media (max-width: 768px) {
+    .card-badge {
+        display: none;
+    }
 }
 
 .card-arrow-button {
@@ -1500,15 +1550,16 @@ body.modal-open {
     justify-content: center;
     width: 2.5rem;
     height: 2.5rem;
+    opacity: 0;
     border-radius: var(--md-sys-shape-corner-full);
     background-color: transparent;
     border: 1px solid rgba(112, 112, 112, 0.2);
     color: var(--color-charcoal);
-    opacity: 1;
     transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized);
 }
 
 .prompt-card:hover .card-arrow-button {
+    opacity: 1;
     background-color: var(--color-gold);
     border-color: var(--color-gold);
     color: var(--color-white);
@@ -1526,6 +1577,13 @@ body.modal-open {
     background-color: var(--color-gold);
     border-color: var(--color-gold);
     color: var(--color-white);
+}
+
+/* Hide arrow button on mobile (no hover capability) */
+@media (max-width: 768px) {
+    .card-arrow-button {
+        display: none;
+    }
 }
 
 /* Cards with images: hide footer category (shown in header) */
@@ -1548,9 +1606,21 @@ body.modal-open {
     letter-spacing: var(--tracking-widest);
 }
 
-/* Show category badge in grid view when using images - Actually hidden until hover per reference */
+/* Category badge: hidden by default, shown on hover */
 .prompt-card .card-category {
-    display: none;
+    opacity: 0;
+    transition: opacity var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
+}
+
+.prompt-card:hover .card-category {
+    opacity: 1;
+}
+
+/* Hide category badge on mobile (no hover capability) */
+@media (max-width: 768px) {
+    .prompt-card .card-category {
+        display: none;
+    }
 }
 
 .card-title-wrapper {
