@@ -390,7 +390,7 @@ body {
 .header-actions {
     display: flex;
     align-items: center;
-    gap: var(--space-lg);
+    gap: var(--space-sm);
 }
 
 .btn-filters {
@@ -408,7 +408,8 @@ body {
     letter-spacing: 0.05em;
     cursor: pointer;
     transition: background-color var(--md-sys-motion-duration-short2);
-    display: none; /* Hidden by default on desktop */
+    display: none;
+    /* Hidden by default on desktop */
     align-items: center;
     gap: 6px;
 }
@@ -1031,7 +1032,6 @@ body.modal-open {
 
     /* Match page background with subtle border */
     background-color: var(--color-page-background);
-    border-bottom: 1px solid var(--color-border-subtle);
 
     max-width: 100%;
     overflow: visible;
@@ -2551,7 +2551,6 @@ body.modal-open {
     justify-content: space-between;
     align-items: center;
     padding: var(--space-md) var(--space-lg);
-    border-bottom: 1px solid var(--color-border-subtle);
     background-color: transparent;
     flex-shrink: 0;
 }
@@ -2609,12 +2608,10 @@ body.modal-open {
 
 .modal-header h2 {
     /* M3 Headline Small */
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: var(--md-sys-typescale-headline-small-size);
     font-weight: var(--weight-medium);
     line-height: var(--md-sys-typescale-headline-small-line-height);
     letter-spacing: var(--md-sys-typescale-headline-small-tracking);
-
     color: var(--color-text-primary);
     margin: 0;
 }
@@ -2883,13 +2880,14 @@ body.modal-open {
         overflow: hidden;
         opacity: 0;
         transition: max-height 0.3s var(--md-sys-motion-easing-emphasized),
-                    opacity 0.25s var(--md-sys-motion-easing-standard);
+            opacity 0.25s var(--md-sys-motion-easing-standard);
     }
 
     /* Show controls bar when toggled */
     .controls-bar.show {
         display: flex;
-        max-height: 800px; /* Large enough to fit all controls */
+        max-height: 800px;
+        /* Large enough to fit all controls */
         opacity: 1;
     }
 
@@ -2937,7 +2935,6 @@ body.modal-open {
         width: 95%;
         height: auto;
         max-height: 90vh;
-        border-radius: 16px 16px 0 0;
         /* Prevent tap delay on mobile */
         touch-action: manipulation;
     }
@@ -2979,7 +2976,8 @@ body.modal-open {
     /* Improve input field usability on mobile */
     .variable-input,
     .variable-textarea {
-        font-size: 16px; /* Prevent iOS zoom on focus */
+        font-size: 16px;
+        /* Prevent iOS zoom on focus */
         padding: 0.875rem;
         min-height: 48px;
         /* Prevent tap delay */
@@ -3102,7 +3100,8 @@ body.modal-open {
     .template-textarea {
         min-height: 200px;
         max-height: 50vh;
-        font-size: 16px; /* Prevent iOS zoom on focus */
+        font-size: 16px;
+        /* Prevent iOS zoom on focus */
         padding: 0.875rem;
         /* Prevent tap delay */
         touch-action: manipulation;
@@ -3177,7 +3176,8 @@ body.modal-open {
     }
 
     .template-textarea {
-        font-size: 16px; /* Prevent iOS zoom */
+        font-size: 16px;
+        /* Prevent iOS zoom */
         min-height: 180px;
         max-height: 45vh;
     }
