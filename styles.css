@@ -2849,6 +2849,26 @@ body.modal-open {
         display: flex;
     }
 
+    /* Hide site name text on mobile */
+    .header-logo-text {
+        display: none;
+    }
+
+    /* Hide filters button text on mobile, show icon only */
+    .btn-filters-text {
+        display: none;
+    }
+
+    /* Reduce gap between header buttons on mobile */
+    .header-actions {
+        gap: var(--space-sm);
+    }
+
+    /* Hide thumbnail images on mobile */
+    .card-thumbnail {
+        display: none;
+    }
+
     /* Controls bar - mobile compact and hidden by default */
     .controls-bar {
         flex-direction: row;
@@ -3001,6 +3021,12 @@ body.modal-open {
         min-height: 48px;
     }
 
+    /* Fix modal positioning to prevent top being cut off */
+    .prompt-modal {
+        align-items: flex-start;
+        padding-top: env(safe-area-inset-top, 0);
+    }
+
     .prompt-modal .modal-content {
         width: 100%;
         height: 100vh;
@@ -3008,6 +3034,8 @@ body.modal-open {
         border-radius: 0;
         border: none;
         box-shadow: none;
+        /* Ensure modal starts from top */
+        margin-top: 0;
     }
 
     .prompt-modal .modal-overlay {
