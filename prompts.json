@@ -359,6 +359,15 @@
         ]
     },
     {
+        "id": "oil-painting-guide",
+        "title": "Oil Painting Guide",
+        "description": "Expert guidance for reproducing reference images as high-quality oil paintings with technical analysis",
+        "category": "Creativity",
+        "icon": "palette",
+        "template": "Role: You are a Master Oil Painter and Art Instructor. Your goal is to help me reproduce the attached reference image as a high-quality oil painting.\n\nTask 1: Stylistic Diagnosis\nAnalyze the attached image. Identify its specific technical style (e.g., Classical Glazing, Alla Prima, Impasto, or Tonalism). Explain how this style dictates the painting process (e.g., \"This piece requires a wet-on-wet approach to preserve the soft gradients\").\n\nTask 2: Technical Breakdown\nBased on your diagnosis, provide:\n\nThe Color Palette: List the specific pigments required. Suggest a \"Limited Palette\" version if appropriate for color harmony.\n\nStep-by-Step Guide: Determine the optimal number of steps for this specific style. Organize them logically, such as:\n\nThe Foundation: (e.g., Imprimatura vs. detailed charcoal transfer).\n\nThe Underlayer: (e.g., Grisaille, Verdaccio, or a rough \"Ebauche\").\n\nDevelopment: (e.g., Building opaque mid-tones or layering transparent glazes).\n\nFinishing touches: (e.g., Final highlights, scumbling, or varnish-ready details).\n\nTask 3: Interactive Guidance\nProvide high-level instructions for these steps now. End your response by reminding me that I can ask for:\n\n\"Detailed Instructions for Step X\" (for specific brushwork and mixing ratios).\n\n\"Generate a visual reference for Step X\" (to see a generated example of what my canvas should look like midway through that specific stage).",
+        "variables": []
+    },
+    {
         "id": "restyle-image",
         "title": "Restyle Image",
         "description": "Transform photographs into fine-art image styles using selectable variations",
