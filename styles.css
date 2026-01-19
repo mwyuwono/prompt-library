@@ -1952,7 +1952,9 @@ body.modal-open {
     white-space: pre-wrap;
     word-wrap: break-word;
     font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    max-height: 60vh;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 /* Variables Section */
