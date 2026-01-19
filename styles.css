@@ -1496,7 +1496,6 @@ body.modal-open {
     align-items: center;
     justify-content: space-between;
     margin-top: auto;
-    padding-top: var(--space-md);
 }
 
 /* Card Header Row - Contains icon and badge */
@@ -1526,8 +1525,8 @@ body.modal-open {
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    padding: 6px 12px;
-    border-radius: 4px;
+    padding: 0px 12px;
+    border-radius: 100px;
     white-space: nowrap;
     opacity: 0;
     transition: opacity var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
@@ -1648,9 +1647,8 @@ body.modal-open {
     line-height: var(--leading-tight);
 
     /* New brand: soft background with colored text */
-    padding: 0.35rem 0.75rem;
-    border-radius: var(--md-sys-shape-corner-small);
 
+    border-radius: var(--md-sys-shape-corner-small);
     letter-spacing: 0.05em;
     text-transform: uppercase;
     flex-shrink: 0;
@@ -1832,7 +1830,7 @@ body.modal-open {
 .card-content {
     display: flex;
     flex-direction: column;
-    gap: var(--space-lg);
+    gap: var(--space-md);
 }
 
 /* Tabs Container */
@@ -1925,11 +1923,11 @@ body.modal-open {
 
 /* Preview Section (standalone and in tab) */
 .preview-section {
-    margin-bottom: var(--space-lg);
+   
     background-color: var(--color-card-surface);
     border: 1px solid var(--color-border-subtle);
     border-radius: 12px;
-    overflow: hidden;
+    overflow: hidden; /* Added from DevTools */
 }
 
 .preview-header {
@@ -1945,6 +1943,8 @@ body.modal-open {
 }
 
 .preview-content {
+    overflow-y: auto; /* Added from DevTools */
+    /* Added from DevTools */
     padding: var(--space-lg);
     font-size: var(--text-sm);
     line-height: var(--leading-relaxed);
@@ -2468,12 +2468,9 @@ body.modal-open {
 
     /* New brand: 1.5rem border radius */
     border-radius: var(--radius-lg);
-
     max-width: 840px;
-    width: 90%;
-    height: 85vh;
-    max-height: 85vh;
-
+    width: 95%;
+    max-height: 95vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -2646,7 +2643,7 @@ body.modal-open {
 }
 
 .modal-body {
-    padding: var(--space-sm) 0;
+ 
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -2696,7 +2693,7 @@ body.modal-open {
 
 /* Variation Selector */
 .variation-selector-wrapper {
-    margin-bottom: var(--space-lg);
+    margin-bottom: var(--space-sm);
     padding: 0 var(--space-lg);
 }
 
@@ -2722,6 +2719,12 @@ body.modal-open {
     border-radius: var(--md-sys-shape-corner-medium);
     cursor: pointer;
     transition: border-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' height='24' viewBox='0 0 24 24' width='24'><path d='M0 0h24v24H0z' fill='none'/><path d='M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1.5em;
+    padding-right: 3rem;
 }
 
 .variation-selector:hover {
