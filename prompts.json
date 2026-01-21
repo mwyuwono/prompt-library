@@ -282,13 +282,24 @@
         ]
     },
     {
-        "id": "image-style-transfer",
-        "title": "Image Style Transfer",
-        "description": "Apply the complete visual style of one image to another while preserving subject identity",
+        "id": "character-portrait",
+        "title": "Character Portrait",
+        "description": "Transform reference photos into high-quality portraits",
         "category": "Creativity",
-        "image": "public/images/style-transfer.png",
-        "template": "Re-render image 2 using the complete visual style (e.g., color, texture, medium) of image 1. Preserve the original subject matter's identity, composition, and physical features in image 2.",
-        "variables": []
+        "icon": "portrait",
+        "variables": [],
+        "variations": [
+            {
+                "id": "visual-anchor",
+                "name": "Visual Anchor Method",
+                "template": "Step 1:\nAnalyze the attached reference photographs to identify the subject's visual anchor: the fixed facial characteristics that must remain unchanged to preserve likeness. These include, at minimum, overall craniofacial structure, eye spacing and orientation, nasal form, mouth proportions, jawline, and any distinctive asymmetries or contours.\n\nOnce this visual anchor is established, reinterpret the subject through the conventions of classical portraiture. Describe the figure in the style of a 19th-century academic oil painting, introducing restrained idealization—refinement of skin, lighting, and expression—while preserving immediate recognizability. The final portrait should convey gravity, dignity, and psychological depth, balancing faithful likeness with the pathos and nobility characteristic of high academic painting.\n\nStep 2: Provide a summary of this Visual Anchor Then ask for a Style Reference Image in order to move to image generation.\n\nStep 3: I will provide a Style Reference Image. You must generate a high-fidelity image that merges the subject's \"Visual Anchor\" with the style, medium, and atmosphere of the reference image. The subject must look like they belong in that world, as if they were the original sitter for that specific piece of art.\n\nLet's Begin: I am uploading the likeness references now."
+            },
+            {
+                "id": "likeness-lock",
+                "name": "Likeness Lock Method",
+                "template": "Step 1 — Likeness Lock + Visual Anchor extraction\n\"Analyze the attached likeness reference photos. Your primary objective is preserving identity.\nPriority order: facial geometry and feature placement (highest) > expression > pose > lighting > wardrobe > background/painterly effects (lowest).\nDefine the subject's Visual Anchor as a set of non-negotiable constraints. Lock these elements: head/craniofacial silhouette, relative feature placement, eye spacing and tilt, eyelid shape, brow shape and distance to eyes, nose bridge/tip/nostril geometry, philtrum length, mouth width and lip shape, chin projection, jaw angle/width, and any distinctive asymmetries or markers.\nAllowed changes: painterly rendering, skin finish, lighting design, color palette, edge softness, canvas/varnish effects.\nDisallowed changes: altering facial proportions, moving features, beautifying asymmetries, changing age/ethnicity cues.\"\n\nStep 2 — Output constraints, then request style reference\n\"Output the Visual Anchor as a bullet checklist of explicit constraints (10–20 items) written as 'must match' statements. Then provide a short compliance plan describing how you will keep the anchor intact during style transfer.\nThen ask me for a Style Reference Image to proceed.\"\n\nStep 3 — Generate\n\"Using the Style Reference Image, generate a 19th-century academic oil portrait that matches its brushwork, palette, lighting (chiaroscuro), composition conventions, and surface finish. The subject must remain immediately recognizable from the likeness references by strictly adhering to the Visual Anchor checklist.\nBefore finalizing, perform a quick internal cross-check: confirm each anchor item is satisfied.\"\nLet's Begin: I am uploading the likeness references now."
+            }
+        ]
     },
     {
         "id": "song-creator",
