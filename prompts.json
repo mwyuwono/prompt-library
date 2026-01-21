@@ -286,7 +286,7 @@
         "title": "Character Portrait",
         "description": "Transform reference photos into high-quality portraits",
         "category": "Creativity",
-        "icon": "portrait",
+        "image": "public/images/character-portrait.png",
         "variables": [],
         "variations": [
             {
