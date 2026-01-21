@@ -287,7 +287,20 @@
         "description": "Transform reference photos into high-quality portraits",
         "category": "Creativity",
         "image": "public/images/character-portrait.png",
-        "variables": [],
+        "variables": [
+            {
+                "name": "style",
+                "label": "Style",
+                "placeholder": "e.g., 19th-century academic, Baroque, Renaissance",
+                "value": ""
+            },
+            {
+                "name": "clothing",
+                "label": "Clothing",
+                "placeholder": "e.g., simple classical attire, period-appropriate dress",
+                "value": ""
+            }
+        ],
         "variations": [
             {
                 "id": "visual-anchor",
@@ -303,6 +316,11 @@
                 "id": "character-reference-only",
                 "name": "Character Reference Only (No Style Image)",
                 "template": "Analyze the uploaded reference images to identify and preserve the subject's Visual Anchor: the immutable facial characteristics that define their identity. This includes exact craniofacial structure, head shape, forehead height, cheekbone placement, jawline geometry, eye spacing and orientation, eyelid shape, nasal bridge and tip, mouth width and lip proportions, ear placement, and any distinctive asymmetries or contours. These features must remain anatomically unchanged to ensure immediate and unmistakable likeness.\n\nRender the subject as a classical, museum-quality oil portrait in the tradition of refined academic painting.\n\nApply idealization only at the surface level—subtle refinement of skin texture, unified tonal transitions, and painterly handling of edges—while strictly preserving the subject's facial proportions, expression, and bone structure as seen in the reference images. Avoid transformation toward an archetypal face.\n\nClothing should be simple and classical in form, rendered in soft natural fabrics with minimal ornamentation, allowing focus to remain on the face. Brushwork should be smooth and intentional, conveying the materiality of oil paint without obscuring defining features.\n\nThe final image should read as a refined classical oil painting that depicts the same individual from the reference images, instantly recognizable, with identity fully preserved and expressed through a restrained, timeless painterly aesthetic."
+            },
+            {
+                "id": "custom-style-clothing",
+                "name": "Custom Style & Clothing",
+                "template": "Style: {{style}}\nClothing: {{clothing}}\n\nAnalyze the attached reference photographs to identify the subject's visual anchor: the fixed facial characteristics that must remain unchanged to preserve likeness.\n\nOnce this visual anchor is established, reinterpret the subject through the conventions of classical portraiture. Render the figure in an oil painting in the style mentioned above, introducing restrained idealization—refinement of skin, lighting, and expression—while preserving immediate recognizability. The final portrait should convey gravity, dignity, and psychological depth, balancing faithful likeness with the pathos and nobility characteristic of a museum quality painting."
             }
         ]
     },
