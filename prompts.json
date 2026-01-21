@@ -287,20 +287,7 @@
         "description": "Transform reference photos into high-quality portraits",
         "category": "Creativity",
         "image": "public/images/character-portrait.png",
-        "variables": [
-            {
-                "name": "style",
-                "label": "Style",
-                "placeholder": "e.g., 19th-century academic, Baroque, Renaissance",
-                "value": ""
-            },
-            {
-                "name": "clothing",
-                "label": "Clothing",
-                "placeholder": "e.g., simple classical attire, period-appropriate dress",
-                "value": ""
-            }
-        ],
+        "variables": [],
         "variations": [
             {
                 "id": "visual-anchor",
@@ -320,7 +307,7 @@
             {
                 "id": "custom-style-clothing",
                 "name": "Custom Style & Clothing",
-                "template": "Style: {{style}}\nClothing: {{clothing}}\n\nAnalyze the attached reference photographs to identify the subject's visual anchor: the fixed facial characteristics that must remain unchanged to preserve likeness.\n\nOnce this visual anchor is established, reinterpret the subject through the conventions of classical portraiture. Render the figure in an oil painting in the style mentioned above, introducing restrained idealization—refinement of skin, lighting, and expression—while preserving immediate recognizability. The final portrait should convey gravity, dignity, and psychological depth, balancing faithful likeness with the pathos and nobility characteristic of a museum quality painting."
+                "template": "Before uploading the reference photographs, please specify:\n\nStyle: [Describe the painting style you want - e.g., 19th-century academic, Baroque, Renaissance, Impressionist]\nClothing: [Describe the clothing you want the subject to wear - e.g., simple classical attire, period-appropriate dress, contemporary formal wear]\n\nOnce you provide this information, I will analyze the reference photographs to identify the subject's visual anchor: the fixed facial characteristics that must remain unchanged to preserve likeness.\n\nI will then reinterpret the subject through the conventions of classical portraiture, rendering the figure in an oil painting in your specified style and clothing, introducing restrained idealization—refinement of skin, lighting, and expression—while preserving immediate recognizability. The final portrait will convey gravity, dignity, and psychological depth, balancing faithful likeness with the pathos and nobility characteristic of a museum quality painting."
             }
         ]
     },
