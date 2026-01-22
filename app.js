@@ -55,9 +55,20 @@ class PromptLibrary {
 
             // Load saved variable values and metadata from localStorage
             this.prompts.forEach(prompt => {
+                // Process prompt-level variables
                 if (prompt.variables) {
                     this.applyVariableDisplayHints(prompt);
                     this.loadVariableValues(prompt.id, prompt.variables);
+                }
+
+                // Process variation-level variables
+                if (prompt.variations) {
+                    prompt.variations.forEach(variation => {
+                        if (variation.variables) {
+                            this.applyVariableDisplayHintsToArray(variation.variables);
+                            this.loadVariableValues(prompt.id, variation.variables);
+                        }
+                    });
                 }
                 // Load metadata (usage count, last used)
                 const metadata = this.loadPromptMetadata(prompt.id);
@@ -604,7 +615,8 @@ class PromptLibrary {
      */
     getPromptDetailHTML(prompt, index) {
         const isLocked = prompt.locked !== false;
-        const hasVariables = prompt.variables && prompt.variables.length > 0;
+        const activeVariables = this.getActiveVariables(prompt);
+        const hasVariables = activeVariables && activeVariables.length > 0;
         const activeTab = prompt.activeTab || 'variables';
 
         return `
@@ -645,9 +657,42 @@ class PromptLibrary {
     /**
      * Get HTML for locked view content (tab content only, tabs-header is outside scroll area)
      */
+    /**
+     * Get variables for the currently active variation
+     * Returns variation-specific variables if they exist, otherwise prompt-level variables
+     */
+    getActiveVariables(prompt) {
+        // If prompt has variations, check if active variation has its own variables
+        if (prompt.variations && prompt.variations.length > 0) {
+            const activeId = prompt.activeVariationId || prompt.variations[0].id;
+            const variation = prompt.variations.find(v => v.id === activeId);
+
+            // If variation has its own variables array, use that
+            if (variation && variation.variables) {
+                return variation.variables;
+            }
+        }
+
+        // Otherwise return prompt-level variables
+        return prompt.variables || [];
+    }
+
+    /**
+     * Get the active variation object
+     */
+    getActiveVariation(prompt) {
+        if (!prompt.variations || prompt.variations.length === 0) {
+            return null;
+        }
+
+        const activeId = prompt.activeVariationId || prompt.variations[0].id;
+        return prompt.variations.find(v => v.id === activeId);
+    }
+
     getLockedViewContent(prompt, index) {
         const compiledPrompt = this.compilePrompt(prompt);
-        const hasVariables = prompt.variables && prompt.variables.length > 0;
+        const activeVariables = this.getActiveVariables(prompt);
+        const hasVariables = activeVariables && activeVariables.length > 0;
         const activeTab = prompt.activeTab || 'variables';
 
         if (!hasVariables) {
@@ -657,7 +702,7 @@ class PromptLibrary {
         return `
             <div class="tabs-content">
                 <div class="tab-pane ${activeTab === 'variables' ? 'active' : ''}" data-tab="variables">
-                    ${this.getVariablesHTML(prompt)}
+                    ${this.getVariablesHTML(activeVariables)}
                 </div>
                 <div class="tab-pane ${activeTab === 'preview' ? 'active' : ''}" data-tab="preview">
                     ${this.getPreviewContentHTML(compiledPrompt)}
@@ -682,6 +727,7 @@ class PromptLibrary {
         if (!prompt.variations || prompt.variations.length <= 1) return '';
 
         const activeId = prompt.activeVariationId || prompt.variations[0].id;
+        const activeVariation = prompt.variations.find(v => v.id === activeId);
 
         return `
             <div class="variation-selector-wrapper">
@@ -693,6 +739,11 @@ class PromptLibrary {
                         </option>
                     `).join('')}
                 </select>
+                ${activeVariation && activeVariation.description ? `
+                    <div class="variation-description visible" data-variation-description>
+                        ${this.escapeHTML(activeVariation.description)}
+                    </div>
+                ` : '<div class="variation-description" data-variation-description></div>'}
             </div>
         `;
     }
@@ -712,14 +763,14 @@ class PromptLibrary {
     /**
      * Get HTML for variables section (inside tab)
      */
-    getVariablesHTML(prompt) {
-        if (!prompt.variables || prompt.variables.length === 0) {
+    getVariablesHTML(variables) {
+        if (!variables || variables.length === 0) {
             return '';
         }
 
         return `
             <div class="variables-section">
-                ${prompt.variables.map(variable => `
+                ${variables.map(variable => `
                     <div class="variable-group">
                         <label class="variable-label">${this.escapeHTML(variable.label)}</label>
                         ${this.getVariableInputHTML(variable)}
@@ -979,7 +1030,7 @@ class PromptLibrary {
         modalBody.innerHTML = this.getPromptDetailHTML(prompt, index);
         this.bindPromptInteractions(modalBody, prompt, index);
         this.initializeVariableTextareas(modalBody);
-        this.updateDependentVariables(modalBody, prompt, prompt.variables || []);
+        this.updateDependentVariables(modalBody, prompt, this.getActiveVariables(prompt));
 
         if (prompt.locked !== false) {
             const firstInput = modalBody.querySelector('.variable-input');
@@ -1123,7 +1174,7 @@ class PromptLibrary {
 
             input.addEventListener('input', (event) => {
                 const variableName = event.target.dataset.variable;
-                const variables = prompt.variables || [];
+                const variables = this.getActiveVariables(prompt);
                 const variable = variables.find(v => v.name === variableName);
                 if (variable) {
                     variable.value = event.target.value;
@@ -1142,7 +1193,7 @@ class PromptLibrary {
         toggleInputs.forEach(input => {
             input.addEventListener('change', (event) => {
                 const variableName = event.target.dataset.variable;
-                const variables = prompt.variables || [];
+                const variables = this.getActiveVariables(prompt);
                 const variable = variables.find(v => v.name === variableName);
                 if (variable) {
                     variable.value = event.target.checked ? (variable.options?.[1] || 'true') : (variable.options?.[0] || '');
@@ -1197,14 +1248,14 @@ class PromptLibrary {
     }
 
     /**
-     * Apply display hints for variables that expect long-form text
+     * Apply display hints to an array of variables
      */
-    applyVariableDisplayHints(prompt) {
-        if (!prompt.variables) return;
+    applyVariableDisplayHintsToArray(variables) {
+        if (!variables) return;
 
         const longTextPattern = /(paste|text|notes|email|message|context|description|details|outline|summary|topic|prompt|instructions|content)/i;
 
-        prompt.variables.forEach(variable => {
+        variables.forEach(variable => {
             if (variable.inputType) return;
             const label = variable.label || '';
             const placeholder = variable.placeholder || '';
@@ -1215,6 +1266,14 @@ class PromptLibrary {
                 }
             }
         });
+    }
+
+    /**
+     * Apply display hints for variables that expect long-form text
+     */
+    applyVariableDisplayHints(prompt) {
+        if (!prompt.variables) return;
+        this.applyVariableDisplayHintsToArray(prompt.variables);
     }
 
     /**
@@ -1230,12 +1289,12 @@ class PromptLibrary {
      * Update visibility of dependent variables based on toggle state
      */
     updateDependentVariables(container, prompt, variables) {
-        if (!prompt.variables) return;
+        if (!variables || variables.length === 0) return;
 
         // Find all variable groups in the container
         const variableGroups = container.querySelectorAll('.variable-group');
 
-        prompt.variables.forEach((variable, index) => {
+        variables.forEach((variable, index) => {
             if (variable.dependsOn) {
                 const dependency = variables.find(v => v.name === variable.dependsOn);
                 if (dependency && dependency.inputType === 'toggle') {
@@ -1434,6 +1493,18 @@ class PromptLibrary {
         // Update active variation
         prompt.activeVariationId = variationId;
 
+        // Update description in UI (if modal is open)
+        const descriptionEl = document.querySelector('[data-variation-description]');
+        if (descriptionEl) {
+            if (variation.description) {
+                descriptionEl.textContent = variation.description;
+                descriptionEl.classList.add('visible');
+            } else {
+                descriptionEl.textContent = '';
+                descriptionEl.classList.remove('visible');
+            }
+        }
+
         // Preserve variable values (already in memory)
         // Preview will auto-update with new template
 
@@ -1446,8 +1517,9 @@ class PromptLibrary {
      */
     clearVariables(index) {
         const prompt = this.filteredPrompts[index];
-        if (prompt?.variables) {
-            prompt.variables.forEach(v => v.value = '');
+        const activeVariables = this.getActiveVariables(prompt);
+        if (activeVariables && activeVariables.length > 0) {
+            activeVariables.forEach(v => v.value = '');
             localStorage.removeItem(`prompt_vars_${prompt.id}`);
         }
 
@@ -1629,8 +1701,11 @@ class PromptLibrary {
         // Get template from active variation or fallback to single template
         let compiled = this.getActiveTemplate(prompt);
 
-        if (prompt.variables) {
-            prompt.variables.forEach(variable => {
+        // Get variables for active variation
+        const activeVariables = this.getActiveVariables(prompt);
+
+        if (activeVariables && activeVariables.length > 0) {
+            activeVariables.forEach(variable => {
                 const placeholder = `{{${variable.name}}}`;
                 // Skip variables that should be hidden in preview
                 if (variable.hideInPreview) {

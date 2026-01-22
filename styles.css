@@ -2738,6 +2738,35 @@ body.modal-open {
     outline-offset: 2px;
 }
 
+/* Variation Description */
+.variation-description {
+    margin: var(--space-xs) 0 0 0;
+    padding: var(--space-sm) var(--space-md);
+    background: color-mix(in srgb, var(--color-action-primary) 8%, var(--color-card-surface));
+    border-left: 3px solid color-mix(in srgb, var(--color-action-primary) 40%, transparent);
+    border-radius: var(--md-sys-shape-corner-small);
+    font-family: var(--font-sans);
+    font-size: var(--text-xs);
+    line-height: 1.5;
+    color: var(--color-text-secondary);
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard),
+                max-height var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard),
+                margin var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
+}
+
+.variation-description.visible {
+    opacity: 1;
+    max-height: 200px;
+    margin-bottom: var(--space-md);
+}
+
+.variation-description:empty {
+    display: none;
+}
+
 .modal-actions {
     display: flex;
     flex-direction: row;
