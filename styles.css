@@ -2738,6 +2738,41 @@ body.modal-open {
     outline-offset: 2px;
 }
 
+/* Variation Description */
+.variation-description {
+    margin: var(--space-xs) 0 0 0;
+    padding: var(--space-sm) var(--space-md);
+    background: color-mix(in srgb, var(--color-action-primary) 8%, var(--color-card-surface));
+    border-left: 3px solid color-mix(in srgb, var(--color-action-primary) 40%, transparent);
+    border-radius: var(--md-sys-shape-corner-small);
+    font-family: var(--font-sans);
+    font-size: var(--text-xs);
+    line-height: 1.5;
+    color: var(--color-text-secondary);
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard),
+                max-height var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard),
+                margin var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
+    /* Ensure proper word wrapping */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    /* Prevent tap delay on mobile */
+    touch-action: manipulation;
+}
+
+.variation-description.visible {
+    opacity: 1;
+    max-height: 300px;
+    margin-bottom: var(--space-md);
+}
+
+.variation-description:empty {
+    display: none;
+}
+
 .modal-actions {
     display: flex;
     flex-direction: row;
@@ -3005,6 +3040,19 @@ body.modal-open {
         padding: 0 var(--space-md);
     }
 
+    .variation-description {
+        padding: var(--space-sm) var(--space-md);
+    }
+
+    .variation-selector {
+        font-size: 16px;
+        /* Prevent iOS zoom on focus */
+        min-height: 48px;
+        /* Ensure adequate touch target */
+        padding: 0.875rem 1rem;
+        touch-action: manipulation;
+    }
+
     .modal-actions {
         flex-direction: column;
         gap: var(--space-md);
@@ -3173,6 +3221,19 @@ body.modal-open {
 
     .variation-selector-wrapper {
         padding: 0 var(--space-sm);
+    }
+
+    .variation-description {
+        padding: var(--space-xs) var(--space-sm);
+        font-size: 0.813rem;
+        /* Slightly larger on mobile for readability */
+    }
+
+    .variation-selector {
+        font-size: 16px;
+        /* Prevent iOS zoom */
+        padding: 1rem;
+        /* Larger padding for easier tapping */
     }
 
     /* Reduce horizontal padding for better readability */
