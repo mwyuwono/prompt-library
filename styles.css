@@ -2755,11 +2755,17 @@ body.modal-open {
     transition: opacity var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard),
                 max-height var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard),
                 margin var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
+    /* Ensure proper word wrapping */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    /* Prevent tap delay on mobile */
+    touch-action: manipulation;
 }
 
 .variation-description.visible {
     opacity: 1;
-    max-height: 200px;
+    max-height: 300px;
     margin-bottom: var(--space-md);
 }
 
@@ -3034,6 +3040,19 @@ body.modal-open {
         padding: 0 var(--space-md);
     }
 
+    .variation-description {
+        padding: var(--space-sm) var(--space-md);
+    }
+
+    .variation-selector {
+        font-size: 16px;
+        /* Prevent iOS zoom on focus */
+        min-height: 48px;
+        /* Ensure adequate touch target */
+        padding: 0.875rem 1rem;
+        touch-action: manipulation;
+    }
+
     .modal-actions {
         flex-direction: column;
         gap: var(--space-md);
@@ -3202,6 +3221,19 @@ body.modal-open {
 
     .variation-selector-wrapper {
         padding: 0 var(--space-sm);
+    }
+
+    .variation-description {
+        padding: var(--space-xs) var(--space-sm);
+        font-size: 0.813rem;
+        /* Slightly larger on mobile for readability */
+    }
+
+    .variation-selector {
+        font-size: 16px;
+        /* Prevent iOS zoom */
+        padding: 1rem;
+        /* Larger padding for easier tapping */
     }
 
     /* Reduce horizontal padding for better readability */
