@@ -2738,6 +2738,41 @@ body.modal-open {
     outline-offset: 2px;
 }
 
+/* Variation Description */
+.variation-description {
+    margin: var(--space-xs) 0 0 0;
+    padding: var(--space-sm) var(--space-md);
+    background: color-mix(in srgb, var(--color-action-primary) 8%, var(--color-card-surface));
+    border-left: 3px solid color-mix(in srgb, var(--color-action-primary) 40%, transparent);
+    border-radius: var(--md-sys-shape-corner-small);
+    font-family: var(--font-sans);
+    font-size: var(--text-xs);
+    line-height: 1.5;
+    color: var(--color-text-secondary);
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard),
+                max-height var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard),
+                margin var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
+    /* Ensure proper word wrapping */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    /* Prevent tap delay on mobile */
+    touch-action: manipulation;
+}
+
+.variation-description.visible {
+    opacity: 1;
+    max-height: 300px;
+    margin-bottom: var(--space-md);
+}
+
+.variation-description:empty {
+    display: none;
+}
+
 .modal-actions {
     display: flex;
     flex-direction: row;
@@ -3005,6 +3040,19 @@ body.modal-open {
         padding: 0 var(--space-md);
     }
 
+    .variation-description {
+        padding: var(--space-sm) var(--space-md);
+    }
+
+    .variation-selector {
+        font-size: 16px;
+        /* Prevent iOS zoom on focus */
+        min-height: 48px;
+        /* Ensure adequate touch target */
+        padding: 0.875rem 1rem;
+        touch-action: manipulation;
+    }
+
     .modal-actions {
         flex-direction: column;
         gap: var(--space-md);
@@ -3111,6 +3159,115 @@ body.modal-open {
         /* Prevent tap delay */
         touch-action: manipulation;
     }
+
+    /*
+     * Mobile Input Focus Optimization
+     * Minimizes clutter when keyboard is active to give more space to the input field
+     */
+
+    /* Minimize modal header when any input is focused */
+    .prompt-modal:has(.variable-input:focus) .modal-header,
+    .prompt-modal:has(.variable-textarea:focus) .modal-header,
+    .prompt-modal:has(.template-textarea:focus) .modal-header {
+        padding: var(--space-xs) var(--space-md);
+        min-height: auto;
+    }
+
+    /* Shrink modal header title when input is focused */
+    .prompt-modal:has(.variable-input:focus) .modal-header h2,
+    .prompt-modal:has(.variable-textarea:focus) .modal-header h2,
+    .prompt-modal:has(.template-textarea:focus) .modal-header h2 {
+        font-size: 1rem;
+        line-height: 1.2;
+    }
+
+    /* Hide modal subtitle (category badge) when input is focused */
+    .prompt-modal:has(.variable-input:focus) .modal-subtitle,
+    .prompt-modal:has(.variable-textarea:focus) .modal-subtitle,
+    .prompt-modal:has(.template-textarea:focus) .modal-subtitle {
+        display: none;
+    }
+
+    /* Hide lock/edit button when input is focused */
+    .prompt-modal:has(.variable-input:focus) .lock-button,
+    .prompt-modal:has(.variable-textarea:focus) .lock-button,
+    .prompt-modal:has(.template-textarea:focus) .lock-button {
+        display: none;
+    }
+
+    /* Hide prompt description when input is focused */
+    .prompt-modal:has(.variable-input:focus) .prompt-modal-description,
+    .prompt-modal:has(.variable-textarea:focus) .prompt-modal-description,
+    .prompt-modal:has(.template-textarea:focus) .prompt-modal-description {
+        display: none;
+    }
+
+    /* Hide variation selector when input is focused */
+    .prompt-modal:has(.variable-input:focus) .variation-selector-wrapper,
+    .prompt-modal:has(.variable-textarea:focus) .variation-selector-wrapper,
+    .prompt-modal:has(.template-textarea:focus) .variation-selector-wrapper {
+        display: none;
+    }
+
+    /* Hide variation description when input is focused */
+    .prompt-modal:has(.variable-input:focus) .variation-description,
+    .prompt-modal:has(.variable-textarea:focus) .variation-description,
+    .prompt-modal:has(.template-textarea:focus) .variation-description {
+        display: none;
+    }
+
+    /* Hide tabs container when input is focused */
+    .prompt-modal:has(.variable-input:focus) .tabs-container,
+    .prompt-modal:has(.variable-textarea:focus) .tabs-container,
+    .prompt-modal:has(.template-textarea:focus) .tabs-container {
+        display: none;
+    }
+
+    /* Hide action buttons when input is focused */
+    .prompt-modal:has(.variable-input:focus) .modal-actions,
+    .prompt-modal:has(.variable-textarea:focus) .modal-actions,
+    .prompt-modal:has(.template-textarea:focus) .modal-actions {
+        display: none;
+    }
+
+    /* Reduce scroll area padding when input is focused */
+    .prompt-modal:has(.variable-input:focus) .modal-scroll-area,
+    .prompt-modal:has(.variable-textarea:focus) .modal-scroll-area,
+    .prompt-modal:has(.template-textarea:focus) .modal-scroll-area {
+        padding-top: var(--space-xs);
+        padding-bottom: var(--space-xs);
+    }
+
+    /* Expand focused textarea to take more available space */
+    .variable-textarea:focus {
+        max-height: 65vh;
+        min-height: 250px;
+    }
+
+    .template-textarea:focus {
+        max-height: 70vh;
+        min-height: 300px;
+    }
+
+    /* Dim non-focused variable groups to reduce visual clutter */
+    .prompt-modal:has(.variable-input:focus) .variable-group:not(:has(:focus)),
+    .prompt-modal:has(.variable-textarea:focus) .variable-group:not(:has(:focus)) {
+        opacity: 0.25;
+        pointer-events: none;
+        transition: opacity var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+    }
+
+    /* Keep focused variable group fully visible and interactive */
+    .variable-group:has(:focus) {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* Hide variable labels for non-focused inputs to save space */
+    .prompt-modal:has(.variable-input:focus) .variable-group:not(:has(:focus)) .variable-label,
+    .prompt-modal:has(.variable-textarea:focus) .variable-group:not(:has(:focus)) .variable-label {
+        display: none;
+    }
 }
 
 /* Extra small devices */
@@ -3173,6 +3330,19 @@ body.modal-open {
 
     .variation-selector-wrapper {
         padding: 0 var(--space-sm);
+    }
+
+    .variation-description {
+        padding: var(--space-xs) var(--space-sm);
+        font-size: 0.813rem;
+        /* Slightly larger on mobile for readability */
+    }
+
+    .variation-selector {
+        font-size: 16px;
+        /* Prevent iOS zoom */
+        padding: 1rem;
+        /* Larger padding for easier tapping */
     }
 
     /* Reduce horizontal padding for better readability */
