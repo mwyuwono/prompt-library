@@ -225,29 +225,80 @@ grep -n '\[.*\.\.\.\]' prompts.json
 
 ## UI Styling Conventions
 
+### Design System Overview (Meeting Minutes Architect)
+
+The prompts-library uses a warm, editorial design system with:
+- Serif headings (Playfair Display) in deep forest green
+- Pill-shaped buttons and badges
+- Clean white inputs with subtle borders
+- Right-aligned action buttons
+- Uppercase form labels with wide letter-spacing
+
 ### Button Color Usage
 
 **Primary Action Buttons** (Copy, Save, Submit):
-- Background: `var(--color-primary)` (olive #2d4e3c)
-- Text: `var(--color-text-contrast)` (white)
-- Hover: `var(--md-sys-color-primary-container)` (light olive)
+- Background: `var(--brand-primary)` (deep forest green #2A3D31)
+- Text: `#FFFFFF` (white)
+- Border radius: `var(--md-sys-shape-corner-pill)` (50px pill shape)
+- Hover: `color-mix(in srgb, var(--brand-primary) 85%, #000000)` (15% darker)
 - **DO NOT** use `var(--color-charcoal)` for primary buttons
 
-**Secondary Action Buttons** (Cancel, outlined buttons):
+**Secondary/Outlined Buttons** (Cancel, Download):
 - Background: transparent
-- Border: `var(--color-border-subtle)`
+- Border: `1px solid var(--color-border-subtle)`
 - Text: `var(--color-action-primary)` (gold)
+- Border radius: `var(--md-sys-shape-corner-pill)` for consistency
 
 **Text-only Actions** (links, "Clear All"):
 - Text: `var(--color-action-primary)` (gold)
 - No background or border
 
-### Variable Label Formatting
+### Typography Conventions
 
-- **Capitalization**: Use sentence case (e.g., "Painting Style" not "PAINTING STYLE")
-- **Font Weight**: Semibold (600) for visual hierarchy
-- **Letter Spacing**: Normal (not wide spacing)
+**Modal Headings:**
+- Font family: `var(--font-serif)` (Playfair Display)
+- Color: `var(--brand-primary)` (deep forest green #2A3D31)
+- Creates editorial, sophisticated hierarchy
+
+**Variable Labels:**
+- **Capitalization**: ALL UPPERCASE for form labels (e.g., "PAINTING STYLE")
+- **Font Weight**: Bold (700) for strong hierarchy
+- **Letter Spacing**: `var(--tracking-wide)` (0.025em) for readability
 - Labels should be clear and descriptive
+
+**Tab Labels:**
+- Normal case (not uppercase)
+- Clean sans-serif styling
+- Minimal 2px underline for active state
+
+### Badge/Pill Components
+
+**Category Badges:**
+- Background: `var(--tag-bg)` (muted beige #E8E4D8)
+- Text: `var(--color-text-secondary)`
+- Border radius: `var(--md-sys-shape-corner-pill)` (50px)
+- Font size: 0.625rem
+- Letter spacing: `var(--tracking-widest)`
+- **DO NOT** use category-specific colors (all badges uniform)
+
+**Variable Count Badges:**
+- Match category badge styling exactly
+- Uniform muted beige background
+
+### Input Field Styling
+
+**Text Inputs & Textareas:**
+- Background: `var(--input-bg)` (#FFFFFF clean white)
+- Border: `1px solid var(--input-border)` (#D1CDC2 subtle gray)
+- **DO NOT** use transparent backgrounds
+- Border radius: `var(--md-sys-shape-corner-extra-small)` (4px)
+
+### Button Layout
+
+**Modal Actions & Card Actions:**
+- Alignment: `justify-content: flex-end` (right-aligned)
+- Gap: `1rem` between buttons
+- Buttons: `flex: 0 0 auto` (natural sizing, no stretching)
 
 ### Button Text Guidelines
 

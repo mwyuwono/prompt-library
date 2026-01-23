@@ -263,3 +263,176 @@ this.toast.show = true;
 3. Adopt additional m3-design-v2 utility components as needed
 
 **Recommendation:** Ship Phase 1 + Phase 2 changes, gather feedback, then decide on Phase 3 scope.
+
+---
+
+## Phase 3: Meeting Minutes Architect Design System (Completed)
+
+**Date**: January 23, 2026
+
+### Overview
+
+Comprehensive design system refactor to align with "Meeting Minutes Architect" editorial aesthetic. This phase implements warm, sophisticated visual design with improved hierarchy through serif typography, pill-shaped components, and refined color palette.
+
+### Design Tokens Updates
+
+#### New Semantic Tokens (`tokens.css`)
+```css
+--bg-surface: #F5F2EA;        /* Warm cream - primary surface */
+--brand-primary: #2A3D31;     /* Deep forest green - headings, buttons */
+--text-heading: #2A3D31;      /* Deep forest green for headings */
+--tag-bg: #E8E4D8;            /* Muted beige for pill badges */
+--tab-border: #D1CDC2;        /* Light border for tab underline */
+--input-bg: #FFFFFF;          /* Clean white for inputs */
+--input-border: #D1CDC2;      /* Subtle 1px border */
+```
+
+#### Updated Base Tokens
+- Primary color: `#2d4e3c` → `#2A3D31` (Deep Forest Green)
+- Added `--md-sys-shape-corner-pill: 50px` for button styling
+
+### Component Refactors
+
+#### 1. Typography System
+**Modal Headings:**
+- Font: Changed to `var(--font-serif)` (Playfair Display)
+- Color: `var(--brand-primary)` instead of generic text color
+- Creates editorial, sophisticated hierarchy
+
+**Variable Labels:**
+- Text transform: `none` → `uppercase`
+- Letter spacing: `var(--tracking-normal)` → `var(--tracking-wide)`
+- Font weight: `var(--weight-semibold)` → `var(--weight-bold)`
+- Provides clear form structure and scanability
+
+#### 2. Button Components
+**Primary Buttons (`.btn-primary`):**
+- Background: `var(--color-primary)` → `var(--brand-primary)`
+- Border radius: Explicit pill shape via `var(--md-sys-shape-corner-pill)`
+- Hover: Uses `color-mix()` for 15% darkening effect
+
+**Outlined Buttons (`.btn-outlined`):**
+- Added pill border-radius for consistency
+- Maintains link-style aesthetic
+
+**Layout Changes:**
+- Buttons: `flex: 1` → `flex: 0 0 auto` (no stretching)
+- Allows natural button sizing based on content
+
+#### 3. Tab Component
+**Before (M3 Title Small):**
+```css
+font-size: var(--md-sys-typescale-title-small-size);
+text-transform: uppercase;
+border-bottom: 3px solid transparent;
+```
+
+**After (Minimal Link Style):**
+```css
+font-size: var(--text-sm);
+text-transform: none;
+border-bottom: 2px solid transparent;
+```
+
+**Container:**
+- Border: `2px` → `1px solid var(--tab-border)`
+- Gap: `var(--space-sm)` → `var(--space-md)`
+- Active state: `var(--color-action-primary)` → `var(--brand-primary)`
+
+#### 4. Modal Layout
+**Action Footer (`.modal-actions`):**
+- Added `justify-content: flex-end` for right alignment
+- Gap: `0.75rem` → `1rem`
+- Buttons: `flex: 1` → `flex: 0 0 auto`
+
+**Card Actions (`.card-actions`):**
+- Added `justify-content: flex-end` for consistency
+- Buttons no longer stretch to fill width
+
+#### 5. Badge/Pill Components
+**Before (Category-specific colors):**
+```css
+.card-category.badge-gold { background: rgba(196, 164, 132, 0.1); color: var(--color-gold); }
+.card-category.badge-olive { background: rgba(61, 68, 53, 0.1); color: var(--color-olive); }
+.card-category.badge-grey { background: rgba(112, 112, 112, 0.1); color: var(--color-warmgrey); }
+```
+
+**After (Uniform pill style):**
+```css
+.card-category {
+    background-color: var(--tag-bg);
+    color: var(--color-text-secondary);
+    font-size: 0.625rem;
+    letter-spacing: var(--tracking-widest);
+    border-radius: var(--md-sys-shape-corner-pill);
+}
+```
+
+**Variable Count Badges:**
+- Updated to match uniform pill style
+- Uses `--tag-bg` background with `--color-text-secondary` text
+
+#### 6. Input Styling
+**Before:**
+```css
+background-color: transparent;
+border: 1px solid var(--color-border-subtle);
+```
+
+**After:**
+```css
+background-color: var(--input-bg);  /* #FFFFFF */
+border: 1px solid var(--input-border);  /* #D1CDC2 */
+```
+
+### Files Modified
+
+```
+tokens.css    - Added 8 new semantic tokens, updated primary color
+styles.css    - Refactored 8 component systems (110 line changes)
+```
+
+### Architectural Improvements
+
+1. **Modular Token System**: Semantic tokens for each design element
+2. **Consistent Pill Shapes**: Unified border-radius across badges and buttons
+3. **Editorial Typography**: Serif headings create sophisticated hierarchy
+4. **Right-Aligned Actions**: Better visual flow for primary actions
+5. **Clean Input Design**: White backgrounds improve form clarity
+
+### Backward Compatibility
+
+- ✅ All existing functionality maintained
+- ✅ No JavaScript changes required
+- ✅ Prompts render correctly
+- ✅ Responsive behavior unchanged
+- ✅ Dark mode tokens preserved (Phase 4 enhancement opportunity)
+
+### Testing Checklist
+
+- [x] Modal headings display in serif font with brand-primary color
+- [x] Variable labels show as uppercase with wide letter-spacing
+- [x] Primary buttons use deep forest green with pill shape
+- [x] Tab component shows minimal 2px underline for active state
+- [x] Modal footer buttons right-aligned with 1rem gap
+- [x] Category badges uniform muted beige with pill shape
+- [x] Input fields white background with subtle border
+- [x] Local server started for visual verification
+
+### Commit
+
+**Commit**: b408a9d
+**Message**: "Refactor design system to align with Meeting Minutes Architect design"
+
+### Next Steps (Phase 4 - Optional)
+
+1. **Dark Mode Refinement**: Update dark mode tokens to match new palette
+2. **Hover States**: Fine-tune interaction states for new color system
+3. **Animation Refinement**: Adjust motion tokens for editorial feel
+4. **Responsive Optimizations**: Mobile-specific adjustments for new button sizing
+
+### Total Phase 3 Effort
+
+**Actual Time:** ~2 hours
+**Risk Level:** Low (pure styling changes, no logic modifications)
+**Breaking Changes:** None
