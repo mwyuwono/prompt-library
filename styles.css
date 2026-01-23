@@ -1974,12 +1974,12 @@ body.modal-open {
     display: block;
     font-family: var(--font-sans);
     font-size: var(--text-xs);
-    font-weight: var(--weight-medium);
+    font-weight: var(--weight-semibold);
     line-height: var(--leading-tight);
     color: var(--color-text-secondary);
     margin-bottom: 0.35rem;
-    letter-spacing: var(--tracking-wide);
-    text-transform: uppercase;
+    letter-spacing: var(--tracking-normal);
+    text-transform: none;
 }
 
 /* M3 Outlined Text Field - Variables */
@@ -2235,17 +2235,20 @@ body.modal-open {
 
 /* Primary Button - New brand charcoal */
 .btn-primary {
-    background-color: var(--color-charcoal);
-    color: var(--color-white);
+    background-color: var(--color-primary);
+    color: var(--color-text-contrast);
     font-weight: 500;
 }
 
 .btn-primary:hover {
-    background-color: rgba(28, 28, 28, 0.9);
+    background-color: var(--md-sys-color-primary-container);
+    color: var(--md-sys-color-on-primary-container);
+    box-shadow: var(--shadow-medium);
 }
 
 .btn-primary:active {
-    background-color: var(--color-olive);
+    background-color: var(--color-primary);
+    box-shadow: var(--shadow-subtle);
 }
 
 .btn-primary:focus-visible {
@@ -2300,6 +2303,11 @@ body.modal-open {
 .btn-outlined:focus-visible {
     outline: 3px solid var(--color-gold);
     outline-offset: 2px;
+}
+
+.btn-outlined .material-symbols-outlined {
+    margin-right: 0.5rem;
+    font-size: 1.25rem;
 }
 
 /* M3 Text Button */

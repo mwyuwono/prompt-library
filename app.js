@@ -643,9 +643,10 @@ class PromptLibrary {
                 </div>
                 <div class="modal-actions card-actions">
                     ${isLocked ? `
-                        <button class="btn btn-primary" data-action="copy">Copy</button>
-                        <button class="btn btn-outlined" data-action="download" aria-label="Download">
+                        <button class="btn btn-primary" data-action="copy">Copy to Clipboard</button>
+                        <button class="btn btn-outlined" data-action="download" aria-label="Download as text file">
                             <span class="material-symbols-outlined" aria-hidden="true">download</span>
+                            Download .txt
                         </button>
                     ` : `
                         <button class="btn btn-secondary" data-action="cancel-edit">Cancel</button>

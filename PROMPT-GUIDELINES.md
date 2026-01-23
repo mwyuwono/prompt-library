@@ -223,7 +223,39 @@ grep -n '\[.*\.\.\.\]' prompts.json
 # (Requires custom jq script)
 ```
 
+## UI Styling Conventions
+
+### Button Color Usage
+
+**Primary Action Buttons** (Copy, Save, Submit):
+- Background: `var(--color-primary)` (olive #2d4e3c)
+- Text: `var(--color-text-contrast)` (white)
+- Hover: `var(--md-sys-color-primary-container)` (light olive)
+- **DO NOT** use `var(--color-charcoal)` for primary buttons
+
+**Secondary Action Buttons** (Cancel, outlined buttons):
+- Background: transparent
+- Border: `var(--color-border-subtle)`
+- Text: `var(--color-action-primary)` (gold)
+
+**Text-only Actions** (links, "Clear All"):
+- Text: `var(--color-action-primary)` (gold)
+- No background or border
+
+### Variable Label Formatting
+
+- **Capitalization**: Use sentence case (e.g., "Painting Style" not "PAINTING STYLE")
+- **Font Weight**: Semibold (600) for visual hierarchy
+- **Letter Spacing**: Normal (not wide spacing)
+- Labels should be clear and descriptive
+
+### Button Text Guidelines
+
+- Use descriptive labels: "Copy to Clipboard" not just "Copy"
+- Include context in download buttons: "Download .txt" with icon
+- Maintain consistency with design mockups
+
 ---
 
 **Last Updated:** January 23, 2026
-**Related Docs:** CLAUDE.md (Variable Types section)
+**Related Docs:** CLAUDE.md (Variable Types section), INTEGRATION-LOG.md (Design System)
