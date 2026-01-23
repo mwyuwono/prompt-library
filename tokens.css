@@ -13,8 +13,8 @@
      M3 COLOR SYSTEM (from m3-design-v2)
      ======================================== */
 
-  /* Primary: Hunter Green */
-  --md-sys-color-primary: #2d4e3c;
+  /* Primary: Deep Forest Green (Meeting Minutes Architect) */
+  --md-sys-color-primary: #2A3D31;
   --md-sys-color-on-primary: #FFFFFF;
   --md-sys-color-primary-container: #E8F5E9;
   --md-sys-color-on-primary-container: #002114;
@@ -130,6 +130,18 @@
   --color-border-subtle: color-mix(in srgb, var(--md-sys-color-text-muted) 10%, transparent);
 
   /* ========================================
+     MEETING MINUTES ARCHITECT DESIGN TOKENS
+     Semantic tokens for new design system
+     ======================================== */
+  --bg-surface: #F5F2EA; /* Warm cream - primary surface */
+  --brand-primary: #2A3D31; /* Deep forest green - headings, buttons */
+  --text-heading: #2A3D31; /* Deep forest green for headings */
+  --tag-bg: #E8E4D8; /* Muted beige for pill badges */
+  --tab-border: #D1CDC2; /* Light border for tab underline */
+  --input-bg: #FFFFFF; /* Clean white for inputs */
+  --input-border: #D1CDC2; /* Subtle 1px border */
+
+  /* ========================================
      SPACING & SHAPE (from m3-design-v2)
      ======================================== */
   --spacing-layout: 120px;
@@ -143,6 +155,7 @@
   --md-sys-shape-corner-large: 32px;
   --md-sys-shape-corner-extra-large: 28px;
   --md-sys-shape-corner-full: 9999px;
+  --md-sys-shape-corner-pill: 50px; /* High-radius pill shape for buttons */
 
   /* ========================================
      MOTION ENHANCEMENTS

@@ -1639,17 +1639,20 @@ body.modal-open {
     color: var(--color-charcoal);
 }
 
+/* Meeting Minutes Architect: Small Uppercase Pill Badge */
 .card-category {
     display: inline-block;
     font-family: var(--font-sans);
-    font-size: 0.75rem;
+    font-size: 0.625rem;
     font-weight: 700;
     line-height: var(--leading-tight);
 
-    /* New brand: soft background with colored text */
-
-    border-radius: var(--md-sys-shape-corner-small);
-    letter-spacing: 0.05em;
+    /* Pill shape with muted beige background */
+    background-color: var(--tag-bg);
+    color: var(--color-text-secondary);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--md-sys-shape-corner-pill);
+    letter-spacing: var(--tracking-widest);
     text-transform: uppercase;
     flex-shrink: 0;
 }
@@ -1721,17 +1724,17 @@ body.modal-open {
     align-items: center;
     justify-content: center;
     font-family: var(--font-sans);
-    font-size: 0.75rem;
+    font-size: 0.625rem;
     font-weight: 700;
     line-height: var(--leading-tight);
-    letter-spacing: 0.05em;
+    letter-spacing: var(--tracking-widest);
 
-    /* New brand: consistent with warm grey badge variant */
-    background-color: rgba(112, 112, 112, 0.1);
-    color: var(--color-warmgrey);
+    /* Meeting Minutes Architect: Match pill style */
+    background-color: var(--tag-bg);
+    color: var(--color-text-secondary);
 
-    padding: 0.35rem 0.75rem;
-    border-radius: var(--md-sys-shape-corner-small);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--md-sys-shape-corner-pill);
     text-transform: uppercase;
 
     border: none;
@@ -1838,13 +1841,13 @@ body.modal-open {
     margin-bottom: 1.25rem;
 }
 
-/* M3 Tabs */
+/* Meeting Minutes Architect: Minimal Tab Style */
 .tabs-header {
     display: flex;
-    gap: var(--space-sm);
+    gap: var(--space-md);
     align-items: center;
     margin-bottom: var(--space-md);
-    border-bottom: 2px solid var(--color-border-subtle);
+    border-bottom: 1px solid var(--tab-border);
     position: relative;
     padding: 0 var(--space-lg);
     /* Add bottom padding to prevent indicator clipping on mobile */
@@ -1852,21 +1855,21 @@ body.modal-open {
 }
 
 .tab-button {
-    /* M3 spacing: 48px height */
-    padding: 0.875rem 1rem;
-    min-height: 3rem;
+    /* Minimal text link style */
+    padding: 0.5rem 0;
+    min-height: 2.5rem;
 
     background: none;
     border: none;
-    border-bottom: 3px solid transparent;
-    margin-bottom: -2px;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
 
-    /* M3 Title Small */
-    font-family: var(--md-sys-typescale-title-small-font);
-    font-size: var(--md-sys-typescale-title-small-size);
-    font-weight: var(--md-sys-typescale-title-small-weight);
-    line-height: var(--md-sys-typescale-title-small-line-height);
-    letter-spacing: var(--md-sys-typescale-title-small-tracking);
+    /* Clean sans-serif */
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    line-height: var(--leading-normal);
+    letter-spacing: var(--tracking-normal);
 
     color: var(--color-text-secondary);
     cursor: pointer;
@@ -1874,7 +1877,7 @@ body.modal-open {
     /* M3 motion */
     transition: all var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
 
-    text-transform: uppercase;
+    text-transform: none;
     position: relative;
     overflow: hidden;
 
@@ -1905,8 +1908,8 @@ body.modal-open {
 }
 
 .tab-button.active {
-    color: var(--color-action-primary);
-    border-bottom-color: var(--color-action-primary);
+    color: var(--brand-primary);
+    border-bottom-color: var(--brand-primary);
 }
 
 .tabs-content {
@@ -1974,15 +1977,15 @@ body.modal-open {
     display: block;
     font-family: var(--font-sans);
     font-size: var(--text-xs);
-    font-weight: var(--weight-semibold);
+    font-weight: var(--weight-bold);
     line-height: var(--leading-tight);
     color: var(--color-text-secondary);
     margin-bottom: 0.35rem;
-    letter-spacing: var(--tracking-normal);
-    text-transform: none;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
 }
 
-/* M3 Outlined Text Field - Variables */
+/* Meeting Minutes Architect: Clean White Input */
 .variable-input {
     width: 100%;
 
@@ -1990,8 +1993,8 @@ body.modal-open {
     padding: 0.75rem 0.875rem;
     min-height: 2.75rem;
 
-    /* M3 outlined text field */
-    border: 1px solid var(--color-border-subtle);
+    /* Clean white with subtle border */
+    border: 1px solid var(--input-border);
     border-radius: var(--md-sys-shape-corner-extra-small);
 
     /* M3 Body Large typography */
@@ -2002,7 +2005,7 @@ body.modal-open {
     letter-spacing: var(--md-sys-typescale-body-large-tracking);
 
     color: var(--color-text-primary);
-    background-color: transparent;
+    background-color: var(--input-bg);
 
     /* M3 motion */
     transition: all var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
@@ -2163,10 +2166,11 @@ body.modal-open {
     border-width: 1px;
 }
 
-/* Card Actions */
+/* Card Actions - Meeting Minutes Architect (right-aligned) */
 .card-actions {
     display: flex;
-    gap: 0.75rem;
+    justify-content: flex-end;
+    gap: 1rem;
     flex-wrap: wrap;
 }
 
@@ -2219,7 +2223,7 @@ body.modal-open {
 }
 
 .card-actions .btn {
-    flex: 1;
+    flex: 0 0 auto;
 }
 
 .btn-sm {
@@ -2233,21 +2237,21 @@ body.modal-open {
     font-size: 18px;
 }
 
-/* Primary Button - New brand charcoal */
+/* Primary Button - Meeting Minutes Architect (Deep Forest Green Pill) */
 .btn-primary {
-    background-color: var(--color-primary);
-    color: var(--color-text-contrast);
+    background-color: var(--brand-primary);
+    color: #FFFFFF;
     font-weight: 500;
+    border-radius: var(--md-sys-shape-corner-pill);
 }
 
 .btn-primary:hover {
-    background-color: var(--md-sys-color-primary-container);
-    color: var(--md-sys-color-on-primary-container);
+    background-color: color-mix(in srgb, var(--brand-primary) 85%, #000000);
     box-shadow: var(--shadow-medium);
 }
 
 .btn-primary:active {
-    background-color: var(--color-primary);
+    background-color: var(--brand-primary);
     box-shadow: var(--shadow-subtle);
 }
 
@@ -2277,11 +2281,12 @@ body.modal-open {
     outline-offset: 2px;
 }
 
-/* M3 Outlined Button */
+/* M3 Outlined Button - Meeting Minutes Architect (Link style) */
 .btn-outlined {
     background-color: transparent;
     border: 1px solid var(--color-border-subtle);
     color: var(--color-action-primary);
+    border-radius: var(--md-sys-shape-corner-pill);
 }
 
 .btn-outlined::before {
@@ -2614,12 +2619,13 @@ body.modal-open {
 }
 
 .modal-header h2 {
-    /* M3 Headline Small */
+    /* Meeting Minutes Architect: Serif Heading */
+    font-family: var(--font-serif);
     font-size: var(--md-sys-typescale-headline-small-size);
     font-weight: var(--weight-medium);
     line-height: var(--md-sys-typescale-headline-small-line-height);
     letter-spacing: var(--md-sys-typescale-headline-small-tracking);
-    color: var(--color-text-primary);
+    color: var(--brand-primary);
     margin: 0;
 }
 
@@ -2781,10 +2787,12 @@ body.modal-open {
     display: none;
 }
 
+/* Meeting Minutes Architect: Right-aligned modal footer */
 .modal-actions {
     display: flex;
     flex-direction: row;
-    gap: 0.75rem;
+    justify-content: flex-end;
+    gap: 1rem;
     position: sticky;
     bottom: 0;
     background-color: var(--color-card-surface);
@@ -2794,8 +2802,8 @@ body.modal-open {
 }
 
 .modal-actions .btn {
-    flex: 1;
-    padding: 0.625rem 1rem;
+    flex: 0 0 auto;
+    padding: 0.625rem 1.5rem;
     min-height: 2.5rem;
 }
 
