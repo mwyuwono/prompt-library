@@ -96,8 +96,8 @@
             </div>
         </main>
 
-        <!-- Toast Notification -->
-        <div id="toast" class="toast">Copied!</div>
+        <!-- Toast Notification (Web Component) -->
+        <wy-toast id="toast"></wy-toast>
 
         <!-- Links Modal -->
         <div id="linksModal" class="modal">
@@ -113,6 +113,18 @@
             </div>
         </div>
     </div>
+
+    <!-- Import map for Lit library (ES modules via CDN) -->
+    <script type="importmap">
+    {
+        "imports": {
+            "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js"
+        }
+    }
+    </script>
+
+    <!-- Load Web Components -->
+    <script type="module" src="components/index.js"></script>
 
     <script src="app.js"></script>
     <script src="links.js"></script>

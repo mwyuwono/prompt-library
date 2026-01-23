@@ -122,6 +122,13 @@ class PromptLibrary {
                 this.toggleMobileFilters();
             });
         }
+
+        // Category chip selection (wy-filter-chip Web Components)
+        this.categoryChips.addEventListener('chip-select', (e) => {
+            this.selectedCategory = e.detail.value;
+            this.updateActiveChip(e.target);
+            this.filterPrompts();
+        });
     }
 
     /**
@@ -204,7 +211,7 @@ class PromptLibrary {
     }
 
     /**
-     * Populate category filter chips
+     * Populate category filter chips (using wy-filter-chip Web Components)
      */
     populateCategoryFilter() {
         const categories = [...new Set(this.prompts.map(p => p.category))].sort();
@@ -224,20 +231,15 @@ class PromptLibrary {
     }
 
     /**
-     * Create a category filter chip
+     * Create a category filter chip (wy-filter-chip Web Component)
      */
     createCategoryChip(value, label, isActive) {
-        const chip = document.createElement('button');
-        chip.className = `category-chip ${isActive ? 'active' : ''}`;
-        chip.textContent = label;
-        chip.dataset.category = value;
-
-        chip.addEventListener('click', () => {
-            this.selectedCategory = value;
-            this.updateActiveChip(chip);
-            this.filterPrompts();
-        });
-
+        const chip = document.createElement('wy-filter-chip');
+        chip.setAttribute('label', label);
+        chip.setAttribute('value', value);
+        if (isActive) {
+            chip.setAttribute('active', '');
+        }
         return chip;
     }
 
@@ -245,13 +247,13 @@ class PromptLibrary {
      * Update active chip styling
      */
     updateActiveChip(activeChip) {
-        // Remove active class from all chips
-        this.categoryChips.querySelectorAll('.category-chip').forEach(chip => {
-            chip.classList.remove('active');
+        // Remove active attribute from all chips
+        this.categoryChips.querySelectorAll('wy-filter-chip').forEach(chip => {
+            chip.removeAttribute('active');
         });
 
-        // Add active class to clicked chip
-        activeChip.classList.add('active');
+        // Add active attribute to clicked chip
+        activeChip.setAttribute('active', '');
     }
 
     /**
@@ -1743,15 +1745,11 @@ class PromptLibrary {
     }
 
     /**
-     * Show toast notification
+     * Show toast notification (using wy-toast Web Component)
      */
     showToast(message) {
-        this.toast.textContent = message;
-        this.toast.classList.add('show');
-
-        setTimeout(() => {
-            this.toast.classList.remove('show');
-        }, 2000);
+        this.toast.message = message;
+        this.toast.show = true;
     }
 
     /**

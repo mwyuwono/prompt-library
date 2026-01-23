@@ -126,6 +126,140 @@ CLAUDE.md          - Will update after Phase 1 validation
 
 ---
 
-## Phase 2: Component Adoption (Planned)
+## Phase 2: Component Adoption (Completed)
 
-TBD after Phase 1 validation and user approval.
+**Date**: January 23, 2026
+
+### Components Integrated
+
+#### 1. **wy-filter-chip** - Category Filter Chips
+**Status:** ✅ Implemented
+
+**Changes:**
+- Copied `wy-filter-chip.js` from m3-design-v2
+- Adapted component for single-select behavior (instead of multi-select toggle)
+- Added `value` property for tracking selection
+- Changed event from `change` to `chip-select` for clarity
+- Updated motion tokens to use CSS variables
+
+**Integration:**
+- `app.js` → `createCategoryChip()` now creates `<wy-filter-chip>` elements
+- `app.js` → `updateActiveChip()` manages `active` attribute on Web Components
+- `app.js` → Event delegation via `chip-select` event listener in `setupEventListeners()`
+- All category filtering logic remains unchanged
+
+**Benefits:**
+- Consistent Material Design 3 styling
+- Better encapsulation via Shadow DOM
+- Declarative API with attributes
+- Built-in hover/active states
+
+#### 2. **wy-toast** - Toast Notifications
+**Status:** ✅ Implemented
+
+**Changes:**
+- Copied `wy-toast.js` from m3-design-v2
+- Updated duration to 2000ms (match existing behavior)
+- Removed icon (simpler design for prompts-library)
+- Updated motion tokens to use CSS variables (spring easing)
+
+**Integration:**
+- `index.html` → Replaced `<div id="toast">` with `<wy-toast id="toast"></wy-toast>`
+- `app.js` → `showToast()` simplified to set `message` and `show` properties
+- Auto-dismissal handled by component lifecycle
+
+**Benefits:**
+- Spring animation for smooth entrance
+- Cleaner API (properties instead of DOM manipulation)
+- Self-managing timer (no manual setTimeout cleanup)
+
+### Infrastructure Setup
+
+#### Lit 3.x Integration via CDN
+- Added `importmap` for ES modules support
+- Loaded Lit from `cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js`
+- Created `components/index.js` as central registry
+- No build step required (maintains vanilla JS approach)
+
+#### Files Added
+```
+components/
+├── index.js           - Component registry
+├── wy-filter-chip.js  - Filter chip Web Component (adapted)
+└── wy-toast.js        - Toast notification Web Component (adapted)
+```
+
+#### Files Modified
+```
+index.html    - Added importmap, component loader, replaced toast element
+app.js        - Updated createCategoryChip(), updateActiveChip(), showToast(), setupEventListeners()
+vercel.json   - Added tokens.css and components/** to static builds
+```
+
+### Deferred Components
+
+The following m3-design-v2 components were **not** adopted in Phase 2:
+
+- **wy-modal** / **wy-prompt-modal** - Current custom modal works well, replacement would be higher risk
+- **wy-form-field** - Input wrapping would require more extensive refactoring
+- **wy-tabs** - Current tab implementation is simple and functional
+
+**Rationale:** Focus on high-value, low-risk integrations first. Modal and form field replacement can be tackled in a future phase if needed.
+
+### Testing Checklist
+
+- [x] Category chips render correctly
+- [x] Category chip selection works (single-select behavior)
+- [x] Active chip styling applies correctly
+- [x] Toast notifications show/hide with spring animation
+- [x] Toast auto-dismisses after 2 seconds
+- [x] No console errors from Lit/Web Components
+- [x] Event delegation works (chip-select bubbles correctly)
+- [x] Vercel deployment config includes components directory
+
+### Migration Patterns
+
+**Before (Vanilla JS):**
+```javascript
+// Create chip
+const chip = document.createElement('button');
+chip.className = 'category-chip active';
+chip.textContent = 'Productivity';
+chip.addEventListener('click', () => { /* ... */ });
+
+// Show toast
+this.toast.textContent = 'Copied!';
+this.toast.classList.add('show');
+setTimeout(() => this.toast.classList.remove('show'), 2000);
+```
+
+**After (Web Components):**
+```javascript
+// Create chip
+const chip = document.createElement('wy-filter-chip');
+chip.setAttribute('label', 'Productivity');
+chip.setAttribute('value', 'Productivity');
+chip.setAttribute('active', '');
+
+// Show toast
+this.toast.message = 'Copied!';
+this.toast.show = true;
+// Auto-dismisses via component lifecycle
+```
+
+### Total Phase 2 Effort
+
+**Actual Time:** ~2.5 hours
+**Risk Level:** Low (isolated components, backward compatible event handling)
+**Breaking Changes:** None (component APIs match existing behavior)
+
+---
+
+## Next Steps (Phase 3 - Optional)
+
+**Potential Future Enhancements:**
+1. Replace custom modal with `wy-prompt-modal` (3-4 hours, medium risk)
+2. Wrap inputs with `wy-form-field` for better accessibility (2-3 hours, low-medium risk)
+3. Adopt additional m3-design-v2 utility components as needed
+
+**Recommendation:** Ship Phase 1 + Phase 2 changes, gather feedback, then decide on Phase 3 scope.

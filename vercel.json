@@ -1,11 +1,13 @@
 {
   "builds": [
     { "src": "index.html", "use": "@vercel/static" },
+    { "src": "tokens.css", "use": "@vercel/static" },
     { "src": "styles.css", "use": "@vercel/static" },
     { "src": "app.js", "use": "@vercel/static" },
     { "src": "links.js", "use": "@vercel/static" },
     { "src": "links.json", "use": "@vercel/static" },
     { "src": "prompts.json", "use": "@vercel/static" },
+    { "src": "components/**", "use": "@vercel/static" },
     { "src": "public/**", "use": "@vercel/static" }
   ]
 }
