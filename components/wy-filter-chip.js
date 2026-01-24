@@ -16,28 +16,39 @@ export class WyFilterChip extends LitElement {
     :host {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
+      gap: 6px;
+      padding: 0.25rem 0.75rem;
       border-radius: 9999px;
-      font-family: var(--font-display);
-      font-size: 0.8125rem;
-      font-weight: 500;
+      font-family: var(--font-serif);
+      font-size: 0.75rem;
+      font-weight: 400;
+      line-height: 1.5;
       cursor: pointer;
-      transition: all var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
-      border: 1px solid var(--md-sys-color-outline-variant);
+      transition: all 0.2s ease;
+      border: 1px solid rgba(255, 255, 255, 0.2);
       background-color: transparent;
-      color: var(--md-sys-color-on-background);
+      color: rgba(255, 255, 255, 0.6);
       user-select: none;
+      white-space: nowrap;
     }
 
     :host(:hover) {
-      background-color: var(--md-sys-color-surface-variant);
+      color: rgba(255, 255, 255, 1);
+      border-color: rgba(255, 255, 255, 0.4);
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    :host(:focus-visible) {
+      outline: 2px solid rgba(255, 255, 255, 0.5);
+      outline-offset: 2px;
     }
 
     :host([active]) {
-      background-color: var(--md-sys-color-primary);
-      color: var(--md-sys-color-on-primary);
-      border-color: var(--md-sys-color-primary);
+      background-color: #E8F5E9;
+      color: #2C4C3B;
+      border-color: transparent;
+      font-weight: 500;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     }
 
     .count {
