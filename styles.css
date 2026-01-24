@@ -839,7 +839,7 @@ body.modal-open {
     --wy-filter-chip-font-style: italic;
     --wy-filter-chip-font-weight: 400;
     --wy-filter-chip-font-weight-active: 500;
-    --wy-filter-chip-padding: 0.25rem 0.75rem;
+    --wy-filter-chip-padding: 0.35rem 0.9rem;
 }
 
 /* Controls group with border separator */

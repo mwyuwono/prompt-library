@@ -25,6 +25,7 @@ export class WyFilterChip extends LitElement {
       line-height: 1.5;
       font-style: var(--wy-filter-chip-font-style, italic);
       cursor: pointer;
+      box-sizing: border-box;
       transition: all var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
       border: 1px solid var(--wy-filter-chip-border, var(--md-sys-color-outline-variant));
       background-color: transparent;
