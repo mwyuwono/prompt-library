@@ -799,19 +799,19 @@ body.modal-open {
     transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-legacy);
 }
 
-/* Controls Bar - Compact and integrated */
+/* Controls Bar - Hunter Green per reference design */
 .controls-bar {
     display: flex;
     align-items: center;
-    gap: var(--space-md);
+    gap: 1rem;
 
-    /* Reduced padding for compactness */
-    padding: var(--space-sm) var(--space-xl);
+    /* Reference design padding */
+    padding: 0.75rem 1.5rem;
 
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
 
-    /* Match page background with subtle border */
-    background-color: var(--color-page-background);
+    /* Hunter Green background #2C4C3B */
+    background-color: #2C4C3B;
 
     max-width: 100%;
     overflow: visible;
@@ -820,124 +820,123 @@ body.modal-open {
     position: relative;
     z-index: 100;
 
-    /* Min height instead of fixed */
-    min-height: 64px;
+    /* Subtle shadow and border */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Controls group with border separator */
+.controls-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-left: 1rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .search-wrapper {
-    flex: 0 1 280px;
-    min-width: 180px;
-    max-width: 320px;
+    flex: 0 0 auto;
+    width: 16rem;
     position: relative;
-    margin-right: auto;
 }
 
-/* M3 Outlined Text Field - Search - Compact */
+/* Search Input - Dark translucent on Hunter Green per reference */
 .search-input {
     width: 100%;
 
-    /* More compact sizing */
-    padding: 0.5rem 0.75rem;
-    min-height: 2.25rem;
+    /* Compact sizing */
+    padding: 0.375rem 0.75rem 0.375rem 2.5rem;
+    min-height: 2rem;
 
-    /* M3 outlined text field */
-    border: 1px solid var(--color-border-subtle);
-    border-radius: var(--md-sys-shape-corner-full);
+    /* Dark translucent background, pill shape */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 9999px;
+    background-color: rgba(0, 0, 0, 0.2);
 
-    /* M3 Body Medium typography for compactness */
-    font-family: var(--md-sys-typescale-body-medium-font);
-    font-size: var(--md-sys-typescale-body-medium-size);
-    font-weight: var(--md-sys-typescale-body-medium-weight);
-    line-height: var(--md-sys-typescale-body-medium-line-height);
-    letter-spacing: var(--md-sys-typescale-body-medium-tracking);
+    /* Typography */
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 400;
 
-    background-color: transparent;
-    color: var(--color-text-primary);
+    /* White text on dark background */
+    color: #FFFFFF;
 
-    /* M3 motion */
-    transition: all var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+    /* Smooth transition */
+    transition: all 0.2s ease;
 }
 
 .search-input::placeholder {
-    color: var(--color-text-secondary);
+    color: rgba(255, 255, 255, 0.4);
 }
 
 .search-input:hover {
-    border-color: var(--color-text-primary);
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 .search-input:focus {
     outline: none;
-    border-color: var(--color-action-primary);
-    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.3);
 }
 
-.search-hint {
-    display: none;
+/* Search icon positioning */
+.search-wrapper::before {
+    content: 'search';
+    font-family: 'Material Symbols Outlined';
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 1.125rem;
+    pointer-events: none;
+    transition: color 0.2s ease;
 }
 
-/* View Toggle Buttons */
+.search-wrapper:focus-within::before {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* View Toggle Buttons - Dark container per reference */
 .view-toggle {
     display: flex;
-    gap: var(--space-xs);
-
-    padding: var(--space-xs);
-    border-radius: var(--md-sys-shape-corner-small);
+    gap: 0;
+    padding: 0.125rem;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 0.5rem;
 }
 
 .view-toggle-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 2rem;
-    height: 2rem;
-    padding: 0;
+    width: 1.875rem;
+    height: 1.875rem;
+    padding: 0.375rem;
     border: none;
     background-color: transparent;
-    color: var(--color-text-secondary);
-    border-radius: var(--md-sys-shape-corner-extra-small);
+    color: rgba(255, 255, 255, 0.4);
+    border-radius: 0.375rem;
     cursor: pointer;
-    /* Enhanced transition for smoother feel */
-    transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-legacy);
+    transition: all 0.2s ease;
     position: relative;
-    overflow: hidden;
 }
 
 .view-toggle-btn .material-symbols-outlined {
-    font-size: 20px;
+    font-size: 18px;
     position: relative;
     z-index: 1;
-    transition: transform 0.3s var(--md-sys-motion-easing-spring);
 }
 
-.view-toggle-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: var(--color-action-primary);
-    opacity: 0;
-    transition: opacity 0.2s var(--md-sys-motion-easing-standard);
-}
-
-.view-toggle-btn:hover::before {
-    opacity: var(--md-sys-state-hover-opacity);
+.view-toggle-btn:hover {
+    color: rgba(255, 255, 255, 1);
 }
 
 .view-toggle-btn.active {
-    background-color: var(--color-surface-hover);
-    color: var(--color-text-primary);
-    transform: scale(1.05);
-}
-
-.view-toggle-btn.active::before {
-    background-color: var(--color-action-primary);
-}
-
-.view-toggle-btn.active .material-symbols-outlined {
-    transform: scale(1.1);
+    background-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 /* Press animation */
@@ -945,17 +944,17 @@ body.modal-open {
     transform: scale(0.95);
 }
 
-/* Toggle Switch for Show Details */
+/* Toggle Switch for Descriptions - Per reference design */
 .toggle-wrapper {
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
+    gap: 0.5rem;
 }
 
 .toggle-label {
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
+    gap: 0.5rem;
     cursor: pointer;
     user-select: none;
 }
@@ -969,39 +968,30 @@ body.modal-open {
 
 .toggle-slider {
     position: relative;
-    width: 40px;
-    height: 24px;
-    background-color: var(--color-card-surface);
-    border: 2px solid var(--color-action-primary);
-    border-radius: var(--md-sys-shape-corner-full);
-    transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-legacy);
+    width: 2.25rem;
+    height: 1.25rem;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: none;
+    border-radius: 9999px;
+    transition: all 0.2s ease;
 }
 
 .toggle-slider::before {
     content: '';
     position: absolute;
-    width: 16px;
-    height: 16px;
-    left: 2px;
+    width: 1rem;
+    height: 1rem;
+    left: 0.125rem;
     top: 50%;
     transform: translateY(-50%);
-    background-color: var(--color-action-primary);
-    border-radius: var(--md-sys-shape-corner-full);
-    /* Enhanced spring-like motion for toggle */
-    transition: all 0.4s var(--md-sys-motion-easing-spring);
-}
-
-.toggle-input:checked+.toggle-slider {
-    background-color: var(--color-action-primary);
-    border-color: var(--color-action-primary);
+    background-color: #8d857d;
+    border-radius: 9999px;
+    transition: all 0.2s ease;
 }
 
 .toggle-input:checked+.toggle-slider::before {
-    left: calc(100% - 18px);
-    /* 2px border + 16px thumb = 18px */
-    background-color: var(--color-page-background);
-    /* Slight scale on checked state for emphasis */
-    transform: translateY(-50%) scale(1.1);
+    left: calc(100% - 1.125rem);
+    background-color: #FFFFFF;
 }
 
 /* Active state - press down effect */
@@ -1010,90 +1000,88 @@ body.modal-open {
 }
 
 .toggle-input:focus-visible+.toggle-slider {
-    outline: 2px solid var(--color-action-primary);
+    outline: 2px solid rgba(255, 255, 255, 0.3);
     outline-offset: 2px;
 }
 
 .toggle-text {
-    font-family: var(--md-sys-typescale-label-medium-font);
-    font-size: var(--md-sys-typescale-label-medium-size);
-    font-weight: var(--md-sys-typescale-label-medium-weight);
-    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    font-size: 0.625rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
     text-transform: uppercase;
-    letter-spacing: var(--md-sys-typescale-label-medium-tracking);
+    letter-spacing: 0.1em;
 }
 
-/* M3 Filter Chips - Compact */
+/* Category Chips Container - Horizontal scroll with fade */
+.category-chips-container {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+}
+
 .category-chips {
     display: flex;
-    gap: var(--space-sm);
-    flex-wrap: wrap;
+    gap: 0.5rem;
+    flex-wrap: nowrap;
     margin: 0;
-    max-width: 100%;
-    overflow-x: visible;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 0.25rem 0;
+    mask-image: linear-gradient(to right, black 85%, transparent 100%);
+}
+
+.category-chips::-webkit-scrollbar {
+    display: none;
 }
 
 .category-chip {
-    /* M3 spacing: Reduced height for compactness */
+    /* Compact sizing per reference */
     padding: 0.25rem 0.75rem;
-    min-height: 1.75rem;
+    min-height: auto;
+    white-space: nowrap;
+    flex-shrink: 0;
 
-    /* Solid fill for neutral chip */
-    border: none;
-    background-color: var(--color-border-subtle);
+    /* Border style for inactive */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: transparent;
 
-    /* M3 small corner for chips */
-    border-radius: var(--md-sys-shape-corner-full);
+    /* Pill shape */
+    border-radius: 9999px;
 
-    /* M3 Label Medium typography for compactness */
-    font-family: var(--md-sys-typescale-label-medium-font);
-    font-size: var(--md-sys-typescale-label-medium-size);
-    font-weight: var(--md-sys-typescale-label-medium-weight);
-    line-height: var(--md-sys-typescale-label-medium-line-height);
-    letter-spacing: var(--md-sys-typescale-label-medium-tracking);
+    /* Serif font per reference - italic style */
+    font-family: var(--font-serif);
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1.5;
+    font-style: italic;
 
-    color: var(--color-text-primary);
+    color: rgba(255, 255, 255, 0.6);
     cursor: pointer;
 
-    /* M3 motion */
-    transition: all var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+    /* Smooth transitions */
+    transition: all 0.2s ease;
 
-    text-transform: uppercase;
+    /* Ensure normal case text */
+    text-transform: none;
+
     position: relative;
-    overflow: hidden;
 }
 
-/* M3 State layer for chips */
-.category-chip::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: var(--color-page-background);
-    opacity: 0;
-    transition: opacity var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
-    pointer-events: none;
+.category-chip:hover {
+    color: rgba(255, 255, 255, 1);
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
-.category-chip:hover::before {
-    opacity: var(--md-sys-state-hover-opacity);
-}
-
-.category-chip:focus-visible::before {
-    opacity: var(--md-sys-state-focus-opacity);
-}
-
-.category-chip:active::before {
-    opacity: var(--md-sys-state-pressed-opacity);
-}
-
-/* New brand: Selected state */
+/* Active state - Light green highlight per reference */
 .category-chip.active {
-    background-color: var(--color-charcoal);
-    color: var(--color-white);
-    transform: scale(1.05);
+    background-color: #E8F5E9;
+    border-color: transparent;
+    color: #2C4C3B;
+    font-weight: 500;
+    font-style: italic;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 /* Smooth transition when filtering prompts */
@@ -1105,7 +1093,7 @@ body.modal-open {
 }
 
 .category-chip:focus-visible {
-    outline: 3px solid var(--color-gold);
+    outline: 2px solid rgba(255, 255, 255, 0.5);
     outline-offset: 2px;
 }
 
@@ -1705,11 +1693,12 @@ body.modal-open {
 
 /* Preview Section (standalone and in tab) */
 .preview-section {
-   
+
     background-color: var(--color-card-surface);
     border: 1px solid var(--color-border-subtle);
     border-radius: 12px;
-    overflow: hidden; /* Added from DevTools */
+    overflow: hidden;
+    /* Added from DevTools */
 }
 
 .preview-header {
@@ -1725,7 +1714,8 @@ body.modal-open {
 }
 
 .preview-content {
-    overflow-y: auto; /* Added from DevTools */
+    overflow-y: auto;
+    /* Added from DevTools */
     /* Added from DevTools */
     padding: var(--space-lg);
     font-size: var(--text-sm);
@@ -2442,7 +2432,7 @@ body.modal-open {
 }
 
 .modal-body {
- 
+
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -2552,8 +2542,8 @@ body.modal-open {
     max-height: 0;
     overflow: hidden;
     transition: opacity var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard),
-                max-height var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard),
-                margin var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
+        max-height var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard),
+        margin var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
     /* Ensure proper word wrapping */
     word-wrap: break-word;
     overflow-wrap: break-word;

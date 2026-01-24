@@ -23,10 +23,14 @@
             <div class="header-actions">
                 <!-- Quick Links - Desktop Only -->
                 <div class="quick-links">
-                    <a href="https://aistudio.google.com" target="_blank" rel="noopener noreferrer" class="quick-link-btn">AI Studio</a>
-                    <a href="https://gemini.google.com" target="_blank" rel="noopener noreferrer" class="quick-link-btn">Gemini</a>
-                    <a href="https://chat.openai.com" target="_blank" rel="noopener noreferrer" class="quick-link-btn">ChatGPT</a>
-                    <a href="https://www.claude.ai" target="_blank" rel="noopener noreferrer" class="quick-link-btn">Claude</a>
+                    <a href="https://aistudio.google.com" target="_blank" rel="noopener noreferrer"
+                        class="quick-link-btn">AI Studio</a>
+                    <a href="https://gemini.google.com" target="_blank" rel="noopener noreferrer"
+                        class="quick-link-btn">Gemini</a>
+                    <a href="https://chat.openai.com" target="_blank" rel="noopener noreferrer"
+                        class="quick-link-btn">ChatGPT</a>
+                    <a href="https://www.claude.ai" target="_blank" rel="noopener noreferrer"
+                        class="quick-link-btn">Claude</a>
                 </div>
                 <button class="btn-filters" id="toggleFiltersBtn" aria-label="Toggle filters">
                     <span class="material-symbols-outlined">tune</span>
@@ -47,33 +51,34 @@
                     <div class="search-wrapper">
                         <input type="text" id="searchInput" class="search-input" placeholder="Search prompts..."
                             autocomplete="off">
-                        <div class="search-hint" id="searchHint">
-                            <kbd>⌘K</kbd>
+                    </div>
+
+                    <div class="controls-group">
+                        <!-- View Toggle Buttons -->
+                        <div class="view-toggle">
+                            <button class="view-toggle-btn" data-view="list" aria-label="List view">
+                                <span class="material-symbols-outlined">format_list_bulleted</span>
+                            </button>
+                            <button class="view-toggle-btn active" data-view="grid" aria-label="Grid view">
+                                <span class="material-symbols-outlined">grid_view</span>
+                            </button>
+                        </div>
+
+                        <!-- Toggle Switch for Descriptions -->
+                        <div class="toggle-wrapper">
+                            <label class="toggle-label">
+                                <input type="checkbox" id="showDetailsToggle" class="toggle-input" checked>
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-text">Descriptions</span>
+                            </label>
                         </div>
                     </div>
 
-                    <!-- View Toggle Buttons -->
-                    <div class="view-toggle">
-                        <button class="view-toggle-btn" data-view="list" aria-label="List view">
-                            <span class="material-symbols-outlined">view_list</span>
-                        </button>
-                        <button class="view-toggle-btn active" data-view="grid" aria-label="Grid view">
-                            <span class="material-symbols-outlined">grid_view</span>
-                        </button>
-                    </div>
-
-                    <!-- Toggle Switch for Descriptions -->
-                    <div class="toggle-wrapper">
-                        <label class="toggle-label">
-                            <input type="checkbox" id="showDetailsToggle" class="toggle-input" checked>
-                            <span class="toggle-slider"></span>
-                            <span class="toggle-text">Descriptions</span>
-                        </label>
-                    </div>
-
                     <!-- Category Filter Chips -->
-                    <div id="categoryChips" class="category-chips">
-                        <!-- Chips will be dynamically inserted here -->
+                    <div class="category-chips-container">
+                        <div id="categoryChips" class="category-chips">
+                            <!-- Chips will be dynamically inserted here -->
+                        </div>
                     </div>
                 </div>
 

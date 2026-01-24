@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Meeting Minutes Architect Modal</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;700&amp;family=Playfair+Display:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#2C4C3B", // Hunter Green
+                        "background-light": "#FDFBF7", // Alabaster
+                        "background-dark": "#1a1a1a", // Fallback dark
+                        "surface-light": "#F5F2EA", // Warm Clay
+                        "surface-dark": "#262626", // Fallback surface dark
+                        "border-light": "#D7D3C8",
+                        "border-dark": "#404040",
+                        "text-main-light": "#2C4C3B", // Using primary as main text for high contrast on light
+                        "text-main-dark": "#E5E5E5",
+                        "text-muted-light": "#6b6863",
+                        "text-muted-dark": "#A3A3A3",
+                    },
+                    fontFamily: {
+                        display: ["Playfair Display", "serif"],
+                        sans: ["DM Sans", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "8px",
+                        'lg': '16px',
+                        'xl': '32px', // for capsules
+                    },
+                },
+            },
+        };
+    </script>
+<style>
+        body {
+            font-family: 'DM Sans', sans-serif;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+        }textarea::-webkit-scrollbar {
+            width: 8px;
+        }
+        textarea::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        textarea::-webkit-scrollbar-thumb {
+            background-color: #D7D3C8;
+            border-radius: 4px;
+        }
+        .dark textarea::-webkit-scrollbar-thumb {
+            background-color: #404040;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex items-center justify-center p-4 sm:p-8 transition-colors duration-200">
+<div class="bg-surface-light dark:bg-surface-dark w-full max-w-4xl shadow-2xl rounded-lg overflow-hidden border border-border-light dark:border-border-dark relative flex flex-col transition-colors duration-200">
+<div class="px-8 pt-8 pb-6 flex flex-col gap-4">
+<div class="flex justify-between items-center">
+<span class="inline-block bg-[#E8E4D9] dark:bg-opacity-20 dark:bg-white text-primary dark:text-gray-200 text-xs font-bold tracking-[0.15em] px-3 py-1 rounded uppercase">
+                    Productivity
+                </span>
+<button class="text-text-muted-light dark:text-text-muted-dark hover:text-primary dark:hover:text-white transition-colors">
+<span class="material-icons text-2xl">close</span>
+</button>
+</div>
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h1 class="text-4xl md:text-5xl text-primary dark:text-text-main-dark font-medium leading-tight">
+                        Meeting Minutes<br/>Architect
+                    </h1>
+<p class="mt-3 text-text-muted-light dark:text-text-muted-dark text-lg font-light leading-relaxed max-w-xl">
+                        Professional summarization with action items and sentiment analysis.
+                    </p>
+</div>
+<button class="flex items-center gap-2 bg-primary hover:bg-[#1a3025] text-white px-5 py-2.5 rounded-full text-sm font-medium transition-colors shadow-sm whitespace-nowrap self-start md:self-auto">
+<span class="material-icons text-sm">edit</span>
+                    Customize Template
+                </button>
+</div>
+</div>
+<div class="px-8 border-b border-border-light dark:border-border-dark flex items-end gap-8">
+<button class="pb-3 border-b-2 border-primary text-primary dark:text-white font-medium text-sm tracking-wide">
+                Variables
+            </button>
+<button class="pb-3 border-b-2 border-transparent text-text-muted-light dark:text-text-muted-dark hover:text-primary dark:hover:text-white font-medium text-sm tracking-wide transition-colors">
+                Final Preview
+            </button>
+</div>
+<div class="p-8 space-y-8 flex-grow">
+<div class="space-y-3">
+<label class="block text-xs font-bold tracking-[0.1em] text-primary dark:text-gray-300 uppercase" for="transcript">
+                    Meeting Transcript
+                </label>
+<div class="relative group">
+<textarea class="w-full bg-white dark:bg-[#1f1f1f] border border-border-light dark:border-border-dark rounded p-4 text-text-main-light dark:text-gray-200 focus:ring-1 focus:ring-primary focus:border-primary placeholder-gray-400 dark:placeholder-gray-600 resize-none transition-all shadow-sm" id="transcript" placeholder="Paste your meeting transcript here..." rows="6"></textarea>
+<div class="absolute bottom-3 right-3 text-xs text-text-muted-light dark:text-text-muted-dark pointer-events-none opacity-50">
+                        Markdown supported
+                    </div>
+</div>
+</div>
+<div class="space-y-3">
+<label class="block text-xs font-bold tracking-[0.1em] text-primary dark:text-gray-300 uppercase" for="participants">
+                    Key Participants
+                </label>
+<input class="w-full bg-white dark:bg-[#1f1f1f] border border-border-light dark:border-border-dark rounded p-3 text-text-main-light dark:text-gray-200 focus:ring-1 focus:ring-primary focus:border-primary placeholder-gray-400 dark:placeholder-gray-600 shadow-sm transition-all" id="participants" placeholder="E.g., John Doe, Sarah Smith, Alex Chen" type="text"/>
+</div>
+</div>
+<div class="px-8 pb-8 pt-4 flex flex-col sm:flex-row justify-end items-center gap-4 sm:gap-6 bg-surface-light dark:bg-surface-dark rounded-b-lg">
+<button class="text-text-muted-light dark:text-text-muted-dark hover:text-primary dark:hover:text-white text-sm font-medium transition-colors underline decoration-dotted decoration-border-light hover:decoration-primary underline-offset-4">
+                Download .txt
+            </button>
+<button class="group flex items-center gap-2 bg-primary hover:bg-[#1a3025] text-white pl-5 pr-6 py-3 rounded-full text-sm font-bold tracking-wide transition-all shadow-md hover:shadow-lg w-full sm:w-auto justify-center">
+<span class="material-icons text-sm group-hover:scale-110 transition-transform">content_copy</span>
+                Copy to Clipboard
+            </button>
+</div>
+</div>
+
+</body></html>
