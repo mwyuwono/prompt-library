@@ -47,40 +47,7 @@
         <main class="main-content">
             <div class="container main-container">
                 <!-- Controls Bar -->
-                <div class="controls-bar">
-                    <div class="search-wrapper">
-                        <input type="text" id="searchInput" class="search-input" placeholder="Search prompts..."
-                            autocomplete="off">
-                    </div>
-
-                    <div class="controls-group">
-                        <!-- View Toggle Buttons -->
-                        <div class="view-toggle">
-                            <button class="view-toggle-btn" data-view="list" aria-label="List view">
-                                <span class="material-symbols-outlined">format_list_bulleted</span>
-                            </button>
-                            <button class="view-toggle-btn active" data-view="grid" aria-label="Grid view">
-                                <span class="material-symbols-outlined">grid_view</span>
-                            </button>
-                        </div>
-
-                        <!-- Toggle Switch for Descriptions -->
-                        <div class="toggle-wrapper">
-                            <label class="toggle-label">
-                                <input type="checkbox" id="showDetailsToggle" class="toggle-input" checked>
-                                <span class="toggle-slider"></span>
-                                <span class="toggle-text">Descriptions</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- Category Filter Chips -->
-                    <div class="category-chips-container">
-                        <div id="categoryChips" class="category-chips">
-                            <!-- Chips will be dynamically inserted here -->
-                        </div>
-                    </div>
-                </div>
+                <wy-controls-bar id="controlsBar" class="controls-bar"></wy-controls-bar>
 
                 <div class="prompt-area view-grid">
                     <!-- Prompt List View -->
@@ -94,7 +61,7 @@
                     </div>
 
                     <!-- Empty State -->
-                    <div id="emptyState" class="empty-state" style="display: none;">
+                    <div id="emptyState" class="empty-state hidden">
                         <p>No prompts found matching your criteria.</p>
                     </div>
                 </div>

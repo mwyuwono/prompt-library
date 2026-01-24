@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="dark" lang="en"><head>
+<html class="light" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Prompt Library Controls</title>
@@ -15,11 +15,10 @@
                 extend: {
                     colors: {
                         "background-dark": "#1a1c1b",
-                        "background-light": "#f5f5f0",
+                        "background-light": "#f8f9fa",
                         "surface-dark": "#1E201F",
                         "hunter-green": "#2C4C3B",
-                        primary: "#A3B8A8",
-                        "chip-highlight": "#E8F5E9",
+                        primary: "#2C4C3B","chip-highlight": "#E8F5E9",
                         "clay-taupe": "#8d857d",
                     },
                     fontFamily: {
@@ -51,69 +50,71 @@
         }
     </style>
 </head>
-<body class="bg-background-light dark:bg-background-dark min-h-screen text-slate-800 dark:text-slate-200 transition-colors duration-300 font-sans">
-<nav class="bg-surface-dark border-b border-white/10 px-6 py-3 flex items-center justify-between">
+<body class="bg-background-light min-h-screen text-slate-800 transition-colors duration-300 font-sans">
+<nav class="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between">
 <div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded-full border border-primary/30 flex items-center justify-center text-primary font-serif italic">
+<div class="w-8 h-8 rounded-full border border-primary/20 flex items-center justify-center text-primary font-serif italic">
 <span>W</span>
 </div>
-<span class="text-white text-lg font-medium tracking-wide">Prompts</span>
+<span class="text-slate-900 text-lg font-medium tracking-wide">Prompts</span>
 </div>
 <div class="hidden md:flex items-center gap-2">
-<button class="px-4 py-1.5 text-xs font-medium tracking-wider text-slate-300 hover:text-white rounded-pill bg-white/5 hover:bg-white/10 transition-colors">AI STUDIO</button>
-<button class="px-4 py-1.5 text-xs font-medium tracking-wider text-slate-300 hover:text-white rounded-pill bg-white/5 hover:bg-white/10 transition-colors">GEMINI</button>
-<button class="px-4 py-1.5 text-xs font-medium tracking-wider text-slate-300 hover:text-white rounded-pill bg-white/5 hover:bg-white/10 transition-colors">CHATGPT</button>
-<button class="px-4 py-1.5 text-xs font-medium tracking-wider text-slate-300 hover:text-white rounded-pill bg-white/5 hover:bg-white/10 transition-colors">CLAUDE</button>
-<button class="px-5 py-1.5 text-xs font-bold tracking-wider text-slate-900 bg-white rounded-pill shadow hover:bg-gray-100 transition-colors">AI TOOLS</button>
+<button class="px-4 py-1.5 text-xs font-medium tracking-wider text-slate-500 hover:text-slate-900 rounded-pill bg-gray-50 hover:bg-gray-100 transition-colors">AI STUDIO</button>
+<button class="px-4 py-1.5 text-xs font-medium tracking-wider text-slate-500 hover:text-slate-900 rounded-pill bg-gray-50 hover:bg-gray-100 transition-colors">GEMINI</button>
+<button class="px-4 py-1.5 text-xs font-medium tracking-wider text-slate-500 hover:text-slate-900 rounded-pill bg-gray-50 hover:bg-gray-100 transition-colors">CHATGPT</button>
+<button class="px-4 py-1.5 text-xs font-medium tracking-wider text-slate-500 hover:text-slate-900 rounded-pill bg-gray-50 hover:bg-gray-100 transition-colors">CLAUDE</button>
+<button class="px-5 py-1.5 text-xs font-bold tracking-wider text-white bg-primary rounded-pill shadow-sm hover:opacity-90 transition-opacity">AI TOOLS</button>
 </div>
 </nav>
-<header class="bg-hunter-green dark:bg-hunter-green text-white py-3 shadow-xl relative z-10 border-b border-white/10">
+<header class="bg-white text-slate-800 py-2 shadow-sm border-b border-gray-200 sticky top-0 z-20">
 <div class="max-w-[1600px] mx-auto px-6 xl:px-[120px]">
-<div class="flex items-center gap-4">
-<div class="relative w-64 flex-shrink-0 group">
-<span class="absolute inset-y-0 left-3 flex items-center pointer-events-none text-white/40 group-focus-within:text-white/80 transition-colors">
-<span class="material-symbols-outlined text-lg">search</span>
+<div class="flex items-center gap-3">
+<div class="relative w-48 flex-shrink-0 group">
+<span class="absolute inset-y-0 left-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">search</span>
 </span>
-<input class="w-full bg-black/20 text-white placeholder-white/40 rounded-pill border border-white/10 px-10 py-1.5 focus:outline-none focus:ring-1 focus:ring-white/30 focus:border-white/30 focus:bg-black/30 transition-all font-sans text-xs" placeholder="Search prompts..." type="text"/>
+<input class="w-full bg-gray-100 text-slate-800 placeholder-slate-400 rounded-pill border-transparent px-9 py-1.5 focus:outline-none focus:ring-1 focus:ring-primary/20 focus:border-primary/20 focus:bg-white transition-all font-sans text-xs" placeholder="Search prompts..." type="text"/>
 </div>
-<div class="flex items-center gap-4 border-l border-white/10 pl-4">
-<div class="flex items-center bg-black/20 rounded-lg p-0.5">
-<button class="p-1.5 rounded text-white/40 hover:text-white transition-colors">
-<span class="material-symbols-outlined text-[18px]">format_list_bulleted</span>
+<div class="h-6 w-[1px] bg-gray-200 mx-1"></div>
+<div class="flex items-center gap-4">
+<div class="flex items-center bg-gray-100 rounded-lg p-0.5">
+<button class="p-1.5 rounded text-slate-400 hover:text-slate-900 transition-colors">
+<span class="material-symbols-outlined text-[16px]">format_list_bulleted</span>
 </button>
-<button class="p-1.5 rounded bg-white/10 text-white shadow-sm ring-1 ring-white/5">
-<span class="material-symbols-outlined text-[18px]">grid_view</span>
+<button class="p-1.5 rounded bg-white text-primary shadow-sm ring-1 ring-gray-200">
+<span class="material-symbols-outlined text-[16px]">grid_view</span>
 </button>
 </div>
 <div class="flex items-center gap-2">
 <label class="flex items-center cursor-pointer relative" for="desc-toggle">
 <input checked="" class="sr-only peer" id="desc-toggle" type="checkbox"/>
-<div class="w-9 h-5 bg-black/30 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-clay-taupe after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+<div class="w-8 h-4 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:bg-primary after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:after:translate-x-4"></div>
 </label>
-<span class="font-sans font-medium text-[10px] tracking-architectural text-white/90 uppercase">Descriptions</span>
+<span class="font-sans font-medium text-[9px] tracking-architectural text-slate-500 uppercase">Descriptions</span>
 </div>
 </div>
+<div class="h-6 w-[1px] bg-gray-200 mx-1"></div>
 <div class="flex-1 overflow-hidden relative">
-<div class="flex items-center gap-2 overflow-x-auto scrollbar-hide mask-fade py-1">
-<button class="font-serif px-3 py-1 rounded-pill border border-white/20 text-white/60 hover:text-white hover:border-white/40 transition-colors text-xs whitespace-nowrap">
+<div class="flex items-center gap-1.5 overflow-x-auto scrollbar-hide mask-fade py-0.5">
+<button class="font-serif px-3 py-1 rounded-pill border border-gray-200 text-slate-500 hover:text-slate-900 hover:bg-gray-50 transition-colors text-[11px] whitespace-nowrap">
                             All
                         </button>
-<button class="font-serif px-3 py-1 rounded-pill border border-white/20 text-white hover:bg-white/5 transition-colors text-xs whitespace-nowrap">
+<button class="font-serif px-3 py-1 rounded-pill border border-gray-200 text-slate-500 hover:text-slate-900 hover:bg-gray-50 transition-colors text-[11px] whitespace-nowrap">
                             Creativity
                         </button>
-<button class="font-serif px-3 py-1 rounded-pill bg-chip-highlight border border-transparent text-hunter-green font-medium shadow-sm transition-colors text-xs whitespace-nowrap">
+<button class="font-serif px-3 py-1 rounded-pill bg-chip-highlight border border-transparent text-primary font-semibold shadow-sm transition-colors text-[11px] whitespace-nowrap">
                             Expertise
                         </button>
-<button class="font-serif px-3 py-1 rounded-pill border border-white/20 text-white hover:bg-white/5 transition-colors text-xs whitespace-nowrap">
+<button class="font-serif px-3 py-1 rounded-pill border border-gray-200 text-slate-500 hover:text-slate-900 hover:bg-gray-50 transition-colors text-[11px] whitespace-nowrap">
                             Productivity
                         </button>
-<button class="font-serif px-3 py-1 rounded-pill border border-white/20 text-white hover:bg-white/5 transition-colors text-xs whitespace-nowrap">
+<button class="font-serif px-3 py-1 rounded-pill border border-gray-200 text-slate-500 hover:text-slate-900 hover:bg-gray-50 transition-colors text-[11px] whitespace-nowrap">
                             Travel &amp; Shopping
                         </button>
-<button class="font-serif px-3 py-1 rounded-pill border border-white/20 text-white hover:bg-white/5 transition-colors text-xs whitespace-nowrap">
+<button class="font-serif px-3 py-1 rounded-pill border border-gray-200 text-slate-500 hover:text-slate-900 hover:bg-gray-50 transition-colors text-[11px] whitespace-nowrap">
                             Governance
                         </button>
-<button class="font-serif px-3 py-1 rounded-pill border border-white/20 text-white hover:bg-white/5 transition-colors text-xs whitespace-nowrap">
+<button class="font-serif px-3 py-1 rounded-pill border border-gray-200 text-slate-500 hover:text-slate-900 hover:bg-gray-50 transition-colors text-[11px] whitespace-nowrap">
                             Investment
                         </button>
 </div>
@@ -123,52 +124,52 @@
 </header>
 <main class="max-w-[1600px] mx-auto px-6 xl:px-[120px] py-12">
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-<div class="bg-white dark:bg-surface-dark border border-gray-200 dark:border-white/5 rounded-xl p-6 hover:shadow-lg transition-shadow group">
+<div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow group">
 <div class="flex items-start justify-between mb-4">
-<span class="inline-block px-3 py-1 rounded-full bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-xs font-serif italic">Expertise</span>
-<button class="text-gray-400 hover:text-primary dark:text-gray-500 dark:hover:text-primary transition-colors">
+<span class="inline-block px-3 py-1 rounded-full bg-green-50 text-green-700 text-xs font-serif italic">Expertise</span>
+<button class="text-gray-400 hover:text-primary transition-colors">
 <span class="material-symbols-outlined text-xl">bookmark</span>
 </button>
 </div>
-<h3 class="text-xl font-serif text-gray-900 dark:text-white mb-2 group-hover:text-primary transition-colors">Strategic Asset Allocation</h3>
-<p class="text-sm text-gray-600 dark:text-gray-400 font-sans leading-relaxed mb-4">
+<h3 class="text-xl font-serif text-gray-900 mb-2 group-hover:text-primary transition-colors">Strategic Asset Allocation</h3>
+<p class="text-sm text-gray-600 font-sans leading-relaxed mb-4">
                     Analyze current market trends against long-term family office objectives to determine optimal asset distribution ratios.
                 </p>
 <div class="flex items-center gap-2 mt-auto">
 <div class="h-6 w-6 rounded-full bg-gradient-to-br from-purple-500 to-blue-500"></div>
-<span class="text-xs text-gray-500 dark:text-gray-500">GPT-4o</span>
+<span class="text-xs text-gray-400">GPT-4o</span>
 </div>
 </div>
-<div class="bg-white dark:bg-surface-dark border border-gray-200 dark:border-white/5 rounded-xl p-6 hover:shadow-lg transition-shadow group">
+<div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow group">
 <div class="flex items-start justify-between mb-4">
-<span class="inline-block px-3 py-1 rounded-full bg-slate-50 dark:bg-white/5 text-slate-600 dark:text-slate-300 text-xs font-serif italic">Productivity</span>
-<button class="text-gray-400 hover:text-primary dark:text-gray-500 dark:hover:text-primary transition-colors">
+<span class="inline-block px-3 py-1 rounded-full bg-slate-50 text-slate-600 text-xs font-serif italic">Productivity</span>
+<button class="text-gray-400 hover:text-primary transition-colors">
 <span class="material-symbols-outlined text-xl">bookmark</span>
 </button>
 </div>
-<h3 class="text-xl font-serif text-gray-900 dark:text-white mb-2 group-hover:text-primary transition-colors">Executive Summary Generator</h3>
-<p class="text-sm text-gray-600 dark:text-gray-400 font-sans leading-relaxed mb-4">
+<h3 class="text-xl font-serif text-gray-900 mb-2 group-hover:text-primary transition-colors">Executive Summary Generator</h3>
+<p class="text-sm text-gray-600 font-sans leading-relaxed mb-4">
                     Condense 50+ page quarterly reports into a concise 2-page briefing suitable for board review meetings.
                 </p>
 <div class="flex items-center gap-2 mt-auto">
 <div class="h-6 w-6 rounded-full bg-gradient-to-br from-orange-400 to-red-500"></div>
-<span class="text-xs text-gray-500 dark:text-gray-500">Claude 3.5</span>
+<span class="text-xs text-gray-400">Claude 3.5</span>
 </div>
 </div>
-<div class="bg-white dark:bg-surface-dark border border-gray-200 dark:border-white/5 rounded-xl p-6 hover:shadow-lg transition-shadow group">
+<div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow group">
 <div class="flex items-start justify-between mb-4">
-<span class="inline-block px-3 py-1 rounded-full bg-slate-50 dark:bg-white/5 text-slate-600 dark:text-slate-300 text-xs font-serif italic">Travel &amp; Shopping</span>
-<button class="text-gray-400 hover:text-primary dark:text-gray-500 dark:hover:text-primary transition-colors">
+<span class="inline-block px-3 py-1 rounded-full bg-slate-50 text-slate-600 text-xs font-serif italic">Travel &amp; Shopping</span>
+<button class="text-gray-400 hover:text-primary transition-colors">
 <span class="material-symbols-outlined text-xl">bookmark</span>
 </button>
 </div>
-<h3 class="text-xl font-serif text-gray-900 dark:text-white mb-2 group-hover:text-primary transition-colors">Itinerary Planning: Kyoto</h3>
-<p class="text-sm text-gray-600 dark:text-gray-400 font-sans leading-relaxed mb-4">
+<h3 class="text-xl font-serif text-gray-900 mb-2 group-hover:text-primary transition-colors">Itinerary Planning: Kyoto</h3>
+<p class="text-sm text-gray-600 font-sans leading-relaxed mb-4">
                     Create a detailed 5-day itinerary focusing on heritage architecture, private tea ceremonies, and textile sourcing.
                 </p>
 <div class="flex items-center gap-2 mt-auto">
 <div class="h-6 w-6 rounded-full bg-gradient-to-br from-blue-400 to-teal-500"></div>
-<span class="text-xs text-gray-500 dark:text-gray-500">Gemini Pro</span>
+<span class="text-xs text-gray-400">Gemini Pro</span>
 </div>
 </div>
 </div>

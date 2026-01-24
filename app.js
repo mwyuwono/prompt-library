@@ -15,12 +15,11 @@ class PromptLibrary {
         this.promptGrid = document.getElementById('promptGrid');
         this.promptList = document.getElementById('promptList');
         this.promptArea = document.querySelector('.prompt-area');
-        this.searchInput = document.getElementById('searchInput');
-        this.categoryChips = document.getElementById('categoryChips');
+        this.controlsBar = document.getElementById('controlsBar');
         this.emptyState = document.getElementById('emptyState');
         this.toast = document.getElementById('toast');
-        this.showDetailsToggle = document.getElementById('showDetailsToggle');
-        this.viewToggleBtns = document.querySelectorAll('.view-toggle-btn');
+        this.showDetailsToggle = null;
+        this.viewToggleBtns = [];
         this.promptModal = null;
         this.promptModalBody = null;
         this.promptModalTitle = null;
@@ -42,6 +41,7 @@ class PromptLibrary {
         this.setupEventListeners();
         this.setupKeyboardShortcuts();
         this.populateCategoryFilter();
+        this.syncControlsBar();
         this.filterPrompts();
     }
 
@@ -93,27 +93,19 @@ class PromptLibrary {
      * Setup event listeners
      */
     setupEventListeners() {
-        // Search input
-        this.searchInput.addEventListener('input', (e) => {
-            this.searchTerm = e.target.value.toLowerCase();
-            this.filterPrompts();
-        });
-
-        // Show details toggle
-        if (this.showDetailsToggle) {
-            this.showDetailsToggle.addEventListener('change', (e) => {
-                this.showDetails = e.target.checked;
+        if (this.controlsBar) {
+            this.controlsBar.addEventListener('filter-change', (e) => {
+                const { search, viewMode, showDetails, category } = e.detail;
+                this.searchTerm = (search || '').toLowerCase();
+                this.showDetails = Boolean(showDetails);
+                this.selectedCategory = category === 'all' ? '' : category;
+                if (viewMode && viewMode !== this.currentView) {
+                    this.switchView(viewMode);
+                }
                 this.updateCardDetailsVisibility();
+                this.filterPrompts();
             });
         }
-
-        // View toggle buttons
-        this.viewToggleBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const view = btn.dataset.view;
-                this.switchView(view);
-            });
-        });
 
         // Mobile filters toggle
         const toggleFiltersBtn = document.getElementById('toggleFiltersBtn');
@@ -123,12 +115,6 @@ class PromptLibrary {
             });
         }
 
-        // Category chip selection (wy-filter-chip Web Components)
-        this.categoryChips.addEventListener('chip-select', (e) => {
-            this.selectedCategory = e.detail.value;
-            this.updateActiveChip(e.target);
-            this.filterPrompts();
-        });
     }
 
     /**
@@ -137,14 +123,9 @@ class PromptLibrary {
     switchView(view) {
         this.currentView = view;
 
-        // Update button states
-        this.viewToggleBtns.forEach(btn => {
-            if (btn.dataset.view === view) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
+        if (this.controlsBar) {
+            this.controlsBar.viewMode = view;
+        }
 
         // Update prompt area class
         this.promptArea.classList.remove('view-list', 'view-grid');
@@ -176,14 +157,25 @@ class PromptLibrary {
         }
 
         document.addEventListener('keydown', (e) => {
+            const searchInput = this.getControlsSearchInput();
+            const isSearchFocused = searchInput &&
+                (document.activeElement === searchInput ||
+                    this.controlsBar?.shadowRoot?.activeElement === searchInput);
+
             // Escape while search is focused clears query
-            if (e.key === 'Escape' && document.activeElement === this.searchInput) {
+            if (e.key === 'Escape' && isSearchFocused) {
                 if (this.searchTerm) {
                     this.searchTerm = '';
-                    this.searchInput.value = '';
+                    if (this.controlsBar) {
+                        this.controlsBar.searchValue = '';
+                    } else if (searchInput) {
+                        searchInput.value = '';
+                    }
                     this.filterPrompts();
                 }
-                this.searchInput.blur();
+                if (searchInput) {
+                    searchInput.blur();
+                }
                 return;
             }
 
@@ -199,7 +191,9 @@ class PromptLibrary {
             // Cmd/Ctrl + K - Focus search input
             if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
                 e.preventDefault();
-                this.searchInput.focus();
+                if (searchInput) {
+                    searchInput.focus();
+                }
             }
 
             // Cmd/Ctrl + / - Show keyboard shortcuts modal
@@ -210,50 +204,29 @@ class PromptLibrary {
         });
     }
 
+    getControlsSearchInput() {
+        return this.controlsBar?.shadowRoot?.querySelector('.search-input');
+    }
+
     /**
-     * Populate category filter chips (using wy-filter-chip Web Components)
+     * Populate category filters via design system controls bar.
      */
     populateCategoryFilter() {
         const categories = [...new Set(this.prompts.map(p => p.category))].sort();
-
-        // Clear existing chips
-        this.categoryChips.innerHTML = '';
-
-        // Add "All" chip
-        const allChip = this.createCategoryChip('', 'All', this.selectedCategory === '');
-        this.categoryChips.appendChild(allChip);
-
-        // Add category chips
-        categories.forEach(category => {
-            const chip = this.createCategoryChip(category, category, category === this.selectedCategory);
-            this.categoryChips.appendChild(chip);
-        });
-    }
-
-    /**
-     * Create a category filter chip (wy-filter-chip Web Component)
-     */
-    createCategoryChip(value, label, isActive) {
-        const chip = document.createElement('wy-filter-chip');
-        chip.setAttribute('label', label);
-        chip.setAttribute('value', value);
-        if (isActive) {
-            chip.setAttribute('active', '');
+        if (this.controlsBar) {
+            this.controlsBar.categories = categories;
+            this.controlsBar.activeCategory = this.selectedCategory || 'all';
         }
-        return chip;
     }
 
-    /**
-     * Update active chip styling
-     */
-    updateActiveChip(activeChip) {
-        // Remove active attribute from all chips
-        this.categoryChips.querySelectorAll('wy-filter-chip').forEach(chip => {
-            chip.removeAttribute('active');
-        });
-
-        // Add active attribute to clicked chip
-        activeChip.setAttribute('active', '');
+    syncControlsBar() {
+        if (!this.controlsBar) {
+            return;
+        }
+        this.controlsBar.viewMode = this.currentView;
+        this.controlsBar.showDetails = this.showDetails;
+        this.controlsBar.searchValue = this.searchTerm;
+        this.controlsBar.activeCategory = this.selectedCategory || 'all';
     }
 
     /**
@@ -413,10 +386,10 @@ class PromptLibrary {
 
         // Show/hide empty state
         if (this.filteredPrompts.length === 0) {
-            this.emptyState.style.display = 'block';
+            this.emptyState.classList.remove('hidden');
             return;
         } else {
-            this.emptyState.style.display = 'none';
+            this.emptyState.classList.add('hidden');
         }
 
         // Render each prompt card
@@ -435,10 +408,10 @@ class PromptLibrary {
 
         // Show/hide empty state
         if (this.filteredPrompts.length === 0) {
-            this.emptyState.style.display = 'block';
+            this.emptyState.classList.remove('hidden');
             return;
         } else {
-            this.emptyState.style.display = 'none';
+            this.emptyState.classList.add('hidden');
         }
 
         // Group prompts by category
@@ -643,11 +616,8 @@ class PromptLibrary {
                 </div>
                 <div class="modal-actions card-actions">
                     ${isLocked ? `
+                        <button class="btn btn-link" data-action="download" aria-label="Download as text file">Download .txt</button>
                         <button class="btn btn-primary" data-action="copy">Copy to Clipboard</button>
-                        <button class="btn btn-outlined" data-action="download" aria-label="Download as text file">
-                            <span class="material-symbols-outlined" aria-hidden="true">download</span>
-                            Download .txt
-                        </button>
                     ` : `
                         <button class="btn btn-secondary" data-action="cancel-edit">Cancel</button>
                         <button class="btn btn-primary" data-action="save-template">Save Changes</button>

@@ -288,7 +288,7 @@ body {
     font-family: var(--font-serif);
     font-size: 18px;
     font-style: italic;
-    color: #D4A373;
+    color: var(--md-sys-color-secondary);
     margin-bottom: var(--space-sm);
 }
 
@@ -799,31 +799,12 @@ body.modal-open {
     transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-legacy);
 }
 
-/* Controls Bar - Hunter Green per reference design */
+/* Controls Bar - Design system component host */
 .controls-bar {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-
-    /* Reference design padding */
-    padding: 0.75rem 1.5rem;
-
-    flex-wrap: nowrap;
-
-    /* Hunter Green background */
-    background-color: var(--wy-controls-bar-bg);
-    color: var(--wy-controls-bar-fg);
-
-    max-width: 100%;
-    overflow: visible;
-
-    /* Ensure controls stay above content */
+    display: block;
+    width: 100%;
     position: relative;
     z-index: 100;
-
-    /* Subtle shadow and border */
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    border-bottom: 1px solid color-mix(in srgb, var(--wy-controls-bar-fg) 10%, transparent);
 
     --wy-filter-chip-text: var(--wy-controls-chip-text);
     --wy-filter-chip-text-hover: var(--wy-controls-chip-text-hover);
@@ -834,272 +815,14 @@ body.modal-open {
     --wy-filter-chip-active-bg: var(--wy-controls-chip-active-bg);
     --wy-filter-chip-active-fg: var(--wy-controls-chip-active-fg);
     --wy-filter-chip-shadow: var(--wy-controls-chip-shadow);
-    --wy-filter-chip-font-family: var(--font-serif);
-    --wy-filter-chip-font-size: 0.75rem;
-    --wy-filter-chip-font-style: italic;
-    --wy-filter-chip-font-weight: 400;
-    --wy-filter-chip-font-weight-active: 500;
-    --wy-filter-chip-padding: 0.35rem 0.9rem;
-}
-
-/* Controls group with border separator */
-.controls-group {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding-left: 1rem;
-    border-left: 1px solid color-mix(in srgb, var(--wy-controls-bar-fg) 10%, transparent);
-}
-
-.search-wrapper {
-    flex: 0 0 auto;
-    width: 16rem;
-    position: relative;
-}
-
-/* Search Input - Dark translucent on Hunter Green per reference */
-.search-input {
-    width: 100%;
-
-    /* Compact sizing */
-    padding: 0.375rem 0.75rem 0.375rem 2.5rem;
-    min-height: 2rem;
-
-    /* Dark translucent background, pill shape */
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 9999px;
-    background-color: rgba(0, 0, 0, 0.2);
-
-    /* Typography */
-    font-family: var(--font-sans);
-    font-size: 0.75rem;
-    font-weight: 400;
-
-    /* White text on dark background */
-    color: #FFFFFF;
-
-    /* Smooth transition */
-    transition: all 0.2s ease;
-}
-
-.search-input::placeholder {
-    color: rgba(255, 255, 255, 0.4);
-}
-
-.search-input:hover {
-    border-color: rgba(255, 255, 255, 0.2);
-}
-
-.search-input:focus {
-    outline: none;
-    border-color: rgba(255, 255, 255, 0.3);
-    background-color: rgba(0, 0, 0, 0.3);
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.3);
-}
-
-/* Search icon positioning */
-.search-wrapper::before {
-    content: 'search';
-    font-family: 'Material Symbols Outlined';
-    position: absolute;
-    left: 0.75rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: rgba(255, 255, 255, 0.4);
-    font-size: 1.125rem;
-    pointer-events: none;
-    transition: color 0.2s ease;
-}
-
-.search-wrapper:focus-within::before {
-    color: rgba(255, 255, 255, 0.8);
-}
-
-/* View Toggle Buttons - Dark container per reference */
-.view-toggle {
-    display: flex;
-    gap: 0;
-    padding: 0.125rem;
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 0.5rem;
-}
-
-.view-toggle-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.875rem;
-    height: 1.875rem;
-    padding: 0.375rem;
-    border: none;
-    background-color: transparent;
-    color: rgba(255, 255, 255, 0.4);
-    border-radius: 0.375rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    position: relative;
-}
-
-.view-toggle-btn .material-symbols-outlined {
-    font-size: 18px;
-    position: relative;
-    z-index: 1;
-}
-
-.view-toggle-btn:hover {
-    color: rgba(255, 255, 255, 1);
-}
-
-.view-toggle-btn.active {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 1);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-}
-
-/* Press animation */
-.view-toggle-btn:active {
-    transform: scale(0.95);
-}
-
-/* Toggle Switch for Descriptions - Per reference design */
-.toggle-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.toggle-label {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-    user-select: none;
-}
-
-.toggle-input {
-    position: absolute;
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.toggle-slider {
-    position: relative;
-    width: 2.25rem;
-    height: 1.25rem;
-    background-color: rgba(0, 0, 0, 0.3);
-    border: none;
-    border-radius: 9999px;
-    transition: all 0.2s ease;
-}
-
-.toggle-slider::before {
-    content: '';
-    position: absolute;
-    width: 1rem;
-    height: 1rem;
-    left: 0.125rem;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: #8d857d;
-    border-radius: 9999px;
-    transition: all 0.2s ease;
-}
-
-.toggle-input:checked+.toggle-slider::before {
-    left: calc(100% - 1.125rem);
-    background-color: #FFFFFF;
-}
-
-/* Active state - press down effect */
-.toggle-input:active+.toggle-slider::before {
-    transform: translateY(-50%) scale(0.95);
-}
-
-.toggle-input:focus-visible+.toggle-slider {
-    outline: 2px solid rgba(255, 255, 255, 0.3);
-    outline-offset: 2px;
-}
-
-.toggle-text {
-    font-family: var(--font-sans);
-    font-size: 0.625rem;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.9);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-}
-
-/* Category Chips Container - Horizontal scroll with fade */
-.category-chips-container {
-    flex: 1;
-    overflow: hidden;
-    position: relative;
-}
-
-.category-chips {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: nowrap;
-    margin: 0;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    padding: 0.25rem 0;
-    mask-image: linear-gradient(to right, black 85%, transparent 100%);
-}
-
-.category-chips::-webkit-scrollbar {
-    display: none;
-}
-
-.category-chip {
-    /* Compact sizing per reference */
-    padding: var(--wy-filter-chip-padding, 0.25rem 0.75rem);
-    min-height: auto;
-    white-space: nowrap;
-    flex-shrink: 0;
-
-    /* Border style for inactive */
-    border: 1px solid var(--wy-filter-chip-border, var(--md-sys-color-outline-variant));
-    background-color: transparent;
-
-    /* Pill shape */
-    border-radius: 9999px;
-
-    /* Serif font per reference - italic style */
-    font-family: var(--wy-filter-chip-font-family, var(--font-serif));
-    font-size: var(--wy-filter-chip-font-size, 0.75rem);
-    font-weight: var(--wy-filter-chip-font-weight, 400);
-    line-height: 1.5;
-    font-style: var(--wy-filter-chip-font-style, italic);
-
-    color: var(--wy-filter-chip-text, var(--md-sys-color-on-background));
-    cursor: pointer;
-
-    /* Smooth transitions */
-    transition: all var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
-
-    /* Ensure normal case text */
-    text-transform: none;
-
-    position: relative;
-}
-
-.category-chip:hover {
-    color: var(--wy-filter-chip-text-hover, var(--wy-filter-chip-text, var(--md-sys-color-on-background)));
-    background-color: var(--wy-filter-chip-hover-bg, var(--md-sys-color-surface-variant));
-    border-color: var(--wy-filter-chip-border-hover, var(--md-sys-color-outline));
-}
-
-/* Active state - Light green highlight per reference */
-.category-chip.active {
-    background-color: var(--wy-filter-chip-active-bg, var(--md-sys-color-primary));
-    border-color: transparent;
-    color: var(--wy-filter-chip-active-fg, var(--md-sys-color-on-primary));
-    font-weight: var(--wy-filter-chip-font-weight-active, 500);
-    font-style: var(--wy-filter-chip-font-style, italic);
-    box-shadow: var(--wy-filter-chip-shadow, none);
+    --wy-filter-chip-font-family: var(--font-sans);
+    --wy-filter-chip-font-size: var(--md-sys-typescale-label-medium-size, 0.75rem);
+    --wy-filter-chip-font-style: normal;
+    --wy-filter-chip-font-weight: 500;
+    --wy-filter-chip-font-weight-active: 600;
+    --wy-filter-chip-padding: var(--space-xs) var(--space-md);
+    --wy-filter-chip-active-bg: var(--md-sys-color-primary-container);
+    --wy-filter-chip-active-fg: var(--md-sys-color-on-primary-container);
 }
 
 /* Smooth transition when filtering prompts */
@@ -1108,11 +831,6 @@ body.modal-open {
 .category-section {
     transition: opacity 0.25s var(--md-sys-motion-easing-standard),
         transform 0.25s var(--md-sys-motion-easing-standard);
-}
-
-.category-chip:focus-visible {
-    outline: 2px solid var(--wy-filter-chip-focus, var(--md-sys-color-primary));
-    outline-offset: 2px;
 }
 
 
@@ -1209,7 +927,7 @@ body.modal-open {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.7s var(--md-sys-motion-easing-emphasized) !important;
+    transition: transform 0.7s var(--md-sys-motion-easing-emphasized);
 }
 
 .prompt-card:hover .card-thumbnail img {
@@ -1963,173 +1681,14 @@ body.modal-open {
     flex-wrap: wrap;
 }
 
-/* M3 Buttons - Base */
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-sm);
+/*
+ * Button styles are provided by the design system (m3-design-v2/main.css)
+ * Only app-specific contextual rules are defined here
+ */
 
-    /* M3 spacing: 24px height */
-    padding: 0.625rem 1.5rem;
-    min-height: 2.5rem;
-
-    /* M3 Expressive: full rounded corners */
-    border-radius: var(--md-sys-shape-corner-full);
-
-    border: none;
-    background-color: transparent;
-
-    /* M3 Label Large typography */
-    font-family: var(--md-sys-typescale-label-large-font);
-    font-size: var(--md-sys-typescale-label-large-size);
-    font-weight: var(--md-sys-typescale-label-large-weight);
-    line-height: var(--md-sys-typescale-label-large-line-height);
-    letter-spacing: var(--md-sys-typescale-label-large-tracking);
-    text-transform: uppercase;
-
-    cursor: pointer;
-
-    /* M3 motion */
-    transition: all var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
-
-    white-space: nowrap;
-    position: relative;
-    overflow: hidden;
-}
-
-/* M3 State layer for all buttons */
-.btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    opacity: 0;
-    transition: opacity var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
-    pointer-events: none;
-}
-
+/* Card actions layout context */
 .card-actions .btn {
     flex: 0 0 auto;
-}
-
-.btn-sm {
-    padding: 0.5rem 1.25rem;
-    min-height: 2rem;
-    font-size: var(--md-sys-typescale-label-medium-size);
-    letter-spacing: var(--md-sys-typescale-label-medium-tracking);
-}
-
-.btn-sm .material-symbols-outlined {
-    font-size: 18px;
-}
-
-/* Primary Button - Meeting Minutes Architect (Deep Forest Green Pill) */
-.btn-primary {
-    background-color: var(--brand-primary);
-    color: #FFFFFF;
-    font-weight: 500;
-    border-radius: var(--md-sys-shape-corner-pill);
-}
-
-.btn-primary:hover {
-    background-color: color-mix(in srgb, var(--brand-primary) 85%, #000000);
-    box-shadow: var(--shadow-medium);
-}
-
-.btn-primary:active {
-    background-color: var(--brand-primary);
-    box-shadow: var(--shadow-subtle);
-}
-
-.btn-primary:focus-visible {
-    outline: 3px solid var(--color-gold);
-    outline-offset: 2px;
-}
-
-/* Secondary Button - New brand linen with border */
-.btn-secondary {
-    background-color: var(--color-linen);
-    color: var(--color-charcoal);
-    border: 1px solid rgba(112, 112, 112, 0.2);
-}
-
-.btn-secondary:hover {
-    border-color: var(--color-gold);
-    background-color: rgba(249, 247, 242, 0.8);
-}
-
-.btn-secondary:active {
-    background-color: rgba(249, 247, 242, 0.6);
-}
-
-.btn-secondary:focus-visible {
-    outline: 3px solid var(--color-gold);
-    outline-offset: 2px;
-}
-
-/* M3 Outlined Button - Meeting Minutes Architect (Link style) */
-.btn-outlined {
-    background-color: transparent;
-    border: 1px solid var(--color-border-subtle);
-    color: var(--color-action-primary);
-    border-radius: var(--md-sys-shape-corner-pill);
-}
-
-.btn-outlined::before {
-    background-color: var(--color-action-primary);
-}
-
-.btn-outlined:hover::before {
-    opacity: var(--md-sys-state-hover-opacity);
-}
-
-.btn-outlined:focus-visible::before {
-    opacity: var(--md-sys-state-focus-opacity);
-}
-
-.btn-outlined:active::before {
-    opacity: var(--md-sys-state-pressed-opacity);
-}
-
-.btn-outlined:focus-visible {
-    outline: 3px solid var(--color-gold);
-    outline-offset: 2px;
-}
-
-.btn-outlined .material-symbols-outlined {
-    margin-right: 0.5rem;
-    font-size: 1.25rem;
-}
-
-/* M3 Text Button */
-.btn-text {
-    background-color: transparent;
-    color: var(--color-action-primary);
-    padding: 0.625rem 0.75rem;
-}
-
-.btn-text::before {
-    background-color: var(--color-action-primary);
-}
-
-.btn-text:hover::before {
-    opacity: var(--md-sys-state-hover-opacity);
-}
-
-.btn-text:focus-visible::before {
-    opacity: var(--md-sys-state-focus-opacity);
-}
-
-.btn-text:active::before {
-    opacity: var(--md-sys-state-pressed-opacity);
-}
-
-.btn-text:focus-visible {
-    outline: 3px solid var(--color-gold);
-    outline-offset: 2px;
 }
 
 /* Clear All button styling */
@@ -2601,27 +2160,7 @@ body.modal-open {
     min-height: 2.75rem;
 }
 
-/* Download link button style per mockup */
-.modal-actions .btn-secondary {
-    background: none;
-    border: none;
-    padding: 0.5rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--md-sys-color-text-muted);
-    text-decoration: underline;
-    text-decoration-style: dotted;
-    text-decoration-color: var(--md-sys-color-outline-variant);
-    text-underline-offset: 4px;
-    text-transform: none;
-    letter-spacing: normal;
-}
-
-.modal-actions .btn-secondary:hover {
-    color: var(--md-sys-color-primary);
-    text-decoration-color: var(--md-sys-color-primary);
-    background: none;
-}
+/* Note: Text-link style buttons now use .btn-link from design system */
 
 .shortcut-list {
     display: flex;
@@ -2738,11 +2277,8 @@ body.modal-open {
         display: none;
     }
 
-    /* Controls bar - mobile compact and hidden by default */
+    /* Controls bar - mobile hidden by default */
     .controls-bar {
-        flex-direction: row;
-        padding: var(--space-sm);
-        gap: var(--space-sm);
         /* Ensure controls are above the grid */
         position: relative;
         z-index: 100;
@@ -2757,32 +2293,14 @@ body.modal-open {
 
     /* Show controls bar when toggled */
     .controls-bar.show {
-        display: flex;
+        display: block;
         max-height: 800px;
         /* Large enough to fit all controls */
         opacity: 1;
     }
 
-    .search-wrapper {
-        min-width: 100%;
-        flex: 1 1 100%;
-        margin-right: 0;
-    }
-
     .search-hint {
         display: none;
-    }
-
-    .category-chips {
-        width: 100%;
-        flex: 1 1 100%;
-        max-width: 100%;
-        overflow-x: hidden;
-    }
-
-    .category-chip {
-        white-space: nowrap;
-        flex-shrink: 0;
     }
 
     /* Prompt grid - mobile: single column, smaller gap */
@@ -3115,29 +2633,12 @@ body.modal-open {
 
 
 
-    .controls-bar {
-        padding: var(--space-sm);
-
-    }
-
     .prompt-grid {
         padding: var(--space-sm);
     }
 
     .prompt-list {
         padding: var(--space-sm);
-    }
-
-    .search-input {
-        min-height: 2.5rem;
-        padding: 0.5rem 0.75rem;
-        border-radius: var(--md-sys-shape-corner-full);
-    }
-
-    .category-chip {
-        padding: 0.25rem 0.625rem;
-        min-height: 1.625rem;
-        font-size: 0.625rem;
     }
 
     .modal-header,
@@ -3223,7 +2724,7 @@ body.modal-open {
     /* Hide descriptions by default on mobile, but allow them to be shown when toggled */
     .card-description.hidden,
     .prompt-list-item-description.hidden {
-        display: none !important;
+        display: none;
         height: 0;
         opacity: 0;
         margin: 0;

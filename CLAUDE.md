@@ -56,30 +56,53 @@ No installation, build, or compilation steps required.
 
 ### Design System Workflow
 
-When the user requests styling changes:
+When the user requests styling or component changes:
 
 1. **Identify the change type** using the table above
 2. **If design system change needed:**
    - Inform the user: "This change should be made in the design system (m3-design-v2) so it applies to all projects"
    - Guide them to make the change there first
-   - After pushing to m3-design-v2, **ALWAYS run aggressive CDN purge** (see below)
+   - After pushing to m3-design-v2, **ALWAYS run the full CDN purge** (see [CDN Cache Purging](#cdn-cache-purging-critical) below)
+   - **Verify the purge worked** before testing in prompts-library
 3. **If app-specific change:** Edit `styles.css` directly
+
+**IMPORTANT FOR DEBUGGING:** If a design system component (e.g., `wy-controls-bar`, `wy-filter-chip`, `wy-modal`) behaves unexpectedly, **always check for stale CDN cache first** before investigating code. Run the full purge commands and hard refresh.
 
 ### CDN Import Details
 
-The design system is loaded via [tokens.css](tokens.css):
+The design system is loaded via two mechanisms:
+
+**CSS tokens** (via [tokens.css](tokens.css)):
 ```css
 @import url('https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/tokens.css');
 @import url('https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/main.css');
 ```
 
+**Web Components** (via [components/index.js](components/index.js)):
+```javascript
+import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/dist/web-components.js';
+```
+
 ### CDN Cache Purging (CRITICAL)
 
-**jsDelivr aggressively caches content.** After ANY change to m3-design-v2, you MUST run aggressive purge commands to prevent stale styles.
+**jsDelivr aggressively caches content.** After ANY change to m3-design-v2, you MUST run aggressive purge commands to prevent stale styles or broken components.
 
-**After pushing changes to m3-design-v2, ALWAYS run ALL of these purge commands:**
+#### When to Purge
+
+**ALWAYS purge after:**
+- Pushing any commit to m3-design-v2
+- Debugging unexpected behavior in design system components (e.g., filter chips, controls bar, modals)
+- When the app behaves differently than expected based on the design system source code
+
+**Symptoms of stale cache:**
+- Components behave differently than their source code suggests
+- Style changes made in design system don't appear
+- Features work locally in design system but not in consuming projects
+
+#### Full Purge Commands (Run All)
 
 ```bash
+# === CSS Tokens ===
 # Purge with @main reference
 curl -s "https://purge.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/tokens.css"
 curl -s "https://purge.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/main.css"
@@ -91,20 +114,35 @@ curl -s "https://purge.jsdelivr.net/gh/mwyuwono/m3-design-v2/src/styles/main.css
 # Purge with @latest reference
 curl -s "https://purge.jsdelivr.net/gh/mwyuwono/m3-design-v2@latest/src/styles/tokens.css"
 curl -s "https://purge.jsdelivr.net/gh/mwyuwono/m3-design-v2@latest/src/styles/main.css"
+
+# === Web Components Bundle ===
+curl -s "https://purge.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/dist/web-components.js"
+curl -s "https://purge.jsdelivr.net/gh/mwyuwono/m3-design-v2/dist/web-components.js"
+curl -s "https://purge.jsdelivr.net/gh/mwyuwono/m3-design-v2@latest/dist/web-components.js"
 ```
 
-**Verification steps:**
+#### One-Liner for Quick Purge
+
+```bash
+for f in src/styles/tokens.css src/styles/main.css dist/web-components.js; do for v in @main "" @latest; do curl -s "https://purge.jsdelivr.net/gh/mwyuwono/m3-design-v2${v}/${f}"; done; done
+```
+
+#### Verification Steps
+
 1. Run all purge commands above
 2. Wait 2-3 seconds for propagation
-3. Verify with direct curl: `curl -s "https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/tokens.css" | grep -A 5 "your-changed-property"`
-4. If still showing old content, purge again and wait longer
-5. Hard refresh the browser (Cmd+Shift+R)
+3. Verify CSS: `curl -s "https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/tokens.css" | grep -A 5 "your-changed-property"`
+4. Verify JS: `curl -s "https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/dist/web-components.js" | grep "expected-code-snippet"`
+5. If still showing old content, purge again and wait longer
+6. Hard refresh the browser (Cmd+Shift+R)
 
-**Why aggressive purging matters:**
+#### Why Aggressive Purging Matters
+
 - jsDelivr has multiple edge nodes that may cache independently
 - A single purge may not clear all edge caches immediately
 - The `@main`, default, and `@latest` references may be cached separately
-- Without proper purging, users may see stale styles for hours
+- **Both CSS and JS bundles must be purged** - components depend on both
+- Without proper purging, users may see stale styles or broken behavior for hours
 
 ### Available Design Tokens
 
@@ -680,3 +718,28 @@ The implementation differs from the original requirements draft in these ways:
 5. **State properties**: Uses `locked` and `activeTab` on prompt objects directly
 
 When making changes, follow the actual implementation patterns rather than the requirements document.
+
+## Known Issues
+
+_No known issues at this time._
+
+## Resolved Issues
+
+### Category Filter Chips Not Working (RESOLVED 2026-01-24)
+
+**Resolution:** The design system (m3-design-v2) was already fixed in commit `521f36c`. The issue was a stale jsDelivr CDN cache serving an old version of `wy-filter-chip` with internal toggle behavior. CDN cache was purged and the fix is now live.
+
+**What was wrong:** The `wy-filter-chip` component had a `_toggle()` method that managed its own `active` state internally, conflicting with `wy-controls-bar`'s parent-controlled state management via Lit's `?active` binding.
+
+**The fix:** `wy-filter-chip` is now purely presentational - it does not toggle its own state. It only handles keyboard accessibility (Enter/Space to click). The parent component (`wy-controls-bar`) manages all active state via the `?active` binding and `@click` handlers.
+
+**Lesson learned:** When filter chips stop working, first check if the CDN cache is stale:
+```bash
+# Purge the web-components bundle
+curl -s "https://purge.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/dist/web-components.js"
+curl -s "https://purge.jsdelivr.net/gh/mwyuwono/m3-design-v2/dist/web-components.js"
+curl -s "https://purge.jsdelivr.net/gh/mwyuwono/m3-design-v2@latest/dist/web-components.js"
+
+# Verify fix is served (should NOT contain "_toggle" near filter-chip)
+curl -s "https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/dist/web-components.js" | grep -B50 'customElements.define("wy-filter-chip"' | grep "_toggle"
+```
