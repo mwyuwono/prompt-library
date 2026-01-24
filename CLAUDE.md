@@ -20,6 +20,100 @@ python3 -m http.server 8000
 
 No installation, build, or compilation steps required.
 
+## Design System Integration
+
+**CRITICAL: This project uses a shared design system. Before making ANY styling changes, read this section.**
+
+### Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  m3-design-v2 (GitHub: mwyuwono/m3-design-v2)                  │
+│  ├── src/styles/tokens.css  → Colors, typography, spacing      │
+│  └── src/styles/main.css    → Base styles, utilities, buttons  │
+└─────────────────────────────────────────────────────────────────┘
+                              ↓ CDN Import
+┌─────────────────────────────────────────────────────────────────┐
+│  prompts-library                                                │
+│  ├── tokens.css  → Imports design system + legacy mappings     │
+│  └── styles.css  → App-specific components only                │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Where to Make Style Changes
+
+| Change Type | Where to Edit | Why |
+|-------------|---------------|-----|
+| **Colors** (brand palette, semantic colors) | `m3-design-v2/src/styles/tokens.css` | Shared across all projects |
+| **Typography** (fonts, type scale) | `m3-design-v2/src/styles/tokens.css` | Consistent reading experience |
+| **Spacing tokens** | `m3-design-v2/src/styles/tokens.css` | Consistent rhythm |
+| **Motion tokens** (durations, easing) | `m3-design-v2/src/styles/tokens.css` | Consistent feel |
+| **Base styles** (body, headings, scrollbars) | `m3-design-v2/src/styles/main.css` | Reusable foundations |
+| **Utility classes** (`.btn`, `.text-muted`) | `m3-design-v2/src/styles/main.css` | Reusable patterns |
+| **Category colors** (`--wy-color-*`) | `m3-design-v2/src/styles/main.css` | Shared taxonomy |
+| **App layout** (`.header-top`, `.controls-bar`) | `prompts-library/styles.css` | App-specific |
+| **App components** (`.prompt-card`, `.prompt-modal`) | `prompts-library/styles.css` | App-specific |
+
+### Design System Workflow
+
+When the user requests styling changes:
+
+1. **Identify the change type** using the table above
+2. **If design system change needed:**
+   - Inform the user: "This change should be made in the design system (m3-design-v2) so it applies to all projects"
+   - Guide them to make the change there first
+   - After pushing to m3-design-v2, purge the CDN cache:
+     ```bash
+     curl -s "https://purge.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/tokens.css"
+     curl -s "https://purge.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/main.css"
+     ```
+3. **If app-specific change:** Edit `styles.css` directly
+
+### CDN Import Details
+
+The design system is loaded via [tokens.css](tokens.css):
+```css
+@import url('https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/tokens.css');
+@import url('https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/main.css');
+```
+
+**Cache behavior**: jsDelivr caches for up to 24 hours. After changes to m3-design-v2:
+1. Push changes to GitHub
+2. Purge CDN cache (see commands above)
+3. Hard refresh the browser (Cmd+Shift+R)
+
+### Available Design Tokens
+
+From the design system, prefer these over hardcoded values:
+
+**Colors:**
+- `--md-sys-color-primary`, `--md-sys-color-on-primary`
+- `--md-sys-color-background`, `--md-sys-color-on-background`
+- `--md-sys-color-surface`, `--md-sys-color-surface-container-*`
+- `--md-sys-color-text-main`, `--md-sys-color-text-muted`
+
+**Typography:**
+- `--font-serif` (Playfair Display), `--font-sans` (DM Sans)
+- `--md-sys-typescale-*-font`, `--md-sys-typescale-*-size`, etc.
+
+**Spacing:**
+- `--spacing-layout` (120px), `--spacing-gap` (64px)
+
+**Shape:**
+- `--md-sys-shape-corner-medium` (16px), `--md-sys-shape-corner-large` (32px), `--md-sys-shape-corner-full` (9999px)
+
+**Category Colors:**
+- `--wy-color-productivity`, `--wy-color-expertise`, `--wy-color-travel`
+
+### Legacy Compatibility
+
+The local [tokens.css](tokens.css) maps old variable names to design system tokens:
+- `--color-page-background` → `--md-sys-color-background`
+- `--color-text-primary` → `--md-sys-color-text-main`
+- `--color-olive` → `--md-sys-color-primary`
+
+When writing new code, prefer the `--md-sys-*` tokens directly.
+
 ## Architecture Overview
 
 ### Core Design Principles
@@ -27,15 +121,17 @@ No installation, build, or compilation steps required.
 1. **Vanilla JavaScript only** - No frameworks, no build tools, no npm dependencies
 2. **Session-only edits** - Template modifications don't persist across page reloads
 3. **Single-user context** - No authentication, database, or server-side logic
+4. **Design system first** - Use shared tokens from m3-design-v2; avoid local overrides
 
 ### File Structure
 
 ```
 /
 ├── index.html       # Main HTML structure
-├── app.js          # Single PromptLibrary class orchestrating everything
-├── styles.css      # All styling (no preprocessors)
-└── prompts.json    # Prompt data source
+├── app.js           # Single PromptLibrary class orchestrating everything
+├── tokens.css       # Design system imports + legacy compatibility mappings
+├── styles.css       # App-specific component styles only
+└── prompts.json     # Prompt data source
 ```
 
 **Note**: The requirements document mentions a `components/` directory with separate modules (`promptCard.js`, `templateParser.js`), but the **actual implementation** uses a single `PromptLibrary` class in `app.js` that handles all functionality internally.
@@ -434,6 +530,12 @@ All user inputs are escaped via `escapeHTML()` before rendering to prevent injec
 
 ### CSS Quality Standards
 
+**CRITICAL: Design System First**:
+- **Before adding any new CSS**, check if the design system (m3-design-v2) already provides what you need
+- **Prefer design system tokens** (`--md-sys-*`, `--wy-*`) over legacy variables (`--color-*`)
+- If a token should be reusable, add it to the design system, not locally
+- See the [Design System Integration](#design-system-integration) section for the full workflow
+
 **CRITICAL: NO !important Declarations**:
 - **NEVER use `!important`** in CSS except for true utility classes that must override everything
 - If specificity conflicts arise, resolve them by:
@@ -456,7 +558,7 @@ All user inputs are escaped via `escapeHTML()` before rendering to prevent injec
     content: '';
     position: absolute;
     inset: 0;
-    background-color: var(--color-action-primary);
+    background-color: var(--md-sys-color-primary);
     opacity: 0;
     transition: opacity var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
     pointer-events: none;
@@ -467,12 +569,11 @@ All user inputs are escaped via `escapeHTML()` before rendering to prevent injec
   ```
 
 **Variables**:
-- Keep colors within the descriptive palette (`--color-page-background`, `--color-card-surface`, `--color-surface-hover`, `--color-border-subtle`, `--color-text-primary`, `--color-text-secondary`, `--color-action-primary`, `--color-action-primary-hover`)
+- **Prefer M3 tokens**: `--md-sys-color-*`, `--md-sys-typescale-*`, `--md-sys-shape-*`
+- **Legacy fallback**: `--color-page-background`, `--color-text-primary`, etc. (mapped to M3 tokens)
 - **NEVER use hardcoded color values** like `#ffffff` or `#000000` - always use CSS variables
-- Use `color-mix()` with variables: `color-mix(in srgb, var(--category-color) 16%, var(--color-card-surface))`
-- Category accents live in `--color-category-*`
-- Modal effects use `--modal-blur-amount`
-- Motion/typography/state tokens rely on `--md-sys-*` variables
+- Use `color-mix()` with variables: `color-mix(in srgb, var(--md-sys-color-primary) 16%, transparent)`
+- Category accents use `--wy-color-*` tokens from the design system
 
 **Transitions & Animations**:
 - **Always use motion token variables** for durations and easing curves

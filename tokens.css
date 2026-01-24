@@ -1,121 +1,37 @@
 /**
- * Design Tokens from m3-design-v2
+ * Design System Import
  * Source: https://github.com/mwyuwono/m3-design-v2
  *
- * This file provides the foundation design tokens and compatibility
- * mappings for the prompts-library application.
+ * This file imports the shared design tokens from the m3-design-v2 design system.
+ * All token changes should be made in the design system repository, not here.
+ *
+ * After changes to m3-design-v2, purge the CDN cache:
+ * curl -s "https://purge.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/tokens.css"
+ * curl -s "https://purge.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/main.css"
  */
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;700&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+/* Design System Tokens (colors, typography, spacing, shapes, motion) */
+@import url('https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/tokens.css');
+
+/* Design System Utilities (base styles, button classes, text utilities) */
+@import url('https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/main.css');
+
+/* ========================================
+   PROJECT-SPECIFIC EXTENSIONS
+   Only add tokens here that are unique to prompts-library
+   and not suitable for the shared design system.
+   ======================================== */
 
 :root {
-  /* ========================================
-     M3 COLOR SYSTEM (from m3-design-v2)
-     ======================================== */
+  /* Legacy compatibility mappings - map old variable names to M3 tokens */
+  --color-linen: var(--md-sys-color-background);
+  --color-charcoal: var(--md-sys-color-on-background);
+  --color-white: var(--md-sys-color-surface-container-lowest);
+  --color-olive: var(--md-sys-color-primary);
+  --color-gold: var(--md-sys-color-secondary);
+  --color-warmgrey: var(--md-sys-color-text-muted);
 
-  /* Primary: Deep Forest Green (Meeting Minutes Architect) */
-  --md-sys-color-primary: #2A3D31;
-  --md-sys-color-on-primary: #FFFFFF;
-  --md-sys-color-primary-container: #E8F5E9;
-  --md-sys-color-on-primary-container: #002114;
-
-  /* Secondary / Surface Tones */
-  --md-sys-color-secondary: #8C7E70;
-  --md-sys-color-on-secondary: #FFFFFF;
-
-  /* Backgrounds & Surfaces (Light) */
-  --md-sys-color-background: #FDFBF7; /* Alabaster */
-  --md-sys-color-on-background: #121714; /* Deep Green-Black */
-
-  /* Surfaces & Containers */
-  --md-sys-color-surface: #F5F2EA; /* Warm Clay */
-  --md-sys-color-on-surface: #121714;
-  --md-sys-color-surface-variant: #EBE5DE;
-  --md-sys-color-on-surface-variant: #49454E;
-
-  /* Surface Container Levels */
-  --md-sys-color-surface-container-lowest: #FFFFFF;
-  --md-sys-color-surface-container-low: #FDFBF7; /* Alabaster */
-  --md-sys-color-surface-container: #F5F2EA; /* Warm Clay */
-  --md-sys-color-surface-container-high: #EBE5DE;
-  --md-sys-color-surface-container-highest: #D7D3C8;
-
-  --md-sys-color-secondary-container: #EBE5DE;
-  --md-sys-color-on-secondary-container: #2d312f;
-
-  /* Inverse Tokens (for Toasts/Snackbars) */
-  --md-sys-color-inverse-surface: #121714;
-  --md-sys-color-inverse-on-surface: #F5F2EA;
-
-  /* Outlines & Borders */
-  --md-sys-color-outline: #2d4e3c;
-  --md-sys-color-outline-variant: #D7D3C8;
-  --md-sys-color-border-variant: #EBE5DA;
-
-  /* Semantic Text */
-  --md-sys-color-text-main: #121714;
-  --md-sys-color-text-muted: #667f71;
-
-  /* ========================================
-     TYPOGRAPHY FAMILIES
-     ======================================== */
-  --font-display: 'Manrope', sans-serif;
-  --font-serif: 'Playfair Display', serif;
-  --font-body: 'Manrope', sans-serif;
-
-  /* Update legacy font-sans to use Manrope */
-  --font-sans: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-
-  /* M3 Typography Token Overrides */
-  --md-sys-typescale-display-large-font: var(--font-serif);
-  --md-sys-typescale-display-medium-font: var(--font-serif);
-  --md-sys-typescale-display-small-font: var(--font-serif);
-
-  --md-sys-typescale-headline-large-font: var(--font-serif);
-  --md-sys-typescale-headline-medium-font: var(--font-serif);
-  --md-sys-typescale-headline-small-font: var(--font-serif);
-
-  --md-sys-typescale-title-large-font: var(--font-serif);
-  --md-sys-typescale-title-medium-font: var(--font-body);
-  --md-sys-typescale-title-small-font: var(--font-body);
-
-  --md-sys-typescale-body-large-font: var(--font-body);
-  --md-sys-typescale-body-medium-font: var(--font-body);
-  --md-sys-typescale-body-small-font: var(--font-body);
-
-  --md-sys-typescale-label-large-font: var(--font-display);
-  --md-sys-typescale-label-medium-font: var(--font-display);
-  --md-sys-typescale-label-small-font: var(--font-display);
-
-  /* ========================================
-     CATEGORY COLORS (from m3-design-v2)
-     ======================================== */
-  --wy-color-productivity: #546E7A; /* Muted Slate */
-  --wy-color-productivity-container: #ECEFF1;
-  --wy-color-on-productivity-container: #263238;
-
-  --wy-color-expertise: #6D5D6E; /* Muted Mauve */
-  --wy-color-expertise-container: #F3F1F3;
-  --wy-color-on-expertise-container: #2E252E;
-
-  --wy-color-travel: #556B2F; /* Muted Olive */
-  --wy-color-travel-container: #F1F5EB;
-  --wy-color-on-travel-container: #283317;
-
-  /* ========================================
-     COMPATIBILITY MAPPINGS
-     Maps legacy prompts-library variables to M3 tokens
-     ======================================== */
-
-  /* Legacy Brand Colors - Map to M3 equivalents */
-  --color-linen: var(--md-sys-color-background); /* #FDFBF7 Alabaster */
-  --color-charcoal: var(--md-sys-color-on-background); /* #121714 */
-  --color-white: var(--md-sys-color-surface-container-lowest); /* #FFFFFF */
-  --color-olive: var(--md-sys-color-primary); /* #2d4e3c Hunter Green */
-  --color-gold: var(--md-sys-color-secondary); /* #8C7E70 Muted Bronze */
-  --color-warmgrey: var(--md-sys-color-text-muted); /* #667f71 */
-
-  /* Legacy Semantic Mappings */
+  /* Semantic mappings for legacy code */
   --color-page-background: var(--md-sys-color-background);
   --color-card-surface: var(--md-sys-color-surface-container-lowest);
   --color-card-dark: var(--md-sys-color-primary);
@@ -124,153 +40,12 @@
   --color-text-contrast: var(--md-sys-color-on-primary);
   --color-primary: var(--md-sys-color-primary);
   --color-action-primary: var(--md-sys-color-secondary);
-  --color-action-primary-hover: #7A6E62; /* Darker bronze */
+  --color-action-primary-hover: #7A6E62;
   --color-emphasis-background: color-mix(in srgb, var(--md-sys-color-secondary) 10%, transparent);
   --color-surface-hover: color-mix(in srgb, var(--md-sys-color-text-muted) 10%, transparent);
   --color-border-subtle: color-mix(in srgb, var(--md-sys-color-text-muted) 10%, transparent);
 
-  /* ========================================
-     MEETING MINUTES ARCHITECT DESIGN TOKENS
-     Semantic tokens for new design system
-     ======================================== */
-  --bg-surface: #F5F2EA; /* Warm cream - primary surface */
-  --brand-primary: #2A3D31; /* Deep forest green - headings, buttons */
-  --text-heading: #2A3D31; /* Deep forest green for headings */
-  --tag-bg: #E8E4D8; /* Muted beige for pill badges */
-  --tab-border: #D1CDC2; /* Light border for tab underline */
-  --input-bg: #FFFFFF; /* Clean white for inputs */
-  --input-border: #D1CDC2; /* Subtle 1px border */
-
-  /* ========================================
-     SPACING & SHAPE (from m3-design-v2)
-     ======================================== */
-  --spacing-layout: 120px;
-  --spacing-gap: 64px;
-
-  /* M3 Shape Tokens */
-  --md-sys-shape-corner-none: 0px;
-  --md-sys-shape-corner-extra-small: 4px;
-  --md-sys-shape-corner-small: 8px;
-  --md-sys-shape-corner-medium: 16px;
-  --md-sys-shape-corner-large: 32px;
-  --md-sys-shape-corner-extra-large: 28px;
-  --md-sys-shape-corner-full: 9999px;
-  --md-sys-shape-corner-pill: 50px; /* High-radius pill shape for buttons */
-
-  /* ========================================
-     MOTION ENHANCEMENTS
-     ======================================== */
-  /* Add spring easing for special animations */
-  --md-sys-motion-easing-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-
-  /* ========================================
-     ELEVATION SYSTEM (from styles.css)
-     ======================================== */
-  --md-sys-elevation-level0: none;
-  --md-sys-elevation-level1: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
-  --md-sys-elevation-level2: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15);
-  --md-sys-elevation-level3: 0px 4px 8px 3px rgba(0, 0, 0, 0.15), 0px 1px 3px rgba(0, 0, 0, 0.3);
-  --md-sys-elevation-level4: 0px 6px 10px 4px rgba(0, 0, 0, 0.15), 0px 2px 3px rgba(0, 0, 0, 0.3);
-  --md-sys-elevation-level5: 0px 8px 12px 6px rgba(0, 0, 0, 0.15), 0px 4px 4px rgba(0, 0, 0, 0.3);
-}
-
-/* ========================================
-   DARK MODE OVERRIDES (from m3-design-v2)
-   ======================================== */
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Primary Colors */
-    --md-sys-color-primary: #8DE0B0;
-    --md-sys-color-on-primary: #002114;
-    --md-sys-color-primary-container: #005338;
-    --md-sys-color-on-primary-container: #8DE0B0;
-
-    /* Backgrounds & Surfaces */
-    --md-sys-color-background: #161c19;
-    --md-sys-color-on-background: #FDFBF7;
-
-    --md-sys-color-surface: #1E2623;
-    --md-sys-color-on-surface: #FDFBF7;
-
-    --md-sys-color-surface-variant: #2C3631;
-    --md-sys-color-on-surface-variant: #A0B3A9;
-
-    --md-sys-color-surface-container-lowest: #0e1110;
-    --md-sys-color-surface-container-low: #161c19;
-    --md-sys-color-surface-container: #1E2623;
-    --md-sys-color-surface-container-high: #2C3631;
-    --md-sys-color-surface-container-highest: #3E4944;
-
-    --md-sys-color-secondary-container: #2C3631;
-    --md-sys-color-on-secondary-container: #EBE5DE;
-
-    /* Inverse Tokens */
-    --md-sys-color-inverse-surface: #FDFBF7;
-    --md-sys-color-inverse-on-surface: #1E2623;
-
-    /* Outlines */
-    --md-sys-color-outline: #8DE0B0;
-    --md-sys-color-outline-variant: #2C3631;
-    --md-sys-color-border-variant: #2C3631;
-
-    /* Text */
-    --md-sys-color-text-main: #FDFBF7;
-    --md-sys-color-text-muted: #8FA397;
-
-    /* Category Colors (Dark Mode) */
-    --wy-color-productivity: #B0BEC5; /* Light Blue Grey */
-    --wy-color-productivity-container: #37474F;
-    --wy-color-on-productivity-container: #ECEFF1;
-
-    --wy-color-expertise: #E1BEE7; /* Light Mauve */
-    --wy-color-expertise-container: #4A3B4A;
-    --wy-color-on-expertise-container: #F3E5F5;
-
-    --wy-color-travel: #DCEDC8; /* Pale Green */
-    --wy-color-travel-container: #334D2B;
-    --wy-color-on-travel-container: #F1F8E9;
-  }
-}
-
-/* ========================================
-   GLOBAL UTILITIES (from m3-design-v2/main.css)
-   ======================================== */
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--md-sys-color-outline-variant);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--md-sys-color-secondary);
-}
-
-/* Tracking & Text Utilities */
-.label-overline {
-  font-family: var(--font-display);
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--md-sys-color-primary);
-  opacity: 0.6;
-}
-
-.text-muted {
-  color: var(--md-sys-color-text-muted);
-}
-
-.italic-serif {
-  font-family: var(--font-serif);
-  font-style: italic;
+  /* App-specific tokens */
+  --modal-blur-amount: 16px;
+  --modal-blur-saturation: 180%;
 }
