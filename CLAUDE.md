@@ -62,11 +62,7 @@ When the user requests styling changes:
 2. **If design system change needed:**
    - Inform the user: "This change should be made in the design system (m3-design-v2) so it applies to all projects"
    - Guide them to make the change there first
-   - After pushing to m3-design-v2, purge the CDN cache:
-     ```bash
-     curl -s "https://purge.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/tokens.css"
-     curl -s "https://purge.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/main.css"
-     ```
+   - After pushing to m3-design-v2, **ALWAYS run aggressive CDN purge** (see below)
 3. **If app-specific change:** Edit `styles.css` directly
 
 ### CDN Import Details
@@ -77,10 +73,38 @@ The design system is loaded via [tokens.css](tokens.css):
 @import url('https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/main.css');
 ```
 
-**Cache behavior**: jsDelivr caches for up to 24 hours. After changes to m3-design-v2:
-1. Push changes to GitHub
-2. Purge CDN cache (see commands above)
-3. Hard refresh the browser (Cmd+Shift+R)
+### CDN Cache Purging (CRITICAL)
+
+**jsDelivr aggressively caches content.** After ANY change to m3-design-v2, you MUST run aggressive purge commands to prevent stale styles.
+
+**After pushing changes to m3-design-v2, ALWAYS run ALL of these purge commands:**
+
+```bash
+# Purge with @main reference
+curl -s "https://purge.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/tokens.css"
+curl -s "https://purge.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/main.css"
+
+# Purge without version (catches default branch)
+curl -s "https://purge.jsdelivr.net/gh/mwyuwono/m3-design-v2/src/styles/tokens.css"
+curl -s "https://purge.jsdelivr.net/gh/mwyuwono/m3-design-v2/src/styles/main.css"
+
+# Purge with @latest reference
+curl -s "https://purge.jsdelivr.net/gh/mwyuwono/m3-design-v2@latest/src/styles/tokens.css"
+curl -s "https://purge.jsdelivr.net/gh/mwyuwono/m3-design-v2@latest/src/styles/main.css"
+```
+
+**Verification steps:**
+1. Run all purge commands above
+2. Wait 2-3 seconds for propagation
+3. Verify with direct curl: `curl -s "https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/tokens.css" | grep -A 5 "your-changed-property"`
+4. If still showing old content, purge again and wait longer
+5. Hard refresh the browser (Cmd+Shift+R)
+
+**Why aggressive purging matters:**
+- jsDelivr has multiple edge nodes that may cache independently
+- A single purge may not clear all edge caches immediately
+- The `@main`, default, and `@latest` references may be cached separately
+- Without proper purging, users may see stale styles for hours
 
 ### Available Design Tokens
 
