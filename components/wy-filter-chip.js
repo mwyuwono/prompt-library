@@ -17,38 +17,39 @@ export class WyFilterChip extends LitElement {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 0.25rem 0.75rem;
+      padding: var(--wy-filter-chip-padding, 0.25rem 0.75rem);
       border-radius: 9999px;
-      font-family: var(--font-serif);
-      font-size: 0.75rem;
-      font-weight: 400;
+      font-family: var(--wy-filter-chip-font-family, var(--font-serif));
+      font-size: var(--wy-filter-chip-font-size, 0.75rem);
+      font-weight: var(--wy-filter-chip-font-weight, 400);
       line-height: 1.5;
+      font-style: var(--wy-filter-chip-font-style, italic);
       cursor: pointer;
-      transition: all 0.2s ease;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+      border: 1px solid var(--wy-filter-chip-border, var(--md-sys-color-outline-variant));
       background-color: transparent;
-      color: rgba(255, 255, 255, 0.6);
+      color: var(--wy-filter-chip-text, var(--md-sys-color-on-background));
       user-select: none;
       white-space: nowrap;
     }
 
     :host(:hover) {
-      color: rgba(255, 255, 255, 1);
-      border-color: rgba(255, 255, 255, 0.4);
-      background-color: rgba(255, 255, 255, 0.05);
+      color: var(--wy-filter-chip-text-hover, var(--wy-filter-chip-text, var(--md-sys-color-on-background)));
+      border-color: var(--wy-filter-chip-border-hover, var(--md-sys-color-outline));
+      background-color: var(--wy-filter-chip-hover-bg, var(--md-sys-color-surface-variant));
     }
 
     :host(:focus-visible) {
-      outline: 2px solid rgba(255, 255, 255, 0.5);
+      outline: 2px solid var(--wy-filter-chip-focus, var(--md-sys-color-primary));
       outline-offset: 2px;
     }
 
     :host([active]) {
-      background-color: #E8F5E9;
-      color: #2C4C3B;
+      background-color: var(--wy-filter-chip-active-bg, var(--md-sys-color-primary));
+      color: var(--wy-filter-chip-active-fg, var(--md-sys-color-on-primary));
       border-color: transparent;
-      font-weight: 500;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      font-weight: var(--wy-filter-chip-font-weight-active, 500);
+      box-shadow: var(--wy-filter-chip-shadow, none);
     }
 
     .count {
