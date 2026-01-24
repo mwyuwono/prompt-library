@@ -83,6 +83,27 @@ The design system is loaded via two mechanisms:
 import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/dist/web-components.js';
 ```
 
+### CRITICAL: Never Pin to Commit Hashes
+
+**ALWAYS use `@main`** for design system imports, never specific commit hashes like `@521f36c`.
+
+**Why this matters:**
+- Pinning to a commit hash freezes the code at that point in time
+- Future fixes and improvements in the design system won't be picked up
+- This has caused bugs where fixes were made but not reflected in consuming projects
+- The CDN purge workflow assumes `@main` references are being used
+
+**If you see a commit hash in an import:**
+```javascript
+// ❌ BAD - pinned to old commit, won't get updates
+import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@521f36c/dist/web-components.js';
+
+// ✅ GOOD - always gets latest from main branch
+import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/dist/web-components.js';
+```
+
+**When debugging CDN issues:** Always check the import paths first. If pinned to a hash, update to `@main`, purge the CDN, and hard refresh.
+
 ### CDN Cache Purging (CRITICAL)
 
 **jsDelivr aggressively caches content.** After ANY change to m3-design-v2, you MUST run aggressive purge commands to prevent stale styles or broken components.
@@ -743,3 +764,20 @@ curl -s "https://purge.jsdelivr.net/gh/mwyuwono/m3-design-v2@latest/dist/web-com
 # Verify fix is served (should NOT contain "_toggle" near filter-chip)
 curl -s "https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/dist/web-components.js" | grep -B50 'customElements.define("wy-filter-chip"' | grep "_toggle"
 ```
+
+### Material Symbols Icons Not Rendering in Controls Bar (RESOLVED 2026-01-24)
+
+**Symptoms:** The search icon, list view icon, and grid view icons in `wy-controls-bar` displayed as text (e.g., "search", "format_list_bulleted", "grid_view") instead of icons.
+
+**Root cause:** Two issues:
+1. The `wy-controls-bar` web component uses Shadow DOM, which isolates styles. The Material Symbols font loaded in `index.html` doesn't propagate into Shadow DOM.
+2. The `components/index.js` was pinned to an old commit hash (`@521f36c`) instead of `@main`, so even after fixing the design system, the fix wasn't picked up.
+
+**The fix:**
+1. Added Material Symbols font import directly inside `wy-controls-bar`'s Shadow DOM styles in the design system
+2. Updated `components/index.js` to use `@main` instead of the pinned commit hash
+
+**Lesson learned:**
+- Web components using Shadow DOM must import fonts directly in their styles - fonts don't inherit from the light DOM
+- Never pin CDN imports to commit hashes; always use `@main` so fixes propagate automatically
+- When design system fixes don't appear, check both CDN cache AND import paths
