@@ -68,6 +68,8 @@ When the user requests styling or component changes:
 
 **IMPORTANT FOR DEBUGGING:** If a design system component (e.g., `wy-controls-bar`, `wy-filter-chip`, `wy-modal`) behaves unexpectedly, **always check for stale CDN cache first** before investigating code. Run the full purge commands and hard refresh.
 
+**Current status (2026-01-25):** jsDelivr `@main` is serving a stale `dist/web-components.js`. The app temporarily pins `@ad99b95` until `@main` updates. See the Active Issues section for revert criteria.
+
 ### CDN Import Details
 
 The design system is loaded via two mechanisms:
@@ -82,27 +84,27 @@ The design system is loaded via two mechanisms:
 ```javascript
 import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/dist/web-components.js';
 ```
+If temporarily pinned to a commit, include a TODO and follow the revert criteria below.
 
-### CRITICAL: Never Pin to Commit Hashes
+### Import Pinning Policy (Default + Fallback)
 
-**ALWAYS use `@main`** for design system imports, never specific commit hashes like `@521f36c`.
+**Default: use `@main`.** Only pin to a commit hash as a **temporary fallback** when jsDelivr still serves stale content after a purge.
 
 **Why this matters:**
 - Pinning to a commit hash freezes the code at that point in time
 - Future fixes and improvements in the design system won't be picked up
-- This has caused bugs where fixes were made but not reflected in consuming projects
 - The CDN purge workflow assumes `@main` references are being used
 
-**If you see a commit hash in an import:**
+**Temporary fallback pin (only when CDN is stale after purge):**
 ```javascript
-// ❌ BAD - pinned to old commit, won't get updates
-import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@521f36c/dist/web-components.js';
-
-// ✅ GOOD - always gets latest from main branch
-import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/dist/web-components.js';
+// ✅ Temporary fallback - pin to the known-good commit until CDN updates
+// TODO: revert to @main once CDN serves the updated bundle
+import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@<commit>/dist/web-components.js';
 ```
 
-**When debugging CDN issues:** Always check the import paths first. If pinned to a hash, update to `@main`, purge the CDN, and hard refresh.
+**Revert criteria:** When `@main` serves the expected snippet (see verification steps below), restore `@main` and remove the TODO.
+
+**When debugging CDN issues:** Check import paths first. If pinned, confirm why. If `@main` is stale after purge, pin temporarily.
 
 ### CDN Cache Purging (CRITICAL)
 
@@ -146,6 +148,12 @@ curl -s "https://purge.jsdelivr.net/gh/mwyuwono/m3-design-v2@latest/dist/web-com
 
 ```bash
 for f in src/styles/tokens.css src/styles/main.css dist/web-components.js; do for v in @main "" @latest; do curl -s "https://purge.jsdelivr.net/gh/mwyuwono/m3-design-v2${v}/${f}"; done; done
+```
+
+#### Helper Script (Recommended)
+
+```bash
+VERIFY_SNIPPET="expected-code-snippet" scripts/design-system-refresh.sh
 ```
 
 #### Verification Steps
@@ -782,3 +790,19 @@ curl -s "https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/dist/web-compone
 - Prefer upstream fixes in the design system over local overrides; reserve app-level patches for temporary hotfixes only
 - Never pin CDN imports to commit hashes; always use `@main` so fixes propagate automatically
 - When design system fixes don't appear, check both CDN cache AND import paths
+
+### Controls Bar Bundle Stale on jsDelivr (ACTIVE 2026-01-25)
+
+**Status:** jsDelivr `@main` is still serving a stale `dist/web-components.js` bundle, even after purges. The prompt-library import is temporarily pinned to commit `ad99b95`.
+
+**Current workaround:**
+- `components/index.js` uses `https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@ad99b95/dist/web-components.js`
+- Keep this pin until `@main` serves the updated bundle
+
+**Verification command:**
+```bash
+VERIFY_SNIPPET="Material+Symbols+Outlined" scripts/design-system-refresh.sh
+```
+
+**Revert criteria:**
+- Once the command above succeeds for `@main`, switch the import back to `@main` and remove the TODO in `components/index.js`.

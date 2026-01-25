@@ -164,6 +164,13 @@ Some prompts offer multiple variations - different template styles for the same 
 - Modal: spring-like easing `cubic-bezier(0.34, 1.56, 0.64, 1)` for opening
 - Standard interactions: M3 motion durations and easing curves
 
+### Design System Update Checklist
+
+1. Make the change in `m3-design-v2` and rebuild the bundle.
+2. Push to `main`, then run `VERIFY_SNIPPET="expected-code-snippet" scripts/design-system-refresh.sh`.
+3. Verify `@main` serves the change; if stale after purge, temporarily pin the commit in `components/index.js` with a TODO.
+4. Revert the pin once `@main` serves the updated bundle.
+
 ### CSS Quality Guidelines
 
 When modifying `styles.css`, follow these critical best practices:
