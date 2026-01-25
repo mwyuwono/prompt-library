@@ -6,8 +6,7 @@
  */
 
 // Import design system web components (built bundle from dist/)
-// TODO: Revert to @main once jsDelivr serves the updated bundle.
-import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@ad99b95/dist/web-components.js';
+import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/dist/web-components.js';
 
 // Local component: customized wy-toast with shorter duration and no icon
 import './wy-toast.js';

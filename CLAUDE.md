@@ -791,18 +791,8 @@ curl -s "https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/dist/web-compone
 - Never pin CDN imports to commit hashes; always use `@main` so fixes propagate automatically
 - When design system fixes don't appear, check both CDN cache AND import paths
 
-### Controls Bar Bundle Stale on jsDelivr (ACTIVE 2026-01-25)
+### Controls Bar Bundle Stale on jsDelivr (RESOLVED 2026-01-25)
 
-**Status:** jsDelivr `@main` is still serving a stale `dist/web-components.js` bundle, even after purges. The prompt-library import is temporarily pinned to commit `ad99b95`.
+**Resolution:** CDN purge succeeded and `@main` now serves the updated bundle. The import was reverted from `@ad99b95` back to `@main`.
 
-**Current workaround:**
-- `components/index.js` uses `https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@ad99b95/dist/web-components.js`
-- Keep this pin until `@main` serves the updated bundle
-
-**Verification command:**
-```bash
-VERIFY_SNIPPET="Material+Symbols+Outlined" scripts/design-system-refresh.sh
-```
-
-**Revert criteria:**
-- Once the command above succeeds for `@main`, switch the import back to `@main` and remove the TODO in `components/index.js`.
+**What was fixed:** The `wy-filter-chip` component now uses configurable CSS custom properties (`--wy-filter-chip-active-bg`, `--wy-filter-chip-active-fg`, etc.) allowing consuming projects to customize chip appearance via CSS variables.
