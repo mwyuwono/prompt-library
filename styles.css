@@ -815,15 +815,19 @@ body.modal-open {
     --wy-filter-chip-active-fg: #002114;
 }
 
-/* Remove max-width constraint so controls align with full-width grid */
+/* Remove max-width constraint and add padding to align with grid */
 .controls-bar::part(controls-container) {
     max-width: none;
+    /* Desktop: match grid's 2rem (32px) padding */
+    padding-left: 32px;
+    padding-right: 32px;
 }
 
-/* Tablet: match grid's 1.5rem padding */
+/* Tablet: match grid's 1.5rem (24px) padding */
 @media (min-width: 768px) and (max-width: 1023px) {
-    .controls-bar {
-        --wy-controls-bar-padding: var(--space-sm) 1.5rem;
+    .controls-bar::part(controls-container) {
+        padding-left: 24px;
+        padding-right: 24px;
     }
 }
 
