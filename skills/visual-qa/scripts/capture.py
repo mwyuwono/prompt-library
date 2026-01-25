@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/Users/mwy/.local/pipx/venvs/playwright/bin/python3
 """
 Capture screenshots of a web page in light and dark mode.
 Outputs PNG screenshots and a JSON report with element visibility data.

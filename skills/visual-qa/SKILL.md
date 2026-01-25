@@ -56,7 +56,7 @@ Read both screenshots and analyze for these common issues:
 For each issue found, use the inspect script to get computed styles:
 
 ```bash
-python3 skills/visual-qa/scripts/inspect.py --url http://localhost:8000 --selector ".search-input" --color-scheme dark
+python3 skills/visual-qa/scripts/inspect_element.py --url http://localhost:8000 --selector ".search-input" --color-scheme dark
 ```
 
 This returns:

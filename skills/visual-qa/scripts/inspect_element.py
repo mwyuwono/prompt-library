@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/Users/mwy/.local/pipx/venvs/playwright/bin/python3
 """
 Inspect a specific element's computed styles and CSS custom properties.
 Useful for debugging why an element has incorrect styling.

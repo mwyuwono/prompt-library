@@ -55,13 +55,13 @@ When you spot a visual issue in a screenshot, use the inspect script to debug:
 
 ```bash
 # Inspect an element's computed styles in dark mode
-python3 skills/visual-qa/scripts/inspect.py --url http://localhost:8000 --selector ".search-input" --color-scheme dark
+python3 skills/visual-qa/scripts/inspect_element.py --url http://localhost:8000 --selector ".search-input" --color-scheme dark
 
 # Inspect inside Shadow DOM
-python3 skills/visual-qa/scripts/inspect.py --url http://localhost:8000 --selector "wy-controls-bar" --shadow-selector ".search-input"
+python3 skills/visual-qa/scripts/inspect_element.py --url http://localhost:8000 --selector "wy-controls-bar" --shadow-selector ".search-input"
 
 # Check contrast ratio
-python3 skills/visual-qa/scripts/inspect.py --url http://localhost:8000 --selector ".search-input" --color-scheme dark --contrast
+python3 skills/visual-qa/scripts/inspect_element.py --url http://localhost:8000 --selector ".search-input" --color-scheme dark --contrast
 ```
 
 See [skills/visual-qa/SKILL.md](skills/visual-qa/SKILL.md) for the complete workflow.
