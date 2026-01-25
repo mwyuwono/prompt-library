@@ -807,16 +807,18 @@ body.modal-open {
     background: transparent;
     border-top: none;
     border-bottom: none;
-    --wy-controls-bar-padding: var(--space-sm) var(--space-xl);
+    /* Match grid padding (2rem = 32px) for horizontal alignment */
+    --wy-controls-bar-padding: var(--space-sm) 2rem;
 
+    /* Filter chip theming - these cascade into the shadow DOM */
     --wy-filter-chip-text: var(--wy-controls-chip-text);
     --wy-filter-chip-text-hover: var(--wy-controls-chip-text-hover);
     --wy-filter-chip-border: var(--wy-controls-chip-border);
     --wy-filter-chip-border-hover: var(--wy-controls-chip-border-hover);
     --wy-filter-chip-hover-bg: var(--wy-controls-chip-hover-bg);
     --wy-filter-chip-focus: var(--wy-controls-chip-focus);
-    --wy-filter-chip-active-bg: var(--wy-controls-chip-active-bg);
-    --wy-filter-chip-active-fg: var(--wy-controls-chip-active-fg);
+    --wy-filter-chip-active-bg: var(--md-sys-color-primary-container);
+    --wy-filter-chip-active-fg: var(--md-sys-color-on-primary-container);
     --wy-filter-chip-shadow: var(--wy-controls-chip-shadow);
     --wy-filter-chip-font-family: var(--font-sans);
     --wy-filter-chip-font-size: var(--md-sys-typescale-label-medium-size, 0.75rem);
@@ -824,8 +826,11 @@ body.modal-open {
     --wy-filter-chip-font-weight: 500;
     --wy-filter-chip-font-weight-active: 600;
     --wy-filter-chip-padding: var(--space-xs) var(--space-md);
-    --wy-filter-chip-active-bg: var(--md-sys-color-primary-container);
-    --wy-filter-chip-active-fg: var(--md-sys-color-on-primary-container);
+}
+
+/* Remove max-width constraint so controls align with full-width grid */
+.controls-bar::part(controls-container) {
+    max-width: none;
 }
 
 /* Smooth transition when filtering prompts */
