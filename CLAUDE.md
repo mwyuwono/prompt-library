@@ -532,7 +532,25 @@ Preview updates in real time as variables change.
 Categories are displayed as clickable chips above the grid:
 - "All" chip is active by default
 - Clicking a category filters the grid
-- Active chip highlighted in purple
+- Active chip uses pale green background (`#E8F5E9`) with dark text (`#002114`)
+
+**Theming filter chips:** The `wy-filter-chip` component lives inside `wy-controls-bar`'s shadow DOM. To customize colors:
+```css
+/* Set on .controls-bar host - cascades into nested shadow DOM */
+.controls-bar {
+    --wy-filter-chip-active-bg: #E8F5E9;
+    --wy-filter-chip-active-fg: #002114;
+}
+```
+
+**Controls bar padding:** Use `::part(controls-container)` to set padding that aligns with the grid:
+```css
+.controls-bar::part(controls-container) {
+    max-width: none;
+    padding-left: 32px;  /* Match grid padding */
+    padding-right: 32px;
+}
+```
 
 ### Modal States
 
@@ -791,8 +809,25 @@ curl -s "https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/dist/web-compone
 - Never pin CDN imports to commit hashes; always use `@main` so fixes propagate automatically
 - When design system fixes don't appear, check both CDN cache AND import paths
 
-### Controls Bar Bundle Stale on jsDelivr (RESOLVED 2026-01-25)
+### Controls Bar Styling Issues (RESOLVED 2026-01-25)
 
-**Resolution:** CDN purge succeeded and `@main` now serves the updated bundle. The import was reverted from `@ad99b95` back to `@main`.
+**Issues addressed:**
+1. Active filter chip showing dark Hunter Green instead of pale green
+2. Controls bar content not aligned with header and grid padding
 
-**What was fixed:** The `wy-filter-chip` component now uses configurable CSS custom properties (`--wy-filter-chip-active-bg`, `--wy-filter-chip-active-fg`, etc.) allowing consuming projects to customize chip appearance via CSS variables.
+**Root causes:**
+1. **Nested shadow DOM variable inheritance**: `wy-filter-chip` lives inside `wy-controls-bar`'s shadow DOM. CSS custom properties set on `:root` don't cascade through multiple shadow boundaries automatically.
+2. **Dark mode token interference**: Using `var(--md-sys-color-primary-container)` resolved to dark mode values when user's system prefers dark mode, even though the app uses light theme.
+3. **Host padding not applying**: The `--wy-controls-bar-padding` CSS variable was set but the `:host` padding wasn't rendering - the `::part()` selector was needed to style the internal container directly.
+
+**The fixes:**
+1. Set `--wy-filter-chip-active-bg` and `--wy-filter-chip-active-fg` with explicit hex values (`#E8F5E9`, `#002114`) on `.controls-bar` in styles.css - this cascades into the nested shadow DOM
+2. Used `::part(controls-container)` to apply padding directly to the internal container, bypassing the unreliable CSS variable approach
+3. Added responsive padding rules matching the grid's breakpoints (32px desktop, 24px tablet)
+
+**Key lessons for shadow DOM theming:**
+- CSS custom properties cascade into shadow DOM from the host element, but NOT through nested shadow DOM boundaries (component A → component B inside A's shadow)
+- For nested components, set variables on the outer component's host - they'll cascade to immediate shadow children
+- When `var()` references resolve to wrong values due to `prefers-color-scheme`, use explicit hex values for light-theme-only apps
+- The `::part()` selector is more reliable than CSS variables for direct style overrides on shadow DOM internals
+- Always verify CSS changes with `getComputedStyle()` checks in the console before assuming they work
