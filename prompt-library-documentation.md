@@ -177,6 +177,7 @@ When modifying `styles.css`, follow these critical best practices:
 
 **Design System First**:
 - Prefer adding or adjusting shared styles in `m3-design-v2` when the change is reusable across projects
+- ALWAYS avoid local overrides whenever possible; treat local CSS patches as temporary hotfixes only
 - Keep local CSS limited to app-specific layout and components; avoid shadow-DOM overrides unless explicitly temporary
 
 **DO NOT Use `!important`**:

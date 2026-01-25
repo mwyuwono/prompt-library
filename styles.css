@@ -814,6 +814,7 @@ body.modal-open {
     /* Filter chip theming - use explicit hex values to avoid dark mode interference */
     --wy-filter-chip-active-bg: #E8F5E9;
     --wy-filter-chip-active-fg: #002114;
+
 }
 
 /* Remove max-width constraint and add padding to align with grid */

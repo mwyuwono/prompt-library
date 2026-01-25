@@ -688,6 +688,7 @@ All user inputs are escaped via `escapeHTML()` before rendering to prevent injec
 **CRITICAL: Design System First**:
 - **Before adding any new CSS**, check if the design system (m3-design-v2) already provides what you need
 - **Prefer design system tokens** (`--md-sys-*`, `--wy-*`) over legacy variables (`--color-*`)
+- **ALWAYS avoid local overrides whenever possible**; use local patches only as temporary hotfixes
 - If a token should be reusable, add it to the design system, not locally
 - See the [Design System Integration](#design-system-integration) section for the full workflow
 
