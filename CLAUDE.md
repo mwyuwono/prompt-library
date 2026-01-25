@@ -20,6 +20,52 @@ python3 -m http.server 8000
 
 No installation, build, or compilation steps required.
 
+## Visual QA Skill
+
+This project includes a **visual-qa** skill for detecting visual issues (contrast problems, invisible elements, spacing issues) after CSS changes.
+
+### Prerequisites
+
+```bash
+pip install playwright && playwright install chromium
+```
+
+### Usage
+
+After making CSS or styling changes, run the visual QA check:
+
+```bash
+# Start the dev server (if not running)
+python3 -m http.server 8000 &
+
+# Capture screenshots in light and dark mode
+python3 skills/visual-qa/scripts/capture.py --url http://localhost:8000 --output /tmp/visual-qa
+
+# Review the screenshots
+open /tmp/visual-qa/light.png /tmp/visual-qa/dark.png
+```
+
+### Automatic Reminder
+
+A Claude Code hook is configured to remind you to run `/visual-qa` after editing CSS or JS files. The reminder appears in the tool output after edits.
+
+### Investigating Issues
+
+When you spot a visual issue in a screenshot, use the inspect script to debug:
+
+```bash
+# Inspect an element's computed styles in dark mode
+python3 skills/visual-qa/scripts/inspect.py --url http://localhost:8000 --selector ".search-input" --color-scheme dark
+
+# Inspect inside Shadow DOM
+python3 skills/visual-qa/scripts/inspect.py --url http://localhost:8000 --selector "wy-controls-bar" --shadow-selector ".search-input"
+
+# Check contrast ratio
+python3 skills/visual-qa/scripts/inspect.py --url http://localhost:8000 --selector ".search-input" --color-scheme dark --contrast
+```
+
+See [skills/visual-qa/SKILL.md](skills/visual-qa/SKILL.md) for the complete workflow.
+
 ## Design System Integration
 
 **CRITICAL: This project uses a shared design system. Before making ANY styling changes, read this section.**
