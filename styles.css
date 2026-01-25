@@ -833,6 +833,13 @@ body.modal-open {
     max-width: none;
 }
 
+/* Tablet: match grid's 1.5rem padding */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .controls-bar {
+        --wy-controls-bar-padding: var(--space-sm) 1.5rem;
+    }
+}
+
 /* Smooth transition when filtering prompts */
 .prompt-card,
 .prompt-list-item,

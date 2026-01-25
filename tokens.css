@@ -48,4 +48,9 @@
   /* App-specific tokens */
   --modal-blur-amount: 16px;
   --modal-blur-saturation: 180%;
+
+  /* Override filter chip active state for light background context */
+  /* Use explicit values since app is always light theme, not affected by prefers-color-scheme */
+  --wy-filter-chip-active-bg: #E8F5E9;
+  --wy-filter-chip-active-fg: #002114;
 }
