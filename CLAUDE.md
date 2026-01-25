@@ -779,5 +779,6 @@ curl -s "https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/dist/web-compone
 
 **Lesson learned:**
 - Web components using Shadow DOM must import fonts directly in their styles - fonts don't inherit from the light DOM
+- Prefer upstream fixes in the design system over local overrides; reserve app-level patches for temporary hotfixes only
 - Never pin CDN imports to commit hashes; always use `@main` so fixes propagate automatically
 - When design system fixes don't appear, check both CDN cache AND import paths

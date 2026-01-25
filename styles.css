@@ -725,7 +725,6 @@ body.modal-open {
     background-color: rgba(249, 247, 242, 0.95);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(112, 112, 112, 0.1);
     padding: var(--space-sm) var(--space-xl);
 
     /* Fixed height */
@@ -805,6 +804,10 @@ body.modal-open {
     width: 100%;
     position: relative;
     z-index: 100;
+    background: transparent;
+    border-top: none;
+    border-bottom: none;
+    --wy-controls-bar-padding: var(--space-sm) var(--space-xl);
 
     --wy-filter-chip-text: var(--wy-controls-chip-text);
     --wy-filter-chip-text-hover: var(--wy-controls-chip-text-hover);
@@ -2297,6 +2300,10 @@ body.modal-open {
         max-height: 800px;
         /* Large enough to fit all controls */
         opacity: 1;
+    }
+
+    .controls-bar {
+        --wy-controls-bar-padding: var(--space-sm) var(--space-md);
     }
 
     .search-hint {
