@@ -138,7 +138,8 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: var(--space-md) var(--space-xl);
-    border-bottom: 1px solid var(--color-border-subtle);
+    border-bottom: none;
+    margin-bottom: var(--space-sm);
     font-family: var(--font-sans);
     font-size: var(--text-xs);
     color: var(--color-text-secondary);
