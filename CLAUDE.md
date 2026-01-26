@@ -99,8 +99,9 @@ See [skills/visual-qa/SKILL.md](skills/visual-qa/SKILL.md) for the complete work
 | **Colors** (brand palette, semantic colors) | `m3-design-v2/src/styles/tokens.css` | Shared across all projects |
 | **Typography** (fonts, type scale) | `m3-design-v2/src/styles/tokens.css` | Consistent reading experience |
 | **Spacing tokens** | `m3-design-v2/src/styles/tokens.css` | Consistent rhythm |
-| **Motion tokens** (durations, easing) | ⚠️ **TODO: Add to design system** | Currently in `styles.css`, should be migrated |
-| **State opacity tokens** | ⚠️ **TODO: Add to design system** | Currently in `styles.css`, should be migrated |
+| **Motion tokens** (durations, easing) | `m3-design-v2/src/styles/tokens.css` | ✅ Migrated January 2026 |
+| **State opacity tokens** | `m3-design-v2/src/styles/tokens.css` | ✅ Migrated January 2026 |
+| **Spacing scale** | `m3-design-v2/src/styles/tokens.css` | ✅ Migrated January 2026 |
 | **Base styles** (body, headings, scrollbars) | `m3-design-v2/src/styles/main.css` | Reusable foundations |
 | **Utility classes** (`.btn`, `.text-muted`) | `m3-design-v2/src/styles/main.css` | Reusable patterns |
 | **Category colors** (`--wy-color-*`) | `m3-design-v2/src/styles/main.css` | Shared taxonomy |
@@ -250,10 +251,21 @@ From the design system, prefer these over hardcoded values:
 - `--md-sys-typescale-*-font`, `--md-sys-typescale-*-size`, etc.
 
 **Spacing:**
-- `--spacing-layout` (120px), `--spacing-gap` (64px)
+- Layout: `--spacing-layout` (120px), `--spacing-gap` (64px)
+- Component scale: `--spacing-xxs` (2px) through `--spacing-3xl` (64px)
+- All spacing tokens follow 8px baseline grid
 
-**Shape:**
-- `--md-sys-shape-corner-medium` (16px), `--md-sys-shape-corner-large` (32px), `--md-sys-shape-corner-full` (9999px)
+**Shape (Border Radius):**
+- `--md-sys-shape-corner-xs` (4px), `--md-sys-shape-corner-small` (8px)
+- `--md-sys-shape-corner-medium` (16px), `--md-sys-shape-corner-large` (32px)
+- `--md-sys-shape-corner-full` (9999px)
+
+**Motion:**
+- Easing: `--md-sys-motion-easing-standard`, `--md-sys-motion-easing-emphasized`, etc.
+- Duration: `--md-sys-motion-duration-short1` through `long4` (50ms-600ms)
+
+**State (for interactive elements):**
+- `--md-sys-state-hover-opacity`, `--md-sys-state-focus-opacity`, `--md-sys-state-pressed-opacity`, etc.
 
 **Category Colors:**
 - `--wy-color-productivity`, `--wy-color-expertise`, `--wy-color-travel`
