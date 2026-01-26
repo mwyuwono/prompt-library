@@ -6,6 +6,7 @@
  */
 
 // Import design system web components (built bundle from dist/)
-import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/dist/web-components.js';
+// Temporarily using commit hash @598803c to bypass CDN cache until @main updates
+import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@598803c/dist/web-components.js';
 
 console.log('[Components] m3-design-v2 web components registered');

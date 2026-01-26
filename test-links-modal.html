@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Links Modal</title>
+    <script type="importmap">
+    {
+        "imports": {
+            "lit": "https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js"
+        }
+    }
+    </script>
+    <script type="module" src="components/index.js"></script>
+</head>
+<body>
+    <h1>Links Modal Test</h1>
+    <button id="testButton">Open Modal</button>
+    
+    <wy-links-modal id="testModal" title="AI Tools"></wy-links-modal>
+
+    <script>
+        const testData = [
+            {
+                category: "Models",
+                links: [
+                    { name: "ChatGPT", url: "https://chat.openai.com", active: true },
+                    { name: "Gemini", url: "https://gemini.google.com", active: false },
+                    { name: "Claude", url: "https://www.claude.com", active: false }
+                ]
+            },
+            {
+                category: "Images",
+                links: [
+                    { name: "AI Studio", url: "https://aistudio.google.com", active: true },
+                    { name: "Midjourney", url: "https://midjourney.com", active: false }
+                ]
+            }
+        ];
+
+        document.getElementById('testButton').addEventListener('click', () => {
+            const modal = document.getElementById('testModal');
+            modal.links = testData;
+            modal.show();
+        });
+
+        document.getElementById('testModal').addEventListener('close', () => {
+            console.log('Modal closed');
+        });
+
+        document.getElementById('testModal').addEventListener('link-click', (e) => {
+            console.log('Link clicked:', e.detail.link);
+        });
+
+        // Wait for component to load
+        setTimeout(() => {
+            const modal = document.getElementById('testModal');
+            if (modal && modal.tagName === 'WY-LINKS-MODAL') {
+                console.log('✅ Component loaded successfully');
+                modal.links = testData;
+            } else {
+                console.error('❌ Component not found or not registered');
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
