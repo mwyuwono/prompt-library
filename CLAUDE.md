@@ -70,6 +70,12 @@ See [skills/visual-qa/SKILL.md](skills/visual-qa/SKILL.md) for the complete work
 
 **CRITICAL: This project uses a shared design system. Before making ANY styling changes, read this section.**
 
+**Status (January 2026):** ✅ Design system fully integrated
+- All web components come from m3-design-v2 (no local component overrides)
+- Design system tokens imported via CDN
+- Local wy-toast.js removed - using design system wy-toast component
+- Local styles minimized to app-specific layout only
+
 ### Architecture
 
 ```
@@ -93,12 +99,16 @@ See [skills/visual-qa/SKILL.md](skills/visual-qa/SKILL.md) for the complete work
 | **Colors** (brand palette, semantic colors) | `m3-design-v2/src/styles/tokens.css` | Shared across all projects |
 | **Typography** (fonts, type scale) | `m3-design-v2/src/styles/tokens.css` | Consistent reading experience |
 | **Spacing tokens** | `m3-design-v2/src/styles/tokens.css` | Consistent rhythm |
-| **Motion tokens** (durations, easing) | `m3-design-v2/src/styles/tokens.css` | Consistent feel |
+| **Motion tokens** (durations, easing) | ⚠️ **TODO: Add to design system** | Currently in `styles.css`, should be migrated |
+| **State opacity tokens** | ⚠️ **TODO: Add to design system** | Currently in `styles.css`, should be migrated |
 | **Base styles** (body, headings, scrollbars) | `m3-design-v2/src/styles/main.css` | Reusable foundations |
 | **Utility classes** (`.btn`, `.text-muted`) | `m3-design-v2/src/styles/main.css` | Reusable patterns |
 | **Category colors** (`--wy-color-*`) | `m3-design-v2/src/styles/main.css` | Shared taxonomy |
+| **Web Components** (wy-toast, wy-controls-bar, etc.) | `m3-design-v2/src/components/` | Shared components |
 | **App layout** (`.header-top`, `.controls-bar`) | `prompts-library/styles.css` | App-specific |
 | **App components** (`.prompt-card`, `.prompt-modal`) | `prompts-library/styles.css` | App-specific |
+
+**Note:** Motion and state tokens are currently defined locally in `styles.css` but should be migrated to the design system for consistency across all projects.
 
 ### Design System Workflow
 
@@ -130,6 +140,12 @@ The design system is loaded via two mechanisms:
 ```javascript
 import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/dist/web-components.js';
 ```
+
+**Component Status (January 2026):**
+- ✅ All web components come from design system (no local overrides)
+- ✅ Local `wy-toast.js` removed - using design system `wy-toast` component
+- ✅ Toast duration set to 2000ms in `app.js` to match previous behavior
+
 If temporarily pinned to a commit, include a TODO and follow the revert criteria below.
 
 ### Import Pinning Policy (Default + Fallback)

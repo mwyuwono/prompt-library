@@ -8,7 +8,4 @@
 // Import design system web components (built bundle from dist/)
 import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/dist/web-components.js';
 
-// Local component: customized wy-toast with shorter duration and no icon
-import './wy-toast.js';
-
 console.log('[Components] m3-design-v2 web components registered');

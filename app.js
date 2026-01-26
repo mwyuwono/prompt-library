@@ -1716,10 +1716,11 @@ class PromptLibrary {
     }
 
     /**
-     * Show toast notification (using wy-toast Web Component)
+     * Show toast notification (using wy-toast Web Component from design system)
      */
     showToast(message) {
         this.toast.message = message;
+        this.toast.duration = 2000; // 2 seconds (design system default is 3000ms)
         this.toast.show = true;
     }
 
