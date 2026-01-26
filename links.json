@@ -6,7 +6,8 @@
             {
                 "name": "ChatGPT",
                 "company": "OpenAI",
-                "url": "https://chat.openai.com"
+                "url": "https://chat.openai.com",
+                "active": true
             },
             {
                 "name": "Gemini",
@@ -37,7 +38,8 @@
             {
                 "name": "AI Studio",
                 "company": "Google",
-                "url": "https://aistudio.google.com"
+                "url": "https://aistudio.google.com",
+                "active": true
             },
             {
                 "name": "OpenAI Image Playground",

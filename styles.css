@@ -1936,28 +1936,7 @@ body.modal-open {
     flex: none;
 }
 
-/* Links modal should appear above prompt modal */
-#linksModal {
-    z-index: 3000;
-}
-
-#linksModal .modal-content {
-    max-width: 90%;
-    height: auto;
-    max-height: 90vh;
-}
-
-#linksModal .modal-body {
-    display: block;
-    flex: 1;
-    overflow-y: auto;
-    padding: var(--space-md) var(--space-md);
-}
-
-#linksContainer {
-    max-height: 100%;
-    overflow-y: auto;
-}
+/* Links modal styles removed - now using wy-links-modal Web Component */
 
 .modal-header h2 {
     /* Meeting Minutes Architect: Serif Heading */
@@ -2200,11 +2179,6 @@ body.modal-open {
 /* M3 Responsive Design */
 @media (max-width: 768px) {
 
-    .links-category {
-
-        flex-direction: column;
-        gap: var(--space-md);
-    }
 
     /* M3 Top App Bar - Mobile */
     .header {
@@ -2467,14 +2441,6 @@ body.modal-open {
         touch-action: manipulation;
     }
 
-    /* Links modal */
-    .links-grid {
-        grid-template-columns: 1fr;
-    }
-
-    #linksModal .modal-body {
-        padding: var(--space-lg) var(--space-md);
-    }
 
     /* Card actions */
     .card-actions {
@@ -2637,8 +2603,7 @@ body.modal-open {
     }
 
     .modal-header,
-    .modal-body,
-    #linksModal .modal-body {
+    .modal-body {
         padding: var(--space-sm);
     }
 
@@ -2778,197 +2743,7 @@ mark {
     font-weight: var(--weight-medium);
 }
 
-/* Links Modal */
-.links-modal-content {
-    max-width: 640px;
-}
-
-.links-category {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 0;
-    padding: var(--space-md) 0;
-    border-bottom: 1px solid var(--color-border-subtle);
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-.links-category:first-child {
-    padding-top: 0;
-}
-
-.links-category:nth-child(1) {
-    animation-delay: 0.1s;
-}
-
-.links-category:nth-child(2) {
-    animation-delay: 0.2s;
-}
-
-.links-category:nth-child(3) {
-    animation-delay: 0.3s;
-}
-
-.links-category:last-child {
-    margin-bottom: 0;
-    padding-bottom: 0;
-    border-bottom: none;
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.links-category-title {
-    min-width: 130px;
-    font-family: var(--font-sans);
-    font-size: var(--md-sys-typescale-title-medium-size);
-    font-weight: var(--md-sys-typescale-title-medium-weight);
-    line-height: var(--md-sys-typescale-title-medium-line-height);
-    color: var(--color-text-secondary);
-    margin-left: var(--space-sm);
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-}
-
-.links-category-icon {
-    font-size: 1.5rem;
-    display: none;
-    animation: iconBounce 0.6s var(--md-sys-motion-easing-spring);
-}
-
-@keyframes iconBounce {
-    0% {
-        transform: scale(0);
-    }
-
-    50% {
-        transform: scale(1.2);
-    }
-
-    100% {
-        transform: scale(1);
-    }
-}
-
-.links-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-sm);
-}
-
-.link-card {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-sm);
-    padding: var(--space-sm) var(--space-md);
-    border-radius: var(--md-sys-shape-corner-full);
-    background-color: var(--color-emphasis-background);
-    text-decoration: none;
-    position: relative;
-    overflow: hidden;
-    transition: all var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
-}
-
-.link-card:nth-child(1) {
-    animation-delay: 0.05s;
-}
-
-.link-card:nth-child(2) {
-    animation-delay: 0.1s;
-}
-
-.link-card:nth-child(3) {
-    animation-delay: 0.15s;
-}
-
-.link-card:nth-child(4) {
-    animation-delay: 0.2s;
-}
-
-.link-card:nth-child(5) {
-    animation-delay: 0.25s;
-}
-
-.link-card:nth-child(6) {
-    animation-delay: 0.3s;
-}
-
-.link-card:nth-child(7) {
-    animation-delay: 0.35s;
-}
-
-@keyframes linkCardIn {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-.link-card:hover {
-    background-color: color-mix(in srgb, var(--color-action-primary) 4%, var(--color-emphasis-background));
-}
-
-.link-card:focus-visible {
-    outline: 2px solid var(--color-action-primary);
-    outline-offset: 2px;
-}
-
-.link-card-header {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-xs);
-    flex: 1;
-    min-width: 0;
-}
-
-.link-card-name {
-    font-family: var(--md-sys-typescale-title-small-font);
-    font-size: var(--md-sys-typescale-title-small-size);
-    font-weight: var(--weight-semibold);
-    color: var(--color-text-primary);
-    margin: 0;
-    transition: color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
-}
-
-.link-card-company {
-    display: none;
-    font-family: var(--font-sans);
-    font-size: var(--md-sys-typescale-label-small-size);
-    font-weight: var(--weight-normal);
-    color: var(--color-text-secondary);
-    line-height: var(--leading-tight);
-}
-
-.link-card-arrow {
-    flex-shrink: 0;
-    font-size: 1.25rem;
-    color: var(--color-action-primary);
-    opacity: 0;
-    transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized);
-}
-
-.link-card:hover .link-card-arrow {
-    opacity: 1;
-    transform: translateX(2px);
-}
+/* Links Modal styles removed - now using wy-links-modal Web Component */
 
 /* Utility Classes */
 [hidden],

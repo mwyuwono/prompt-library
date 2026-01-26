@@ -71,19 +71,8 @@
         <!-- Toast Notification (Web Component) -->
         <wy-toast id="toast"></wy-toast>
 
-        <!-- Links Modal -->
-        <div id="linksModal" class="modal">
-            <div class="modal-overlay" data-action="close-links"></div>
-            <div class="modal-content links-modal-content">
-                <div class="modal-header">
-                    <h2>AI Tools</h2>
-                    <button class="modal-close" data-action="close-links">&times;</button>
-                </div>
-                <div class="modal-body" id="linksContainer">
-                    <!-- Links will be dynamically inserted here -->
-                </div>
-            </div>
-        </div>
+        <!-- Links Modal (Web Component) -->
+        <wy-links-modal id="linksModal" title="AI Tools"></wy-links-modal>
     </div>
 
     <!-- Import map for Lit library (ES modules via CDN) -->
