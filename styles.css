@@ -2025,7 +2025,7 @@ body.modal-open {
     /* Meeting Minutes Architect: Muted text per mockup */
     color: var(--md-sys-color-text-muted);
     margin-bottom: 0;
-    padding: 0 2rem;
+    padding: 0 var(--space-lg);
     max-width: 36rem;
 }
 
@@ -2548,6 +2548,7 @@ wy-info-panel[data-variation-description][content=""] {
 
     .prompt-modal-description {
         padding: 0 var(--space-sm);
+        /* Mobile uses smaller padding */
     }
 
     .variation-selector-container {
