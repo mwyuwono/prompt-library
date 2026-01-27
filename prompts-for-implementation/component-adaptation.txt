@@ -28,7 +28,42 @@ Phase 6 Deliverables. Provide: 1 Color extraction report table showing reference
 
 Success criteria ALL must pass: Color accuracy with all elements delta E under 2.0 imperceptible difference, pixel match with 99.9% or higher match percentage, all interactive states tested and verified matching reference, visual fidelity where component matches screenshot exactly, token usage 100% design tokens zero hardcoded values, Playwright tests all passing, dark mode works in both schemes, no console errors, semantic HTML, ARIA labels present, focus states visible and accessible.
 
-ZERO-TRUST VERIFICATION REQUIRED: Never report implementation as complete without rigorous verification. Test must verify actual computed styles not just DOM presence. Check alignment by measuring paddingLeft of all elements must match exactly within 1px tolerance. Verify visibility with dimensions greater than zero opacity not zero z-index makes sense. Check design token resolution by getting CSS variable values not just that var() is used. Verify no console errors warnings or 404s excluding favicon. Check layout integrity with scrollWidth equals clientWidth no overflow. Implement cache busting in all verification URLs with timestamp query param. Document what cannot be verified programmatically and provide specific manual verification instructions with exact steps. Report failures immediately do not claim success when tests fail.
+ZERO-TRUST VERIFICATION REQUIRED: Never report implementation as complete without rigorous verification. DOM element presence is meaningless without quality verification.
+
+Mandatory Verification Protocol:
+1. Visual Verification via Computed Styles: Do NOT just check if element exists. Use window.getComputedStyle() for actual rendered values. Verify alignment by measuring paddingLeft paddingRight marginLeft of ALL elements in the component must match within 1px tolerance. Verify visibility with offsetWidth and offsetHeight greater than zero, display not none, opacity greater than zero, z-index makes sense for stacking. Check for obscured elements or layout issues with scrollWidth equals clientWidth and scrollHeight equals clientHeight no overflow.
+
+2. Design System Integrity: Verify colors match specific design tokens by comparing actual hex values from getComputedStyle().backgroundColor against expected token values not just that var() is used. Check fonts resolve to correct family not fallback by inspecting getComputedStyle().fontFamily. Verify spacing uses exact design system values like 24px equals var(--spacing-lg) not 2rem or other arbitrary values. Compare computed values to expected token resolution. Verify no circular references or undefined token values.
+
+3. Infrastructure and State: Implement cache busting in ALL verification URLs with timestamp query param like url?v=timestamp. Capture and verify zero console errors warnings or 404s excluding favicon. Any console error equals immediate FAIL. Check loading states spinner visibility if applicable. Verify network requests succeed.
+
+4. Interactive State Quality: For hover focus active disabled states verify with Playwright hover() and keyboard.press() then check getComputedStyle() values match reference. Verify state layer opacity transitions occur. Check focus outlines visible with correct width offset color. Test keyboard navigation arrow keys enter escape. Verify event handlers fire with correct event.detail values.
+
+5. Component Integration: After building verify customElements.get('wy-component-name') returns constructor function not undefined. If undefined registration failed check for @import errors. Verify component imported in both main.js AND web-components.js. Test component renders in consuming page with proper Shadow DOM styles applied.
+
+Failure Criteria STRICT:
+- ANY console error or warning (except favicon 404) = FAIL immediately
+- Padding alignment off by more than 1px = FAIL
+- Element present but width or height equals 0 = FAIL  
+- Design token resolves to wrong value = FAIL
+- Layout overflow scrollWidth greater than clientWidth = FAIL
+- Component registration returns undefined = FAIL
+- Missing interactive state styling = FAIL
+- Console shows wrong color in getComputedStyle = FAIL
+
+Test Result Standards:
+- PASS requires: All computed styles match expected exactly, alignment verified via pixel measurements, zero console errors, all design tokens resolve correctly, no layout overflow, dimensions greater than zero, proper visibility.
+- PARTIAL requires manual verification: Provide specific step-by-step instructions for what user must manually verify like dropdown menu background color when open or animation smoothness or visual contrast perception. Be explicit about what to check and how.
+- FAIL includes: Element exists but not visible, wrong styles applied computed values dont match expected, console errors present, padding alignment off, token resolution incorrect, registration failed.
+
+Documentation Requirements:
+- Create detailed Zero-Trust verification report showing all test results with actual computed values measured.
+- Document PASS FAIL or MANUAL for each verification check.
+- For manual checks provide exact steps like open URL hard refresh click element X measure computed style Y verify value Z.
+- Report failures immediately with root cause analysis do not claim success when tests fail.
+- Include retest protocol for after deployment.
+
+Execute verification with cache-busted URLs. Measure actual computed styles. Report honest status. Document manual verification steps. Only claim complete when ALL tests pass.
 
 Anti-patterns to avoid: hardcoded colors hex rgb rgba, magic number spacing, arbitrary transitions, !important declarations, changing background-color on hover directly, hardcoded border-radius, skipping dark mode testing, using @import for fonts in Shadow DOM (causes registration failure), forgetting to load fonts globally in page head, inline styles for theming, delivering without verification, using generic semantic tokens when reference needs specific colors, assuming semantic token names match without verifying RGB values, testing functionality before colors are correct, approximating colors instead of exact match.
 
