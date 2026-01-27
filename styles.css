@@ -1983,6 +1983,34 @@ wy-links-modal::part(modal-actions) {
     z-index: 10;
 }
 
+/* Mobile: wy-links-modal full-screen adaptation */
+/* Note: Component doesn't expose parts, so we use CSS variables that cascade into shadow DOM */
+/* The component would need to read these variables for full effect */
+/* For now, we can only control body scroll and set variables for future component updates */
+@media (max-width: 768px) {
+    wy-links-modal {
+        /* CSS variables for mobile - component would need to use these */
+        /* These cascade into shadow DOM but component doesn't currently read them */
+        --wy-links-modal-mobile-padding: var(--spacing-md);
+        --wy-links-modal-mobile-title-size: var(--md-sys-typescale-headline-medium-size);
+        --wy-links-modal-chip-min-height: 44px;
+        --wy-links-modal-chip-padding: var(--spacing-sm) var(--spacing-lg);
+        --wy-links-modal-chip-gap: var(--spacing-sm);
+        --wy-links-modal-section-gap: var(--spacing-lg);
+        
+        /* Override spacing variables that component DOES use */
+        --spacing-xl: var(--spacing-md); /* Reduce padding from 32px to 16px on mobile */
+    }
+
+    /* Prevent body scroll when modal is open on mobile */
+    body:has(wy-links-modal[open]) {
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
+        overscroll-behavior: none;
+    }
+}
+
 .modal-header h2 {
     /* Meeting Minutes Architect: Serif Heading */
     font-family: var(--font-serif);
