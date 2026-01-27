@@ -1901,8 +1901,8 @@ body.modal-open {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    /* Meeting Minutes Architect: Generous padding per mockup */
-    padding: 2rem 2rem 1.5rem;
+    /* Consistent padding with modal body - uses design system tokens for alignment */
+    padding: var(--space-lg) var(--space-lg) var(--space-md);
     background-color: transparent;
     flex-shrink: 0;
 }
