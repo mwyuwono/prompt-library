@@ -40,6 +40,13 @@
     --leading-normal: 1.6;
     --leading-relaxed: 1.75;
     --leading-loose: 1.9;
+    
+    /* App-specific line-height tokens for card typography */
+    --line-height-card-title: 1.2;
+    --line-height-card-description: 1.5;
+    
+    /* Grid gap token using design system spacing */
+    --grid-gap: var(--spacing-lg);
 
     /* Font weights */
     --weight-light: 300;
@@ -387,11 +394,11 @@ body {
 }
 
 .prompt-grid {
-    display: grid;
-    /* Reference design: 1 column mobile, 2 tablet, 3 desktop, 4 xl */
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-    justify-content: start;
+    display: block;
+    /* CSS Columns for better variable-height card handling */
+    column-count: 1;
+    column-gap: var(--grid-gap);
+    column-fill: balance;
 
     /* Reference design spacing */
     padding: 2rem;
@@ -403,29 +410,23 @@ body {
         transform 0.35s var(--md-sys-motion-easing-emphasized);
 }
 
-/* Responsive grid columns */
+/* Responsive column counts */
 @media (min-width: 768px) {
     .prompt-grid {
-        grid-template-columns: repeat(2, 1fr);
+        column-count: 2;
     }
 }
 
 @media (min-width: 1024px) {
     .prompt-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media (min-width: 1280px) {
-    .prompt-grid {
-        grid-template-columns: repeat(4, 1fr);
+        column-count: 3;
     }
 }
 
 /* Tablet adjustments */
 @media (min-width: 768px) and (max-width: 1023px) {
     .prompt-grid {
-        gap: 1.25rem;
+        column-gap: 1.25rem;
         padding: 1.5rem;
     }
 }
@@ -594,7 +595,7 @@ body {
 }
 
 .view-grid .prompt-grid {
-    display: grid;
+    display: block;
     opacity: 1;
     transform: scale(1);
 }
@@ -796,6 +797,8 @@ body.modal-open {
     /* Filter chip theming - use explicit hex values to avoid dark mode interference */
     --wy-filter-chip-active-bg: #E8F5E9;
     --wy-filter-chip-active-fg: #002114;
+    /* Ensure filter chips meet touch target requirements */
+    --wy-filter-chip-min-height: 44px;
 
 }
 
@@ -805,6 +808,8 @@ body.modal-open {
     /* Desktop: match grid's 2rem (32px) padding */
     padding-left: 32px;
     padding-right: 32px;
+    /* Increase vertical spacing between search and category sections */
+    gap: var(--spacing-md);
 }
 
 /* Tablet: match grid's 1.5rem (24px) padding */
@@ -837,6 +842,11 @@ body.modal-open {
     /* Ensure it grows */
     display: flex;
     flex-direction: column;
+
+    /* Prevent cards from splitting across columns */
+    break-inside: avoid;
+    /* Consistent vertical rhythm */
+    margin-bottom: var(--spacing-lg);
 
     padding: 0;
     color: var(--color-text-primary);
@@ -1048,7 +1058,8 @@ body.modal-open {
     background-color: transparent;
     border: 1px solid rgba(112, 112, 112, 0.2);
     color: var(--color-charcoal);
-    transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized);
+    transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized),
+        transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
 }
 
 .prompt-card:hover .card-arrow-button {
@@ -1056,6 +1067,11 @@ body.modal-open {
     background-color: var(--color-gold);
     border-color: var(--color-gold);
     color: var(--color-white);
+    transform: scale(1.05);
+}
+
+.prompt-card:active .card-arrow-button {
+    transform: scale(0.98);
 }
 
 
@@ -1125,7 +1141,7 @@ body.modal-open {
     font-family: var(--font-serif);
     font-size: 1.5rem;
     font-weight: 600;
-    line-height: var(--leading-tight);
+    line-height: var(--line-height-card-title);
     letter-spacing: var(--tracking-tight);
     margin-bottom: 0.75rem;
     /* Match reference mb-3 */
@@ -1253,7 +1269,7 @@ body.modal-open {
     font-family: var(--font-sans);
     font-size: 0.875rem;
     font-weight: 300;
-    line-height: 1.625;
+    line-height: var(--line-height-card-description);
     letter-spacing: var(--tracking-normal);
     /* Default: Warm Grey on white cards */
     color: var(--color-warmgrey);
@@ -1824,7 +1840,7 @@ body.modal-open {
     border-radius: 16px;
     max-width: 56rem;
     width: 95%;
-    max-height: 95vh;
+    max-height: 90vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -1938,6 +1954,35 @@ body.modal-open {
 
 /* Links modal styles removed - now using wy-links-modal Web Component */
 
+/* wy-links-modal sticky action bar fixes */
+wy-links-modal {
+    --wy-links-modal-max-height: 90vh;
+}
+
+/* Target modal container via part if exposed */
+wy-links-modal::part(modal-container) {
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+}
+
+/* Target modal content for scrollable area */
+wy-links-modal::part(modal-content) {
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+}
+
+/* Target modal actions for sticky footer */
+wy-links-modal::part(modal-actions) {
+    position: sticky;
+    bottom: 0;
+    background-color: var(--md-sys-color-surface);
+    backdrop-filter: blur(8px);
+    padding-bottom: env(safe-area-inset-bottom, 0);
+    z-index: 10;
+}
+
 .modal-header h2 {
     /* Meeting Minutes Architect: Serif Heading */
     font-family: var(--font-serif);
@@ -1979,7 +2024,6 @@ body.modal-open {
 }
 
 .modal-body {
-
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -1987,6 +2031,7 @@ body.modal-open {
     overflow-x: hidden;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
+    min-height: 0;
 }
 
 .modal-body-content {
@@ -2060,7 +2105,9 @@ wy-info-panel[data-variation-description][content=""] {
     bottom: 0;
     /* Match modal surface */
     background-color: var(--md-sys-color-surface);
-    padding: 1rem 2rem 2rem;
+    backdrop-filter: blur(8px);
+    padding: 1rem 2rem;
+    padding-bottom: calc(2rem + env(safe-area-inset-bottom, 0));
     z-index: 10;
 }
 
@@ -2208,15 +2255,27 @@ wy-info-panel[data-variation-description][content=""] {
         --wy-controls-bar-padding: var(--space-sm) var(--space-md);
     }
 
+    /* Mobile: horizontal scroll for category chips */
+    .controls-bar::part(category-section) {
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none; /* Hide scrollbar */
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .controls-bar::part(category-section)::-webkit-scrollbar {
+        display: none; /* Hide scrollbar on WebKit */
+    }
+
     .search-hint {
         display: none;
     }
 
     /* Prompt grid - mobile: single column, smaller gap */
     .prompt-grid {
-        grid-template-columns: 1fr;
+        column-count: 1;
         padding: 1rem;
-        gap: 1rem;
+        column-gap: 1rem;
     }
 
     /* Cards are responsive on mobile too */
