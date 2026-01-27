@@ -2029,83 +2029,23 @@ body.modal-open {
     max-width: 36rem;
 }
 
-/* Variation Selector */
-.variation-selector-wrapper {
+/* Variation Selector with Web Components */
+.variation-selector-container {
     margin-bottom: var(--space-sm);
     padding: 0 var(--space-lg);
 }
 
-.variation-selector-label {
+[data-variation-dropdown] {
     display: block;
-    font-family: var(--font-sans);
-    font-size: var(--text-xs);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-text-secondary);
-    margin-bottom: var(--space-xs);
 }
 
-.variation-selector {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    font-family: var(--font-sans);
-    font-size: var(--text-sm);
-    color: var(--color-text-primary);
-    background-color: var(--color-card-surface);
-    border: 1px solid var(--color-border-subtle);
-    border-radius: var(--md-sys-shape-corner-medium);
-    cursor: pointer;
-    transition: border-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
-    appearance: none;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' height='24' viewBox='0 0 24 24' width='24'><path d='M0 0h24v24H0z' fill='none'/><path d='M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z'/></svg>");
-    background-repeat: no-repeat;
-    background-position: right 0.75rem center;
-    background-size: 1.5em;
-    padding-right: 3rem;
+.variation-description-panel {
+    margin-top: 16px; /* Match reference design gap */
+    display: block;
 }
 
-.variation-selector:hover {
-    border-color: var(--color-action-primary);
-}
-
-.variation-selector:focus {
-    outline: 2px solid var(--color-action-primary);
-    outline-offset: 2px;
-}
-
-/* Variation Description */
-.variation-description {
-    margin: var(--space-xs) 0 0 0;
-    padding: var(--space-sm) var(--space-md);
-    background: color-mix(in srgb, var(--color-action-primary) 8%, var(--color-card-surface));
-    border-left: 3px solid color-mix(in srgb, var(--color-action-primary) 40%, transparent);
-    border-radius: var(--md-sys-shape-corner-small);
-    font-family: var(--font-sans);
-    font-size: var(--text-xs);
-    line-height: 1.5;
-    color: var(--color-text-secondary);
-    opacity: 0;
-    max-height: 0;
-    overflow: hidden;
-    transition: opacity var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard),
-        max-height var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard),
-        margin var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
-    /* Ensure proper word wrapping */
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    hyphens: auto;
-    /* Prevent tap delay on mobile */
-    touch-action: manipulation;
-}
-
-.variation-description.visible {
-    opacity: 1;
-    max-height: 300px;
-    margin-bottom: var(--space-md);
-}
-
-.variation-description:empty {
+wy-info-panel[data-variation-description]:empty,
+wy-info-panel[data-variation-description][content=""] {
     display: none;
 }
 
@@ -2355,22 +2295,11 @@ body.modal-open {
         padding: 0 var(--space-md);
     }
 
-    .variation-selector-wrapper {
+    .variation-selector-container {
         padding: 0 var(--space-md);
     }
 
-    .variation-description {
-        padding: var(--space-sm) var(--space-md);
-    }
-
-    .variation-selector {
-        font-size: 16px;
-        /* Prevent iOS zoom on focus */
-        min-height: 48px;
-        /* Ensure adequate touch target */
-        padding: 0.875rem 1rem;
-        touch-action: manipulation;
-    }
+    /* Web components handle their own mobile sizing */
 
     .modal-actions {
         flex-direction: column;
@@ -2514,16 +2443,16 @@ body.modal-open {
     }
 
     /* Hide variation selector when input is focused */
-    .prompt-modal:has(.variable-input:focus) .variation-selector-wrapper,
-    .prompt-modal:has(.variable-textarea:focus) .variation-selector-wrapper,
-    .prompt-modal:has(.template-textarea:focus) .variation-selector-wrapper {
+    .prompt-modal:has(.variable-input:focus) [data-variation-dropdown],
+    .prompt-modal:has(.variable-textarea:focus) [data-variation-dropdown],
+    .prompt-modal:has(.template-textarea:focus) [data-variation-dropdown] {
         display: none;
     }
 
     /* Hide variation description when input is focused */
-    .prompt-modal:has(.variable-input:focus) .variation-description,
-    .prompt-modal:has(.variable-textarea:focus) .variation-description,
-    .prompt-modal:has(.template-textarea:focus) .variation-description {
+    .prompt-modal:has(.variable-input:focus) [data-variation-description],
+    .prompt-modal:has(.variable-textarea:focus) [data-variation-description],
+    .prompt-modal:has(.template-textarea:focus) [data-variation-description] {
         display: none;
     }
 
@@ -2621,22 +2550,11 @@ body.modal-open {
         padding: 0 var(--space-sm);
     }
 
-    .variation-selector-wrapper {
+    .variation-selector-container {
         padding: 0 var(--space-sm);
     }
 
-    .variation-description {
-        padding: var(--space-xs) var(--space-sm);
-        font-size: 0.813rem;
-        /* Slightly larger on mobile for readability */
-    }
-
-    .variation-selector {
-        font-size: 16px;
-        /* Prevent iOS zoom */
-        padding: 1rem;
-        /* Larger padding for easier tapping */
-    }
+    /* Web components handle their own mobile sizing */
 
     /* Reduce horizontal padding for better readability */
     .variable-group {

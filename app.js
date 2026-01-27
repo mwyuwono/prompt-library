@@ -703,20 +703,17 @@ class PromptLibrary {
         const activeVariation = prompt.variations.find(v => v.id === activeId);
 
         return `
-            <div class="variation-selector-wrapper">
-                <label class="variation-selector-label">Style</label>
-                <select class="variation-selector" data-action="switch-variation">
-                    ${prompt.variations.map(v => `
-                        <option value="${v.id}" ${v.id === activeId ? 'selected' : ''}>
-                            ${this.escapeHTML(v.name)}
-                        </option>
-                    `).join('')}
-                </select>
-                ${activeVariation && activeVariation.description ? `
-                    <div class="variation-description visible" data-variation-description>
-                        ${this.escapeHTML(activeVariation.description)}
-                    </div>
-                ` : '<div class="variation-description" data-variation-description></div>'}
+            <div class="variation-selector-container">
+                <wy-dropdown
+                    label="STYLE"
+                    value="${activeId}"
+                    data-variation-dropdown
+                ></wy-dropdown>
+                <wy-info-panel 
+                    class="variation-description-panel" 
+                    data-variation-description
+                    ${activeVariation?.description ? `content="${this.escapeHTML(activeVariation.description)}"` : ''}
+                ></wy-info-panel>
             </div>
         `;
     }
@@ -1132,10 +1129,17 @@ class PromptLibrary {
             });
         }
 
-        const variationSelector = container.querySelector('[data-action="switch-variation"]');
-        if (variationSelector) {
-            variationSelector.addEventListener('change', (event) => {
-                this.switchVariation(index, event.target.value);
+        const variationDropdown = container.querySelector('[data-variation-dropdown]');
+        if (variationDropdown) {
+            // Set options array programmatically (can't be done in HTML attribute)
+            variationDropdown.options = prompt.variations.map(v => ({
+                value: v.id,
+                label: v.name
+            }));
+            
+            // Listen for web component change event
+            variationDropdown.addEventListener('change', (event) => {
+                this.switchVariation(index, event.detail.value);
             });
         }
 
@@ -1469,12 +1473,13 @@ class PromptLibrary {
         // Update description in UI (if modal is open)
         const descriptionEl = document.querySelector('[data-variation-description]');
         if (descriptionEl) {
+            // Update wy-info-panel content property
             if (variation.description) {
-                descriptionEl.textContent = variation.description;
-                descriptionEl.classList.add('visible');
+                descriptionEl.content = variation.description;
+                descriptionEl.style.display = 'block';
             } else {
-                descriptionEl.textContent = '';
-                descriptionEl.classList.remove('visible');
+                descriptionEl.content = '';
+                descriptionEl.style.display = 'none';
             }
         }
 
