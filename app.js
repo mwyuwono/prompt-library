@@ -712,8 +712,7 @@ class PromptLibrary {
                 <wy-info-panel 
                     class="variation-description-panel" 
                     data-variation-description
-                    ${activeVariation?.description ? `content="${this.escapeHTML(activeVariation.description)}"` : ''}
-                ></wy-info-panel>
+                >${activeVariation?.description ? this.escapeHTML(activeVariation.description) : ''}</wy-info-panel>
             </div>
         `;
     }
@@ -1473,12 +1472,12 @@ class PromptLibrary {
         // Update description in UI (if modal is open)
         const descriptionEl = document.querySelector('[data-variation-description]');
         if (descriptionEl) {
-            // Update wy-info-panel content property
+            // Update wy-info-panel via innerHTML (uses slot content)
             if (variation.description) {
-                descriptionEl.content = variation.description;
+                descriptionEl.innerHTML = `<p>${this.escapeHTML(variation.description)}</p>`;
                 descriptionEl.style.display = 'block';
             } else {
-                descriptionEl.content = '';
+                descriptionEl.innerHTML = '';
                 descriptionEl.style.display = 'none';
             }
         }
