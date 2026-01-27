@@ -6,8 +6,8 @@
  */
 
 // Import design system web components (built bundle from dist/)
-// Using @8974361 - Latest: dropdown menu bg update, toggle visibility controls
+// Using @802d520 - Latest: dropdown subtle variant with Container Low background
 // TODO: Switch back to @main after ~24 hours when CDN branch pointer updates
-import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@8974361/dist/web-components.js';
+import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@802d520/dist/web-components.js';
 
 console.log('[Components] m3-design-v2 web components registered');

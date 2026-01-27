@@ -707,6 +707,7 @@ class PromptLibrary {
                 <wy-dropdown
                     label="STYLE"
                     value="${activeId}"
+                    variant="subtle"
                     data-variation-dropdown
                 ></wy-dropdown>
                 <wy-info-panel 
