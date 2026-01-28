@@ -279,6 +279,32 @@ The local [tokens.css](tokens.css) maps old variable names to design system toke
 
 When writing new code, prefer the `--md-sys-*` tokens directly.
 
+### React Components vs Web Components Architecture
+
+**CRITICAL:** This project uses Web Components from the design system directly (no React wrappers). When making UI changes:
+
+**This project uses:**
+- **Web Components** (`<wy-*>` elements) - Loaded via CDN from `m3-design-v2`
+- **Vanilla JavaScript** - No React, no wrappers
+
+**When to update design system vs project:**
+- **Update Design System (`m3-design-v2`) when:** Component is shared (e.g., `wy-controls-bar`, `wy-toast`, `wy-filter-chip`)
+- **Update Project when:** App-specific logic or styling that doesn't belong in design system
+
+**How to identify which component to edit:**
+1. Check if component uses `<wy-component-name>` syntax in HTML/JS
+2. If yes, edit the design system component (`m3-design-v2/src/components/wy-*.js`)
+3. If no, it's project-specific (edit local files)
+
+**Example:**
+- `wy-controls-bar` appears in HTML → Edit `m3-design-v2/src/components/wy-controls-bar.js`
+- Local `.prompt-card` styles → Edit `styles.css` (project-specific)
+
+**Verification Checklist:**
+- [ ] Check if component uses `<wy-*>` syntax
+- [ ] If web component, verify it's in design system before editing
+- [ ] Confirm changes should propagate to all projects (if editing design system)
+
 ## Architecture Overview
 
 ### Core Design Principles
