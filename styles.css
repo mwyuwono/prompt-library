@@ -401,7 +401,7 @@ body {
     column-fill: balance;
 
     /* Reference design spacing */
-    padding: 2rem;
+    padding: var(--spacing-xl);
 
     /* Smooth view transition animations */
     opacity: 0;
@@ -426,8 +426,8 @@ body {
 /* Tablet adjustments */
 @media (min-width: 768px) and (max-width: 1023px) {
     .prompt-grid {
-        column-gap: 1.25rem;
-        padding: 1.5rem;
+        column-gap: var(--spacing-md);
+        padding: var(--spacing-lg);
     }
 }
 
@@ -834,7 +834,7 @@ body.modal-open {
 .prompt-card {
     /* New brand: white background with soft border */
     background: var(--color-white);
-    border: 1px solid rgba(112, 112, 112, 0.1);
+    border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-lg);
 
     /* Flexible height with flex layout */
@@ -936,7 +936,7 @@ body.modal-open {
 
 .card-content {
     /* Reference design: content fills remaining half */
-    padding: 1.5rem;
+    padding: var(--spacing-lg);
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -976,7 +976,7 @@ body.modal-open {
 
 /* Cards without images - full height content area */
 .prompt-card:not(.has-image):not([data-has-image="true"]) .card-content {
-    padding: 2rem;
+    padding: var(--spacing-xl);
     height: auto;
     /* Ensure it grows */
     flex-grow: 1;
@@ -1007,7 +1007,7 @@ body.modal-open {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--spacing-lg);
 }
 
 /* When no icon present (image cards), align badge to right */
@@ -1029,7 +1029,7 @@ body.modal-open {
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    padding: 0px 12px;
+    padding: 0 var(--spacing-sm);
     border-radius: 100px;
     white-space: nowrap;
     opacity: 0;
@@ -1051,12 +1051,12 @@ body.modal-open {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
+    width: var(--spacing-xl);
+    height: var(--spacing-xl);
     opacity: 0;
     border-radius: var(--md-sys-shape-corner-full);
     background-color: transparent;
-    border: 1px solid rgba(112, 112, 112, 0.2);
+    border: 1px solid color-mix(in srgb, var(--md-sys-color-text-muted) 20%, transparent);
     color: var(--color-charcoal);
     transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized),
         transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
@@ -1078,7 +1078,7 @@ body.modal-open {
 
 /* Featured olive cards - white arrow that turns gold */
 .prompt-card.featured-olive .card-arrow-button {
-    border-color: rgba(255, 255, 255, 0.3);
+    border-color: color-mix(in srgb, var(--md-sys-color-surface-container-lowest) 30%, transparent);
     color: var(--color-white);
 }
 
@@ -1139,12 +1139,11 @@ body.modal-open {
 .card-title {
     /* New brand: Playfair Display for all titles */
     font-family: var(--font-serif);
-    font-size: 1.5rem;
+    font-size: var(--md-sys-typescale-headline-small-size);
     font-weight: 600;
     line-height: var(--line-height-card-title);
     letter-spacing: var(--tracking-tight);
-    margin-bottom: 0.75rem;
-    /* Match reference mb-3 */
+    margin-bottom: var(--spacing-sm);
     /* Default: Charcoal on white cards */
     color: var(--color-charcoal);
 }
@@ -1267,7 +1266,7 @@ body.modal-open {
 .card-description {
     /* New brand: Inter for all descriptions */
     font-family: var(--font-sans);
-    font-size: 0.875rem;
+    font-size: var(--md-sys-typescale-body-small-size);
     font-weight: 300;
     line-height: var(--line-height-card-description);
     letter-spacing: var(--tracking-normal);
@@ -1291,8 +1290,7 @@ body.modal-open {
 
 .prompt-card.featured-olive .card-title {
     color: var(--color-white);
-    margin-bottom: 1rem;
-    /* Match reference mb-4 */
+    margin-bottom: var(--spacing-md);
 }
 
 .prompt-card.featured-olive .card-description {
