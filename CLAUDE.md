@@ -139,7 +139,8 @@ The design system is loaded via two mechanisms:
 
 **Web Components** (via [components/index.js](components/index.js)):
 ```javascript
-import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/dist/web-components.js';
+// Using @main with cache-busting parameter - update ?v= after design system changes
+import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/dist/web-components.js?v=20260130';
 ```
 
 **Component Status (January 2026):**
@@ -149,25 +150,50 @@ import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/dist/web-componen
 
 If temporarily pinned to a commit, include a TODO and follow the revert criteria below.
 
-### Import Pinning Policy (Default + Fallback)
+### Import Pinning Policy (3-Tier Hierarchy)
 
-**Default: use `@main`.** Only pin to a commit hash as a **temporary fallback** when jsDelivr still serves stale content after a purge.
+**Preferred import strategies (in order of preference):**
 
-**Why this matters:**
-- Pinning to a commit hash freezes the code at that point in time
-- Future fixes and improvements in the design system won't be picked up
-- The CDN purge workflow assumes `@main` references are being used
+| Priority | Method | Use Case |
+|----------|--------|----------|
+| **Primary** | Semantic version tags (`@v1.2.3`) | Production stability, immutable |
+| **Secondary** | `@main` with cache-busting (`?v=YYYYMMDD`) | Development iteration |
+| **Emergency** | Commit hash (`@abc1234`) | CDN staleness fallback only |
 
-**Temporary fallback pin (only when CDN is stale after purge):**
+#### 1. Semantic Version Tags (Primary - Most Reliable)
 ```javascript
-// ✅ Temporary fallback - pin to the known-good commit until CDN updates
-// TODO: revert to @main once CDN serves the updated bundle
-import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@<commit>/dist/web-components.js';
+import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@v1.2.3/dist/web-components.js';
 ```
+- Predictable, immutable references
+- Clear upgrade path via version bumps
+- Requires tagging releases in the design system repo
 
-**Revert criteria:** When `@main` serves the expected snippet (see verification steps below), restore `@main` and remove the TODO.
+#### 2. `@main` with Cache-Busting Parameter (Secondary - Rapid Iteration)
+```javascript
+// Update ?v= parameter after design system changes to bust browser cache
+import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/dist/web-components.js?v=20260130';
+```
+- Gets latest from main branch
+- `?v=YYYYMMDD` parameter forces browser cache refresh (Safari-specific fix)
+- Update the parameter when design system changes
 
-**When debugging CDN issues:** Check import paths first. If pinned, confirm why. If `@main` is stale after purge, pin temporarily.
+#### 3. Commit Hash Pinning (Emergency Fallback Only)
+```javascript
+// EMERGENCY: Pinned due to [specific issue]. Revert to @main by [date].
+// Issue: [describe the CDN staleness or bug]
+import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@abc1234/dist/web-components.js';
+```
+- Only use when CDN is serving stale `@main` after purging
+- **MUST** include comment explaining why
+- **MUST** include TODO with reversion deadline (24-48 hours max)
+- Should be resolved quickly; file an issue if persistent
+
+**NEVER pin to a commit hash without:**
+- A comment explaining the specific issue
+- A TODO with target date to revert
+- Documenting the root cause
+
+**When debugging CDN issues:** Check import paths first. If pinned, confirm why. If `@main` is stale after purge, pin temporarily with full documentation.
 
 ### CDN Cache Purging (CRITICAL)
 
@@ -235,6 +261,32 @@ VERIFY_SNIPPET="expected-code-snippet" scripts/design-system-refresh.sh
 - The `@main`, default, and `@latest` references may be cached separately
 - **Both CSS and JS bundles must be purged** - components depend on both
 - Without proper purging, users may see stale styles or broken behavior for hours
+
+### Browser Cache Management
+
+**Safari-Specific Caching Behavior:**
+Safari aggressively caches CSS and JS files even with proper `Cache-Control` headers from the CDN. To ensure users see updates after design system changes:
+
+**For CDN imports (web components, tokens):**
+- Use `?v=YYYYMMDD` cache-busting parameters on `@main` imports
+- After design system changes, update the version parameter in consuming projects
+- Example: `...@main/dist/web-components.js?v=20260130`
+
+**For local CSS/JS files (`tokens.css`, `styles.css`):**
+- Add cache-busting parameters: `href="styles.css?v=YYYYMMDD"`
+- Update the version parameter whenever the file changes
+
+**Complete Workflow Checklist (After Design System Changes):**
+1. Purge jsDelivr CDN cache (run full purge commands above)
+2. Update `?v=` parameter in `components/index.js`
+3. Update `?v=` parameters in `index.html` if CSS imports changed
+4. Commit all version bumps together
+5. Hard refresh browser (Cmd+Shift+R)
+
+**When to update cache-busting parameters:**
+- After any design system commit that affects this project
+- When debugging "changes not appearing" issues
+- After purging CDN cache to ensure browser fetches fresh content
 
 ### Available Design Tokens
 

@@ -6,8 +6,8 @@
  */
 
 // Import design system web components (built bundle from dist/)
-// Using @2740d5a - FIXED: subtle variant now changes BUTTON background (was invisible)
-// TODO: Switch back to @main after ~24 hours when CDN branch pointer updates
-import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@2740d5a/dist/web-components.js';
+// Using @main with cache-busting parameter
+// Update ?v= parameter after design system changes to bust browser cache
+import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/dist/web-components.js?v=20260130';
 
 console.log('[Components] m3-design-v2 web components registered');
