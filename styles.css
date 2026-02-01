@@ -163,6 +163,15 @@ body {
     gap: var(--space-sm);
 }
 
+/* ========================================
+   DEPRECATED: Legacy Header Button Styles
+
+   These styles have been replaced by wy-button web component.
+   Migrated: 2026-02-01
+   Safe to remove: Yes - no remaining usages
+   ======================================== */
+
+/* @deprecated - replaced by wy-button */
 .btn-filters {
     background: var(--color-charcoal);
     color: var(--color-white);
@@ -184,14 +193,17 @@ body {
     gap: 6px;
 }
 
+/* @deprecated */
 .btn-filters .material-symbols-outlined {
     font-size: 14px;
 }
 
+/* @deprecated */
 .btn-filters:hover {
     background: var(--color-gold);
 }
 
+/* @deprecated - replaced by wy-button */
 .btn-download {
     background: var(--color-charcoal);
     color: var(--color-white);
@@ -209,8 +221,14 @@ body {
     transition: background-color var(--md-sys-motion-duration-short2);
 }
 
+/* @deprecated */
 .btn-download:hover {
     background: var(--color-gold);
+}
+
+/* Header wy-button styles */
+#toggleFiltersBtn {
+    display: none; /* Hidden on desktop, shown on mobile */
 }
 
 /* Quick Links - Desktop Only */
@@ -1350,13 +1368,27 @@ body.modal-open {
 }
 
 /* ==========================================================================
-   LEGACY MODAL STYLES
-   These styles were for the vanilla JS modal, now replaced by wy-prompt-modal
-   web component. The component has encapsulated Shadow DOM styles.
-   Keeping these for backward compatibility with any remaining references.
+   DEPRECATED: Legacy Tab Styles
+
+   These styles have been replaced by wy-tabs web component.
+   Migrated: 2026-02-01
+   Safe to remove: Yes - no remaining usages
    ========================================================================== */
 
-/* Meeting Minutes Architect: Minimal Tab Style per mockup */
+/* New tabs container using wy-tabs web component */
+.tabs-header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    border-bottom: 1px solid var(--md-sys-color-outline-variant);
+}
+
+.tabs-header-container wy-tabs {
+    flex: 1;
+}
+
+/* @deprecated - replaced by wy-tabs */
 .tabs-header {
     display: flex;
     gap: 2rem;
@@ -1367,6 +1399,7 @@ body.modal-open {
     padding: 0 2rem;
 }
 
+/* @deprecated - replaced by wy-tabs */
 .tab-button {
     /* Minimal text link style */
     padding: 0.5rem 0;
@@ -1398,7 +1431,7 @@ body.modal-open {
     touch-action: manipulation;
 }
 
-/* M3 state layer for tabs */
+/* @deprecated - M3 state layer for tabs */
 .tab-button::before {
     content: '';
     position: absolute;
@@ -1412,14 +1445,17 @@ body.modal-open {
     pointer-events: none;
 }
 
+/* @deprecated */
 .tab-button:hover::before {
     opacity: var(--md-sys-state-hover-opacity);
 }
 
+/* @deprecated */
 .tab-button:active::before {
     opacity: var(--md-sys-state-pressed-opacity);
 }
 
+/* @deprecated */
 .tab-button.active {
     /* Meeting Minutes Architect: Hunter Green active tab per mockup */
     color: var(--md-sys-color-primary);
@@ -1502,7 +1538,16 @@ body.modal-open {
     text-transform: uppercase;
 }
 
-/* Meeting Minutes Architect: White input on clay surface per mockup */
+/* ========================================
+   DEPRECATED: Legacy Form Input Styles
+
+   These styles have been replaced by wy-form-field web component.
+   Text and textarea inputs now use wy-form-field.
+   Migrated: 2026-02-01
+   Safe to remove: Yes - no remaining usages (toggle inputs use separate styles)
+   ======================================== */
+
+/* @deprecated - replaced by wy-form-field */
 .variable-input {
     width: 100%;
 
@@ -1529,25 +1574,30 @@ body.modal-open {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
+/* @deprecated */
 .variable-input::placeholder {
     color: var(--md-sys-color-text-muted);
     opacity: 0.6;
 }
 
+/* @deprecated */
 .variable-input:hover {
     border-color: var(--md-sys-color-secondary);
 }
 
+/* @deprecated */
 .variable-input:focus {
     outline: none;
     border-color: var(--md-sys-color-primary);
     box-shadow: 0 0 0 1px var(--md-sys-color-primary);
 }
 
+/* @deprecated */
 .variable-input.has-value {
     border-color: var(--md-sys-color-outline-variant);
 }
 
+/* @deprecated - replaced by wy-form-field */
 .variable-textarea {
     min-height: 150px;
     max-height: 50vh;
@@ -1769,7 +1819,18 @@ body.modal-open {
     }
 }
 
-/* M3 Dialog (Modal) - Enhanced Animations */
+/* ========================================
+   DEPRECATED: Legacy Modal Styles
+
+   These styles were used by the keyboard shortcuts modal before migration
+   to wy-modal web component. They are no longer used and can be safely
+   removed in a future cleanup.
+
+   Migrated: 2026-02-01 (shortcuts modal → wy-modal)
+   Safe to remove: Yes - no remaining usages
+   ======================================== */
+
+/* @deprecated - Legacy modal base */
 .modal {
     position: fixed;
     top: 0;
@@ -1791,17 +1852,20 @@ body.modal-open {
     transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* @deprecated */
 .modal.show {
     visibility: visible;
     pointer-events: auto;
     opacity: 1;
 }
 
+/* @deprecated */
 .modal.closing {
     opacity: 0;
     pointer-events: none;
 }
 
+/* @deprecated - Legacy modal overlay */
 .modal-overlay {
     position: absolute;
     top: 0;
@@ -1822,6 +1886,7 @@ body.modal-open {
     will-change: backdrop-filter, background-color;
 }
 
+/* @deprecated */
 .modal.show .modal-overlay {
     /* Enhanced blur with subtle dark overlay */
     backdrop-filter: blur(var(--modal-blur-amount)) saturate(var(--modal-blur-saturation));
@@ -1829,12 +1894,14 @@ body.modal-open {
     background-color: rgba(0, 0, 0, 0.09);
 }
 
+/* @deprecated */
 .modal.closing .modal-overlay {
     backdrop-filter: blur(0px);
     -webkit-backdrop-filter: blur(0px);
     background-color: rgba(0, 0, 0, 0);
 }
 
+/* @deprecated - Legacy modal content container */
 .modal-content {
     position: relative;
 
@@ -1872,6 +1939,7 @@ body.modal-open {
     pointer-events: auto;
 }
 
+/* @deprecated */
 .modal.show .modal-content {
     /* Ending animation state - normal scale and position with enhanced shadow */
     transform: scale(1) translateY(0);
@@ -1879,7 +1947,7 @@ body.modal-open {
     box-shadow: 0 32px 64px rgba(0, 0, 0, 0.2), 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
-/* Closing animation - graceful exit */
+/* @deprecated - Closing animation - graceful exit */
 .modal.closing .modal-content {
     transform: scale(0.96) translateY(20px);
     opacity: 0;
@@ -1889,6 +1957,7 @@ body.modal-open {
         box-shadow 0.3s cubic-bezier(0.4, 0, 1, 1);
 }
 
+/* @deprecated - Legacy modal keyframes */
 @keyframes modalIn {
     0% {
         transform: scale(0.85) translateY(-40px);
@@ -1906,6 +1975,7 @@ body.modal-open {
     }
 }
 
+/* @deprecated */
 @keyframes modalOut {
     0% {
         transform: scale(1) translateY(0);
@@ -2027,7 +2097,7 @@ wy-links-modal::part(modal-actions) {
     margin: 0;
 }
 
-/* Modal close button - New brand with gold hover */
+/* @deprecated - Modal close button (replaced by wy-modal built-in close) */
 .modal-close {
     background: none;
     border: none;
@@ -2047,10 +2117,12 @@ wy-links-modal::part(modal-actions) {
     border-radius: 50%;
 }
 
+/* @deprecated */
 .modal-close:hover {
     color: var(--color-gold);
 }
 
+/* @deprecated */
 .modal-close:focus-visible {
     outline: 3px solid var(--color-gold);
     outline-offset: 2px;
@@ -2237,9 +2309,14 @@ wy-info-panel[data-variation-description][content=""] {
         display: flex;
     }
 
-    /* Show filters button on mobile */
+    /* @deprecated - Show filters button on mobile */
     .btn-filters {
         display: flex;
+    }
+
+    /* Show wy-button filters on mobile */
+    #toggleFiltersBtn {
+        display: inline-flex;
     }
 
     /* Hide site name text on mobile */
@@ -2247,7 +2324,7 @@ wy-info-panel[data-variation-description][content=""] {
         display: none;
     }
 
-    /* Hide filters button text on mobile, show icon only */
+    /* @deprecated - Hide filters button text on mobile, show icon only */
     .btn-filters-text {
         display: none;
     }

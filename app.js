@@ -598,13 +598,11 @@ class PromptLibrary {
             <p class="prompt-modal-description">${this.escapeHTML(prompt.description)}</p>
             ${this.getVariationSelectorHTML(prompt)}
             ${isLocked && hasVariables ? `
-                <div class="tabs-header">
-                    <button class="tab-button ${activeTab === 'variables' ? 'active' : ''}" data-action="switch-tab" data-tab="variables">
-                        Variables
-                    </button>
-                    <button class="tab-button ${activeTab === 'preview' ? 'active' : ''}" data-action="switch-tab" data-tab="preview">
-                        Preview
-                    </button>
+                <div class="tabs-header-container">
+                    <wy-tabs active-tab="${activeTab}">
+                        <button role="tab" data-tab="variables">Variables</button>
+                        <button role="tab" data-tab="preview">Preview</button>
+                    </wy-tabs>
                     ${activeTab === 'variables' ? `
                         <button class="btn-text" data-action="clear-variables" onclick="event.stopPropagation()">Clear All</button>
                     ` : ''}
@@ -732,6 +730,7 @@ class PromptLibrary {
 
     /**
      * Get HTML for variables section (inside tab)
+     * Uses wy-form-field web component for text/textarea inputs
      */
     getVariablesHTML(variables) {
         if (!variables || variables.length === 0) {
@@ -740,33 +739,23 @@ class PromptLibrary {
 
         return `
             <div class="variables-section">
-                ${variables.map(variable => `
-                    <div class="variable-group">
-                        <label class="variable-label">${this.escapeHTML(variable.label)}</label>
-                        ${this.getVariableInputHTML(variable)}
-                    </div>
-                `).join('')}
+                ${variables.map(variable => this.getVariableInputHTML(variable)).join('')}
             </div>
         `;
     }
 
     /**
      * Render variable input element based on configuration
+     * Uses wy-form-field web component for text/textarea inputs
      */
     getVariableInputHTML(variable) {
         const inputType = variable.inputType || 'text';
-        const baseClasses = ['variable-input'];
-        if (inputType === 'textarea') {
-            baseClasses.push('variable-textarea');
-        }
-        if (variable.value) {
-            baseClasses.push('has-value');
-        }
-
-        const className = baseClasses.join(' ');
         const dataAttr = `data-variable="${this.escapeHTML(variable.name)}"`;
         const placeholder = this.escapeHTML(variable.placeholder || '');
+        const label = this.escapeHTML(variable.label);
+        const inputId = `var-${this.escapeHTML(variable.name)}`;
 
+        // Toggle inputs use custom implementation (no wy-form-field support yet)
         if (inputType === 'toggle') {
             const isChecked = (variable.options && variable.value === variable.options[1]) || variable.value === 'true' || variable.value === true;
             const usesDefaultToggleLabels = !variable.options || variable.options.length < 2;
@@ -775,31 +764,44 @@ class PromptLibrary {
             const offLabel = usesDefaultToggleLabels && isChecked ? option2 : option1;
             const onLabel = usesDefaultToggleLabels ? option2 : option2;
             return `
-                <div class="variable-toggle-wrapper">
-                    <label class="variable-toggle-label">
-                        <div class="variable-toggle-labels">
-                            <span class="variable-toggle-option ${!isChecked ? 'active' : ''}">${offLabel}</span>
-                            <span class="variable-toggle-option ${isChecked ? 'active' : ''}">${onLabel}</span>
-                        </div>
-                        <input
-                            type="checkbox"
-                            class="variable-toggle-input"
-                            ${dataAttr}
-                            data-default-toggle="${usesDefaultToggleLabels ? 'true' : 'false'}"
-                            ${isChecked ? 'checked' : ''}
-                        >
-                        <span class="variable-toggle-slider"></span>
-                    </label>
+                <div class="variable-group">
+                    <label class="variable-label">${label}</label>
+                    <div class="variable-toggle-wrapper">
+                        <label class="variable-toggle-label">
+                            <div class="variable-toggle-labels">
+                                <span class="variable-toggle-option ${!isChecked ? 'active' : ''}">${offLabel}</span>
+                                <span class="variable-toggle-option ${isChecked ? 'active' : ''}">${onLabel}</span>
+                            </div>
+                            <input
+                                type="checkbox"
+                                class="variable-toggle-input"
+                                ${dataAttr}
+                                data-default-toggle="${usesDefaultToggleLabels ? 'true' : 'false'}"
+                                ${isChecked ? 'checked' : ''}
+                            >
+                            <span class="variable-toggle-slider"></span>
+                        </label>
+                    </div>
                 </div>
             `;
         }
 
+        // Textarea inputs wrapped in wy-form-field
         if (inputType === 'textarea') {
             const value = this.escapeHTML(variable.value || '');
-            return `<textarea class="${className}" ${dataAttr} placeholder="${placeholder}" rows="${variable.rows || 6}">${value}</textarea>`;
+            return `
+                <wy-form-field label="${label}" id="${inputId}">
+                    <textarea id="${inputId}" ${dataAttr} placeholder="${placeholder}" rows="${variable.rows || 6}">${value}</textarea>
+                </wy-form-field>
+            `;
         }
 
-        return `<input type="text" class="${className}" ${dataAttr} placeholder="${placeholder}" value="${this.escapeHTML(variable.value || '')}">`;
+        // Text inputs wrapped in wy-form-field
+        return `
+            <wy-form-field label="${label}" id="${inputId}">
+                <input type="text" id="${inputId}" ${dataAttr} placeholder="${placeholder}" value="${this.escapeHTML(variable.value || '')}">
+            </wy-form-field>
+        `;
     }
 
     /**
@@ -1139,15 +1141,14 @@ class PromptLibrary {
             });
         }
 
-        const tabButtons = container.querySelectorAll('[data-action="switch-tab"]');
-        tabButtons.forEach(button => {
-            button.addEventListener('click', (event) => {
-                event.preventDefault();
+        // Listen for wy-tabs tab-change event
+        const wyTabs = container.querySelector('wy-tabs');
+        if (wyTabs) {
+            wyTabs.addEventListener('tab-change', (event) => {
                 event.stopPropagation();
-                const tab = event.currentTarget.dataset.tab;
-                this.switchTab(index, tab);
+                this.switchTab(index, event.detail.tab);
             });
-        });
+        }
 
         const clearButton = container.querySelector('[data-action="clear-variables"]');
         if (clearButton) {
@@ -1861,65 +1862,42 @@ class PromptLibrary {
     }
 
     /**
-     * Show keyboard shortcuts modal
+     * Show keyboard shortcuts modal (uses wy-modal web component)
      */
     showShortcutsModal() {
-        // Check if modal already exists
-        let modal = document.getElementById('shortcutsModal');
+        const modal = document.getElementById('shortcutsModal');
+        if (!modal) return;
 
-        if (!modal) {
+        // Populate content if not already done
+        if (!modal.hasAttribute('data-initialized')) {
             // Detect platform for key display
             const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
             const modKey = isMac ? '⌘' : 'Ctrl';
 
-            // Create modal
-            modal = document.createElement('div');
-            modal.id = 'shortcutsModal';
-            modal.className = 'modal';
             modal.innerHTML = `
-                <div class="modal-overlay" data-action="close-modal"></div>
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h2>Keyboard Shortcuts</h2>
-                        <button class="modal-close" data-action="close-modal">&times;</button>
+                <div class="shortcut-list">
+                    <div class="shortcut-item">
+                        <span class="shortcut-keys"><kbd>Esc</kbd></span>
+                        <span class="shortcut-description">Close open dialogs</span>
                     </div>
-                    <div class="modal-body">
-                        <div class="shortcut-list">
-                            <div class="shortcut-item">
-                                <span class="shortcut-keys"><kbd>Esc</kbd></span>
-                                <span class="shortcut-description">Close open dialogs</span>
-                            </div>
-                            <div class="shortcut-item">
-                                <span class="shortcut-keys"><kbd>${modKey}</kbd> + <kbd>K</kbd></span>
-                                <span class="shortcut-description">Focus search</span>
-                            </div>
-                            <div class="shortcut-item">
-                                <span class="shortcut-keys"><kbd>${modKey}</kbd> + <kbd>/</kbd></span>
-                                <span class="shortcut-description">Show this help</span>
-                            </div>
-                        </div>
+                    <div class="shortcut-item">
+                        <span class="shortcut-keys"><kbd>${modKey}</kbd> + <kbd>K</kbd></span>
+                        <span class="shortcut-description">Focus search</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="shortcut-keys"><kbd>${modKey}</kbd> + <kbd>/</kbd></span>
+                        <span class="shortcut-description">Show this help</span>
                     </div>
                 </div>
             `;
-            document.body.appendChild(modal);
+            modal.setAttribute('data-initialized', 'true');
 
-            // Add event listeners for closing
-            modal.querySelectorAll('[data-action="close-modal"]').forEach(element => {
-                element.addEventListener('click', () => this.hideShortcutsModal());
-            });
-
-            // Close on Escape key
-            const closeOnEscape = (e) => {
-                if (e.key === 'Escape') {
-                    this.hideShortcutsModal();
-                    document.removeEventListener('keydown', closeOnEscape);
-                }
-            };
-            document.addEventListener('keydown', closeOnEscape);
+            // Listen for close event from wy-modal
+            modal.addEventListener('close', () => this.hideShortcutsModal());
         }
 
-        // Show modal
-        modal.classList.add('show');
+        // Show modal using wy-modal API
+        modal.open = true;
     }
 
     /**
@@ -1928,7 +1906,7 @@ class PromptLibrary {
     hideShortcutsModal() {
         const modal = document.getElementById('shortcutsModal');
         if (modal) {
-            modal.classList.remove('show');
+            modal.open = false;
         }
     }
 

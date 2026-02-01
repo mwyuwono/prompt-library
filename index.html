@@ -8,8 +8,8 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <!-- Fonts imported via tokens.css (Playfair Display, Manrope, DM Sans) -->
-    <link rel="stylesheet" href="tokens.css?v=20260131c">
-    <link rel="stylesheet" href="styles.css?v=20260131c">
+    <link rel="stylesheet" href="tokens.css?v=20260201a">
+    <link rel="stylesheet" href="styles.css?v=20260201a">
 </head>
 
 <body>
@@ -32,11 +32,10 @@
                     <a href="https://www.claude.ai" target="_blank" rel="noopener noreferrer"
                         class="quick-link-btn">Claude</a>
                 </div>
-                <button class="btn-filters" id="toggleFiltersBtn" aria-label="Toggle filters">
-                    <span class="material-symbols-outlined">tune</span>
-                    <span class="btn-filters-text">Filters</span>
-                </button>
-                <button class="btn-download" id="openLinksModal">AI Tools</button>
+                <wy-button id="toggleFiltersBtn" variant="primary" size="small" icon="tune" icon-position="leading" aria-label="Toggle filters">
+                    Filters
+                </wy-button>
+                <wy-button id="openLinksModal" variant="primary" size="small">AI Tools</wy-button>
             </div>
         </div>
 
@@ -76,6 +75,9 @@
 
         <!-- Links Modal (Web Component) -->
         <wy-links-modal id="linksModal" title="AI Tools"></wy-links-modal>
+
+        <!-- Keyboard Shortcuts Modal (Web Component) -->
+        <wy-modal id="shortcutsModal" heading="Keyboard Shortcuts" max-width="480px"></wy-modal>
     </div>
 
     <!-- Import map for Lit library (ES modules via CDN) -->
