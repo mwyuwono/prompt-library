@@ -1541,13 +1541,12 @@ body.modal-open {
 /* ========================================
    DEPRECATED: Legacy Form Input Styles
 
-   These styles have been replaced by wy-form-field web component.
-   Text and textarea inputs now use wy-form-field.
+   Text and textarea inputs now use wy-form-field web component.
+   These styles are kept only for the variable-input class used by toggle inputs.
    Migrated: 2026-02-01
-   Safe to remove: Yes - no remaining usages (toggle inputs use separate styles)
    ======================================== */
 
-/* @deprecated - replaced by wy-form-field */
+/* @deprecated - text/textarea use wy-form-field now */
 .variable-input {
     width: 100%;
 
