@@ -514,5 +514,21 @@
                 "value": ""
             }
         ]
+    },
+    {
+        "id": "portrait-iconography",
+        "title": "Portrait Iconography Brainstorm",
+        "description": "Brainstorm visual symbolism for portraits using 19th-century art history and iconographic language",
+        "category": "Creativity",
+        "icon": "image",
+        "template": "Core message/intent of the artwork: {{message}}\n\nAct as a specialist in 19th-century Art History and Iconography. I want to brainstorm a portrait of a subject that visually communicates a specific hidden message.\n\nProvide a detailed breakdown of how an artist of this era would communicate the message entered above using the following four categories:\n\n* The 'Language of Objects': Suggest 3-4 specific items (memento mori, flora, or household objects) that act as metaphors for the message.\n* Composition & Lighting: Describe how the use of shadows (chiaroscuro), perspective, or the placement of the subject in the frame reinforces the secret meaning.\n* The 'Somatic' (Body) Code: Detail specific gestures, gazes, or anatomical focuses (e.g., tension in the hands, the direction of the eyes) that hint at the internal state.\n* Environmental Cues: Describe a background, window view, or architectural detail that provides a 'thematic echoes' of the main message.\n\nEnsure the suggestions feel grounded in the 19th-century aesthetic (Romanticism, Realism, or the Gilded Age) rather than modern fantasy.",
+        "variables": [
+            {
+                "name": "message",
+                "label": "Core Message/Intent",
+                "placeholder": "e.g., Hidden grief, secret ambition, forbidden love, moral conflict",
+                "value": ""
+            }
+        ]
     }
 ]
