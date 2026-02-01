@@ -844,53 +844,68 @@ class PromptLibrary {
     }
 
     /**
-     * Create modal container for prompt details
+     * Create/get modal container for prompt details (web component)
      */
     createPromptModal() {
         if (this.promptModal) return;
 
-        this.promptModal = document.createElement('div');
-        this.promptModal.id = 'promptModal';
-        this.promptModal.className = 'modal prompt-modal';
-        this.promptModal.innerHTML = `
-            <div class="modal-overlay" data-action="close-prompt"></div>
-            <div class="modal-content prompt-modal-content">
-                <div class="modal-header">
-                    <div class="modal-header-text">
-                        <h2 id="promptModalTitle"></h2>
-                        <div class="modal-subtitle">
-                            <span class="card-category" id="promptModalCategory"></span>
-                        </div>
-                    </div>
-                    <div class="modal-header-actions">
-                        <button class="btn btn-outlined btn-sm lock-button" id="promptModalLockButton" data-action="toggle-lock">
-                            <span class="material-symbols-outlined">mode_edit</span>
-                            Edit Prompt
-                        </button>
-                        <button class="modal-close" data-action="close-prompt" aria-label="Close prompt dialog">&times;</button>
-                    </div>
-                </div>
-                <div class="modal-body"></div>
-            </div>
-        `;
+        // Get the web component from the DOM
+        this.promptModal = document.getElementById('promptModal');
+        if (!this.promptModal) {
+            this.promptModal = document.createElement('wy-prompt-modal');
+            this.promptModal.id = 'promptModal';
+            document.body.appendChild(this.promptModal);
+        }
 
-        document.body.appendChild(this.promptModal);
-        this.promptModalBody = this.promptModal.querySelector('.modal-body');
-        this.promptModalTitle = this.promptModal.querySelector('#promptModalTitle');
-        this.promptModalCategory = this.promptModal.querySelector('#promptModalCategory');
-        this.promptModalLockButton = this.promptModal.querySelector('#promptModalLockButton');
+        // Wire up event handlers
+        this.promptModal.addEventListener('close', () => this.closePromptModal());
 
-        this.promptModal.querySelectorAll('[data-action="close-prompt"]').forEach(element => {
-            element.addEventListener('click', () => this.closePromptModal());
+        this.promptModal.addEventListener('copy', (e) => {
+            // Copy is handled by the component, just show toast
+            this.showToast('Copied to clipboard!');
         });
 
-        if (this.promptModalLockButton) {
-            this.promptModalLockButton.addEventListener('click', (event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                this.handleLockButtonClick();
-            });
-        }
+        this.promptModal.addEventListener('download', (e) => {
+            // Use the existing downloadPrompt method for consistency
+            this.downloadPrompt(this.activePromptIndex);
+        });
+
+        this.promptModal.addEventListener('save', (e) => {
+            this.saveTemplateChanges(this.activePromptIndex);
+        });
+
+        this.promptModal.addEventListener('variation-change', (e) => {
+            const { index, variation } = e.detail;
+            const prompt = this.filteredPrompts[this.activePromptIndex];
+            if (prompt && variation) {
+                prompt.activeVariationId = variation.id;
+                // Update variables if variation has its own
+                if (variation.variables) {
+                    this.promptModal.variables = variation.variables;
+                }
+            }
+        });
+
+        this.promptModal.addEventListener('variable-change', (e) => {
+            const { name, value, values } = e.detail;
+            const prompt = this.filteredPrompts[this.activePromptIndex];
+            if (prompt) {
+                const variables = this.getActiveVariables(prompt);
+                const variable = variables.find(v => v.name === name);
+                if (variable) {
+                    variable.value = value;
+                    this.saveVariableValues(prompt.id, variables);
+                }
+            }
+        });
+
+        this.promptModal.addEventListener('variables-cleared', () => {
+            this.clearVariables(this.activePromptIndex);
+        });
+
+        this.promptModal.addEventListener('toast', (e) => {
+            this.showToast(e.detail.message);
+        });
     }
 
     /**
@@ -907,25 +922,39 @@ class PromptLibrary {
         this.activePromptIndex = index;
         this.activePromptId = prompt.id;
 
-        if (this.promptModalTitle) {
-            this.promptModalTitle.textContent = prompt.title;
-        }
-        if (this.promptModalCategory) {
-            this.promptModalCategory.textContent = prompt.category;
+        // Map variation ID to index
+        const variationIndex = prompt.variations?.findIndex(v => v.id === prompt.activeVariationId) ?? 0;
+
+        // Get the active variables and restore saved values
+        const variables = this.getActiveVariables(prompt);
+        const savedValues = this.loadVariableValues(prompt.id);
+        if (savedValues) {
+            variables.forEach(v => {
+                if (savedValues[v.name] !== undefined) {
+                    v.value = savedValues[v.name];
+                }
+            });
         }
 
-        this.updateLockButton(prompt);
-
-        this.renderPromptModalContent(prompt, index);
+        // Set all properties on the web component
+        Object.assign(this.promptModal, {
+            title: prompt.title,
+            category: prompt.category,
+            description: prompt.description || '',
+            template: this.getActiveTemplate(prompt),
+            variables: variables,
+            variations: prompt.variations || [],
+            activeVariationIndex: variationIndex >= 0 ? variationIndex : 0,
+            mode: prompt.locked !== false ? 'locked' : 'edit',
+            activeTab: prompt.activeTab || 'variables',
+            open: true
+        });
 
         // Store current scroll position before locking body
         const scrollY = window.scrollY;
         this.bodyScrollPosition = scrollY;
 
-        this.promptModal.classList.add('show');
         document.body.classList.add('modal-open');
-
-        // Set body top position to preserve scroll appearance
         document.body.style.top = `-${scrollY}px`;
 
         // Handle keyboard visibility on mobile
@@ -938,29 +967,31 @@ class PromptLibrary {
     closePromptModal() {
         if (!this.promptModal) return;
 
-        // Check for unsaved changes
-        if (this.hasUnsavedChanges()) {
-            if (!confirm('You have unsaved changes. Discard them?')) {
-                return; // Don't close if user cancels
-            }
-            // Restore original template if discarding changes
-            const prompt = this.filteredPrompts[this.activePromptIndex];
-            if (prompt && prompt._originalTemplate) {
-                // Restore to the right location
-                if (prompt.variations && prompt.variations.length > 0) {
-                    const activeId = prompt.activeVariationId || prompt.variations[0].id;
-                    const variation = prompt.variations.find(v => v.id === activeId);
-                    if (variation) {
-                        variation.template = prompt._originalTemplate;
-                    }
-                } else {
-                    prompt.template = prompt._originalTemplate;
+        // Check for unsaved changes (only in edit mode)
+        const prompt = this.filteredPrompts[this.activePromptIndex];
+        if (prompt && this.promptModal.mode === 'edit') {
+            if (this.hasUnsavedChanges()) {
+                if (!confirm('You have unsaved changes. Discard them?')) {
+                    this.promptModal.open = true; // Re-open if cancelled
+                    return;
                 }
-                delete prompt._originalTemplate;
+                // Restore original template if discarding changes
+                if (prompt._originalTemplate) {
+                    if (prompt.variations && prompt.variations.length > 0) {
+                        const activeId = prompt.activeVariationId || prompt.variations[0].id;
+                        const variation = prompt.variations.find(v => v.id === activeId);
+                        if (variation) {
+                            variation.template = prompt._originalTemplate;
+                        }
+                    } else {
+                        prompt.template = prompt._originalTemplate;
+                    }
+                    delete prompt._originalTemplate;
+                }
             }
         }
 
-        this.promptModal.classList.remove('show');
+        this.promptModal.open = false;
         document.body.classList.remove('modal-open');
 
         // Restore scroll position
@@ -970,8 +1001,6 @@ class PromptLibrary {
 
         this.activePromptIndex = null;
         this.activePromptId = null;
-        this.cancelModalBodyAnimation();
-        this.resetModalBodyAnimation(this.promptModalBody);
 
         // Cleanup keyboard handling
         this.cleanupKeyboardHandling();
@@ -1385,7 +1414,8 @@ class PromptLibrary {
             this.updatePromptCard(index);
         }
 
-        if (this.activePromptId && this.promptModal && this.promptModal.classList.contains('show')) {
+        // Update web component modal if open
+        if (this.activePromptId && this.promptModal && this.promptModal.open) {
             const modalIndex = this.filteredPrompts.findIndex(p => p.id === this.activePromptId);
             if (modalIndex === -1) {
                 this.closePromptModal();
@@ -1393,7 +1423,19 @@ class PromptLibrary {
             }
 
             this.activePromptIndex = modalIndex;
-            this.renderPromptModalContent(this.filteredPrompts[modalIndex], modalIndex);
+            const prompt = this.filteredPrompts[modalIndex];
+
+            // Update web component properties
+            Object.assign(this.promptModal, {
+                title: prompt.title,
+                category: prompt.category,
+                description: prompt.description || '',
+                template: this.getActiveTemplate(prompt),
+                variables: this.getActiveVariables(prompt),
+                variations: prompt.variations || [],
+                mode: prompt.locked !== false ? 'locked' : 'edit',
+                activeTab: prompt.activeTab || 'variables'
+            });
         }
     }
     /**
@@ -1403,9 +1445,19 @@ class PromptLibrary {
         const prompt = this.filteredPrompts[index];
         if (!prompt) return;
 
+        // Store original template when entering edit mode
+        if (prompt.locked !== false) {
+            prompt._originalTemplate = this.getActiveTemplate(prompt);
+        }
+
         prompt.locked = !prompt.locked;
         if (prompt.locked && !prompt.activeTab) {
             prompt.activeTab = 'variables';
+        }
+
+        // Update web component mode directly
+        if (this.promptModal && this.promptModal.open) {
+            this.promptModal.mode = prompt.locked !== false ? 'locked' : 'edit';
         }
 
         this.refreshPromptViews(index);
@@ -1421,36 +1473,9 @@ class PromptLibrary {
         // Update the prompt's active tab
         prompt.activeTab = tabName;
 
-        // Update tab buttons and panes directly in the DOM instead of re-rendering
-        if (this.promptModalBody) {
-            const tabButtons = this.promptModalBody.querySelectorAll('.tab-button');
-            const tabPanes = this.promptModalBody.querySelectorAll('.tab-pane');
-            const clearButton = this.promptModalBody.querySelector('[data-action="clear-variables"]');
-
-            // Update button active states
-            tabButtons.forEach(button => {
-                const buttonTab = button.dataset.tab;
-                if (buttonTab === tabName) {
-                    button.classList.add('active');
-                } else {
-                    button.classList.remove('active');
-                }
-            });
-
-            // Update pane active states
-            tabPanes.forEach(pane => {
-                const paneTab = pane.dataset.tab;
-                if (paneTab === tabName) {
-                    pane.classList.add('active');
-                } else {
-                    pane.classList.remove('active');
-                }
-            });
-
-            // Show/hide Clear All button based on active tab
-            if (clearButton) {
-                clearButton.style.display = tabName === 'variables' ? '' : 'none';
-            }
+        // Update web component if it's managing the modal
+        if (this.promptModal && this.promptModal.tagName === 'WY-PROMPT-MODAL') {
+            this.promptModal.activeTab = tabName;
         }
 
         // Update the card if needed
@@ -1501,7 +1526,12 @@ class PromptLibrary {
             localStorage.removeItem(`prompt_vars_${prompt.id}`);
         }
 
-        this.refreshPromptViews(index);
+        // Update web component with cleared variables
+        if (this.promptModal && this.promptModal.open) {
+            this.promptModal.variables = activeVariables;
+        }
+
+        this.updatePromptCard(index);
         this.showToast('Variables cleared');
     }
 
@@ -1511,6 +1541,22 @@ class PromptLibrary {
     saveTemplateChanges(index) {
         const prompt = this.filteredPrompts[index];
         if (!prompt) return;
+
+        // Get the edited template from the web component
+        if (this.promptModal && this.promptModal.mode === 'edit') {
+            const newTemplate = this.promptModal.template;
+
+            // Save to the right location (variation or main template)
+            if (prompt.variations && prompt.variations.length > 0) {
+                const activeId = prompt.activeVariationId || prompt.variations[0].id;
+                const variation = prompt.variations.find(v => v.id === activeId);
+                if (variation) {
+                    variation.template = newTemplate;
+                }
+            } else {
+                prompt.template = newTemplate;
+            }
+        }
 
         // Clear the original template marker since changes are saved
         delete prompt._originalTemplate;
@@ -1563,10 +1609,17 @@ class PromptLibrary {
     hasUnsavedChanges() {
         if (this.activePromptIndex === null || this.activePromptIndex === undefined) return false;
         const prompt = this.filteredPrompts[this.activePromptIndex];
-        if (!prompt) return false;
+        if (!prompt || !prompt._originalTemplate) return false;
 
-        const currentTemplate = this.getActiveTemplate(prompt);
-        return prompt._originalTemplate && prompt._originalTemplate !== currentTemplate;
+        // Get current template from web component if in edit mode
+        let currentTemplate;
+        if (this.promptModal && this.promptModal.mode === 'edit') {
+            currentTemplate = this.promptModal.template;
+        } else {
+            currentTemplate = this.getActiveTemplate(prompt);
+        }
+
+        return prompt._originalTemplate !== currentTemplate;
     }
 
     /**
