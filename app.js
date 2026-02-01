@@ -746,16 +746,15 @@ class PromptLibrary {
 
     /**
      * Render variable input element based on configuration
-     * Uses wy-form-field web component for text/textarea inputs
+     * Uses wy-form-field web component - properties set programmatically in attachModalEventListeners
      */
     getVariableInputHTML(variable) {
         const inputType = variable.inputType || 'text';
         const dataAttr = `data-variable="${this.escapeHTML(variable.name)}"`;
         const placeholder = this.escapeHTML(variable.placeholder || '');
         const label = this.escapeHTML(variable.label);
-        const inputId = `var-${this.escapeHTML(variable.name)}`;
 
-        // Toggle inputs use custom implementation (no wy-form-field support yet)
+        // Toggle inputs use custom implementation (design system doesn't have toggle component)
         if (inputType === 'toggle') {
             const isChecked = (variable.options && variable.value === variable.options[1]) || variable.value === 'true' || variable.value === true;
             const usesDefaultToggleLabels = !variable.options || variable.options.length < 2;
@@ -787,19 +786,20 @@ class PromptLibrary {
         }
 
         // Textarea inputs wrapped in wy-form-field
+        // data-label attribute used for programmatic property setting
         if (inputType === 'textarea') {
             const value = this.escapeHTML(variable.value || '');
             return `
-                <wy-form-field label="${label}" id="${inputId}">
-                    <textarea id="${inputId}" ${dataAttr} placeholder="${placeholder}" rows="${variable.rows || 6}">${value}</textarea>
+                <wy-form-field data-label="${label}">
+                    <textarea ${dataAttr} placeholder="${placeholder}" rows="${variable.rows || 6}">${value}</textarea>
                 </wy-form-field>
             `;
         }
 
         // Text inputs wrapped in wy-form-field
         return `
-            <wy-form-field label="${label}" id="${inputId}">
-                <input type="text" id="${inputId}" ${dataAttr} placeholder="${placeholder}" value="${this.escapeHTML(variable.value || '')}">
+            <wy-form-field data-label="${label}">
+                <input type="text" ${dataAttr} placeholder="${placeholder}" value="${this.escapeHTML(variable.value || '')}">
             </wy-form-field>
         `;
     }
@@ -1029,12 +1029,14 @@ class PromptLibrary {
         }
 
         modalBody.innerHTML = this.getPromptDetailHTML(prompt, index);
+        this.initializeFormFields(modalBody);
         this.bindPromptInteractions(modalBody, prompt, index);
         this.initializeVariableTextareas(modalBody);
         this.updateDependentVariables(modalBody, prompt, this.getActiveVariables(prompt));
 
         if (prompt.locked !== false) {
-            const firstInput = modalBody.querySelector('.variable-input');
+            // Find first input - either inside wy-form-field or toggle's variable-input
+            const firstInput = modalBody.querySelector('wy-form-field input, wy-form-field textarea, .variable-toggle-input');
             if (firstInput) {
                 firstInput.focus({ preventScroll: false });
             }
@@ -1173,7 +1175,8 @@ class PromptLibrary {
             });
         }
 
-        const variableInputs = container.querySelectorAll('.variable-input');
+        // Handle text/textarea inputs (inside wy-form-field)
+        const variableInputs = container.querySelectorAll('wy-form-field input[data-variable], wy-form-field textarea[data-variable]');
         variableInputs.forEach(input => {
             if (input.tagName === 'TEXTAREA') {
                 this.autoResizeTextarea(input);
@@ -1284,10 +1287,24 @@ class PromptLibrary {
     }
 
     /**
+     * Initialize wy-form-field components by setting label property programmatically
+     * HTML attributes don't bind properly to Lit component properties
+     */
+    initializeFormFields(container) {
+        container.querySelectorAll('wy-form-field[data-label]').forEach(formField => {
+            const label = formField.dataset.label;
+            if (label) {
+                // Set property directly on the Lit element
+                formField.label = label;
+            }
+        });
+    }
+
+    /**
      * Ensure variable textareas size to content on initial render
      */
     initializeVariableTextareas(container) {
-        container.querySelectorAll('.variable-textarea').forEach(textarea => {
+        container.querySelectorAll('textarea').forEach(textarea => {
             this.autoResizeTextarea(textarea);
         });
     }
