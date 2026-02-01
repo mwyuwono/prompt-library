@@ -994,11 +994,20 @@ class PromptLibrary {
         }
 
         this.promptModal.open = false;
-        document.body.classList.remove('modal-open');
 
-        // Restore scroll position
+        // Restore scroll position - IMPORTANT: Order matters for mobile Safari
+        // 1. Get the saved scroll position
         const scrollY = this.bodyScrollPosition || 0;
+        // 2. Clear ALL inline styles BEFORE removing modal-open class
+        //    This prevents the page from jumping when position changes from fixed to static
         document.body.style.top = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
+        document.body.style.overflow = '';
+        document.body.style.overscrollBehavior = '';
+        // 3. Remove the class (which would otherwise set these properties)
+        document.body.classList.remove('modal-open');
+        // 4. Restore scroll position
         window.scrollTo(0, scrollY);
 
         this.activePromptIndex = null;

@@ -231,6 +231,30 @@ body {
     display: none; /* Hidden on desktop, shown on mobile */
 }
 
+/* FOUC Prevention: Style wy-button elements before they're defined/upgraded
+   This ensures buttons look correct even while web components are loading */
+wy-button:not(:defined) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background-color: var(--md-sys-color-primary, #2C4C3B);
+    color: var(--md-sys-color-on-primary, #FFFFFF);
+    border: none;
+    border-radius: 9999px;
+    padding: 6px 20px;
+    font-family: var(--font-sans, 'DM Sans', sans-serif);
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    height: 32px;
+}
+
+/* Hide filters button FOUC on desktop (it's hidden anyway) */
+#toggleFiltersBtn:not(:defined) {
+    display: none;
+}
+
 /* Quick Links - Desktop Only */
 .quick-links {
     display: flex;
@@ -2315,6 +2339,11 @@ wy-info-panel[data-variation-description][content=""] {
 
     /* Show wy-button filters on mobile */
     #toggleFiltersBtn {
+        display: inline-flex;
+    }
+
+    /* Show filters button FOUC prevention on mobile */
+    #toggleFiltersBtn:not(:defined) {
         display: inline-flex;
     }
 
