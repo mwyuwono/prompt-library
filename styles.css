@@ -1349,6 +1349,13 @@ body.modal-open {
     margin-bottom: 1.25rem;
 }
 
+/* ==========================================================================
+   LEGACY MODAL STYLES
+   These styles were for the vanilla JS modal, now replaced by wy-prompt-modal
+   web component. The component has encapsulated Shadow DOM styles.
+   Keeping these for backward compatibility with any remaining references.
+   ========================================================================== */
+
 /* Meeting Minutes Architect: Minimal Tab Style per mockup */
 .tabs-header {
     display: flex;
