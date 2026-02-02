@@ -9,7 +9,5 @@
 // Using @main with cache-busting parameter
 // Update ?v= parameter after design system changes to bust browser cache
 import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/dist/web-components.js?v=20260202';
-// Ensure wy-toast is registered even if excluded from the bundle.
-import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/components/wy-toast.js?v=20260202';
 
 console.log('[Components] m3-design-v2 web components registered');
