@@ -500,83 +500,83 @@
       }
     ]
   },
-    {
-        "id": "audio-essay-discovery",
-        "title": "Audio Essay Topic Discovery",
-        "description": "Four-step research workflow to discover interdisciplinary topics and generate audio essay scripts",
-        "category": "Expertise",
-        "icon": "headphones",
-        "steps": [
-            {
-                "id": "decomposition",
-                "name": "Conceptual Decomposition",
-                "instructions": "Start by entering your topic. This step will identify three distinct conceptual pillars that define your topic.",
-                "template": "Topic: {{topic}}\n\nRole: You are a Technical Systems Analyst, Historical Researcher, and culturally sophisticated guide. Your objective is to extract high-density, interdisciplinary data from a provided starting point.\n\nCORE THEMATIC SCOPE\n\nAll output must be inspired by these specific domains. If a topic does not intersect with at least one of these, it is rejected:\n\nMaterial Science/Craft\nClassical revival architecture (e.g., Greek Revival)\nStructural Engineering\nNeoclassical Art\nSouthern Gothic Realism and Writers\n18th/19th-century Economic History\nAmerican history\nBiographies of gay writers, artists, and historical figures\nAlcohol, wine, and beer\nThe American South\nNew England, Boston, Salem, and Marblehead\nAntiques collecting (primarily American, English, and French)\n\nMECHANISMS & INSTITUTIONS (OPTIONAL LENSES)\n\nUse these when they strengthen the synthesis or provide a causal throughline:\n\nInterpersonal relationship (patronage, kinship, mentorship, rivalry, marriage, inheritance networks)\nCredit, banking, and merchant finance\nInsurance and risk pricing (marine, fire, life)\nLaw, contracts, and property regimes (admiralty, probate, incorporation)\nLogistics and port governance (customs, warehousing, quarantine, lighthouses)\nPrinting, publishing, and information networks (newspapers, circulars, ledgers)\n\nPHASE 1: CONCEPTUAL DECOMPOSITION\n\nUpon receiving a Level 0 topic, identify three distinct conceptual pillars (technical, historical, or structural) that define the topic.\n\nFormat: List the three pillars as noun-heavy phrases. No descriptions.\n\nMANDATORY LINGUISTIC CONSTRAINTS (Zero-Tolerance for Fluff)\n\nNo \"Throat-Clearing\": Delete phrases like \"It is worth noting,\" \"Let's dive into,\" or \"As an expert curator\".\nNo Decorative Adjectives: Avoid words like stately, haunting, evocative, rich, or vibrant.\nNo Litotes: Avoid indirect assertions (e.g., \"not unlike,\" \"not insignificant\"). Use direct, assertive language.\nNo Personification: History does not \"whisper\" or \"tell stories.\" It \"codifies,\" \"catalyzes,\" or \"results in.\"\nNo Narrative Transitions: Do not provide summaries or \"Curator's Notes\". Provide data immediately.",
-                "variables": [
-                    {
-                        "name": "topic",
-                        "label": "Topic",
-                        "placeholder": "e.g., Greek Revival Architecture, Bourbon Production, Salem Maritime Trade",
-                        "value": ""
-                    }
-                ]
-            },
-            {
-                "id": "curriculum",
-                "name": "The Curriculum Menu",
-                "instructions": "Copy the three pillars from Step 1, then use this prompt to generate 10 related topics (30% direct, 70% tangential).",
-                "template": "Topic: {{topic}}\n\nConceptual Pillars from Step 1:\n{{pillars}}\n\nPHASE 2: THE CURRICULUM MENU\n\nGenerate 10 Level 1 topics.\n\nTarget Ratio: 30% direct correlation / 70% tangential/interdisciplinary connections.\n\nTechnical Justification: One sentence (max 15 words) per item. State the precise overlap with the Core Thematic Scope. Mechanisms & Institutions may be used when useful.\n\nRequirement: No adjectives. No introductory text.\n\nFormat each as:\n\n[Number]. [Topic Title]: [One sentence technical justification]\n\nExample:\n1. Maritime Insurance Pricing Models in Early Boston: Quantifies risk assessment mechanisms for trans-Atlantic shipping routes.\n2. Probate Records and Furniture Attribution: Links documented estate inventories to surviving Federal-period cabinetwork.",
-                "variables": [
-                    {
-                        "name": "topic",
-                        "label": "Original Topic",
-                        "placeholder": "e.g., Greek Revival Architecture",
-                        "value": ""
-                    },
-                    {
-                        "name": "pillars",
-                        "label": "Three Pillars (from Step 1)",
-                        "inputType": "textarea",
-                        "rows": 4,
-                        "placeholder": "Paste the three conceptual pillars from Step 1 results",
-                        "value": ""
-                    }
-                ]
-            },
-            {
-                "id": "abstracts",
-                "name": "Technical Abstracts",
-                "instructions": "Select a topic from Step 2's menu. This step will generate two detailed technical abstracts for that topic.",
-                "template": "Selected Topic: {{selected_topic}}\n\nPHASE 3: TECHNICAL ABSTRACTS\n\nSuggest two Technical Abstracts (Level 2) for the selected topic.\n\nFor each abstract:\n\nSentence 1: Quantify scope (Dates, geography, or technical specifications).\nSentence 2: Identify the primary mechanical, structural, or literary evolution.\nSentence 3: State the measurable historical or material outcome.\n\nFormat:\n\n### Abstract A: [Title]\n[Three sentences as specified above]\n\n### Abstract B: [Title]\n[Three sentences as specified above]\n\nMANDATORY LINGUISTIC CONSTRAINTS:\n- No \"Throat-Clearing\"\n- No Decorative Adjectives\n- No Litotes\n- No Personification\n- No Narrative Transitions",
-                "variables": [
-                    {
-                        "name": "selected_topic",
-                        "label": "Selected Topic (from Step 2)",
-                        "inputType": "textarea",
-                        "rows": 3,
-                        "placeholder": "Paste the topic you selected from Step 2's menu",
-                        "value": ""
-                    }
-                ]
-            },
-            {
-                "id": "essay-script",
-                "name": "Audio Essay Generation",
-                "instructions": "Select one of the abstracts from Step 3. This generates the final audio essay script prompt for use in a new chat.",
-                "template": "Selected Abstract: {{selected_abstract}}\n\n---AUDIO ESSAY SCRIPT PROMPT---\n\nCopy the text below and use it in a NEW chat window to generate your audio essay:\n\n---BEGIN PROMPT---\nTopic: {{selected_abstract}}\n\nWrite a twenty-five-hundred-word essay on the topic above. Structure the essay entirely in paragraphs, avoiding lists, bullet points, or outline formatting. The goal is to create a continuous narrative suitable for listening as if it were a chapter of a book read aloud by a professional narrator.\n\nStyle and Language Rules:\n\nSpell out numbers and dates fully. For example:\nInstead of \"first,\" write \"first.\"\nInstead of \"nineteen fifties,\" write \"nineteen fifties.\"\nInstead of \"twenty twenty-four,\" write \"twenty twenty-four.\"\nInstead of \"five percent,\" write \"five percent.\"\nInstead of \"twenty-four hours a day, seven days a week,\" write \"twenty-four hours a day, seven days a week.\"\nAvoid abbreviations and acronyms unless they are spelled out in full (e.g., write \"McKinsey and Company\" instead of \"McKinsey and Co.\").\nDo not use symbols (percent, dollar, ampersand). Always write the words out.\nAvoid inline references such as \"(Smith, nineteen ninety-nine)\" or \"[one]\". Instead, all references and sources should be collected at the end of the essay in a concise \"References\" section.\nWrite in complete sentences, maintaining fluid transitions between ideas.\nFavor descriptive language that aids the ear. Repetition for clarity is acceptable if it improves oral comprehension.\n\nLinguistic Constraints (Zero-Tolerance for Fluff):\n\nNo \"Throat-Clearing\": Delete phrases like \"It is worth noting,\" \"Let us dive into,\" or \"As an expert curator.\"\nNo Decorative Adjectives: Avoid words like stately, haunting, evocative, rich, or vibrant.\nNo Litotes: Avoid indirect assertions (e.g., \"not unlike,\" \"not insignificant\"). Use direct, assertive language.\nNo Personification: History does not \"whisper\" or \"tell stories.\" It \"codifies,\" \"catalyzes,\" or \"results in.\"\nNo Narrative Transitions: Do not provide summaries or \"Curator's Notes.\" Provide data immediately.\n\nAudience and Depth:\n\nWrite for a highly intelligent general audience that expects both accuracy and originality. Provide insights that go beyond common knowledge and surface-level facts.\nIncorporate historical, cultural, and technical context where relevant to deepen understanding.\nUse metaphors or analogies sparingly and only if they improve clarity.\n\nFactual Rigor:\n\nVerify claims with precise supporting details.\nWhere possible, provide exact figures, dates, names, or dimensions to anchor the narrative in concrete fact.\nDo not leave generalizations unsupported.\nEnsure balance: acknowledge counterpoints or differing interpretations when relevant, and explain why one perspective became dominant.\n\nTone:\n\nAim for the cadence of a long-form essay or nonfiction book chapter. Think of the style of Bill Bryson or Alan Taylor: approachable, informed, and precise.\nStrive for clarity without oversimplifying.\nKeep the prose natural for the ear; avoid overly dense academic phrasing.\n\nConclusion and Learning Extensions:\n\nAt the end of the essay, provide a short \"References\" section with the sources used.\nAfter the references, concisely state three areas for deeper learning. These should not be remedial but rather fascinating and informative avenues for a curious and well-studied reader to pursue further.\n---END PROMPT---",
-                "variables": [
-                    {
-                        "name": "selected_abstract",
-                        "label": "Selected Abstract (from Step 3)",
-                        "inputType": "textarea",
-                        "rows": 4,
-                        "placeholder": "Paste the abstract you selected from Step 3 (title and three sentences)",
-                        "value": ""
-                    }
-                ]
-            }
+  {
+    "id": "audio-essay-discovery",
+    "title": "Audio Essay Topic Discovery",
+    "description": "Four-step research workflow to discover interdisciplinary topics and generate audio essay scripts",
+    "category": "Expertise",
+    "icon": "headphones",
+    "steps": [
+      {
+        "id": "decomposition",
+        "name": "Conceptual Decomposition",
+        "instructions": "Start by entering your topic. This step will identify three distinct conceptual pillars that define your topic.",
+        "template": "Topic: {{topic}}\n\nRole: You are a Technical Systems Analyst, Historical Researcher, and culturally sophisticated guide. Your objective is to extract high-density, interdisciplinary data from a provided starting point.\n\nCORE THEMATIC SCOPE\n\nAll output must be inspired by these specific domains. If a topic does not intersect with at least one of these, it is rejected:\n\nMaterial Science/Craft\nClassical revival architecture (e.g., Greek Revival)\nStructural Engineering\nNeoclassical Art\nSouthern Gothic Realism and Writers\n18th/19th-century Economic History\nAmerican history\nBiographies of gay writers, artists, and historical figures\nAlcohol, wine, and beer\nThe American South\nNew England, Boston, Salem, and Marblehead\nAntiques collecting (primarily American, English, and French)\n\nMECHANISMS & INSTITUTIONS (OPTIONAL LENSES)\n\nUse these when they strengthen the synthesis or provide a causal throughline:\n\nInterpersonal relationship (patronage, kinship, mentorship, rivalry, marriage, inheritance networks)\nCredit, banking, and merchant finance\nInsurance and risk pricing (marine, fire, life)\nLaw, contracts, and property regimes (admiralty, probate, incorporation)\nLogistics and port governance (customs, warehousing, quarantine, lighthouses)\nPrinting, publishing, and information networks (newspapers, circulars, ledgers)\n\nPHASE 1: CONCEPTUAL DECOMPOSITION\n\nUpon receiving a Level 0 topic, identify three distinct conceptual pillars (technical, historical, or structural) that define the topic.\n\nFormat: List the three pillars as noun-heavy phrases. No descriptions.\n\nMANDATORY LINGUISTIC CONSTRAINTS (Zero-Tolerance for Fluff)\n\nNo \"Throat-Clearing\": Delete phrases like \"It is worth noting,\" \"Let's dive into,\" or \"As an expert curator\".\nNo Decorative Adjectives: Avoid words like stately, haunting, evocative, rich, or vibrant.\nNo Litotes: Avoid indirect assertions (e.g., \"not unlike,\" \"not insignificant\"). Use direct, assertive language.\nNo Personification: History does not \"whisper\" or \"tell stories.\" It \"codifies,\" \"catalyzes,\" or \"results in.\"\nNo Narrative Transitions: Do not provide summaries or \"Curator's Notes\". Provide data immediately.",
+        "variables": [
+          {
+            "name": "topic",
+            "label": "Topic",
+            "placeholder": "e.g., Greek Revival Architecture, Bourbon Production, Salem Maritime Trade",
+            "value": ""
+          }
         ]
-    },
+      },
+      {
+        "id": "curriculum",
+        "name": "The Curriculum Menu",
+        "instructions": "Copy the three pillars from Step 1, then use this prompt to generate 10 related topics (30% direct, 70% tangential).",
+        "template": "Topic: {{topic}}\n\nConceptual Pillars from Step 1:\n{{pillars}}\n\nPHASE 2: THE CURRICULUM MENU\n\nGenerate 10 Level 1 topics.\n\nTarget Ratio: 30% direct correlation / 70% tangential/interdisciplinary connections.\n\nTechnical Justification: One sentence (max 15 words) per item. State the precise overlap with the Core Thematic Scope. Mechanisms & Institutions may be used when useful.\n\nRequirement: No adjectives. No introductory text.\n\nFormat each as:\n\n[Number]. [Topic Title]: [One sentence technical justification]\n\nExample:\n1. Maritime Insurance Pricing Models in Early Boston: Quantifies risk assessment mechanisms for trans-Atlantic shipping routes.\n2. Probate Records and Furniture Attribution: Links documented estate inventories to surviving Federal-period cabinetwork.",
+        "variables": [
+          {
+            "name": "topic",
+            "label": "Original Topic",
+            "placeholder": "e.g., Greek Revival Architecture",
+            "value": ""
+          },
+          {
+            "name": "pillars",
+            "label": "Three Pillars (from Step 1)",
+            "inputType": "textarea",
+            "rows": 4,
+            "placeholder": "Paste the three conceptual pillars from Step 1 results",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "id": "abstracts",
+        "name": "Technical Abstracts",
+        "instructions": "Select a topic from Step 2's menu. This step will generate two detailed technical abstracts for that topic.",
+        "template": "Selected Topic: {{selected_topic}}\n\nPHASE 3: TECHNICAL ABSTRACTS\n\nSuggest two Technical Abstracts (Level 2) for the selected topic.\n\nFor each abstract:\n\nSentence 1: Quantify scope (Dates, geography, or technical specifications).\nSentence 2: Identify the primary mechanical, structural, or literary evolution.\nSentence 3: State the measurable historical or material outcome.\n\nFormat:\n\n### Abstract A: [Title]\n[Three sentences as specified above]\n\n### Abstract B: [Title]\n[Three sentences as specified above]\n\nMANDATORY LINGUISTIC CONSTRAINTS:\n- No \"Throat-Clearing\"\n- No Decorative Adjectives\n- No Litotes\n- No Personification\n- No Narrative Transitions",
+        "variables": [
+          {
+            "name": "selected_topic",
+            "label": "Selected Topic (from Step 2)",
+            "inputType": "textarea",
+            "rows": 3,
+            "placeholder": "Paste the topic you selected from Step 2's menu",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "id": "essay-script",
+        "name": "Audio Essay Generation",
+        "instructions": "Select one of the abstracts from Step 3. This generates the final audio essay script prompt for use in a new chat.",
+        "template": "Selected Abstract: {{selected_abstract}}\n\n---AUDIO ESSAY SCRIPT PROMPT---\n\nCopy the text below and use it in a NEW chat window to generate your audio essay:\n\n---BEGIN PROMPT---\nTopic: {{selected_abstract}}\n\nWrite a twenty-five-hundred-word essay on the topic above. Structure the essay entirely in paragraphs, avoiding lists, bullet points, or outline formatting. The goal is to create a continuous narrative suitable for listening as if it were a chapter of a book read aloud by a professional narrator.\n\nStyle and Language Rules:\n\nSpell out numbers and dates fully. For example:\nInstead of \"first,\" write \"first.\"\nInstead of \"nineteen fifties,\" write \"nineteen fifties.\"\nInstead of \"twenty twenty-four,\" write \"twenty twenty-four.\"\nInstead of \"five percent,\" write \"five percent.\"\nInstead of \"twenty-four hours a day, seven days a week,\" write \"twenty-four hours a day, seven days a week.\"\nAvoid abbreviations and acronyms unless they are spelled out in full (e.g., write \"McKinsey and Company\" instead of \"McKinsey and Co.\").\nDo not use symbols (percent, dollar, ampersand). Always write the words out.\nAvoid inline references such as \"(Smith, nineteen ninety-nine)\" or \"[one]\". Instead, all references and sources should be collected at the end of the essay in a concise \"References\" section.\nWrite in complete sentences, maintaining fluid transitions between ideas.\nFavor descriptive language that aids the ear. Repetition for clarity is acceptable if it improves oral comprehension.\n\nLinguistic Constraints (Zero-Tolerance for Fluff):\n\nNo \"Throat-Clearing\": Delete phrases like \"It is worth noting,\" \"Let us dive into,\" or \"As an expert curator.\"\nNo Decorative Adjectives: Avoid words like stately, haunting, evocative, rich, or vibrant.\nNo Litotes: Avoid indirect assertions (e.g., \"not unlike,\" \"not insignificant\"). Use direct, assertive language.\nNo Personification: History does not \"whisper\" or \"tell stories.\" It \"codifies,\" \"catalyzes,\" or \"results in.\"\nNo Narrative Transitions: Do not provide summaries or \"Curator's Notes.\" Provide data immediately.\n\nAudience and Depth:\n\nWrite for a highly intelligent general audience that expects both accuracy and originality. Provide insights that go beyond common knowledge and surface-level facts.\nIncorporate historical, cultural, and technical context where relevant to deepen understanding.\nUse metaphors or analogies sparingly and only if they improve clarity.\n\nFactual Rigor:\n\nVerify claims with precise supporting details.\nWhere possible, provide exact figures, dates, names, or dimensions to anchor the narrative in concrete fact.\nDo not leave generalizations unsupported.\nEnsure balance: acknowledge counterpoints or differing interpretations when relevant, and explain why one perspective became dominant.\n\nTone:\n\nAim for the cadence of a long-form essay or nonfiction book chapter. Think of the style of Bill Bryson or Alan Taylor: approachable, informed, and precise.\nStrive for clarity without oversimplifying.\nKeep the prose natural for the ear; avoid overly dense academic phrasing.\n\nConclusion and Learning Extensions:\n\nAt the end of the essay, provide a short \"References\" section with the sources used.\nAfter the references, concisely state three areas for deeper learning. These should not be remedial but rather fascinating and informative avenues for a curious and well-studied reader to pursue further.\n---END PROMPT---",
+        "variables": [
+          {
+            "name": "selected_abstract",
+            "label": "Selected Abstract (from Step 3)",
+            "inputType": "textarea",
+            "rows": 4,
+            "placeholder": "Paste the abstract you selected from Step 3 (title and three sentences)",
+            "value": ""
+          }
+        ]
+      }
+    ]
+  },
   {
     "id": "portrait-iconography",
     "title": "Portrait Iconography Brainstorm",
