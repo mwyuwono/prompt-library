@@ -442,9 +442,8 @@ wy-button:not(:defined) {
     column-count: 1;
     -webkit-column-gap: var(--grid-gap);
     column-gap: var(--grid-gap);
-    /* Safari can mis-balance columns; auto keeps cards top-justified */
-    -webkit-column-fill: auto;
-    column-fill: auto;
+    -webkit-column-fill: balance;
+    column-fill: balance;
 
     /* Reference design spacing */
     padding: var(--spacing-xl);
@@ -948,6 +947,26 @@ body.modal-open {
 .prompt-card:active {
     transform: translateY(0);
     box-shadow: var(--shadow-medium);
+}
+
+/* Safari: prevent column/transform paint glitches (titles disappearing, hover flicker). */
+@supports (font: -apple-system-body) {
+    .prompt-grid {
+        /* Safari can mis-balance columns; auto keeps cards top-justified */
+        -webkit-column-fill: auto;
+        column-fill: auto;
+    }
+
+    .view-grid .prompt-card {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+
+    .prompt-card:hover,
+    .prompt-card:active {
+        transform: none;
+    }
 }
 
 /* Featured olive card hover - Enhanced shadow */
