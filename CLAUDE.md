@@ -174,6 +174,8 @@ First variation is default. User input preserved when switching. Variables share
 
 Auto-deploys to Vercel on push to `main`.
 
+**CRITICAL CDN Cache Management:** After pushing changes to m3-design-v2, always wait 2-3 minutes before purging jsDelivr CDN (purges are throttled to max 10/hour per file), and if throttled, temporarily pin consuming projects to the commit hash (e.g., `@abc1234`) with a TODO to revert to `@main` within 24 hours, rather than repeatedly purging which will fail.
+
 ```bash
 git add . && git commit -m "Description
 
