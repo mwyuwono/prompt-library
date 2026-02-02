@@ -6,8 +6,8 @@
  */
 
 // Import design system web components (built bundle from dist/)
-// Using @main with cache-busting parameter
-// Update ?v= parameter after design system changes to bust browser cache
-import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/dist/web-components.js?v=202602021808';
+// TEMPORARY: Pinned to commit hash due to CDN throttle. Revert to @main after Feb 3, 2026.
+// TODO: Revert to @main with cache-busting after CDN cache expires
+import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@d4c15a4/dist/web-components.js';
 
 console.log('[Components] m3-design-v2 web components registered');
