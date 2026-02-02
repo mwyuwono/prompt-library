@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Step Prompt Test</title>
+    
+    <!-- Design System Tokens -->
+    <link rel="stylesheet" href="tokens.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,899&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            background: var(--md-sys-color-background);
+            color: var(--md-sys-color-on-surface);
+            padding: 40px;
+        }
+        
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-family: var(--font-serif, 'Playfair Display', serif);
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+        
+        .test-button {
+            background: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 999px;
+            font-family: var(--font-sans);
+            font-size: 0.875rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 24px;
+        }
+        
+        .test-button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Multi-Step Prompt Test</h1>
+        <p>Testing the Audio Essay Topic Discovery multi-step prompt with local design system build.</p>
+        
+        <button class="test-button" onclick="openTestPrompt()">Open Multi-Step Prompt</button>
+    </div>
+    
+    <!-- Toast notification -->
+    <wy-toast id="toast"></wy-toast>
+    
+    <!-- Prompt Modal -->
+    <wy-prompt-modal id="promptModal"></wy-prompt-modal>
+    
+    <!-- Load local design system build -->
+    <script type="module">
+        // Import from local dev server
+        import 'http://localhost:5174/src/main.js';
+        
+        window.openTestPrompt = () => {
+            const modal = document.getElementById('promptModal');
+            
+            // Set multi-step prompt data
+            modal.title = 'Audio Essay Topic Discovery';
+            modal.category = 'Expertise';
+            modal.description = 'Four-step research workflow to discover interdisciplinary topics and generate audio essay scripts';
+            modal.steps = [
+                {
+                    id: 'decomposition',
+                    name: 'Conceptual Decomposition',
+                    instructions: 'Start by entering your topic. This step will identify three distinct conceptual pillars that define your topic.',
+                    template: 'Topic: {{topic}}\n\nPHASE 1: CONCEPTUAL DECOMPOSITION\n\nIdentify three distinct conceptual pillars (technical, historical, or structural) that define the topic.',
+                    variables: [
+                        {
+                            name: 'topic',
+                            label: 'Topic',
+                            placeholder: 'e.g., Greek Revival Architecture',
+                            value: ''
+                        }
+                    ]
+                },
+                {
+                    id: 'curriculum',
+                    name: 'The Curriculum Menu',
+                    instructions: 'Copy the three pillars from Step 1, then use this prompt to generate 10 related topics.',
+                    template: 'Topic: {{topic}}\n\nPillars: {{pillars}}\n\nPHASE 2: THE CURRICULUM MENU\n\nGenerate 10 Level 1 topics with technical justifications.',
+                    variables: [
+                        {
+                            name: 'topic',
+                            label: 'Original Topic',
+                            value: ''
+                        },
+                        {
+                            name: 'pillars',
+                            label: 'Three Pillars (from Step 1)',
+                            inputType: 'textarea',
+                            rows: 4,
+                            value: ''
+                        }
+                    ]
+                },
+                {
+                    id: 'abstracts',
+                    name: 'Technical Abstracts',
+                    instructions: 'Select a topic from Step 2. This generates two detailed technical abstracts.',
+                    template: 'Selected Topic: {{selected_topic}}\n\nPHASE 3: TECHNICAL ABSTRACTS\n\nGenerate two abstracts with scope, evolution, and outcomes.',
+                    variables: [
+                        {
+                            name: 'selected_topic',
+                            label: 'Selected Topic (from Step 2)',
+                            inputType: 'textarea',
+                            rows: 3,
+                            value: ''
+                        }
+                    ]
+                },
+                {
+                    id: 'essay-script',
+                    name: 'Audio Essay Generation',
+                    instructions: 'Select an abstract from Step 3. This generates the final essay script prompt.',
+                    template: 'Selected Abstract: {{selected_abstract}}\n\nPHASE 4: AUDIO ESSAY GENERATION\n\nGenerate 2,500-word audio essay script.',
+                    variables: [
+                        {
+                            name: 'selected_abstract',
+                            label: 'Selected Abstract (from Step 3)',
+                            inputType: 'textarea',
+                            rows: 4,
+                            value: ''
+                        }
+                    ]
+                }
+            ];
+            modal.activeStepIndex = 0;
+            modal.open = true;
+            
+            // Listen for events
+            modal.addEventListener('step-change', (e) => {
+                console.log('Step changed:', e.detail);
+            });
+            
+            modal.addEventListener('copy', (e) => {
+                const toast = document.getElementById('toast');
+                toast.message = 'Copied to clipboard!';
+                toast.show = true;
+            });
+            
+            modal.addEventListener('close', () => {
+                console.log('Modal closed');
+            });
+        };
+    </script>
+</body>
+</html>
