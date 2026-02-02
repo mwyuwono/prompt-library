@@ -773,32 +773,22 @@ class PromptLibrary {
 
         // Toggle inputs use custom implementation (design system doesn't have toggle component)
         if (inputType === 'toggle') {
-            const isChecked = (variable.options && variable.value === variable.options[1]) || variable.value === 'true' || variable.value === true;
-            const usesDefaultToggleLabels = !variable.options || variable.options.length < 2;
-            const option1 = this.escapeHTML(variable.options?.[0] || 'Disabled');
-            const option2 = this.escapeHTML(variable.options?.[1] || 'Enabled');
-            const offLabel = usesDefaultToggleLabels && isChecked ? option2 : option1;
-            const onLabel = usesDefaultToggleLabels ? option2 : option2;
+            // Prepare options for Web Component (supports both options pattern and simple boolean)
+            const hasOptions = variable.options && Array.isArray(variable.options) && variable.options.length >= 2;
+            const optionsJSON = hasOptions ? JSON.stringify(variable.options).replace(/"/g, '&quot;') : '';
+            const currentValue = this.escapeHTML(variable.value || '');
+            
+            // Use description as helper text if available
+            const description = variable.description ? `description="${this.escapeHTML(variable.description)}"` : '';
+            
             return `
-                <div class="variable-group">
-                    <label class="variable-label">${label}</label>
-                    <div class="variable-toggle-wrapper">
-                        <label class="variable-toggle-label">
-                            <div class="variable-toggle-labels">
-                                <span class="variable-toggle-option ${!isChecked ? 'active' : ''}">${offLabel}</span>
-                                <span class="variable-toggle-option ${isChecked ? 'active' : ''}">${onLabel}</span>
-                            </div>
-                            <input
-                                type="checkbox"
-                                class="variable-toggle-input"
-                                ${dataAttr}
-                                data-default-toggle="${usesDefaultToggleLabels ? 'true' : 'false'}"
-                                ${isChecked ? 'checked' : ''}
-                            >
-                            <span class="variable-toggle-slider"></span>
-                        </label>
-                    </div>
-                </div>
+                <wy-toggle-field
+                    ${dataAttr}
+                    label="${label}"
+                    ${description}
+                    ${hasOptions ? `options='${optionsJSON}'` : ''}
+                    value="${currentValue}"
+                ></wy-toggle-field>
             `;
         }
 
@@ -1112,7 +1102,7 @@ class PromptLibrary {
 
         if (prompt.locked !== false) {
             // Find first input - either inside wy-form-field or toggle's variable-input
-            const firstInput = modalBody.querySelector('wy-form-field input, wy-form-field textarea, .variable-toggle-input');
+            const firstInput = modalBody.querySelector('wy-form-field input, wy-form-field textarea, wy-toggle-field');
             if (firstInput) {
                 firstInput.focus({ preventScroll: false });
             }
@@ -1275,34 +1265,17 @@ class PromptLibrary {
         });
 
         // Handle toggle inputs
-        const toggleInputs = container.querySelectorAll('.variable-toggle-input');
-        toggleInputs.forEach(input => {
-            input.addEventListener('change', (event) => {
+        // Handle wy-toggle-field Web Component changes
+        const toggleFields = container.querySelectorAll('wy-toggle-field');
+        toggleFields.forEach(toggleField => {
+            toggleField.addEventListener('change', (event) => {
                 const variableName = event.target.dataset.variable;
                 const variables = this.getActiveVariables(prompt);
                 const variable = variables.find(v => v.name === variableName);
                 if (variable) {
-                    variable.value = event.target.checked ? (variable.options?.[1] || 'true') : (variable.options?.[0] || '');
-
-                    // Update toggle label highlighting
-                    const wrapper = event.target.closest('.variable-toggle-wrapper');
-                    if (wrapper) {
-                        const options = wrapper.querySelectorAll('.variable-toggle-option');
-                        const isDefaultToggle = event.target.dataset.defaultToggle === 'true';
-                        options.forEach((option, i) => {
-                            if (i === 0) {
-                                option.classList.toggle('active', !event.target.checked);
-                                if (isDefaultToggle) {
-                                    option.textContent = event.target.checked ? 'Enabled' : 'Disabled';
-                                }
-                            } else {
-                                option.classList.toggle('active', event.target.checked);
-                                if (isDefaultToggle) {
-                                    option.textContent = 'Enabled';
-                                }
-                            }
-                        });
-                    }
+                    // Web Component emits { checked, value } where value is the string value (options[0] or options[1])
+                    variable.value = event.detail.value !== undefined ? event.detail.value : 
+                                   (event.detail.checked ? 'true' : '');
 
                     // Handle conditional visibility for dependent variables
                     this.updateDependentVariables(container, prompt, variables);
