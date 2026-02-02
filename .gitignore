@@ -1,6 +1,9 @@
 # Vercel
 .vercel
 
+# Node modules
+node_modules/
+
 # macOS
 .DS_Store
 *.swp

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Editor - Admin</title>
+
+    <!-- Design System CSS -->
+    <link rel="stylesheet" href="tokens.css?v=20260202">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Admin Page Styles -->
+    <link rel="stylesheet" href="admin.css?v=20260202">
+</head>
+<body class="admin-page">
+    <!-- Prompt List Sidebar -->
+    <aside id="prompt-list" class="prompt-list">
+        <div class="sidebar-header">
+            <h2>Prompts</h2>
+            <a href="/index.html" class="view-public-link" target="_blank">
+                <span class="material-symbols-outlined">open_in_new</span>
+                View Public Site
+            </a>
+        </div>
+        <div id="prompt-list-items">
+            <!-- Populated by admin.js -->
+        </div>
+    </aside>
+
+    <!-- Main Editor -->
+    <main id="main-content">
+        <div id="editor-container">
+            <wy-prompt-editor id="editor"></wy-prompt-editor>
+        </div>
+        <div id="empty-state" class="empty-state">
+            <span class="material-symbols-outlined">arrow_back</span>
+            <h3>Select a prompt to edit</h3>
+            <p>Choose a prompt from the list to begin editing</p>
+        </div>
+    </main>
+
+    <!-- Toast Notifications -->
+    <wy-toast id="toast"></wy-toast>
+
+    <!-- Design System Web Components -->
+    <script type="module">
+        // Using local build until design system is pushed to GitHub
+        import './web-components.js?v=20260202';
+    </script>
+
+    <!-- Admin Logic -->
+    <script type="module" src="admin.js?v=20260202"></script>
+</body>
+</html>

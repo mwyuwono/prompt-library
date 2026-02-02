@@ -51,7 +51,10 @@ class PromptLibrary {
     async loadPrompts() {
         try {
             const response = await fetch('prompts.json');
-            this.prompts = await response.json();
+            const allPrompts = await response.json();
+            
+            // Filter out archived prompts from public site
+            this.prompts = allPrompts.filter(p => !p.archived);
 
             // Load saved variable values and metadata from localStorage
             this.prompts.forEach(prompt => {
@@ -905,13 +908,35 @@ class PromptLibrary {
         this.promptModal.addEventListener('variable-change', (e) => {
             const { name, value, values } = e.detail;
             const prompt = this.filteredPrompts[this.activePromptIndex];
+            
             if (prompt) {
-                const variables = this.getActiveVariables(prompt);
-                const variable = variables.find(v => v.name === name);
-                if (variable) {
-                    variable.value = value;
-                    this.saveVariableValues(prompt.id, variables);
+                if (prompt.steps && prompt.steps.length > 0) {
+                    // Multi-step mode: save to current step
+                    const step = prompt.steps[this.promptModal.activeStepIndex];
+                    const variable = step.variables.find(v => v.name === name);
+                    if (variable) {
+                        variable.value = value;
+                        this.saveStepVariableValues(prompt.id, step.id, step.variables);
+                    }
+                } else {
+                    // Standard mode: existing behavior
+                    const variables = this.getActiveVariables(prompt);
+                    const variable = variables.find(v => v.name === name);
+                    if (variable) {
+                        variable.value = value;
+                        this.saveVariableValues(prompt.id, variables);
+                    }
                 }
+            }
+        });
+
+        this.promptModal.addEventListener('step-change', (e) => {
+            const { stepIndex } = e.detail;
+            const prompt = this.filteredPrompts[this.activePromptIndex];
+            
+            if (prompt) {
+                // Save current step index
+                this.saveStepIndex(prompt.id, stepIndex);
             }
         });
 
@@ -938,33 +963,61 @@ class PromptLibrary {
         this.activePromptIndex = index;
         this.activePromptId = prompt.id;
 
-        // Map variation ID to index
-        const variationIndex = prompt.variations?.findIndex(v => v.id === prompt.activeVariationId) ?? 0;
-
-        // Get the active variables and restore saved values
-        const variables = this.getActiveVariables(prompt);
-        const savedValues = this.loadVariableValues(prompt.id);
-        if (savedValues) {
-            variables.forEach(v => {
-                if (savedValues[v.name] !== undefined) {
-                    v.value = savedValues[v.name];
+        // Check if prompt has steps (multi-step mode)
+        if (prompt.steps && prompt.steps.length > 0) {
+            // Restore saved step index
+            const savedStepIndex = this.loadStepIndex(prompt.id);
+            
+            // Load saved variable values for each step
+            prompt.steps.forEach(step => {
+                const savedValues = this.loadStepVariableValues(prompt.id, step.id);
+                if (savedValues) {
+                    step.variables.forEach(v => {
+                        if (savedValues[v.name] !== undefined) {
+                            v.value = savedValues[v.name];
+                        }
+                    });
                 }
             });
-        }
 
-        // Set all properties on the web component
-        Object.assign(this.promptModal, {
-            title: prompt.title,
-            category: prompt.category,
-            description: prompt.description || '',
-            template: this.getActiveTemplate(prompt),
-            variables: variables,
-            variations: prompt.variations || [],
-            activeVariationIndex: variationIndex >= 0 ? variationIndex : 0,
-            mode: prompt.locked !== false ? 'locked' : 'edit',
-            activeTab: prompt.activeTab || 'variables',
-            open: true
-        });
+            Object.assign(this.promptModal, {
+                title: prompt.title,
+                category: prompt.category,
+                description: prompt.description || '',
+                steps: prompt.steps,
+                activeStepIndex: savedStepIndex || 0,
+                open: true
+            });
+        } else {
+            // Standard prompt (existing code)
+            // Map variation ID to index
+            const variationIndex = prompt.variations?.findIndex(v => v.id === prompt.activeVariationId) ?? 0;
+
+            // Get the active variables and restore saved values
+            const variables = this.getActiveVariables(prompt);
+            const savedValues = this.loadVariableValues(prompt.id);
+            if (savedValues) {
+                variables.forEach(v => {
+                    if (savedValues[v.name] !== undefined) {
+                        v.value = savedValues[v.name];
+                    }
+                });
+            }
+
+            // Set all properties on the web component
+            Object.assign(this.promptModal, {
+                title: prompt.title,
+                category: prompt.category,
+                description: prompt.description || '',
+                template: this.getActiveTemplate(prompt),
+                variables: variables,
+                variations: prompt.variations || [],
+                activeVariationIndex: variationIndex >= 0 ? variationIndex : 0,
+                mode: prompt.locked !== false ? 'locked' : 'edit',
+                activeTab: prompt.activeTab || 'variables',
+                open: true
+            });
+        }
 
         // Store current scroll position before locking body
         const scrollY = window.scrollY;
@@ -1874,6 +1927,49 @@ class PromptLibrary {
             });
         } catch (error) {
             console.error('Error loading variable values:', error);
+        }
+    }
+
+    /**
+     * Save current step index to localStorage
+     */
+    saveStepIndex(promptId, stepIndex) {
+        localStorage.setItem(`prompt_step_${promptId}`, stepIndex.toString());
+    }
+
+    /**
+     * Load saved step index from localStorage
+     */
+    loadStepIndex(promptId) {
+        const saved = localStorage.getItem(`prompt_step_${promptId}`);
+        return saved ? parseInt(saved, 10) : 0;
+    }
+
+    /**
+     * Save step-specific variable values
+     */
+    saveStepVariableValues(promptId, stepId, variables) {
+        const key = `prompt_vars_${promptId}_${stepId}`;
+        const values = {};
+        variables.forEach(v => {
+            if (v.value) values[v.name] = v.value;
+        });
+        localStorage.setItem(key, JSON.stringify(values));
+    }
+
+    /**
+     * Load step-specific variable values
+     */
+    loadStepVariableValues(promptId, stepId) {
+        const key = `prompt_vars_${promptId}_${stepId}`;
+        const saved = localStorage.getItem(key);
+        if (!saved) return null;
+        
+        try {
+            return JSON.parse(saved);
+        } catch (error) {
+            console.error('Error loading step variables:', error);
+            return null;
         }
     }
 

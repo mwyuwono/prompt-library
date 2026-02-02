@@ -1,534 +1,596 @@
 [
-    {
-        "id": "audio-essay",
-        "title": "Audio Essay Writer",
-        "description": "Generate 3,000-word essays optimized for audio narration with proper formatting and sources",
-        "category": "Creativity",
-        "image": "public/images/audio-essay.png",
-        "template": "Topic: {{topic}}\n\nWrite a three-thousand-word essay on the topic above. Structure the essay entirely in paragraphs, avoiding lists, bullet points, or outline formatting. The goal is to create a continuous narrative suitable for listening as if it were a chapter of a book read aloud by a professional narrator.\n\nStyle and Language Rules:\n\nSpell out numbers and dates fully. For example:\nInstead of \"1st,\" write \"first.\"\nInstead of \"1950s,\" write \"nineteen fifties.\"\nInstead of \"2024,\" write \"twenty twenty-four.\"\nInstead of \"5%,\" write \"five percent.\"\nInstead of \"24/7,\" write \"twenty-four hours a day, seven days a week.\"\nAvoid abbreviations and acronyms unless they are spelled out in full (e.g., write \"McKinsey and Company\" instead of \"McKinsey & Co.\").\nDo not use symbols (%, $, &). Always write the words out.\nAvoid inline references such as \"(Smith, 1999)\" or \"[1]\".. Instead, all references and sources should be collected at the end of the essay in a concise \"References\" section.\nWrite in complete sentences, maintaining fluid transitions between ideas.\nFavor rich descriptive language that aids the ear. Repetition for clarity is acceptable if it improves oral comprehension.\nAudience and Depth:\n\nWrite for a highly intelligent general audience that expects both accuracy and originality. Provide insights that go beyond common knowledge and surface-level facts.\nIncorporate historical, cultural, and technical context where relevant to deepen understanding.\nUse metaphors or analogies sparingly and only if they improve clarity.\nFactual Rigor:\n\nVerify claims with precise supporting details. For example, if you write \"the Sumner Tunnel was once the deepest underwater tunnel in the world,\" also state its depth in feet and meters, the year it was completed, and the context of what surpassed it.\nWhere possible, provide exact figures, dates, names, or dimensions to anchor the narrative in concrete fact.\nDo not leave generalizations unsupported. For instance, if you say something was \"transformative,\" explain what specific change it caused, how it was measured, and what its consequences were.\nEnsure balance: acknowledge counterpoints or differing interpretations when relevant, and explain why one perspective became dominant.\nTone:\n\nAim for the cadence of a long-form essay or nonfiction book chapter. Think of the style of Bill Bryson or Alan Taylor: approachable, informed, and precise.\nStrive for clarity without oversimplifying.\nKeep the prose natural for the ear; avoid overly dense academic phrasing.\nConclusion and Learning Extensions:\n\nAt the end of the essay, provide a short \"References\" section with the sources used.\nAfter the references, concisely state three areas for deeper learning. These should not be remedial but rather fascinating and informative avenues for a curious and well-studied reader to pursue further.",
-        "variables": [
-            {
-                "name": "topic",
-                "label": "Essay Topic",
-                "placeholder": "e.g., The History of the Sumner Tunnel",
-                "value": ""
-            }
-        ]
-    },
-    {
-        "id": "classical-scene-porcelain",
-        "title": "Ceramic Vessel Scene",
-        "description": "Transform ceramic vessel designs with classical male nude figures while maintaining original style",
-        "category": "Creativity",
-        "image": "public/images/ceramic-vessel.png",
-        "template": "{{scene_description}}\n\nKeep the aesthetic of the ceramic vessel, but alter the composition to include the figures mentioned above. Weave these new figures into the current scenery so that the original elements and the new scene coexist naturally.\n\nAll figures in the scene are strictly nude, masculine males with idealized, classically Roman features and muscular anatomy. The figures represent virility and physical perfection. Avoid long hair or other characteristics that could read feminine. The scene is dynamic, depicting the figures in visually interesting and appealing poses.\n\nMaintain the artwork style and vessel form from the uploaded image in the newly created scenery.\n\nEnsure all edits are seamlessly integrated with the existing artwork. Colors must be harmonious with the original palette, and surrounding imagery and elements must flow naturally without making the new scene stand out as an obvious edit. Subtly echo decorative motifs, border patterns, and stylistic elements from the existing vessel in the edited sections to create visual continuity and coherence.\n\nThe negative space around the new scenery must be harmonious with the existing vessel, ensuring sufficient negative space for the piece to feel elegant. the male figures are surrounded by a bit of empty space to make them more prominent as the subject of the image. If new elements overlap or interact with existing elements, the integration must be seamless and thoughtful.\n\n{{ko_imari_palette}}\n\n{{mask_instructions}}",
-        "variables": [
-            {
-                "name": "scene_description",
-                "label": "Scene Description",
-                "placeholder": "e.g., a Bacchanalian scene, a southern plantation scene",
-                "value": ""
-            },
-            {
-                "name": "mask_instructions",
-                "label": "Masked Image",
-                "inputType": "toggle",
-                "options": [
-                    "",
-                    "Limit all edits to only the areas masked by the user. Ensure the mask is not visible in the resulting image."
-                ],
-                "value": ""
-            },
-            {
-                "name": "ko_imari_palette",
-                "label": "Ko-Imari Palette",
-                "inputType": "toggle",
-                "options": [
-                    "",
-                    "Use skin tones consistent with the 'Ko-Imari' palette, specifically rendering the figures' skin as the unpainted, translucent milky-white of the porcelain (nigoshide), with anatomical details and muscular definition rendered in fine, delicate outlines with appropriate shading for a Ko-Imari vessel."
-                ],
-                "value": ""
-            }
-        ]
-    },
-    {
-        "id": "character-swap-male",
-        "title": "Character Swap - Male Figure",
-        "description": "Replace character's head with a Roman male athlete while maintaining original pose and artistic style",
-        "category": "Creativity",
-        "icon": "swap_horiz",
-        "featured": true,
-        "template": "Edit the uploaded image to replace the character's head and face with that of a 19-year-old male Roman athlete, strictly maintaining the original pose, angle, and perspective.\n\nCharacter Details (Adapted to Style):\n\nFace: A distinct, ancient Roman facial structure featuring an aquiline nose and high cheekbones. Crucially, these features must not be rendered realistically if the source image is stylized; they must be interpreted and rendered using only the strokes, lines, and abstraction level of the original artwork.\n\nHair: Short, thick, wavy hair. The texture of the hair must be defined entirely by the artistic medium of the source image (e.g., rendered with engraved lines for an etching, loose smudges for a charcoal sketch, or cross-hatching for a pencil drawing). No headgear.\n\nExpression: An expression that is natural and consistent with the body language and context of the original pose. Before setting the expression, interpret the emotion of the original uploaded image and use a consistent expression for the new image. This will ensure the context and expression of the original image is upheld in the new version.\n\nStyle & Technical Execution:\n\nSeamless Integration: The new head must perfectly match the exact medium, substrate texture (e.g., aged paper grain), line quality, stroke style, and level of detail of the source image.\n\nLighting & Values: Strictly adhere to the shading values, contrast, and lighting direction of the original image to ensure the swap appears authentic to the specific drawing.\n\nContingency: If the original pose hides the face, apply the Roman aesthetic, skin tone values, and hair type to the visible portions of the head and neck in the matching style.",
-        "variables": []
-    },
-    {
-        "id": "proofreader",
-        "title": "Writing Assistant",
-        "description": "Improve clarity, flow, and structure with multiple style options",
-        "category": "Productivity",
-        "image": "public/images/productivity.png",
-        "variables": [
-            {
-                "name": "text",
-                "label": "Text to Review",
-                "placeholder": "Paste your text here",
-                "value": ""
-            }
+  {
+    "id": "audio-essay",
+    "title": "Audio Essay Writer",
+    "description": "Generate 3,000-word essays optimized for audio narration with proper formatting and sources",
+    "category": "Creativity",
+    "image": "public/images/audio-essay.png",
+    "template": "Topic: {{topic}}\n\nWrite a three-thousand-word essay on the topic above. Structure the essay entirely in paragraphs, avoiding lists, bullet points, or outline formatting. The goal is to create a continuous narrative suitable for listening as if it were a chapter of a book read aloud by a professional narrator.\n\nStyle and Language Rules:\n\nSpell out numbers and dates fully. For example:\nInstead of \"1st,\" write \"first.\"\nInstead of \"1950s,\" write \"nineteen fifties.\"\nInstead of \"2024,\" write \"twenty twenty-four.\"\nInstead of \"5%,\" write \"five percent.\"\nInstead of \"24/7,\" write \"twenty-four hours a day, seven days a week.\"\nAvoid abbreviations and acronyms unless they are spelled out in full (e.g., write \"McKinsey and Company\" instead of \"McKinsey & Co.\").\nDo not use symbols (%, $, &). Always write the words out.\nAvoid inline references such as \"(Smith, 1999)\" or \"[1]\".. Instead, all references and sources should be collected at the end of the essay in a concise \"References\" section.\nWrite in complete sentences, maintaining fluid transitions between ideas.\nFavor rich descriptive language that aids the ear. Repetition for clarity is acceptable if it improves oral comprehension.\nAudience and Depth:\n\nWrite for a highly intelligent general audience that expects both accuracy and originality. Provide insights that go beyond common knowledge and surface-level facts.\nIncorporate historical, cultural, and technical context where relevant to deepen understanding.\nUse metaphors or analogies sparingly and only if they improve clarity.\nFactual Rigor:\n\nVerify claims with precise supporting details. For example, if you write \"the Sumner Tunnel was once the deepest underwater tunnel in the world,\" also state its depth in feet and meters, the year it was completed, and the context of what surpassed it.\nWhere possible, provide exact figures, dates, names, or dimensions to anchor the narrative in concrete fact.\nDo not leave generalizations unsupported. For instance, if you say something was \"transformative,\" explain what specific change it caused, how it was measured, and what its consequences were.\nEnsure balance: acknowledge counterpoints or differing interpretations when relevant, and explain why one perspective became dominant.\nTone:\n\nAim for the cadence of a long-form essay or nonfiction book chapter. Think of the style of Bill Bryson or Alan Taylor: approachable, informed, and precise.\nStrive for clarity without oversimplifying.\nKeep the prose natural for the ear; avoid overly dense academic phrasing.\nConclusion and Learning Extensions:\n\nAt the end of the essay, provide a short \"References\" section with the sources used.\nAfter the references, concisely state three areas for deeper learning. These should not be remedial but rather fascinating and informative avenues for a curious and well-studied reader to pursue further.",
+    "variables": [
+      {
+        "name": "topic",
+        "label": "Essay Topic",
+        "placeholder": "e.g., The History of the Sumner Tunnel",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "classical-scene-porcelain",
+    "title": "Ceramic Vessel Scene",
+    "description": "Transform ceramic vessel designs with classical male nude figures while maintaining original style",
+    "category": "Creativity",
+    "image": "public/images/ceramic-vessel.png",
+    "template": "{{scene_description}}\n\nKeep the aesthetic of the ceramic vessel, but alter the composition to include the figures mentioned above. Weave these new figures into the current scenery so that the original elements and the new scene coexist naturally.\n\nAll figures in the scene are strictly nude, masculine males with idealized, classically Roman features and muscular anatomy. The figures represent virility and physical perfection. Avoid long hair or other characteristics that could read feminine. The scene is dynamic, depicting the figures in visually interesting and appealing poses.\n\nMaintain the artwork style and vessel form from the uploaded image in the newly created scenery.\n\nEnsure all edits are seamlessly integrated with the existing artwork. Colors must be harmonious with the original palette, and surrounding imagery and elements must flow naturally without making the new scene stand out as an obvious edit. Subtly echo decorative motifs, border patterns, and stylistic elements from the existing vessel in the edited sections to create visual continuity and coherence.\n\nThe negative space around the new scenery must be harmonious with the existing vessel, ensuring sufficient negative space for the piece to feel elegant. the male figures are surrounded by a bit of empty space to make them more prominent as the subject of the image. If new elements overlap or interact with existing elements, the integration must be seamless and thoughtful.\n\n{{ko_imari_palette}}\n\n{{mask_instructions}}",
+    "variables": [
+      {
+        "name": "scene_description",
+        "label": "Scene Description",
+        "placeholder": "e.g., a Bacchanalian scene, a southern plantation scene",
+        "value": ""
+      },
+      {
+        "name": "mask_instructions",
+        "label": "Masked Image",
+        "inputType": "toggle",
+        "options": [
+          "",
+          "Limit all edits to only the areas masked by the user. Ensure the mask is not visible in the resulting image."
         ],
-        "variations": [
-            {
-                "id": "standard",
-                "name": "Standard (with Objective Alternative)",
-                "description": "Improves clarity and flow while preserving your voice. Creates an objective alternative version for professional contexts.",
-                "template": "Text: {{text}}\n\nInstructions\n\nTask 1:\n\nI want you to help me write, starting with the passage of text above. If possible, allow me to directly edit the output in canvas mode. As we iterate, remember that your primary purpose is to improve clarity, flow, and overall structure, even if that means reorganizing the content.\n\nI also want you to:\n\nPreserve my original tone and style, but revise wording and re-organize content when needed to enhance readability and coherence.\nBe concise, direct, and confident. Favor economical constructions over verbosity.\nEnsure grammar and usage conform to rigorous standards of American English, such as The Chicago Manual of Style.\n‍\n\nTask 2:\n\nCreate an alternative version of the text that:\n\nPresents information objectively without advocating for any particular outcome. Keep it casual but professional, as if I'm communicating with a colleague I know well. Avoid being overly enthusiastic, pushy, or using excessive praise. Focus on relevant facts and let the recipient draw their own conclusions.‍\nOptimizes the structure. Reimagine the structure to be more concise and efficient, while conveying the same meaning and sentiment."
-            },
-            {
-                "id": "casual",
-                "name": "Casual & Conversational",
-                "description": "Makes text friendly and approachable. Best for informal communication and personal contexts.",
-                "template": "Text: {{text}}\n\nPlease rewrite the text above to make it more casual and conversational. Make it sound friendly and approachable, like you're talking to a friend. Keep the meaning the same but relax the tone. Remove overly formal language and use simpler words where possible."
-            },
-            {
-                "id": "formal",
-                "name": "Formal & Professional",
-                "description": "Elevates language for business correspondence and academic settings. Uses sophisticated vocabulary and precise phrasing.",
-                "template": "Text: {{text}}\n\nPlease rewrite the text above in a more formal and professional style. Use sophisticated vocabulary and precise language. Ensure it adheres to formal writing conventions and would be appropriate for business correspondence or academic settings. Maintain proper grammar and eliminate any casual expressions."
-            },
-            {
-                "id": "concise",
-                "name": "Concise & Direct",
-                "description": "Removes filler and redundancy to maximize clarity with minimal words. Best when brevity is essential.",
-                "template": "Text: {{text}}\n\nPlease make this text as concise as possible while preserving all key information. Remove unnecessary words, redundant phrases, and filler. Make every sentence count. Be direct and to the point. Aim for maximum clarity with minimum words."
-            }
-        ]
-    },
-    {
-        "id": "shipping-quote-request",
-        "title": "Shipping Quote Request",
-        "description": "Draft concise emails requesting shipping quotes from vendors for auction purchases",
-        "category": "Travel & Shopping",
-        "icon": "local_shipping",
-        "template": "Item Details: {{item_details}}\nAuction House: {{auction_house}}\nListing URL: {{listing_url}}\n‍\n\nShip to:\n\nMatt Weaver-Yuwono\n20 Mechanic Square, Unit 5\nMarblehead, MA 01945\n\nInstructions:\n\nPlease draft an email for requesting shipping quotes from multiple vendors. The letter should provide details for the item(s) I am considering purchasing, which I have included above. Provide details that are pertinent for calculating shipping (such as item type, size/dimensions, weight (if known), durability, etc.). Also provide the delivery address (above) so that the vendor can accurately calculate shipping prices.\n\nThe item(s) will be purchased from a local auction house, and the shipping vendor will need to pick up the item during their allowed pickup times. The shipping vendor will be responsible for packing the item(s).\n\nThe letter should ask for information on shipping cost and delivery timeframe.\n\nThe letter should include a link to the listing, which I have provided above. This enables the shipping vendor to view images of the item.\n\nThe tone of the letter should be clear, and straightforward. Be very concise. For example \"Hello, Could you please assist me with a shipping quote for them item below, which I plan to purchase from [Auction house name] in [City, State]?\"",
+        "value": ""
+      },
+      {
+        "name": "ko_imari_palette",
+        "label": "Ko-Imari Palette",
+        "inputType": "toggle",
+        "options": [
+          "",
+          "Use skin tones consistent with the 'Ko-Imari' palette, specifically rendering the figures' skin as the unpainted, translucent milky-white of the porcelain (nigoshide), with anatomical details and muscular definition rendered in fine, delicate outlines with appropriate shading for a Ko-Imari vessel."
+        ],
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "character-swap-male",
+    "title": "Character Swap - Male Figure",
+    "description": "Replace character's head with a Roman male athlete while maintaining original pose and artistic style",
+    "category": "Creativity",
+    "icon": "swap_horiz",
+    "featured": true,
+    "template": "Edit the uploaded image to replace the character's head and face with that of a 19-year-old male Roman athlete, strictly maintaining the original pose, angle, and perspective.\n\nCharacter Details (Adapted to Style):\n\nFace: A distinct, ancient Roman facial structure featuring an aquiline nose and high cheekbones. Crucially, these features must not be rendered realistically if the source image is stylized; they must be interpreted and rendered using only the strokes, lines, and abstraction level of the original artwork.\n\nHair: Short, thick, wavy hair. The texture of the hair must be defined entirely by the artistic medium of the source image (e.g., rendered with engraved lines for an etching, loose smudges for a charcoal sketch, or cross-hatching for a pencil drawing). No headgear.\n\nExpression: An expression that is natural and consistent with the body language and context of the original pose. Before setting the expression, interpret the emotion of the original uploaded image and use a consistent expression for the new image. This will ensure the context and expression of the original image is upheld in the new version.\n\nStyle & Technical Execution:\n\nSeamless Integration: The new head must perfectly match the exact medium, substrate texture (e.g., aged paper grain), line quality, stroke style, and level of detail of the source image.\n\nLighting & Values: Strictly adhere to the shading values, contrast, and lighting direction of the original image to ensure the swap appears authentic to the specific drawing.\n\nContingency: If the original pose hides the face, apply the Roman aesthetic, skin tone values, and hair type to the visible portions of the head and neck in the matching style.",
+    "variables": []
+  },
+  {
+    "id": "proofreader",
+    "title": "Writing Assistant",
+    "description": "Improve clarity, flow, and structure with multiple style options",
+    "category": "Productivity",
+    "image": "public/images/productivity.png",
+    "variables": [
+      {
+        "name": "text",
+        "label": "Text to Review",
+        "placeholder": "Paste your text here",
+        "value": ""
+      }
+    ],
+    "variations": [
+      {
+        "id": "standard",
+        "name": "Standard (with Objective Alternative)",
+        "description": "Improves clarity and flow while preserving your voice. Creates an objective alternative version for professional contexts.",
+        "template": "Text: {{text}}\n\nInstructions\n\nTask 1:\n\nI want you to help me write, starting with the passage of text above. If possible, allow me to directly edit the output in canvas mode. As we iterate, remember that your primary purpose is to improve clarity, flow, and overall structure, even if that means reorganizing the content.\n\nI also want you to:\n\nPreserve my original tone and style, but revise wording and re-organize content when needed to enhance readability and coherence.\nBe concise, direct, and confident. Favor economical constructions over verbosity.\nEnsure grammar and usage conform to rigorous standards of American English, such as The Chicago Manual of Style.\n‍\n\nTask 2:\n\nCreate an alternative version of the text that:\n\nPresents information objectively without advocating for any particular outcome. Keep it casual but professional, as if I'm communicating with a colleague I know well. Avoid being overly enthusiastic, pushy, or using excessive praise. Focus on relevant facts and let the recipient draw their own conclusions.‍\nOptimizes the structure. Reimagine the structure to be more concise and efficient, while conveying the same meaning and sentiment."
+      },
+      {
+        "id": "casual",
+        "name": "Casual & Conversational",
+        "description": "Makes text friendly and approachable. Best for informal communication and personal contexts.",
+        "template": "Text: {{text}}\n\nPlease rewrite the text above to make it more casual and conversational. Make it sound friendly and approachable, like you're talking to a friend. Keep the meaning the same but relax the tone. Remove overly formal language and use simpler words where possible."
+      },
+      {
+        "id": "formal",
+        "name": "Formal & Professional",
+        "description": "Elevates language for business correspondence and academic settings. Uses sophisticated vocabulary and precise phrasing.",
+        "template": "Text: {{text}}\n\nPlease rewrite the text above in a more formal and professional style. Use sophisticated vocabulary and precise language. Ensure it adheres to formal writing conventions and would be appropriate for business correspondence or academic settings. Maintain proper grammar and eliminate any casual expressions."
+      },
+      {
+        "id": "concise",
+        "name": "Concise & Direct",
+        "description": "Removes filler and redundancy to maximize clarity with minimal words. Best when brevity is essential.",
+        "template": "Text: {{text}}\n\nPlease make this text as concise as possible while preserving all key information. Remove unnecessary words, redundant phrases, and filler. Make every sentence count. Be direct and to the point. Aim for maximum clarity with minimum words."
+      }
+    ]
+  },
+  {
+    "id": "shipping-quote-request",
+    "title": "Shipping Quote Request",
+    "description": "Draft concise emails requesting shipping quotes from vendors for auction purchases",
+    "category": "Travel & Shopping",
+    "icon": "local_shipping",
+    "template": "Item Details: {{item_details}}\nAuction House: {{auction_house}}\nListing URL: {{listing_url}}\n‍\n\nShip to:\n\nMatt Weaver-Yuwono\n20 Mechanic Square, Unit 5\nMarblehead, MA 01945\n\nInstructions:\n\nPlease draft an email for requesting shipping quotes from multiple vendors. The letter should provide details for the item(s) I am considering purchasing, which I have included above. Provide details that are pertinent for calculating shipping (such as item type, size/dimensions, weight (if known), durability, etc.). Also provide the delivery address (above) so that the vendor can accurately calculate shipping prices.\n\nThe item(s) will be purchased from a local auction house, and the shipping vendor will need to pick up the item during their allowed pickup times. The shipping vendor will be responsible for packing the item(s).\n\nThe letter should ask for information on shipping cost and delivery timeframe.\n\nThe letter should include a link to the listing, which I have provided above. This enables the shipping vendor to view images of the item.\n\nThe tone of the letter should be clear, and straightforward. Be very concise. For example \"Hello, Could you please assist me with a shipping quote for them item below, which I plan to purchase from [Auction house name] in [City, State]?\"",
+    "variables": [
+      {
+        "name": "item_details",
+        "label": "Item Details",
+        "placeholder": "e.g., Antique oak desk, 60\" x 30\" x 30\", approximately 150 lbs",
+        "value": ""
+      },
+      {
+        "name": "auction_house",
+        "label": "Auction House",
+        "placeholder": "e.g., Skinner Auctions, Boston, MA",
+        "value": ""
+      },
+      {
+        "name": "listing_url",
+        "label": "Listing URL",
+        "placeholder": "https://...",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "expertise-test",
+    "title": "Expertise Quiz Generator",
+    "description": "Create expert-level quizzes with detailed audio-optimized answer explanations",
+    "category": "Expertise",
+    "icon": "quiz",
+    "template": "Topic: {{topic}}\n\nInstructions\n\nI want to test my expertise on the topic above. Create a highly challenging, expert-level quiz that covers historical context, technical details, key figures or developments, advanced concepts, distinguishing characteristics, and real-world applications or implications.\n\nThe quiz should be structured into sections, with each section containing thought-provoking questions designed to assess deep knowledge and nuanced understanding. Include a bonus section for advanced connoisseurship or specialized expertise. The difficulty level should be equivalent to an exam for subject-matter experts or professionals in the field.\n\nAt the end of the quiz, ask if I would like the answers. If I choose to receive them, provide detailed explanations in a format optimized for audio playback, using a storytelling style similar to historian Alan Taylor. Responses should be deeply researched, engaging, and expansive—offering historical context, connections between events, and rich detail rather than just isolated facts. Transitions should be smooth, descriptions vivid, and key insights framed within a broader narrative. Avoid dry lists or overly academic phrasing; instead, present explanations with the depth and flow of an engaging historical audiobook. Where applicable, naturally reference supporting sources or data points to enhance the explanation.",
+    "variables": [
+      {
+        "name": "topic",
+        "label": "Topic",
+        "placeholder": "e.g., Georgian Architecture",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "product-research",
+    "title": "Premium Product Finder",
+    "description": "Find heirloom-quality products from artisanal makers using natural materials",
+    "category": "Travel & Shopping",
+    "icon": "storefront",
+    "template": "Product: {{product}}\n‍\n\nContext\n\nI'm searching for the product above. Help me locate exceptional options with the following characteristics:\n\nMaterials & Quality Requirements\n\nExclusively natural materials (wood, stone, metal, glass, ceramic, linen, wool, cotton, leather)\nAbsolutely no plastics, synthetic finishes, or artificial materials\nHeirloom quality construction with superior craftsmanship\nAuthentic finishing techniques and traditional manufacturing methods where applicable\nPreference for artisanal and handcrafted items over mass-produced alternatives\nAesthetic Alignment\n\nMaterials allowed to age gracefully and develop patina\nDesigns that emphasize quality and longevity over trends\nRetailer & Source Profile\n\nPremium specialty retailers and bespoke manufacturers\nHeritage brands with established reputations for quality\nSmall-batch artisans and craftspeople\nIndependent design studios and workshops\nArchitectural salvage and restoration specialists\nGlobal boutiques specializing in exceptional home goods\nSearch Depth Requirements\n\nBegin with established premium retailers like Blackberry Farm Shop, Abask, Flamingo Estate, House of Antique Hardware, Ralph Lauren, and Drakes of London, Sid Mashburn, Chairish\nExpand search to discover lesser-known specialists like Mark Lewis Design Shop or Talas in New York\nIdentify international sources and specialized workshops not commonly known\nExplore architectural salvage options for authentic period pieces\nResponse Format\n\nPlease provide search results organized as follows:\n\nDirect links to specific products meeting my requirements\nPrice point (if available)\nAvoid other context or filler content, I just want the links and price.\nAdditional Context\n\nThis search should emphasize quality over convenience, authenticity over affordability, and craftsmanship over contemporary trends. I value items that will develop character over time and maintain their integrity for decades.",
+    "variables": [
+      {
+        "name": "product",
+        "label": "Product",
+        "placeholder": "e.g., Linen bed sheets",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "antiques-expert",
+    "title": "Antiques Expert Analysis",
+    "description": "Expert analysis and forensic training for authenticating antiques across all categories",
+    "category": "Expertise",
+    "icon": "chair",
+    "variables": [],
+    "variations": [
+      {
+        "id": "comprehensive",
+        "name": "Comprehensive Analysis",
+        "description": "Complete expert assessment covering identification, history, craftsmanship, condition, and authentication with optional quiz. Best for general antique evaluation.",
+        "template": "You are an antiques expert providing information about antique furniture and objects.\n\nWhen I upload a photo of an item, please provide the following:\n\nIdentification & Dating: Use visual clues and systematic analysis to identify and date the item. Specifically mention markings, labels, or unique characteristics that help in determining its age and origin. Indicate if the item appears to be an original antique or a reproduction.\nHistory & Context: Provide a brief history of the item's category, including its typical use and historical context. Mention broader trends from the item's era that influenced its design and purpose.\nCraftsmanship & Condition:\nAnalyze the craftsmanship (e.g., joinery techniques, materials, and artistic style) and condition of the item.\nPay particular attention to details that indicate refinishing, forgery, or restoration. Highlight any inconsistencies in wear, suspicious hardware, or other alterations that might impact the item's authenticity.\nCompare the item to recognized standards or styles to assess its authenticity.\nResearch Resources: Recommend reliable sources for further research, such as books, museums, or organizations specializing in the item's type.\nFocus Areas: Always scrutinize the item for potential refinishing, forgery indicators, or condition issues. Mention any signs of restoration and whether they positively or negatively impact the piece's historical value.\n\nFinally, ask if I would like you to create a highly challenging, expert-level quiz to test about this item that covers historical context, production techniques, design characteristics, notable makers, market factors, and authentication methods. If yes, provide a quiz to test my expertise that is structured into sections, with each section containing detailed and thought-provoking questions. The questions should test deep knowledge, including technical details, provenance considerations, and distinguishing features from similar antiques.\n\nResponses should be written at a level appropriate for antiques experts.\n\nUse Markup syntax for clarity, organizing the response into distinct sections."
+      },
+      {
+        "id": "forensic-training",
+        "name": "Master's Eye Training",
+        "description": "Interactive two-step forensic analysis teaching expert-level authentication through guided checklist and master-apprentice critique. Best for developing connoisseurship skills.",
+        "template": "Role: You are a Polymath Expert in the decorative and fine arts, specializing in forensic analysis of antiques across all categories (furniture, ceramics, textiles, metalwork, etc.). Your goal is to train a serious collector to develop a \"Master's Eye\" through a two-step interactive process.\n\nThe Context: I will upload images of an antique (often from auction listings with varying quality). You must analyze these images with extreme rigor, looking for tool marks, material science, signs of aging, and evidence of restoration.\n\nStep 1: The Forensic Checklist\nDo NOT provide your full analysis yet. Instead, identify the object and provide a specific checklist of what I should examine in the images to determine age, quality, and authenticity. Focus heavily on forensic evidence (e.g., hand-planed vs. circular saw marks, irregular dovetails, honest wear vs. \"distressing,\" glaze inclusions, or oxidation patterns). Ask me to provide my observations on these specific points.\n\nStep 2: The Master-Apprentice Critique\nOnce I provide my analysis, perform a \"Master-Apprentice\" critique.\n• Direct Assessment: Rigorously evaluate my observations for accuracy and comprehensiveness. Correct me where I have missed a detail or misinterpreted a physical sign.\n• Comparative Analysis: Contrast my findings with what an \"ideal\" or \"textbook\" authentic example of this piece should look like.\n• The Reveal: Finally, provide your own expert conclusion on the item's likely period, origin, and condition based on the forensic evidence.\n\nInstructions for Tone: Maintain a high-level, academic, yet practical tone. Use precise technical terminology (e.g., medullary rays, ormolu, craquelure, tenon and mortise). If the image quality is poor, tell me exactly what is obscured and what the \"red flags\" might be in that specific area.\n\nLet's Begin: you can begin once the images are provided."
+      }
+    ]
+  },
+  {
+    "id": "restaurant-finder",
+    "title": "Restaurant Finder",
+    "description": "Find top-rated farm-to-table restaurants using press coverage and customer reviews",
+    "category": "Travel & Shopping",
+    "icon": "restaurant",
+    "template": "Location: {{location}}\n\n‍\n\nContext: I'm looking for outstanding restaurants and bars within the 'Search distance' from the 'Location' provided. I want to go beyond just customer reviews; I want to include analysis from quality food reporting sources such as newspapers, blogs, YouTube channels, and magazines.\n\nInstructions: As an AI model, your task is to simulate a comprehensive web search using your extensive training data and follow these steps to deliver the required information:\n\nFirstly, identify 10 credible sources of food reporting relevant to the specified 'Location' and 'Search distance'.\n\nDesired format:\n\n**Sources:**\n1. [Insert name of Source 1] - [Source location]\n2. [Insert name of Source 2] - [Source location]\n3. ...\n(Leave a blank line after this section)\n\nSecondly, simulate a search through these sources for commendations of excellent restaurants, combining this data with customer reviews and any other publicly available information. Analyze the frequency of press mentions, the overall sentiment, and the reviews, ranking the best restaurants first.\n\nFocus on restaurants that are:\n- Farm to table\n- Organic\n- Use natural and fresh ingredients\n- Frequently update their menu\n- Accept reservations\n- Highly reviewed\n- Frequently mentioned in the press\n- Have few negative reviews\n\nExclude any that are:\n- Franchise or chain establishments\n- Fast food joints\n\nFinally, compile a comprehensive list of restaurants, divided into three categories, without repeating restaurants in more than one category:\n\n- The 5 best fine dining restaurants\n- The 5 best restaurants overall\n- The 5 best bakeries\n\nDesired format:\n\n#Category\n\n(Leave a blank line)\n\n**Restaurants:**\n1. **[Insert name of Restaurant 1]** - [Restaurant city], [Restaurant state]\n   - Mentioned in: [Insert the name of source(s) where the restaurant was mentioned]\n   - Description: [Insert a summary of the coverage of this restaurant]\n\n(Leave a blank line)\n\n2. **[Insert name of Restaurant 2]** - [Restaurant city], [Restaurant state]\n   - Mentioned in: [Insert the name of source(s) where the restaurant was mentioned]\n   - Description: [Insert a summary of the coverage of this restaurant]\n\n(Leave a blank line)",
+    "variables": [
+      {
+        "name": "location",
+        "label": "Location",
+        "placeholder": "e.g., Portland, Maine",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "accommodations-finder",
+    "title": "Luxury Accommodations Finder",
+    "description": "Find boutique hotels and luxury accommodations using press coverage and special requirements",
+    "category": "Travel & Shopping",
+    "icon": "hotel",
+    "template": "Location: {{location}}\nSpecial requirements: {{special_requirements}}\n‍\n\nContext: I'm seeking exceptional accommodations in or around a specified 'Location' that meet the 'Special requirements' above. My search aims to go beyond customer reviews; I want to consider analysis from quality publications and sources such as newspapers, travel magazines, blogs, and other reputable cultural publications.\n\nInstructions: As an AI model, you are to simulate a comprehensive web search using your extensive training data. Your task involves the following steps:\n\n1. Identify 10 credible publications relevant to the 'Location', referred to as 'Sources'.\n\nDesired format:\n\n**Sources:**\n1. [Insert name of Source 1] - [Source location]\n2. [Insert name of Source 2] - [Source location]\n3. ...\n\nLeave a blank line after this section.\n\n2. Simulate a search through these sources for excellent hotels, inns, or other luxury accommodations. Combine this data with customer reviews and any other publicly available information. Analyze the frequency of press mentions, the overall sentiment, and the reviews.\n\nConsider accommodations that meet the following requirements, as well as the 'Special requirements' provided above:\n\nBoutique\nIndependently owned\nMembers of high-quality hotel groups such as Relais and Chateaux\nHighly praised\nFrequently mentioned in the press\nHave few negative reviews\nExclude any that:\n\nAre considered economy accommodations\nHave average customer reviews of 3.5 stars or less\n3. Compile a comprehensive list of highly-regarded accommodations that meet the 'Special requirements'. Divide the list into 'Hotels' and 'Other accommodations' categories.‍\n\nDesired format:\n\n# Hotels\n\n**[Insert name of Hotel 1]** - [Hotel city], [Hotel state]\n- Requirement: [Insert the rationale for why this result meets the 'Special requirements']\n- Mentioned in: [Insert the name of source(s) where the hotel was mentioned]\n- Description: [Insert a summary of the coverage of this hotel]\n  [Insert website]\n**[Insert name of Hotel 2]** - [Hotel city], [Hotel state]\n- Requirement: [Insert the rationale for why this result meets the 'Special requirements']\n- Mentioned in: [Insert the name of source(s) where the hotel was mentioned]\n- Description: [Insert a summary of the coverage of this hotel]\n  [Insert website]\n...\n# Other accommodations\n\n**[Insert name of other accommodation]** - **Type:**: [type of accommodation]\n[accommodation city], [accommodation state]\n- Requirement: [Insert the rationale for why this result meets the 'Special requirements']\n- Mentioned in: [Insert the name of source(s) where the accommodation was mentioned]\n- Description: [Insert a summary of the coverage of this accommodation]\n[Insert website]\n...\nInclude as many options as are relevant for the selected location. In your output, please use Markup syntax for improved readability.",
+    "variables": [
+      {
+        "name": "location",
+        "label": "Location",
+        "placeholder": "e.g., Tuscany, Italy",
+        "value": ""
+      },
+      {
+        "name": "special_requirements",
+        "label": "Special Requirements",
+        "placeholder": "e.g., Dog-friendly, with pool",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "work-email-reply",
+    "title": "Work Email Reply",
+    "description": "Draft balanced, professional email responses with alternative versions for tone and brevity",
+    "category": "Productivity",
+    "icon": "reply",
+    "template": "Incoming email: {{incoming_email}}\nResponse outline: {{response_outline}}\n‍\n\nContext\n\nI want to draft a message in a balanced and neutral tone. The goal is to present information objectively without advocating for any particular outcome. Keep it casual but professional, as if I'm communicating with a colleague I know well. Avoid being overly enthusiastic, pushy, or using excessive praise. Focus on relevant facts and let the recipient draw their own conclusions.\n\nThis instruction captures the key elements you're looking for while being applicable to a wide range of messages:\n\nBalanced and neutral tone\nObjective presentation of information\nCasual but professional language\nAvoidance of excessive enthusiasm or praise\nFocus on relevant facts\nInstructions\n\nFirst, review the 'Incoming email' and the 'Response outline' I provided above. Next, write a response to the 'Incoming email'. Use markup syntax to improve readability of the results.\n\nDesired format:\n# Email response, Option 1:\n{text}\nleave a blank line\n\nNext, write the following 2 alternative versions of the message:\n\nAlternative Version - Option 1\nWrite the version of the message that you feel is most appropriate for a work email.\n\nAlternative Version - Option 2\nWrite the message as succinctly as possible.\n\nDesired format:\n## Alternative Version: <Alternative Option Number>\n{text}\nleave a blank line",
+    "variables": [
+      {
+        "name": "incoming_email",
+        "label": "Incoming Email",
+        "placeholder": "Paste the email you received",
+        "value": ""
+      },
+      {
+        "name": "response_outline",
+        "label": "Response Outline",
+        "placeholder": "Brief outline of what you want to say",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "work-jira-task",
+    "title": "Jira Task Extractor",
+    "description": "Extract project details and tasks from notes to create formatted Jira task entries",
+    "category": "Productivity",
+    "icon": "checklist",
+    "template": "Project Notes: {{project_notes}}\n‍\n\nGiven the text provided above, I want you to extract project details and tasks to create a simplified Jira task entry. The purpose of this Jira task is to track specific tasks and their associated to-do items effectively. It is important to note that the text provided does not offer a comprehensive overview of the project. Your goal is to identify and organize essential details and actionable items directly relevant to the project, as presented in the text.\n\nPlease avoid including any filler content or extraneous details not explicitly mentioned in the text. Focus on what is directly relevant and actionable, based on the given information. If further context is required to accurately complete this task, do not hesitate to request additional information.\n\nWhen presenting the results, format them in a way that is easily transferable to a Jira task entry. This format should include sections for a title, background, and action items, all of which should be clearly delineated. Utilize Markup syntax to enhance the readability and organization of the output, ensuring that it is user-friendly and ready to be copied directly into Jira.\n\nExample of the desired output format (please adapt as needed based on the task details):\n\n\"\"\"Title: [Insert Task Title Here]\n\nBackground:\n\nBrief description of the project or task context.\nKey objectives or goals.\nAction Items:\n\n[Action Item 1]: Description and any relevant details.\n[Action Item 2]: Description and any relevant details....\"\"\"",
+    "variables": [
+      {
+        "name": "project_notes",
+        "label": "Project Notes",
+        "placeholder": "Paste your project notes or meeting notes here",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "work-self-assessment",
+    "title": "Performance Review Assistant",
+    "description": "Generate impact statements for annual reviews aligned with impact markers and metrics",
+    "category": "Productivity",
+    "icon": "trending_up",
+    "template": "Project Description: {{project_description}}\n‍\n\nContext: {{context}}\n\nAnnual Self-Assessment\n\nFor my annual performance review, I aim to measure my impact based on the provided set of impact markers. I require your assistance in synthesizing summaries for each of my projects, highlighting my contributions and aligning them with relevant impact markers.\n\nInstructions:\n\nPreliminary Research: Before diving into the Impact Statements, briefly study my background, professional style, and the provided impact markers to grasp the full context of my role, preferred methods of communication, and key performance indicators.\nProject Deep Dive: Go beyond merely reading the project descriptions. Analyze them to understand the inherent challenges, strategic objectives, and the innovation they bring to the table.\nImpact Statement Draft: Create an initial 'Impact Statement' for each project, synthesizing the project description with relevant impact markers. This statement should be a compelling narrative that highlights my role and contributions. Feel free to rearrange or rephrase elements for enhanced clarity and flow, while retaining the essence of each component.\nImpact Metrics: For each Impact Statement, include specific metrics or quantifiable achievements that demonstrate the impact made. This could be in terms of cost savings, efficiency gains, or client engagement levels.\nEnhanced Impact Statement: Generate an \"Enhanced Impact Statement\" that incorporates at least three specific refinements for clarity, impact, or strategic alignment. This version should not just be a reiteration but a polished narrative that builds upon the original Impact Statement, making it more persuasive and impactful.\nRelevance Highlight: Conclude each Enhanced Impact Statement by explicitly indicating which impact markers were most crucial in shaping the project's success. This reinforces the alignment with organizational goals and objectives.\nNarrative Flow: Ensure that both versions of the Impact Statement have a logical flow, transitioning smoothly from introducing the project, to discussing challenges, solutions, and finally, the impact created.\nBackground:\n\nI'm a seasoned Product Designer at a prominent consulting firm, leading user experience design for our Global Banking Practice. As one of the four key figures in the central leadership team called the 'Global Banking Hub', my purview extends across the design and user experience of all banking solutions we offer. My approach hinges on the Human-Centered Design methodology for product design, ensuring that our tools are intuitive and effective for our end users. In product development, I adhere to Agile methodology, maintaining flexibility and responsiveness to deliver efficient, high-quality results. For problem solving and workshops, I rely on Design Thinking best practices..\n\nProfessional Style:\n\nMy communication style prioritizes clarity and conciseness, without compromising on detail. I aim for substance and measurable impact, avoiding overconfidence and self-aggrandizement.\n\nImpact Markers:\n\nImpact Market Category: Discover\n\n‍Research: Defines approach for a wide range of methods‍\nCreativity: Diagnoses key opportunities by applying multiple creative lens to make connections and push ideas‍\nWorkshop: Strategizes and oversees workshops to generate maximum client input & participation‍\nStrategy: Shapes and translates business problems into digital services and functionality\nImpact Market Category: Create\n\nCreativity: Establishes the creative direction and problem solving by applying guiding principles to generate new solutions for complex systems that address consumer and business goals\nConcepting: Guides teams on how to best frame & communicate design logic\nPrototype: Establishes direction for developing testable prototypes to evaluate and measure trade-offs using qual and quant techniques\nValue Prop: Understands & shapes approach for teams to compellingly communicate value prop/ vision across all lenses\nDesign Problem Solving: Shares perspective / feedback during design PS sessions\nImpact Market Category: Build\n\nExperience: Shapes the building frameworks approach for a successful design and production of a relevant, engaging and intuitive experience\nDevelop: Decides on the final approach for developer-ready designs taking into account business & tech constraints, often including best practice tools, design systems, component library etc.\nVisual: Sets appropriate internal selection of systems, processes, business considerations, external requirements (e.g. App Store Guidelines) for production\nProduction: Oversees and shapes the implementation/ path-to-production, alerting team of potential design bugs\nCross-team: Shapes client/ CST/ cross-functional team approach to implementation providing direction across all lenses\nImpact Market Category: Scale\n\nTalent: Begins to help clients by mapping out specific talent needs, implementing tools and processes to achieve world class design\nOps Capabilities: Begins to implement tools and processes to help scale to achieve world class design operations and systems\nCulture: Develops programs to help organizations to put the customer at the heart of the organization\nEvangelism: Starts to craft design impact stories",
+    "variables": [
+      {
+        "name": "project_description",
+        "label": "Project Description",
+        "placeholder": "Describe the project you worked on",
+        "value": ""
+      },
+      {
+        "name": "context",
+        "label": "Additional Context",
+        "placeholder": "Any additional context about your role or contributions",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "webflow-code-assistance",
+    "title": "Webflow Code Helper",
+    "description": "Get modular, well-documented JavaScript code for Webflow prototypes with section markers",
+    "category": "Productivity",
+    "icon": "code",
+    "template": "Objective: {{objective}}\n‍\n\nContext\n\nI am using Webflow to build a prototype and would like your assistance achieving the 'Objective' above. I have limited experience editing JavaScript, so I need extremely modular, clearly labeled output to safely swap small sections without touching syntax.\n\nInstructions\n\nPart 1: Thorough Analysis of the Problem\n\nUnderstanding the Challenge: Start by asking detailed questions to clearly understand the specific requirements and challenges of the task.\nIdentifying Requirements: pinpoint the requirements needed to achieve the coding challenge. This includes aspects like functionality, user experience, and technical specifications.\nExploring Solutions: Consider potential methods for addressing the challenge, weighing their advantages and disadvantages. Critically evaluate your proposed approach to identify any limitations. This step is crucial to ensure the method is viable and to address potential issues before moving on to code generation.\nRecommendation: Based on your analysis, recommend the most suitable method for solving the challenge. You can say, \"I evaluated multiple approaches and recommend...\", but ONLY state the details of the optimal method to avoid verbose responses.\nPart 2: Code\n\nCode: Ensure all code snippets can be seamlessly integrated into my Webflow prototype.\nIdentifying Elements: Use custom data-* attributes for element identification (e.g., data-element=\"button\", data-component=\"modal\"). Specify the recommended attribute name and value(s) for each element the script needs.\nModular sections with markers: Break code into self-contained blocks surrounded by comment markers in this format:\n\n// ---SECTION [FUNCTIONAL_NAME]---// [one-line description of this section's purpose][code for this section]// ---ENDSECTION [FUNCTIONAL_NAME]---\n\nUse functional, hierarchical labels (e.g., FETCH_DATA, RENDER_BUTTON, VALIDATE_INPUT).\n‍\nSection map first: Before generating the full code, provide a brief outline of section names and their responsibilities. Wait for confirmation of that map before filling in the code.\nUse a boilerplate template: Assume a one-page template already contains all comment markers. Only fill or replace code between existing markers so the structure remains intact.\nInline usage examples: At the bottom of each section, include a one-line snippet (e.g., initModal();) showing how it's invoked.\nIncremental scope & isolated validation: Deliver each section in isolation. If possible, include a minimal test or example so I can validate one block at a time before merging.\nConsistent formatting: Format all code (e.g., with Prettier) to ensure consistent indentation and braces. Do not alter comment markers.\nVersioned backups: Whenever replacing a block, keep the previous version in a comment or separate file. This ensures easy rollback if something breaks.",
+    "variables": [
+      {
+        "name": "objective",
+        "label": "Coding Objective",
+        "placeholder": "e.g., Create a filterable product grid with modal preview",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "character-portrait",
+    "title": "Character Portrait",
+    "description": "Transform reference photos into high-quality portraits",
+    "category": "Creativity",
+    "image": "public/images/character-portrait.png",
+    "variables": [],
+    "variations": [
+      {
+        "id": "visual-anchor",
+        "name": "Visual Anchor Method",
+        "description": "Three-step process: analyze facial structure, summarize key features, then merge with style reference. Best when you have both likeness and style images.",
+        "template": "Step 1:\nAnalyze the attached reference photographs to identify the subject's visual anchor: the fixed facial characteristics that must remain unchanged to preserve likeness. These include, at minimum, overall craniofacial structure, eye spacing and orientation, nasal form, mouth proportions, jawline, and any distinctive asymmetries or contours.\n\nOnce this visual anchor is established, reinterpret the subject through the conventions of classical portraiture. Describe the figure in the style of a 19th-century academic oil painting, introducing restrained idealization—refinement of skin, lighting, and expression—while preserving immediate recognizability. The final portrait should convey gravity, dignity, and psychological depth, balancing faithful likeness with the pathos and nobility characteristic of high academic painting.\n\nStep 2: Provide a summary of this Visual Anchor Then ask for a Style Reference Image in order to move to image generation.\n\nStep 3: I will provide a Style Reference Image. You must generate a high-fidelity image that merges the subject's \"Visual Anchor\" with the style, medium, and atmosphere of the reference image. The subject must look like they belong in that world, as if they were the original sitter for that specific piece of art.\n\nLet's Begin: I am uploading the likeness references now."
+      },
+      {
+        "id": "likeness-lock",
+        "name": "Likeness Lock Method",
+        "description": "Creates explicit constraint checklist before generation to prioritize identity preservation. Best when likeness accuracy is critical.",
+        "template": "Step 1 — Likeness Lock + Visual Anchor extraction\n\"Analyze the attached likeness reference photos. Your primary objective is preserving identity.\nPriority order: facial geometry and feature placement (highest) > expression > pose > lighting > wardrobe > background/painterly effects (lowest).\nDefine the subject's Visual Anchor as a set of non-negotiable constraints. Lock these elements: head/craniofacial silhouette, relative feature placement, eye spacing and tilt, eyelid shape, brow shape and distance to eyes, nose bridge/tip/nostril geometry, philtrum length, mouth width and lip shape, chin projection, jaw angle/width, and any distinctive asymmetries or markers.\nAllowed changes: painterly rendering, skin finish, lighting design, color palette, edge softness, canvas/varnish effects.\nDisallowed changes: altering facial proportions, moving features, beautifying asymmetries, changing age/ethnicity cues.\"\n\nStep 2 — Output constraints, then request style reference\n\"Output the Visual Anchor as a bullet checklist of explicit constraints (10–20 items) written as 'must match' statements. Then provide a short compliance plan describing how you will keep the anchor intact during style transfer.\nThen ask me for a Style Reference Image to proceed.\"\n\nStep 3 — Generate\n\"Using the Style Reference Image, generate a 19th-century academic oil portrait that matches its brushwork, palette, lighting (chiaroscuro), composition conventions, and surface finish. The subject must remain immediately recognizable from the likeness references by strictly adhering to the Visual Anchor checklist.\nBefore finalizing, perform a quick internal cross-check: confirm each anchor item is satisfied.\"\nLet's Begin: I am uploading the likeness references now."
+      },
+      {
+        "id": "character-reference-only",
+        "name": "Character Reference Only (No Style Image)",
+        "description": "Generates classical oil portrait directly from reference photos without style image. Best for standalone portraits with automatic style.",
+        "template": "Analyze the uploaded reference images to identify and preserve the subject's Visual Anchor: the immutable facial characteristics that define their identity. This includes exact craniofacial structure, head shape, forehead height, cheekbone placement, jawline geometry, eye spacing and orientation, eyelid shape, nasal bridge and tip, mouth width and lip proportions, ear placement, and any distinctive asymmetries or contours. These features must remain anatomically unchanged to ensure immediate and unmistakable likeness.\n\nRender the subject as a classical, museum-quality oil portrait in the tradition of refined academic painting.\n\nApply idealization only at the surface level—subtle refinement of skin texture, unified tonal transitions, and painterly handling of edges—while strictly preserving the subject's facial proportions, expression, and bone structure as seen in the reference images. Avoid transformation toward an archetypal face.\n\nClothing should be simple and classical in form, rendered in soft natural fabrics with minimal ornamentation, allowing focus to remain on the face. Brushwork should be smooth and intentional, conveying the materiality of oil paint without obscuring defining features.\n\nThe final image should read as a refined classical oil painting that depicts the same individual from the reference images, instantly recognizable, with identity fully preserved and expressed through a restrained, timeless painterly aesthetic."
+      },
+      {
+        "id": "custom-style-clothing",
+        "name": "Custom Style & Clothing",
+        "description": "Allows you to specify artistic style and clothing details before generation. Most flexible option for custom requirements.",
+        "template": "Before uploading the reference photographs, please specify:\n\nStyle: {{style}}\nClothing: {{clothing}}\n\nOnce you provide this information, I will analyze the reference photographs to identify the subject's visual anchor: the fixed facial characteristics that must remain unchanged to preserve likeness.\n\nI will then reinterpret the subject through the conventions of classical portraiture, rendering the figure in an oil painting in your specified style and clothing, introducing restrained idealization—refinement of skin, lighting, and expression—while preserving immediate recognizability. The final portrait will convey gravity, dignity, and psychological depth, balancing faithful likeness with the pathos and nobility characteristic of a museum quality painting.",
         "variables": [
-            {
-                "name": "item_details",
-                "label": "Item Details",
-                "placeholder": "e.g., Antique oak desk, 60\" x 30\" x 30\", approximately 150 lbs",
-                "value": ""
-            },
-            {
-                "name": "auction_house",
-                "label": "Auction House",
-                "placeholder": "e.g., Skinner Auctions, Boston, MA",
-                "value": ""
-            },
-            {
-                "name": "listing_url",
-                "label": "Listing URL",
-                "placeholder": "https://...",
-                "value": ""
-            }
+          {
+            "name": "style",
+            "label": "Painting Style",
+            "placeholder": "e.g., 19th-century academic, Baroque, Renaissance, Impressionist",
+            "value": ""
+          },
+          {
+            "name": "clothing",
+            "label": "Clothing Description",
+            "placeholder": "e.g., simple classical attire, period-appropriate dress, contemporary formal wear",
+            "value": ""
+          }
         ]
-    },
-    {
-        "id": "expertise-test",
-        "title": "Expertise Quiz Generator",
-        "description": "Create expert-level quizzes with detailed audio-optimized answer explanations",
-        "category": "Expertise",
-        "icon": "quiz",
-        "template": "Topic: {{topic}}\n\nInstructions\n\nI want to test my expertise on the topic above. Create a highly challenging, expert-level quiz that covers historical context, technical details, key figures or developments, advanced concepts, distinguishing characteristics, and real-world applications or implications.\n\nThe quiz should be structured into sections, with each section containing thought-provoking questions designed to assess deep knowledge and nuanced understanding. Include a bonus section for advanced connoisseurship or specialized expertise. The difficulty level should be equivalent to an exam for subject-matter experts or professionals in the field.\n\nAt the end of the quiz, ask if I would like the answers. If I choose to receive them, provide detailed explanations in a format optimized for audio playback, using a storytelling style similar to historian Alan Taylor. Responses should be deeply researched, engaging, and expansive—offering historical context, connections between events, and rich detail rather than just isolated facts. Transitions should be smooth, descriptions vivid, and key insights framed within a broader narrative. Avoid dry lists or overly academic phrasing; instead, present explanations with the depth and flow of an engaging historical audiobook. Where applicable, naturally reference supporting sources or data points to enhance the explanation.",
-        "variables": [
-            {
-                "name": "topic",
-                "label": "Topic",
-                "placeholder": "e.g., Georgian Architecture",
-                "value": ""
-            }
-        ]
-    },
-    {
-        "id": "product-research",
-        "title": "Premium Product Finder",
-        "description": "Find heirloom-quality products from artisanal makers using natural materials",
-        "category": "Travel & Shopping",
-        "icon": "storefront",
-        "template": "Product: {{product}}\n‍\n\nContext\n\nI'm searching for the product above. Help me locate exceptional options with the following characteristics:\n\nMaterials & Quality Requirements\n\nExclusively natural materials (wood, stone, metal, glass, ceramic, linen, wool, cotton, leather)\nAbsolutely no plastics, synthetic finishes, or artificial materials\nHeirloom quality construction with superior craftsmanship\nAuthentic finishing techniques and traditional manufacturing methods where applicable\nPreference for artisanal and handcrafted items over mass-produced alternatives\nAesthetic Alignment\n\nMaterials allowed to age gracefully and develop patina\nDesigns that emphasize quality and longevity over trends\nRetailer & Source Profile\n\nPremium specialty retailers and bespoke manufacturers\nHeritage brands with established reputations for quality\nSmall-batch artisans and craftspeople\nIndependent design studios and workshops\nArchitectural salvage and restoration specialists\nGlobal boutiques specializing in exceptional home goods\nSearch Depth Requirements\n\nBegin with established premium retailers like Blackberry Farm Shop, Abask, Flamingo Estate, House of Antique Hardware, Ralph Lauren, and Drakes of London, Sid Mashburn, Chairish\nExpand search to discover lesser-known specialists like Mark Lewis Design Shop or Talas in New York\nIdentify international sources and specialized workshops not commonly known\nExplore architectural salvage options for authentic period pieces\nResponse Format\n\nPlease provide search results organized as follows:\n\nDirect links to specific products meeting my requirements\nPrice point (if available)\nAvoid other context or filler content, I just want the links and price.\nAdditional Context\n\nThis search should emphasize quality over convenience, authenticity over affordability, and craftsmanship over contemporary trends. I value items that will develop character over time and maintain their integrity for decades.",
-        "variables": [
-            {
-                "name": "product",
-                "label": "Product",
-                "placeholder": "e.g., Linen bed sheets",
-                "value": ""
-            }
-        ]
-    },
-    {
-        "id": "antiques-expert",
-        "title": "Antiques Expert Analysis",
-        "description": "Expert analysis and forensic training for authenticating antiques across all categories",
-        "category": "Expertise",
-        "icon": "chair",
+      }
+    ]
+  },
+  {
+    "id": "song-creator",
+    "title": "Song Creator",
+    "description": "Annotate lyrics to match a specific artist's performance style and delivery",
+    "category": "Creativity",
+    "icon": "music_note",
+    "featured": true,
+    "template": "### Task\nAnnotate the provided text to match the specific musical performance style of a target artist.\n\n### Inputs\n\nArtist: {{artist}}\n\nLyrics to Process: \"\"\"\n{{lyrics}}\n\"\"\"\n\n### Instructions\n\nStyle Header: Begin with the sentence: \"In the style of the artist with first name [First Name] and last name [Last Name], who is known for...\" followed by a precise description of their cadence, delivery, and instrumentation.\n\nAnnotation: Rewrite the provided lyrics, inserting detailed performance notes between lines and words. Capture the artist's specific quirks (e.g., vocal runs, spoken word sections, specific ad-libs, breathing patterns).\n\n### Strict Guardrails\n\nALL non-lyrical text (headers, cues, moods, ad-libs) MUST be inside square brackets [ ].\n\nExample: [Verse 1 - Fast Tempo] text text [Audible breath] text...\n\nDo not output any preamble or post-script conversation.",
+    "variables": [
+      {
+        "name": "artist",
+        "label": "Artist",
+        "placeholder": "e.g., Freddie Mercury",
+        "value": ""
+      },
+      {
+        "name": "lyrics",
+        "label": "Lyrics to Process",
+        "placeholder": "Insert song lyrics here...",
+        "value": "",
+        "inputType": "textarea",
+        "rows": 10
+      }
+    ],
+    "slug": "song-creator"
+  },
+  {
+    "id": "architectural-rendering-davis",
+    "title": "Davis Architectural Rendering",
+    "description": "Transform images into 19th-century American architectural renderings in Alexander Jackson Davis style",
+    "category": "Creativity",
+    "icon": "architecture",
+    "template": "Turn this image into A 19th-century American architectural rendering in the style of Alexander Jackson Davis depicted as a precise front elevation orthographic drawing with no vanishing point. The artwork should utilize strict ruled ink lines overlaid with translucent watercolor washes in warm cream and pale yellow stone tones. Include a smooth graded wash sky fading from blue to white, deep calculated cast shadows to simulate depth within recesses, and high-contrast dark windows that maintain the window pattern of the reference. Any metal accents should be finished with verdigris green . Add a human scale figure at the entrance to establish scale, and faint greyed-out flanking structures to frame the subject.",
+    "variables": []
+  },
+  {
+    "id": "prompt-builder",
+    "title": "Prompt Builder Assistant",
+    "description": "Refine prompt ideas through iterative questioning to create polished, effective prompts",
+    "category": "Productivity",
+    "icon": "construction",
+    "template": "Prompt: {{initial_idea}}\n\nYou are a Prompt Builder Assistant. I have shared a general idea for a prompt above. Follow these steps:\n\n1. Ask the first follow-up question to get more detail and wait for the user's response.\n2. After the user responds, ask the second follow-up question based on what you've learned and wait again for their response.\n3. Then ask the third follow-up question in the same manner.\n4. Once you have all three answers, use the information to craft a final prompt that meets the user's needs.\n5. Present the final prompt in a clear and ready-to-use format. If you present multiple options to the user, use a unique option identifier for each option so the user can simply refer to that identifier rather than restating the entire option.",
+    "variables": [
+      {
+        "name": "initial_idea",
+        "label": "Initial Prompt Idea",
+        "placeholder": "e.g., Help me identify architectural styles in historic buildings",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "academic-drawing",
+    "title": "Academic Drawing",
+    "description": "Convert an image or create an academic drawing of an idealized male figure in classical style",
+    "category": "Creativity",
+    "icon": "brush",
+    "variables": [],
+    "variations": [
+      {
+        "id": "convert-image",
+        "name": "Convert Uploaded Image",
+        "description": "Transforms your uploaded image into an academic figure study drawing while preserving the original pose and character.",
         "variables": [],
-        "variations": [
-            {
-                "id": "comprehensive",
-                "name": "Comprehensive Analysis",
-                "description": "Complete expert assessment covering identification, history, craftsmanship, condition, and authentication with optional quiz. Best for general antique evaluation.",
-                "template": "You are an antiques expert providing information about antique furniture and objects.\n\nWhen I upload a photo of an item, please provide the following:\n\nIdentification & Dating: Use visual clues and systematic analysis to identify and date the item. Specifically mention markings, labels, or unique characteristics that help in determining its age and origin. Indicate if the item appears to be an original antique or a reproduction.\nHistory & Context: Provide a brief history of the item's category, including its typical use and historical context. Mention broader trends from the item's era that influenced its design and purpose.\nCraftsmanship & Condition:\nAnalyze the craftsmanship (e.g., joinery techniques, materials, and artistic style) and condition of the item.\nPay particular attention to details that indicate refinishing, forgery, or restoration. Highlight any inconsistencies in wear, suspicious hardware, or other alterations that might impact the item's authenticity.\nCompare the item to recognized standards or styles to assess its authenticity.\nResearch Resources: Recommend reliable sources for further research, such as books, museums, or organizations specializing in the item's type.\nFocus Areas: Always scrutinize the item for potential refinishing, forgery indicators, or condition issues. Mention any signs of restoration and whether they positively or negatively impact the piece's historical value.\n\nFinally, ask if I would like you to create a highly challenging, expert-level quiz to test about this item that covers historical context, production techniques, design characteristics, notable makers, market factors, and authentication methods. If yes, provide a quiz to test my expertise that is structured into sections, with each section containing detailed and thought-provoking questions. The questions should test deep knowledge, including technical details, provenance considerations, and distinguishing features from similar antiques.\n\nResponses should be written at a level appropriate for antiques experts.\n\nUse Markup syntax for clarity, organizing the response into distinct sections."
-            },
-            {
-                "id": "forensic-training",
-                "name": "Master's Eye Training",
-                "description": "Interactive two-step forensic analysis teaching expert-level authentication through guided checklist and master-apprentice critique. Best for developing connoisseurship skills.",
-                "template": "Role: You are a Polymath Expert in the decorative and fine arts, specializing in forensic analysis of antiques across all categories (furniture, ceramics, textiles, metalwork, etc.). Your goal is to train a serious collector to develop a \"Master's Eye\" through a two-step interactive process.\n\nThe Context: I will upload images of an antique (often from auction listings with varying quality). You must analyze these images with extreme rigor, looking for tool marks, material science, signs of aging, and evidence of restoration.\n\nStep 1: The Forensic Checklist\nDo NOT provide your full analysis yet. Instead, identify the object and provide a specific checklist of what I should examine in the images to determine age, quality, and authenticity. Focus heavily on forensic evidence (e.g., hand-planed vs. circular saw marks, irregular dovetails, honest wear vs. \"distressing,\" glaze inclusions, or oxidation patterns). Ask me to provide my observations on these specific points.\n\nStep 2: The Master-Apprentice Critique\nOnce I provide my analysis, perform a \"Master-Apprentice\" critique.\n• Direct Assessment: Rigorously evaluate my observations for accuracy and comprehensiveness. Correct me where I have missed a detail or misinterpreted a physical sign.\n• Comparative Analysis: Contrast my findings with what an \"ideal\" or \"textbook\" authentic example of this piece should look like.\n• The Reveal: Finally, provide your own expert conclusion on the item's likely period, origin, and condition based on the forensic evidence.\n\nInstructions for Tone: Maintain a high-level, academic, yet practical tone. Use precise technical terminology (e.g., medullary rays, ormolu, craquelure, tenon and mortise). If the image quality is poor, tell me exactly what is obscured and what the \"red flags\" might be in that specific area.\n\nLet's Begin: you can begin once the images are provided."
-            }
-        ]
-    },
-    {
-        "id": "restaurant-finder",
-        "title": "Restaurant Finder",
-        "description": "Find top-rated farm-to-table restaurants using press coverage and customer reviews",
-        "category": "Travel & Shopping",
-        "icon": "restaurant",
-        "template": "Location: {{location}}\n\n‍\n\nContext: I'm looking for outstanding restaurants and bars within the 'Search distance' from the 'Location' provided. I want to go beyond just customer reviews; I want to include analysis from quality food reporting sources such as newspapers, blogs, YouTube channels, and magazines.\n\nInstructions: As an AI model, your task is to simulate a comprehensive web search using your extensive training data and follow these steps to deliver the required information:\n\nFirstly, identify 10 credible sources of food reporting relevant to the specified 'Location' and 'Search distance'.\n\nDesired format:\n\n**Sources:**\n1. [Insert name of Source 1] - [Source location]\n2. [Insert name of Source 2] - [Source location]\n3. ...\n(Leave a blank line after this section)\n\nSecondly, simulate a search through these sources for commendations of excellent restaurants, combining this data with customer reviews and any other publicly available information. Analyze the frequency of press mentions, the overall sentiment, and the reviews, ranking the best restaurants first.\n\nFocus on restaurants that are:\n- Farm to table\n- Organic\n- Use natural and fresh ingredients\n- Frequently update their menu\n- Accept reservations\n- Highly reviewed\n- Frequently mentioned in the press\n- Have few negative reviews\n\nExclude any that are:\n- Franchise or chain establishments\n- Fast food joints\n\nFinally, compile a comprehensive list of restaurants, divided into three categories, without repeating restaurants in more than one category:\n\n- The 5 best fine dining restaurants\n- The 5 best restaurants overall\n- The 5 best bakeries\n\nDesired format:\n\n#Category\n\n(Leave a blank line)\n\n**Restaurants:**\n1. **[Insert name of Restaurant 1]** - [Restaurant city], [Restaurant state]\n   - Mentioned in: [Insert the name of source(s) where the restaurant was mentioned]\n   - Description: [Insert a summary of the coverage of this restaurant]\n\n(Leave a blank line)\n\n2. **[Insert name of Restaurant 2]** - [Restaurant city], [Restaurant state]\n   - Mentioned in: [Insert the name of source(s) where the restaurant was mentioned]\n   - Description: [Insert a summary of the coverage of this restaurant]\n\n(Leave a blank line)",
+        "template": "Convert the uploaded image into an academic drawing of a nude male figure presented in a balanced, idealized standing pose derived from classical statuary and 19th-century academic practice, emphasizing idealized male beauty. Preserve the general pose and character of the original subject while refining it to classical ideals.\n\nThe figure stands upright with weight evenly distributed, one leg bearing slightly more load while the opposite leg relaxes, creating a subtle, restrained contrapposto.\n\nThe pelvis is level and stable; the torso is erect and open, with the rib cage lifted and aligned cleanly over the hips. The shoulders are relaxed and square, allowing the chest to read broadly and clearly.\n\nThe arms are held in a natural, neutral arrangement—one arm resting loosely at the side, the other gently bent at the elbow with the hand relaxed near the hip—posed to reveal proportional relationships without gesture or narrative intent.\n\nThe head is upright and centered, facing forward with a slight classical turn. Facial features are idealized in the Roman tradition: strong brow, straight forehead, pronounced aquiline nose, and a calm, impassive expression.\n\nHair is short, close-cropped, and classical in character—neatly contoured to the skull, with minimal volume, subtle wave or texture at the crown, and no modern styling or exaggerated curls.\n\nThe pose emphasizes symmetry, proportion, and clarity of form, allowing the ideal male anatomy to be read in full: harmonious relationships between head, torso, and limbs; clear transitions between major masses; balanced distribution of weight.\n\nRendered in the tradition of 19th-century French academic draftsmanship (Bargue, Gérôme, early École des Beaux-Arts). Emphasize structural clarity, anatomical rigor, and restraint.\n\nUse charcoal or graphite with precise contour control, subtle variation in line weight, and economical modeling. Shading should rely on clear planes, measured tonal transitions, and unified halftones rather than expressive or sketch-like marks.\n\nAnatomy must be deliberate and canonical: clear articulation of rib cage, pelvis, scapulae, and major muscle groups, with emphasis on volume and proportion over surface texture.\n\nLighting is controlled and directional, atelier-style, using a single dominant light source to establish calm shadow masses and restrained highlights.\n\nThe background remains minimal or blank, reinforcing the studio study context.\n\nOverall effect: a museum-quality academic figure study—idealized, disciplined, and timeless—classical in spirit, restrained in execution, and visually clean."
+      },
+      {
+        "id": "generate-from-description",
+        "name": "Generate from Description",
+        "description": "Creates a new academic drawing based on your subject description. Useful when you don't have a reference image.",
         "variables": [
-            {
-                "name": "location",
-                "label": "Location",
-                "placeholder": "e.g., Portland, Maine",
-                "value": ""
-            }
-        ]
-    },
+          {
+            "name": "subject",
+            "label": "Subject Description",
+            "placeholder": "e.g., A young athlete holding a discus, Hellenistic period influence",
+            "value": ""
+          }
+        ],
+        "template": "Subject: {{subject}}\n\nCreate an academic drawing of a nude male figure presented in a balanced, idealized standing pose derived from classical statuary and 19th-century academic practice, emphasizing idealized male beauty. Incorporate the subject description above into the composition.\n\nThe figure stands upright with weight evenly distributed, one leg bearing slightly more load while the opposite leg relaxes, creating a subtle, restrained contrapposto.\n\nThe pelvis is level and stable; the torso is erect and open, with the rib cage lifted and aligned cleanly over the hips. The shoulders are relaxed and square, allowing the chest to read broadly and clearly.\n\nThe arms are held in a natural, neutral arrangement—one arm resting loosely at the side, the other gently bent at the elbow with the hand relaxed near the hip—posed to reveal proportional relationships without gesture or narrative intent.\n\nThe head is upright and centered, facing forward with a slight classical turn. Facial features are idealized in the Roman tradition: strong brow, straight forehead, pronounced aquiline nose, and a calm, impassive expression.\n\nHair is short, close-cropped, and classical in character—neatly contoured to the skull, with minimal volume, subtle wave or texture at the crown, and no modern styling or exaggerated curls.\n\nThe pose emphasizes symmetry, proportion, and clarity of form, allowing the ideal male anatomy to be read in full: harmonious relationships between head, torso, and limbs; clear transitions between major masses; balanced distribution of weight.\n\nRendered in the tradition of 19th-century French academic draftsmanship (Bargue, Gérôme, early École des Beaux-Arts). Emphasize structural clarity, anatomical rigor, and restraint.\n\nUse charcoal or graphite with precise contour control, subtle variation in line weight, and economical modeling. Shading should rely on clear planes, measured tonal transitions, and unified halftones rather than expressive or sketch-like marks.\n\nAnatomy must be deliberate and canonical: clear articulation of rib cage, pelvis, scapulae, and major muscle groups, with emphasis on volume and proportion over surface texture.\n\nLighting is controlled and directional, atelier-style, using a single dominant light source to establish calm shadow masses and restrained highlights.\n\nThe background remains minimal or blank, reinforcing the studio study context.\n\nOverall effect: a museum-quality academic figure study—idealized, disciplined, and timeless—classical in spirit, restrained in execution, and visually clean."
+      }
+    ]
+  },
+  {
+    "id": "artist-guide",
+    "title": "Artist Guide",
+    "description": "Expert guidance for reproducing reference images in oil painting, watercolor, or drawing with technical analysis",
+    "category": "Creativity",
+    "icon": "palette",
+    "variables": [],
+    "variations": [
+      {
+        "id": "oil-painting",
+        "name": "Oil Painting Guide",
+        "description": "Step-by-step guidance for reproducing images in oil paint. Includes palette recommendations, layering techniques, and visual reference generation.",
+        "template": "Role: You are a Master Oil Painter and Art Instructor. Your goal is to help me reproduce the attached reference image as a high-quality oil painting.\n\nTask 1: Stylistic Diagnosis\nAnalyze the attached image. Identify its specific technical style (e.g., Classical Glazing, Alla Prima, Impasto, or Tonalism). Explain how this style dictates the painting process (e.g., \"This piece requires a wet-on-wet approach to preserve the soft gradients\").\n\nTask 2: Technical Breakdown\nBased on your diagnosis, provide:\n\nThe Color Palette: List the specific pigments required. Suggest a \"Limited Palette\" version if appropriate for color harmony.\n\nStep-by-Step Guide: Determine the optimal number of steps for this specific style. Organize them logically, such as:\n\nThe Foundation: (e.g., Imprimatura vs. detailed charcoal transfer).\n\nThe Underlayer: (e.g., Grisaille, Verdaccio, or a rough \"Ebauche\").\n\nDevelopment: (e.g., Building opaque mid-tones or layering transparent glazes).\n\nFinishing touches: (e.g., Final highlights, scumbling, or varnish-ready details).\n\nTask 3: Interactive Guidance\nProvide high-level instructions for these steps now. End your response by reminding me that I can ask for:\n\n\"Detailed Instructions for Step X\" (for specific brushwork and mixing ratios).\n\n\"Generate a visual reference for Step X\" (to see a generated example of what my canvas should look like midway through that specific stage)."
+      },
+      {
+        "id": "watercolor",
+        "name": "Watercolor Guide",
+        "description": "Instructions for watercolor techniques including wet-on-wet, masking, and transparency control. Covers paper selection and pigment properties.",
+        "template": "Role: You are a Master Watercolorist and Art Instructor. Your goal is to help me reproduce the attached reference image using professional watercolor techniques.\n\nTask 1: Stylistic & Technical Diagnosis\nAnalyze the attached image. Identify the watercolor approach best suited for this piece (e.g., Loose & Expressive, Botanical Realism, or Wet-on-Wet Impressionism).\n\nLight Preservation: Identify the \"pure whites\" in the image and advise if I should use masking fluid or paint around them (negative painting).\n\nPaper Choice: Suggest the ideal paper texture (Hot Press for detail, Cold Press for general use, or Rough for texture).\n\nTask 2: Technical Breakdown\n\nThe Palette & Transparency: List the necessary pigments. Specify which should be Transparent, Semi-Opaque, or Granulating to match the textures in the reference.\n\nStep-by-Step Guide: Break the process into logical watercolor phases:\n\nPhase 1: The Sketch & Masking: (Guidelines for a light graphite sketch and preserving highlights).\n\nPhase 2: The Initial Washes (Tea Consistency): (Establishing the lightest values and \"under-glow\" using wet-on-wet or flat washes).\n\nPhase 3: Building Form (Milk Consistency): (Developing mid-tones, defining shapes, and managing edges—soft vs. hard).\n\nPhase 4: Values & Shadows (Honey Consistency): (Adding the darkest \"darks,\" dry-brush textures, and fine details).\n\nTask 3: Interactive Guidance\nProvide high-level instructions for these steps now. End your response by reminding me that I can ask for:\n\n\"Detailed Instructions for Step X\" (including specific water-to-paint ratios and brush types).\n\n\"Generate a visual reference for Step X\" (to see a generated example of the painting in its \"ugly duckling\" mid-wash stage)."
+      },
+      {
+        "id": "drawing",
+        "name": "Drawing Guide",
+        "description": "Comprehensive drawing guidance covering graphite, charcoal, and carbon techniques. Includes value mapping and texture rendering methods.",
+        "template": "Role: You are a Master Draftsman and Drawing Instructor. Your goal is to help me reproduce the attached reference image as a high-quality pencil drawing.\n\nTask 1: Stylistic & Technical Diagnosis\nAnalyze the attached image. Identify the drawing approach best suited for this piece (e.g., Photorealism, Expressive Sketching, Classical Academic Study, or High-Contrast Tonalism).\n\nMaterial Recommendations: Suggest the best medium for the job (e.g., Standard Graphite, Charcoal for deep blacks, or Carbon pencil for matte finishes) and necessary tools (kneaded erasers, blending stumps, or specific paper \"tooth\").\n\nTexture Strategy: Briefly explain the primary technique needed for the dominant textures in the image (e.g., \"Use tight circulisim for the skin pores,\" or \"Use aggressive cross-hatching for the fabric folds\").\n\nTask 2: Technical Breakdown\nBased on your diagnosis, provide:\n\nThe \"Palette\" (Grade Selection): List the specific range of pencils required (e.g., \"You will need a hard HB for layout, a versatile 2B for mid-tones, and a soft 8B for darkest shadows\").\n\nStep-by-Step Guide: Divide the process into logical drawing phases that build value gradually:\n\nPhase 1: The Framework (Hard Pencils): (Guidelines for accurate proportions, gesture, and light \"envelope\" shapes).\n\nPhase 2: Mapping Shadows (Mid-Range Pencils): (Establishing the \"bedbug line\" separating light and shadow families; flat tonal mapping).\n\nPhase 3: Modeling Form & Blending: (Developing gradients, turning soft edges, and deciding whether to blend with tools or rely on distinct hatch marks).\n\nPhase 4: Deepening Darks & Texture: (Pushing contrast to the limit with softest pencils and rendering specific surface details).\n\nPhase 5: Subtractive Highlights: (Using erasers to \"draw\" back into the tones to create crisp highlights or stray hairs).\n\nTask 3: Interactive Guidance\nProvide high-level instructions for these steps now. End your response by reminding me that I can ask for:\n\n\"Detailed Instructions for Step X\" (including specific pencil grades, pressure guidance, and stroke types).\n\n\"Generate a visual reference for Step X\" (to see a generated example of what the drawing should look like at that specific stage of completion, e.g., just the line work)."
+      }
+    ]
+  },
+  {
+    "id": "restyle-image",
+    "title": "Restyle Image",
+    "description": "Transform photographs into fine-art image styles using selectable variations",
+    "category": "Creativity",
+    "icon": "camera_alt",
+    "variables": [],
+    "variations": [
+      {
+        "id": "tina-barney",
+        "name": "Tina Barney Style Photo",
+        "description": "Applies the aesthetic of large-format, museum-grade color photography with naturalistic color and restrained contrast.",
+        "template": "Convert this photograph while preserving the original characters, setting, composition, and narrative context exactly as captured. Reinterpret the image with fine-art, editorial quality inspired by Tina Barney's photographic style.\n\nApply the visual language of large-format, museum-grade color photography: naturalistic yet deliberate color, soft but controlled contrast, and a restrained, painterly palette. Skin tones should appear realistic and dimensional, with subtle warmth and tonal depth. Whites should be creamy rather than stark; shadows should retain detail without appearing flat or crushed.\n\nMaintain a sense of quiet psychological presence and observational intimacy. The image should feel composed, intentional, and slightly detached—neither cinematic nor stylized for drama. Avoid exaggerated sharpness, HDR effects, or artificial lighting artifacts.\n\nUpgrade the technical quality to resemble a contemporary high-end digital or medium-format camera: refined dynamic range, clean micro-detail, smooth tonal transitions, and film-like color depth without visible grain. Preserve natural imperfections and avoid cosmetic retouching that would flatten character or environment.\n\nThe final result should read as gallery-ready fine art photography—editorial in rigor, restrained in execution, and suitable for museum or print publication."
+      },
+      {
+        "id": "sally-mann",
+        "name": "Sally Mann Style Photo",
+        "description": "Renders as wet-plate collodion process with shallow depth of field, high contrast, and organic chemical imperfections.",
+        "template": "Keep the current subject but render the image as a large format black and white photograph in the style of Sally Mann's wet-plate collodion process. adjust the zoom if needed to achieve proper balance. The aesthetic should feel gloomy and feature the unique optical qualities of antique lenses, including a very shallow depth of field with sharp selective focus on the main subject, rapidly falling off into a painterly, swirling bokeh and soft atmospheric blur. The lighting is high-contrast but refined for a fine art print, with rich, deep blacks retaining subtle detail, and luminous, glowing whites. Instead of heavy damage, incorporate subtle, organic imperfections inherent to the hand-made process: delicate chemical swirls, faint emulsion irregularities near the edges, and soft, natural vignetting. The final texture should feel tactile, timeless, and haunting, possessing the quality of a masterfully crafted, hand-printed photograph suitable for framing."
+      },
+      {
+        "id": "antique-colorization",
+        "name": "Antique Photo Colorization",
+        "description": "Transforms black and white or sepia photographs into natural-looking color images with contemporary photo quality.",
+        "template": "Transform this antique photograph into a seamless, high-quality color photograph. The colorization should be completely natural, replicating the aesthetic of a photo taken with a contemporary color camera, while preserving the original subject and setting without any changes."
+      }
+    ]
+  },
+  {
+    "id": "component-adaptation",
+    "title": "Component Adaptation (Design System)",
+    "description": "Adapt components with automated color extraction, state testing, and pixel-perfect verification (ΔE < 2.0, ≥99.9% match)",
+    "category": "Productivity",
+    "icon": "widgets",
+    "template": "Component: {{component_name}}\n\nI need to adapt this component to my m3-design-v2 design system with PERFECT visual fidelity. I will provide a screenshot and original code. Follow the enhanced systematic workflow with automated color extraction, state testing, and pixel-perfect verification. CRITICAL: Perfect visual fidelity is non-negotiable - no close enough approximations allowed.\n\nPhase 1 Color Extraction and Analysis. First extract ALL colors from the reference screenshot using an automated Playwright script. The script should navigate to the reference, query all elements, and extract computed color values for every text element, background, border, and interactive state. Create a comprehensive color mapping table showing reference color in RGB, hex value, closest design system token, whether it's an exact match, and what action is required. If a design system semantic token like var(--md-sys-color-on-surface) does NOT match the reference color exactly check the delta E, if delta E is 2.0 or higher you MUST create component-specific color tokens. Never approximate or use close enough colors. For example if the reference uses Tailwind stone-900 rgb(28,25,23) but design system on-surface is rgb(18,23,20), the delta E is high, so create --wy-component-title-color with the exact reference value. Document why semantic tokens don't work for this specific design. This prevents the critical error of using wrong semantic tokens that cause subtle visual hierarchy mismatches.\n\nPhase 1 continued Analysis and Planning. Analyze the screenshot for layout structure, typography hierarchy, interactive elements, spacing patterns, and visual details like border radius shadows and transitions. Review the original code for hardcoded values to replace. Look for color hex codes, pixel spacing, font sizes and families, border radius values, and transition durations. Create a complete token mapping table. Identify missing design system assets.\n\nPhase 2 Design System Updates. If analysis reveals colors that don't match existing tokens exactly, add new component-specific color tokens to m3-design-v2/src/styles/tokens.css. Follow naming pattern --wy-component-name-property-color. Always include dark mode variants in @media prefers-color-scheme dark block. Add spacing shape or motion tokens if required. Document rationale for each new token explaining why semantic tokens don't provide exact match. Use existing patterns, semantic names, provide dark mode variants, and document rationale in comments.\n\nPhase 3 Implementation. Create Web Component in m3-design-v2/src/components/wy-[name].js using LitElement. Define reactive properties. Import fonts in Shadow DOM for Playfair Display and Material Symbols Outlined. Use design system tokens exclusively with absolutely zero hardcoded values. Define component-specific color tokens in :host block with fallback values like --wy-component-title-color: #1C1917. Use these specific tokens in styles not generic semantic tokens. Follow Material Design 3 state layer patterns using ::before pseudo-elements with opacity transitions. Add focus-visible outlines 3px solid with 2px offset. Never use !important. Use semantic HTML. Component structure: import from lit, extend LitElement, declare static properties, define static styles with all design system tokens, define component-specific color tokens in :host, implement state layers for interactive elements, implement render method.\n\nPhase 4 Build and Prepare Testing. Build design system with npm run build, start dev server with npm run dev, create test page if needed importing tokens and component.\n\nPhase 5.1 Color Accuracy Testing MANDATORY. Create and run test-color-accuracy.py script. Extract reference colors from original using Playwright script that loads reference and extracts computed getComputedStyle values for all text backgrounds and borders converting to RGB tuples. Define REFERENCE_COLORS dictionary with element name to RGB tuple mapping like title: (28, 25, 23) for stone-900. Extract implementation colors using same method from component shadow root. Calculate color delta using Euclidean distance formula. For each color verify delta E is less than 2.0 which means imperceptible difference. Delta E between 2.0 and 5.0 is noticeable, above 5.0 is clearly visible. Print formatted table showing element, actual RGB, expected RGB, and delta value. Success criteria: ALL colors must have delta E less than 2.0. If test fails identify which colors have high delta, verify component uses correct component-specific tokens not generic semantic tokens, ensure tokens defined in :host block for Shadow DOM, re-run extraction to verify reference colors, update token values. Common failures: using var(--md-sys-color-on-surface) when reference uses Tailwind stone palette, tokens not cascading into Shadow DOM, circular variable references like --spacing-sm: var(--spacing-sm, ...), CDN cache serving old bundle.\n\nPhase 5.2 Interactive State Testing MANDATORY. Extract state colors from reference for hover focus active and disabled states using Playwright to hover elements, press Tab for focus, click for active. For each interactive element verify default rest state colors match reference exactly with delta E less than 2.0, hover state border background color changes match, focus state keyboard indicator matches with outline style color width and offset, active pressed state click appearance matches, disabled state opacity cursor and colors match if applicable, loading state indicators match if applicable, error state styling matches if applicable, and state transitions animation duration and easing match reference. Test all interactive states for buttons chips links form inputs. Success criteria: all state colors match reference with delta E less than 2.0, state transitions occur, no states missing, focus indicators meet WCAG. Common issues: using :hover without state layer pseudo-element, missing :focus-visible styles, hardcoding state colors instead of state layer opacity, missing disabled state, transitions too fast or slow.\n\nPhase 5.3 Pixel Perfect Visual Comparison MANDATORY. Use Playwright plus PIL to capture screenshots from reference and implementation at exact same viewport like 1200x900. Convert images to RGB numpy arrays. Calculate per-pixel difference using absolute value of array subtraction. Create diff heatmap where pixels within tolerance of 2 RGB points per channel are green and pixels outside tolerance are red. Calculate match percentage as matching pixels divided by total pixels times 100. Generate visual outputs: diff heatmap PNG with green for matching red for different, side-by-side comparison PNG with reference on left implementation on right with labels. Success criteria: match percentage must be 99.9% or higher allowing only 0.1% for anti-aliasing differences, no visible differences in side-by-side, diff heatmap shows only minor anti-aliasing if any. Acceptable differences: font rendering 1-2px due to browser OS, anti-aliasing on rounded corners within tolerance, sub-pixel rendering under 2 points per channel. Unacceptable: wrong colors different hue saturation lightness, wrong spacing margin padding gap offsets, wrong font sizes or weights, wrong border radius or shapes, missing elements or incorrect positioning. If match under 99.9%: review heatmap to identify problem areas, check if acceptable anti-aliasing or real issues, increase tolerance slightly if only anti-aliasing max 5, if real differences fix implementation and retest, never lower success threshold.\n\nPhase 5.4 Functional Testing. Verify all original functionality preserved, test modal open close, click handlers, navigation, keyboard shortcuts, event dispatching, state management. Run automated functional test or manual verification.\n\nPhase 5.5 Design System Compliance. Scan component code for hardcoded hex codes, magic number spacing, arbitrary durations, !important declarations. Verify 100% token usage. Zero hardcoded values allowed.\n\nPhase 6 Deliverables. Provide: 1 Color extraction report table showing reference RGB, hex value, design system token, whether exact match, and action taken. 2 Token mapping report complete table original value to token with status. 3 Color accuracy test results showing all delta E values under 2.0 with formatted table and max delta reported. 4 Interactive state test results showing all states verified with hover focus active disabled tested and screenshot evidence. 5 Pixel perfect comparison results with match percentage 99.9% or higher, diff heatmap image path, side-by-side comparison image path, and acceptable vs unacceptable differences documented. 6 Complete component code with full Web Component implementation, registration in src/main.js, component.json entry with props and examples, usage example in markup. 7 Design system updates if any showing new tokens added to tokens.css, dark mode variants, and rationale for why semantic tokens didn't work. 8 Integration instructions for using component, available API, event listeners, build and deploy commands.\n\nSuccess criteria ALL must pass: Color accuracy with all elements delta E under 2.0 imperceptible difference, pixel match with 99.9% or higher match percentage, all interactive states tested and verified matching reference, visual fidelity where component matches screenshot exactly, token usage 100% design tokens zero hardcoded values, Playwright tests all passing, dark mode works in both schemes, no console errors, semantic HTML, ARIA labels present, focus states visible and accessible.\n\nAnti-patterns to avoid: hardcoded colors hex rgb rgba, magic number spacing, arbitrary transitions, !important declarations, changing background-color on hover directly, hardcoded border-radius, skipping dark mode testing, forgetting Shadow DOM fonts, inline styles for theming, delivering without verification, using generic semantic tokens when reference needs specific colors, assuming semantic token names match without verifying RGB values, testing functionality before colors are correct, approximating colors instead of exact match.\n\nDesign system compliance for colors: use var(--md-sys-color-*) or var(--wy-*), provide dark mode variants, use color-mix() for transparency. Typography: use var(--font-serif) var(--font-sans) var(--font-display), clamp() for fluid scaling, design system letter spacing. Spacing: use var(--spacing-*) xxs through 3xl, follow 8px grid, clamp() for responsive. Shape: use var(--md-sys-shape-corner-*), corner-full for capsules. Motion: use var(--md-sys-motion-duration-*) and var(--md-sys-motion-easing-*), no magic durations. Interactive states: hover with ::before overlay, opacity var(--md-sys-state-hover-opacity), focus 3px outline 2px offset, never change background directly.\n\nExecute complete workflow with all testing phases 5.1 through 5.5 and provide all 8 deliverables with color extraction report, color accuracy delta E results, state testing results, pixel perfect comparison with heatmap and match percentage, complete code, design system updates, and integration instructions.",
+    "variables": [
+      {
+        "name": "component_name",
+        "label": "Component Name/Description",
+        "placeholder": "e.g., Links Modal, Filter Chip, Profile Card",
+        "value": ""
+      }
+    ]
+  },
     {
-        "id": "accommodations-finder",
-        "title": "Luxury Accommodations Finder",
-        "description": "Find boutique hotels and luxury accommodations using press coverage and special requirements",
-        "category": "Travel & Shopping",
-        "icon": "hotel",
-        "template": "Location: {{location}}\nSpecial requirements: {{special_requirements}}\n‍\n\nContext: I'm seeking exceptional accommodations in or around a specified 'Location' that meet the 'Special requirements' above. My search aims to go beyond customer reviews; I want to consider analysis from quality publications and sources such as newspapers, travel magazines, blogs, and other reputable cultural publications.\n\nInstructions: As an AI model, you are to simulate a comprehensive web search using your extensive training data. Your task involves the following steps:\n\n1. Identify 10 credible publications relevant to the 'Location', referred to as 'Sources'.\n\nDesired format:\n\n**Sources:**\n1. [Insert name of Source 1] - [Source location]\n2. [Insert name of Source 2] - [Source location]\n3. ...\n\nLeave a blank line after this section.\n\n2. Simulate a search through these sources for excellent hotels, inns, or other luxury accommodations. Combine this data with customer reviews and any other publicly available information. Analyze the frequency of press mentions, the overall sentiment, and the reviews.\n\nConsider accommodations that meet the following requirements, as well as the 'Special requirements' provided above:\n\nBoutique\nIndependently owned\nMembers of high-quality hotel groups such as Relais and Chateaux\nHighly praised\nFrequently mentioned in the press\nHave few negative reviews\nExclude any that:\n\nAre considered economy accommodations\nHave average customer reviews of 3.5 stars or less\n3. Compile a comprehensive list of highly-regarded accommodations that meet the 'Special requirements'. Divide the list into 'Hotels' and 'Other accommodations' categories.‍\n\nDesired format:\n\n# Hotels\n\n**[Insert name of Hotel 1]** - [Hotel city], [Hotel state]\n- Requirement: [Insert the rationale for why this result meets the 'Special requirements']\n- Mentioned in: [Insert the name of source(s) where the hotel was mentioned]\n- Description: [Insert a summary of the coverage of this hotel]\n  [Insert website]\n**[Insert name of Hotel 2]** - [Hotel city], [Hotel state]\n- Requirement: [Insert the rationale for why this result meets the 'Special requirements']\n- Mentioned in: [Insert the name of source(s) where the hotel was mentioned]\n- Description: [Insert a summary of the coverage of this hotel]\n  [Insert website]\n...\n# Other accommodations\n\n**[Insert name of other accommodation]** - **Type:**: [type of accommodation]\n[accommodation city], [accommodation state]\n- Requirement: [Insert the rationale for why this result meets the 'Special requirements']\n- Mentioned in: [Insert the name of source(s) where the accommodation was mentioned]\n- Description: [Insert a summary of the coverage of this accommodation]\n[Insert website]\n...\nInclude as many options as are relevant for the selected location. In your output, please use Markup syntax for improved readability.",
-        "variables": [
+        "id": "audio-essay-discovery",
+        "title": "Audio Essay Topic Discovery",
+        "description": "Four-step research workflow to discover interdisciplinary topics and generate audio essay scripts",
+        "category": "Expertise",
+        "icon": "headphones",
+        "steps": [
             {
-                "name": "location",
-                "label": "Location",
-                "placeholder": "e.g., Tuscany, Italy",
-                "value": ""
-            },
-            {
-                "name": "special_requirements",
-                "label": "Special Requirements",
-                "placeholder": "e.g., Dog-friendly, with pool",
-                "value": ""
-            }
-        ]
-    },
-    {
-        "id": "work-email-reply",
-        "title": "Work Email Reply",
-        "description": "Draft balanced, professional email responses with alternative versions for tone and brevity",
-        "category": "Productivity",
-        "icon": "reply",
-        "template": "Incoming email: {{incoming_email}}\nResponse outline: {{response_outline}}\n‍\n\nContext\n\nI want to draft a message in a balanced and neutral tone. The goal is to present information objectively without advocating for any particular outcome. Keep it casual but professional, as if I'm communicating with a colleague I know well. Avoid being overly enthusiastic, pushy, or using excessive praise. Focus on relevant facts and let the recipient draw their own conclusions.\n\nThis instruction captures the key elements you're looking for while being applicable to a wide range of messages:\n\nBalanced and neutral tone\nObjective presentation of information\nCasual but professional language\nAvoidance of excessive enthusiasm or praise\nFocus on relevant facts\nInstructions\n\nFirst, review the 'Incoming email' and the 'Response outline' I provided above. Next, write a response to the 'Incoming email'. Use markup syntax to improve readability of the results.\n\nDesired format:\n# Email response, Option 1:\n{text}\nleave a blank line\n\nNext, write the following 2 alternative versions of the message:\n\nAlternative Version - Option 1\nWrite the version of the message that you feel is most appropriate for a work email.\n\nAlternative Version - Option 2\nWrite the message as succinctly as possible.\n\nDesired format:\n## Alternative Version: <Alternative Option Number>\n{text}\nleave a blank line",
-        "variables": [
-            {
-                "name": "incoming_email",
-                "label": "Incoming Email",
-                "placeholder": "Paste the email you received",
-                "value": ""
-            },
-            {
-                "name": "response_outline",
-                "label": "Response Outline",
-                "placeholder": "Brief outline of what you want to say",
-                "value": ""
-            }
-        ]
-    },
-    {
-        "id": "work-jira-task",
-        "title": "Jira Task Extractor",
-        "description": "Extract project details and tasks from notes to create formatted Jira task entries",
-        "category": "Productivity",
-        "icon": "checklist",
-        "template": "Project Notes: {{project_notes}}\n‍\n\nGiven the text provided above, I want you to extract project details and tasks to create a simplified Jira task entry. The purpose of this Jira task is to track specific tasks and their associated to-do items effectively. It is important to note that the text provided does not offer a comprehensive overview of the project. Your goal is to identify and organize essential details and actionable items directly relevant to the project, as presented in the text.\n\nPlease avoid including any filler content or extraneous details not explicitly mentioned in the text. Focus on what is directly relevant and actionable, based on the given information. If further context is required to accurately complete this task, do not hesitate to request additional information.\n\nWhen presenting the results, format them in a way that is easily transferable to a Jira task entry. This format should include sections for a title, background, and action items, all of which should be clearly delineated. Utilize Markup syntax to enhance the readability and organization of the output, ensuring that it is user-friendly and ready to be copied directly into Jira.\n\nExample of the desired output format (please adapt as needed based on the task details):\n\n\"\"\"Title: [Insert Task Title Here]\n\nBackground:\n\nBrief description of the project or task context.\nKey objectives or goals.\nAction Items:\n\n[Action Item 1]: Description and any relevant details.\n[Action Item 2]: Description and any relevant details....\"\"\"",
-        "variables": [
-            {
-                "name": "project_notes",
-                "label": "Project Notes",
-                "placeholder": "Paste your project notes or meeting notes here",
-                "value": ""
-            }
-        ]
-    },
-    {
-        "id": "work-self-assessment",
-        "title": "Performance Review Assistant",
-        "description": "Generate impact statements for annual reviews aligned with impact markers and metrics",
-        "category": "Productivity",
-        "icon": "trending_up",
-        "template": "Project Description: {{project_description}}\n‍\n\nContext: {{context}}\n\nAnnual Self-Assessment\n\nFor my annual performance review, I aim to measure my impact based on the provided set of impact markers. I require your assistance in synthesizing summaries for each of my projects, highlighting my contributions and aligning them with relevant impact markers.\n\nInstructions:\n\nPreliminary Research: Before diving into the Impact Statements, briefly study my background, professional style, and the provided impact markers to grasp the full context of my role, preferred methods of communication, and key performance indicators.\nProject Deep Dive: Go beyond merely reading the project descriptions. Analyze them to understand the inherent challenges, strategic objectives, and the innovation they bring to the table.\nImpact Statement Draft: Create an initial 'Impact Statement' for each project, synthesizing the project description with relevant impact markers. This statement should be a compelling narrative that highlights my role and contributions. Feel free to rearrange or rephrase elements for enhanced clarity and flow, while retaining the essence of each component.\nImpact Metrics: For each Impact Statement, include specific metrics or quantifiable achievements that demonstrate the impact made. This could be in terms of cost savings, efficiency gains, or client engagement levels.\nEnhanced Impact Statement: Generate an \"Enhanced Impact Statement\" that incorporates at least three specific refinements for clarity, impact, or strategic alignment. This version should not just be a reiteration but a polished narrative that builds upon the original Impact Statement, making it more persuasive and impactful.\nRelevance Highlight: Conclude each Enhanced Impact Statement by explicitly indicating which impact markers were most crucial in shaping the project's success. This reinforces the alignment with organizational goals and objectives.\nNarrative Flow: Ensure that both versions of the Impact Statement have a logical flow, transitioning smoothly from introducing the project, to discussing challenges, solutions, and finally, the impact created.\nBackground:\n\nI'm a seasoned Product Designer at a prominent consulting firm, leading user experience design for our Global Banking Practice. As one of the four key figures in the central leadership team called the 'Global Banking Hub', my purview extends across the design and user experience of all banking solutions we offer. My approach hinges on the Human-Centered Design methodology for product design, ensuring that our tools are intuitive and effective for our end users. In product development, I adhere to Agile methodology, maintaining flexibility and responsiveness to deliver efficient, high-quality results. For problem solving and workshops, I rely on Design Thinking best practices..\n\nProfessional Style:\n\nMy communication style prioritizes clarity and conciseness, without compromising on detail. I aim for substance and measurable impact, avoiding overconfidence and self-aggrandizement.\n\nImpact Markers:\n\nImpact Market Category: Discover\n\n‍Research: Defines approach for a wide range of methods‍\nCreativity: Diagnoses key opportunities by applying multiple creative lens to make connections and push ideas‍\nWorkshop: Strategizes and oversees workshops to generate maximum client input & participation‍\nStrategy: Shapes and translates business problems into digital services and functionality\nImpact Market Category: Create\n\nCreativity: Establishes the creative direction and problem solving by applying guiding principles to generate new solutions for complex systems that address consumer and business goals\nConcepting: Guides teams on how to best frame & communicate design logic\nPrototype: Establishes direction for developing testable prototypes to evaluate and measure trade-offs using qual and quant techniques\nValue Prop: Understands & shapes approach for teams to compellingly communicate value prop/ vision across all lenses\nDesign Problem Solving: Shares perspective / feedback during design PS sessions\nImpact Market Category: Build\n\nExperience: Shapes the building frameworks approach for a successful design and production of a relevant, engaging and intuitive experience\nDevelop: Decides on the final approach for developer-ready designs taking into account business & tech constraints, often including best practice tools, design systems, component library etc.\nVisual: Sets appropriate internal selection of systems, processes, business considerations, external requirements (e.g. App Store Guidelines) for production\nProduction: Oversees and shapes the implementation/ path-to-production, alerting team of potential design bugs\nCross-team: Shapes client/ CST/ cross-functional team approach to implementation providing direction across all lenses\nImpact Market Category: Scale\n\nTalent: Begins to help clients by mapping out specific talent needs, implementing tools and processes to achieve world class design\nOps Capabilities: Begins to implement tools and processes to help scale to achieve world class design operations and systems\nCulture: Develops programs to help organizations to put the customer at the heart of the organization\nEvangelism: Starts to craft design impact stories",
-        "variables": [
-            {
-                "name": "project_description",
-                "label": "Project Description",
-                "placeholder": "Describe the project you worked on",
-                "value": ""
-            },
-            {
-                "name": "context",
-                "label": "Additional Context",
-                "placeholder": "Any additional context about your role or contributions",
-                "value": ""
-            }
-        ]
-    },
-    {
-        "id": "webflow-code-assistance",
-        "title": "Webflow Code Helper",
-        "description": "Get modular, well-documented JavaScript code for Webflow prototypes with section markers",
-        "category": "Productivity",
-        "icon": "code",
-        "template": "Objective: {{objective}}\n‍\n\nContext\n\nI am using Webflow to build a prototype and would like your assistance achieving the 'Objective' above. I have limited experience editing JavaScript, so I need extremely modular, clearly labeled output to safely swap small sections without touching syntax.\n\nInstructions\n\nPart 1: Thorough Analysis of the Problem\n\nUnderstanding the Challenge: Start by asking detailed questions to clearly understand the specific requirements and challenges of the task.\nIdentifying Requirements: pinpoint the requirements needed to achieve the coding challenge. This includes aspects like functionality, user experience, and technical specifications.\nExploring Solutions: Consider potential methods for addressing the challenge, weighing their advantages and disadvantages. Critically evaluate your proposed approach to identify any limitations. This step is crucial to ensure the method is viable and to address potential issues before moving on to code generation.\nRecommendation: Based on your analysis, recommend the most suitable method for solving the challenge. You can say, \"I evaluated multiple approaches and recommend...\", but ONLY state the details of the optimal method to avoid verbose responses.\nPart 2: Code\n\nCode: Ensure all code snippets can be seamlessly integrated into my Webflow prototype.\nIdentifying Elements: Use custom data-* attributes for element identification (e.g., data-element=\"button\", data-component=\"modal\"). Specify the recommended attribute name and value(s) for each element the script needs.\nModular sections with markers: Break code into self-contained blocks surrounded by comment markers in this format:\n\n// ---SECTION [FUNCTIONAL_NAME]---// [one-line description of this section's purpose][code for this section]// ---ENDSECTION [FUNCTIONAL_NAME]---\n\nUse functional, hierarchical labels (e.g., FETCH_DATA, RENDER_BUTTON, VALIDATE_INPUT).\n‍\nSection map first: Before generating the full code, provide a brief outline of section names and their responsibilities. Wait for confirmation of that map before filling in the code.\nUse a boilerplate template: Assume a one-page template already contains all comment markers. Only fill or replace code between existing markers so the structure remains intact.\nInline usage examples: At the bottom of each section, include a one-line snippet (e.g., initModal();) showing how it's invoked.\nIncremental scope & isolated validation: Deliver each section in isolation. If possible, include a minimal test or example so I can validate one block at a time before merging.\nConsistent formatting: Format all code (e.g., with Prettier) to ensure consistent indentation and braces. Do not alter comment markers.\nVersioned backups: Whenever replacing a block, keep the previous version in a comment or separate file. This ensures easy rollback if something breaks.",
-        "variables": [
-            {
-                "name": "objective",
-                "label": "Coding Objective",
-                "placeholder": "e.g., Create a filterable product grid with modal preview",
-                "value": ""
-            }
-        ]
-    },
-    {
-        "id": "character-portrait",
-        "title": "Character Portrait",
-        "description": "Transform reference photos into high-quality portraits",
-        "category": "Creativity",
-        "image": "public/images/character-portrait.png",
-        "variables": [],
-        "variations": [
-            {
-                "id": "visual-anchor",
-                "name": "Visual Anchor Method",
-                "description": "Three-step process: analyze facial structure, summarize key features, then merge with style reference. Best when you have both likeness and style images.",
-                "template": "Step 1:\nAnalyze the attached reference photographs to identify the subject's visual anchor: the fixed facial characteristics that must remain unchanged to preserve likeness. These include, at minimum, overall craniofacial structure, eye spacing and orientation, nasal form, mouth proportions, jawline, and any distinctive asymmetries or contours.\n\nOnce this visual anchor is established, reinterpret the subject through the conventions of classical portraiture. Describe the figure in the style of a 19th-century academic oil painting, introducing restrained idealization—refinement of skin, lighting, and expression—while preserving immediate recognizability. The final portrait should convey gravity, dignity, and psychological depth, balancing faithful likeness with the pathos and nobility characteristic of high academic painting.\n\nStep 2: Provide a summary of this Visual Anchor Then ask for a Style Reference Image in order to move to image generation.\n\nStep 3: I will provide a Style Reference Image. You must generate a high-fidelity image that merges the subject's \"Visual Anchor\" with the style, medium, and atmosphere of the reference image. The subject must look like they belong in that world, as if they were the original sitter for that specific piece of art.\n\nLet's Begin: I am uploading the likeness references now."
-            },
-            {
-                "id": "likeness-lock",
-                "name": "Likeness Lock Method",
-                "description": "Creates explicit constraint checklist before generation to prioritize identity preservation. Best when likeness accuracy is critical.",
-                "template": "Step 1 — Likeness Lock + Visual Anchor extraction\n\"Analyze the attached likeness reference photos. Your primary objective is preserving identity.\nPriority order: facial geometry and feature placement (highest) > expression > pose > lighting > wardrobe > background/painterly effects (lowest).\nDefine the subject's Visual Anchor as a set of non-negotiable constraints. Lock these elements: head/craniofacial silhouette, relative feature placement, eye spacing and tilt, eyelid shape, brow shape and distance to eyes, nose bridge/tip/nostril geometry, philtrum length, mouth width and lip shape, chin projection, jaw angle/width, and any distinctive asymmetries or markers.\nAllowed changes: painterly rendering, skin finish, lighting design, color palette, edge softness, canvas/varnish effects.\nDisallowed changes: altering facial proportions, moving features, beautifying asymmetries, changing age/ethnicity cues.\"\n\nStep 2 — Output constraints, then request style reference\n\"Output the Visual Anchor as a bullet checklist of explicit constraints (10–20 items) written as 'must match' statements. Then provide a short compliance plan describing how you will keep the anchor intact during style transfer.\nThen ask me for a Style Reference Image to proceed.\"\n\nStep 3 — Generate\n\"Using the Style Reference Image, generate a 19th-century academic oil portrait that matches its brushwork, palette, lighting (chiaroscuro), composition conventions, and surface finish. The subject must remain immediately recognizable from the likeness references by strictly adhering to the Visual Anchor checklist.\nBefore finalizing, perform a quick internal cross-check: confirm each anchor item is satisfied.\"\nLet's Begin: I am uploading the likeness references now."
-            },
-            {
-                "id": "character-reference-only",
-                "name": "Character Reference Only (No Style Image)",
-                "description": "Generates classical oil portrait directly from reference photos without style image. Best for standalone portraits with automatic style.",
-                "template": "Analyze the uploaded reference images to identify and preserve the subject's Visual Anchor: the immutable facial characteristics that define their identity. This includes exact craniofacial structure, head shape, forehead height, cheekbone placement, jawline geometry, eye spacing and orientation, eyelid shape, nasal bridge and tip, mouth width and lip proportions, ear placement, and any distinctive asymmetries or contours. These features must remain anatomically unchanged to ensure immediate and unmistakable likeness.\n\nRender the subject as a classical, museum-quality oil portrait in the tradition of refined academic painting.\n\nApply idealization only at the surface level—subtle refinement of skin texture, unified tonal transitions, and painterly handling of edges—while strictly preserving the subject's facial proportions, expression, and bone structure as seen in the reference images. Avoid transformation toward an archetypal face.\n\nClothing should be simple and classical in form, rendered in soft natural fabrics with minimal ornamentation, allowing focus to remain on the face. Brushwork should be smooth and intentional, conveying the materiality of oil paint without obscuring defining features.\n\nThe final image should read as a refined classical oil painting that depicts the same individual from the reference images, instantly recognizable, with identity fully preserved and expressed through a restrained, timeless painterly aesthetic."
-            },
-            {
-                "id": "custom-style-clothing",
-                "name": "Custom Style & Clothing",
-                "description": "Allows you to specify artistic style and clothing details before generation. Most flexible option for custom requirements.",
-                "template": "Before uploading the reference photographs, please specify:\n\nStyle: {{style}}\nClothing: {{clothing}}\n\nOnce you provide this information, I will analyze the reference photographs to identify the subject's visual anchor: the fixed facial characteristics that must remain unchanged to preserve likeness.\n\nI will then reinterpret the subject through the conventions of classical portraiture, rendering the figure in an oil painting in your specified style and clothing, introducing restrained idealization—refinement of skin, lighting, and expression—while preserving immediate recognizability. The final portrait will convey gravity, dignity, and psychological depth, balancing faithful likeness with the pathos and nobility characteristic of a museum quality painting.",
+                "id": "decomposition",
+                "name": "Conceptual Decomposition",
+                "instructions": "Start by entering your topic. This step will identify three distinct conceptual pillars that define your topic.",
+                "template": "Topic: {{topic}}\n\nRole: You are a Technical Systems Analyst, Historical Researcher, and culturally sophisticated guide. Your objective is to extract high-density, interdisciplinary data from a provided starting point.\n\nCORE THEMATIC SCOPE\n\nAll output must be inspired by these specific domains. If a topic does not intersect with at least one of these, it is rejected:\n\nMaterial Science/Craft\nClassical revival architecture (e.g., Greek Revival)\nStructural Engineering\nNeoclassical Art\nSouthern Gothic Realism and Writers\n18th/19th-century Economic History\nAmerican history\nBiographies of gay writers, artists, and historical figures\nAlcohol, wine, and beer\nThe American South\nNew England, Boston, Salem, and Marblehead\nAntiques collecting (primarily American, English, and French)\n\nMECHANISMS & INSTITUTIONS (OPTIONAL LENSES)\n\nUse these when they strengthen the synthesis or provide a causal throughline:\n\nInterpersonal relationship (patronage, kinship, mentorship, rivalry, marriage, inheritance networks)\nCredit, banking, and merchant finance\nInsurance and risk pricing (marine, fire, life)\nLaw, contracts, and property regimes (admiralty, probate, incorporation)\nLogistics and port governance (customs, warehousing, quarantine, lighthouses)\nPrinting, publishing, and information networks (newspapers, circulars, ledgers)\n\nPHASE 1: CONCEPTUAL DECOMPOSITION\n\nUpon receiving a Level 0 topic, identify three distinct conceptual pillars (technical, historical, or structural) that define the topic.\n\nFormat: List the three pillars as noun-heavy phrases. No descriptions.\n\nMANDATORY LINGUISTIC CONSTRAINTS (Zero-Tolerance for Fluff)\n\nNo \"Throat-Clearing\": Delete phrases like \"It is worth noting,\" \"Let's dive into,\" or \"As an expert curator\".\nNo Decorative Adjectives: Avoid words like stately, haunting, evocative, rich, or vibrant.\nNo Litotes: Avoid indirect assertions (e.g., \"not unlike,\" \"not insignificant\"). Use direct, assertive language.\nNo Personification: History does not \"whisper\" or \"tell stories.\" It \"codifies,\" \"catalyzes,\" or \"results in.\"\nNo Narrative Transitions: Do not provide summaries or \"Curator's Notes\". Provide data immediately.",
                 "variables": [
                     {
-                        "name": "style",
-                        "label": "Painting Style",
-                        "placeholder": "e.g., 19th-century academic, Baroque, Renaissance, Impressionist",
+                        "name": "topic",
+                        "label": "Topic",
+                        "placeholder": "e.g., Greek Revival Architecture, Bourbon Production, Salem Maritime Trade",
+                        "value": ""
+                    }
+                ]
+            },
+            {
+                "id": "curriculum",
+                "name": "The Curriculum Menu",
+                "instructions": "Copy the three pillars from Step 1, then use this prompt to generate 10 related topics (30% direct, 70% tangential).",
+                "template": "Topic: {{topic}}\n\nConceptual Pillars from Step 1:\n{{pillars}}\n\nPHASE 2: THE CURRICULUM MENU\n\nGenerate 10 Level 1 topics.\n\nTarget Ratio: 30% direct correlation / 70% tangential/interdisciplinary connections.\n\nTechnical Justification: One sentence (max 15 words) per item. State the precise overlap with the Core Thematic Scope. Mechanisms & Institutions may be used when useful.\n\nRequirement: No adjectives. No introductory text.\n\nFormat each as:\n\n[Number]. [Topic Title]: [One sentence technical justification]\n\nExample:\n1. Maritime Insurance Pricing Models in Early Boston: Quantifies risk assessment mechanisms for trans-Atlantic shipping routes.\n2. Probate Records and Furniture Attribution: Links documented estate inventories to surviving Federal-period cabinetwork.",
+                "variables": [
+                    {
+                        "name": "topic",
+                        "label": "Original Topic",
+                        "placeholder": "e.g., Greek Revival Architecture",
                         "value": ""
                     },
                     {
-                        "name": "clothing",
-                        "label": "Clothing Description",
-                        "placeholder": "e.g., simple classical attire, period-appropriate dress, contemporary formal wear",
+                        "name": "pillars",
+                        "label": "Three Pillars (from Step 1)",
+                        "inputType": "textarea",
+                        "rows": 4,
+                        "placeholder": "Paste the three conceptual pillars from Step 1 results",
+                        "value": ""
+                    }
+                ]
+            },
+            {
+                "id": "abstracts",
+                "name": "Technical Abstracts",
+                "instructions": "Select a topic from Step 2's menu. This step will generate two detailed technical abstracts for that topic.",
+                "template": "Selected Topic: {{selected_topic}}\n\nPHASE 3: TECHNICAL ABSTRACTS\n\nSuggest two Technical Abstracts (Level 2) for the selected topic.\n\nFor each abstract:\n\nSentence 1: Quantify scope (Dates, geography, or technical specifications).\nSentence 2: Identify the primary mechanical, structural, or literary evolution.\nSentence 3: State the measurable historical or material outcome.\n\nFormat:\n\n### Abstract A: [Title]\n[Three sentences as specified above]\n\n### Abstract B: [Title]\n[Three sentences as specified above]\n\nMANDATORY LINGUISTIC CONSTRAINTS:\n- No \"Throat-Clearing\"\n- No Decorative Adjectives\n- No Litotes\n- No Personification\n- No Narrative Transitions",
+                "variables": [
+                    {
+                        "name": "selected_topic",
+                        "label": "Selected Topic (from Step 2)",
+                        "inputType": "textarea",
+                        "rows": 3,
+                        "placeholder": "Paste the topic you selected from Step 2's menu",
+                        "value": ""
+                    }
+                ]
+            },
+            {
+                "id": "essay-script",
+                "name": "Audio Essay Generation",
+                "instructions": "Select one of the abstracts from Step 3. This generates the final audio essay script prompt for use in a new chat.",
+                "template": "Selected Abstract: {{selected_abstract}}\n\n---AUDIO ESSAY SCRIPT PROMPT---\n\nCopy the text below and use it in a NEW chat window to generate your audio essay:\n\n---BEGIN PROMPT---\nTopic: {{selected_abstract}}\n\nWrite a twenty-five-hundred-word essay on the topic above. Structure the essay entirely in paragraphs, avoiding lists, bullet points, or outline formatting. The goal is to create a continuous narrative suitable for listening as if it were a chapter of a book read aloud by a professional narrator.\n\nStyle and Language Rules:\n\nSpell out numbers and dates fully. For example:\nInstead of \"first,\" write \"first.\"\nInstead of \"nineteen fifties,\" write \"nineteen fifties.\"\nInstead of \"twenty twenty-four,\" write \"twenty twenty-four.\"\nInstead of \"five percent,\" write \"five percent.\"\nInstead of \"twenty-four hours a day, seven days a week,\" write \"twenty-four hours a day, seven days a week.\"\nAvoid abbreviations and acronyms unless they are spelled out in full (e.g., write \"McKinsey and Company\" instead of \"McKinsey and Co.\").\nDo not use symbols (percent, dollar, ampersand). Always write the words out.\nAvoid inline references such as \"(Smith, nineteen ninety-nine)\" or \"[one]\". Instead, all references and sources should be collected at the end of the essay in a concise \"References\" section.\nWrite in complete sentences, maintaining fluid transitions between ideas.\nFavor descriptive language that aids the ear. Repetition for clarity is acceptable if it improves oral comprehension.\n\nLinguistic Constraints (Zero-Tolerance for Fluff):\n\nNo \"Throat-Clearing\": Delete phrases like \"It is worth noting,\" \"Let us dive into,\" or \"As an expert curator.\"\nNo Decorative Adjectives: Avoid words like stately, haunting, evocative, rich, or vibrant.\nNo Litotes: Avoid indirect assertions (e.g., \"not unlike,\" \"not insignificant\"). Use direct, assertive language.\nNo Personification: History does not \"whisper\" or \"tell stories.\" It \"codifies,\" \"catalyzes,\" or \"results in.\"\nNo Narrative Transitions: Do not provide summaries or \"Curator's Notes.\" Provide data immediately.\n\nAudience and Depth:\n\nWrite for a highly intelligent general audience that expects both accuracy and originality. Provide insights that go beyond common knowledge and surface-level facts.\nIncorporate historical, cultural, and technical context where relevant to deepen understanding.\nUse metaphors or analogies sparingly and only if they improve clarity.\n\nFactual Rigor:\n\nVerify claims with precise supporting details.\nWhere possible, provide exact figures, dates, names, or dimensions to anchor the narrative in concrete fact.\nDo not leave generalizations unsupported.\nEnsure balance: acknowledge counterpoints or differing interpretations when relevant, and explain why one perspective became dominant.\n\nTone:\n\nAim for the cadence of a long-form essay or nonfiction book chapter. Think of the style of Bill Bryson or Alan Taylor: approachable, informed, and precise.\nStrive for clarity without oversimplifying.\nKeep the prose natural for the ear; avoid overly dense academic phrasing.\n\nConclusion and Learning Extensions:\n\nAt the end of the essay, provide a short \"References\" section with the sources used.\nAfter the references, concisely state three areas for deeper learning. These should not be remedial but rather fascinating and informative avenues for a curious and well-studied reader to pursue further.\n---END PROMPT---",
+                "variables": [
+                    {
+                        "name": "selected_abstract",
+                        "label": "Selected Abstract (from Step 3)",
+                        "inputType": "textarea",
+                        "rows": 4,
+                        "placeholder": "Paste the abstract you selected from Step 3 (title and three sentences)",
                         "value": ""
                     }
                 ]
             }
         ]
     },
-    {
-        "id": "song-creator",
-        "title": "Song Creator",
-        "description": "Annotate lyrics to match a specific artist's performance style and delivery",
-        "category": "Creativity",
-        "icon": "music_note",
-        "featured": true,
-        "template": "### Task\nAnnotate the provided text to match the specific musical performance style of a target artist.\n\n### Inputs\n\nArtist: {{artist}}\n\nLyrics to Process: \"\"\"\n{{lyrics}}\n\"\"\"\n\n### Instructions\n\nStyle Header: Begin with the sentence: \"In the style of the artist with first name [First Name] and last name [Last Name], who is known for...\" followed by a precise description of their cadence, delivery, and instrumentation.\n\nAnnotation: Rewrite the provided lyrics, inserting detailed performance notes between lines and words. Capture the artist's specific quirks (e.g., vocal runs, spoken word sections, specific ad-libs, breathing patterns).\n\n### Strict Guardrails\n\nALL non-lyrical text (headers, cues, moods, ad-libs) MUST be inside square brackets [ ].\n\nExample: [Verse 1 - Fast Tempo] text text [Audible breath] text...\n\nDo not output any preamble or post-script conversation.",
-        "variables": [
-            {
-                "name": "artist",
-                "label": "Artist",
-                "placeholder": "e.g., Freddie Mercury",
-                "value": ""
-            },
-            {
-                "name": "lyrics",
-                "label": "Lyrics to Process",
-                "placeholder": "Insert song lyrics here...",
-                "value": "",
-                "inputType": "textarea",
-                "rows": 10
-            }
-        ]
-    },
-    {
-        "id": "architectural-rendering-davis",
-        "title": "Davis Architectural Rendering",
-        "description": "Transform images into 19th-century American architectural renderings in Alexander Jackson Davis style",
-        "category": "Creativity",
-        "icon": "architecture",
-        "template": "Turn this image into A 19th-century American architectural rendering in the style of Alexander Jackson Davis depicted as a precise front elevation orthographic drawing with no vanishing point. The artwork should utilize strict ruled ink lines overlaid with translucent watercolor washes in warm cream and pale yellow stone tones. Include a smooth graded wash sky fading from blue to white, deep calculated cast shadows to simulate depth within recesses, and high-contrast dark windows that maintain the window pattern of the reference. Any metal accents should be finished with verdigris green . Add a human scale figure at the entrance to establish scale, and faint greyed-out flanking structures to frame the subject.",
-        "variables": []
-    },
-    {
-        "id": "prompt-builder",
-        "title": "Prompt Builder Assistant",
-        "description": "Refine prompt ideas through iterative questioning to create polished, effective prompts",
-        "category": "Productivity",
-        "icon": "construction",
-        "template": "Prompt: {{initial_idea}}\n\nYou are a Prompt Builder Assistant. I have shared a general idea for a prompt above. Follow these steps:\n\n1. Ask the first follow-up question to get more detail and wait for the user's response.\n2. After the user responds, ask the second follow-up question based on what you've learned and wait again for their response.\n3. Then ask the third follow-up question in the same manner.\n4. Once you have all three answers, use the information to craft a final prompt that meets the user's needs.\n5. Present the final prompt in a clear and ready-to-use format. If you present multiple options to the user, use a unique option identifier for each option so the user can simply refer to that identifier rather than restating the entire option.",
-        "variables": [
-            {
-                "name": "initial_idea",
-                "label": "Initial Prompt Idea",
-                "placeholder": "e.g., Help me identify architectural styles in historic buildings",
-                "value": ""
-            }
-        ]
-    },
-    {
-        "id": "academic-drawing",
-        "title": "Academic Drawing",
-        "description": "Convert an image or create an academic drawing of an idealized male figure in classical style",
-        "category": "Creativity",
-        "icon": "brush",
-        "variables": [],
-        "variations": [
-            {
-                "id": "convert-image",
-                "name": "Convert Uploaded Image",
-                "description": "Transforms your uploaded image into an academic figure study drawing while preserving the original pose and character.",
-                "variables": [],
-                "template": "Convert the uploaded image into an academic drawing of a nude male figure presented in a balanced, idealized standing pose derived from classical statuary and 19th-century academic practice, emphasizing idealized male beauty. Preserve the general pose and character of the original subject while refining it to classical ideals.\n\nThe figure stands upright with weight evenly distributed, one leg bearing slightly more load while the opposite leg relaxes, creating a subtle, restrained contrapposto.\n\nThe pelvis is level and stable; the torso is erect and open, with the rib cage lifted and aligned cleanly over the hips. The shoulders are relaxed and square, allowing the chest to read broadly and clearly.\n\nThe arms are held in a natural, neutral arrangement—one arm resting loosely at the side, the other gently bent at the elbow with the hand relaxed near the hip—posed to reveal proportional relationships without gesture or narrative intent.\n\nThe head is upright and centered, facing forward with a slight classical turn. Facial features are idealized in the Roman tradition: strong brow, straight forehead, pronounced aquiline nose, and a calm, impassive expression.\n\nHair is short, close-cropped, and classical in character—neatly contoured to the skull, with minimal volume, subtle wave or texture at the crown, and no modern styling or exaggerated curls.\n\nThe pose emphasizes symmetry, proportion, and clarity of form, allowing the ideal male anatomy to be read in full: harmonious relationships between head, torso, and limbs; clear transitions between major masses; balanced distribution of weight.\n\nRendered in the tradition of 19th-century French academic draftsmanship (Bargue, Gérôme, early École des Beaux-Arts). Emphasize structural clarity, anatomical rigor, and restraint.\n\nUse charcoal or graphite with precise contour control, subtle variation in line weight, and economical modeling. Shading should rely on clear planes, measured tonal transitions, and unified halftones rather than expressive or sketch-like marks.\n\nAnatomy must be deliberate and canonical: clear articulation of rib cage, pelvis, scapulae, and major muscle groups, with emphasis on volume and proportion over surface texture.\n\nLighting is controlled and directional, atelier-style, using a single dominant light source to establish calm shadow masses and restrained highlights.\n\nThe background remains minimal or blank, reinforcing the studio study context.\n\nOverall effect: a museum-quality academic figure study—idealized, disciplined, and timeless—classical in spirit, restrained in execution, and visually clean."
-            },
-            {
-                "id": "generate-from-description",
-                "name": "Generate from Description",
-                "description": "Creates a new academic drawing based on your subject description. Useful when you don't have a reference image.",
-                "variables": [
-                    {
-                        "name": "subject",
-                        "label": "Subject Description",
-                        "placeholder": "e.g., A young athlete holding a discus, Hellenistic period influence",
-                        "value": ""
-                    }
-                ],
-                "template": "Subject: {{subject}}\n\nCreate an academic drawing of a nude male figure presented in a balanced, idealized standing pose derived from classical statuary and 19th-century academic practice, emphasizing idealized male beauty. Incorporate the subject description above into the composition.\n\nThe figure stands upright with weight evenly distributed, one leg bearing slightly more load while the opposite leg relaxes, creating a subtle, restrained contrapposto.\n\nThe pelvis is level and stable; the torso is erect and open, with the rib cage lifted and aligned cleanly over the hips. The shoulders are relaxed and square, allowing the chest to read broadly and clearly.\n\nThe arms are held in a natural, neutral arrangement—one arm resting loosely at the side, the other gently bent at the elbow with the hand relaxed near the hip—posed to reveal proportional relationships without gesture or narrative intent.\n\nThe head is upright and centered, facing forward with a slight classical turn. Facial features are idealized in the Roman tradition: strong brow, straight forehead, pronounced aquiline nose, and a calm, impassive expression.\n\nHair is short, close-cropped, and classical in character—neatly contoured to the skull, with minimal volume, subtle wave or texture at the crown, and no modern styling or exaggerated curls.\n\nThe pose emphasizes symmetry, proportion, and clarity of form, allowing the ideal male anatomy to be read in full: harmonious relationships between head, torso, and limbs; clear transitions between major masses; balanced distribution of weight.\n\nRendered in the tradition of 19th-century French academic draftsmanship (Bargue, Gérôme, early École des Beaux-Arts). Emphasize structural clarity, anatomical rigor, and restraint.\n\nUse charcoal or graphite with precise contour control, subtle variation in line weight, and economical modeling. Shading should rely on clear planes, measured tonal transitions, and unified halftones rather than expressive or sketch-like marks.\n\nAnatomy must be deliberate and canonical: clear articulation of rib cage, pelvis, scapulae, and major muscle groups, with emphasis on volume and proportion over surface texture.\n\nLighting is controlled and directional, atelier-style, using a single dominant light source to establish calm shadow masses and restrained highlights.\n\nThe background remains minimal or blank, reinforcing the studio study context.\n\nOverall effect: a museum-quality academic figure study—idealized, disciplined, and timeless—classical in spirit, restrained in execution, and visually clean."
-            }
-        ]
-    },
-    {
-        "id": "artist-guide",
-        "title": "Artist Guide",
-        "description": "Expert guidance for reproducing reference images in oil painting, watercolor, or drawing with technical analysis",
-        "category": "Creativity",
-        "icon": "palette",
-        "variables": [],
-        "variations": [
-            {
-                "id": "oil-painting",
-                "name": "Oil Painting Guide",
-                "description": "Step-by-step guidance for reproducing images in oil paint. Includes palette recommendations, layering techniques, and visual reference generation.",
-                "template": "Role: You are a Master Oil Painter and Art Instructor. Your goal is to help me reproduce the attached reference image as a high-quality oil painting.\n\nTask 1: Stylistic Diagnosis\nAnalyze the attached image. Identify its specific technical style (e.g., Classical Glazing, Alla Prima, Impasto, or Tonalism). Explain how this style dictates the painting process (e.g., \"This piece requires a wet-on-wet approach to preserve the soft gradients\").\n\nTask 2: Technical Breakdown\nBased on your diagnosis, provide:\n\nThe Color Palette: List the specific pigments required. Suggest a \"Limited Palette\" version if appropriate for color harmony.\n\nStep-by-Step Guide: Determine the optimal number of steps for this specific style. Organize them logically, such as:\n\nThe Foundation: (e.g., Imprimatura vs. detailed charcoal transfer).\n\nThe Underlayer: (e.g., Grisaille, Verdaccio, or a rough \"Ebauche\").\n\nDevelopment: (e.g., Building opaque mid-tones or layering transparent glazes).\n\nFinishing touches: (e.g., Final highlights, scumbling, or varnish-ready details).\n\nTask 3: Interactive Guidance\nProvide high-level instructions for these steps now. End your response by reminding me that I can ask for:\n\n\"Detailed Instructions for Step X\" (for specific brushwork and mixing ratios).\n\n\"Generate a visual reference for Step X\" (to see a generated example of what my canvas should look like midway through that specific stage)."
-            },
-            {
-                "id": "watercolor",
-                "name": "Watercolor Guide",
-                "description": "Instructions for watercolor techniques including wet-on-wet, masking, and transparency control. Covers paper selection and pigment properties.",
-                "template": "Role: You are a Master Watercolorist and Art Instructor. Your goal is to help me reproduce the attached reference image using professional watercolor techniques.\n\nTask 1: Stylistic & Technical Diagnosis\nAnalyze the attached image. Identify the watercolor approach best suited for this piece (e.g., Loose & Expressive, Botanical Realism, or Wet-on-Wet Impressionism).\n\nLight Preservation: Identify the \"pure whites\" in the image and advise if I should use masking fluid or paint around them (negative painting).\n\nPaper Choice: Suggest the ideal paper texture (Hot Press for detail, Cold Press for general use, or Rough for texture).\n\nTask 2: Technical Breakdown\n\nThe Palette & Transparency: List the necessary pigments. Specify which should be Transparent, Semi-Opaque, or Granulating to match the textures in the reference.\n\nStep-by-Step Guide: Break the process into logical watercolor phases:\n\nPhase 1: The Sketch & Masking: (Guidelines for a light graphite sketch and preserving highlights).\n\nPhase 2: The Initial Washes (Tea Consistency): (Establishing the lightest values and \"under-glow\" using wet-on-wet or flat washes).\n\nPhase 3: Building Form (Milk Consistency): (Developing mid-tones, defining shapes, and managing edges—soft vs. hard).\n\nPhase 4: Values & Shadows (Honey Consistency): (Adding the darkest \"darks,\" dry-brush textures, and fine details).\n\nTask 3: Interactive Guidance\nProvide high-level instructions for these steps now. End your response by reminding me that I can ask for:\n\n\"Detailed Instructions for Step X\" (including specific water-to-paint ratios and brush types).\n\n\"Generate a visual reference for Step X\" (to see a generated example of the painting in its \"ugly duckling\" mid-wash stage)."
-            },
-            {
-                "id": "drawing",
-                "name": "Drawing Guide",
-                "description": "Comprehensive drawing guidance covering graphite, charcoal, and carbon techniques. Includes value mapping and texture rendering methods.",
-                "template": "Role: You are a Master Draftsman and Drawing Instructor. Your goal is to help me reproduce the attached reference image as a high-quality pencil drawing.\n\nTask 1: Stylistic & Technical Diagnosis\nAnalyze the attached image. Identify the drawing approach best suited for this piece (e.g., Photorealism, Expressive Sketching, Classical Academic Study, or High-Contrast Tonalism).\n\nMaterial Recommendations: Suggest the best medium for the job (e.g., Standard Graphite, Charcoal for deep blacks, or Carbon pencil for matte finishes) and necessary tools (kneaded erasers, blending stumps, or specific paper \"tooth\").\n\nTexture Strategy: Briefly explain the primary technique needed for the dominant textures in the image (e.g., \"Use tight circulisim for the skin pores,\" or \"Use aggressive cross-hatching for the fabric folds\").\n\nTask 2: Technical Breakdown\nBased on your diagnosis, provide:\n\nThe \"Palette\" (Grade Selection): List the specific range of pencils required (e.g., \"You will need a hard HB for layout, a versatile 2B for mid-tones, and a soft 8B for darkest shadows\").\n\nStep-by-Step Guide: Divide the process into logical drawing phases that build value gradually:\n\nPhase 1: The Framework (Hard Pencils): (Guidelines for accurate proportions, gesture, and light \"envelope\" shapes).\n\nPhase 2: Mapping Shadows (Mid-Range Pencils): (Establishing the \"bedbug line\" separating light and shadow families; flat tonal mapping).\n\nPhase 3: Modeling Form & Blending: (Developing gradients, turning soft edges, and deciding whether to blend with tools or rely on distinct hatch marks).\n\nPhase 4: Deepening Darks & Texture: (Pushing contrast to the limit with softest pencils and rendering specific surface details).\n\nPhase 5: Subtractive Highlights: (Using erasers to \"draw\" back into the tones to create crisp highlights or stray hairs).\n\nTask 3: Interactive Guidance\nProvide high-level instructions for these steps now. End your response by reminding me that I can ask for:\n\n\"Detailed Instructions for Step X\" (including specific pencil grades, pressure guidance, and stroke types).\n\n\"Generate a visual reference for Step X\" (to see a generated example of what the drawing should look like at that specific stage of completion, e.g., just the line work)."
-            }
-        ]
-    },
-    {
-        "id": "restyle-image",
-        "title": "Restyle Image",
-        "description": "Transform photographs into fine-art image styles using selectable variations",
-        "category": "Creativity",
-        "icon": "camera_alt",
-        "variables": [],
-        "variations": [
-            {
-                "id": "tina-barney",
-                "name": "Tina Barney Style Photo",
-                "description": "Applies the aesthetic of large-format, museum-grade color photography with naturalistic color and restrained contrast.",
-                "template": "Convert this photograph while preserving the original characters, setting, composition, and narrative context exactly as captured. Reinterpret the image with fine-art, editorial quality inspired by Tina Barney's photographic style.\n\nApply the visual language of large-format, museum-grade color photography: naturalistic yet deliberate color, soft but controlled contrast, and a restrained, painterly palette. Skin tones should appear realistic and dimensional, with subtle warmth and tonal depth. Whites should be creamy rather than stark; shadows should retain detail without appearing flat or crushed.\n\nMaintain a sense of quiet psychological presence and observational intimacy. The image should feel composed, intentional, and slightly detached—neither cinematic nor stylized for drama. Avoid exaggerated sharpness, HDR effects, or artificial lighting artifacts.\n\nUpgrade the technical quality to resemble a contemporary high-end digital or medium-format camera: refined dynamic range, clean micro-detail, smooth tonal transitions, and film-like color depth without visible grain. Preserve natural imperfections and avoid cosmetic retouching that would flatten character or environment.\n\nThe final result should read as gallery-ready fine art photography—editorial in rigor, restrained in execution, and suitable for museum or print publication."
-            },
-            {
-                "id": "sally-mann",
-                "name": "Sally Mann Style Photo",
-                "description": "Renders as wet-plate collodion process with shallow depth of field, high contrast, and organic chemical imperfections.",
-                "template": "Keep the current subject but render the image as a large format black and white photograph in the style of Sally Mann's wet-plate collodion process. adjust the zoom if needed to achieve proper balance. The aesthetic should feel gloomy and feature the unique optical qualities of antique lenses, including a very shallow depth of field with sharp selective focus on the main subject, rapidly falling off into a painterly, swirling bokeh and soft atmospheric blur. The lighting is high-contrast but refined for a fine art print, with rich, deep blacks retaining subtle detail, and luminous, glowing whites. Instead of heavy damage, incorporate subtle, organic imperfections inherent to the hand-made process: delicate chemical swirls, faint emulsion irregularities near the edges, and soft, natural vignetting. The final texture should feel tactile, timeless, and haunting, possessing the quality of a masterfully crafted, hand-printed photograph suitable for framing."
-            },
-            {
-                "id": "antique-colorization",
-                "name": "Antique Photo Colorization",
-                "description": "Transforms black and white or sepia photographs into natural-looking color images with contemporary photo quality.",
-                "template": "Transform this antique photograph into a seamless, high-quality color photograph. The colorization should be completely natural, replicating the aesthetic of a photo taken with a contemporary color camera, while preserving the original subject and setting without any changes."
-            }
-        ]
-    },
-    {
-        "id": "component-adaptation",
-        "title": "Component Adaptation (Design System)",
-        "description": "Adapt components with automated color extraction, state testing, and pixel-perfect verification (ΔE < 2.0, ≥99.9% match)",
-        "category": "Productivity",
-        "icon": "widgets",
-        "template": "Component: {{component_name}}\n\nI need to adapt this component to my m3-design-v2 design system with PERFECT visual fidelity. I will provide a screenshot and original code. Follow the enhanced systematic workflow with automated color extraction, state testing, and pixel-perfect verification. CRITICAL: Perfect visual fidelity is non-negotiable - no close enough approximations allowed.\n\nPhase 1 Color Extraction and Analysis. First extract ALL colors from the reference screenshot using an automated Playwright script. The script should navigate to the reference, query all elements, and extract computed color values for every text element, background, border, and interactive state. Create a comprehensive color mapping table showing reference color in RGB, hex value, closest design system token, whether it's an exact match, and what action is required. If a design system semantic token like var(--md-sys-color-on-surface) does NOT match the reference color exactly check the delta E, if delta E is 2.0 or higher you MUST create component-specific color tokens. Never approximate or use close enough colors. For example if the reference uses Tailwind stone-900 rgb(28,25,23) but design system on-surface is rgb(18,23,20), the delta E is high, so create --wy-component-title-color with the exact reference value. Document why semantic tokens don't work for this specific design. This prevents the critical error of using wrong semantic tokens that cause subtle visual hierarchy mismatches.\n\nPhase 1 continued Analysis and Planning. Analyze the screenshot for layout structure, typography hierarchy, interactive elements, spacing patterns, and visual details like border radius shadows and transitions. Review the original code for hardcoded values to replace. Look for color hex codes, pixel spacing, font sizes and families, border radius values, and transition durations. Create a complete token mapping table. Identify missing design system assets.\n\nPhase 2 Design System Updates. If analysis reveals colors that don't match existing tokens exactly, add new component-specific color tokens to m3-design-v2/src/styles/tokens.css. Follow naming pattern --wy-component-name-property-color. Always include dark mode variants in @media prefers-color-scheme dark block. Add spacing shape or motion tokens if required. Document rationale for each new token explaining why semantic tokens don't provide exact match. Use existing patterns, semantic names, provide dark mode variants, and document rationale in comments.\n\nPhase 3 Implementation. Create Web Component in m3-design-v2/src/components/wy-[name].js using LitElement. Define reactive properties. Import fonts in Shadow DOM for Playfair Display and Material Symbols Outlined. Use design system tokens exclusively with absolutely zero hardcoded values. Define component-specific color tokens in :host block with fallback values like --wy-component-title-color: #1C1917. Use these specific tokens in styles not generic semantic tokens. Follow Material Design 3 state layer patterns using ::before pseudo-elements with opacity transitions. Add focus-visible outlines 3px solid with 2px offset. Never use !important. Use semantic HTML. Component structure: import from lit, extend LitElement, declare static properties, define static styles with all design system tokens, define component-specific color tokens in :host, implement state layers for interactive elements, implement render method.\n\nPhase 4 Build and Prepare Testing. Build design system with npm run build, start dev server with npm run dev, create test page if needed importing tokens and component.\n\nPhase 5.1 Color Accuracy Testing MANDATORY. Create and run test-color-accuracy.py script. Extract reference colors from original using Playwright script that loads reference and extracts computed getComputedStyle values for all text backgrounds and borders converting to RGB tuples. Define REFERENCE_COLORS dictionary with element name to RGB tuple mapping like title: (28, 25, 23) for stone-900. Extract implementation colors using same method from component shadow root. Calculate color delta using Euclidean distance formula. For each color verify delta E is less than 2.0 which means imperceptible difference. Delta E between 2.0 and 5.0 is noticeable, above 5.0 is clearly visible. Print formatted table showing element, actual RGB, expected RGB, and delta value. Success criteria: ALL colors must have delta E less than 2.0. If test fails identify which colors have high delta, verify component uses correct component-specific tokens not generic semantic tokens, ensure tokens defined in :host block for Shadow DOM, re-run extraction to verify reference colors, update token values. Common failures: using var(--md-sys-color-on-surface) when reference uses Tailwind stone palette, tokens not cascading into Shadow DOM, circular variable references like --spacing-sm: var(--spacing-sm, ...), CDN cache serving old bundle.\n\nPhase 5.2 Interactive State Testing MANDATORY. Extract state colors from reference for hover focus active and disabled states using Playwright to hover elements, press Tab for focus, click for active. For each interactive element verify default rest state colors match reference exactly with delta E less than 2.0, hover state border background color changes match, focus state keyboard indicator matches with outline style color width and offset, active pressed state click appearance matches, disabled state opacity cursor and colors match if applicable, loading state indicators match if applicable, error state styling matches if applicable, and state transitions animation duration and easing match reference. Test all interactive states for buttons chips links form inputs. Success criteria: all state colors match reference with delta E less than 2.0, state transitions occur, no states missing, focus indicators meet WCAG. Common issues: using :hover without state layer pseudo-element, missing :focus-visible styles, hardcoding state colors instead of state layer opacity, missing disabled state, transitions too fast or slow.\n\nPhase 5.3 Pixel Perfect Visual Comparison MANDATORY. Use Playwright plus PIL to capture screenshots from reference and implementation at exact same viewport like 1200x900. Convert images to RGB numpy arrays. Calculate per-pixel difference using absolute value of array subtraction. Create diff heatmap where pixels within tolerance of 2 RGB points per channel are green and pixels outside tolerance are red. Calculate match percentage as matching pixels divided by total pixels times 100. Generate visual outputs: diff heatmap PNG with green for matching red for different, side-by-side comparison PNG with reference on left implementation on right with labels. Success criteria: match percentage must be 99.9% or higher allowing only 0.1% for anti-aliasing differences, no visible differences in side-by-side, diff heatmap shows only minor anti-aliasing if any. Acceptable differences: font rendering 1-2px due to browser OS, anti-aliasing on rounded corners within tolerance, sub-pixel rendering under 2 points per channel. Unacceptable: wrong colors different hue saturation lightness, wrong spacing margin padding gap offsets, wrong font sizes or weights, wrong border radius or shapes, missing elements or incorrect positioning. If match under 99.9%: review heatmap to identify problem areas, check if acceptable anti-aliasing or real issues, increase tolerance slightly if only anti-aliasing max 5, if real differences fix implementation and retest, never lower success threshold.\n\nPhase 5.4 Functional Testing. Verify all original functionality preserved, test modal open close, click handlers, navigation, keyboard shortcuts, event dispatching, state management. Run automated functional test or manual verification.\n\nPhase 5.5 Design System Compliance. Scan component code for hardcoded hex codes, magic number spacing, arbitrary durations, !important declarations. Verify 100% token usage. Zero hardcoded values allowed.\n\nPhase 6 Deliverables. Provide: 1 Color extraction report table showing reference RGB, hex value, design system token, whether exact match, and action taken. 2 Token mapping report complete table original value to token with status. 3 Color accuracy test results showing all delta E values under 2.0 with formatted table and max delta reported. 4 Interactive state test results showing all states verified with hover focus active disabled tested and screenshot evidence. 5 Pixel perfect comparison results with match percentage 99.9% or higher, diff heatmap image path, side-by-side comparison image path, and acceptable vs unacceptable differences documented. 6 Complete component code with full Web Component implementation, registration in src/main.js, component.json entry with props and examples, usage example in markup. 7 Design system updates if any showing new tokens added to tokens.css, dark mode variants, and rationale for why semantic tokens didn't work. 8 Integration instructions for using component, available API, event listeners, build and deploy commands.\n\nSuccess criteria ALL must pass: Color accuracy with all elements delta E under 2.0 imperceptible difference, pixel match with 99.9% or higher match percentage, all interactive states tested and verified matching reference, visual fidelity where component matches screenshot exactly, token usage 100% design tokens zero hardcoded values, Playwright tests all passing, dark mode works in both schemes, no console errors, semantic HTML, ARIA labels present, focus states visible and accessible.\n\nAnti-patterns to avoid: hardcoded colors hex rgb rgba, magic number spacing, arbitrary transitions, !important declarations, changing background-color on hover directly, hardcoded border-radius, skipping dark mode testing, forgetting Shadow DOM fonts, inline styles for theming, delivering without verification, using generic semantic tokens when reference needs specific colors, assuming semantic token names match without verifying RGB values, testing functionality before colors are correct, approximating colors instead of exact match.\n\nDesign system compliance for colors: use var(--md-sys-color-*) or var(--wy-*), provide dark mode variants, use color-mix() for transparency. Typography: use var(--font-serif) var(--font-sans) var(--font-display), clamp() for fluid scaling, design system letter spacing. Spacing: use var(--spacing-*) xxs through 3xl, follow 8px grid, clamp() for responsive. Shape: use var(--md-sys-shape-corner-*), corner-full for capsules. Motion: use var(--md-sys-motion-duration-*) and var(--md-sys-motion-easing-*), no magic durations. Interactive states: hover with ::before overlay, opacity var(--md-sys-state-hover-opacity), focus 3px outline 2px offset, never change background directly.\n\nExecute complete workflow with all testing phases 5.1 through 5.5 and provide all 8 deliverables with color extraction report, color accuracy delta E results, state testing results, pixel perfect comparison with heatmap and match percentage, complete code, design system updates, and integration instructions.",
-        "variables": [
-            {
-                "name": "component_name",
-                "label": "Component Name/Description",
-                "placeholder": "e.g., Links Modal, Filter Chip, Profile Card",
-                "value": ""
-            }
-        ]
-    },
-    {
-        "id": "audio-essay-discovery",
-        "title": "Audio Essay Topic Discovery",
-        "description": "Discover interdisciplinary topics for audio essays through curated thematic domains with ready-to-use script prompts",
-        "category": "Expertise",
-        "icon": "headphones",
-        "template": "Topic: {{topic}}\n\nRole: You are a Technical Systems Analyst, Historical Researcher, and culturally sophisticated guide. Your objective is to extract high-density, interdisciplinary data from a provided starting point.\n\nCORE THEMATIC SCOPE\n\nAll output must be inspired by these specific domains. If a topic does not intersect with at least one of these, it is rejected:\n\nMaterial Science/Craft\n\nClassical revival architecture (e.g., Greek Revival)\n\nStructural Engineering\n\nNeoclassical Art\n\nSouthern Gothic Realism and Writers\n\n18th/19th-century Economic History\n\nAmerican history\n\nBiographies of gay writers, artists, and historical figures\n\nAlcohol, wine, and beer\n\nThe American South\n\nNew England, Boston, Salem, and Marblehead\n\nAntiques collecting (primarily American, English, and French)\n\nMECHANISMS & INSTITUTIONS (OPTIONAL LENSES)\n\nUse these when they strengthen the synthesis or provide a causal throughline:\n\nInterpersonal relationship (patronage, kinship, mentorship, rivalry, marriage, inheritance networks)\n\nCredit, banking, and merchant finance\n\nInsurance and risk pricing (marine, fire, life)\n\nLaw, contracts, and property regimes (admiralty, probate, incorporation)\n\nLogistics and port governance (customs, warehousing, quarantine, lighthouses)\n\nPrinting, publishing, and information networks (newspapers, circulars, ledgers)\n\nPHASE 1: CONCEPTUAL DECOMPOSITION\n\nUpon receiving a Level 0 topic, identify three distinct conceptual pillars (technical, historical, or structural) that define the topic.\n\nFormat: List the three pillars as noun-heavy phrases. No descriptions.\n\nPHASE 2: THE CURRICULUM MENU\n\nGenerate 10 Level 1 topics.\n\nTarget Ratio: 30% direct correlation / 70% tangential/interdisciplinary connections.\n\nTechnical Justification: One sentence (max 15 words) per item. State the precise overlap with the Core Thematic Scope. Mechanisms & Institutions may be used when useful.\n\nRequirement: No adjectives. No introductory text.\n\nStop and ask: \"Approve or modify?\"\n\nPHASE 3: TECHNICAL ABSTRACTS (Upon Approval)\n\nSuggest two Technical Abstracts (Level 2) for each topic.\n\nSentence 1: Quantify scope (Dates, geography, or technical specifications).\n\nSentence 2: Identify the primary mechanical, structural, or literary evolution.\n\nSentence 3: State the measurable historical or material outcome.\n\nPHASE 4: AUDIO ESSAY GENERATION\n\nAfter presenting the Technical Abstracts, ask: \"Which topic would you like to develop into an audio essay?\"\n\nOnce the user selects a topic, provide the following prompt for them to use in a new chat window:\n\n---BEGIN PROMPT---\nTopic: [Insert the selected topic title and abstract here]\n\nWrite a twenty-five-hundred-word essay on the topic above. Structure the essay entirely in paragraphs, avoiding lists, bullet points, or outline formatting. The goal is to create a continuous narrative suitable for listening as if it were a chapter of a book read aloud by a professional narrator.\n\nStyle and Language Rules:\n\nSpell out numbers and dates fully. For example:\nInstead of \"first,\" write \"first.\"\nInstead of \"nineteen fifties,\" write \"nineteen fifties.\"\nInstead of \"twenty twenty-four,\" write \"twenty twenty-four.\"\nInstead of \"five percent,\" write \"five percent.\"\nInstead of \"twenty-four hours a day, seven days a week,\" write \"twenty-four hours a day, seven days a week.\"\nAvoid abbreviations and acronyms unless they are spelled out in full (e.g., write \"McKinsey and Company\" instead of \"McKinsey and Co.\").\nDo not use symbols (percent, dollar, ampersand). Always write the words out.\nAvoid inline references such as \"(Smith, nineteen ninety-nine)\" or \"[one]\". Instead, all references and sources should be collected at the end of the essay in a concise \"References\" section.\nWrite in complete sentences, maintaining fluid transitions between ideas.\nFavor descriptive language that aids the ear. Repetition for clarity is acceptable if it improves oral comprehension.\n\nLinguistic Constraints (Zero-Tolerance for Fluff):\n\nNo \"Throat-Clearing\": Delete phrases like \"It is worth noting,\" \"Let us dive into,\" or \"As an expert curator.\"\nNo Decorative Adjectives: Avoid words like stately, haunting, evocative, rich, or vibrant.\nNo Litotes: Avoid indirect assertions (e.g., \"not unlike,\" \"not insignificant\"). Use direct, assertive language.\nNo Personification: History does not \"whisper\" or \"tell stories.\" It \"codifies,\" \"catalyzes,\" or \"results in.\"\nNo Narrative Transitions: Do not provide summaries or \"Curator's Notes.\" Provide data immediately.\n\nAudience and Depth:\n\nWrite for a highly intelligent general audience that expects both accuracy and originality. Provide insights that go beyond common knowledge and surface-level facts.\nIncorporate historical, cultural, and technical context where relevant to deepen understanding.\nUse metaphors or analogies sparingly and only if they improve clarity.\n\nFactual Rigor:\n\nVerify claims with precise supporting details. For example, if you write \"the Sumner Tunnel was once the deepest underwater tunnel in the world,\" also state its depth in feet and meters, the year it was completed, and the context of what surpassed it.\nWhere possible, provide exact figures, dates, names, or dimensions to anchor the narrative in concrete fact.\nDo not leave generalizations unsupported. For instance, if you say something was \"transformative,\" explain what specific change it caused, how it was measured, and what its consequences were.\nEnsure balance: acknowledge counterpoints or differing interpretations when relevant, and explain why one perspective became dominant.\n\nTone:\n\nAim for the cadence of a long-form essay or nonfiction book chapter. Think of the style of Bill Bryson or Alan Taylor: approachable, informed, and precise.\nStrive for clarity without oversimplifying.\nKeep the prose natural for the ear; avoid overly dense academic phrasing.\n\nConclusion and Learning Extensions:\n\nAt the end of the essay, provide a short \"References\" section with the sources used.\nAfter the references, concisely state three areas for deeper learning. These should not be remedial but rather fascinating and informative avenues for a curious and well-studied reader to pursue further.\n---END PROMPT---\n\nMANDATORY LINGUISTIC CONSTRAINTS (Zero-Tolerance for Fluff)\n\nTo accommodate a user with zero patience for \"filler,\" you must adhere to the following:\n\nNo \"Throat-Clearing\": Delete phrases like \"It is worth noting,\" \"Let's dive into,\" or \"As an expert curator\".\n\nNo Decorative Adjectives: Avoid words like stately, haunting, evocative, rich, or vibrant.\n\nNo Litotes: Avoid indirect assertions (e.g., \"not unlike,\" \"not insignificant\"). Use direct, assertive language.\n\nNo Personification: History does not \"whisper\" or \"tell stories.\" It \"codifies,\" \"catalyzes,\" or \"results in.\"\n\nNo Narrative Transitions: Do not provide summaries or \"Curator's Notes\". Provide data immediately.",
-        "variables": [
-            {
-                "name": "topic",
-                "label": "Topic",
-                "placeholder": "e.g., Greek Revival Architecture, Bourbon Production, Salem Maritime Trade",
-                "value": ""
-            }
-        ]
-    },
-    {
-        "id": "portrait-iconography",
-        "title": "Portrait Iconography Brainstorm",
-        "description": "Brainstorm visual symbolism for portraits using 19th-century art history and iconographic language",
-        "category": "Creativity",
-        "icon": "image",
-        "template": "Core message/intent of the artwork: {{message}}\n\nAct as a specialist in 19th-century Art History and Iconography. I want to brainstorm a portrait of a subject that visually communicates a specific hidden message.\n\nProvide a detailed breakdown of how an artist of this era would communicate the message entered above using the following four categories:\n\n* The 'Language of Objects': Suggest 3-4 specific items (memento mori, flora, or household objects) that act as metaphors for the message.\n* Composition & Lighting: Describe how the use of shadows (chiaroscuro), perspective, or the placement of the subject in the frame reinforces the secret meaning.\n* The 'Somatic' (Body) Code: Detail specific gestures, gazes, or anatomical focuses (e.g., tension in the hands, the direction of the eyes) that hint at the internal state.\n* Environmental Cues: Describe a background, window view, or architectural detail that provides a 'thematic echoes' of the main message.\n\nEnsure the suggestions feel grounded in the 19th-century aesthetic (Romanticism, Realism, or the Gilded Age) rather than modern fantasy.",
-        "variables": [
-            {
-                "name": "message",
-                "label": "Core Message/Intent",
-                "placeholder": "e.g., Hidden grief, secret ambition, forbidden love, moral conflict",
-                "value": ""
-            }
-        ]
-    }
+  {
+    "id": "portrait-iconography",
+    "title": "Portrait Iconography Brainstorm",
+    "description": "Brainstorm visual symbolism for portraits using 19th-century art history and iconographic language",
+    "category": "Creativity",
+    "icon": "image",
+    "template": "Core message/intent of the artwork: {{message}}\n\nAct as a specialist in 19th-century Art History and Iconography. I want to brainstorm a portrait of a subject that visually communicates a specific hidden message.\n\nProvide a detailed breakdown of how an artist of this era would communicate the message entered above using the following four categories:\n\n* The 'Language of Objects': Suggest 3-4 specific items (memento mori, flora, or household objects) that act as metaphors for the message.\n* Composition & Lighting: Describe how the use of shadows (chiaroscuro), perspective, or the placement of the subject in the frame reinforces the secret meaning.\n* The 'Somatic' (Body) Code: Detail specific gestures, gazes, or anatomical focuses (e.g., tension in the hands, the direction of the eyes) that hint at the internal state.\n* Environmental Cues: Describe a background, window view, or architectural detail that provides a 'thematic echoes' of the main message.\n\nEnsure the suggestions feel grounded in the 19th-century aesthetic (Romanticism, Realism, or the Gilded Age) rather than modern fantasy.",
+    "variables": [
+      {
+        "name": "message",
+        "label": "Core Message/Intent",
+        "placeholder": "e.g., Hidden grief, secret ambition, forbidden love, moral conflict",
+        "value": ""
+      }
+    ]
+  }
 ]
