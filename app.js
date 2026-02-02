@@ -95,8 +95,9 @@ class PromptLibrary {
     setupEventListeners() {
         if (this.controlsBar) {
             this.controlsBar.addEventListener('filter-change', (e) => {
-                const { search, viewMode, showDetails, category } = e.detail;
-                this.searchTerm = (search || '').toLowerCase();
+                const { search, searchValue, viewMode, showDetails, category } = e.detail;
+                // Support both 'search' and 'searchValue' for compatibility with controls bar component
+                this.searchTerm = (search || searchValue || '').toLowerCase();
                 this.showDetails = Boolean(showDetails);
                 this.selectedCategory = category === 'all' ? '' : category;
                 if (viewMode && viewMode !== this.currentView) {
@@ -236,11 +237,24 @@ class PromptLibrary {
         this.filteredPrompts = this.prompts.filter(prompt => {
             const searchLower = this.searchTerm;
 
-            const matchesSearch = !searchLower ||
+            // Check if search term matches title, description, or category
+            let matchesSearch = !searchLower ||
                 prompt.title.toLowerCase().includes(searchLower) ||
                 prompt.description.toLowerCase().includes(searchLower) ||
-                prompt.category.toLowerCase().includes(searchLower) ||
-                prompt.template.toLowerCase().includes(searchLower);
+                prompt.category.toLowerCase().includes(searchLower);
+
+            // Also check template content (handle both single template and variations)
+            if (!matchesSearch && searchLower) {
+                if (prompt.template) {
+                    matchesSearch = prompt.template.toLowerCase().includes(searchLower);
+                }
+                // Search within all variation templates
+                if (!matchesSearch && prompt.variations) {
+                    matchesSearch = prompt.variations.some(v =>
+                        v.template && v.template.toLowerCase().includes(searchLower)
+                    );
+                }
+            }
 
             let matchesCategory = true;
             if (this.selectedCategory) {
