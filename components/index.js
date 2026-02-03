@@ -6,6 +6,6 @@
  */
 
 // Import from CDN (deployed to all environments)
-import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/dist/web-components.js?v=20260203-shadow-fix';
+import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/dist/web-components.js?v=20260203-sticky-fix';
 
 console.log('[Components] m3-design-v2 web components registered (CDN)');
