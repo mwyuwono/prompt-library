@@ -986,6 +986,9 @@ class PromptLibrary {
         this.activePromptIndex = index;
         this.activePromptId = prompt.id;
 
+        // Reset all modal properties to prevent state leakage between prompt types
+        this.resetPromptModal();
+
         // Check if prompt has steps (multi-step mode)
         if (prompt.steps && prompt.steps.length > 0) {
             // Restore saved step index
@@ -1105,6 +1108,35 @@ class PromptLibrary {
 
         // Cleanup keyboard handling
         this.cleanupKeyboardHandling();
+    }
+
+    /**
+     * Reset prompt modal to clean state
+     * Prevents state leakage when switching between prompt types
+     */
+    resetPromptModal() {
+        if (!this.promptModal) return;
+        
+        Object.assign(this.promptModal, {
+            // Core content
+            title: '',
+            category: '',
+            description: '',
+            template: '',
+            variables: [],
+            variations: [],
+            steps: [],
+            
+            // Indices
+            activeVariationIndex: 0,
+            activeStepIndex: 0,
+            
+            // UI state
+            mode: 'locked',
+            activeTab: 'variables'
+            
+            // Note: Don't set 'open' here - caller controls modal visibility
+        });
     }
 
     /**
