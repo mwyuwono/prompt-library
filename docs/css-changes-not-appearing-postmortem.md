@@ -594,3 +594,51 @@ cd m3-design-v2
 ./scripts/verify-deployment.sh
 # Hard refresh browser (Cmd+Shift+R)
 ```
+
+---
+
+## Protocol Validation Test (2026-02-03)
+
+To validate the new commit-hash deployment protocol, we made 5 CSS changes and deployed them in one pass:
+
+### Test Changes Made
+
+| # | Component | Change | File |
+|---|-----------|--------|------|
+| 1 | Stepper | Remove `padding-top: var(--spacing-lg)` | wy-prompt-modal.js |
+| 2 | Info Panel | Remove border from `.panel` | wy-info-panel.js |
+| 3 | Modal Header | Change bottom padding to `0` | wy-prompt-modal.js |
+| 4 | Controls Bar | Increase vertical padding to `16px` | wy-controls-bar.js |
+| 5 | Admin | Reduce top padding to `var(--spacing-md)` | admin.css |
+
+### Deployment Executed
+
+```bash
+./scripts/deploy.sh "Test deployment protocol: CSS spacing adjustments"
+```
+
+**Results:**
+- Commit hash: `@a845b15`
+- Bundle size: 667,981 bytes
+- All verification checks passed
+- CDN serving correct version immediately (no stale cache)
+
+### Verification Results
+
+```
+1. Local Bundle: ✅ Bundle sizes match (667,981 bytes)
+2. CDN Version:  ✅ CDN bundle size matches local dist
+3. Commit Hash:  ✅ CDN is pinned to current HEAD (@a845b15)
+4. Admin:        ✅ Cache-busting parameter updated
+5. Git Status:   ✅ Design system clean
+```
+
+### Protocol Status: ✅ VALIDATED
+
+The commit-hash pinning approach successfully:
+1. Eliminated CDN cache staleness issues
+2. Enabled single-command deployment
+3. Provided immediate verification of propagation
+4. Required no manual cache purging or waiting
+
+**This protocol should be used for all future design system deployments.**
