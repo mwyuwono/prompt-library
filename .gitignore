@@ -18,3 +18,7 @@ node_modules/
 .env
 .env.local
 .env.*.local
+
+# Local design system builds (use CDN instead)
+web-components.js
+web-components.js.map
