@@ -5991,7 +5991,7 @@ class Za extends g {
       display: block;
       background-color: var(--wy-controls-bar-bg, transparent);
       border-bottom: var(--wy-controls-bar-border, none);
-      padding: var(--wy-controls-bar-padding, 8px 32px);
+      padding: var(--wy-controls-bar-padding, 16px 32px);
       box-sizing: border-box;
     }
 
@@ -7380,15 +7380,13 @@ class as extends g {
         
         .panel {
             background-color: var(--wy-info-panel-bg);
-            border: 1px solid var(--wy-info-panel-border);
             border-radius: var(--md-sys-shape-corner-medium, 16px);
             padding: var(--wy-info-panel-padding);
             color: var(--wy-info-panel-text-color);
             font-family: var(--font-sans, 'DM Sans', sans-serif);
             font-size: var(--wy-info-panel-font-size);
             line-height: 1.6;
-            transition: background-color var(--md-sys-motion-duration-short4, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
-                        border-color var(--md-sys-motion-duration-short4, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition: background-color var(--md-sys-motion-duration-short4, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
         }
         
         .panel p {
@@ -7402,7 +7400,6 @@ class as extends g {
         .panel.compact {
             padding: var(--wy-info-panel-compact-padding);
             background-color: var(--wy-info-panel-compact-bg);
-            border-color: var(--wy-info-panel-compact-border);
         }
         
         .panel-heading {
@@ -10476,7 +10473,7 @@ class fs extends g {
 
     /* HEADER STYLES */
     .header {
-      padding: var(--spacing-xl, 32px) var(--spacing-xl, 32px) var(--spacing-lg, 24px);
+      padding: var(--spacing-xl, 32px) var(--spacing-xl, 32px) 0;
       display: flex;
       flex-direction: column;
       gap: var(--spacing-md, 16px);
@@ -10940,7 +10937,6 @@ class fs extends g {
       background: var(--wy-color-surface-light);
       z-index: 10;
       margin-bottom: var(--spacing-xl, 32px);
-      padding-top: var(--spacing-lg, 24px);
     }
 
     .stepper-progress {
