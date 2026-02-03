@@ -2,7 +2,7 @@
 
 **Date:** 2026-02-03  
 **Project:** prompt-library  
-**Status:** IN PROGRESS - Outstanding issues remain
+**Status:** ✅ COMPLETE - All issues resolved, automation implemented
 
 ## Summary
 
@@ -116,40 +116,49 @@ If browser partially supports, Rule 2 might apply without Rule 3 working.
 
 ---
 
-## Outstanding Issues
+## Resolved Issues (Previously Outstanding)
 
-### Issue 4: Changes Still Not Visible After All Fixes
-**Reported:** After applying all fixes above  
-**Symptom:** User reports changes still not visible in admin
+### Issue 4: Sticky Actions Still Not Working After CSS Fix
+**Reported:** After applying duplicate selector fix  
+**Symptom:** Actions panel still scrolls with page despite correct CSS
 
-**Possible Causes to Investigate:**
+**Root Cause: Shadow DOM Scroll Context Isolation**
 
-1. **Server Not Restarted**
-   - Admin requires Node.js server (`node server.js`)
-   - Server may be serving old files from memory/cache
-   - Solution: Restart server, reload page
+The CSS was correct (`position: sticky; top: 0;`), but `position: sticky` works relative to the nearest scrollable ancestor. The problem:
 
-2. **Browser Service Worker Cache**
-   - Some browsers cache module imports aggressively
-   - Cache-busting parameter may not be enough
-   - Solution: Clear browser cache completely, or use DevTools to disable cache
+```
+#main-content (overflow-y: auto) ← Scrolling happens HERE (light DOM)
+  └── wy-prompt-editor (Shadow DOM boundary)
+        └── .editor-form
+              └── .actions (position: sticky) ← Can't see parent scroll context
+```
 
-3. **Module Import Caching**
-   - ES modules (`<script type="module">`) are cached by browser
-   - Even with `?v=` parameter, browser may serve cached module
-   - Solution: Add timestamp to cache-busting (e.g., `?v=20260203-162750`)
+Shadow DOM creates isolation - the `.actions` element couldn't "see" that `#main-content` was scrolling because it's outside the Shadow DOM boundary.
 
-4. **Git Not Pulled on Server**
-   - If running server from different directory
-   - May be serving old files that haven't been pulled
-   - Solution: `git pull` in server directory
+**Resolution:**
+- Moved scroll context INTO the Shadow DOM
+- Made `.editor-form` the scrollable container (`overflow-y: auto; max-height: calc(100vh - 48px)`)
+- Removed `overflow-y: auto` from `#main-content` in admin.css
+- Now `.actions` is sticky relative to `.editor-form`'s scroll
 
-5. **Wrong URL/Port**
-   - User may be accessing wrong server instance
-   - Check if accessing http://localhost:3000/admin or http://localhost:8001/admin
-   - Solution: Verify correct URL
+**Status:** ✅ RESOLVED
 
-**Status:** 🔍 INVESTIGATING
+---
+
+### Issue 5: Info Panel Background Still Missing on Public Site
+**Reported:** After Shadow DOM CSS fix was applied  
+**Symptom:** Step instructions in Essay Topic Discovery still had transparent background
+
+**Root Cause: Stale CDN Cache-Busting Parameter**
+
+The CSS custom property fix was in the local bundle, but `components/index.js` still had the old cache-busting parameter `?v=20260203-featured` instead of the updated one.
+
+**Resolution:**
+- Updated `components/index.js` to `?v=20260203-sticky-fix`
+- Purged jsDelivr CDN cache
+- Committed and pushed changes
+
+**Status:** ✅ RESOLVED
 
 ---
 
@@ -315,6 +324,39 @@ child-component {
 }
 ```
 
+### 7. Shadow DOM Scroll Context Isolation Breaks position: sticky
+
+**Problem:** `position: sticky` inside Shadow DOM can't detect scroll context in light DOM parent.
+
+**How it happens:**
+```
+#parent (overflow-y: auto) ← Scrolling container (light DOM)
+  └── my-component (Shadow DOM boundary)
+        └── .sticky-element (position: sticky) ← Can't see parent scroll
+```
+
+**Result:** Element doesn't stick because it's looking for scroll context within Shadow DOM, which doesn't exist.
+
+**Prevention:**
+- **Move scroll context INTO the Shadow DOM**
+- Make an internal element the scroll container (`overflow-y: auto; max-height: ...`)
+- Sticky element will then work relative to internal scroll context
+- Remove `overflow-y: auto` from light DOM parent to prevent double scroll bars
+
+**Example Fix:**
+```css
+/* Shadow DOM CSS */
+.internal-container {
+    overflow-y: auto;
+    max-height: calc(100vh - 48px);
+}
+
+.sticky-header {
+    position: sticky;
+    top: 0;
+}
+```
+
 ---
 
 ## Complete Checklist for Design System Changes
@@ -338,46 +380,42 @@ When making changes to m3-design-v2 components:
 
 ---
 
-## Outstanding Questions
+## Troubleshooting Checklist (For Future Reference)
 
-1. **Is the admin server running?**
+If changes don't appear after running `deploy.sh`, check these in order:
+
+1. **Run verification script first:**
+   ```bash
+   ./scripts/verify-deployment.sh
+   ```
+
+2. **Is the admin server running?**
    - Check: `ps aux | grep "node server"`
-   - Verify: http://localhost:3000/admin or http://localhost:8001/admin?
+   - Restart: `cd prompt-library && node server.js`
 
-2. **Has the server been restarted since bundle update?**
-   - Node.js may cache require() modules
-   - Solution: Restart `node server.js`
+3. **Browser cache:**
+   - Hard refresh: `Cmd+Shift+R` (Mac) or `Ctrl+Shift+R` (Windows)
+   - Or: Open DevTools → Network tab → Check "Disable cache"
+   - Or: Test in incognito window
 
-3. **Is browser cache fully cleared?**
-   - Try: Open DevTools → Network tab → Check "Disable cache"
-   - Try: Incognito window
-   - Try: Clear all browser data for localhost
+4. **Verify correct URL:**
+   - Admin: http://localhost:3000/admin
+   - Public: http://localhost:3000
 
-4. **Are we accessing the correct URL?**
-   - Multiple servers may be running on different ports
-   - Verify which port has the updated files
-
----
-
-## Next Steps
-
-1. User confirms which specific changes are still not appearing:
-   - [ ] Sticky actions panel?
-   - [ ] Info panel background color?
-   - [ ] Featured toggle?
-   - [ ] Variation editor?
-
-2. Verify server status and URL:
-   - [ ] Check which server is running
-   - [ ] Confirm URL being accessed
-   - [ ] Restart server with latest files
-
-3. Nuclear option if all else fails:
-   - [ ] Kill all Node.js/Python servers
-   - [ ] Clear browser cache completely
-   - [ ] `cd prompt-library && git pull`
-   - [ ] `node server.js`
-   - [ ] Open http://localhost:3000/admin in incognito window
+5. **Nuclear option:**
+   ```bash
+   # Kill all servers
+   pkill -f "node server"
+   
+   # Clear browser cache completely
+   # (Do this manually in browser settings)
+   
+   # Fresh start
+   cd prompt-library
+   git pull
+   node server.js
+   # Open http://localhost:3000/admin in incognito
+   ```
 
 ---
 
@@ -410,20 +448,72 @@ When making changes to m3-design-v2 components:
 
 ---
 
-## Prevention Strategy (TO DO)
+## Prevention Strategy (IMPLEMENTED)
 
-Once all issues resolved, create:
+All automation has been created to prevent recurrence:
 
-1. **Pre-commit Hook** - Reminds to build dist/ if src/ changed
-2. **Build Script** - Automates build + copy + cache-busting update
-3. **Verification Script** - Tests that changes appear in all consuming projects
-4. **Documentation** - Step-by-step checklist in CLAUDE.md files
+### 1. ✅ Automated Deploy Script (`m3-design-v2/scripts/deploy.sh`)
+
+One command handles the entire deployment workflow:
+
+```bash
+./scripts/deploy.sh "Description of changes"
+```
+
+The script automatically:
+1. Builds `dist/web-components.js`
+2. Commits both `src/` and `dist/` changes
+3. Pushes to GitHub
+4. Purges jsDelivr CDN cache
+5. Copies bundle to `prompt-library`
+6. Updates cache-busting parameters in `admin.html` and `components/index.js`
+7. Commits `prompt-library` changes
+
+### 2. ✅ Verification Script (`m3-design-v2/scripts/verify-deployment.sh`)
+
+Confirms changes propagated to all consumers:
+
+```bash
+./scripts/verify-deployment.sh ["expected-code-snippet"]
+```
+
+Checks:
+- Bundle sizes match between design system and prompt-library
+- CDN is responding with current version
+- Cache-busting parameters are consistent
+- Git status is clean in both repos
+
+### 3. ✅ Documentation Updated
+
+- `m3-design-v2/CLAUDE.md` - Includes automated deployment instructions
+- `prompt-library/CLAUDE.md` - Cache-busting guidance
+- `plots/CLAUDE.md` - npm link workflow
+- `Weaver-Yuwono-Home-Page/CLAUDE.md` - CDN cache workflow
+
+### 4. Pre-commit Hook (Optional Future Enhancement)
+
+Not yet implemented. Could add as git hook to remind about build step.
 
 ---
 
-## Status: AWAITING USER FEEDBACK
+## Final Status: ✅ COMPLETE
 
-Please check the admin page now and confirm:
-1. What URL are you accessing? (http://localhost:3000/admin or other?)
-2. Which changes are still not visible?
-3. Can you open DevTools → Network tab and verify `web-components.js?v=20260203-1627` is being loaded (not an older version)?
+All issues have been resolved and automation has been implemented to prevent recurrence.
+
+**Summary of Fixes:**
+1. Featured filter chip - Build was not run ✅
+2. Sticky actions - Duplicate CSS selectors + Shadow DOM scroll context isolation ✅
+3. Info panel background - :host-context() browser support + stale cache-busting ✅
+
+**Automation Delivered:**
+- `scripts/deploy.sh` - One-command deployment
+- `scripts/verify-deployment.sh` - Verification of propagation
+
+**To Deploy Future Changes:**
+```bash
+cd m3-design-v2
+# Make your changes to src/
+./scripts/deploy.sh "Description of changes"
+./scripts/verify-deployment.sh
+# Hard refresh browser (Cmd+Shift+R)
+```
