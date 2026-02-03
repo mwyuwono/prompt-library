@@ -8,11 +8,17 @@ A vanilla JavaScript prompt management tool with zero dependencies and no build 
 
 ## Running the Application
 
+**Public Site:**
 ```bash
 python3 -m http.server 8000  # Then open http://localhost:8000
 ```
 
-No installation, build, or compilation steps required.
+**Admin Interface:**
+```bash
+node server.js  # Then open http://localhost:3000/admin
+```
+
+No build process required for either mode. Admin requires Node.js server for API endpoints.
 
 ## Design System Integration
 
@@ -81,11 +87,16 @@ Prefer these over hardcoded values:
 
 ```
 /
-├── index.html       # Main HTML structure
-├── app.js           # Single PromptLibrary class orchestrating everything
+├── index.html       # Public site (read-only)
+├── app.js           # Public site logic (PromptLibrary class)
+├── admin.html       # Admin interface (editable)
+├── admin.js         # Admin orchestration logic
+├── admin.css        # Admin page layout
+├── server.js        # Express server with API endpoints
 ├── tokens.css       # Design system imports + legacy compatibility mappings
-├── styles.css       # App-specific component styles only
-└── prompts.json     # Prompt data source
+├── styles.css       # Public site component styles
+├── prompts.json     # Prompt data source (writable via admin API)
+└── web-components.js # Local design system bundle (with save fix)
 ```
 
 ### State Management
@@ -182,8 +193,84 @@ git add . && git commit -m "Description
 Co-Authored-By: Claude <noreply@anthropic.com>" && git push
 ```
 
+### Cache-Busting Parameter Management
+
+**CRITICAL: After updating local `web-components.js` bundle, update cache-busting parameters in HTML files.**
+
+This project uses **two import methods**:
+
+1. **Admin (local bundle):** `admin.html` imports `./web-components.js?v=YYYYMMDD-description`
+2. **Public site (CDN):** `components/index.js` imports from jsDelivr with `?v=YYYYMMDD`
+
+**When to Update Cache-Busting:**
+
+- After copying new `web-components.js` from m3-design-v2
+- After making changes to design system components (wy-prompt-editor, wy-info-panel, etc.)
+- When CSS changes to components aren't appearing in browser
+
+**Workflow:**
+
+```bash
+# 1. Copy latest bundle from design system
+cd m3-design-v2
+npm run build
+cp dist/web-components.js ../prompt-library/web-components.js
+
+# 2. Update cache-busting parameters
+# Edit admin.html line 52: Change ?v=old-value to ?v=YYYYMMDD-description
+# Edit components/index.js line 9: Update ?v=YYYYMMDD
+
+# 3. Commit the changes
+cd ../prompt-library
+git add web-components.js admin.html components/index.js
+git commit -m "Update bundle and cache-busting parameters"
+git push
+```
+
+**Quick Check for Stale Cache-Busting:**
+
+```bash
+# Search for old cache-busting parameters
+grep -r "web-components.js?v=" admin.html components/index.js
+```
+
+**Expected Output (Update if dates are old):**
+- `admin.html`: `./web-components.js?v=YYYYMMDD-description`
+- `components/index.js`: `web-components.js?v=YYYYMMDD`
+
+## Admin System
+
+This project includes a local-only admin interface for editing prompts visually.
+
+**Documentation:** [docs/admin-system-plan.md](docs/admin-system-plan.md)
+
+**Quick Start:**
+1. Start server: `node server.js`
+2. Open: http://localhost:3000/admin
+3. Select prompt from sidebar
+4. Edit in multi-step form
+5. Save changes → updates `prompts.json`
+6. Commit and push to publish
+
+**Key Features:**
+- Multi-step editor (Basic Info, Visuals, Variables, Template, Visibility)
+- Image upload/delete with drag-drop
+- Material Symbols icon picker
+- Variable editor with conditional visibility
+- Archive toggle (hides from public site)
+- Live preview panel
+
+**Architecture:**
+- Web Components from m3-design-v2 (local bundle with save fix)
+- Express server with 6 API endpoints
+- Sidebar navigation with URL hash routing
+- Changes write to `prompts.json` immediately
+
+See [docs/admin-system-plan.md](docs/admin-system-plan.md) for complete API reference, component details, and troubleshooting.
+
 ## See Also
 
+- **Admin System**: [docs/admin-system-plan.md](docs/admin-system-plan.md) - Complete admin interface documentation
 - **Visual QA**: [skills/visual-qa/SKILL.md](skills/visual-qa/SKILL.md) - Screenshot testing after CSS changes
 - **CDN Troubleshooting**: [docs/cdn-troubleshooting.md](docs/cdn-troubleshooting.md) - Cache purging and verification
 - **Repository**: https://github.com/mwyuwono/prompt-library
