@@ -162,6 +162,31 @@ The CSS custom property fix was in the local bundle, but `components/index.js` s
 
 ---
 
+### Clarification: Info Panel Variants Are Intentional Design
+
+**Observation:** After fixing the CDN issue, users noted that:
+- Essay Topic Discovery (multi-step prompt): Info panel HAS secondary-container background
+- Restyle Image (single prompt with description): Info panel has transparent background
+
+**This is NOT a bug - it's intentional design:**
+
+The `wy-info-panel` component has two visual variants:
+
+| Usage | HTML | Background |
+|-------|------|------------|
+| Step instructions | `<wy-info-panel variant="compact">` | `secondary-container` (#E8DDD7) |
+| Description text | `<wy-info-panel>` (default) | `transparent` |
+
+**Code location:** [m3-design-v2/src/components/wy-prompt-modal.js](../../../m3-design-v2/src/components/wy-prompt-modal.js) lines 857-862 (compact) and 970-972 (default)
+
+**Why two variants:**
+- **Compact with background**: Used for step instructions that need visual prominence and separation from variables
+- **Transparent**: Used for supplementary description text that should blend with the modal
+
+This is working correctly at the design system level.
+
+---
+
 ## System Architecture Context
 
 ### Design System Distribution (m3-design-v2)

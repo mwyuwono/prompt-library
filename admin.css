@@ -121,7 +121,7 @@
 
 /* Main Content */
 #main-content {
-    padding: var(--spacing-2xl, 48px) var(--spacing-3xl, 64px);
+    padding: var(--spacing-md, 16px) var(--spacing-3xl, 64px) var(--spacing-2xl, 48px);
     /* overflow-y removed - scroll context moved to wy-prompt-editor Shadow DOM for sticky positioning */
     max-width: 100%;
 }
