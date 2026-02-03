@@ -52,16 +52,19 @@ No build process required for either mode. Admin requires Node.js server for API
 
 **Web Components** (via `components/index.js`):
 ```javascript
-import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/dist/web-components.js?v=20260130';
+// Uses commit hash pinning for reliability (auto-updated by deploy.sh)
+import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@<commit>/dist/web-components.js';
 ```
 
 ### Import Policy
 
-Prefer `@main` with cache-busting (`?v=YYYYMMDD`). Only pin to commit hashes as emergency fallback with a documented reason and revert deadline (24-48h max).
+**Web components use commit hash pinning** (`@abc1234`) for reliability. The `m3-design-v2/scripts/deploy.sh` script automatically updates this hash after each deployment.
+
+CSS tokens still use `@main` (less frequently updated, cache issues less critical).
 
 ### CDN Cache Issues
 
-If design system changes don't appear or components behave unexpectedly, **check for stale CDN cache first**. See [docs/cdn-troubleshooting.md](docs/cdn-troubleshooting.md) for purge commands and verification steps.
+If design system changes don't appear, see [docs/css-changes-not-appearing-postmortem.md](docs/css-changes-not-appearing-postmortem.md) for root causes and the complete troubleshooting guide.
 
 ### Available Design Tokens
 
@@ -193,50 +196,26 @@ git add . && git commit -m "Description
 Co-Authored-By: Claude <noreply@anthropic.com>" && git push
 ```
 
-### Cache-Busting Parameter Management
+### Design System Deployment
 
-**CRITICAL: After updating local `web-components.js` bundle, update cache-busting parameters in HTML files.**
-
-This project uses **two import methods**:
-
-1. **Admin (local bundle):** `admin.html` imports `./web-components.js?v=YYYYMMDD-description`
-2. **Public site (CDN):** `components/index.js` imports from jsDelivr with `?v=YYYYMMDD`
-
-**When to Update Cache-Busting:**
-
-- After copying new `web-components.js` from m3-design-v2
-- After making changes to design system components (wy-prompt-editor, wy-info-panel, etc.)
-- When CSS changes to components aren't appearing in browser
-
-**Workflow:**
+**All design system changes should be deployed via the automated script in m3-design-v2:**
 
 ```bash
-# 1. Copy latest bundle from design system
-cd m3-design-v2
-npm run build
-cp dist/web-components.js ../prompt-library/web-components.js
-
-# 2. Update cache-busting parameters
-# Edit admin.html line 52: Change ?v=old-value to ?v=YYYYMMDD-description
-# Edit components/index.js line 9: Update ?v=YYYYMMDD
-
-# 3. Commit the changes
-cd ../prompt-library
-git add web-components.js admin.html components/index.js
-git commit -m "Update bundle and cache-busting parameters"
-git push
+cd ../m3-design-v2
+./scripts/deploy.sh "Description of changes"
+./scripts/verify-deployment.sh
 ```
 
-**Quick Check for Stale Cache-Busting:**
+This automatically:
+- Builds and commits design system changes
+- Copies bundle to `prompt-library/web-components.js`
+- Updates `admin.html` cache-busting parameter
+- Updates `components/index.js` commit hash
+- Commits prompt-library changes
 
-```bash
-# Search for old cache-busting parameters
-grep -r "web-components.js?v=" admin.html components/index.js
-```
+**After deployment:** Push prompt-library changes and hard refresh browser (`Cmd+Shift+R`).
 
-**Expected Output (Update if dates are old):**
-- `admin.html`: `./web-components.js?v=YYYYMMDD-description`
-- `components/index.js`: `web-components.js?v=YYYYMMDD`
+**Troubleshooting:** See [docs/css-changes-not-appearing-postmortem.md](docs/css-changes-not-appearing-postmortem.md)
 
 ## Admin System
 

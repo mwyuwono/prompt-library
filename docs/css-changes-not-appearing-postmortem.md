@@ -599,7 +599,7 @@ cd m3-design-v2
 
 ## Protocol Validation Test (2026-02-03)
 
-To validate the new commit-hash deployment protocol, we made 5 CSS changes and deployed them in one pass:
+To validate the new commit-hash deployment protocol, we made multiple CSS changes and deployed them:
 
 ### Test Changes Made
 
@@ -608,30 +608,21 @@ To validate the new commit-hash deployment protocol, we made 5 CSS changes and d
 | 1 | Stepper | Remove `padding-top: var(--spacing-lg)` | wy-prompt-modal.js |
 | 2 | Info Panel | Remove border from `.panel` | wy-info-panel.js |
 | 3 | Modal Header | Change bottom padding to `0` | wy-prompt-modal.js |
-| 4 | Controls Bar | Increase vertical padding to `16px` | wy-controls-bar.js |
-| 5 | Admin | Reduce top padding to `var(--spacing-md)` | admin.css |
+| 4 | Admin | Reduce top padding to `var(--spacing-md)` | admin.css |
+| 5 | Controls Bar (scrolled) | Add `background-color: surface-variant`, `padding: 0 8px` | wy-controls-bar.js |
 
 ### Deployment Executed
 
 ```bash
-./scripts/deploy.sh "Test deployment protocol: CSS spacing adjustments"
+./scripts/deploy.sh "Description of changes"
 ```
 
-**Results:**
-- Commit hash: `@a845b15`
-- Bundle size: 667,981 bytes
+**Final Results:**
+- Commit hash: `@4216243`
+- Bundle size: 668,091 bytes
 - All verification checks passed
 - CDN serving correct version immediately (no stale cache)
-
-### Verification Results
-
-```
-1. Local Bundle: ✅ Bundle sizes match (667,981 bytes)
-2. CDN Version:  ✅ CDN bundle size matches local dist
-3. Commit Hash:  ✅ CDN is pinned to current HEAD (@a845b15)
-4. Admin:        ✅ Cache-busting parameter updated
-5. Git Status:   ✅ Design system clean
-```
+- User confirmed all visual changes appeared correctly
 
 ### Protocol Status: ✅ VALIDATED
 
