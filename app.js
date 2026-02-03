@@ -10,6 +10,7 @@ class PromptLibrary {
         this.selectedCategory = 'Creativity'; // Default to Creativity
         this.showDetails = true; // Default to visible on desktop
         this.currentView = 'grid'; // Default to grid view
+        this.showFeaturedOnly = false; // Default to showing all prompts
 
         // DOM elements
         this.promptGrid = document.getElementById('promptGrid');
@@ -98,11 +99,19 @@ class PromptLibrary {
     setupEventListeners() {
         if (this.controlsBar) {
             this.controlsBar.addEventListener('filter-change', (e) => {
-                const { search, searchValue, viewMode, showDetails, category } = e.detail;
+                const { search, searchValue, viewMode, showDetails, category, showFeaturedOnly } = e.detail;
                 // Support both 'search' and 'searchValue' for compatibility with controls bar component
                 this.searchTerm = (search || searchValue || '').toLowerCase();
                 this.showDetails = Boolean(showDetails);
-                this.selectedCategory = category === 'all' ? '' : category;
+                this.showFeaturedOnly = Boolean(showFeaturedOnly);
+                
+                // When Featured filter is active, ignore category selection
+                if (this.showFeaturedOnly) {
+                    this.selectedCategory = '';
+                } else {
+                    this.selectedCategory = category === 'all' ? '' : category;
+                }
+                
                 if (viewMode && viewMode !== this.currentView) {
                     this.switchView(viewMode);
                 }
@@ -231,10 +240,11 @@ class PromptLibrary {
         this.controlsBar.showDetails = this.showDetails;
         this.controlsBar.searchValue = this.searchTerm;
         this.controlsBar.activeCategory = this.selectedCategory || 'all';
+        this.controlsBar.showFeaturedOnly = this.showFeaturedOnly;
     }
 
     /**
-     * Filter prompts based on search term and category
+     * Filter prompts based on search term, category, and featured status
      */
     filterPrompts() {
         this.filteredPrompts = this.prompts.filter(prompt => {
@@ -259,12 +269,26 @@ class PromptLibrary {
                 }
             }
 
+            // Featured filter is EXCLUSIVE - when active, show ONLY featured prompts
+            if (this.showFeaturedOnly) {
+                return matchesSearch && (prompt.featured === true);
+            }
+
+            // Otherwise apply category filter as before
             let matchesCategory = true;
             if (this.selectedCategory) {
                 matchesCategory = prompt.category === this.selectedCategory;
             }
 
             return matchesSearch && matchesCategory;
+        });
+
+        // Sort: Featured prompts first, then the rest
+        this.filteredPrompts.sort((a, b) => {
+            const aFeatured = a.featured === true ? 1 : 0;
+            const bFeatured = b.featured === true ? 1 : 0;
+            // Sort descending (featured first)
+            return bFeatured - aFeatured;
         });
 
         this.renderPrompts();
@@ -562,18 +586,27 @@ class PromptLibrary {
 
         // Icon section for non-image cards
         let iconHTML = '';
-        if (!prompt.image && (prompt.icon || prompt.featured)) {
-            const variantClass = prompt.featured ? 'icon-featured' : 'icon-neutral';
-            const iconName = prompt.featured ? 'auto_fix_high' : (prompt.icon || 'star');
-            iconHTML = `
-                <div class="card-icon-container ${variantClass}">
-                    <span class="material-symbols-outlined">${iconName}</span>
-                </div>
-            `;
+        if (!prompt.image) {
+            // For featured prompts, show heart icon in circular container
+            if (prompt.featured) {
+                iconHTML = `
+                    <div class="card-icon-container icon-featured">
+                        <span class="material-symbols-outlined">favorite</span>
+                    </div>
+                `;
+            } else if (prompt.icon) {
+                // For non-featured prompts with custom icon
+                iconHTML = `
+                    <div class="card-icon-container icon-neutral">
+                        <span class="material-symbols-outlined">${prompt.icon}</span>
+                    </div>
+                `;
+            }
         }
 
-        // Tag/Badge section (Category badge for non-image cards only)
-        const badgeHTML = !prompt.image && prompt.category ? `
+        // Tag/Badge section (Category badge for non-image cards only, unless featured)
+        // When featured, don't show category badge (heart icon replaces it)
+        const badgeHTML = !prompt.image && !prompt.featured && prompt.category ? `
             <div class="card-badge">${this.escapeHTML(prompt.category).toUpperCase()}</div>
         ` : '';
 
