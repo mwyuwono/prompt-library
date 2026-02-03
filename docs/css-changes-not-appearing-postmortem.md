@@ -357,26 +357,78 @@ child-component {
 }
 ```
 
+### 8. jsDelivr @main is Unreliable - Use Commit Hashes
+
+**Problem:** jsDelivr CDN `@main` serves inconsistent stale content even after purging.
+
+**Evidence:**
+| Source | Bundle Size | Status |
+|--------|-------------|--------|
+| Local dist/web-components.js | 668,315 bytes | Correct |
+| GitHub API | 668,315 bytes | Correct |
+| CDN with commit hash `@e5df6a9` | 668,315 bytes | Correct |
+| CDN with `@main` | 637,784 bytes | **STALE** |
+
+**Why this happens:**
+- jsDelivr has multiple edge servers worldwide
+- Each edge server caches independently
+- Purge requests don't reliably propagate to all edges
+- Different users may get different cached versions of `@main`
+- Even "successful" purge responses don't guarantee all edges are updated
+
+**Result:** After pushing changes and purging, some users see new version, others see old version. Debugging nightmare.
+
+**Prevention:**
+- **NEVER use `@main` for production CDN imports**
+- **Always use commit hashes** (`@abc1234`) - they are immutable
+- Commit hash references are cached correctly because they can never change
+- No purging needed - just point to the new hash
+
+**Example:**
+```javascript
+// ❌ BAD - Unreliable
+import 'https://cdn.jsdelivr.net/gh/user/repo@main/dist/bundle.js';
+
+// ✅ GOOD - Immutable reference
+import 'https://cdn.jsdelivr.net/gh/user/repo@abc1234/dist/bundle.js';
+```
+
+**Updated deploy workflow:**
+1. Build and commit changes
+2. Push to GitHub
+3. Capture commit hash: `git rev-parse --short HEAD`
+4. Update CDN imports to use that hash
+5. Commit consuming project changes
+
+The `deploy.sh` script now does this automatically.
+
 ---
 
 ## Complete Checklist for Design System Changes
 
-When making changes to m3-design-v2 components:
+**Recommended: Use the automated script:**
+```bash
+cd m3-design-v2
+./scripts/deploy.sh "Description of changes"
+./scripts/verify-deployment.sh
+```
+
+**Manual process (if needed):**
 
 - [ ] 1. Edit source files in `src/components/`
 - [ ] 2. Run `npm run build` to create `dist/web-components.js`
 - [ ] 3. Commit **both** `src/` and `dist/` files together
 - [ ] 4. Push to GitHub
-- [ ] 5. Purge jsDelivr CDN cache (for CDN-consuming projects)
+- [ ] 5. Capture commit hash: `HASH=$(git rev-parse --short HEAD)`
 - [ ] 6. Copy `dist/web-components.js` to projects using local bundles:
   - [ ] `cp dist/web-components.js ../prompt-library/web-components.js`
-- [ ] 7. Update cache-busting parameters in consuming projects:
-  - [ ] `prompt-library/admin.html` - Change `?v=` to current timestamp
-  - [ ] `prompt-library/components/index.js` - Update `?v=` parameter
-  - [ ] `Weaver-Yuwono-Home-Page/projects/projects.css` - Update `?v=` in @import
+- [ ] 7. Update imports in consuming projects:
+  - [ ] `prompt-library/admin.html` - Update `?v=` timestamp for local bundle
+  - [ ] `prompt-library/components/index.js` - Update commit hash `@xxx` (NOT @main!)
+  - [ ] `Weaver-Yuwono-Home-Page/projects/projects.css` - Update commit hash in @import
 - [ ] 8. Commit bundle updates in consuming projects
 - [ ] 9. Hard refresh browser (`Cmd+Shift+R`) or clear cache
-- [ ] 10. Verify changes appear in all consuming projects
+- [ ] 10. Run `./scripts/verify-deployment.sh` to confirm propagation
 
 ---
 

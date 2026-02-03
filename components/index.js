@@ -6,6 +6,8 @@
  */
 
 // Import from CDN (deployed to all environments)
-import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/dist/web-components.js?v=20260203-sticky-fix';
+// Using commit hash instead of @main for reliable CDN delivery
+// @main is unreliable - see docs/css-changes-not-appearing-postmortem.md Lesson 8
+import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@e5df6a9/dist/web-components.js';
 
 console.log('[Components] m3-design-v2 web components registered (CDN)');
