@@ -110,6 +110,19 @@ If you find yourself writing `::part()` selectors for padding, gaps, max-width, 
 
 **If you see ::part() overrides in this codebase:** They are legacy anti-patterns that should be refactored. Do not add more.
 
+### CRITICAL: web-components.js is a Bundled Copy
+
+**NEVER edit web-components.js directly in prompt-library.**
+
+This file is a bundled copy from `m3-design-v2/dist/web-components.js`. Any direct edits will be overwritten the next time the design system is deployed.
+
+**To fix web component bugs:**
+1. Edit source components in `m3-design-v2/src/components/`
+2. Run `m3-design-v2/scripts/deploy.sh "description"`
+3. Changes automatically propagate to prompt-library and all consuming projects
+
+**Exception:** Quick local testing only - but changes must be ported to design system source before pushing.
+
 ### CDN Import Details
 
 **CSS tokens** (via `tokens.css`):
