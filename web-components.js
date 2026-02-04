@@ -6076,7 +6076,7 @@ class Za extends g {
     :host([data-scrolled]) .controls-container {
       gap: var(--wy-controls-container-gap-scrolled, 16px);
       max-width: 100%;
-      padding: 0 var(--wy-controls-padding-scrolled, 8px);
+      padding: var(--wy-controls-container-gap-scrolled, 16px);
       border-radius: 9999px; /* Pill shape for scrolled state */
       transition: gap var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1)),
                   padding var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1));
