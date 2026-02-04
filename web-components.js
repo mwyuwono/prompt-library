@@ -6009,6 +6009,7 @@ class Za extends g {
       -webkit-backdrop-filter: blur(12px);
       border: 1px solid var(--md-sys-color-outline-variant, #D7D3C8);
       border-radius: 9999px;
+      overflow: visible; /* Ensure pill shape isn't clipped */
       padding: 8px 24px;
       box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
       transition: 
