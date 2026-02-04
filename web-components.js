@@ -6004,7 +6004,7 @@ class Za extends g {
       z-index: 100;
       width: auto;
       max-width: 900px;
-      background-color: rgba(245, 242, 234, 0.85);
+      background-color: color-mix(in srgb, var(--md-sys-color-surface) 60%, transparent);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border: 1px solid var(--md-sys-color-outline-variant, #D7D3C8);
@@ -6051,7 +6051,6 @@ class Za extends g {
     :host([data-scrolled]) .controls-container {
       gap: 16px;
       max-width: 100%;
-      background-color: var(--md-sys-color-surface-variant, #E8E4D9);
       padding: 0 var(--spacing-sm, 8px);
       border-radius: 9999px; /* Pill shape for scrolled state */
       transition: gap var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1));
