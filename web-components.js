@@ -46,10 +46,10 @@ const wi = (i) => new Bo(typeof i == "string" ? i : i + "", void 0, Gt), m = (i,
   for (const o of e.cssRules) t += o.cssText;
   return wi(t);
 })(i) : i;
-const { is: Ci, defineProperty: $i, getOwnPropertyDescriptor: Ei, getOwnPropertyNames: Si, getOwnPropertySymbols: Ti, getPrototypeOf: zi } = Object, Je = globalThis, bo = Je.trustedTypes, Ai = bo ? bo.emptyScript : "", Ii = Je.reactiveElementPolyfillSupport, ke = (i, e) => i, Xe = { toAttribute(i, e) {
+const { is: Ci, defineProperty: $i, getOwnPropertyDescriptor: Ei, getOwnPropertyNames: Si, getOwnPropertySymbols: Ti, getPrototypeOf: Ai } = Object, Je = globalThis, bo = Je.trustedTypes, zi = bo ? bo.emptyScript : "", Ii = Je.reactiveElementPolyfillSupport, ke = (i, e) => i, Xe = { toAttribute(i, e) {
   switch (e) {
     case Boolean:
-      i = i ? Ai : null;
+      i = i ? zi : null;
       break;
     case Object:
     case Array:
@@ -105,7 +105,7 @@ let ve = class extends HTMLElement {
   }
   static _$Ei() {
     if (this.hasOwnProperty(ke("elementProperties"))) return;
-    const e = zi(this);
+    const e = Ai(this);
     e.finalize(), e.l !== void 0 && (this.l = [...e.l]), this.elementProperties = new Map(e.elementProperties);
   }
   static finalize() {
@@ -285,7 +285,7 @@ function d(i) {
     return r.constructor.createProperty(a, o), n ? Object.getOwnPropertyDescriptor(r, a) : void 0;
   })(i, e, t);
 }
-function z(i) {
+function A(i) {
   return d({ ...i, state: !0, attribute: !1 });
 }
 const et = (i, e, t) => (t.configurable = !0, t.enumerable = !0, Reflect.decorate && typeof e != "object" && Object.defineProperty(i, e, t), t);
@@ -399,7 +399,7 @@ class Ni {
     for (; p !== void 0; ) {
       if (n === p.index) {
         let f;
-        p.type === 2 ? f = new Ae(a, a.nextSibling, this, e) : p.type === 1 ? f = new p.ctor(a, p.name, p.strings, this, e) : p.type === 6 && (f = new Hi(a, this, e)), this._$AV.push(f), p = o[++c];
+        p.type === 2 ? f = new ze(a, a.nextSibling, this, e) : p.type === 1 ? f = new p.ctor(a, p.name, p.strings, this, e) : p.type === 6 && (f = new Hi(a, this, e)), this._$AV.push(f), p = o[++c];
       }
       n !== p?.index && (a = de.nextNode(), n++);
     }
@@ -410,7 +410,7 @@ class Ni {
     for (const o of this._$AV) o !== void 0 && (o.strings !== void 0 ? (o._$AI(e, o, t), t += o.strings.length - 2) : o._$AI(e[t])), t++;
   }
 }
-class Ae {
+class ze {
   get _$AU() {
     return this._$AM?._$AU ?? this._$Cv;
   }
@@ -456,7 +456,7 @@ class Ae {
     Qt(this._$AH) || (this._$AH = [], this._$AR());
     const t = this._$AH;
     let o, r = 0;
-    for (const a of e) r === t.length ? t.push(o = new Ae(this.O($e()), this.O($e()), this, this.options)) : o = t[r], o._$AI(a), r++;
+    for (const a of e) r === t.length ? t.push(o = new ze(this.O($e()), this.O($e()), this, this.options)) : o = t[r], o._$AI(a), r++;
     r < t.length && (this._$AR(o && o._$AB.nextSibling, r), t.length = r);
   }
   _$AR(e = this._$AA.nextSibling, t) {
@@ -535,13 +535,13 @@ class Hi {
   }
 }
 const Wi = Zt.litHtmlPolyfillSupport;
-Wi?.(Se, Ae), (Zt.litHtmlVersions ??= []).push("3.3.2");
+Wi?.(Se, ze), (Zt.litHtmlVersions ??= []).push("3.3.2");
 const Jt = (i, e, t) => {
   const o = t?.renderBefore ?? e;
   let r = o._$litPart$;
   if (r === void 0) {
     const a = t?.renderBefore ?? null;
-    o._$litPart$ = r = new Ae(e.insertBefore($e(), a), a, void 0, t ?? {});
+    o._$litPart$ = r = new ze(e.insertBefore($e(), a), a, void 0, t ?? {});
   }
   return r._$AI(i), r;
 };
@@ -978,10 +978,10 @@ s([
   d({ type: Boolean, reflect: !0 })
 ], Ie.prototype, "disabled", void 0);
 s([
-  z()
+  A()
 ], Ie.prototype, "hovered", void 0);
 s([
-  z()
+  A()
 ], Ie.prototype, "pressed", void 0);
 s([
   w(".surface")
@@ -1102,10 +1102,10 @@ function pr(i, e) {
     throw new Error(`'${i.type}' event needs setupDispatchHooks().`);
   t.addEventListener("after", e);
 }
-const zo = /* @__PURE__ */ new WeakMap();
+const Ao = /* @__PURE__ */ new WeakMap();
 function hr(i, ...e) {
-  let t = zo.get(i);
-  t || (t = /* @__PURE__ */ new Set(), zo.set(i, t));
+  let t = Ao.get(i);
+  t || (t = /* @__PURE__ */ new Set(), Ao.set(i, t));
   for (const o of e) {
     if (t.has(o))
       continue;
@@ -1158,7 +1158,7 @@ function Oe(i) {
   }
   return e;
 }
-const Te = /* @__PURE__ */ Symbol("createValidator"), ze = /* @__PURE__ */ Symbol("getValidityAnchor"), lt = /* @__PURE__ */ Symbol("privateValidator"), Z = /* @__PURE__ */ Symbol("privateSyncValidity"), Fe = /* @__PURE__ */ Symbol("privateCustomValidationMessage");
+const Te = /* @__PURE__ */ Symbol("createValidator"), Ae = /* @__PURE__ */ Symbol("getValidityAnchor"), lt = /* @__PURE__ */ Symbol("privateValidator"), Z = /* @__PURE__ */ Symbol("privateSyncValidity"), Fe = /* @__PURE__ */ Symbol("privateCustomValidationMessage");
 function ro(i) {
   var e;
   class t extends i {
@@ -1192,12 +1192,12 @@ function ro(i) {
     [(e = Fe, Z)]() {
       this[lt] || (this[lt] = this[Te]());
       const { validity: r, validationMessage: a } = this[lt].getValidity(), n = !!this[Fe], c = this[Fe] || a;
-      this[N].setValidity({ ...r, customError: n }, c, this[ze]() ?? void 0);
+      this[N].setValidity({ ...r, customError: n }, c, this[Ae]() ?? void 0);
     }
     [Te]() {
       throw new Error("Implement [createValidator]");
     }
-    [ze]() {
+    [Ae]() {
       throw new Error("Implement [getValidityAnchor]");
     }
   }
@@ -1435,7 +1435,7 @@ class ae extends fr {
       required: this.required
     }));
   }
-  [ze]() {
+  [Ae]() {
     return this.input;
   }
 }
@@ -1684,7 +1684,7 @@ const ei = /* @__PURE__ */ Symbol.for(""), Tr = (i) => {
   if (a._$litStatic$ !== void 0) return a._$litStatic$;
   throw Error(`Value passed to 'literal' function must be a 'literal' result: ${a}. Use 'unsafeStatic' to pass non-literal values, but
             take care to ensure page security.`);
-})(o) + i[r + 1], i[0]), r: ei }), Ao = /* @__PURE__ */ new Map(), zr = (i) => (e, ...t) => {
+})(o) + i[r + 1], i[0]), r: ei }), zo = /* @__PURE__ */ new Map(), Ar = (i) => (e, ...t) => {
   const o = t.length;
   let r, a;
   const n = [], c = [];
@@ -1695,15 +1695,15 @@ const ei = /* @__PURE__ */ Symbol.for(""), Tr = (i) => {
   }
   if (f === o && n.push(e[o]), u) {
     const v = n.join("$$lit$$");
-    (e = Ao.get(v)) === void 0 && (n.raw = n, Ao.set(v, e = n)), t = c;
+    (e = zo.get(v)) === void 0 && (n.raw = n, zo.set(v, e = n)), t = c;
   }
   return i(e, ...t);
-}, lo = zr(l);
+}, lo = Ar(l);
 function Io(i, e = !0) {
   return e && getComputedStyle(i).getPropertyValue("direction").trim() === "rtl";
 }
-const Ar = Q(Oe(g));
-class L extends Ar {
+const zr = Q(Oe(g));
+class L extends zr {
   get name() {
     return this.getAttribute("name") ?? "";
   }
@@ -1848,7 +1848,7 @@ s([
   d({ reflect: !0 })
 ], L.prototype, "value", void 0);
 s([
-  z()
+  A()
 ], L.prototype, "flipIcon", void 0);
 const Ir = m`:host{display:inline-flex;outline:none;-webkit-tap-highlight-color:rgba(0,0,0,0);height:var(--_container-height);width:var(--_container-width);justify-content:center}:host([touch-target=wrapper]){margin:max(0px,(48px - var(--_container-height))/2) max(0px,(48px - var(--_container-width))/2)}md-focus-ring{--md-focus-ring-shape-start-start: var(--_container-shape-start-start);--md-focus-ring-shape-start-end: var(--_container-shape-start-end);--md-focus-ring-shape-end-end: var(--_container-shape-end-end);--md-focus-ring-shape-end-start: var(--_container-shape-end-start)}:host(:is([disabled],[soft-disabled])){pointer-events:none}.icon-button{place-items:center;background:none;border:none;box-sizing:border-box;cursor:pointer;display:flex;place-content:center;outline:none;padding:0;position:relative;text-decoration:none;user-select:none;z-index:0;flex:1;border-start-start-radius:var(--_container-shape-start-start);border-start-end-radius:var(--_container-shape-start-end);border-end-start-radius:var(--_container-shape-end-start);border-end-end-radius:var(--_container-shape-end-end)}.icon ::slotted(*){font-size:var(--_icon-size);height:var(--_icon-size);width:var(--_icon-size);font-weight:inherit}md-ripple{z-index:-1;border-start-start-radius:var(--_container-shape-start-start);border-start-end-radius:var(--_container-shape-start-end);border-end-start-radius:var(--_container-shape-end-start);border-end-end-radius:var(--_container-shape-end-end)}.flip-icon .icon{transform:scaleX(-1)}.icon{display:inline-flex}.link{display:grid;height:100%;outline:none;place-items:center;position:absolute;width:100%}.touch{position:absolute;height:max(48px,100%);width:max(48px,100%)}:host([touch-target=none]) .touch{display:none}@media(forced-colors: active){:host(:is([disabled],[soft-disabled])){--_disabled-icon-color: GrayText;--_disabled-icon-opacity: 1}}
 `;
@@ -2050,13 +2050,13 @@ s([
   Y({ slot: "aria-describedby" })
 ], T.prototype, "slottedAriaDescribedBy", void 0);
 s([
-  z()
+  A()
 ], T.prototype, "isAnimating", void 0);
 s([
-  z()
+  A()
 ], T.prototype, "refreshErrorAlert", void 0);
 s([
-  z()
+  A()
 ], T.prototype, "disableTransitions", void 0);
 s([
   w(".label.floating")
@@ -2581,7 +2581,7 @@ class y extends Wr {
       renderedControl: this.inputOrTextarea
     }));
   }
-  [ze]() {
+  [Ae]() {
     return this.inputOrTextarea;
   }
   [Qe](e) {
@@ -2676,16 +2676,16 @@ s([
   d({ reflect: !0 })
 ], y.prototype, "autocomplete", void 0);
 s([
-  z()
+  A()
 ], y.prototype, "dirty", void 0);
 s([
-  z()
+  A()
 ], y.prototype, "focused", void 0);
 s([
-  z()
+  A()
 ], y.prototype, "nativeError", void 0);
 s([
-  z()
+  A()
 ], y.prototype, "nativeErrorText", void 0);
 s([
   w(".input")
@@ -2955,7 +2955,7 @@ function li(i) {
 function oa(i) {
   return Object.values(Tt).some((e) => e === i);
 }
-function zt(i, e) {
+function At(i, e) {
   const t = new Event("md-contains", { bubbles: !0, composed: !0 });
   let o = [];
   const r = (n) => {
@@ -3228,7 +3228,7 @@ function sa(i = document) {
     e = e.shadowRoot.activeElement;
   return e;
 }
-class A extends g {
+class z extends g {
   /**
    * Whether the menu is animating upwards or downwards when opening. This is
    * helpful for calculating some animation calculations.
@@ -3297,7 +3297,7 @@ class A extends g {
       if (this.stayOpenOnFocusout || !this.open || this.pointerPath.includes(t))
         return;
       if (e.relatedTarget) {
-        if (zt(e.relatedTarget, this) || this.pointerPath.length !== 0 && zt(e.relatedTarget, t))
+        if (At(e.relatedTarget, this) || this.pointerPath.length !== 0 && At(e.relatedTarget, t))
           return;
       } else if (this.pointerPath.includes(this))
         return;
@@ -3577,75 +3577,75 @@ class A extends g {
 }
 s([
   w(".menu")
-], A.prototype, "surfaceEl", void 0);
+], z.prototype, "surfaceEl", void 0);
 s([
   w("slot")
-], A.prototype, "slotEl", void 0);
+], z.prototype, "slotEl", void 0);
 s([
   d()
-], A.prototype, "anchor", void 0);
+], z.prototype, "anchor", void 0);
 s([
   d()
-], A.prototype, "positioning", void 0);
+], z.prototype, "positioning", void 0);
 s([
   d({ type: Boolean })
-], A.prototype, "quick", void 0);
+], z.prototype, "quick", void 0);
 s([
   d({ type: Boolean, attribute: "has-overflow" })
-], A.prototype, "hasOverflow", void 0);
+], z.prototype, "hasOverflow", void 0);
 s([
   d({ type: Boolean, reflect: !0 })
-], A.prototype, "open", void 0);
+], z.prototype, "open", void 0);
 s([
   d({ type: Number, attribute: "x-offset" })
-], A.prototype, "xOffset", void 0);
+], z.prototype, "xOffset", void 0);
 s([
   d({ type: Number, attribute: "y-offset" })
-], A.prototype, "yOffset", void 0);
+], z.prototype, "yOffset", void 0);
 s([
   d({ type: Boolean, attribute: "no-horizontal-flip" })
-], A.prototype, "noHorizontalFlip", void 0);
+], z.prototype, "noHorizontalFlip", void 0);
 s([
   d({ type: Boolean, attribute: "no-vertical-flip" })
-], A.prototype, "noVerticalFlip", void 0);
+], z.prototype, "noVerticalFlip", void 0);
 s([
   d({ type: Number, attribute: "typeahead-delay" })
-], A.prototype, "typeaheadDelay", void 0);
+], z.prototype, "typeaheadDelay", void 0);
 s([
   d({ attribute: "anchor-corner" })
-], A.prototype, "anchorCorner", void 0);
+], z.prototype, "anchorCorner", void 0);
 s([
   d({ attribute: "menu-corner" })
-], A.prototype, "menuCorner", void 0);
+], z.prototype, "menuCorner", void 0);
 s([
   d({ type: Boolean, attribute: "stay-open-on-outside-click" })
-], A.prototype, "stayOpenOnOutsideClick", void 0);
+], z.prototype, "stayOpenOnOutsideClick", void 0);
 s([
   d({ type: Boolean, attribute: "stay-open-on-focusout" })
-], A.prototype, "stayOpenOnFocusout", void 0);
+], z.prototype, "stayOpenOnFocusout", void 0);
 s([
   d({ type: Boolean, attribute: "skip-restore-focus" })
-], A.prototype, "skipRestoreFocus", void 0);
+], z.prototype, "skipRestoreFocus", void 0);
 s([
   d({ attribute: "default-focus" })
-], A.prototype, "defaultFocus", void 0);
+], z.prototype, "defaultFocus", void 0);
 s([
   d({ type: Boolean, attribute: "no-navigation-wrap" })
-], A.prototype, "noNavigationWrap", void 0);
+], z.prototype, "noNavigationWrap", void 0);
 s([
   Y({ flatten: !0 })
-], A.prototype, "slotItems", void 0);
+], z.prototype, "slotItems", void 0);
 s([
-  z()
-], A.prototype, "typeaheadActive", void 0);
+  A()
+], z.prototype, "typeaheadActive", void 0);
 const na = m`:host{--md-elevation-level: var(--md-menu-container-elevation, 2);--md-elevation-shadow-color: var(--md-menu-container-shadow-color, var(--md-sys-color-shadow, #000));min-width:112px;color:unset;display:contents}md-focus-ring{--md-focus-ring-shape: var(--md-menu-container-shape, var(--md-sys-shape-corner-extra-small, 4px))}.menu{border-radius:var(--md-menu-container-shape, var(--md-sys-shape-corner-extra-small, 4px));display:none;inset:auto;border:none;padding:0px;overflow:visible;background-color:rgba(0,0,0,0);color:inherit;opacity:0;z-index:20;position:absolute;user-select:none;max-height:inherit;height:inherit;min-width:inherit;max-width:inherit;scrollbar-width:inherit}.menu::backdrop{display:none}.fixed{position:fixed}.items{display:block;list-style-type:none;margin:0;outline:none;box-sizing:border-box;background-color:var(--md-menu-container-color, var(--md-sys-color-surface-container, #f3edf7));height:inherit;max-height:inherit;overflow:auto;min-width:inherit;max-width:inherit;border-radius:inherit;scrollbar-width:inherit}.item-padding{padding-block:var(--md-menu-top-space, 8px) var(--md-menu-bottom-space, 8px)}.has-overflow:not([popover]) .items{overflow:visible}.has-overflow.animating .items,.animating .items{overflow:hidden}.has-overflow.animating .items{pointer-events:none}.animating ::slotted(.md-menu-hidden){opacity:0}slot{display:block;height:inherit;max-height:inherit}::slotted(:is(md-divider,[role=separator])){margin:8px 0}@media(forced-colors: active){.menu{border-style:solid;border-color:CanvasText;border-width:1px}}
 `;
-let At = class extends A {
+let zt = class extends z {
 };
-At.styles = [na];
-At = s([
+zt.styles = [na];
+zt = s([
   _("md-menu")
-], At);
+], zt);
 class la extends so {
   computeValidity(e) {
     return this.selectControl || (this.selectControl = document.createElement("select")), Jt(l`<option value=${e.value}></option>`, this.selectControl), this.selectControl.value = e.value, this.selectControl.required = e.required, {
@@ -3927,7 +3927,7 @@ class $ extends ca {
    * Handles closing the menu when the focus leaves the select's subtree.
    */
   handleFocusout(e) {
-    e.relatedTarget && zt(e.relatedTarget, this) || (this.open = !1);
+    e.relatedTarget && At(e.relatedTarget, this) || (this.open = !1);
   }
   /**
    * Gets a list of all selected select options as a list item record array.
@@ -4045,7 +4045,7 @@ class $ extends ca {
   [Te]() {
     return new la(() => this);
   }
-  [ze]() {
+  [Ae]() {
     return this.field;
   }
 }
@@ -4099,19 +4099,19 @@ s([
   d({ type: Number, attribute: "selected-index" })
 ], $.prototype, "selectedIndex", null);
 s([
-  z()
+  A()
 ], $.prototype, "nativeError", void 0);
 s([
-  z()
+  A()
 ], $.prototype, "nativeErrorText", void 0);
 s([
-  z()
+  A()
 ], $.prototype, "focused", void 0);
 s([
-  z()
+  A()
 ], $.prototype, "open", void 0);
 s([
-  z()
+  A()
 ], $.prototype, "defaultFocus", void 0);
 s([
   w(".field")
@@ -4930,16 +4930,16 @@ s([
 s([
   d({ type: Boolean, reflect: !0, attribute: "inset-end" })
 ], ot.prototype, "insetEnd", void 0);
-const za = m`:host{box-sizing:border-box;color:var(--md-divider-color, var(--md-sys-color-outline-variant, #cac4d0));display:flex;height:var(--md-divider-thickness, 1px);width:100%}:host([inset]),:host([inset-start]){padding-inline-start:16px}:host([inset]),:host([inset-end]){padding-inline-end:16px}:host::before{background:currentColor;content:"";height:100%;width:100%}@media(forced-colors: active){:host::before{background:CanvasText}}
+const Aa = m`:host{box-sizing:border-box;color:var(--md-divider-color, var(--md-sys-color-outline-variant, #cac4d0));display:flex;height:var(--md-divider-thickness, 1px);width:100%}:host([inset]),:host([inset-start]){padding-inline-start:16px}:host([inset]),:host([inset-end]){padding-inline-end:16px}:host::before{background:currentColor;content:"";height:100%;width:100%}@media(forced-colors: active){:host::before{background:CanvasText}}
 `;
 let Lt = class extends ot {
 };
-Lt.styles = [za];
+Lt.styles = [Aa];
 Lt = s([
   _("md-divider")
 ], Lt);
 const He = /* @__PURE__ */ Symbol("isFocusable"), ct = /* @__PURE__ */ Symbol("privateIsFocusable"), We = /* @__PURE__ */ Symbol("externalTabIndex"), je = /* @__PURE__ */ Symbol("isUpdatingTabIndex"), Ye = /* @__PURE__ */ Symbol("updateTabIndex");
-function Aa(i) {
+function za(i) {
   var e, t, o;
   class r extends i {
     constructor() {
@@ -4976,7 +4976,7 @@ function Aa(i) {
     d({ noAccessor: !0 })
   ], r.prototype, "tabIndex", void 0), r;
 }
-const bi = /* @__PURE__ */ Symbol("animateIndicator"), Ia = Aa(g);
+const bi = /* @__PURE__ */ Symbol("animateIndicator"), Ia = za(g);
 class K extends Ia {
   /**
    * @deprecated use `active`
@@ -5076,7 +5076,7 @@ s([
   w(".indicator")
 ], K.prototype, "indicator", void 0);
 s([
-  z()
+  A()
 ], K.prototype, "fullWidthIndicator", void 0);
 s([
   No({ flatten: !0 })
@@ -5656,10 +5656,10 @@ s([
   w(".actions")
 ], I.prototype, "actions", void 0);
 s([
-  z()
+  A()
 ], I.prototype, "isAtScrollTop", void 0);
 s([
-  z()
+  A()
 ], I.prototype, "isAtScrollBottom", void 0);
 s([
   w(".scroller")
@@ -5674,13 +5674,13 @@ s([
   w(".focus-trap")
 ], I.prototype, "firstFocusTrap", void 0);
 s([
-  z()
+  A()
 ], I.prototype, "hasHeadline", void 0);
 s([
-  z()
+  A()
 ], I.prototype, "hasActions", void 0);
 s([
-  z()
+  A()
 ], I.prototype, "hasIcon", void 0);
 function Va(i) {
   const e = ":is(button,input,select,textarea,object,:is(a,area)[href],[tabindex],[contenteditable=true])", t = ":not(:disabled,[disabled])";
@@ -5864,18 +5864,34 @@ class Xa extends g {
       font-weight: var(--wy-filter-chip-font-weight, 500);
       cursor: pointer;
       transition: all 0.15s ease;
-      border: 1px solid var(--wy-filter-chip-border, var(--md-sys-color-outline-variant, #e5e7eb));
-      background-color: var(--wy-filter-chip-bg, transparent);
-      color: var(--wy-filter-chip-text, var(--md-sys-color-on-surface-variant, #64748b));
+      
+      /* Opaque white background by default */
+      background-color: var(--wy-filter-chip-bg, var(--md-sys-color-surface));
+      border: 1px solid var(--wy-filter-chip-border, transparent);
+      color: var(--wy-filter-chip-text, var(--md-sys-color-on-surface));
+      box-shadow: none;
+      
       user-select: none;
       white-space: nowrap;
       flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
     }
 
-    :host(:hover:not([active])) {
-      color: var(--wy-filter-chip-text-hover, var(--md-sys-color-on-surface, #1f2937));
-      background-color: var(--wy-filter-chip-hover-bg, var(--md-sys-color-surface-variant, #f9fafb));
-      border-color: var(--wy-filter-chip-border-hover, var(--md-sys-color-outline-variant, #e5e7eb));
+    /* Material Design 3 state layer for hover */
+    :host::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-color: var(--md-sys-color-on-surface);
+      opacity: 0;
+      transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard);
+      pointer-events: none;
+      border-radius: inherit;
+    }
+
+    :host(:hover:not([active]))::before {
+      opacity: var(--md-sys-state-hover-opacity, 0.08);
     }
 
     :host(:focus-visible) {
@@ -5888,7 +5904,7 @@ class Xa extends g {
       color: var(--wy-filter-chip-active-fg, var(--md-sys-color-on-primary, #FFFFFF));
       border-color: transparent;
       font-weight: var(--wy-filter-chip-font-weight-active, 500);
-      box-shadow: var(--wy-filter-chip-shadow, none);
+      box-shadow: none;
     }
 
     .count {
@@ -6082,29 +6098,16 @@ class Za extends g {
     .search-input {
       width: 100%;
       height: 32px;
-      background-color: var(--wy-controls-search-bg, var(--md-sys-color-surface-container-high, #f3f4f6));
-      border: 1px solid var(--md-sys-color-outline-variant, transparent);
+      background-color: var(--wy-controls-search-bg, var(--md-sys-color-surface));
+      border: 1px solid transparent;
       border-radius: 9999px;
       padding: 0 12px 0 36px;
       font-family: var(--font-body, 'DM Sans', sans-serif);
       font-size: 0.75rem;
       color: var(--md-sys-color-on-surface, #1f2937);
       box-sizing: border-box;
+      box-shadow: none;
       transition: all 0.2s;
-    }
-
-    :host([data-scrolled]) .search-input {
-      height: 32px;
-      font-size: 0.75rem;
-      background-color: var(--md-sys-color-surface, #fff);
-      border: none;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-      transition: 
-        height var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized),
-        font-size var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized),
-        background-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard),
-        border var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard),
-        box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard);
     }
 
     .search-input::placeholder {
@@ -6265,14 +6268,6 @@ class Za extends g {
       flex: 0 1 auto;
       max-width: 600px;
       transition: max-width var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1));
-    }
-
-    /* Filter chips opaque styling when scrolled */
-    :host([data-scrolled]) {
-      --wy-filter-chip-bg: var(--md-sys-color-surface);
-      --wy-filter-chip-border: transparent;
-      --wy-filter-chip-active-bg: var(--md-sys-color-primary, #2C4C3B);
-      --wy-filter-chip-active-fg: var(--md-sys-color-on-primary, #FFFFFF);
     }
 
     /* Tablet responsive padding */
@@ -13543,7 +13538,7 @@ class Ts extends g {
   }
 }
 customElements.define("wy-work-card", Ts);
-class zs extends g {
+class As extends g {
   static properties = {
     density: { type: String },
     // 'spacious', 'compact'
@@ -13622,8 +13617,8 @@ class zs extends g {
     `;
   }
 }
-customElements.define("wy-works-grid", zs);
-class As extends g {
+customElements.define("wy-works-grid", As);
+class zs extends g {
   static properties = {
     title: { type: String },
     paperSize: { type: String, attribute: "paper-size" },
@@ -13780,7 +13775,7 @@ class As extends g {
     `;
   }
 }
-customElements.define("wy-plot-card", As);
+customElements.define("wy-plot-card", zs);
 class Is extends g {
   static properties = {
     status: { type: String },
