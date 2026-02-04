@@ -433,6 +433,14 @@ wy-button:not(:defined) {
 
     /* Ensure grid starts below controls */
     z-index: 1;
+    
+    /* Smooth transition for gap collapse */
+    transition: margin-top var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized);
+}
+
+/* Reduce gap when controls-bar is scrolled and becomes fixed */
+.controls-bar[data-scrolled] ~ .prompt-area {
+    margin-top: calc(-1 * var(--wy-controls-bar-height, 60px));
 }
 
 .prompt-grid {
@@ -840,6 +848,9 @@ body.modal-open {
     border-bottom: none;
     /* Match grid padding (2rem = 32px) for horizontal alignment */
     --wy-controls-bar-padding: var(--space-sm) 2rem;
+    
+    /* Track height for gap collapse when scrolled */
+    --wy-controls-bar-height: 60px;
 
     /* Filter chip theming - use explicit hex values to avoid dark mode interference */
     --wy-filter-chip-active-bg: #E8F5E9;
