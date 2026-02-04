@@ -846,42 +846,23 @@ body.modal-open {
     background: transparent;
     border-top: none;
     border-bottom: none;
-    /* Match grid padding (2rem = 32px) for horizontal alignment */
-    --wy-controls-bar-padding: var(--space-sm) 2rem;
     
     /* Track height for gap collapse when scrolled */
     --wy-controls-bar-height: 60px;
+    
+    /* Configure layout via custom properties (no ::part() overrides needed) */
+    --wy-controls-padding-desktop: 32px;
+    --wy-controls-padding-tablet: 24px;
+    --wy-controls-padding-mobile: 16px;
+    --wy-controls-padding-scrolled: var(--spacing-sm);
+    --wy-controls-container-max-width: none; /* No max-width constraint for prompt-library */
+    --wy-controls-container-gap: var(--spacing-md);
 
     /* Filter chip theming - use explicit hex values to avoid dark mode interference */
     --wy-filter-chip-active-bg: #E8F5E9;
     --wy-filter-chip-active-fg: #002114;
     /* Ensure filter chips meet touch target requirements */
     --wy-filter-chip-min-height: 44px;
-
-}
-
-/* Remove max-width constraint and add padding to align with grid */
-.controls-bar::part(controls-container) {
-    max-width: none;
-    /* Desktop: match grid's 2rem (32px) padding */
-    padding-left: 32px;
-    padding-right: 32px;
-    /* Increase vertical spacing between search and category sections */
-    gap: var(--spacing-md);
-}
-
-/* Scrolled state: reduce padding to 8px for compact pill */
-.controls-bar[data-scrolled]::part(controls-container) {
-    padding-left: var(--spacing-sm);
-    padding-right: var(--spacing-sm);
-}
-
-/* Tablet: match grid's 1.5rem (24px) padding */
-@media (min-width: 768px) and (max-width: 1023px) {
-    .controls-bar::part(controls-container) {
-        padding-left: 24px;
-        padding-right: 24px;
-    }
 }
 
 /* Smooth transition when filtering prompts */

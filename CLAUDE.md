@@ -42,6 +42,38 @@ No build process required for either mode. Admin requires Node.js server for API
 | App layout (`.header-top`, `.controls-bar`) | `prompts-library/styles.css` |
 | App components (`.prompt-card`, `.prompt-modal`) | `prompts-library/styles.css` |
 
+### CRITICAL: Never Use ::part() for Structural Layout
+
+**Using ::part() to override component structural layout is FORBIDDEN.**
+
+If you find yourself writing `::part()` selectors for padding, gaps, max-width, or responsive behavior, **STOP IMMEDIATELY**. This indicates the design system component needs refactoring, not local overrides.
+
+**Anti-Pattern (FORBIDDEN):**
+```css
+/* ❌ NEVER DO THIS */
+.controls-bar::part(controls-container) {
+    padding-left: 32px;          /* ❌ Structural layout override */
+    gap: 16px;                   /* ❌ Structural layout override */
+    max-width: none;             /* ❌ Structural layout override */
+}
+```
+
+**Correct Approach:**
+1. **Add CSS custom properties** to the component in `m3-design-v2`
+2. **Set custom property values** in consuming project
+3. **Never use ::part()** for layout
+
+```css
+/* ✅ CORRECT - Configure via custom properties */
+.controls-bar {
+    --wy-controls-padding-desktop: 32px;
+    --wy-controls-container-gap: var(--spacing-md);
+    --wy-controls-container-max-width: none;
+}
+```
+
+**If you see ::part() overrides in this codebase:** They are legacy anti-patterns that should be refactored. Do not add more.
+
 ### CDN Import Details
 
 **CSS tokens** (via `tokens.css`):
