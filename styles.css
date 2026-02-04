@@ -2426,18 +2426,6 @@ wy-info-panel[data-variation-description][content=""] {
         --wy-controls-bar-padding: var(--space-sm) var(--space-md);
     }
 
-    /* Mobile: horizontal scroll for category chips */
-    .controls-bar::part(category-section) {
-        overflow-x: auto;
-        overflow-y: hidden;
-        scrollbar-width: none; /* Hide scrollbar */
-        -webkit-overflow-scrolling: touch;
-    }
-
-    .controls-bar::part(category-section)::-webkit-scrollbar {
-        display: none; /* Hide scrollbar on WebKit */
-    }
-
     .search-hint {
         display: none;
     }
