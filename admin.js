@@ -268,8 +268,9 @@ function loadPrompt(id) {
     
     currentPromptId = id;
     
-    // Set prompt data
-    editor.prompt = prompt;
+    // Set prompt data - create a deep copy to ensure Lit detects the change
+    // This is important for "Discard Changes" to work correctly after conversions
+    editor.prompt = JSON.parse(JSON.stringify(prompt));
     editor.categories = categories;
     
     console.log('Prompt set on editor');
