@@ -5993,6 +5993,15 @@ class Za extends g {
       border-bottom: var(--wy-controls-bar-border, none);
       padding: var(--wy-controls-bar-padding, 8px 32px);
       box-sizing: border-box;
+      
+      /* Configurable layout properties */
+      --wy-controls-padding-desktop: var(--spacing-xl, 32px);
+      --wy-controls-padding-tablet: var(--spacing-lg, 24px);
+      --wy-controls-padding-mobile: var(--spacing-md, 16px);
+      --wy-controls-padding-scrolled: var(--spacing-sm, 8px);
+      --wy-controls-container-max-width: 1600px;
+      --wy-controls-container-gap: 12px;
+      --wy-controls-container-gap-scrolled: 16px;
     }
 
     /* Sticky Pill State - when scrolled */
@@ -6043,17 +6052,19 @@ class Za extends g {
       display: flex;
       flex-wrap: nowrap;
       align-items: center;
-      gap: 12px;
-      max-width: 1600px;
+      gap: var(--wy-controls-container-gap, 12px);
+      max-width: var(--wy-controls-container-max-width, 1600px);
       margin: 0 auto;
+      padding: 0 var(--wy-controls-padding-desktop, 32px);
     }
 
     :host([data-scrolled]) .controls-container {
-      gap: 16px;
+      gap: var(--wy-controls-container-gap-scrolled, 16px);
       max-width: 100%;
-      padding: 0 var(--spacing-sm, 8px);
+      padding: 0 var(--wy-controls-padding-scrolled, 8px);
       border-radius: 9999px; /* Pill shape for scrolled state */
-      transition: gap var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1));
+      transition: gap var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1)),
+                  padding var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1));
     }
 
     /* Search Section */
@@ -6264,6 +6275,13 @@ class Za extends g {
       --wy-filter-chip-active-fg: var(--md-sys-color-on-primary, #FFFFFF);
     }
 
+    /* Tablet responsive padding */
+    @media (min-width: 768px) and (max-width: 1023px) {
+      .controls-container {
+        padding: 0 var(--wy-controls-padding-tablet, 24px);
+      }
+    }
+
     @media (max-width: 768px) {
       /* Disable sticky pill behavior on mobile */
       :host([data-scrolled]) {
@@ -6284,6 +6302,7 @@ class Za extends g {
       .controls-container {
         flex-wrap: wrap;
         gap: 8px;
+        padding: 0 var(--wy-controls-padding-mobile, 16px);
       }
 
       .search-section {
