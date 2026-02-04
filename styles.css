@@ -2429,6 +2429,11 @@ wy-info-panel[data-variation-description][content=""] {
         /* Large enough to fit all controls */
         opacity: 1;
     }
+    
+    /* Allow pill border-radius to render when scrolled */
+    .controls-bar[data-scrolled] {
+        overflow: visible;
+    }
 
     .controls-bar {
         --wy-controls-bar-padding: var(--space-sm) var(--space-md);
