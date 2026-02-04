@@ -4,7 +4,7 @@
     "title": "Audio Essay",
     "description": "Generate long-form essays optimized for audio narration with proper formatting and sources",
     "category": "Creativity",
-    "image": "public/images/audio-essay.png",
+    "image": "",
     "template": "Topic: {{topic}}\n\nWrite a three-thousand-word essay on the topic above. Structure the essay entirely in paragraphs, avoiding lists, tables and . The goal is to create the script for a continuous narrative suitable for listening as if it were a chapter of a book read aloud by a professional narrator.\n\nStyle and Language Rules:\n\nSpell out numbers and dates fully. For example:\nInstead of \"1st,\" write \"first.\"\nInstead of \"1950s,\" write \"nineteen fifties.\"\nInstead of \"2024,\" write \"twenty twenty-four.\"\nInstead of \"5%,\" write \"five percent.\"\nInstead of \"24/7,\" write \"twenty-four hours a day, seven days a week.\"\nAvoid abbreviations and acronyms unless they are spelled out in full (e.g., write \"McKinsey and Company\" instead of \"McKinsey & Co.\").\nDo not use symbols (%, $, &). Always write the words out.\nAvoid inline references such as \"(Smith, 1999)\" or \"[1]\".. Instead, all references and sources should be collected at the end of the essay in a concise \"References\" section.\n\nAudience and Depth:\n\nWrite for a highly intelligent audience that expects both accuracy and depth. Assume the audience already knows something about the topic and provide insights that go beyond common knowledge and surface-level facts.\nIncorporate historical, cultural, and technical context where relevant to deepen understanding.\nUse metaphors or analogies sparingly and only if they improve clarity.\nFactual Rigor:\n\nVerify claims with precise supporting details. For example, if you write \"the Sumner Tunnel was once the deepest underwater tunnel in the world,\" also state its depth in feet and meters, the year it was completed, and the context of what surpassed it.\nWhere possible, provide exact figures, dates, names, or dimensions to anchor the narrative in concrete fact.\nDo not leave generalizations unsupported. For instance, if you say something was \"transformative,\" explain what specific change it caused, how it was measured, and what its consequences were.\n\nTone:\n\nPrecise, information dense, and void of fluff and filler words.\n\nConclusion and Learning Extensions:\n\nAt the end of the essay, provide a short \"References\" section with the sources used.\nAfter the references, concisely state three areas for deeper learning. These should be appropriate for expert-level listeners. ",
     "variables": [
       {
@@ -20,10 +20,10 @@
   },
   {
     "id": "classical-scene-porcelain",
-    "title": "Ceramic Vessel Scene",
-    "description": "Transform ceramic vessel designs with classical male nude figures while maintaining original style",
+    "title": "Ceramic Vessel Design",
+    "description": "Transform ceramic vessel designs with classical figures while maintaining original style",
     "category": "Creativity",
-    "image": "public/images/ceramic-vessel.png",
+    "image": "",
     "template": "{{scene_description}}\n\nKeep the aesthetic of the ceramic vessel, but alter the composition to include the figures mentioned above. Weave these new figures into the current scenery so that the original elements and the new scene coexist naturally.\n\nAll figures in the scene are strictly nude, masculine males with idealized, classically Roman features and muscular anatomy. The figures represent virility and physical perfection. Avoid long hair or other characteristics that could read feminine. The scene is dynamic, depicting the figures in visually interesting and appealing poses.\n\nMaintain the artwork style and vessel form from the uploaded image in the newly created scenery.\n\nEnsure all edits are seamlessly integrated with the existing artwork. Colors must be harmonious with the original palette, and surrounding imagery and elements must flow naturally without making the new scene stand out as an obvious edit. Subtly echo decorative motifs, border patterns, and stylistic elements from the existing vessel in the edited sections to create visual continuity and coherence.\n\nThe negative space around the new scenery must be harmonious with the existing vessel, ensuring sufficient negative space for the piece to feel elegant. the male figures are surrounded by a bit of empty space to make them more prominent as the subject of the image. If new elements overlap or interact with existing elements, the integration must be seamless and thoughtful.\n\n{{ko_imari_palette}}\n\n{{mask_instructions}}",
     "variables": [
       {
@@ -53,24 +53,27 @@
         "value": ""
       }
     ],
-    "featured": false
+    "featured": false,
+    "slug": "ceramic-vessel-design",
+    "icon": "brush"
   },
   {
     "id": "character-swap-male",
-    "title": "Character Swap - Male Figure",
-    "description": "Replace character's head with a Roman male athlete while maintaining original pose and artistic style",
+    "title": "Academic Drawing Figure",
+    "description": "Transform the subject of an image into a classical figure while maintaining original pose and artistic style",
     "category": "Creativity",
     "icon": "swap_horiz",
-    "featured": true,
+    "featured": false,
     "template": "Edit the uploaded image to replace the character's head and face with that of a 19-year-old male Roman athlete, strictly maintaining the original pose, angle, and perspective.\n\nCharacter Details (Adapted to Style):\n\nFace: A distinct, ancient Roman facial structure featuring an aquiline nose and high cheekbones. Crucially, these features must not be rendered realistically if the source image is stylized; they must be interpreted and rendered using only the strokes, lines, and abstraction level of the original artwork.\n\nHair: Short, thick, wavy hair. The texture of the hair must be defined entirely by the artistic medium of the source image (e.g., rendered with engraved lines for an etching, loose smudges for a charcoal sketch, or cross-hatching for a pencil drawing). No headgear.\n\nExpression: An expression that is natural and consistent with the body language and context of the original pose. Before setting the expression, interpret the emotion of the original uploaded image and use a consistent expression for the new image. This will ensure the context and expression of the original image is upheld in the new version.\n\nStyle & Technical Execution:\n\nSeamless Integration: The new head must perfectly match the exact medium, substrate texture (e.g., aged paper grain), line quality, stroke style, and level of detail of the source image.\n\nLighting & Values: Strictly adhere to the shading values, contrast, and lighting direction of the original image to ensure the swap appears authentic to the specific drawing.\n\nContingency: If the original pose hides the face, apply the Roman aesthetic, skin tone values, and hair type to the visible portions of the head and neck in the matching style.",
-    "variables": []
+    "variables": [],
+    "slug": "academic-drawing-figure"
   },
   {
     "id": "proofreader",
     "title": "Writing Assistant",
     "description": "Improve clarity, flow, and structure with multiple style options",
     "category": "Productivity",
-    "image": "public/images/productivity.png",
+    "image": "",
     "variables": [
       {
         "name": "text",
@@ -81,36 +84,20 @@
     ],
     "variations": [
       {
-        "id": "standard",
-        "name": "Standard (with Objective Alternative)",
-        "description": "Improves clarity and flow while preserving your voice. Creates an objective alternative version for professional contexts.",
-        "template": "Text: {{text}}\n\nInstructions\n\nTask 1:\n\nI want you to help me write, starting with the passage of text above. If possible, allow me to directly edit the output in canvas mode. As we iterate, remember that your primary purpose is to improve clarity, flow, and overall structure, even if that means reorganizing the content.\n\nI also want you to:\n\nPreserve my original tone and style, but revise wording and re-organize content when needed to enhance readability and coherence.\nBe concise, direct, and confident. Favor economical constructions over verbosity.\nEnsure grammar and usage conform to rigorous standards of American English, such as The Chicago Manual of Style.\n‍\n\nTask 2:\n\nCreate an alternative version of the text that:\n\nPresents information objectively without advocating for any particular outcome. Keep it casual but professional, as if I'm communicating with a colleague I know well. Avoid being overly enthusiastic, pushy, or using excessive praise. Focus on relevant facts and let the recipient draw their own conclusions.‍\nOptimizes the structure. Reimagine the structure to be more concise and efficient, while conveying the same meaning and sentiment."
-      },
-      {
-        "id": "casual",
-        "name": "Casual & Conversational",
-        "description": "Makes text friendly and approachable. Best for informal communication and personal contexts.",
-        "template": "Text: {{text}}\n\nPlease rewrite the text above to make it more casual and conversational. Make it sound friendly and approachable, like you're talking to a friend. Keep the meaning the same but relax the tone. Remove overly formal language and use simpler words where possible."
-      },
-      {
-        "id": "formal",
-        "name": "Formal & Professional",
-        "description": "Elevates language for business correspondence and academic settings. Uses sophisticated vocabulary and precise phrasing.",
-        "template": "Text: {{text}}\n\nPlease rewrite the text above in a more formal and professional style. Use sophisticated vocabulary and precise language. Ensure it adheres to formal writing conventions and would be appropriate for business correspondence or academic settings. Maintain proper grammar and eliminate any casual expressions."
-      },
-      {
-        "id": "concise",
-        "name": "Concise & Direct",
-        "description": "Removes filler and redundancy to maximize clarity with minimal words. Best when brevity is essential.",
-        "template": "Text: {{text}}\n\nPlease make this text as concise as possible while preserving all key information. Remove unnecessary words, redundant phrases, and filler. Make every sentence count. Be direct and to the point. Aim for maximum clarity with minimum words."
+        "id": "refine",
+        "name": "Restructure & Refine",
+        "description": "Improves clarity and flow while preserving your voice. ",
+        "template": "Text:\n{{text}}\n\nInstructions\n\nAct as a senior editor revising my writing for clarity, flow, and structure. Start from the text above.\n\nYour primary objective is to optimize the organization of ideas, even if that requires:\n• Moving sentences or clauses across paragraphs\n• Reordering sentences within a paragraph\n• Merging or splitting sentences\n• Rewriting a sentence so it fits better in a different structural position\n\nDo not preserve the original order unless it is already optimal. If a sentence in a later paragraph strengthens an earlier idea, relocate and revise it accordingly.\n\nPreserve my original tone, style, and level of concision. Write as if I had written the improved version myself.\n\nEditorial standards\n• Be concise, direct, and confident\n• Favor economical constructions over verbosity\n• Maintain rigorous American English usage (Chicago Manual of Style)\n• Avoid litotes and other negative constructions\n• Avoid decorative or ornamental adjectives\n• Limit the use of em dashes\n• Reduce repetitive use of “I” by restructuring sentences rather than deleting content\n\nStructural heuristics\n• Each paragraph should advance a single, clear idea\n• Sentences should appear in the order that maximizes logical buildup and emphasis\n• If clarity improves by repositioning or rewriting a sentence, do so without comment\n\nIf possible, present the revised text in canvas mode so I can edit it directly as we iterate."
       }
     ],
-    "featured": false
+    "featured": true,
+    "slug": "writing-assistant",
+    "template": ""
   },
   {
     "id": "shipping-quote-request",
-    "title": "Shipping Quote Request",
-    "description": "Draft concise emails requesting shipping quotes from vendors for auction purchases",
+    "title": "Auction Shipping Quote",
+    "description": "Draft concise emails requesting shipping quotes for auction purchases",
     "category": "Travel & Shopping",
     "icon": "local_shipping",
     "template": "Item Details: {{item_details}}\nAuction House: {{auction_house}}\nListing URL: {{listing_url}}\n‍\n\nShip to:\n\nMatt Weaver-Yuwono\n20 Mechanic Square, Unit 5\nMarblehead, MA 01945\n\nInstructions:\n\nPlease draft an email for requesting shipping quotes from multiple vendors. The letter should provide details for the item(s) I am considering purchasing, which I have included above. Provide details that are pertinent for calculating shipping (such as item type, size/dimensions, weight (if known), durability, etc.). Also provide the delivery address (above) so that the vendor can accurately calculate shipping prices.\n\nThe item(s) will be purchased from a local auction house, and the shipping vendor will need to pick up the item during their allowed pickup times. The shipping vendor will be responsible for packing the item(s).\n\nThe letter should ask for information on shipping cost and delivery timeframe.\n\nThe letter should include a link to the listing, which I have provided above. This enables the shipping vendor to view images of the item.\n\nThe tone of the letter should be clear, and straightforward. Be very concise. For example \"Hello, Could you please assist me with a shipping quote for them item below, which I plan to purchase from [Auction house name] in [City, State]?\"",
@@ -134,7 +121,8 @@
         "value": ""
       }
     ],
-    "featured": false
+    "featured": false,
+    "slug": "auction-shipping-quote"
   },
   {
     "id": "expertise-test",
@@ -315,17 +303,40 @@
   },
   {
     "id": "character-portrait",
-    "title": "Character Portrait",
+    "title": "Portrait Creator",
     "description": "Transform reference photos into high-quality portraits",
     "category": "Creativity",
-    "image": "public/images/character-portrait.png",
+    "image": "",
     "variables": [],
     "variations": [
       {
         "id": "visual-anchor",
         "name": "Visual Anchor Method",
         "description": "Three-step process: analyze facial structure, summarize key features, then merge with style reference. Best when you have both likeness and style images.",
-        "template": "Step 1:\nAnalyze the attached reference photographs to identify the subject's visual anchor: the fixed facial characteristics that must remain unchanged to preserve likeness. These include, at minimum, overall craniofacial structure, eye spacing and orientation, nasal form, mouth proportions, jawline, and any distinctive asymmetries or contours.\n\nOnce this visual anchor is established, reinterpret the subject through the conventions of classical portraiture. Describe the figure in the style of a 19th-century academic oil painting, introducing restrained idealization—refinement of skin, lighting, and expression—while preserving immediate recognizability. The final portrait should convey gravity, dignity, and psychological depth, balancing faithful likeness with the pathos and nobility characteristic of high academic painting.\n\nStep 2: Provide a summary of this Visual Anchor Then ask for a Style Reference Image in order to move to image generation.\n\nStep 3: I will provide a Style Reference Image. You must generate a high-fidelity image that merges the subject's \"Visual Anchor\" with the style, medium, and atmosphere of the reference image. The subject must look like they belong in that world, as if they were the original sitter for that specific piece of art.\n\nLet's Begin: I am uploading the likeness references now."
+        "template": "Step 1:\nAnalyze the attached reference photographs to identify the subject's visual anchor: the fixed facial characteristics that must remain unchanged to preserve likeness. These include, at minimum, overall craniofacial structure, eye spacing and orientation, nasal form, mouth proportions, jawline, and any distinctive asymmetries or contours.\n\nOnce this visual anchor is established, reinterpret the subject through the conventions of classical portraiture. Describe the figure in the style of a 19th-century academic oil painting, introducing restrained idealization—refinement of skin, lighting, and expression—while preserving immediate recognizability. The final portrait should convey gravity, dignity, and psychological depth, balancing faithful likeness with the pathos and nobility characteristic of high academic painting.\n\nStep 2: Provide a summary of this Visual Anchor Then ask for a Style Reference Image in order to move to image generation.\n\nStep 3: I will provide a Style Reference Image. You must generate a high-fidelity image that merges the subject's \"Visual Anchor\" with the style, medium, and atmosphere of the reference image. The subject must look like they belong in that world, as if they were the original sitter for that specific piece of art.\n\nLet's Begin: I am uploading the likeness references now.",
+        "steps": [
+          {
+            "id": "step-1",
+            "name": "Step 1",
+            "instructions": "",
+            "template": "Step test\nStep 1:\nAnalyze the attached reference photographs to identify the subject's visual anchor: the fixed facial characteristics that must remain unchanged to preserve likeness. These include, at minimum, overall craniofacial structure, eye spacing and orientation, nasal form, mouth proportions, jawline, and any distinctive asymmetries or contours.\n\nOnce this visual anchor is established, reinterpret the subject through the conventions of classical portraiture. Describe the figure in the style of a 19th-century academic oil painting, introducing restrained idealization—refinement of skin, lighting, and expression—while preserving immediate recognizability. The final portrait should convey gravity, dignity, and psychological depth, balancing faithful likeness with the pathos and nobility characteristic of high academic painting.\n\nStep 2: Provide a summary of this Visual Anchor Then ask for a Style Reference Image in order to move to image generation.\n\nStep 3: I will provide a Style Reference Image. You must generate a high-fidelity image that merges the subject's \"Visual Anchor\" with the style, medium, and atmosphere of the reference image. The subject must look like they belong in that world, as if they were the original sitter for that specific piece of art.\n\nLet's Begin: I am uploading the likeness references now.",
+            "variables": []
+          },
+          {
+            "id": "step-2",
+            "name": "Step 2",
+            "instructions": "",
+            "template": "",
+            "variables": []
+          },
+          {
+            "id": "step-3",
+            "name": "Step 3",
+            "instructions": "",
+            "template": "",
+            "variables": []
+          }
+        ]
       },
       {
         "id": "likeness-lock",
@@ -360,7 +371,9 @@
         ]
       }
     ],
-    "featured": false
+    "featured": false,
+    "slug": "portrait-creator",
+    "icon": "face_right"
   },
   {
     "id": "song-creator",
@@ -368,7 +381,7 @@
     "description": "Annotate lyrics to match a specific artist's performance style and delivery",
     "category": "Creativity",
     "icon": "music_note",
-    "featured": true,
+    "featured": false,
     "template": "### Task\nAnnotate the provided text to match the specific musical performance style of a target artist.\n\n### Inputs\n\nArtist: {{artist}}\n\nLyrics to Process: \"\"\"\n{{lyrics}}\n\"\"\"\n\n### Instructions\n\nStyle Header: Begin with the sentence: \"In the style of the artist with first name [First Name] and last name [Last Name], who is known for...\" followed by a precise description of their cadence, delivery, and instrumentation.\n\nAnnotation: Rewrite the provided lyrics, inserting detailed performance notes between lines and words. Capture the artist's specific quirks (e.g., vocal runs, spoken word sections, specific ad-libs, breathing patterns).\n\n### Strict Guardrails\n\nALL non-lyrical text (headers, cues, moods, ad-libs) MUST be inside square brackets [ ].\n\nExample: [Verse 1 - Fast Tempo] text text [Audible breath] text...\n\nDo not output any preamble or post-script conversation.\n",
     "variables": [
       {

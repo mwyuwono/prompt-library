@@ -3,7 +3,8 @@
 .admin-page {
     display: grid;
     grid-template-columns: 280px 1fr;
-    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
     background: var(--md-sys-color-background, #FDFBF7);
     margin: 0;
     padding: 0;
@@ -11,11 +12,12 @@
 
 /* Sidebar */
 .prompt-list {
-    background: var(--md-sys-color-surface, #F5F2EA);
+    background: var(--md-sys-color-background, #FDFBF7);
     border-right: 1px solid var(--md-sys-color-outline-variant, #DDD);
     padding: var(--spacing-lg, 24px) var(--spacing-md, 16px);
     overflow-y: auto;
     height: 100vh;
+    box-sizing: border-box;
     position: sticky;
     top: 0;
 }
@@ -122,8 +124,10 @@
 /* Main Content */
 #main-content {
     padding: var(--spacing-md, 16px) var(--spacing-3xl, 64px) var(--spacing-2xl, 48px);
-    /* overflow-y removed - scroll context moved to wy-prompt-editor Shadow DOM for sticky positioning */
+    height: 100vh;
+    overflow-y: auto;
     max-width: 100%;
+    box-sizing: border-box;
 }
 
 #editor-container {

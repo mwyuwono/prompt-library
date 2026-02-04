@@ -8298,10 +8298,11 @@ class cs extends g {
   static properties = {
     variations: { type: Array },
     allowReorder: { type: Boolean, attribute: "allow-reorder" },
-    _expandedIndex: { type: Number, state: !0 }
+    _expandedIndex: { type: Number, state: !0 },
+    _expandedStepsByVariation: { type: Object, state: !0 }
   };
   constructor() {
-    super(), this.variations = [], this.allowReorder = !0, this._expandedIndex = -1;
+    super(), this.variations = [], this.allowReorder = !0, this._expandedIndex = -1, this._expandedStepsByVariation = {};
   }
   static styles = m`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
@@ -8676,6 +8677,23 @@ class cs extends g {
     o !== a.length - 1 && ([a[o], a[o + 1]] = [a[o + 1], a[o]], this._notifyChange(r));
   }
   _handleStepToggle(e, t) {
+    const { index: stepIndex } = t.detail;
+    const currentExpanded = this._expandedStepsByVariation[e] || [];
+    const stepIndexInArray = currentExpanded.indexOf(stepIndex);
+    
+    if (stepIndexInArray > -1) {
+      // Step is currently expanded, collapse it
+      currentExpanded.splice(stepIndexInArray, 1);
+    } else {
+      // Step is currently collapsed, expand it
+      currentExpanded.push(stepIndex);
+    }
+    
+    this._expandedStepsByVariation = {
+      ...this._expandedStepsByVariation,
+      [e]: [...currentExpanded]
+    };
+    this.requestUpdate();
   }
   _handleAddStep(e) {
     const t = [...this.variations], o = t[e];
@@ -8862,19 +8880,22 @@ This action cannot be undone.`;
                                         Define the sequence of prompts for this variation
                                     </p>
                                     <div class="steps-section" @click="${(u) => u.stopPropagation()}">
-                                        ${e.steps.map((u, v) => l`
+                                        ${e.steps.map((u, v) => {
+                                            const expandedSteps = this._expandedStepsByVariation[t] || [];
+                                            const expandedState = expandedSteps.includes(v);
+                                            return l`
                                             <wy-step-editor
                                                 .step="${u}"
                                                 .index="${v}"
                                                 .total="${e.steps.length}"
-                                                .expanded="${v === 0}"
+                                                .expanded="${expandedState}"
                                                 @step-change="${(b) => this._handleStepChange(t, b)}"
                                                 @step-delete="${(b) => this._handleStepDelete(t, b)}"
                                                 @step-move-up="${(b) => this._handleStepMoveUp(t, b)}"
                                                 @step-move-down="${(b) => this._handleStepMoveDown(t, b)}"
                                                 @step-toggle="${(b) => this._handleStepToggle(t, b)}"
                                             ></wy-step-editor>
-                                        `)}
+                                        `;})}
                                         <button 
                                             class="add-step-button" 
                                             @click="${() => this._handleAddStep(t)}"
@@ -8977,7 +8998,6 @@ class ps extends g {
             display: grid;
             grid-template-columns: 58% 42%;
             gap: var(--spacing-2xl, 48px);
-            min-height: 100vh;
         }
 
         .editor-form {
@@ -8985,7 +9005,7 @@ class ps extends g {
             flex-direction: column;
             gap: var(--spacing-lg, 24px);
             overflow-y: auto;
-            max-height: calc(100vh - 48px);
+            height: fit-content;
             padding-right: var(--spacing-sm, 8px);
         }
 
@@ -9050,17 +9070,9 @@ class ps extends g {
         }
 
         .actions {
-            position: sticky;
-            top: 0;
-            background-color: var(--md-sys-color-background, #FDFBF7);
-            padding: var(--spacing-md, 16px);
-            margin: 0 calc(-1 * var(--spacing-lg, 24px)) var(--spacing-lg, 24px);
-            border-bottom: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            z-index: 100;
-            backdrop-filter: blur(8px);
             display: flex;
             gap: var(--spacing-sm, 8px);
-            justify-content: flex-end;
+            margin: 0 0 var(--spacing-md, 16px) 0;
         }
 
         .button {
@@ -9427,15 +9439,6 @@ Convert to single-step mode instead.`);
                             <p><strong>Changes saved to prompts.json.</strong> Run <code>git add prompts.json && git commit -m "Update prompts" && git push</code> to publish. To undo: <code>git checkout -- prompts.json</code></p>
                         </div>
                     ` : ""}
-                    
-                    <div class="actions">
-                        <button class="button button-secondary" @click="${this._handleCancel}">
-                            Discard Changes
-                        </button>
-                        <button class="button button-primary" @click="${this._handleSave}">
-                            Save Changes
-                        </button>
-                    </div>
 
                     <!-- Section 1: Basic Information -->
                     <div class="card">
@@ -9629,6 +9632,15 @@ Convert to single-step mode instead.`);
 
                 <!-- Right Column: Preview -->
                 <div class="editor-preview">
+                    <div class="actions">
+                        <button class="button button-secondary" @click="${this._handleCancel}">
+                            Discard
+                        </button>
+                        <button class="button button-primary" @click="${this._handleSave}">
+                            Save
+                        </button>
+                    </div>
+                    
                     <div class="preview-header">
                         <h3 class="preview-title">Live Preview</h3>
                         <span class="preview-status">Updating</span>
