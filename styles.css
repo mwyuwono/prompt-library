@@ -95,7 +95,7 @@ body {
 
 /* App body overrides (design system provides base body styles) */
 body {
-    background-color: var(--color-page-background);
+    background-color: var(--md-sys-color-surface-container);
     color: var(--color-text-primary);
     overflow-x: hidden;
 }
@@ -132,7 +132,7 @@ body {
     font-family: var(--font-sans);
     font-size: var(--text-xs);
     color: var(--color-text-secondary);
-    background: var(--color-linen);
+    background: transparent;
     position: sticky;
     top: 0;
     z-index: 1000;
