@@ -8953,7 +8953,14 @@ class ps extends g {
     super(), this.prompt = null, this.categories = [], this.readonly = !1, this._editedPrompt = null, this._promptMode = "single", this._expandedSteps = [], this._showGitInfo = !1;
   }
   updated(e) {
-    e.has("prompt") && this.prompt && (this._editedPrompt = JSON.parse(JSON.stringify(this.prompt)), !this._editedPrompt.slug && this._editedPrompt.title && (this._editedPrompt.slug = this._generateSlug(this._editedPrompt.title)), this._promptMode = this._editedPrompt.steps && this._editedPrompt.steps.length > 0 ? "multi" : "single", this._expandedSteps = this._promptMode === "multi" ? [0] : []);
+    if (e.has("prompt") && this.prompt) {
+      this._editedPrompt = JSON.parse(JSON.stringify(this.prompt));
+      if (!this._editedPrompt.slug && this._editedPrompt.title) {
+        this._editedPrompt.slug = this._generateSlug(this._editedPrompt.title);
+      }
+      this._promptMode = this._editedPrompt.steps && this._editedPrompt.steps.length > 0 ? "multi" : "single";
+      this._expandedSteps = this._promptMode === "multi" ? [0] : [];
+    }
   }
   static styles = m`
         :host {
@@ -9251,7 +9258,41 @@ class ps extends g {
     }, e === "title" && (this._editedPrompt.slug = this._generateSlug(t)), this.requestUpdate());
   }
   _handleSave() {
-    if (this._promptMode === "multi")
+    // Handle variations mode - sync all variation templates and steps
+    if (this._editedPrompt.variations && this._editedPrompt.variations.length > 0) {
+      const variationEditor = this.shadowRoot.querySelector("wy-variation-editor");
+      if (variationEditor) {
+        // Query all variation cards
+        const cards = variationEditor.shadowRoot.querySelectorAll(".variation-card");
+        cards.forEach((card, varIdx) => {
+          const variation = this._editedPrompt.variations[varIdx];
+          if (!variation) return;
+          
+          // Check if this variation is multi-step or single template
+          const hasSteps = variation.steps && variation.steps.length > 0;
+          
+          if (hasSteps) {
+            // Multi-step variation: sync all step templates
+            const stepEditors = card.querySelectorAll("wy-step-editor");
+            stepEditors.forEach((stepEditor, stepIdx) => {
+              const textarea = stepEditor.shadowRoot?.querySelector("wy-code-textarea")?.shadowRoot?.querySelector("textarea");
+              if (textarea && variation.steps[stepIdx]) {
+                variation.steps[stepIdx].template = textarea.value;
+              }
+            });
+          } else {
+            // Single template variation: sync main template
+            const codeTextarea = card.querySelector("wy-code-textarea");
+            const textarea = codeTextarea?.shadowRoot?.querySelector("textarea");
+            if (textarea) {
+              variation.template = textarea.value;
+            }
+          }
+        });
+      }
+    }
+    // Handle standard multi-step mode (no variations)
+    else if (this._promptMode === "multi")
       this.shadowRoot.querySelectorAll("wy-step-editor").forEach((t, o) => {
         const r = t.shadowRoot?.querySelector("wy-code-textarea");
         if (r) {
@@ -9259,6 +9300,7 @@ class ps extends g {
           a && this._editedPrompt.steps[o] && (this._editedPrompt.steps[o].template = a.value);
         }
       });
+    // Handle standard single template mode (no variations)
     else {
       const e = this.shadowRoot.querySelector("wy-code-textarea");
       if (e) {
@@ -9473,7 +9515,12 @@ Convert to single-step mode instead.`);
                             </p>
                             <wy-variation-editor
                                 .variations="${this._editedPrompt.variations}"
-                                @change="${(o) => this._handleFieldChange("variations", o.detail.variations)}"
+                                @change="${(o) => {
+                                  // Only handle variation-level changes, not nested component changes
+                                  if (o.detail.variations !== undefined) {
+                                    this._handleFieldChange("variations", o.detail.variations);
+                                  }
+                                }}"
                             ></wy-variation-editor>
                         </div>
                     ` : l`
