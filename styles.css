@@ -870,6 +870,13 @@ body.modal-open {
     gap: var(--spacing-md);
 }
 
+/* Scrolled state: reduce padding to 8px for compact pill */
+.controls-bar[data-scrolled]::part(controls-container) {
+    padding-left: var(--spacing-sm);
+    padding-right: var(--spacing-sm);
+    background-color: color-mix(in srgb, var(--md-sys-color-surface) 60%, transparent);
+}
+
 /* Tablet: match grid's 1.5rem (24px) padding */
 @media (min-width: 768px) and (max-width: 1023px) {
     .controls-bar::part(controls-container) {
