@@ -8953,7 +8953,7 @@ class ps extends g {
     super(), this.prompt = null, this.categories = [], this.readonly = !1, this._editedPrompt = null, this._promptMode = "single", this._expandedSteps = [], this._showGitInfo = !1;
   }
   updated(e) {
-    e.has("prompt") && this.prompt && (this._editedPrompt = JSON.parse(JSON.stringify(this.prompt)), !this._editedPrompt.slug && this._editedPrompt.title && (this._editedPrompt.slug = this._generateSlug(this._editedPrompt.title)), this._promptMode = this._editedPrompt.steps && this._editedPrompt.steps.length > 0 ? "multi" : "single", this._expandedSteps = this._promptMode === "multi" ? [0] : []);
+    e.has("prompt") && this.prompt && (this._editedPrompt = JSON.parse(JSON.stringify(this.prompt)), !this._editedPrompt.slug && this._editedPrompt.title && (this._editedPrompt.slug = this._generateSlug(this._editedPrompt.title)), this._promptMode = this._editedPrompt.steps && this._editedPrompt.steps.length > 0 ? "multi" : "single", this._expandedSteps = this._promptMode === "multi" ? [0] : [], this._showGitInfo = !1);
   }
   static styles = m`
         :host {
