@@ -6053,6 +6053,7 @@ class Za extends g {
       max-width: 100%;
       background-color: var(--md-sys-color-surface-variant, #E8E4D9);
       padding: 0 var(--spacing-sm, 8px);
+      border-radius: 9999px; /* Pill shape for scrolled state */
       transition: gap var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1));
     }
 
