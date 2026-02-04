@@ -857,12 +857,6 @@ body.modal-open {
     --wy-controls-padding-scrolled: var(--spacing-sm);
     --wy-controls-container-max-width: none; /* No max-width constraint for prompt-library */
     --wy-controls-container-gap: var(--spacing-md);
-
-    /* Filter chip theming - use explicit hex values to avoid dark mode interference */
-    --wy-filter-chip-active-bg: #E8F5E9;
-    --wy-filter-chip-active-fg: #002114;
-    /* Ensure filter chips meet touch target requirements */
-    --wy-filter-chip-min-height: 44px;
 }
 
 /* Smooth transition when filtering prompts */
