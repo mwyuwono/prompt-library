@@ -5865,7 +5865,7 @@ class Xa extends g {
       cursor: pointer;
       transition: all 0.15s ease;
       border: 1px solid var(--wy-filter-chip-border, var(--md-sys-color-outline-variant, #e5e7eb));
-      background-color: transparent;
+      background-color: var(--wy-filter-chip-bg, transparent);
       color: var(--wy-filter-chip-text, var(--md-sys-color-on-surface-variant, #64748b));
       user-select: none;
       white-space: nowrap;
@@ -6084,13 +6084,17 @@ class Za extends g {
     }
 
     :host([data-scrolled]) .search-input {
-      height: 28px;
-      font-size: 0.7rem;
-      background-color: rgba(255, 255, 255, 0.6);
+      height: 32px;
+      font-size: 0.75rem;
+      background-color: var(--md-sys-color-surface, #fff);
+      border: none;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
       transition: 
-        height var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1)),
-        font-size var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1)),
-        background-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+        height var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized),
+        font-size var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized),
+        background-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard),
+        border var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard),
+        box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard);
     }
 
     .search-input::placeholder {
@@ -6251,6 +6255,14 @@ class Za extends g {
       flex: 0 1 auto;
       max-width: 600px;
       transition: max-width var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1));
+    }
+
+    /* Filter chips opaque styling when scrolled */
+    :host([data-scrolled]) {
+      --wy-filter-chip-bg: var(--md-sys-color-surface);
+      --wy-filter-chip-border: transparent;
+      --wy-filter-chip-active-bg: var(--md-sys-color-primary, #2C4C3B);
+      --wy-filter-chip-active-fg: var(--md-sys-color-on-primary, #FFFFFF);
     }
 
     @media (max-width: 768px) {
