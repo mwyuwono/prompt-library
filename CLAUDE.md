@@ -42,6 +42,42 @@ No build process required for either mode. Admin requires Node.js server for API
 | App layout (`.header-top`, `.controls-bar`) | `prompts-library/styles.css` |
 | App components (`.prompt-card`, `.prompt-modal`) | `prompts-library/styles.css` |
 
+### CRITICAL: Audit Local Overrides Before Design System Changes
+
+**ALWAYS check for local token overrides before making design system changes.**
+
+Token precedence chain (highest to lowest):
+1. Consuming project `tokens.css` (this file)
+2. Design system `m3-design-v2/src/styles/tokens.css`
+3. Component defaults in `m3-design-v2/src/components/*.js`
+
+**Before making design system changes, audit for overrides:**
+
+```bash
+# Check this project's tokens.css for component-specific overrides
+grep -n "wy-filter-chip\|wy-controls\|wy-modal\|wy-button" tokens.css
+
+# If found, determine if they should be:
+# ✅ KEPT: App-specific theming (e.g., category colors)
+# ❌ REMOVED: Workarounds for design system bugs (now fixed)
+```
+
+**Red flags (indicates local override should be removed):**
+- Hardcoded colors (e.g., `#E8F5E9`) instead of tokens
+- Comments like "Override for..." or "Fix for..."
+- Values that contradict design system intent
+- Duplicate tokens already in design system
+
+**When local overrides ARE appropriate:**
+- App-specific theming that shouldn't propagate to other projects
+- Layout configuration (padding, max-width, gaps)
+- Context-specific adjustments documented with rationale
+
+**When local overrides are FORBIDDEN:**
+- Colors, borders, shadows (use design system tokens)
+- Component structural layout (use custom properties, not ::part())
+- Workarounds for design system bugs (fix the design system instead)
+
 ### CRITICAL: Never Use ::part() for Structural Layout
 
 **Using ::part() to override component structural layout is FORBIDDEN.**
@@ -78,8 +114,9 @@ If you find yourself writing `::part()` selectors for padding, gaps, max-width, 
 
 **CSS tokens** (via `tokens.css`):
 ```css
-@import url('https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/tokens.css');
-@import url('https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/main.css');
+/* Update ?v= timestamp after design system changes to force browser cache refresh */
+@import url('https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/tokens.css?v=YYYYMMDD-HHMM');
+@import url('https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/main.css?v=YYYYMMDD-HHMM');
 ```
 
 **Web Components** (via `components/index.js`):
@@ -97,6 +134,29 @@ CSS tokens still use `@main` (less frequently updated, cache issues less critica
 ### CDN Cache Issues
 
 If design system changes don't appear, see [docs/css-changes-not-appearing-postmortem.md](docs/css-changes-not-appearing-postmortem.md) for root causes and the complete troubleshooting guide.
+
+### CRITICAL: Cache-Busting for Design System Changes
+
+**ALWAYS check and update cache-busting parameters in `tokens.css` after design system changes.**
+
+When design system tokens or styles change in `m3-design-v2`:
+
+1. **Update cache-busting parameters** in `tokens.css` (lines 14, 17):
+   ```css
+   @import url('...tokens.css?v=YYYYMMDD-HHMM');
+   @import url('...main.css?v=YYYYMMDD-HHMM');
+   ```
+
+2. **Update to current timestamp** (e.g., `?v=20260203-2044`)
+
+3. **Why this matters:**
+   - Web components use commit hash pinning (auto-updated by deploy.sh)
+   - CSS tokens use `@main` which is CDN-cached
+   - Without cache-busting, browsers load stale CSS even after CDN purge
+   - This causes wrong colors, borders, spacing despite correct component code
+
+4. **Verification:**
+   After updating cache-busting and hard refresh (Cmd+Shift+R), use `getComputedStyle()` to verify tokens resolve to correct values.
 
 ### Available Design Tokens
 
