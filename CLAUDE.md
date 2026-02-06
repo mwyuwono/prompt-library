@@ -146,7 +146,7 @@ CSS tokens still use `@main` (less frequently updated, cache issues less critica
 
 ### CDN Cache Issues
 
-If design system changes don't appear, see [docs/css-changes-not-appearing-postmortem.md](docs/css-changes-not-appearing-postmortem.md) for root causes and the complete troubleshooting guide.
+If design system changes don't appear, see [docs/cdn-troubleshooting.md](docs/cdn-troubleshooting.md) for purge commands and verification steps.
 
 ### CRITICAL: Cache-Busting for Design System Changes
 
@@ -320,7 +320,7 @@ This automatically:
 
 **After deployment:** Push prompt-library changes and hard refresh browser (`Cmd+Shift+R`).
 
-**Troubleshooting:** See [docs/css-changes-not-appearing-postmortem.md](docs/css-changes-not-appearing-postmortem.md)
+**Troubleshooting:** See [docs/cdn-troubleshooting.md](docs/cdn-troubleshooting.md)
 
 ## Admin System
 
@@ -354,11 +354,18 @@ See [docs/admin-system-plan.md](docs/admin-system-plan.md) for complete API refe
 
 ## See Also
 
-- **Admin System**: [docs/admin-system-plan.md](docs/admin-system-plan.md) - Complete admin interface documentation
-- **Visual QA**: [skills/visual-qa/SKILL.md](skills/visual-qa/SKILL.md) - Screenshot testing after CSS changes
-- **CDN Troubleshooting**: [docs/cdn-troubleshooting.md](docs/cdn-troubleshooting.md) - Cache purging and verification
-- **Repository**: https://github.com/mwyuwono/prompt-library
-- **Live Site**: https://oct-19-prompts-rebuild-nbpz1n873-weaver-yuwono.vercel.app
+| Document | Purpose |
+|----------|---------|
+| [README.md](README.md) | Project overview, architecture, data model |
+| [docs/admin-system-plan.md](docs/admin-system-plan.md) | Admin API reference and components |
+| [docs/prompt-authoring.md](docs/prompt-authoring.md) | Prompt writing guidelines |
+| [docs/cdn-troubleshooting.md](docs/cdn-troubleshooting.md) | CDN cache purging and verification |
+| [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) | Documentation standards |
+| [docs/ARCHIVE.md](docs/ARCHIVE.md) | Historical implementation notes |
+| [skills/visual-qa/SKILL.md](skills/visual-qa/SKILL.md) | Screenshot testing after CSS changes |
+
+**Repository:** https://github.com/mwyuwono/prompt-library
+**Live Site:** https://p.weaver-yuwono.com
 
 ## Known Issues
 
