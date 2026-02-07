@@ -630,5 +630,29 @@
       }
     ],
     "featured": false
+  },
+  {
+    "id": "art-critique",
+    "title": "Artwork Critique",
+    "description": "Get constructive critique on your artwork with two modes: reference matching for studies and technique analysis for original pieces",
+    "category": "Creativity",
+    "icon": "palette",
+    "variables": [],
+    "variations": [
+      {
+        "id": "reference-match",
+        "name": "Reference Match",
+        "description": "Compare your artwork against a reference image for maximum accuracy. Best for master studies and practice from photos.",
+        "template": "I am uploading two images: [Image 1] is my artwork, and [Image 2] is the reference I am trying to emulate.\n\nAct as a professional art instructor. Your goal is to help me bridge the gap between my work and the reference. Please provide a side-by-side technical analysis focusing on:\n\nProportions & Placement: Are there any anatomical or spatial shifts?\n\nValue & Contrast: Am I capturing the same range of highlights and shadows?\n\nColor Accuracy: How close are my hues and saturation to the original?\n\nEdges & Brushwork: Have I missed any sharp or soft transitions that define the reference?\n\nPlease be specific and prioritize the top 3 most impactful changes I can make right now to make my work look more like the reference."
+      },
+      {
+        "id": "technique-style",
+        "name": "Technique & Style",
+        "description": "Get a candid critique of your original artwork to level up your fundamental skills. Best for finished pieces and works in progress.",
+        "template": "I've uploaded a piece of my original artwork. I am looking for a candid, constructive critique to help me improve as an artist.\n\nPlease evaluate this piece based on the following criteria:\n\nComposition: Is the focal point clear? Does the eye flow naturally through the piece?\n\nValue Scale: Is the lighting consistent? Does the piece have enough depth, or does it feel 'flat'?\n\nTechnical Execution: Critique my shading, linework, anatomy, and perspective. Mention what is working well and what feels 'off.'\n\nMood & Impact: What is the overall vibe you get from this, and does the technique support that mood?\n\nClose with one specific exercise or 'homework' assignment I can do to strengthen the weakest area you identified."
+      }
+    ],
+    "featured": false,
+    "slug": "artwork-critique"
   }
 ]
