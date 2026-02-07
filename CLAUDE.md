@@ -301,6 +301,8 @@ git add . && git commit -m "Description
 Co-Authored-By: Claude <noreply@anthropic.com>" && git push
 ```
 
+**One branch at a time**: Only one non-main branch should exist at any time. At the start of a conversation, check `git branch` and alert the user if more than one non-main branch exists so stale branches can be cleaned up before proceeding.
+
 ### Design System Deployment
 
 **All design system changes should be deployed via the automated script in m3-design-v2:**
