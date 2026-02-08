@@ -1,461 +1,83 @@
-# Prompts Library Admin System
+# Admin System
 
-**Technical documentation for LLM coding tools**
+Local-only admin interface for editing prompts visually. Changes save to `prompts.json` and publish when committed to git.
 
-## Overview
-
-Local-only admin interface at `/admin` for editing prompts visually. Changes save to `prompts.json` and publish when committed to git.
-
-**Access:** http://localhost:3000/admin (requires server.js running)
+**Access:** `node server.js` then open http://localhost:3000/admin
 
 ## Architecture
 
-### Core Components
-
 ```
-prompt-library/
-├── admin.html          # Admin page shell
-├── admin.js            # Orchestration logic
-├── admin.css           # Page-level layout only
-├── server.js           # Express server with API endpoints
-├── prompts.json        # Data source (writable via API)
-└── web-components.js   # Local design system bundle
+admin.html          # Page shell
+admin.js            # Orchestration (state, event handlers, sidebar)
+admin.css           # Layout (280px sidebar + main grid)
+server.js           # Express server with API endpoints
+web-components.js   # Local design system bundle (DO NOT use CDN for admin)
 ```
 
-### Design System Components (from m3-design-v2)
+### Web Components (from m3-design-v2, Lit 3.x)
 
-All UI components are Web Components built with Lit 3.x:
+| Component | Purpose |
+|-----------|---------|
+| `wy-prompt-editor` | Main editor (5 sections: Basic Info, Visuals, Variables, Template, Visibility) |
+| `wy-image-upload` | Drag-drop image upload with preview |
+| `wy-icon-picker` | Material Symbols grid selector |
+| `wy-variable-editor` | Variable list CRUD with conditional visibility |
+| `wy-code-textarea` | Template editor with variable chip insertion |
+| `wy-step-editor` | Multi-step prompt step cards with reordering |
+| `wy-toggle-field` | Toggle with label/description |
+| `wy-form-field` | Input wrapper |
+| `wy-dropdown` | Category selector |
+| `wy-toast` | Notifications |
 
-- `wy-prompt-editor` - Main multi-step editor
-- `wy-image-upload` - Drag-drop image upload
-- `wy-icon-picker` - Material Symbols icon selector
-- `wy-variable-editor` - Variable list management
-- `wy-code-textarea` - Template editor with variable insertion
-- `wy-toggle-field` - Toggle with label/description
-- `wy-form-field` - Input wrapper (existing)
-- `wy-dropdown` - Category selector (existing)
-- `wy-modal` - Confirmation dialogs (existing)
-- `wy-toast` - Save/error notifications (existing)
+## Server API
 
-**Important:** Design system components are imported locally (`./web-components.js`) with cache-busting for save fix. Not using CDN for admin interface.
+**Dependencies:** express, multer, cors
 
----
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/prompts` | All prompts + categories |
+| `GET` | `/api/prompts/:id` | Single prompt |
+| `PUT` | `/api/prompts/:id` | Update prompt (full object) |
+| `POST` | `/api/prompts/:id/archive` | Toggle archive status |
+| `POST` | `/api/images/upload` | Upload image (multipart `file` field) |
+| `DELETE` | `/api/images/:filename` | Delete image |
 
-## Data Model
+Images saved to `public/images/` with timestamp filenames. All changes write to `prompts.json` immediately.
 
-### Prompt Schema (prompts.json)
+## wy-prompt-editor API
 
-```javascript
-{
-  "id": "unique-slug",           // Unique identifier
-  "title": "Display Name",       // Shown in UI
-  "description": "Short desc",   // Summary text
-  "category": "Category Name",   // For filtering/grouping
-  "image": "public/images/...",  // Optional thumbnail
-  "icon": "material_icon_name",  // Google Material Symbol (fallback if no image)
-  "featured": true,              // Optional flag for special styling
-  "locked": true,                // Edit protection (default: true)
-  "archived": false,             // Hidden from public site when true
-
-  "variables": [
-    {
-      "name": "variable_slug",
-      "label": "Display Label",
-      "placeholder": "Help text",
-      "value": "",
-      "inputType": "toggle",     // Optional: "toggle" or "text"
-      "options": ["", "value"],  // For toggle: off/on values
-      "dependsOn": "other_var",  // Optional: conditional visibility
-      "hideWhen": "value"        // Optional: value that hides this variable
-    }
-  ],
-
-  "variations": [                // Alternative versions (read-only in v1)
-    {
-      "id": "variation-id",
-      "name": "Style Name",
-      "template": "Alternative template"
-    }
-  ],
-  
-  "template": "Text with {{variable}} substitution"
-}
-```
-
-**Important:** JSON is flat array format, not wrapped in `{"prompts": [...]}`.
-
----
-
-## Web Component APIs
-
-### wy-prompt-editor
-
-Main multi-step editor with 5 sections: Basic Info, Visuals, Variables, Template, Visibility.
-
-**Properties:**
-- `prompt` (Object) - Prompt data to edit
-- `categories` (Array) - Available categories for dropdown
-- `icons` (Array) - Available icons for picker
+**Properties:** `prompt` (Object), `categories` (Array), `icons` (Array)
 
 **Events:**
-- `save` → `{ prompt: Object }` - Save button clicked
-- `cancel` → `{}` - Discard button clicked
-- `image-upload` → `{ file: File, promptId: string }` - Image selected
-- `image-remove` → `{ promptId: string }` - Image removed
-
-**Usage:**
-```javascript
-editor.prompt = promptData;
-editor.categories = ['Creativity', 'Productivity', ...];
-editor.addEventListener('save', async (e) => {
-  await fetch(`/api/prompts/${e.detail.prompt.id}`, {
-    method: 'PUT',
-    body: JSON.stringify(e.detail.prompt)
-  });
-});
-```
-
-### Supporting Components
-
-| Component | Purpose | Key Properties | Key Events |
-|-----------|---------|----------------|------------|
-| `wy-toggle-field` | Toggle with label/description | `checked`, `label`, `description` | `change` |
-| `wy-image-upload` | Drag-drop image upload | `value`, `label`, `accept` | `change`, `remove`, `error` |
-| `wy-icon-picker` | Material Symbols grid selector | `value`, `icons`, `columns` | `change` |
-| `wy-variable-editor` | Variable list manager | `variables`, `allow-reorder` | `change` |
-| `wy-code-textarea` | Template editor with chip insertion | `value`, `variables`, `rows` | `input`, `change` |
-| `wy-form-field` | Input wrapper | `label`, `disabled` | - |
-| `wy-dropdown` | Category selector | `value`, `options` | `change` |
-| `wy-toast` | Notifications | `message`, `type` | - |
-
----
-
-## Server API (server.js)
-
-### Starting the Server
-
-```bash
-node server.js  # Starts on http://localhost:3000
-```
-
-**Dependencies:** express, multer, cors (see package.json)
-
-### API Endpoints
-
-| Method | Endpoint | Description | Request Body | Response |
-|--------|----------|-------------|--------------|----------|
-| `GET` | `/api/prompts` | Get all prompts + categories | - | `{ prompts: [...], categories: [...] }` |
-| `GET` | `/api/prompts/:id` | Get single prompt | - | `{ prompt: {...} }` |
-| `PUT` | `/api/prompts/:id` | Update prompt | Full prompt object | `{ success: true, prompt: {...} }` |
-| `POST` | `/api/prompts/:id/archive` | Toggle archive status | - | `{ success: true, archived: boolean }` |
-| `POST` | `/api/images/upload` | Upload image (multipart) | `file` field | `{ success: true, path: "public/images/..." }` |
-| `DELETE` | `/api/images/:filename` | Delete image | - | `{ success: true }` |
-
-**Image Storage:** Files saved to `public/images/` with timestamp filenames.
-
-**Data Persistence:** All changes write to `prompts.json` immediately (not in-memory).
-
----
-
-## Admin Page Structure
-
-### admin.html
-
-```html
-<body class="admin-page">
-  <!-- Left: Prompt List Sidebar -->
-  <aside id="prompt-list" class="prompt-list">
-    <div class="sidebar-header">
-      <h2>Prompts</h2>
-      <a href="/index.html" target="_blank">View Public Site</a>
-    </div>
-    <div id="prompt-list-items"><!-- Populated by JS --></div>
-  </aside>
-
-  <!-- Right: Editor or Empty State -->
-  <main id="main-content">
-    <div id="editor-container">
-      <wy-prompt-editor id="editor"></wy-prompt-editor>
-    </div>
-    <div id="empty-state" class="empty-state">
-      <h3>Select a prompt to edit</h3>
-    </div>
-  </main>
-
-  <!-- Toast Notifications -->
-  <wy-toast id="toast"></wy-toast>
-
-  <!-- Import Local Web Components (with save fix) -->
-  <script type="module">
-    import './web-components.js?v=20260203-save-fix';
-  </script>
-  <script type="module" src="admin.js"></script>
-</body>
-```
-
-### admin.js Key Functions
-
-```javascript
-// State
-let prompts = [];
-let categories = [];
-let currentPromptId = null;
-
-// Core Functions
-async function loadPrompts() {
-  const { prompts, categories } = await fetch('/api/prompts').then(r => r.json());
-  // Store in module state
-}
-
-function loadPrompt(id) {
-  const prompt = prompts.find(p => p.id === id);
-  editor.prompt = prompt;
-  editor.categories = categories;
-  window.location.hash = id;
-  hideEmptyState();
-}
-
-function renderPromptList() {
-  // Render sidebar items with active/archived states
-  // Attach click handlers to load prompts
-}
-
-// Event Handlers
-editor.addEventListener('save', async (e) => {
-  await fetch(`/api/prompts/${e.detail.prompt.id}`, {
-    method: 'PUT',
-    body: JSON.stringify(e.detail.prompt)
-  });
-  showToast('Prompt saved successfully');
-  await loadPrompts();
-  renderPromptList();
-});
-
-editor.addEventListener('image-upload', async (e) => {
-  const formData = new FormData();
-  formData.append('file', e.detail.file);
-  const { path } = await fetch('/api/images/upload', {
-    method: 'POST',
-    body: formData
-  }).then(r => r.json());
-  
-  editor.prompt = { ...editor.prompt, image: path };
-});
-```
-
-### Layout (admin.css)
-
-```css
-.admin-page {
-  display: grid;
-  grid-template-columns: 280px 1fr;  /* Sidebar + main */
-  min-height: 100vh;
-}
-
-#prompt-list {
-  background: var(--md-sys-color-surface);
-  border-right: 1px solid var(--md-sys-color-outline-variant);
-  overflow-y: auto;
-}
-
-.prompt-item {
-  /* Hover states, active state, archived styling */
-}
-
-#empty-state {
-  /* Centered message when no prompt selected */
-}
-```
-
----
-
-## Public Site Integration
-
-### Archive Filtering (app.js)
-
-Archived prompts are hidden from public site:
-
-```javascript
-// In PromptLibrary class
-async loadPrompts() {
-  const response = await fetch('prompts.json');
-  const allPrompts = await response.json();
-  
-  // Filter out archived prompts
-  this.prompts = allPrompts.filter(p => !p.archived);
-  this.filteredPrompts = this.prompts;
-  this.renderPrompts();
-}
-```
-
-**Important:** Archive status only affects public site visibility. Prompts remain in `prompts.json` and are visible/editable in admin interface.
-
----
+- `save` -> `{ prompt }` - Save clicked
+- `cancel` -> `{}` - Discard clicked
+- `image-upload` -> `{ file, promptId }` - Image selected
+- `image-remove` -> `{ promptId }` - Image removed
 
 ## Workflow
 
-### Making Changes
-
 1. Start server: `node server.js`
-2. Open admin: http://localhost:3000/admin
-3. Select prompt from sidebar
-4. Edit in multi-step form
-5. Click "Save Changes"
-6. Changes written to `prompts.json` immediately
+2. Open http://localhost:3000/admin
+3. Select prompt from sidebar (URL hash routing)
+4. Edit -> Save -> `prompts.json` updated immediately
+5. `git add prompts.json public/images/ && git push` to deploy via Vercel
 
-### Publishing to Production
+**Archive:** Toggling archive hides prompts from public site (`app.js` filters `!p.archived`). Prompts remain in JSON and admin.
 
-```bash
-git add prompts.json public/images/
-git commit -m "Update prompts
+## Known Limitations
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
-git push origin main
-```
-
-Vercel auto-deploys on push to `main`.
-
-### Reverting Changes
-
-**Before committing:**
-```bash
-git checkout -- prompts.json public/images/
-```
-
-**After committing:**
-```bash
-git revert HEAD  # Creates new commit undoing changes
-git push origin main
-```
-
----
-
-## Implementation Status
-
-**✅ Completed** - All features implemented and tested.
-
-### Features Delivered
-
-| Feature | Status | Notes |
-|---------|--------|-------|
-| Multi-step editor (`wy-prompt-editor`) | ✅ | 5 sections: Basic Info, Visuals, Variables, Template, Visibility |
-| Image upload/delete | ✅ | Drag-drop with preview, removes old file on update |
-| Icon picker | ✅ | Material Symbols grid selector |
-| Variable editor | ✅ | Add/remove/reorder with conditional visibility support |
-| Template editor | ✅ | Variable chip insertion, character count |
-| Archive toggle | ✅ | Hides prompts from public site |
-| Server API | ✅ | Express with 6 endpoints |
-| Admin interface | ✅ | Sidebar navigation, empty state, toast notifications |
-| Public site filtering | ✅ | Archived prompts excluded from index |
-| Save fix | ✅ | Local web-components bundle with multi-step form submission fix |
-| **Variation management** | ✅ | Convert standard ↔ variations, add/remove/edit variations (Feb 2026) |
-
-### Variation Management
-
-**New Feature (February 2026):** Prompts can now be converted between standard mode and variations mode at any time.
-
-**Standard Mode:**
-- **Single-step:** One template with variables
-- **Multi-step:** Multiple sequential steps, each with its own template and variables
-
-**Variations Mode:**
-- Multiple template variations for the same prompt
-- Each variation can be independently single-step OR multi-step
-- Variables are shared across all variations
-- Users can switch between variations on the public site
-
-**Converting Standard → Variations:**
-1. Open any standard prompt in the editor
-2. Click "Convert to Variations" button (next to "Prompt Type" heading)
-3. A new variation is created containing the current template/steps
-4. The variation editor appears with controls to add more variations
-5. Each new variation can have different templates or different step structures
-
-**Converting Variations → Standard:**
-1. Open any variation-based prompt in the editor
-2. Click "Convert to Standard" button (next to "Variations" heading)
-3. Confirm the conversion (destructive action - other variations will be removed)
-4. The first variation becomes the standard template/steps
-5. Prompt returns to standard mode (single or multi-step based on first variation structure)
-
-**Use Cases:**
-- Create alternative writing styles for the same prompt (e.g., "Professional", "Casual", "Academic")
-- Provide beginner and advanced versions of complex prompts
-- Offer different approaches to the same task (e.g., "Quick Method", "Detailed Method")
-
-### Known Limitations
-
-- **Add/Delete prompts:** Use JSON editing for now (archive for soft-delete)
-- **Drag reordering:** Variables can be added/removed but not reordered (would require drag-drop implementation)
-
-### Testing Checklist
-
-When modifying admin system, verify:
-
-**Core Functionality:**
-- [ ] `node server.js` starts on port 3000
-- [ ] `/admin` loads with prompt list
-- [ ] Click prompt → editor loads with all 5 sections
-- [ ] Edit fields → Save → `prompts.json` updated
-- [ ] Upload image → file in `public/images/`, path saved
-- [ ] Toggle archive → prompt hidden from index.html
-- [ ] Cancel → reloads original data
-- [ ] Toast notifications show for save/error states
-- [ ] Browser back/forward navigation works with URL hash
-
-**Variation Management:**
-- [ ] Single-step prompt shows "Convert to Variations" button
-- [ ] Click convert → variation editor appears with 1 variation
-- [ ] Can add more variations after conversion
-- [ ] Multi-step prompt shows "Convert to Variations" button  
-- [ ] Multi-step conversion preserves all steps in variation
-- [ ] Variation-based prompt shows "Convert to Standard" button
-- [ ] Convert to standard shows confirmation dialog
-- [ ] First variation becomes the standard template/steps
-- [ ] Conversions persist correctly when saved
-
----
+- **Add/Delete prompts:** Use JSON editing (archive for soft-delete)
+- **Variable reordering:** Add/remove supported, not drag reorder
 
 ## Troubleshooting
 
-### Web Components Not Loading
-
-**Symptom:** Editor doesn't appear, console shows undefined custom elements.
-
-**Fix:** Check `admin.html` imports local `web-components.js` with save fix:
-```html
-<script type="module">
-  import './web-components.js?v=20260203-save-fix';
-</script>
-```
-
-### Save Button Not Working
-
-**Symptom:** Click save, nothing happens.
-
-**Fix:** Multi-step form needs save fix. Verify using local bundle (not CDN).
-
-### Images Not Uploading
-
-**Symptom:** Upload fails with 404 or 500 error.
-
-**Fix:** Ensure `public/images/` directory exists and server has write permissions.
-
-### Archived Prompts Still Visible on Public Site
-
-**Symptom:** Archive toggle works in admin but prompt still shows on index.html.
-
-**Fix:** Verify `app.js` filters archived prompts:
-```javascript
-this.prompts = allPrompts.filter(p => !p.archived);
-```
-
----
+| Symptom | Fix |
+|---------|-----|
+| Editor doesn't appear | Check `admin.html` imports local `web-components.js` (not CDN) |
+| Save does nothing | Verify using local bundle with save fix |
+| Image upload fails | Ensure `public/images/` directory exists |
+| Archived prompt still visible | Verify `app.js` has `filter(p => !p.archived)` |
 
 ## Design System Source
 
-All Web Components are built with **Lit 3.x** and sourced from **m3-design-v2** repository.
-
-**Local Build:** This project uses a local copy (`web-components.js`) with save fix applied. Do not switch to CDN import without verifying multi-step form submission works.
-
-**For Updates:** See `m3-design-v2/CLAUDE.md` for component development patterns and commit workflow.
+Components built with Lit 3.x from `m3-design-v2`. Admin uses local copy (`web-components.js`) with save fix. Do not switch to CDN without verifying multi-step form submission works.
