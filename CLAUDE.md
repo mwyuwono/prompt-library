@@ -6,6 +6,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A vanilla JavaScript prompt management tool with zero dependencies and no build process. Users can store, customize, and copy reusable AI prompts with variable substitution using `{{variable}}` syntax.
 
+## Communication Preferences
+
+**Be concise.** Short status updates over verbose summaries. No markdown documentation files unless explicitly requested.
+
+### Documentation Hygiene
+
+**Clean up temporary documentation at the end of exercises.**
+
+- Delete plans, tests, and other temporary `.md` files when work is complete
+- When marking a plan "done" or completing a test, remove the documentation created along the way
+- Don't create detailed summaries upon completion unless they provide information not already in the code or elsewhere
+- Resist the urge to document what the code already shows clearly
+
 ## Running the Application
 
 **Public Site:**

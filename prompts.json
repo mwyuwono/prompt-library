@@ -616,7 +616,7 @@
   },
   {
     "id": "portrait-iconography",
-    "title": "Portrait Iconography Brainstorm",
+    "title": "Art Iconography",
     "description": "Brainstorm visual symbolism for portraits using 19th-century art history and iconographic language",
     "category": "Creativity",
     "icon": "image",
@@ -629,6 +629,7 @@
         "value": ""
       }
     ],
-    "featured": false
+    "featured": false,
+    "slug": "art-iconography"
   }
 ]

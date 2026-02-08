@@ -348,10 +348,43 @@ git push origin main
 | Admin interface | ✅ | Sidebar navigation, empty state, toast notifications |
 | Public site filtering | ✅ | Archived prompts excluded from index |
 | Save fix | ✅ | Local web-components bundle with multi-step form submission fix |
+| **Variation management** | ✅ | Convert standard ↔ variations, add/remove/edit variations (Feb 2026) |
+
+### Variation Management
+
+**New Feature (February 2026):** Prompts can now be converted between standard mode and variations mode at any time.
+
+**Standard Mode:**
+- **Single-step:** One template with variables
+- **Multi-step:** Multiple sequential steps, each with its own template and variables
+
+**Variations Mode:**
+- Multiple template variations for the same prompt
+- Each variation can be independently single-step OR multi-step
+- Variables are shared across all variations
+- Users can switch between variations on the public site
+
+**Converting Standard → Variations:**
+1. Open any standard prompt in the editor
+2. Click "Convert to Variations" button (next to "Prompt Type" heading)
+3. A new variation is created containing the current template/steps
+4. The variation editor appears with controls to add more variations
+5. Each new variation can have different templates or different step structures
+
+**Converting Variations → Standard:**
+1. Open any variation-based prompt in the editor
+2. Click "Convert to Standard" button (next to "Variations" heading)
+3. Confirm the conversion (destructive action - other variations will be removed)
+4. The first variation becomes the standard template/steps
+5. Prompt returns to standard mode (single or multi-step based on first variation structure)
+
+**Use Cases:**
+- Create alternative writing styles for the same prompt (e.g., "Professional", "Casual", "Academic")
+- Provide beginner and advanced versions of complex prompts
+- Offer different approaches to the same task (e.g., "Quick Method", "Detailed Method")
 
 ### Known Limitations
 
-- **Variation editing:** Read-only in current version (prompts with variations can be edited, but variations themselves cannot be added/removed/edited)
 - **Add/Delete prompts:** Use JSON editing for now (archive for soft-delete)
 - **Drag reordering:** Variables can be added/removed but not reordered (would require drag-drop implementation)
 
@@ -359,6 +392,7 @@ git push origin main
 
 When modifying admin system, verify:
 
+**Core Functionality:**
 - [ ] `node server.js` starts on port 3000
 - [ ] `/admin` loads with prompt list
 - [ ] Click prompt → editor loads with all 5 sections
@@ -368,6 +402,17 @@ When modifying admin system, verify:
 - [ ] Cancel → reloads original data
 - [ ] Toast notifications show for save/error states
 - [ ] Browser back/forward navigation works with URL hash
+
+**Variation Management:**
+- [ ] Single-step prompt shows "Convert to Variations" button
+- [ ] Click convert → variation editor appears with 1 variation
+- [ ] Can add more variations after conversion
+- [ ] Multi-step prompt shows "Convert to Variations" button  
+- [ ] Multi-step conversion preserves all steps in variation
+- [ ] Variation-based prompt shows "Convert to Standard" button
+- [ ] Convert to standard shows confirmation dialog
+- [ ] First variation becomes the standard template/steps
+- [ ] Conversions persist correctly when saved
 
 ---
 
