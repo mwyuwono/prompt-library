@@ -44,6 +44,21 @@ class PromptLibrary {
         this.populateCategoryFilter();
         this.syncControlsBar();
         this.filterPrompts();
+        this.showAdminButtonIfLocal();
+    }
+
+    /**
+     * Show admin button only when running on localhost
+     */
+    showAdminButtonIfLocal() {
+        const isLocalhost = window.location.hostname === 'localhost' || 
+                           window.location.hostname === '127.0.0.1' ||
+                           window.location.hostname === '';
+        
+        const adminButton = document.getElementById('adminButton');
+        if (adminButton && isLocalhost) {
+            adminButton.style.display = 'flex';
+        }
     }
 
     /**

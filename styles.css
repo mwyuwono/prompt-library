@@ -2876,6 +2876,56 @@ mark {
 
 /* Links Modal styles removed - now using wy-links-modal Web Component */
 
+/* Admin Button (localhost only) */
+.admin-button {
+    position: fixed;
+    top: calc(var(--header-height, 72px) + 16px);
+    right: 16px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--md-sys-shape-corner-full);
+    background-color: transparent;
+    color: var(--md-sys-color-on-surface);
+    text-decoration: none;
+    transition: background-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
+                color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+    cursor: pointer;
+    z-index: 101;
+    opacity: 0.6;
+}
+
+.admin-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-color: currentColor;
+    opacity: 0;
+    transition: opacity var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+}
+
+.admin-button:hover {
+    opacity: 1;
+}
+
+.admin-button:hover::before {
+    opacity: var(--md-sys-state-hover-opacity);
+}
+
+.admin-button:focus-visible {
+    outline: 3px solid var(--md-sys-color-primary);
+    outline-offset: 2px;
+}
+
+.admin-button .material-symbols-outlined {
+    font-size: 20px;
+    position: relative;
+    z-index: 1;
+}
+
 /* Utility Classes */
 [hidden],
 .hidden {
