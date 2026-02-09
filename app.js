@@ -50,15 +50,70 @@ class PromptLibrary {
     /**
      * Show admin button only when running on localhost
      */
-    showAdminButtonIfLocal() {
+    async showAdminButtonIfLocal() {
         const isLocalhost = window.location.hostname === 'localhost' || 
                            window.location.hostname === '127.0.0.1' ||
                            window.location.hostname === '';
         
+        if (!isLocalhost) return;
+        
         const adminButton = document.getElementById('adminButton');
-        if (adminButton && isLocalhost) {
+        if (!adminButton) return;
+        
+        // Check if admin server is running on port 3001
+        const serverAvailable = await this.checkAdminServer();
+        
+        if (serverAvailable) {
+            // Link to admin server port
+            adminButton.href = 'http://localhost:3001/admin.html';
             adminButton.style.display = 'flex';
+        } else {
+            // Still show button but with click handler that shows error
+            adminButton.href = '#';
+            adminButton.style.display = 'flex';
+            adminButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.showAdminServerError();
+            });
         }
+    }
+
+    /**
+     * Check if admin server is running on port 3001
+     */
+    async checkAdminServer() {
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 1000); // 1 second timeout
+            
+            const response = await fetch('http://localhost:3001/api/prompts', {
+                method: 'HEAD',
+                cache: 'no-cache',
+                signal: controller.signal
+            });
+            
+            clearTimeout(timeoutId);
+            return response.ok;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    /**
+     * Show error message when admin server is not running
+     */
+    showAdminServerError() {
+        const message = `Admin server not running.
+
+To use the admin panel:
+1. Open a terminal
+2. Navigate to the project folder
+3. Run: node server.js
+4. Click the admin button again
+
+The server will start on http://localhost:3001`;
+        
+        alert(message);
     }
 
     /**

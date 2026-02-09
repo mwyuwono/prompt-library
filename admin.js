@@ -54,9 +54,12 @@ function hideEmptyState() {
  */
 async function loadPrompts() {
     try {
+        console.log('Loading prompts from /api/prompts...');
+        console.log('Current URL:', window.location.href);
+        
         const response = await fetch('/api/prompts');
         if (!response.ok) {
-            throw new Error('Failed to load prompts');
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
         
         const data = await response.json();
@@ -66,8 +69,40 @@ async function loadPrompts() {
         console.log(`Loaded ${prompts.length} prompts and ${categories.length} categories`);
     } catch (error) {
         console.error('Error loading prompts:', error);
-        showToast('Failed to load prompts', 'error');
+        
+        // Determine if this is a server connectivity issue
+        const isServerDown = error.message.includes('Failed to fetch') || 
+                            error.name === 'TypeError' ||
+                            error.message.includes('NetworkError');
+        
+        if (isServerDown) {
+            showServerNotRunningError();
+        } else {
+            showToast(`Failed to load prompts: ${error.message}`, 'error');
+        }
     }
+}
+
+/**
+ * Show server not running error message
+ */
+function showServerNotRunningError() {
+    // Replace the prompt list with helpful error message
+    promptListItems.innerHTML = `
+        <div class="server-error-state">
+            <span class="material-symbols-outlined">error</span>
+            <h3>Admin Server Not Running</h3>
+            <p>The admin panel requires the Node.js server.</p>
+            <ol>
+                <li>Open a terminal in the project folder</li>
+                <li>Run: <code>node server.js</code></li>
+                <li>Refresh this page</li>
+            </ol>
+            <p class="server-url">Server should start on <code>http://localhost:3001</code></p>
+        </div>
+    `;
+    
+    showToast('Server connection failed. See instructions.', 'error');
 }
 
 /**
