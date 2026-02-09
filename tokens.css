@@ -23,6 +23,9 @@
    ======================================== */
 
 :root {
+  /* Force light mode only - disable dark mode */
+  color-scheme: light only;
+  
   /* Legacy compatibility mappings - map old variable names to M3 tokens */
   --color-linen: var(--md-sys-color-background);
   --color-charcoal: var(--md-sys-color-on-background);
