@@ -105,13 +105,17 @@ class PromptLibrary {
     showAdminServerError() {
         const message = `Admin server not running.
 
-To use the admin panel:
-1. Open a terminal
-2. Navigate to the project folder
-3. Run: node server.js
-4. Click the admin button again
+Option 1 - Using alias (recommended):
+1. Open terminal and run: admin-prompts
 
-The server will start on http://localhost:3001`;
+Option 2 - Manual:
+1. Open terminal
+2. Navigate to project folder
+3. Run: npm install (first time only)
+4. Run: node server.js
+
+Then click the admin button again.
+Server will start on http://localhost:3001`;
         
         alert(message);
     }

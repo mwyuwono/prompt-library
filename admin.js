@@ -93,11 +93,21 @@ function showServerNotRunningError() {
             <span class="material-symbols-outlined">error</span>
             <h3>Admin Server Not Running</h3>
             <p>The admin panel requires the Node.js server.</p>
+            
+            <h4>Option 1 - Using alias (recommended):</h4>
             <ol>
-                <li>Open a terminal in the project folder</li>
+                <li>Open terminal and run: <code>admin-prompts</code></li>
+                <li>Refresh this page</li>
+            </ol>
+            
+            <h4>Option 2 - Manual:</h4>
+            <ol>
+                <li>Open terminal in the project folder</li>
+                <li>Run: <code>npm install</code> (first time only)</li>
                 <li>Run: <code>node server.js</code></li>
                 <li>Refresh this page</li>
             </ol>
+            
             <p class="server-url">Server should start on <code>http://localhost:3001</code></p>
         </div>
     `;
