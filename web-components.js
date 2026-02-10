@@ -6029,7 +6029,7 @@ class Za extends g {
       z-index: 100;
       width: auto;
       max-width: 900px;
-      background-color: color-mix(in srgb, var(--md-sys-color-surface) 60%, transparent);
+      background-color: var(--wy-controls-bar-bg, color-mix(in srgb, var(--md-sys-color-surface) 60%, transparent));
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border-radius: 9999px;
