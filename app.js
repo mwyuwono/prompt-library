@@ -7,10 +7,10 @@ class PromptLibrary {
         this.prompts = [];
         this.filteredPrompts = [];
         this.searchTerm = '';
-        this.selectedCategory = 'Creativity'; // Default to Creativity
+        this.selectedCategory = ''; // Default to Featured (no category selected)
         this.showDetails = true; // Default to visible on desktop
         this.currentView = 'grid'; // Default to grid view
-        this.showFeaturedOnly = false; // Default to showing all prompts
+        this.showFeaturedOnly = true; // Default to Featured tab
 
         // DOM elements
         this.promptGrid = document.getElementById('promptGrid');
