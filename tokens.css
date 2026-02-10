@@ -11,10 +11,10 @@
  */
 
 /* Design System Tokens (colors, typography, spacing, shapes, motion) */
-@import url('https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/tokens.css?v=20260203-2044');
+@import url('https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/tokens.css?v=20260209-2000');
 
 /* Design System Utilities (base styles, button classes, text utilities) */
-@import url('https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/main.css?v=20260203-2044');
+@import url('https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/main.css?v=20260209-2000');
 
 /* ========================================
    PROJECT-SPECIFIC EXTENSIONS
