@@ -69,3 +69,149 @@
   --md-sys-motion-duration-medium3: 350ms;
   --md-sys-motion-duration-medium4: 400ms;
 }
+
+/* ========================================
+   DARK MODE OVERRIDE - FORCE LIGHT MODE
+   
+   This block overrides the design system's dark mode media queries.
+   Even when the user's OS is in dark mode, we force light mode colors.
+   
+   Why this is needed:
+   - color-scheme: light only (above) only affects browser UI (scrollbars, form controls)
+   - It does NOT prevent @media (prefers-color-scheme: dark) from matching
+   - Design system imports contain dark mode overrides that apply when OS is dark
+   - This block re-applies light mode values to counter those overrides
+   ======================================== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Re-apply all light mode color tokens to override design system dark mode */
+    
+    /* Primary: Hunter Green */
+    --md-sys-color-primary: #2C4C3B;
+    --md-sys-color-on-primary: #FFFFFF;
+    --md-sys-color-primary-container: #E8F5E9;
+    --md-sys-color-on-primary-container: #002114;
+
+    /* Secondary / Surface Tones */
+    --md-sys-color-secondary: #8C7E70;
+    --md-sys-color-on-secondary: #FFFFFF;
+
+    /* Backgrounds & Surfaces (Light) */
+    --md-sys-color-background: #FDFBF7;
+    --md-sys-color-on-background: #121714;
+
+    /* Surfaces & Containers */
+    --md-sys-color-surface: #F5F2EA;
+    --md-sys-color-on-surface: #121714;
+    --md-sys-color-surface-variant: #EBE5DE;
+    --md-sys-color-on-surface-variant: #49454E;
+
+    /* Surface containers */
+    --md-sys-color-surface-container-lowest: #FFFFFF;
+    --md-sys-color-surface-container-low: #FDFBF7;
+    --md-sys-color-surface-container: #F5F2EA;
+    --md-sys-color-surface-container-high: #EBE5DE;
+    --md-sys-color-surface-container-highest: #D7D3C8;
+
+    --md-sys-color-secondary-container: #EBE5DE;
+    --md-sys-color-on-secondary-container: #2d312f;
+
+    /* Inverse Tokens */
+    --md-sys-color-inverse-surface: #121714;
+    --md-sys-color-inverse-on-surface: #F5F2EA;
+
+    /* Outlines & Borders */
+    --md-sys-color-outline: #2d4e3c;
+    --md-sys-color-outline-variant: #D7D3C8;
+    --md-sys-color-border-variant: #EBE5DA;
+
+    /* Semantic Text */
+    --md-sys-color-text-main: #121714;
+    --md-sys-color-text-muted: #667f71;
+    --md-sys-color-text-heading: #2C4C3B;
+    
+    /* Links Modal Specific Colors */
+    --wy-links-modal-title-color: #1C1917;
+    --wy-links-modal-header-color: #292524;
+    --wy-links-modal-chip-text-color: #44403C;
+    --wy-links-modal-close-color: #A8A29E;
+    --wy-links-modal-chip-border: #D9D4C7;
+    --wy-links-modal-text-muted: #78716C;
+    
+    /* Dropdown Component Colors */
+    --wy-dropdown-label-color: #71717A;
+    --wy-dropdown-text-color: #52525B;
+    --wy-dropdown-icon-color: #52525B;
+    --wy-dropdown-bg: #F5F2EA;
+    --wy-dropdown-border: #E5E7EB;
+    --wy-dropdown-border-hover: #D7D3C8;
+    --wy-dropdown-menu-bg: #EBE5DE;
+    --wy-dropdown-item-hover-bg: #EBE5DE;
+    
+    /* Info Panel Component Colors */
+    --wy-info-panel-bg: #FDFBF7;
+    --wy-info-panel-border: #D7D3C8;
+    --wy-info-panel-text-color: #52525B;
+
+    /* Library Header Component Colors */
+    --wy-status-success-color: #438E64;
+    --wy-library-header-scrolled-bg: rgba(248, 247, 244, 0.8);
+
+    /* Component Tokens - Controls Bar */
+    --wy-controls-bar-bg: var(--md-sys-color-primary);
+    --wy-controls-bar-fg: var(--md-sys-color-on-primary);
+    --wy-controls-search-bg: var(--md-sys-color-surface-container-lowest);
+    --wy-controls-toggle-bg: var(--md-sys-color-surface-container-high);
+    --wy-controls-chip-text: color-mix(in srgb, var(--wy-controls-bar-fg) 60%, transparent);
+    --wy-controls-chip-text-hover: var(--wy-controls-bar-fg);
+    --wy-controls-chip-border: color-mix(in srgb, var(--wy-controls-bar-fg) 20%, transparent);
+    --wy-controls-chip-border-hover: color-mix(in srgb, var(--wy-controls-bar-fg) 40%, transparent);
+    --wy-controls-chip-hover-bg: color-mix(in srgb, var(--wy-controls-bar-fg) 5%, transparent);
+    --wy-controls-chip-focus: color-mix(in srgb, var(--wy-controls-bar-fg) 50%, transparent);
+    --wy-controls-chip-active-bg: var(--md-sys-color-primary);
+    --wy-controls-chip-active-fg: var(--md-sys-color-on-primary);
+
+    /* Filter Chip Colors */
+    --wy-filter-chip-bg: var(--md-sys-color-surface-container-lowest);
+    --wy-filter-chip-text: var(--md-sys-color-on-surface);
+    --wy-filter-chip-text-hover: var(--md-sys-color-on-surface);
+    --wy-filter-chip-border: transparent;
+    --wy-filter-chip-border-hover: transparent;
+    --wy-filter-chip-hover-bg: var(--md-sys-color-surface-variant);
+    --wy-filter-chip-focus: var(--md-sys-color-primary);
+    --wy-filter-chip-active-bg: var(--md-sys-color-primary);
+    --wy-filter-chip-active-fg: var(--md-sys-color-on-primary);
+
+    /* Button System Tokens */
+    --wy-button-primary-bg: var(--md-sys-color-primary);
+    --wy-button-primary-fg: var(--md-sys-color-on-primary);
+    --wy-button-primary-hover-bg: #1e3428;
+    --wy-button-primary-shadow-hover: 0 10px 25px -5px rgba(44, 76, 59, 0.25);
+    
+    --wy-button-secondary-bg: var(--md-sys-color-surface);
+    --wy-button-secondary-fg: var(--md-sys-color-primary);
+    --wy-button-secondary-hover-bg: color-mix(in srgb, var(--md-sys-color-surface) 95%, black);
+    
+    --wy-button-outlined-bg: transparent;
+    --wy-button-outlined-fg: var(--md-sys-color-primary);
+    --wy-button-outlined-border: var(--md-sys-color-surface-container-highest);
+    --wy-button-outlined-hover-bg: color-mix(in srgb, var(--md-sys-color-surface) 30%, transparent);
+    
+    --wy-button-text-fg: var(--md-sys-color-primary);
+    --wy-button-text-fg-muted: color-mix(in srgb, var(--md-sys-color-primary) 60%, transparent);
+    --wy-button-text-hover-bg: color-mix(in srgb, var(--md-sys-color-primary) 5%, transparent);
+    
+    --wy-icon-button-filled-bg: var(--md-sys-color-primary);
+    --wy-icon-button-filled-fg: var(--md-sys-color-on-primary);
+    --wy-icon-button-filled-shadow: 0 4px 12px rgba(44, 76, 59, 0.2);
+    --wy-icon-button-outlined-bg: var(--md-sys-color-background);
+    --wy-icon-button-outlined-fg: var(--md-sys-color-primary);
+    --wy-icon-button-outlined-border: color-mix(in srgb, var(--md-sys-color-primary) 20%, transparent);
+    
+    --wy-utility-tag-bg: color-mix(in srgb, var(--md-sys-color-primary) 5%, transparent);
+    --wy-utility-tag-fg: var(--md-sys-color-primary);
+    --wy-utility-tag-border: color-mix(in srgb, var(--md-sys-color-primary) 10%, transparent);
+    --wy-utility-tag-add-border: color-mix(in srgb, var(--md-sys-color-primary) 30%, transparent);
+    --wy-utility-tag-add-fg: color-mix(in srgb, var(--md-sys-color-primary) 40%, transparent);
+  }
+}
