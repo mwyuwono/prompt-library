@@ -1120,7 +1120,7 @@ body.modal-open {
     opacity: 0;
     border-radius: var(--md-sys-shape-corner-full);
     background-color: transparent;
-    border: 1px solid color-mix(in srgb, var(--md-sys-color-text-muted) 20%, transparent);
+    border: none;
     color: var(--color-charcoal);
     transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized),
         transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
@@ -1129,7 +1129,6 @@ body.modal-open {
 .prompt-card:hover .card-arrow-button {
     opacity: 1;
     background-color: var(--color-gold);
-    border-color: var(--color-gold);
     color: var(--color-white);
     transform: scale(1.05);
 }
@@ -1142,13 +1141,11 @@ body.modal-open {
 
 /* Featured olive cards - white arrow that turns gold */
 .prompt-card.featured-olive .card-arrow-button {
-    border-color: color-mix(in srgb, var(--md-sys-color-surface-container-lowest) 30%, transparent);
     color: var(--color-white);
 }
 
 .prompt-card.featured-olive .card-arrow-button:hover {
     background-color: var(--color-gold);
-    border-color: var(--color-gold);
     color: var(--color-white);
 }
 
@@ -1421,6 +1418,7 @@ body.modal-open {
    Safe to remove: Yes - no remaining usages
    ========================================================================== */
 
+/* DEPRECATED: Use design system wy-prompt-modal .tabs-header instead */
 /* New tabs container using wy-tabs web component */
 .tabs-header-container {
     display: flex;
@@ -1434,6 +1432,7 @@ body.modal-open {
     flex: 1;
 }
 
+/* DEPRECATED: Use design system wy-prompt-modal .tabs-header instead */
 /* @deprecated - replaced by wy-tabs */
 .tabs-header {
     display: flex;
@@ -2224,6 +2223,7 @@ wy-links-modal::part(modal-actions) {
     max-width: 36rem;
 }
 
+/* DEPRECATED: Use design system wy-prompt-modal .variation-selector-container instead */
 /* Variation Selector with Web Components */
 .variation-selector-container {
     margin-bottom: var(--space-sm);
