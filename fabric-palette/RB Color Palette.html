@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Palette: Robert Brown</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#a5745b",
+            "background-light": "#f6f6f8",
+            "background-dark": "#101622",
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"],
+            "serif": ["Playfair Display", "serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+
+    .swatch-card:hover .copy-overlay,
+    .swatch-card:focus-within .copy-overlay {
+      opacity: 1;
+    }
+
+    .swatch-live-label {
+      opacity: 0;
+      width: 90%;
+      border-radius: 99px;
+      margin-top: 8px;
+      margin-left: auto;
+      margin-right: auto;
+      transform: translateY(-8px);
+      transition: opacity 200ms ease, transform 200ms ease;
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      background: rgba(17, 24, 39, 0.25);
+      pointer-events: none;
+    }
+
+    .swatch-live-label.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .swatch-secondary-chip {
+      width: 32px;
+      height: 32px;
+      border-radius: 9999px;
+      border: 1.5px solid rgba(255, 255, 255, 0.82);
+      box-shadow: 0 0 0 1px rgba(17, 24, 39, 0.16);
+      transition: transform 150ms ease, box-shadow 150ms ease;
+    }
+
+    .swatch-secondary-chip:hover,
+    .swatch-secondary-chip:focus-visible {
+      transform: scale(1.08);
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.9);
+    }
+  </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display text-[#0d121b] transition-colors duration-300">
+  <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+    <div class="layout-container flex h-full grow flex-col">
+      <!-- Navigation Header -->
+
+      <main class="flex-1 px-6 md:px-20 lg:px-40 py-12">
+        <!-- Hero Section -->
+        <div class="max-w-4xl mb-12">
+          <h1 class="text-[#0d121b] dark:text-white text-5xl leading-tight tracking-tight mb-4 font-serif font-bold">
+            Color Palette
+          </h1>
+          <p class="text-[#4c669a] text-lg max-w-2xl"><span class="font-serif italic text-xl">Robert Brown Fabric
+              Collection</span>
+          </p>
+        </div>
+        <!-- Palette Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="palette-grid"></div>
+        <!-- Copied Notification (Toast) -->
+        <div
+          class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] opacity-0 pointer-events-none transition-all duration-500 transform translate-y-4"
+          id="toast">
+          <div
+            class="flex items-center gap-4 rounded-xl border border-primary/20 bg-white dark:bg-background-dark p-4 shadow-2xl">
+            <div class="bg-primary/10 text-primary p-2 rounded-lg">
+              <span class="material-symbols-outlined">check_circle</span>
+            </div>
+            <div class="flex flex-col pr-8">
+              <p class="text-[#0d121b] dark:text-white text-sm font-bold leading-tight tracking-tight">Copied to
+                Clipboard</p>
+              <p class="text-[#4c669a] text-xs font-normal leading-normal">The HEX code has been saved.</p>
+            </div>
+            <button class="text-[#4c669a] hover:text-[#0d121b]"
+              onclick="this.parentElement.parentElement.classList.add('opacity-0')">
+              <span class="material-symbols-outlined text-xl">close</span>
+            </button>
+          </div>
+        </div>
+      </main>
+      <!-- Sophisticated Footer -->
+
+    </div>
+  </div>
+  <!-- Palette Component and Interaction Logic -->
+  <script>
+    const paletteGrid = document.getElementById('palette-grid');
+    const toast = document.getElementById('toast');
+    let toastTimeoutId;
+
+    function normalizeHex(hex) {
+      const normalized = (hex || '').trim().toUpperCase();
+      return /^#[0-9A-F]{6}$/.test(normalized) ? normalized : null;
+    }
+
+    function escapeHtml(text) {
+      return (text || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    async function loadSwatchesFromJson() {
+      try {
+        const response = await fetch('./swatches.json', { cache: 'no-store' });
+        if (!response.ok) {
+          throw new Error(`Failed to load swatches.json (${response.status})`);
+        }
+
+        const parsed = await response.json();
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (error) {
+        console.error('Could not load swatch JSON:', error);
+        return [];
+      }
+    }
+
+    function renderSwatchCard(swatch) {
+      const primaryHex = normalizeHex(swatch?.primary?.hex);
+      if (!primaryHex) return '';
+
+      const primaryName = swatch.primary.name || swatch.title || 'Primary';
+      const secondaryColors = Array.isArray(swatch.secondary)
+        ? swatch.secondary.slice(0, 5).map((color) => {
+          const hex = normalizeHex(color?.hex);
+          if (!hex) return null;
+          return {
+            name: color.name || 'Secondary',
+            hex
+          };
+        }).filter(Boolean)
+        : [];
+
+      const secondaryMarkup = secondaryColors.length > 0
+        ? `
+          <div class="absolute bottom-3 left-3 z-30 flex flex-wrap gap-2">
+            ${secondaryColors.map((color) => `
+              <span
+                class="copy-target swatch-secondary-chip cursor-pointer"
+                role="button"
+                tabindex="0"
+                data-hex="${escapeHtml(color.hex)}"
+                data-name="${escapeHtml(color.name)}"
+                aria-label="Copy ${escapeHtml(color.name)} (${escapeHtml(color.hex)})"
+                style="background-color: ${escapeHtml(color.hex)};"
+              ></span>
+            `).join('')}
+          </div>
+        `
+        : '';
+
+      return `
+        <article class="swatch-card group flex flex-col gap-4">
+          <div
+            class="copy-target swatch-primary relative w-full aspect-[4/5] rounded-xl shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden cursor-pointer"
+            role="button"
+            tabindex="0"
+            data-hex="${escapeHtml(primaryHex)}"
+            data-name="${escapeHtml(primaryName)}"
+            data-alt="${escapeHtml(swatch.alt || swatch.title || 'Palette swatch')}"
+            aria-label="Copy ${escapeHtml(primaryName)} (${escapeHtml(primaryHex)})"
+            style="background-color: ${escapeHtml(primaryHex)};"
+          >
+            <div class="swatch-live-label absolute top-0 inset-x-0 z-20 p-3 text-white">
+              <p class="swatch-live-label-text text-xs font-semibold tracking-wide text-white/95"></p>
+            </div>
+            <div class="copy-overlay absolute inset-0 z-10 bg-black/12 opacity-0 transition-opacity flex items-center justify-center">
+              <span class="material-symbols-outlined text-white text-4xl">content_copy</span>
+            </div>
+            ${secondaryMarkup}
+          </div>
+          <div class="px-1">
+            <h3 class="text-[#0d121b] dark:text-white font-semibold text-lg font-serif">${escapeHtml(swatch.title || primaryName)}</h3>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderPalette(swatches) {
+      if (!paletteGrid) return;
+      paletteGrid.innerHTML = swatches
+        .map((swatch) => renderSwatchCard(swatch))
+        .filter(Boolean)
+        .join('');
+    }
+
+    function showToast(title, body) {
+      if (!toast) return;
+
+      const titleEl = toast.querySelector('p:first-of-type');
+      const bodyEl = toast.querySelector('p:last-of-type');
+
+      if (titleEl) titleEl.textContent = title;
+      if (bodyEl) bodyEl.textContent = body;
+
+      toast.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+      toast.classList.add('opacity-100', 'translate-y-0');
+
+      if (toastTimeoutId) {
+        clearTimeout(toastTimeoutId);
+      }
+
+      toastTimeoutId = setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+        toast.classList.remove('opacity-100', 'translate-y-0');
+      }, 3000);
+    }
+
+    async function copyTextToClipboard(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.setAttribute('readonly', '');
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-9999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+
+      let copied = false;
+      try {
+        copied = document.execCommand('copy');
+      } finally {
+        document.body.removeChild(textArea);
+      }
+
+      if (!copied) {
+        throw new Error('Copy command failed');
+      }
+      return true;
+    }
+
+    async function copyFromTarget(target) {
+      const hex = normalizeHex(target?.dataset?.hex);
+      const name = (target?.dataset?.name || 'Color').trim();
+      if (!hex) return;
+
+      try {
+        await copyTextToClipboard(hex);
+        showToast('Copied to Clipboard', `${name} · ${hex} copied.`);
+      } catch (error) {
+        showToast('Copy failed', 'Could not copy automatically.');
+      }
+    }
+
+    function setCardLabel(card, text) {
+      const label = card?.querySelector('.swatch-live-label');
+      const labelText = card?.querySelector('.swatch-live-label-text');
+      if (!label || !labelText) return;
+      labelText.textContent = text;
+      label.classList.add('is-visible');
+    }
+
+    function clearCardLabel(card) {
+      const label = card?.querySelector('.swatch-live-label');
+      if (!label) return;
+      label.classList.remove('is-visible');
+    }
+
+    function getCopyTarget(node) {
+      if (!paletteGrid) return null;
+      const target = node?.closest?.('.copy-target');
+      return target && paletteGrid.contains(target) ? target : null;
+    }
+
+    if (paletteGrid) {
+      paletteGrid.addEventListener('click', async (event) => {
+        const target = getCopyTarget(event.target);
+        if (!target) return;
+        await copyFromTarget(target);
+      });
+
+      paletteGrid.addEventListener('keydown', async (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ' && event.key !== 'Spacebar') {
+          return;
+        }
+
+        const target = getCopyTarget(event.target);
+        if (!target) return;
+        event.preventDefault();
+        await copyFromTarget(target);
+      });
+
+      paletteGrid.addEventListener('mouseover', (event) => {
+        const target = getCopyTarget(event.target);
+        if (!target) return;
+        const card = target.closest('.swatch-card');
+        const hex = normalizeHex(target.dataset.hex);
+        const name = (target.dataset.name || 'Color').trim();
+        if (!card || !hex) return;
+        setCardLabel(card, `${name} · ${hex}`);
+      });
+
+      paletteGrid.addEventListener('mouseout', (event) => {
+        const fromTarget = getCopyTarget(event.target);
+        if (!fromTarget) return;
+        const fromCard = fromTarget.closest('.swatch-card');
+        if (!fromCard) return;
+
+        const toTarget = getCopyTarget(event.relatedTarget);
+        if (toTarget && toTarget.closest('.swatch-card') === fromCard) {
+          return;
+        }
+
+        clearCardLabel(fromCard);
+      });
+
+      paletteGrid.addEventListener('focusin', (event) => {
+        const target = getCopyTarget(event.target);
+        if (!target) return;
+        const card = target.closest('.swatch-card');
+        const hex = normalizeHex(target.dataset.hex);
+        const name = (target.dataset.name || 'Color').trim();
+        if (!card || !hex) return;
+        setCardLabel(card, `${name} · ${hex}`);
+      });
+
+      paletteGrid.addEventListener('focusout', (event) => {
+        const fromTarget = getCopyTarget(event.target);
+        if (!fromTarget) return;
+        const fromCard = fromTarget.closest('.swatch-card');
+        if (!fromCard) return;
+
+        const toTarget = getCopyTarget(event.relatedTarget);
+        if (toTarget && toTarget.closest('.swatch-card') === fromCard) {
+          return;
+        }
+
+        clearCardLabel(fromCard);
+      });
+    }
+
+    loadSwatchesFromJson().then((swatches) => {
+      renderPalette(swatches);
+
+      if (swatches.length === 0) {
+        showToast('Palette unavailable', 'Could not load swatch data.');
+      }
+    });
+  </script>
+</body>
+
+</html>
