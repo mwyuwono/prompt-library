@@ -677,5 +677,40 @@
     ],
     "featured": false,
     "slug": "artwork-critique"
+  },
+  {
+    "id": "fabric-colorways",
+    "title": "Fabric Colorways",
+    "description": "Explore alternative colorways for textile designs using reference images and color palettes",
+    "category": "Fabric",
+    "icon": "palette",
+    "variables": [],
+    "variations": [
+      {
+        "id": "palette-method",
+        "name": "Palette Method",
+        "description": "Upload a reference design and a palette image. The model recolors the reference using colors from the palette while maintaining style and quality consistency.",
+        "template": "You are an expert textile designer specializing in colorway development.\n\nI am uploading two images:\n\n1. **Reference Image**: The original fabric/textile design that I want to recolor\n2. **Palette Image**: A reference showing the color palette I want to apply to the design\n\n**Your task:**\n\nAnalyze the color palette from the second image and apply those colors to recolor the reference design. The recolored version should:\n\n- Use only colors extracted from the palette image\n- Maintain the exact composition, structure, and pattern of the reference design\n- Preserve the style, texture, quality, and level of detail from the original\n- Ensure color application is consistent and harmonious across the entire design\n- Refine the result to match the professional quality and finish of the reference design\n\nThe output should be a single high-quality image showing the reference design recolored with the new palette while maintaining all original design elements and aesthetic integrity.",
+        "variables": []
+      },
+      {
+        "id": "style-direction",
+        "name": "Style Direction",
+        "description": "Upload a reference design and provide style guidance. The model generates a grid showing 4 different colorway variations based on your style direction.",
+        "template": "You are an expert textile designer specializing in colorway development and trend forecasting.\n\nI am uploading a reference fabric/textile design and providing style direction below:\n\n**Style Direction:** {{style_direction}}\n\n**Your task:**\n\nUsing the uploaded reference design and the style direction provided, generate a visual grid showing **4 different colorway variations** of the design.\n\nEach variation should:\n\n- Maintain the exact composition, structure, and pattern of the reference design\n- Apply a distinct color palette aligned with the style direction (e.g., if \"minimalist neutral,\" show variations in grays, taupes, and creams)\n- Preserve the style, texture, quality, and level of detail from the original\n- Represent commercially viable, professionally refined colorways\n- Show clear visual distinction between the 4 options\n\nArrange all 4 variations in a single grid image (2x2 or 1x4 layout) for easy comparison. Each variation should be a complete, high-quality rendering of the design in its assigned colors.\n\nThe output should demonstrate 4 distinct but cohesive interpretations of the design within the style parameters provided.",
+        "variables": [
+          {
+            "name": "style_direction",
+            "label": "Style Direction",
+            "placeholder": "e.g., minimalist neutral, vibrant tropical, moody jewel tones, geometric modern",
+            "value": "",
+            "inputType": "textarea",
+            "rows": 3
+          }
+        ]
+      }
+    ],
+    "featured": false,
+    "slug": "fabric-colorways"
   }
 ]
