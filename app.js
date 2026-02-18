@@ -19,6 +19,7 @@ class PromptLibrary {
         this.controlsBar = document.getElementById('controlsBar');
         this.emptyState = document.getElementById('emptyState');
         this.toast = document.getElementById('toast');
+        this.paletteLink = document.getElementById('paletteLink');
         this.showDetailsToggle = null;
         this.viewToggleBtns = [];
         this.promptModal = null;
@@ -190,6 +191,7 @@ Server will start on http://localhost:3001`;
                     this.switchView(viewMode);
                 }
                 this.updateCardDetailsVisibility();
+                this.updatePaletteVisibility();
                 this.filterPrompts();
             });
         }
@@ -386,6 +388,17 @@ Server will start on http://localhost:3001`;
                 badge.classList.add('hidden');
             }
         });
+    }
+
+    /**
+     * Show or hide the Fabric Palette link based on category filter
+     */
+    updatePaletteVisibility() {
+        if (this.paletteLink) {
+            // Show palette link only when Fabric category is active
+            this.paletteLink.style.display =
+                this.selectedCategory === 'Fabric' ? 'inline-block' : 'none';
+        }
     }
 
     /**
