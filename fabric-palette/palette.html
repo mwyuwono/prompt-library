@@ -72,6 +72,18 @@
       transform: translateY(0);
     }
 
+    .swatch-secondary-chips-container {
+      opacity: 0;
+      transition: opacity 150ms ease;
+      pointer-events: none;
+    }
+
+    .swatch-primary:hover .swatch-secondary-chips-container,
+    .swatch-primary:focus-within .swatch-secondary-chips-container {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
     .swatch-secondary-chip {
       width: 32px;
       height: 32px;
@@ -183,7 +195,7 @@
 
       const secondaryMarkup = secondaryColors.length > 0
         ? `
-          <div class="absolute bottom-3 left-3 z-30 flex flex-wrap gap-2">
+          <div class="swatch-secondary-chips-container absolute bottom-3 left-1/2 -translate-x-1/2 z-30 flex flex-wrap gap-2 justify-center">
             ${secondaryColors.map((color) => `
               <span
                 class="copy-target swatch-secondary-chip cursor-pointer"
