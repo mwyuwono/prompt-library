@@ -115,11 +115,39 @@
               Collection</span>
           </p>
         </div>
+        <!-- Search -->
+        <div class="relative mb-8" id="search-container">
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary/60 pointer-events-none select-none">search</span>
+            <input
+              type="text"
+              id="search-input"
+              placeholder="Search colors…"
+              autocomplete="off"
+              class="w-full pl-12 pr-10 py-3 rounded-xl border border-primary/20 bg-white dark:bg-background-dark text-[#0d121b] dark:text-white placeholder-[#0d121b]/40 dark:placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-primary/30 text-sm transition-all"
+            >
+            <button
+              id="search-clear"
+              class="absolute right-4 top-1/2 -translate-y-1/2 text-primary/60 hover:text-primary hidden"
+              aria-label="Clear search"
+            >
+              <span class="material-symbols-outlined text-xl">close</span>
+            </button>
+          </div>
+          <!-- Dropdown — max-height 40vh on mobile so it never fills the screen -->
+          <div
+            id="search-dropdown"
+            class="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-background-dark rounded-xl border border-primary/20 shadow-xl z-50 overflow-y-auto hidden"
+            style="max-height: 40vh;"
+          >
+            <div id="search-results" class="p-2"></div>
+          </div>
+        </div>
         <!-- Palette Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="palette-grid"></div>
         <!-- Copied Notification (Toast) -->
         <div
-          class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] opacity-0 pointer-events-none transition-all duration-500 transform translate-y-4"
+          class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] opacity-0 pointer-events-none transition-all duration-500 transform translate-y-4 max-w-[95vw] w-max"
           id="toast">
           <div
             class="flex items-center gap-4 rounded-xl border border-primary/20 bg-white dark:bg-background-dark p-4 shadow-2xl">
@@ -147,6 +175,7 @@
     const paletteGrid = document.getElementById('palette-grid');
     const toast = document.getElementById('toast');
     let toastTimeoutId;
+    let allSwatches = [];
 
     function normalizeHex(hex) {
       const normalized = (hex || '').trim().toUpperCase();
@@ -212,7 +241,7 @@
         : '';
 
       return `
-        <article class="swatch-card group flex flex-col gap-4">
+        <article class="swatch-card group flex flex-col gap-4" id="swatch-${escapeHtml(swatch.id || '')}">
           <div
             class="copy-target swatch-primary relative w-full aspect-[4/5] rounded-xl shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden cursor-pointer"
             role="button"
@@ -236,6 +265,7 @@
     }
 
     function renderPalette(swatches) {
+      allSwatches = swatches;
       if (!paletteGrid) return;
       paletteGrid.innerHTML = swatches
         .map((swatch) => renderSwatchCard(swatch))
@@ -392,6 +422,101 @@
         clearCardLabel(fromCard);
       });
     }
+
+    // ── Search ─────────────────────────────────────────────────────────────
+    const searchInput = document.getElementById('search-input');
+    const searchDropdown = document.getElementById('search-dropdown');
+    const searchResults = document.getElementById('search-results');
+    const searchClear = document.getElementById('search-clear');
+
+    function matchesSwatch(swatch, q) {
+      const lq = q.toLowerCase();
+      if ((swatch.primary?.name || swatch.title || '').toLowerCase().includes(lq)) return true;
+      if ((swatch.primary?.hex || '').toLowerCase().includes(lq)) return true;
+      if ((swatch.brand || '').toLowerCase().includes(lq)) return true;
+      return (swatch.secondary || []).some(c =>
+        (c.name || '').toLowerCase().includes(lq) || (c.hex || '').toLowerCase().includes(lq)
+      );
+    }
+
+    function renderSearchResults(results) {
+      if (!searchResults) return;
+      if (results.length === 0) {
+        searchResults.innerHTML = '<p class="px-4 py-3 text-sm text-[#0d121b]/50 dark:text-white/50">No colors found</p>';
+        return;
+      }
+      searchResults.innerHTML = results.map(s => {
+        const hex = normalizeHex(s.primary?.hex);
+        const name = s.primary?.name || s.title || 'Color';
+        const brand = s.brand || '';
+        if (!hex) return '';
+        return `
+          <button
+            class="flex items-center gap-3 w-full px-4 py-2.5 hover:bg-primary/5 rounded-lg text-left transition-colors"
+            data-swatch-id="${escapeHtml(s.id || '')}"
+          >
+            <span class="w-8 h-8 rounded-full flex-shrink-0 shadow-sm border border-black/10" style="background-color:${escapeHtml(hex)};"></span>
+            <span class="flex flex-col min-w-0">
+              <span class="text-sm font-medium text-[#0d121b] dark:text-white truncate">${escapeHtml(name)}</span>
+              <span class="text-xs text-[#0d121b]/50 dark:text-white/50 truncate">${escapeHtml(brand)} · ${escapeHtml(hex)}</span>
+            </span>
+          </button>`;
+      }).join('');
+    }
+
+    function openSearch(q) {
+      const results = allSwatches.filter(s => matchesSwatch(s, q)).slice(0, 20);
+      renderSearchResults(results);
+      searchDropdown.classList.remove('hidden');
+    }
+
+    function closeSearch() {
+      searchDropdown.classList.add('hidden');
+    }
+
+    if (searchInput) {
+      searchInput.addEventListener('input', () => {
+        const q = searchInput.value.trim();
+        searchClear.classList.toggle('hidden', !q);
+        q ? openSearch(q) : closeSearch();
+      });
+
+      searchInput.addEventListener('keydown', e => {
+        if (e.key === 'Escape') { closeSearch(); searchInput.blur(); }
+      });
+    }
+
+    if (searchClear) {
+      searchClear.addEventListener('click', () => {
+        searchInput.value = '';
+        searchClear.classList.add('hidden');
+        closeSearch();
+        searchInput.focus();
+      });
+    }
+
+    document.addEventListener('click', e => {
+      if (!e.target.closest('#search-container')) closeSearch();
+    });
+
+    if (searchResults) {
+      searchResults.addEventListener('click', e => {
+        const btn = e.target.closest('[data-swatch-id]');
+        if (!btn) return;
+        const card = document.getElementById(`swatch-${btn.dataset.swatchId}`);
+        if (card) {
+          card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          card.style.outline = '3px solid #a5745b';
+          card.style.outlineOffset = '4px';
+          card.style.borderRadius = '0.75rem';
+          setTimeout(() => { card.style.outline = ''; card.style.outlineOffset = ''; }, 2000);
+        }
+        closeSearch();
+        searchInput.value = '';
+        searchClear.classList.add('hidden');
+      });
+    }
+    // ── End Search ──────────────────────────────────────────────────────────
 
     loadSwatchesFromJson().then((swatches) => {
       renderPalette(swatches);
