@@ -136,6 +136,10 @@ This file is a bundled copy from `m3-design-v2/dist/web-components.js`. Any dire
 
 **Exception:** Quick local testing only - but changes must be ported to design system source before pushing.
 
+### Bundle completeness check
+
+This project loads the design system via a single bundle. Every `wy-*` tag used here must be imported in `m3-design-v2/src/web-components.js`. When changing design-system loading or adding `wy-*` usage, verify the component is in the bundle entry to avoid unregistered-element breakage.
+
 ### CDN Import Details
 
 **CSS tokens** (via `tokens.css`):
