@@ -727,5 +727,25 @@
     ],
     "featured": false,
     "slug": "fabric-colorways"
+  },
+  {
+    "id": "fabric-pattern-repeat",
+    "title": "Pattern Repeat Design",
+    "description": "Generate a new seamless repeating tile inspired by the visual style, color palette, and motifs of a reference image",
+    "category": "Fabric",
+    "icon": "texture",
+    "variables": [
+      {
+        "name": "notes",
+        "label": "Additional Notes (Optional)",
+        "placeholder": "e.g., make it more dense, use a half-drop repeat, emphasize the floral elements",
+        "value": "",
+        "inputType": "textarea",
+        "rows": 4
+      }
+    ],
+    "template": "Analyze the visual style, color palette, and botanical motifs of the provided image to create a net new, seamless repeating tile.\n1. Maintain Aesthetic DNA: Capture the specific \"look and feel\" of the original—including the line weight, artistic medium (e.g., block print, watercolor, or ink), and the specific shade of the background and foreground elements.\n2. Design a New Repeat: Instead of cropping the original, generate a fresh composition of these elements. You are not constrained by the original’s specific dimensions or geometric grid.\n3. Ensure Technical Seamlessness: The new tile must be perfectly seamless. The motifs at the top edge must transition perfectly into the bottom, and the left edge must transition perfectly into the right.\n4. Optimize for Tiling: The final output should be a single, centered tile that can be repeated indefinitely to create a continuous, cohesive pattern without visible seams or “edge breaks.”{{notes}}",
+    "featured": false,
+    "slug": "fabric-pattern-repeat"
   }
 ]
