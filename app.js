@@ -1206,14 +1206,7 @@ Server will start on http://localhost:3001`;
 
             // Get the active variables and restore saved values
             const variables = this.getActiveVariables(prompt);
-            const savedValues = this.loadVariableValues(prompt.id);
-            if (savedValues) {
-                variables.forEach(v => {
-                    if (savedValues[v.name] !== undefined) {
-                        v.value = savedValues[v.name];
-                    }
-                });
-            }
+            this.loadVariableValues(prompt.id, variables);
 
             // Set all properties on the web component
             Object.assign(this.promptModal, {
@@ -2138,18 +2131,22 @@ Server will start on http://localhost:3001`;
     /**
      * Load variable values from localStorage
      */
-    loadVariableValues(promptId, variables) {
+    loadVariableValues(promptId, variables = null) {
         const key = `prompt_vars_${promptId}`;
         const saved = localStorage.getItem(key);
-        if (!saved) return;
+        if (!saved) return null;
 
         try {
             const values = JSON.parse(saved);
-            variables.forEach(v => {
-                if (values[v.name]) v.value = values[v.name];
-            });
+            if (Array.isArray(variables)) {
+                variables.forEach(v => {
+                    if (values[v.name] !== undefined) v.value = values[v.name];
+                });
+            }
+            return values;
         } catch (error) {
             console.error('Error loading variable values:', error);
+            return null;
         }
     }
 
