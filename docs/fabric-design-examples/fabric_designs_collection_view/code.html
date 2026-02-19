@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Fabric Designs Collection View</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2C4C3B","background-light": "#FDFBF7","background-dark": "#161c19",
+                        "amber-soft": "#FFF8E1",
+                        "earth-brown": "#a5745b",
+                        "charcoal": "#1A1C18","slate-blue": "#4e6d97"
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "serif": ["Playfair Display", "serif"],
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-charcoal font-display min-h-screen flex flex-col antialiased selection:bg-primary/20">
+<header class="flex items-center justify-between border-b border-solid border-b-[#e7ecf3] px-10 py-5 bg-background-light/80 backdrop-blur-md sticky top-0 z-50">
+<div class="flex items-center gap-4">
+<div class="size-10 bg-primary text-white rounded-full flex items-center justify-center font-serif font-bold text-lg tracking-widest border border-primary/20 shadow-sm">
+            WY
+        </div>
+</div>
+<nav class="flex items-center gap-3">
+<a class="bg-primary text-white text-sm font-medium px-6 py-2 rounded-full shadow-sm transition-all hover:opacity-90" href="#">
+            Prints
+        </a>
+<a class="text-charcoal bg-transparent hover:bg-gray-100/50 text-sm font-medium px-6 py-2 rounded-full transition-all border border-transparent hover:border-gray-200" href="#">
+            Palette
+        </a>
+</nav>
+</header>
+<main class="flex-1 flex flex-col w-full">
+<div class="w-full bg-amber-soft border-b border-amber-200/50 px-6 py-3 flex items-center justify-center gap-3 text-center">
+<span class="material-symbols-outlined text-primary" style="font-size: 20px;">warning</span>
+<p class="text-primary text-sm font-medium leading-normal">
+            Color changes are session-only and will not be saved. Download your SVG after editing.
+        </p>
+</div>
+<div class="flex-1 w-full max-w-[1440px] mx-auto px-6 md:px-[60px] lg:px-[120px] py-12">
+<div class="flex flex-col gap-4 mb-12">
+<h1 class="text-charcoal text-5xl md:text-6xl font-serif font-medium leading-tight tracking-tight">Fabric Designs</h1>
+<p class="text-charcoal/70 text-lg font-display font-normal leading-normal max-w-2xl">Select a design to start colorizing</p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 xl:gap-10">
+<a class="group flex flex-col gap-4 cursor-pointer transition-transform duration-300 hover:-translate-y-1" href="#">
+<div class="relative w-full aspect-[4/5] overflow-hidden rounded-lg shadow-sm group-hover:shadow-xl transition-all duration-300 bg-white">
+<div class="absolute inset-0 bg-center bg-no-repeat bg-cover transition-transform duration-500 group-hover:scale-105" data-alt="Abstract colorful fabric texture with swirls" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAx8W__BqS77p0pC0I4xhhknu7h-m5toas5-5DBeiu9ZtIDcSNF8GPOzIHZmcaLvSwkYPv94PAkX2hGkGBmFXdpqrBYjSpTqCtN26MwJFc1wg1-YnjdDRFimiN9y5aNXGwNn-9MyegHuzEiyb_5Su3NctHQT4sYVAu5ptHb9BRkO-hNmyA8YIKllBd7mLgz46aajy6tEEq1vBIMd7uVHpLFroBHZGMUwNSYLqiE2B7q3ZnIr46j4l4ZsYzG8BQgcO7pj7W7ZLpeiOg");'>
+</div>
+<div class="absolute bottom-4 right-4 bg-primary text-white text-xs font-bold px-4 py-2 rounded-full shadow-md backdrop-blur-sm bg-opacity-95">
+                        4 layers
+                    </div>
+</div>
+<div class="flex flex-col gap-1 px-1">
+<h3 class="text-charcoal text-xl font-medium font-display leading-tight group-hover:text-primary transition-colors">Damask Rose</h3>
+<p class="text-charcoal/60 text-sm font-normal">Complex floral arrangement</p>
+</div>
+</a>
+<a class="group flex flex-col gap-4 cursor-pointer transition-transform duration-300 hover:-translate-y-1" href="#">
+<div class="relative w-full aspect-[4/5] overflow-hidden rounded-lg shadow-sm group-hover:shadow-xl transition-all duration-300 bg-white">
+<div class="absolute inset-0 bg-center bg-no-repeat bg-cover transition-transform duration-500 group-hover:scale-105" data-alt="Geometric weave pattern in blue and orange" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD1vIebpGZcLM9wM9FSptx1EAmtu8wBCn0bSiU9ukqNdM7TxSW1AfpjYSuzvwQGfrMte4zdhkaSLF6qudhWVeSRXjbkIhnhZxiv0SbR24hzqDtxknZPKgerdUdZVeIHvxbG-YkckYUqFxIgrfmqHydosY5qojPO6C2-_TKiKy_04ifJ2buoyjcJ-kG4OJwstKDLj3z8XFOv-pUmWZBS_XjNi6hOhfqA4Hud9M2V9Za7ynKbLLfW9mXQzZX0GUOGbE66oXKonnvV0Rg");'>
+</div>
+<div class="absolute bottom-4 right-4 bg-primary text-white text-xs font-bold px-4 py-2 rounded-full shadow-md backdrop-blur-sm bg-opacity-95">
+                        3 layers
+                    </div>
+</div>
+<div class="flex flex-col gap-1 px-1">
+<h3 class="text-charcoal text-xl font-medium font-display leading-tight group-hover:text-primary transition-colors">Geometric Weave</h3>
+<p class="text-charcoal/60 text-sm font-normal">Modern symmetrical grid</p>
+</div>
+</a>
+<a class="group flex flex-col gap-4 cursor-pointer transition-transform duration-300 hover:-translate-y-1" href="#">
+<div class="relative w-full aspect-[4/5] overflow-hidden rounded-lg shadow-sm group-hover:shadow-xl transition-all duration-300 bg-white">
+<div class="absolute inset-0 bg-center bg-no-repeat bg-cover transition-transform duration-500 group-hover:scale-105" data-alt="Delicate floral lattice pattern on light background" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC8Umjq8GpjPsx7atyLmtDLa60Wu5WOxbpGwIJiD8dpAzgoPlBEzRCE870Vy8kIB_mJRbc9J056ukH8UYo4qUJlMinOZ4h0PAf7FOlTh4gHY7UwSjdrra-Dwv4rwBqaWekRyaiy-UWSgJtss6gDyaMb4NIBY3jVkaT3UYy4SUDKK3R0l5swDT9_6UJXmE2BU-1hMRmoFidJxpzFtiFtFGOMfN92pz_Nl42nEyYRsjkhIEy3KULZxK7jSyE4gHtV3DlCaTJK0pYULvg");'>
+</div>
+<div class="absolute bottom-4 right-4 bg-primary text-white text-xs font-bold px-4 py-2 rounded-full shadow-md backdrop-blur-sm bg-opacity-95">
+                        5 layers
+                    </div>
+</div>
+<div class="flex flex-col gap-1 px-1">
+<h3 class="text-charcoal text-xl font-medium font-display leading-tight group-hover:text-primary transition-colors">Floral Lattice</h3>
+<p class="text-charcoal/60 text-sm font-normal">Intertwining vines and blooms</p>
+</div>
+</a>
+<a class="group flex flex-col gap-4 cursor-pointer transition-transform duration-300 hover:-translate-y-1" href="#">
+<div class="relative w-full aspect-[4/5] overflow-hidden rounded-lg shadow-sm group-hover:shadow-xl transition-all duration-300 bg-white">
+<div class="absolute inset-0 bg-center bg-no-repeat bg-cover transition-transform duration-500 group-hover:scale-105" data-alt="Bold chevron stripes in high contrast" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCC0ZupqW0axCG9fetuPMMxu7gqKRSPAo5WDOVD_p3fa_2KUA6FfHYmwlK5csKPFxPk6_OJhCqUhQ_Ivq5YvMyabKEzXrd10sIE2m49b1-3_nER-EZs6OfBiZJVTcJvygL56YG_rN3YoK35aZCL5phjxqyy9Z9NqwMEuw79v1eQ83E6ektabgyx71uViC65XRoHeMwdwKAtJB786WEN61Urs65xrfrrwMvyXiAMTUpFoYccTdQYKQhA1YbgBAQcBFyKDcgZCbfpU7o");'>
+</div>
+<div class="absolute bottom-4 right-4 bg-primary text-white text-xs font-bold px-4 py-2 rounded-full shadow-md backdrop-blur-sm bg-opacity-95">
+                        2 layers
+                    </div>
+</div>
+<div class="flex flex-col gap-1 px-1">
+<h3 class="text-charcoal text-xl font-medium font-display leading-tight group-hover:text-primary transition-colors">Chevron Stripes</h3>
+<p class="text-charcoal/60 text-sm font-normal">Classic zig-zag bold lines</p>
+</div>
+</a>
+<a class="group flex flex-col gap-4 cursor-pointer transition-transform duration-300 hover:-translate-y-1" href="#">
+<div class="relative w-full aspect-[4/5] overflow-hidden rounded-lg shadow-sm group-hover:shadow-xl transition-all duration-300 bg-white">
+<div class="absolute inset-0 bg-center bg-no-repeat bg-cover transition-transform duration-500 group-hover:scale-105" data-alt="Intricate paisley print with teardrop shapes" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCziHMDxBOdwwpiKwb96hb6M0FoTE-SzatBOBXU9w2pup-664OmI-YWllFaW6k3gRUF2HQ5L8_3o4Iw59EGncCaXaCKag8uG2TtBxG63mJLLmgVK5yaKmM-fmt12ZYLdExottykTjY1nHU64L__qBDeVYKer1oj7sj2IOqEljtlyo7atGKVwi6gaHuYonVfYW3v5m7SEORs86xu7eiMraOm48HQdVtepfPk_VvF9U8tMUBqP74-KcyXTqUQB4Pxr7mKkx6e2F5cIIc");'>
+</div>
+<div class="absolute bottom-4 right-4 bg-primary text-white text-xs font-bold px-4 py-2 rounded-full shadow-md backdrop-blur-sm bg-opacity-95">
+                        4 layers
+                    </div>
+</div>
+<div class="flex flex-col gap-1 px-1">
+<h3 class="text-charcoal text-xl font-medium font-display leading-tight group-hover:text-primary transition-colors">Paisley Print</h3>
+<p class="text-charcoal/60 text-sm font-normal">Traditional persian motif</p>
+</div>
+</a>
+<a class="group flex flex-col gap-4 cursor-pointer transition-transform duration-300 hover:-translate-y-1" href="#">
+<div class="relative w-full aspect-[4/5] overflow-hidden rounded-lg shadow-sm group-hover:shadow-xl transition-all duration-300 bg-white">
+<div class="absolute inset-0 bg-center bg-no-repeat bg-cover transition-transform duration-500 group-hover:scale-105" data-alt="Blurred ikat style dye pattern" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBJUnfPji35IxvpF7fBs4jSwg4i-sRaCqsMLMU0C3yXMoXR9ricl8S0fVuXlIJFvNcVyz90tGhEbbkYYABeWknxcarj3WSL9YvKkVhIQMyvXyV7Cws0ECzkqxXaLTaE-k5e4i_bikt04YDYlOsdOJeo24Bu8UvYhKJsRB0r75D11dd72IhUUfNyLgUbvbbsoQuRo_IHyDP5aXczgQbSKYNtBqZtUcKTBxxTtWcozGLpaCKu-0yFc-RUE5TXpFyvMlUzu2KcgyA65eM");'>
+</div>
+<div class="absolute bottom-4 right-4 bg-primary text-white text-xs font-bold px-4 py-2 rounded-full shadow-md backdrop-blur-sm bg-opacity-95">
+                        3 layers
+                    </div>
+</div>
+<div class="flex flex-col gap-1 px-1">
+<h3 class="text-charcoal text-xl font-medium font-display leading-tight group-hover:text-primary transition-colors">Modern Ikat</h3>
+<p class="text-charcoal/60 text-sm font-normal">Resist dyeing technique</p>
+</div>
+</a>
+</div>
+</div>
+</main>
+<footer class="border-t border-[#e7ecf3] py-10 text-center">
+<p class="text-charcoal/40 text-sm">© 2024 Weaver-Yuwono Family Office. All rights reserved.</p>
+</footer>
+
+</body></html>

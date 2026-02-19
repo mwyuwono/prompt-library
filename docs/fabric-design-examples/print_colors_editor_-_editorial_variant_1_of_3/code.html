@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Refined Print Colors Editor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;700&amp;family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2C4C3B", // Hunter Green as requested
+                        "primary-dark": "#1e3629",
+                        "background-light": "#FDFBF7", // Alabaster as requested
+                        "background-dark": "#161c19",
+                        "surface-light": "#FFFFFF",
+                        "surface-dark": "#232a26",
+                        "taupe-border": "#E5E0D8",
+                    },
+                    fontFamily: {
+                        "display": ["DM Sans", "sans-serif"], // Body text and labels
+                        "serif": ["Playfair Display", "serif"], // Headings
+                        "caps": ["DM Sans", "sans-serif"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "1.5rem", 
+                        "xl": "2rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .editorial-shadow {
+            box-shadow: 0 20px 40px -10px rgba(44, 76, 59, 0.08);
+        }.custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: rgba(44, 76, 59, 0.1);
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen text-[#121714] dark:text-[#f0f0f0] flex flex-col overflow-hidden font-display">
+<header class="w-full h-20 border-b border-taupe-border dark:border-primary/20 flex items-center justify-between px-8 bg-surface-light dark:bg-surface-dark z-20 shrink-0">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-serif text-lg font-bold">
+                WY
+            </div>
+</div>
+<nav class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center gap-2">
+<a class="px-6 py-2 rounded-full text-sm font-medium text-white bg-primary transition-colors shadow-sm" href="#">Prints</a>
+<a class="px-6 py-2 rounded-full text-sm font-medium text-primary hover:bg-primary/5 dark:text-gray-300 dark:hover:text-white transition-colors" href="#">Palette</a>
+</nav>
+<div class="w-10"></div>
+</header>
+<main class="flex-1 flex flex-col md:flex-row h-[calc(100vh-80px)] overflow-hidden">
+<section class="flex-1 md:w-[60%] p-6 md:p-10 flex flex-col justify-center items-center relative overflow-hidden bg-background-light dark:bg-background-dark">
+<div class="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none bg-[url('https://placeholder.pics/svg/1000')] bg-cover bg-center mix-blend-multiply dark:mix-blend-lighten"></div>
+<div class="w-full h-full max-w-4xl flex flex-col">
+<div class="mb-6 flex justify-between items-end">
+<div>
+<h1 class="font-serif text-4xl md:text-5xl text-primary dark:text-white mb-2 font-medium">Floral Crest</h1>
+<p class="text-primary/60 dark:text-gray-400 font-display text-sm tracking-wide">Variant 1: Editorial Gallery</p>
+</div>
+<div class="flex gap-3">
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-white dark:bg-surface-dark border border-taupe-border dark:border-primary/30 shadow-sm hover:shadow-md transition-all text-primary dark:text-white" title="Zoom In">
+<span class="material-symbols-outlined text-lg">add</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-white dark:bg-surface-dark border border-taupe-border dark:border-primary/30 shadow-sm hover:shadow-md transition-all text-primary dark:text-white" title="Zoom Out">
+<span class="material-symbols-outlined text-lg">remove</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-white dark:bg-surface-dark border border-taupe-border dark:border-primary/30 shadow-sm hover:shadow-md transition-all text-primary dark:text-white" title="Reset View">
+<span class="material-symbols-outlined text-lg">center_focus_strong</span>
+</button>
+</div>
+</div>
+<div class="flex-1 bg-surface-light dark:bg-surface-dark rounded-xl p-8 editorial-shadow border border-taupe-border/50 dark:border-primary/10 relative group overflow-hidden flex items-center justify-center">
+<div class="relative w-full h-full bg-[#f4f1ea] dark:bg-[#1a201d] flex items-center justify-center overflow-hidden rounded-lg">
+<div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: radial-gradient(#2d4e3c 1px, transparent 1px); background-size: 20px 20px;"></div>
+<div class="relative w-3/4 h-3/4 shadow-xl transform transition-transform duration-700 ease-out group-hover:scale-[1.02]">
+<img alt="Pattern Preview" class="w-full h-full object-cover rounded shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDH1VCAFLeeNzPDxQtrPBCt3lxljB3A0FxGYdZ7cUVAVLaYaBtI_P1khmrp4DOzz5t5XQ-sc4x5wKB2pe27_XLyJdXusb9DwA18xK742w59kEWB6bI1m9lWDtbSABP2iPDVbWaRCkyqU9n2oePLC51PSiV5i5ctFzsYxveuUlQ6ZrK1wkrSZzb3FaKTDpHPjiTxIILV3j5YTcW-ZoRjkC30Xzf5LU-vQZ3C24s96lChM0cYjcEqHbFygLiD_7tlQvwOlP0fZar6gks"/>
+<div class="absolute bottom-4 right-4 bg-white/90 dark:bg-black/80 backdrop-blur px-3 py-1 rounded-full text-xs font-caps tracking-wider text-primary dark:text-white border border-primary/10 font-bold">
+                                PREVIEW MODE
+                            </div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<aside class="w-full md:w-[40%] bg-surface-light dark:bg-surface-dark border-l border-taupe-border dark:border-primary/20 flex flex-col h-full z-10 shadow-xl relative">
+<div class="flex-1 overflow-y-auto custom-scrollbar p-8 pb-32">
+<div class="mb-10">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-xs font-caps font-bold tracking-[0.2em] text-primary/80 dark:text-white/80 uppercase">Layers</h2>
+<button class="text-xs font-medium text-primary hover:underline dark:text-primary/60">Reset All</button>
+</div>
+<div class="space-y-4">
+<div class="group flex items-center justify-between p-4 rounded-lg border border-taupe-border dark:border-primary/20 bg-background-light dark:bg-background-dark/50 hover:border-primary/30 transition-colors cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded bg-[#F0EFEB] border border-black/5 shadow-inner flex items-center justify-center">
+<div class="w-6 h-6 bg-[#D8D4C8] rounded-sm"></div>
+</div>
+<div class="flex flex-col">
+<span class="font-display font-semibold text-primary dark:text-white">Background Base</span>
+<span class="text-xs text-primary/60 dark:text-gray-400 font-display">#F0EFEB • Pantone 7527 C</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="text-primary/40 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+<button class="text-primary/40 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">lock_open</span>
+</button>
+</div>
+</div>
+<div class="group flex items-center justify-between p-4 rounded-lg border-2 border-primary bg-white dark:bg-surface-dark shadow-sm relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded bg-[#2d4e3c] border border-black/5 shadow-inner flex items-center justify-center">
+<span class="material-symbols-outlined text-white/50 text-sm">local_florist</span>
+</div>
+<div class="flex flex-col">
+<span class="font-display font-bold text-primary dark:text-white">Floral Elements</span>
+<span class="text-xs text-primary/60 dark:text-gray-400 font-display">#2C4C3B • Hunter Green</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="text-primary hover:text-primary-dark transition-colors">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+<button class="text-primary/40 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">lock_open</span>
+</button>
+</div>
+</div>
+<div class="group flex items-center justify-between p-4 rounded-lg border border-taupe-border dark:border-primary/20 bg-background-light dark:bg-background-dark/50 hover:border-primary/30 transition-colors cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded bg-[#C4A484] border border-black/5 shadow-inner flex items-center justify-center">
+<span class="material-symbols-outlined text-white/50 text-sm">text_fields</span>
+</div>
+<div class="flex flex-col">
+<span class="font-display font-semibold text-primary dark:text-white">Text Overlay</span>
+<span class="text-xs text-primary/60 dark:text-gray-400 font-display">#C4A484 • Camel</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="text-primary/40 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">visibility_off</span>
+</button>
+<button class="text-primary/40 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div>
+<h2 class="text-xs font-caps font-bold tracking-[0.2em] text-primary/80 dark:text-white/80 mb-6 uppercase">Palette Colors</h2>
+<div class="grid grid-cols-5 gap-4">
+<button aria-label="Select Hunter Green" class="aspect-square rounded-full bg-[#2C4C3B] border-2 border-transparent hover:border-primary/30 hover:scale-110 transition-all ring-2 ring-offset-2 ring-primary dark:ring-offset-surface-dark focus:outline-none"></button>
+<button aria-label="Select Slate" class="aspect-square rounded-full bg-[#1e293b] border-2 border-transparent hover:border-primary/30 hover:scale-110 transition-all focus:outline-none"></button>
+<button aria-label="Select Brown" class="aspect-square rounded-full bg-[#78350f] border-2 border-transparent hover:border-primary/30 hover:scale-110 transition-all focus:outline-none"></button>
+<button aria-label="Select Yellow" class="aspect-square rounded-full bg-[#eab308] border-2 border-transparent hover:border-primary/30 hover:scale-110 transition-all focus:outline-none"></button>
+<button aria-label="Select Rose" class="aspect-square rounded-full bg-[#9f1239] border-2 border-transparent hover:border-primary/30 hover:scale-110 transition-all focus:outline-none"></button>
+<button aria-label="Select Cyan" class="aspect-square rounded-full bg-[#155e75] border-2 border-transparent hover:border-primary/30 hover:scale-110 transition-all focus:outline-none"></button>
+<button aria-label="Select Off White" class="aspect-square rounded-full bg-[#F0EFEB] border border-gray-300 hover:border-primary/30 hover:scale-110 transition-all focus:outline-none"></button>
+<button class="aspect-square rounded-full border-2 border-dashed border-primary/30 flex items-center justify-center text-primary/50 hover:text-primary hover:border-primary transition-all">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+<div class="mt-8 p-4 bg-background-light dark:bg-background-dark/50 rounded-lg border border-taupe-border dark:border-primary/20">
+<label class="flex items-center justify-between cursor-pointer group">
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-primary dark:text-white font-display">Auto-Contrast</span>
+<span class="text-xs text-primary/60 dark:text-gray-400 font-display">Adjust text color automatically</span>
+</div>
+<div class="relative">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/20 dark:peer-focus:ring-primary/40 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+</div>
+</label>
+</div>
+</div>
+</div>
+<div class="absolute bottom-0 left-0 right-0 p-8 border-t border-taupe-border dark:border-primary/20 bg-surface-light dark:bg-surface-dark shrink-0">
+<div class="flex flex-col gap-4">
+<button class="w-full py-4 rounded-full bg-primary hover:bg-primary-dark text-white font-caps font-bold tracking-widest text-sm shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 group">
+<span>DOWNLOAD SVG</span>
+<span class="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform">download</span>
+</button>
+<button class="w-full py-2 rounded-full border border-transparent text-primary dark:text-white font-caps font-medium text-xs tracking-widest hover:text-primary-dark transition-colors">
+                        CANCEL
+                    </button>
+</div>
+</div>
+</aside>
+</main>
+
+</body></html>
