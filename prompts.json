@@ -513,12 +513,27 @@
   },
   {
     "id": "restyle-image",
-    "title": "Restyle Photograph",
+    "title": "Photography",
     "description": "Transform photographs into fine-art using multiple variations",
     "category": "Creativity",
     "icon": "camera_alt",
-    "variables": [],
+    "variables": [
+      {
+        "name": "additional_notes",
+        "label": "Additional Notes (Optional)",
+        "placeholder": "e.g., Focus on the blue ceramic vase in the center; ignore background objects",
+        "value": "",
+        "inputType": "textarea",
+        "rows": 3
+      }
+    ],
     "variations": [
+      {
+        "id": "archival-studio",
+        "name": "Archival Studio Catalog",
+        "description": "Transforms a reference image into a neutral-background, studio-quality archival catalog photograph while preserving all real-world wear and material detail.",
+        "template": "Role: Act as a professional archival photographer and digital conservator.\n\nTask: Transform the attached reference image into a high-end, studio-quality photograph.\n\nTechnical Corrections:\n\nPerspective & Geometry: Correct all lens distortion and keystoning. Ensure all architectural lines are perfectly vertical and horizontal. Align the camera angle to be perfectly square (orthographic) to the subject.\n\nLighting: Replace uneven lighting, harsh shadows, or phone-flash glare with balanced, diffused studio \"clamshell\" lighting. Ensure even illumination across the entire frame with neutral white balance.\n\nOptics: Remove digital noise and chromatic aberration. Ensure edge-to-edge sharpness as if shot with a prime macro lens at $f/8$ on a full-frame sensor.\n\nSubject Integrity (Crucial):\n\nPreservation: Do NOT \"beautify\" or \"repair\" the subject. Maintain every nuance of the original texture, including scratches, chips, fabric pills, patina, or weathered edges. The subject must remain an exact 1:1 replica of the input's physical state.\n\nMateriality: Enhance the tactile quality of the materials (e.g., the weave of the fabric, the glaze of the ceramic, the grain of the paper) without altering their form.\n\nFinal Output: A clean, professional product catalog shot against a neutral, non-distracting studio background. High dynamic range, 8k resolution, photorealistic.\n\nOptional user notes (may be blank; if blank, ignore this field): {{additional_notes}}"
+      },
       {
         "id": "tina-barney",
         "name": "Tina Barney Style Photo",
