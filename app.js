@@ -1000,13 +1000,13 @@ Server will start on http://localhost:3001`;
             const description = variable.description ? `description="${this.escapeHTML(variable.description)}"` : '';
             
             return `
-                <wy-toggle-field
+                <wy-option-toggle
                     ${dataAttr}
                     label="${label}"
                     ${description}
                     ${hasOptions ? `options='${optionsJSON}'` : ''}
                     value="${currentValue}"
-                ></wy-toggle-field>
+                ></wy-option-toggle>
             `;
         }
 
@@ -1352,7 +1352,7 @@ Server will start on http://localhost:3001`;
 
         if (prompt.locked !== false) {
             // Find first input - either inside wy-form-field or toggle's variable-input
-            const firstInput = modalBody.querySelector('wy-form-field input, wy-form-field textarea, wy-toggle-field');
+            const firstInput = modalBody.querySelector('wy-form-field input, wy-form-field textarea, wy-option-toggle');
             if (firstInput) {
                 firstInput.focus({ preventScroll: false });
             }
@@ -1515,8 +1515,8 @@ Server will start on http://localhost:3001`;
         });
 
         // Handle toggle inputs
-        // Handle wy-toggle-field Web Component changes
-        const toggleFields = container.querySelectorAll('wy-toggle-field');
+        // Handle wy-option-toggle Web Component changes
+        const toggleFields = container.querySelectorAll('wy-option-toggle');
         toggleFields.forEach(toggleField => {
             toggleField.addEventListener('change', (event) => {
                 const variableName = event.target.dataset.variable;
