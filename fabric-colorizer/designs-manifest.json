@@ -1,0 +1,14 @@
+[
+  {
+    "id": "test-001",
+    "title": "Test Pattern",
+    "description": "Minimal placeholder design for testing the colorizer",
+    "thumbnail": "./designs/test-001/design.svg",
+    "svgPath": "./designs/test-001/design.svg",
+    "layers": [
+      { "id": "layer-base", "label": "Base" },
+      { "id": "layer-accent", "label": "Accent" },
+      { "id": "layer-detail", "label": "Detail" }
+    ]
+  }
+]

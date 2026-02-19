@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Colorizer — Fabric Designs</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#2C4C3B",
+            "primary-dark": "#1e3629",
+            "background-light": "#FDFBF7",
+            "background-dark": "#161c19",
+            "surface-light": "#FFFFFF",
+            "surface-dark": "#232a26",
+            "taupe-border": "#E5E0D8",
+          },
+          fontFamily: {
+            display: ["DM Sans", "sans-serif"],
+            serif: ["Playfair Display", "serif"],
+            caps: ["DM Sans", "sans-serif"],
+          },
+          borderRadius: { DEFAULT: "1rem", lg: "1.5rem", xl: "2rem", full: "9999px" },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="colorizer.css" />
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen text-[#121714] dark:text-[#f0f0f0] flex flex-col overflow-hidden font-display">
+  <header class="w-full h-20 border-b border-taupe-border dark:border-primary/20 flex items-center justify-between px-8 bg-surface-light dark:bg-surface-dark z-20 shrink-0">
+    <div class="flex items-center gap-4">
+      <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-serif text-lg font-bold">WY</div>
+    </div>
+    <nav class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center gap-2">
+      <a href="index.html" class="px-6 py-2 rounded-full text-sm font-medium text-white bg-primary transition-colors shadow-sm">Prints</a>
+      <a href="../fabric-palette/palette.html" class="px-6 py-2 rounded-full text-sm font-medium text-primary hover:bg-primary/5 dark:text-gray-300 dark:hover:text-white transition-colors">Palette</a>
+    </nav>
+    <div class="w-10"></div>
+  </header>
+  <main class="flex-1 flex flex-col md:flex-row h-[calc(100vh-80px)] overflow-hidden">
+    <section class="flex-1 md:w-[60%] p-6 md:p-10 flex flex-col justify-center items-center relative overflow-hidden bg-background-light dark:bg-background-dark">
+      <div class="w-full h-full max-w-4xl flex flex-col">
+        <div class="mb-6 flex justify-between items-end">
+          <div>
+            <h1 id="design-title" class="font-serif text-4xl md:text-5xl text-primary dark:text-white mb-2 font-medium">—</h1>
+            <p id="design-subtitle" class="text-primary/60 dark:text-gray-400 font-display text-sm tracking-wide">Loading…</p>
+          </div>
+          <div class="flex gap-3">
+            <button type="button" class="zoom-btn w-10 h-10 flex items-center justify-center rounded-full bg-white dark:bg-surface-dark border border-taupe-border dark:border-primary/30 shadow-sm hover:shadow-md transition-all text-primary dark:text-white" title="Zoom In"><span class="material-symbols-outlined text-lg">add</span></button>
+            <button type="button" class="zoom-btn w-10 h-10 flex items-center justify-center rounded-full bg-white dark:bg-surface-dark border border-taupe-border dark:border-primary/30 shadow-sm hover:shadow-md transition-all text-primary dark:text-white" title="Zoom Out"><span class="material-symbols-outlined text-lg">remove</span></button>
+            <button type="button" class="zoom-btn w-10 h-10 flex items-center justify-center rounded-full bg-white dark:bg-surface-dark border border-taupe-border dark:border-primary/30 shadow-sm hover:shadow-md transition-all text-primary dark:text-white" title="Reset View"><span class="material-symbols-outlined text-lg">center_focus_strong</span></button>
+          </div>
+        </div>
+        <div class="flex-1 bg-surface-light dark:bg-surface-dark rounded-xl p-8 editorial-shadow border border-taupe-border/50 dark:border-primary/10 relative group overflow-hidden flex items-center justify-center min-h-0">
+          <div class="relative w-full h-full bg-[#f4f1ea] dark:bg-[#1a201d] flex items-center justify-center overflow-hidden rounded-lg">
+            <div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: radial-gradient(#2d4e3c 1px, transparent 1px); background-size: 20px 20px;"></div>
+            <div id="svg-preview-container" class="relative w-3/4 h-3/4 flex items-center justify-center overflow-hidden">
+              <!-- SVG injected here -->
+            </div>
+            <div class="absolute bottom-4 right-4 bg-white/90 dark:bg-black/80 backdrop-blur px-3 py-1 rounded-full text-xs font-caps tracking-wider text-primary dark:text-white border border-primary/10 font-bold">PREVIEW MODE</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <aside class="w-full md:w-[40%] bg-surface-light dark:bg-surface-dark border-l border-taupe-border dark:border-primary/20 flex flex-col h-full z-10 shadow-xl relative">
+      <div class="flex-1 overflow-y-auto custom-scrollbar p-8 pb-32">
+        <div class="mb-10">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xs font-caps font-bold tracking-[0.2em] text-primary/80 dark:text-white/80 uppercase">Layers</h2>
+            <button type="button" id="reset-all-btn" class="text-xs font-medium text-primary hover:underline dark:text-primary/60">Reset All</button>
+          </div>
+          <div id="layers-list" class="space-y-4">
+            <!-- Layer rows rendered by JS -->
+          </div>
+        </div>
+        <div>
+          <h2 class="text-xs font-caps font-bold tracking-[0.2em] text-primary/80 dark:text-white/80 mb-6 uppercase">Palette Colors</h2>
+          <div id="swatches-grid" class="grid grid-cols-5 gap-4">
+            <!-- Swatches + add custom populated by JS -->
+          </div>
+          <div class="mt-4 flex items-center gap-3">
+            <label class="text-sm font-display text-primary dark:text-white">Custom:</label>
+            <input type="color" id="custom-color" value="#2C4C3B" class="w-12 h-12 rounded-full border-2 border-taupe-border cursor-pointer" />
+          </div>
+        </div>
+        <div class="mt-8 p-4 bg-background-light dark:bg-background-dark/50 rounded-lg border border-taupe-border dark:border-primary/20">
+          <div class="flex items-center justify-between">
+            <div class="flex flex-col">
+              <span class="text-sm font-semibold text-primary dark:text-white font-display">Auto-Contrast</span>
+              <span class="text-xs text-primary/60 dark:text-gray-400 font-display">Coming soon</span>
+            </div>
+            <div class="w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full opacity-60 cursor-not-allowed"></div>
+          </div>
+        </div>
+      </div>
+      <div class="absolute bottom-0 left-0 right-0 p-8 border-t border-taupe-border dark:border-primary/20 bg-surface-light dark:bg-surface-dark shrink-0">
+        <div class="flex flex-col gap-4">
+          <button type="button" id="download-btn" class="w-full py-4 rounded-full bg-primary hover:bg-primary-dark text-white font-caps font-bold tracking-widest text-sm shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 group">
+            <span>DOWNLOAD SVG</span>
+            <span class="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform">download</span>
+          </button>
+          <a href="index.html" class="w-full py-2 rounded-full border border-transparent text-primary dark:text-white font-caps font-medium text-xs tracking-widest hover:text-primary-dark transition-colors text-center">CANCEL</a>
+        </div>
+      </div>
+    </aside>
+  </main>
+  <script src="colorizer.js"></script>
+  <script>
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const designId = params.get('design');
+      const container = document.getElementById('svg-preview-container');
+      const layersList = document.getElementById('layers-list');
+      const designTitle = document.getElementById('design-title');
+      const designSubtitle = document.getElementById('design-subtitle');
+      const customColorInput = document.getElementById('custom-color');
+      const downloadBtn = document.getElementById('download-btn');
+      const resetAllBtn = document.getElementById('reset-all-btn');
+
+      let design = null;
+      let svgEl = null;
+      let initialFills = {};
+      let activeLayerId = null;
+      let layerFillState = {};
+
+      function setActiveLayer(id) {
+        activeLayerId = id;
+        layersList.querySelectorAll('[data-layer-id]').forEach((row) => {
+          const isActive = row.getAttribute('data-layer-id') === id;
+          row.classList.toggle('border-2', isActive);
+          row.classList.toggle('border-primary', isActive);
+          row.classList.toggle('bg-white', isActive);
+          row.classList.toggle('dark:bg-surface-dark', isActive);
+          row.classList.toggle('shadow-sm', isActive);
+          row.classList.toggle('border', !isActive);
+          row.classList.toggle('border-taupe-border', !isActive);
+          row.classList.toggle('bg-background-light', !isActive);
+          row.classList.toggle('dark:bg-background-dark/50', !isActive);
+          row.querySelector('.layer-accent-bar')?.classList.toggle('hidden', !isActive);
+        });
+      }
+
+      function applyColor(layerId, hex) {
+        if (!svgEl || !layerId) return;
+        window.FabricColorizer.applyColorToLayer(svgEl, layerId, hex);
+        layerFillState[layerId] = hex;
+        const row = layersList.querySelector(`[data-layer-id="${layerId}"]`);
+        if (row) {
+          const swatch = row.querySelector('.layer-swatch');
+          if (swatch) swatch.style.backgroundColor = hex;
+          const hexEl = row.querySelector('.layer-hex');
+          if (hexEl) hexEl.textContent = hex;
+        }
+      }
+
+      function renderLayerRows() {
+        if (!design) return;
+        layersList.innerHTML = design.layers
+          .map((layer) => {
+            const fill = layerFillState[layer.id] ?? initialFills[layer.id] ?? '#cccccc';
+            const isActive = activeLayerId === layer.id;
+            return `
+              <div data-layer-id="${layer.id}" role="button" tabindex="0" class="group flex items-center justify-between p-4 rounded-lg border cursor-pointer transition-colors relative overflow-hidden ${isActive ? 'border-2 border-primary bg-white dark:bg-surface-dark shadow-sm' : 'border-taupe-border dark:border-primary/20 bg-background-light dark:bg-background-dark/50 hover:border-primary/30'}">
+                <div class="layer-accent-bar absolute left-0 top-0 bottom-0 w-1 bg-primary ${isActive ? '' : 'hidden'}"></div>
+                <div class="flex items-center gap-4">
+                  <div class="layer-swatch w-10 h-10 rounded bg-[#f0efeb] border border-black/5 shadow-inner flex items-center justify-center" style="background-color: ${fill}"></div>
+                  <div class="flex flex-col">
+                    <span class="font-display font-semibold text-primary dark:text-white ${isActive ? 'font-bold' : ''}">${(layer.label || layer.id).replace(/</g, '&lt;')}</span>
+                    <span class="layer-hex text-xs text-primary/60 dark:text-gray-400 font-display">${fill}</span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button type="button" class="visibility-btn text-primary/40 hover:text-primary transition-colors" aria-label="Toggle visibility"><span class="material-symbols-outlined text-[20px]">visibility</span></button>
+                  <button type="button" class="lock-btn text-primary/40 hover:text-primary transition-colors opacity-50 cursor-not-allowed" aria-label="Lock (coming soon)"><span class="material-symbols-outlined text-[20px]">lock_open</span></button>
+                </div>
+              </div>
+            `;
+          })
+          .join('');
+        design.layers.forEach((layer) => {
+          const row = layersList.querySelector(`[data-layer-id="${layer.id}"]`);
+          if (row) {
+            row.addEventListener('click', (e) => {
+              if (e.target.closest('.visibility-btn') || e.target.closest('.lock-btn')) return;
+              setActiveLayer(layer.id);
+            });
+            const visBtn = row.querySelector('.visibility-btn');
+            if (visBtn) {
+              visBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const g = svgEl && svgEl.getElementById(layer.id);
+                if (g) {
+                  const hidden = g.getAttribute('visibility') === 'hidden';
+                  g.setAttribute('visibility', hidden ? 'visible' : 'hidden');
+                  visBtn.querySelector('.material-symbols-outlined').textContent = hidden ? 'visibility' : 'visibility_off';
+                }
+              });
+            }
+          }
+        });
+      }
+
+      async function init() {
+        if (!designId) {
+          designTitle.textContent = 'No design selected';
+          designSubtitle.textContent = 'Go back to the gallery and choose a design.';
+          return;
+        }
+        design = await window.FabricColorizer.getDesignById(designId);
+        if (!design) {
+          designTitle.textContent = 'Design not found';
+          designSubtitle.textContent = designId;
+          return;
+        }
+        designTitle.textContent = design.title || designId;
+        designSubtitle.textContent = design.description || '';
+
+        const svgPath = new URL(design.svgPath, window.location.href).href;
+        const { svgEl: el, initialFills: fills } = await window.FabricColorizer.loadAndInjectSVG(svgPath, container);
+        svgEl = el;
+        initialFills = fills;
+        layerFillState = { ...fills };
+
+        renderLayerRows();
+        if (design.layers.length) setActiveLayer(design.layers[0].id);
+
+        const swatches = await window.FabricColorizer.fetchSwatches();
+        const grid = document.getElementById('swatches-grid');
+        grid.innerHTML =
+          swatches
+            .map(
+              (s) =>
+                `<button type="button" class="swatch-btn aspect-square rounded-full border-2 border-transparent hover:border-primary/30 hover:scale-110 transition-all focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-surface-dark" style="background-color: ${s.hex}" data-hex="${s.hex}" aria-label="Select ${(s.name || '').replace(/"/g, '')}"></button>`
+            )
+            .join('') +
+          `<button type="button" id="add-custom-btn" class="aspect-square rounded-full border-2 border-dashed border-primary/30 flex items-center justify-center text-primary/50 hover:text-primary hover:border-primary transition-all" aria-label="Add custom color"><span class="material-symbols-outlined text-sm">add</span></button>`;
+        grid.querySelectorAll('.swatch-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const hex = btn.getAttribute('data-hex');
+            if (hex && activeLayerId) {
+              applyColor(activeLayerId, hex);
+              customColorInput.value = hex;
+            }
+          });
+        });
+        document.getElementById('add-custom-btn').addEventListener('click', () => customColorInput.click());
+      }
+
+      customColorInput.addEventListener('input', () => {
+        const hex = customColorInput.value;
+        if (activeLayerId) applyColor(activeLayerId, hex);
+      });
+
+      downloadBtn.addEventListener('click', () => {
+        if (svgEl && design) window.FabricColorizer.downloadSVG(svgEl, design.id);
+      });
+
+      resetAllBtn.addEventListener('click', () => {
+        Object.keys(initialFills).forEach((id) => applyColor(id, initialFills[id]));
+      });
+
+      init();
+    })();
+  </script>
+</body>
+</html>
