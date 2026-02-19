@@ -513,11 +513,16 @@ Server will start on http://localhost:3001`;
         this.promptGrid.innerHTML = '';
 
         // Show/hide empty state
-        if (this.filteredPrompts.length === 0) {
+        if (this.filteredPrompts.length === 0 && this.selectedCategory !== 'Fabric') {
             this.emptyState.classList.remove('hidden');
             return;
         } else {
             this.emptyState.classList.add('hidden');
+        }
+
+        // Prepend colorizer card when Fabric category is active
+        if (this.selectedCategory === 'Fabric') {
+            this.promptGrid.appendChild(this.createColorizerCard());
         }
 
         // Render each prompt card
@@ -535,11 +540,27 @@ Server will start on http://localhost:3001`;
         this.promptList.innerHTML = '';
 
         // Show/hide empty state
-        if (this.filteredPrompts.length === 0) {
+        if (this.filteredPrompts.length === 0 && this.selectedCategory !== 'Fabric') {
             this.emptyState.classList.remove('hidden');
             return;
         } else {
             this.emptyState.classList.add('hidden');
+        }
+
+        // When Fabric is selected but no prompts match, still show colorizer in its own section
+        if (this.filteredPrompts.length === 0 && this.selectedCategory === 'Fabric') {
+            const section = document.createElement('div');
+            section.className = 'category-section';
+            const header = document.createElement('h2');
+            header.className = 'category-section-header';
+            header.textContent = 'Fabric';
+            section.appendChild(header);
+            const itemsContainer = document.createElement('div');
+            itemsContainer.className = 'category-items';
+            itemsContainer.appendChild(this.createColorizerCard('list'));
+            section.appendChild(itemsContainer);
+            this.promptList.appendChild(section);
+            return;
         }
 
         // Group prompts by category
@@ -564,6 +585,11 @@ Server will start on http://localhost:3001`;
 
             const itemsContainer = document.createElement('div');
             itemsContainer.className = 'category-items';
+
+            // Prepend colorizer card in the Fabric section
+            if (category === 'Fabric') {
+                itemsContainer.appendChild(this.createColorizerCard('list'));
+            }
 
             promptsByCategory[category].forEach(({ prompt, index }) => {
                 const item = this.createListItem(prompt, index);
@@ -658,6 +684,78 @@ Server will start on http://localhost:3001`;
 
         // Attach event listeners
         this.attachCardEventListeners(card, index);
+
+        return card;
+    }
+
+    /**
+     * Create a card linking to the Fabric Colorizer feature.
+     * Matches the visual structure of regular prompt cards.
+     * @param {string} viewMode - 'grid' (default) or 'list'
+     */
+    createColorizerCard(viewMode = 'grid') {
+        const url = './fabric-colorizer/colorizer.html';
+        const title = 'Fabric Colorizer';
+        const description = 'Recolor any fabric design with AI-powered palette suggestions';
+        const hiddenClass = this.showDetails ? '' : 'hidden';
+
+        if (viewMode === 'list') {
+            const item = document.createElement('div');
+            item.className = 'prompt-list-item';
+            item.setAttribute('role', 'link');
+            item.setAttribute('aria-label', `Open ${title}`);
+            item.tabIndex = 0;
+            item.innerHTML = `
+                <div class="prompt-list-item-content">
+                    <div class="prompt-list-item-header">
+                        <h3 class="prompt-list-item-title">${this.escapeHTML(title)}</h3>
+                    </div>
+                    <p class="prompt-list-item-description ${hiddenClass}">${this.escapeHTML(description)}</p>
+                </div>
+                <div class="prompt-list-item-meta">
+                    <span class="variable-count-badge ${hiddenClass}">Interactive tool</span>
+                </div>
+            `;
+            const navigate = () => window.open(url, '_blank', 'noopener,noreferrer');
+            item.addEventListener('click', navigate);
+            item.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate(); }
+            });
+            return item;
+        }
+
+        const card = document.createElement('div');
+        card.className = 'prompt-card neutral-icon';
+        card.dataset.category = 'Fabric';
+        card.setAttribute('role', 'link');
+        card.setAttribute('aria-label', `Open ${title}`);
+        card.tabIndex = 0;
+
+        card.innerHTML = `
+            <div class="card-content">
+                <div>
+                    <div class="card-header-row">
+                        <div class="card-icon-container icon-neutral">
+                            <span class="material-symbols-outlined">palette</span>
+                        </div>
+                        <div class="card-badge">FABRIC</div>
+                    </div>
+                    <h3 class="card-title">${this.escapeHTML(title)}</h3>
+                    <p class="card-description ${hiddenClass}">${this.escapeHTML(description)}</p>
+                </div>
+                <div class="card-footer">
+                    <div class="card-arrow-button">
+                        <span class="material-symbols-outlined">open_in_new</span>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        const navigate = () => window.open(url, '_blank', 'noopener,noreferrer');
+        card.addEventListener('click', navigate);
+        card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate(); }
+        });
 
         return card;
     }
