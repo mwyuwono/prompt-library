@@ -747,5 +747,34 @@
     "template": "Analyze the visual style, color palette, and botanical motifs of the provided image to create a net new, seamless repeating tile.\n1. Maintain Aesthetic DNA: Capture the specific \"look and feel\" of the original—including the line weight, artistic medium (e.g., block print, watercolor, or ink), and the specific shade of the background and foreground elements.\n2. Design a New Repeat: Instead of cropping the original, generate a fresh composition of these elements. You are not constrained by the original’s specific dimensions or geometric grid.\n3. Ensure Technical Seamlessness: The new tile must be perfectly seamless. The motifs at the top edge must transition perfectly into the bottom, and the left edge must transition perfectly into the right.\n4. Optimize for Tiling: The final output should be a single, centered tile that can be repeated indefinitely to create a continuous, cohesive pattern without visible seams or “edge breaks.”{{notes}}",
     "featured": false,
     "slug": "fabric-pattern-repeat"
+  },
+  {
+    "id": "fabric-vector-prep",
+    "title": "Vector Trace Prep",
+    "description": "Simplify an image into a flat, high-contrast graphic optimized for vector tracing with a limited color palette",
+    "category": "Fabric",
+    "icon": "polyline",
+    "variables": [
+      {
+        "name": "num_colors",
+        "label": "Number of Colors (2–12)",
+        "placeholder": "Enter a number between 2 and 12",
+        "value": "4",
+        "inputType": ""
+      },
+      {
+        "name": "background",
+        "label": "Background",
+        "value": "",
+        "inputType": "toggle",
+        "options": [
+          "White",
+          "Transparent"
+        ]
+      }
+    ],
+    "template": "Recreate the provided image as a simplified, high-contrast graphic optimized for vector tracing. Follow these technical constraints:\n• Geometry: Convert all elements into flat, solid shapes with clearly defined, closed paths. Remove all gradients, blurs, shadows, and painterly textures.\n• Color Palette: Reduce the image to a limited set of {{num_colors}} distinct, solid colors. Ensure high contrast between adjacent color fields.\n• Edge Quality: Smooth all curves and sharpen all corners. Eliminate fine, intricate details or “noise” that would create excessive nodes during conversion.\n• Composition: Maintain the essential subject matter, layout, and “look and feel” of the original, but simplify complex areas into unified color blocks.\n• Background: Place the simplified graphic on a solid, neutral {{background}} background to ensure clean edge detection.",
+    "featured": false,
+    "slug": "fabric-vector-prep"
   }
 ]
