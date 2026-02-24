@@ -64,14 +64,14 @@ class PromptLibrary {
         // Check if admin server is running on port 3001
         const serverAvailable = await this.checkAdminServer();
         
+        adminButton.style.display = 'inline-block';
+
         if (serverAvailable) {
-            // Link to admin server port
-            adminButton.href = 'http://localhost:3001/admin.html';
-            adminButton.style.display = 'flex';
+            adminButton.addEventListener('click', () => {
+                window.location.href = 'http://localhost:3001/admin.html';
+            }, { once: true });
         } else {
             // Still show button but with click handler that shows error
-            adminButton.href = '#';
-            adminButton.style.display = 'flex';
             adminButton.addEventListener('click', (e) => {
                 e.preventDefault();
                 this.showAdminServerError();
@@ -261,6 +261,7 @@ Server will start on http://localhost:3001`;
                         searchInput.value = '';
                     }
                     this.filterPrompts();
+                    this.updatePaletteVisibility();
                 }
                 if (searchInput) {
                     searchInput.blur();
@@ -297,6 +298,10 @@ Server will start on http://localhost:3001`;
         return this.controlsBar?.shadowRoot?.querySelector('.search-input');
     }
 
+    isSearchActive() {
+        return Boolean(this.searchTerm && this.searchTerm.trim());
+    }
+
     /**
      * Populate category filters via design system controls bar.
      */
@@ -323,6 +328,8 @@ Server will start on http://localhost:3001`;
      * Filter prompts based on search term, category, and featured status
      */
     filterPrompts() {
+        const isSearchActive = this.isSearchActive();
+
         this.filteredPrompts = this.prompts.filter(prompt => {
             const searchLower = this.searchTerm;
 
@@ -343,6 +350,10 @@ Server will start on http://localhost:3001`;
                         v.template && v.template.toLowerCase().includes(searchLower)
                     );
                 }
+            }
+
+            if (isSearchActive) {
+                return matchesSearch;
             }
 
             // Featured filter is EXCLUSIVE - when active, show ONLY featured prompts
@@ -395,9 +406,10 @@ Server will start on http://localhost:3001`;
      */
     updatePaletteVisibility() {
         if (this.paletteLink) {
+            const isSearchActive = this.isSearchActive();
             // Show palette link only when Fabric category is active
             this.paletteLink.style.display =
-                this.selectedCategory === 'Fabric' ? 'inline-block' : 'none';
+                this.selectedCategory === 'Fabric' && !isSearchActive ? 'inline-block' : 'none';
         }
     }
 
@@ -509,11 +521,13 @@ Server will start on http://localhost:3001`;
      * Render prompts in grid view
      */
     renderGridView() {
+        const isFabricCategoryMode = this.selectedCategory === 'Fabric' && !this.isSearchActive();
+
         // Clear grid
         this.promptGrid.innerHTML = '';
 
         // Show/hide empty state
-        if (this.filteredPrompts.length === 0 && this.selectedCategory !== 'Fabric') {
+        if (this.filteredPrompts.length === 0 && !isFabricCategoryMode) {
             this.emptyState.classList.remove('hidden');
             return;
         } else {
@@ -521,7 +535,7 @@ Server will start on http://localhost:3001`;
         }
 
         // Prepend colorizer card when Fabric category is active
-        if (this.selectedCategory === 'Fabric') {
+        if (isFabricCategoryMode) {
             this.promptGrid.appendChild(this.createColorizerCard());
         }
 
@@ -536,11 +550,13 @@ Server will start on http://localhost:3001`;
      * Render prompts in list view organized by category
      */
     renderListView() {
+        const isFabricCategoryMode = this.selectedCategory === 'Fabric' && !this.isSearchActive();
+
         // Clear list
         this.promptList.innerHTML = '';
 
         // Show/hide empty state
-        if (this.filteredPrompts.length === 0 && this.selectedCategory !== 'Fabric') {
+        if (this.filteredPrompts.length === 0 && !isFabricCategoryMode) {
             this.emptyState.classList.remove('hidden');
             return;
         } else {
@@ -548,7 +564,7 @@ Server will start on http://localhost:3001`;
         }
 
         // When Fabric is selected but no prompts match, still show colorizer in its own section
-        if (this.filteredPrompts.length === 0 && this.selectedCategory === 'Fabric') {
+        if (this.filteredPrompts.length === 0 && isFabricCategoryMode) {
             const section = document.createElement('div');
             section.className = 'category-section';
             const header = document.createElement('h2');
