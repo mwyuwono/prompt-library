@@ -776,16 +776,5 @@
     "template": "Recreate the provided image as a simplified, high-contrast graphic optimized for vector tracing. Follow these technical constraints:\n\u2022 Geometry: Convert all elements into flat, solid shapes with clearly defined, closed paths. Remove all gradients, blurs, shadows, and painterly textures.\n\u2022 Color Palette: Reduce the image to a limited set of {{num_colors}} distinct, solid colors. Ensure high contrast between adjacent color fields.\n\u2022 Edge Quality: Smooth all curves and sharpen all corners. Eliminate fine, intricate details or \u201cnoise\u201d that would create excessive nodes during conversion.\n\u2022 Composition: Maintain the essential subject matter, layout, and \u201clook and feel\u201d of the original, but simplify complex areas into unified color blocks.\n\u2022 Background: Place the simplified graphic on a solid, neutral {{background}} background to ensure clean edge detection.",
     "featured": false,
     "slug": "fabric-vector-prep"
-  },
-  {
-    "id": "pomelli",
-    "title": "Pomelli",
-    "description": "Google Labs AI marketing tool for SMBs \u2014 generates on-brand social media campaigns and product photography from your website URL",
-    "category": "AI Tools",
-    "icon": "campaign",
-    "template": "URL: https://labs.google.com/pomelli\n\nPomelli is a free AI marketing tool from Google Labs (in public beta). It analyzes your website and creates a Business DNA \u2014 extracting your brand tone, fonts, colors, and images \u2014 then generates on-brand social media assets.\n\nKey features:\n- Social campaigns: On-brand posts for Instagram, Facebook, and ads\n- Photoshoot: Transforms product photos into professional studio or lifestyle images\n- Animate: Turns static content into short video clips (powered by Veo)\n\nAvailable in: US, Canada, Australia, New Zealand (English only during beta)\nCost: Free during beta",
-    "variables": [],
-    "featured": false,
-    "slug": "pomelli"
   }
 ]
