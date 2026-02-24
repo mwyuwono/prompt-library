@@ -100,23 +100,13 @@
     "description": "Draft concise emails requesting shipping quotes for auction purchases",
     "category": "Travel & Shopping",
     "icon": "local_shipping",
-    "template": "Item Details: {{item_details}}\nListing URL: {{listing_url}}\n‍\n\nShip to:\n\nMatt Weaver-Yuwono\n20 Mechanic Square, Unit 5\nMarblehead, MA 01945\n\nInstructions:\n\nDraft an email for requesting shipping quotes from multiple vendors. The letter should provide relevant physical details for the item(s) I am considering purchasing, which I have included above. Provide details that are pertinent for calculating shipping (such as item type, size/dimensions, weight (if known), durability, etc.). Also provide the delivery address (above) so that the vendor can accurately calculate shipping prices.\n\nThe item(s) will be purchased from a local auction house, and the shipping vendor will need to pick up the item during their allowed pickup times. The shipping vendor will be responsible for packing the item(s).\n\nThe letter should ask for information on shipping cost.\n\nThe letter should include a link to the listing, which I have provided above. This enables the shipping vendor to view images of the item.\n\nThe tone of the letter should be clear, and straightforward. Be very concise. For example \"Good [morning], Could you please assist me with a shipping quote for them item below from [Auction house name] in [City, State]?\"\n\nDon't use bold text or other text styling. \n\nPlease note: This prompt template includes a space for the user to input item details, but that step is only completed if you are unable to extract the item information from the URL provided. If URL scraping fails, inform the user. ",
+    "template": "Listing URL: {{listing_url}}\n‍\n\nShip to:\n\nMatt Weaver-Yuwono\n20 Mechanic Square, Unit 5\nMarblehead, MA 01945\n\nInstructions:\n\nDraft an email for requesting shipping quotes from multiple vendors. The letter should provide relevant physical details for the item(s) I am purchasing, which I have included above. Extract physical specifications for packing and transport. Strictly ignore all provenance, artist identity, era, or aesthetic descriptions.\n\nItem Category: Classify by physical form (e.g., Framed Painting, Sculpture, Pedestal, Crate).\n\nMaximum Outer Dimensions: Provide the absolute exterior footprint (Height x Width x Depth).\n\nRule: Use the largest measurements including frames, bases, or projections.\n\nExclude: Sight size, stretcher size, or internal plate marks.\n\nCritical Handling Constraints: List only physical vulnerabilities that dictate packing methods (e.g., \"Glazed with glass,\" \"Friable surface,\" \"Extending limbs,\" \"Heavy gilding/flaking\").\n\nData Filter: Immediately discard any mention of the artist, title, or historical significance. If a dimension is missing, mark as \"NOT SPECIFIED.\"\n\nAlso provide the delivery address (above) so that the vendor can accurately calculate shipping prices.\n\nThe item(s) comes from a local auction house, and the shipping vendor will need to pick up the item during their allowed pickup times. The shipping vendor will be responsible for packing the item(s).\n\nThe letter should ask for information on shipping cost.\n\nThe letter should include a link to the listing, which I have provided above. This enables the shipping vendor to view images of the item.\n\nThe tone of the letter should be clear, and straightforward. Be very concise. For example \"Good [morning], Could you please assist me with a shipping quote for them item below from [Auction house name] in [City, State]?\"\n\nDon't use bold text or other text styling. \n\nPlease note: if you are unable to extract the item information from the URL provided, inform the user and ask for the item details. ",
     "variables": [
       {
         "name": "listing_url",
         "label": "Listing URL",
         "placeholder": "https://...",
         "value": ""
-      },
-      {
-        "name": "item_details",
-        "label": "Item Details",
-        "placeholder": "Only needed if URL scraping fails",
-        "inputType": "text",
-        "options": [
-          "",
-          ""
-        ]
       }
     ],
     "featured": false,
