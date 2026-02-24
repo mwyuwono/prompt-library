@@ -44,6 +44,18 @@
                     Filters
                 </wy-button>
                 <wy-button id="openLinksModal" variant="primary" size="small">AI Tools</wy-button>
+                <wy-button
+                    id="adminButton"
+                    variant="outlined"
+                    size="small"
+                    icon="admin_panel_settings"
+                    icon-position="leading"
+                    aria-label="Open Admin Panel"
+                    title="Open Admin Panel"
+                    style="display: none;"
+                >
+                    Admin
+                </wy-button>
             </div>
         </div>
 
@@ -56,11 +68,6 @@
                 <!-- Controls Bar -->
                 <wy-controls-bar id="controlsBar" class="controls-bar" hide-view-toggle hide-details-toggle></wy-controls-bar>
                 
-                <!-- Admin Button (localhost only) -->
-                <a id="adminButton" href="/admin.html" class="admin-button" title="Open Admin Panel" style="display: none;">
-                    <span class="material-symbols-outlined">admin_panel_settings</span>
-                </a>
-
                 <div class="prompt-area view-grid">
                     <!-- Prompt List View -->
                     <div id="promptList" class="prompt-list">
