@@ -774,8 +774,8 @@
   },
   {
     "id": "overcome-task-avoidance",
-    "title": "Overcome Task Avoidance",
-    "description": "Cut through anxiety and avoidance to take immediate action on a specific task",
+    "title": "Procrastination",
+    "description": "Cut through avoidance to take immediate action on a specific task",
     "category": "Productivity",
     "icon": "bolt",
     "template": "I'm feeling anxious and avoiding a task. I need your help to get unstuck and take action right now — not to process my feelings or make a long plan.\nThe task I'm avoiding is: {{task_description}}\nHere's what I want you to do:\n\t1.\tName the blocker and move past it — Identify the one specific thing I'm resisting, then immediately tell me how we're moving past it. No justification, no empathy — just a clear path forward.\n\t2.\tBreak it into micro-actions — Give me exactly 3 actions I can each complete in under 5 minutes. These should be real progress, not setup or prep. Number them and make them specific to the task I described.\n\t3.\tCall out the avoidance pattern — Tell me one way I'm likely to rationalize not starting, and preempt it.\n\t4.\tSet a commitment — End with a direct instruction: exactly what I should do the moment I close this conversation.\nBe direct. Don't be gentle or hedge. Treat me as capable of handling a straight answer.",
@@ -789,7 +789,7 @@
         "rows": 3
       }
     ],
-    "featured": false,
-    "slug": "overcome-task-avoidance"
+    "featured": true,
+    "slug": "procrastination"
   }
 ]

@@ -55,6 +55,38 @@
     font-size: 18px;
 }
 
+.sidebar-search {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs, 4px);
+    background: var(--md-sys-color-surface-variant, #ECE9E4);
+    border-radius: var(--md-sys-shape-corner-small, 8px);
+    padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
+    margin-bottom: var(--spacing-sm, 8px);
+}
+
+.sidebar-search .material-symbols-outlined {
+    font-size: 18px;
+    color: var(--md-sys-color-on-surface-variant, #3F4944);
+    flex-shrink: 0;
+}
+
+.sidebar-search input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-family: var(--font-body, 'DM Sans', sans-serif);
+    font-size: 0.875rem;
+    color: var(--md-sys-color-on-surface, #121714);
+    outline: none;
+    min-width: 0;
+}
+
+.sidebar-search input::placeholder {
+    color: var(--md-sys-color-on-surface-variant, #3F4944);
+    opacity: 0.7;
+}
+
 #prompt-list-items {
     display: flex;
     flex-direction: column;

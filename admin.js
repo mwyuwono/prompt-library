@@ -4,10 +4,12 @@
 let prompts = [];
 let categories = [];
 let currentPromptId = null;
+let sidebarSearch = '';
 
 // DOM Elements
 const editor = document.getElementById('editor');
 const promptListItems = document.getElementById('prompt-list-items');
+const sidebarSearchInput = document.getElementById('sidebar-search-input');
 const toast = document.getElementById('toast');
 const editorContainer = document.getElementById('editor-container');
 const emptyState = document.getElementById('empty-state');
@@ -185,6 +187,12 @@ async function deleteImage(filename) {
  * Setup event listeners
  */
 function setupEventListeners() {
+    // Sidebar search
+    sidebarSearchInput.addEventListener('input', () => {
+        sidebarSearch = sidebarSearchInput.value.toLowerCase();
+        renderPromptList();
+    });
+
     // Editor save event
     editor.addEventListener('save', async (e) => {
         try {
@@ -270,7 +278,11 @@ function setupEventListeners() {
  * Render prompt list sidebar
  */
 function renderPromptList() {
-    promptListItems.innerHTML = prompts.map(p => {
+    const filtered = sidebarSearch
+        ? prompts.filter(p => p.title.toLowerCase().includes(sidebarSearch))
+        : prompts;
+
+    promptListItems.innerHTML = filtered.map(p => {
         const iconName = p.icon || 'article';
         const archivedBadge = p.archived ? '<span class="badge">Archived</span>' : '';
         const activeClass = p.id === currentPromptId ? 'active' : '';
