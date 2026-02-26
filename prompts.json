@@ -417,6 +417,13 @@
         "description": "Creates a two-part architectural plate with a side elevation and a floor plan on aged parchment.",
         "variables": [],
         "template": "Analyze the building shown in the uploaded image. Convert this structure into a vintage 19th-century architectural illustration plate, in the style of Alexander Jackson Davis.\n\nThe composition must be divided into two parts on a single sheet of aged, cream-colored parchment paper with visible foxing and texture:\n\n- Top Half (Elevation): A precise, orthographic side-elevation drawing of the building from the image. Render it with fine ink linework and warm sepia watercolor washes for shading.\n- Bottom Half (Plan): A plausible technical floor plan corresponding to the building above. Crucial Detail: All thick, cut wall sections within the floor plan must be filled entirely with a flat pink watercolor wash.\n\nThe overall aesthetic should look like a hand-drawn, academic architectural plate from the 1850s."
+      },
+      {
+        "id": "lequeu-visionary",
+        "name": "Lequeu Visionary",
+        "description": "Transforms an uploaded image into an 18th-century visionary drawing in the haunting, obsessive style of Jean Jacques Lequeu.",
+        "variables": [],
+        "template": "Transform the provided image(s) into a 18th-century visionary architectural drawing characterized by obsessive, meticulous precision and 'architecture parlante.' Use heavy, descriptive 'le lavis' watercolor washes to simulate realistic textures. The aesthetic should be a mix of rigorous academic drafting and haunting, psychological landscapes, rendered with cartographic exactness on aged, off-white parchment."
       }
     ],
     "featured": false
