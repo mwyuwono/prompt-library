@@ -397,9 +397,9 @@
     "slug": "song-creator-suno"
   },
   {
-    "id": "architectural-rendering-davis",
-    "title": "Davis Architectural Rendering",
-    "description": "Transform images into 19th-century American architectural renderings in Alexander Jackson Davis style",
+    "id": "architectural-rendering",
+    "title": "Architectural Rendering",
+    "description": "Transform images into architectural renderings across historical styles and periods",
     "category": "Creativity",
     "icon": "architecture",
     "variables": [],
