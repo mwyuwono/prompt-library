@@ -805,5 +805,29 @@
     ],
     "featured": true,
     "slug": "procrastination"
+  },
+  {
+    "id": "cultural-weekend-planner",
+    "title": "Cultural Weekend Planner",
+    "description": "Build a scored, logistics-ready weekend plan for cultural sites and restaurants matched to your preferences",
+    "category": "Travel & Shopping",
+    "icon": "travel_explore",
+    "template": "Destination: {{destination}}\nVisit: {{day_of_week}}\n\nROLE\nYou are my local cultural concierge and research analyst. Use web search. Optimize for activities and restaurants that match my established preferences.\n\nMY PREFERENCES (USE AS FILTERS + SCORING)\nCultural / weekend:\n- Historic house museums and architecturally intact heritage sites\n- Decorative arts, design, craft, material culture (furniture, ceramics, textiles, interiors)\n- Private libraries, reading rooms, appointment-based collections, \"quiet prestige\" institutions\n- Antiques ecosystem: auction previews, reputable antiques dealers, architectural salvage, design-centered shops\n- Architecture-driven walks: historic districts, cohesive streetscapes, notable residential/commercial architecture\n- Local, low-kitsch experiences with strong sense of place\n- Seasonal realism: prioritize what is open and worthwhile for the visit window\n\nRestaurants:\n- Classic or timeless dining rooms; strong service fundamentals; low gimmick factor\n- Chef-driven, quality focused\n- Sense of place (beautiful settings, local ingredients, local institutions, heritage venues)\n\nTASK\n1) Identify the best-fit cultural destinations and restaurant options that match my preferences.\n2) Build a practical weekend plan with tight logistics.\n3) Provide evidence: hours, reservation requirements, and why each place matches my profile.\n\nRESEARCH REQUIREMENTS (WEB SEARCH)\n- Use official sources first (museum/library/restaurant websites) for hours, closures, ticketing, and reservations.\n- Cross-check quality signals via a small number of reputable reviews (major publications, well-known local press, or broadly used review platforms).\n- Verify \"open on my dates\" explicitly. Flag anything seasonal/limited-hours.\n- Prioritize places with a strong \"design / interiors / history\" angle and cohesive atmosphere.\n\nSCORING (0–5 EACH; TOTAL /25)\nA) Preference fit (historic/design/architecture/antiques)\nB) Sense of place (distinctive local character)\nC) Experience quality signals (curation, reputation, service)\nD) Logistics fit (distance, hours alignment, reservation feasibility)\nE) Low-kitsch / high craft (substance over spectacle)\nRank results by total score. Break ties with A then D.\n\nOUTPUT FORMAT (NO FLUFF)\nA) Top cultural picks (6–10)\nFor each:\n- Name + category (historic house / decorative arts museum / library / antiques / architecture walk)\n- Why it fits (2 bullets tied to my preferences)\n- Practicalities: address/area, hours on {{day_of_week}}, ticketing/reservations, typical visit length\n- Quality signal: 1 short citation-style note (e.g., \"official site + major review consensus\")\n- Score: A–E + total\n\nB) Restaurant shortlist (8–12), grouped MECE\nGroups (use all that apply):\n- Classic rooms / institutions\n- Chef-driven, not fussy\n- Great bar + dinner energy\n- Lunch/quick bite near cultural stops\nFor each:\n- Why it fits (2 bullets)\n- Practicalities: neighborhood, reservation strategy, price band, noise level, \"good for\" (pre-theater, long dinner, etc.)\n- Score: A–E + total\n\nC) Proposed itinerary (1 day or full weekend depending on {{day_of_week}})\n- Morning / midday / afternoon / evening\n- Include travel time assumptions and booking order (what to reserve first)\n- Include 1–2 backup options per time block\n\nD) A \"book-it list\"\n- The 3–6 things I should reserve now, with deadline guidance and direct booking channel (official site preferred)\n\nE) Map-ready list\n- Provide a simple list of all picks in this format:\n  Name — Address/Neighborhood — Type — Notes (1 short phrase)\n\nCONSTRAINTS\n- Keep each description concise and fact-based.\n- Exclude generic tourist traps unless they strongly score on A and E.\n- Prefer walkable clusters around {{destination}} when feasible.\n- Use concrete dates and day-of-week in the hours section.\n\nIf you want, I can tailor the scoring rubric to weight \"architecture walkability\" higher or make the restaurant grouping more specific (e.g., \"serious lunch counter,\" \"hotel bar with old-world service,\" \"bistro with classic technique\").",
+    "variables": [
+      {
+        "name": "destination",
+        "label": "Destination",
+        "placeholder": "e.g., Philadelphia, PA",
+        "value": ""
+      },
+      {
+        "name": "day_of_week",
+        "label": "Day of Week",
+        "placeholder": "e.g., Saturday",
+        "value": ""
+      }
+    ],
+    "featured": false,
+    "slug": "cultural-weekend-planner"
   }
 ]
