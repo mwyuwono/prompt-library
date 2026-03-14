@@ -494,7 +494,10 @@
         "name": "fidelity",
         "label": "Fidelity",
         "inputType": "toggle",
-        "options": ["Low", "Mid"],
+        "options": [
+          "Low",
+          "Mid"
+        ],
         "value": "Low"
       }
     ],
@@ -839,10 +842,10 @@
   {
     "id": "style-dna-extractor",
     "title": "Style DNA Extractor",
-    "description": "Analyze a style reference image to extract its aesthetic DNA into a portable, subject-agnostic prompt",
+    "description": "Provide a style reference image to extract its aesthetic DNA into a subject-agnostic image prompt",
     "category": "Atelier",
     "image": "",
-    "template": "Task: Analyze the provided \"Style Reference\" image to extract its aesthetic and emotional DNA into a standalone, portable prompt.\n\nRequirements for the Output Prompt:\n\nAesthetic Detail: Describe the specific medium, brushwork, line quality, and texture.\n\nColor & Light: Define the color palette and the specific lighting/atmosphere.\n\nEmotional Mood: Capture the \"vibe\" or emotional weight of the piece (e.g., \"melancholic,\" \"vibrant\").\n\nSubject-Agnostic: Do not describe the specific objects or people in this reference. Use the placeholder [Subject] to ensure the style is transferable.\n\nZero Context Dependency: Do not use transition words or references to this current conversation (e.g., avoid \"as seen above\").\n\nOutput Format:\n\nProvide the prompt text only.\n\nDo not include any introduction, conversational commentary, or \"Here is your prompt\" headers.\n\nThe output should be ready for immediate copy-pasting.",
+    "template": "Task: Analyze the provided \"Style Reference\" image to extract its aesthetic and emotional DNA into a standalone, portable prompt.\n\nCore Requirements:\n\nAesthetic & Mood: Describe the medium, brushwork, lighting, and \"vibe\" (e.g., \"solitary,\" \"energetic\").\n\nSubject-Agnostic: Use the placeholder [Subject] instead of describing the specific objects in the reference.\n\nZero Context Dependency: The prompt must be self-contained; do not refer to this chat or \"the image above.\"\n\nOutput Formatting:\n\nProvide the prompt text only inside a single code block (for easy one-click copying).\n\nDo not include any introductory text, conversational \"fluff,\" or closing remarks before or after the code block.\n\nInteractive Step (Post-Output):\n\nAfter providing the code block, add a single sentence: \"If you'd like to refine this further, please upload a 'Style Reference' image, and I will adjust the prompt to match its specific characteristics more precisely.",
     "variables": [],
     "slug": "style-dna-extractor",
     "icon": "palette",

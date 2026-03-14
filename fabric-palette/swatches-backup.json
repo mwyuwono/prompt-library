@@ -1,0 +1,674 @@
+[
+  {
+    "id": "little-greene-blush-267",
+    "brand": "Little Greene",
+    "title": "Blush 267",
+    "alt": "Little Greene Blush 267 color swatch",
+    "primary": {
+      "name": "Blush 267",
+      "hex": "#B48D82"
+    },
+    "secondary": [
+      {
+        "name": "Nuance 1 Soft Tint",
+        "hex": "#D4C2BD"
+      },
+      {
+        "name": "Nuance 2 Lifted Midtone",
+        "hex": "#C4A8A0"
+      },
+      {
+        "name": "Nuance 3 Grounded Midtone",
+        "hex": "#A47264"
+      },
+      {
+        "name": "Nuance 4 Deep Shadow",
+        "hex": "#8B5D50"
+      },
+      {
+        "name": "Vibrant Highlight",
+        "hex": "#C06D5C"
+      }
+    ]
+  },
+  {
+    "id": "little-greene-rolling-fog-dark-160",
+    "brand": "Little Greene",
+    "title": "Rolling Fog - Dark 160",
+    "alt": "Little Greene Rolling Fog - Dark 160 color swatch",
+    "primary": {
+      "name": "Rolling Fog - Dark 160",
+      "hex": "#B4A08A"
+    },
+    "secondary": [
+      {
+        "name": "Nuance 1 Soft Tint",
+        "hex": "#D6CDC4"
+      },
+      {
+        "name": "Nuance 2 Lifted Midtone",
+        "hex": "#C5B7A7"
+      },
+      {
+        "name": "Nuance 3 Grounded Midtone",
+        "hex": "#A3896D"
+      },
+      {
+        "name": "Nuance 4 Deep Shadow",
+        "hex": "#8C7256"
+      },
+      {
+        "name": "Vibrant Highlight",
+        "hex": "#C08B5D"
+      }
+    ]
+  },
+  {
+    "id": "sherwin-williams-tavern-taupe-sw-7508",
+    "brand": "Sherwin Williams",
+    "title": "Tavern Taupe (SW 7508)",
+    "alt": "Sherwin Williams Tavern Taupe SW 7508 color swatch",
+    "primary": {
+      "name": "Tavern Taupe (SW 7508)",
+      "hex": "#968576"
+    },
+    "secondary": [
+      {
+        "name": "Nuance 1 Soft Tint",
+        "hex": "#BCB3AB"
+      },
+      {
+        "name": "Nuance 2 Lifted Midtone",
+        "hex": "#A99C91"
+      },
+      {
+        "name": "Nuance 3 Grounded Midtone",
+        "hex": "#7E6E60"
+      },
+      {
+        "name": "Nuance 4 Deep Shadow",
+        "hex": "#65574C"
+      },
+      {
+        "name": "Vibrant Highlight",
+        "hex": "#AF7D52"
+      }
+    ]
+  },
+  {
+    "id": "farrow-and-ball-hopper-head-305",
+    "brand": "Farrow & Ball",
+    "title": "Hopper Head No. 305",
+    "alt": "Farrow and Ball Hopper Head No. 305 color swatch",
+    "primary": {
+      "name": "Hopper Head No. 305",
+      "hex": "#53535B"
+    },
+    "secondary": [
+      {
+        "name": "Nuance 1 Soft Tint",
+        "hex": "#80808A"
+      },
+      {
+        "name": "Nuance 2 Lifted Midtone",
+        "hex": "#696973"
+      },
+      {
+        "name": "Nuance 3 Grounded Midtone",
+        "hex": "#3D3D43"
+      },
+      {
+        "name": "Nuance 4 Deep Shadow",
+        "hex": "#27272B"
+      },
+      {
+        "name": "Vibrant Highlight",
+        "hex": "#4A5F9C"
+      }
+    ]
+  },
+  {
+    "id": "farrow-and-ball-studio-green-93",
+    "brand": "Farrow & Ball",
+    "title": "Studio Green No. 93",
+    "alt": "Farrow and Ball Studio Green No. 93 color swatch",
+    "primary": {
+      "name": "Studio Green No. 93",
+      "hex": "#3E433E"
+    },
+    "secondary": [
+      {
+        "name": "Nuance 1 Soft Tint",
+        "hex": "#6A736A"
+      },
+      {
+        "name": "Nuance 2 Lifted Midtone",
+        "hex": "#545B54"
+      },
+      {
+        "name": "Nuance 3 Grounded Midtone",
+        "hex": "#282B28"
+      },
+      {
+        "name": "Nuance 4 Deep Shadow",
+        "hex": "#141514"
+      },
+      {
+        "name": "Vibrant Highlight",
+        "hex": "#2F6C4D"
+      }
+    ]
+  },
+  {
+    "id": "sherwin-williams-wheat-penny-sw-7705",
+    "brand": "Sherwin Williams",
+    "title": "Wheat Penny (SW 7705)",
+    "alt": "Sherwin Williams Wheat Penny SW 7705 color swatch",
+    "primary": {
+      "name": "Wheat Penny (SW 7705)",
+      "hex": "#9E7058"
+    },
+    "secondary": [
+      {
+        "name": "Nuance 1 Soft Tint",
+        "hex": "#BEA294"
+      },
+      {
+        "name": "Nuance 2 Lifted Midtone",
+        "hex": "#AE8975"
+      },
+      {
+        "name": "Nuance 3 Grounded Midtone",
+        "hex": "#825B46"
+      },
+      {
+        "name": "Nuance 4 Deep Shadow",
+        "hex": "#654635"
+      },
+      {
+        "name": "Vibrant Highlight",
+        "hex": "#C06F45"
+      }
+    ]
+  },
+  {
+    "id": "little-greene-invisible-green-56",
+    "brand": "Little Greene",
+    "title": "Invisible Green 56",
+    "alt": "Little Greene Invisible Green 56 color swatch",
+    "primary": {
+      "name": "Invisible Green 56",
+      "hex": "#2E301D"
+    },
+    "secondary": [
+      {
+        "name": "Nuance 1 Soft Tint",
+        "hex": "#626643"
+      },
+      {
+        "name": "Nuance 2 Lifted Midtone",
+        "hex": "#484B30"
+      },
+      {
+        "name": "Nuance 3 Grounded Midtone",
+        "hex": "#191A0F"
+      },
+      {
+        "name": "Nuance 4 Deep Shadow",
+        "hex": "#191A0F"
+      },
+      {
+        "name": "Vibrant Highlight",
+        "hex": "#5A6B2E"
+      }
+    ]
+  },
+  {
+    "id": "little-greene-silt-40",
+    "brand": "Little Greene",
+    "title": "Silt 40",
+    "alt": "Little Greene Silt 40 color swatch",
+    "primary": {
+      "name": "Silt 40",
+      "hex": "#827E6E"
+    },
+    "secondary": [
+      {
+        "name": "Nuance 1 Soft Tint",
+        "hex": "#ACAAA0"
+      },
+      {
+        "name": "Nuance 2 Lifted Midtone",
+        "hex": "#989486"
+      },
+      {
+        "name": "Nuance 3 Grounded Midtone",
+        "hex": "#6A6659"
+      },
+      {
+        "name": "Nuance 4 Deep Shadow",
+        "hex": "#514E43"
+      },
+      {
+        "name": "Vibrant Highlight",
+        "hex": "#A8914A"
+      }
+    ]
+  },
+  {
+    "id": "benjamin-moore-saint-martin-sand-2164-50",
+    "brand": "Benjamin Moore",
+    "title": "Saint Martin Sand 2164-50",
+    "alt": "Benjamin Moore Saint Martin Sand 2164-50 color swatch",
+    "primary": {
+      "name": "Saint Martin Sand 2164-50",
+      "hex": "#D1BBA5"
+    },
+    "secondary": [
+      {
+        "name": "Nuance 1 Soft Tint",
+        "hex": "#EFE9E3"
+      },
+      {
+        "name": "Nuance 2 Lifted Midtone",
+        "hex": "#DFD2C5"
+      },
+      {
+        "name": "Nuance 3 Grounded Midtone",
+        "hex": "#C3A485"
+      },
+      {
+        "name": "Nuance 4 Deep Shadow",
+        "hex": "#B58D65"
+      },
+      {
+        "name": "Vibrant Highlight",
+        "hex": "#E2A46C"
+      }
+    ]
+  },
+  {
+    "id": "sherwin-williams-sand-trap-sw-6066",
+    "brand": "Sherwin Williams",
+    "title": "Sand Trap (SW 6066)",
+    "alt": "Sherwin Williams Sand Trap SW 6066 color swatch",
+    "primary": {
+      "name": "Sand Trap (SW 6066)",
+      "hex": "#D2BEB1"
+    },
+    "secondary": [
+      {
+        "name": "Nuance 1 Soft Tint",
+        "hex": "#EFEAE6"
+      },
+      {
+        "name": "Nuance 2 Lifted Midtone",
+        "hex": "#E2D6CF"
+      },
+      {
+        "name": "Nuance 3 Grounded Midtone",
+        "hex": "#C2A693"
+      },
+      {
+        "name": "Nuance 4 Deep Shadow",
+        "hex": "#B38D74"
+      },
+      {
+        "name": "Vibrant Highlight",
+        "hex": "#DEA17F"
+      }
+    ]
+  },
+  {
+    "id": "sherwin-williams-summit-gray-sw-7669",
+    "brand": "Sherwin Williams",
+    "title": "Summit Gray (SW 7669)",
+    "alt": "Sherwin Williams Summit Gray SW 7669 color swatch",
+    "primary": {
+      "name": "Summit Gray (SW 7669)",
+      "hex": "#979792"
+    },
+    "secondary": [
+      {
+        "name": "Nuance 1 Soft Tint",
+        "hex": "#C5C5C0"
+      },
+      {
+        "name": "Nuance 2 Lifted Midtone",
+        "hex": "#AFAFA8"
+      },
+      {
+        "name": "Nuance 3 Grounded Midtone",
+        "hex": "#838379"
+      },
+      {
+        "name": "Nuance 4 Deep Shadow",
+        "hex": "#6B6B62"
+      },
+      {
+        "name": "Vibrant Highlight",
+        "hex": "#A59B45"
+      }
+    ]
+  },
+  {
+    "id": "sherwin-williams-web-gray-sw-7075",
+    "brand": "Sherwin Williams",
+    "title": "Web Gray (SW 7075)",
+    "alt": "Sherwin Williams Web Gray SW 7075 color swatch",
+    "primary": {
+      "name": "Web Gray (SW 7075)",
+      "hex": "#61686D"
+    },
+    "secondary": [
+      {
+        "name": "Nuance 1 Soft Tint",
+        "hex": "#90969A"
+      },
+      {
+        "name": "Nuance 2 Lifted Midtone",
+        "hex": "#777F85"
+      },
+      {
+        "name": "Nuance 3 Grounded Midtone",
+        "hex": "#4B5155"
+      },
+      {
+        "name": "Nuance 4 Deep Shadow",
+        "hex": "#363A3D"
+      },
+      {
+        "name": "Vibrant Highlight",
+        "hex": "#3F7A99"
+      }
+    ]
+  },
+  {
+    "id": "benjamin-moore-edgewood-rocks-1056",
+    "brand": "Benjamin Moore",
+    "title": "Edgewood Rocks 1056",
+    "alt": "Benjamin Moore Edgewood Rocks 1056 color swatch",
+    "primary": {
+      "name": "Edgewood Rocks 1056",
+      "hex": "#A68B66"
+    },
+    "secondary": [
+      {
+        "name": "Nuance 1 Soft Tint",
+        "hex": "#C5B7A3"
+      },
+      {
+        "name": "Nuance 2 Lifted Midtone",
+        "hex": "#B5A185"
+      },
+      {
+        "name": "Nuance 3 Grounded Midtone",
+        "hex": "#8E7450"
+      },
+      {
+        "name": "Nuance 4 Deep Shadow",
+        "hex": "#715C3F"
+      },
+      {
+        "name": "Vibrant Highlight",
+        "hex": "#C18A4D"
+      }
+    ]
+  },
+  {
+    "id": "farrow-and-ball-bancha-298",
+    "brand": "Farrow & Ball",
+    "title": "Bancha No. 298",
+    "alt": "Farrow and Ball Bancha No. 298 color swatch",
+    "primary": {
+      "name": "Bancha No. 298",
+      "hex": "#5E6445"
+    },
+    "secondary": [
+      {
+        "name": "Nuance 1 Soft Tint",
+        "hex": "#8E966F"
+      },
+      {
+        "name": "Nuance 2 Lifted Midtone",
+        "hex": "#777E59"
+      },
+      {
+        "name": "Nuance 3 Grounded Midtone",
+        "hex": "#454932"
+      },
+      {
+        "name": "Nuance 4 Deep Shadow",
+        "hex": "#2B2E1F"
+      },
+      {
+        "name": "Vibrant Highlight",
+        "hex": "#7D8E39"
+      }
+    ]
+  },
+  {
+    "id": "sherwin-williams-cobble-brown-sw-6082",
+    "brand": "Sherwin Williams",
+    "title": "Cobble Brown (SW 6082)",
+    "alt": "Sherwin Williams Cobble Brown SW 6082 color swatch",
+    "primary": {
+      "name": "Cobble Brown (SW 6082)",
+      "hex": "#796154"
+    },
+    "secondary": [
+      {
+        "name": "Nuance 1 Soft Tint",
+        "hex": "#A59084"
+      },
+      {
+        "name": "Nuance 2 Lifted Midtone",
+        "hex": "#927769"
+      },
+      {
+        "name": "Nuance 3 Grounded Midtone",
+        "hex": "#5F4B40"
+      },
+      {
+        "name": "Nuance 4 Deep Shadow",
+        "hex": "#44352E"
+      },
+      {
+        "name": "Vibrant Highlight",
+        "hex": "#A55F39"
+      }
+    ]
+  },
+  {
+    "id": "benjamin-moore-saddle-soap-2110-30",
+    "brand": "Benjamin Moore",
+    "title": "Saddle Soap 2110-30",
+    "alt": "Benjamin Moore Saddle Soap 2110-30 color swatch",
+    "primary": {
+      "name": "Saddle Soap 2110-30",
+      "hex": "#8E7060"
+    },
+    "secondary": [
+      {
+        "name": "Nuance 1 Soft Tint",
+        "hex": "#B4A096"
+      },
+      {
+        "name": "Nuance 2 Lifted Midtone",
+        "hex": "#A2887A"
+      },
+      {
+        "name": "Nuance 3 Grounded Midtone",
+        "hex": "#745A4D"
+      },
+      {
+        "name": "Nuance 4 Deep Shadow",
+        "hex": "#58443A"
+      },
+      {
+        "name": "Vibrant Highlight",
+        "hex": "#B36843"
+      }
+    ]
+  },
+  {
+    "id": "benjamin-moore-el-cajon-clay-1260",
+    "brand": "Benjamin Moore",
+    "title": "El Cajon Clay 1260",
+    "alt": "Benjamin Moore El Cajon Clay 1260 color swatch",
+    "primary": {
+      "name": "El Cajon Clay 1260",
+      "hex": "#654946"
+    },
+    "secondary": [
+      {
+        "name": "Nuance 1 Soft Tint",
+        "hex": "#967470"
+      },
+      {
+        "name": "Nuance 2 Lifted Midtone",
+        "hex": "#7F5E5A"
+      },
+      {
+        "name": "Nuance 3 Grounded Midtone",
+        "hex": "#4A3533"
+      },
+      {
+        "name": "Nuance 4 Deep Shadow",
+        "hex": "#2F2120"
+      },
+      {
+        "name": "Vibrant Highlight",
+        "hex": "#8F3F33"
+      }
+    ]
+  },
+  {
+    "id": "farrow-and-ball-worsted-284",
+    "brand": "Farrow & Ball",
+    "title": "Worsted No. 284",
+    "alt": "Farrow and Ball Worsted No. 284 color swatch",
+    "primary": {
+      "name": "Worsted No. 284",
+      "hex": "#9B9891"
+    },
+    "secondary": [
+      {
+        "name": "Nuance 1 Soft Tint",
+        "hex": "#C6C5C2"
+      },
+      {
+        "name": "Nuance 2 Lifted Midtone",
+        "hex": "#B1AEA9"
+      },
+      {
+        "name": "Nuance 3 Grounded Midtone",
+        "hex": "#858279"
+      },
+      {
+        "name": "Nuance 4 Deep Shadow",
+        "hex": "#6D6A63"
+      },
+      {
+        "name": "Vibrant Highlight",
+        "hex": "#B39151"
+      }
+    ]
+  },
+  {
+    "id": "sherwin-williams-brainstorm-bronze-sw-7033",
+    "brand": "Sherwin Williams",
+    "title": "Brainstorm Bronze (SW 7033)",
+    "alt": "Sherwin Williams Brainstorm Bronze SW 7033 color swatch",
+    "primary": {
+      "name": "Brainstorm Bronze (SW 7033)",
+      "hex": "#766B5A"
+    },
+    "secondary": [
+      {
+        "name": "Nuance 1 Soft Tint",
+        "hex": "#A2988A"
+      },
+      {
+        "name": "Nuance 2 Lifted Midtone",
+        "hex": "#8F826F"
+      },
+      {
+        "name": "Nuance 3 Grounded Midtone",
+        "hex": "#5D5446"
+      },
+      {
+        "name": "Nuance 4 Deep Shadow",
+        "hex": "#433C32"
+      },
+      {
+        "name": "Vibrant Highlight",
+        "hex": "#A7773D"
+      }
+    ]
+  },
+  {
+    "id": "sherwin-williams-urbane-bronze-sw-7048",
+    "brand": "Sherwin Williams",
+    "title": "Urbane Bronze (SW 7048)",
+    "alt": "Sherwin Williams Urbane Bronze SW 7048 color swatch",
+    "primary": {
+      "name": "Urbane Bronze (SW 7048)",
+      "hex": "#54504A"
+    },
+    "secondary": [
+      {
+        "name": "Nuance 1 Soft Tint",
+        "hex": "#847E76"
+      },
+      {
+        "name": "Nuance 2 Lifted Midtone",
+        "hex": "#6C6760"
+      },
+      {
+        "name": "Nuance 3 Grounded Midtone",
+        "hex": "#3C3934"
+      },
+      {
+        "name": "Nuance 4 Deep Shadow",
+        "hex": "#23221F"
+      },
+      {
+        "name": "Vibrant Highlight",
+        "hex": "#7A5A2D"
+      }
+    ]
+  },
+  {
+    "id": "farrow-and-ball-pitch-black-256",
+    "brand": "Farrow & Ball",
+    "title": "Pitch Black No. 256",
+    "alt": "Farrow and Ball Pitch Black No. 256 color swatch",
+    "primary": {
+      "name": "Pitch Black No. 256",
+      "hex": "#3C3D3D"
+    },
+    "secondary": [
+      {
+        "name": "Nuance 1 Soft Tint",
+        "hex": "#666F6F"
+      },
+      {
+        "name": "Nuance 2 Lifted Midtone",
+        "hex": "#505757"
+      },
+      {
+        "name": "Nuance 3 Grounded Midtone",
+        "hex": "#242727"
+      },
+      {
+        "name": "Nuance 4 Deep Shadow",
+        "hex": "#141515"
+      },
+      {
+        "name": "Vibrant Highlight",
+        "hex": "#2D6E68"
+      }
+    ]
+  }
+]
