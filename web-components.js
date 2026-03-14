@@ -1,16 +1,16 @@
-function s(r, e, t, o) {
-  var i = arguments.length, a = i < 3 ? e : o === null ? o = Object.getOwnPropertyDescriptor(e, t) : o, n;
+function n(r, e, t, o) {
+  var i = arguments.length, a = i < 3 ? e : o === null ? o = Object.getOwnPropertyDescriptor(e, t) : o, s;
   if (typeof Reflect == "object" && typeof Reflect.decorate == "function") a = Reflect.decorate(r, e, t, o);
-  else for (var c = r.length - 1; c >= 0; c--) (n = r[c]) && (a = (i < 3 ? n(a) : i > 3 ? n(e, t, a) : n(e, t)) || a);
+  else for (var c = r.length - 1; c >= 0; c--) (s = r[c]) && (a = (i < 3 ? s(a) : i > 3 ? s(e, t, a) : s(e, t)) || a);
   return i > 3 && a && Object.defineProperty(e, t, a), a;
 }
-const w = (r) => (e, t) => {
+const k = (r) => (e, t) => {
   t !== void 0 ? t.addInitializer(() => {
     customElements.define(r, e);
   }) : customElements.define(r, e);
 };
-const Ye = globalThis, Yt = Ye.ShadowRoot && (Ye.ShadyCSS === void 0 || Ye.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, Gt = /* @__PURE__ */ Symbol(), fo = /* @__PURE__ */ new WeakMap();
-let Lo = class {
+const Ke = globalThis, Kt = Ke.ShadowRoot && (Ke.ShadyCSS === void 0 || Ke.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, Gt = /* @__PURE__ */ Symbol(), fo = /* @__PURE__ */ new WeakMap();
+let Bo = class {
   constructor(e, t, o) {
     if (this._$cssResult$ = !0, o !== Gt) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
     this.cssText = e, this.t = t;
@@ -18,7 +18,7 @@ let Lo = class {
   get styleSheet() {
     let e = this.o;
     const t = this.t;
-    if (Yt && e === void 0) {
+    if (Kt && e === void 0) {
       const o = t !== void 0 && t.length === 1;
       o && (e = fo.get(t)), e === void 0 && ((this.o = e = new CSSStyleSheet()).replaceSync(this.cssText), o && fo.set(t, e));
     }
@@ -28,28 +28,28 @@ let Lo = class {
     return this.cssText;
   }
 };
-const wi = (r) => new Lo(typeof r == "string" ? r : r + "", void 0, Gt), m = (r, ...e) => {
-  const t = r.length === 1 ? r[0] : e.reduce((o, i, a) => o + ((n) => {
-    if (n._$cssResult$ === !0) return n.cssText;
-    if (typeof n == "number") return n;
-    throw Error("Value passed to 'css' function must be a 'css' function result: " + n + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
+const _i = (r) => new Bo(typeof r == "string" ? r : r + "", void 0, Gt), m = (r, ...e) => {
+  const t = r.length === 1 ? r[0] : e.reduce((o, i, a) => o + ((s) => {
+    if (s._$cssResult$ === !0) return s.cssText;
+    if (typeof s == "number") return s;
+    throw Error("Value passed to 'css' function must be a 'css' function result: " + s + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
   })(i) + r[a + 1], r[0]);
-  return new Lo(t, r, Gt);
+  return new Bo(t, r, Gt);
 }, ki = (r, e) => {
-  if (Yt) r.adoptedStyleSheets = e.map((t) => t instanceof CSSStyleSheet ? t : t.styleSheet);
+  if (Kt) r.adoptedStyleSheets = e.map((t) => t instanceof CSSStyleSheet ? t : t.styleSheet);
   else for (const t of e) {
-    const o = document.createElement("style"), i = Ye.litNonce;
+    const o = document.createElement("style"), i = Ke.litNonce;
     i !== void 0 && o.setAttribute("nonce", i), o.textContent = t.cssText, r.appendChild(o);
   }
-}, go = Yt ? (r) => r : (r) => r instanceof CSSStyleSheet ? ((e) => {
+}, go = Kt ? (r) => r : (r) => r instanceof CSSStyleSheet ? ((e) => {
   let t = "";
   for (const o of e.cssRules) t += o.cssText;
-  return wi(t);
+  return _i(t);
 })(r) : r;
-const { is: Ci, defineProperty: $i, getOwnPropertyDescriptor: Si, getOwnPropertyNames: Ei, getOwnPropertySymbols: zi, getPrototypeOf: Ai } = Object, Je = globalThis, bo = Je.trustedTypes, Ti = bo ? bo.emptyScript : "", Ii = Je.reactiveElementPolyfillSupport, ke = (r, e) => r, Xe = { toAttribute(r, e) {
+const { is: Ci, defineProperty: $i, getOwnPropertyDescriptor: Si, getOwnPropertyNames: Ei, getOwnPropertySymbols: zi, getPrototypeOf: Ai } = Object, Je = globalThis, bo = Je.trustedTypes, Ii = bo ? bo.emptyScript : "", Ti = Je.reactiveElementPolyfillSupport, ke = (r, e) => r, Xe = { toAttribute(r, e) {
   switch (e) {
     case Boolean:
-      r = r ? Ti : null;
+      r = r ? Ii : null;
       break;
     case Object:
     case Array:
@@ -92,12 +92,12 @@ let ve = class extends HTMLElement {
   static getPropertyDescriptor(e, t, o) {
     const { get: i, set: a } = Si(this.prototype, e) ?? { get() {
       return this[t];
-    }, set(n) {
-      this[t] = n;
+    }, set(s) {
+      this[t] = s;
     } };
-    return { get: i, set(n) {
+    return { get: i, set(s) {
       const c = i?.call(this);
-      a?.call(this, n), this.requestUpdate(e, c, o);
+      a?.call(this, s), this.requestUpdate(e, c, o);
     }, configurable: !0, enumerable: !0 };
   }
   static getPropertyOptions(e) {
@@ -180,22 +180,22 @@ let ve = class extends HTMLElement {
   _$AK(e, t) {
     const o = this.constructor, i = o._$Eh.get(e);
     if (i !== void 0 && this._$Em !== i) {
-      const a = o.getPropertyOptions(i), n = typeof a.converter == "function" ? { fromAttribute: a.converter } : a.converter?.fromAttribute !== void 0 ? a.converter : Xe;
+      const a = o.getPropertyOptions(i), s = typeof a.converter == "function" ? { fromAttribute: a.converter } : a.converter?.fromAttribute !== void 0 ? a.converter : Xe;
       this._$Em = i;
-      const c = n.fromAttribute(t, a.type);
+      const c = s.fromAttribute(t, a.type);
       this[i] = c ?? this._$Ej?.get(i) ?? c, this._$Em = null;
     }
   }
   requestUpdate(e, t, o, i = !1, a) {
     if (e !== void 0) {
-      const n = this.constructor;
-      if (i === !1 && (a = this[e]), o ??= n.getPropertyOptions(e), !((o.hasChanged ?? Xt)(a, t) || o.useDefault && o.reflect && a === this._$Ej?.get(e) && !this.hasAttribute(n._$Eu(e, o)))) return;
+      const s = this.constructor;
+      if (i === !1 && (a = this[e]), o ??= s.getPropertyOptions(e), !((o.hasChanged ?? Xt)(a, t) || o.useDefault && o.reflect && a === this._$Ej?.get(e) && !this.hasAttribute(s._$Eu(e, o)))) return;
       this.C(e, t, o);
     }
     this.isUpdatePending === !1 && (this._$ES = this._$EP());
   }
-  C(e, t, { useDefault: o, reflect: i, wrapped: a }, n) {
-    o && !(this._$Ej ??= /* @__PURE__ */ new Map()).has(e) && (this._$Ej.set(e, n ?? t ?? this[e]), a !== !0 || n !== void 0) || (this._$AL.has(e) || (this.hasUpdated || o || (t = void 0), this._$AL.set(e, t)), i === !0 && this._$Em !== e && (this._$Eq ??= /* @__PURE__ */ new Set()).add(e));
+  C(e, t, { useDefault: o, reflect: i, wrapped: a }, s) {
+    o && !(this._$Ej ??= /* @__PURE__ */ new Map()).has(e) && (this._$Ej.set(e, s ?? t ?? this[e]), a !== !0 || s !== void 0) || (this._$AL.has(e) || (this.hasUpdated || o || (t = void 0), this._$AL.set(e, t)), i === !0 && this._$Em !== e && (this._$Eq ??= /* @__PURE__ */ new Set()).add(e));
   }
   async _$EP() {
     this.isUpdatePending = !0;
@@ -219,8 +219,8 @@ let ve = class extends HTMLElement {
       }
       const o = this.constructor.elementProperties;
       if (o.size > 0) for (const [i, a] of o) {
-        const { wrapped: n } = a, c = this[i];
-        n !== !0 || this._$AL.has(i) || c === void 0 || this.C(i, void 0, a, c);
+        const { wrapped: s } = a, c = this[i];
+        s !== !0 || this._$AL.has(i) || c === void 0 || this.C(i, void 0, a, c);
       }
     }
     let e = !1;
@@ -257,57 +257,57 @@ let ve = class extends HTMLElement {
   firstUpdated(e) {
   }
 };
-ve.elementStyles = [], ve.shadowRootOptions = { mode: "open" }, ve[ke("elementProperties")] = /* @__PURE__ */ new Map(), ve[ke("finalized")] = /* @__PURE__ */ new Map(), Ii?.({ ReactiveElement: ve }), (Je.reactiveElementVersions ??= []).push("2.1.2");
+ve.elementStyles = [], ve.shadowRootOptions = { mode: "open" }, ve[ke("elementProperties")] = /* @__PURE__ */ new Map(), ve[ke("finalized")] = /* @__PURE__ */ new Map(), Ti?.({ ReactiveElement: ve }), (Je.reactiveElementVersions ??= []).push("2.1.2");
 const Di = { attribute: !0, type: String, converter: Xe, reflect: !1, hasChanged: Xt }, Oi = (r = Di, e, t) => {
   const { kind: o, metadata: i } = t;
   let a = globalThis.litPropertyMetadata.get(i);
   if (a === void 0 && globalThis.litPropertyMetadata.set(i, a = /* @__PURE__ */ new Map()), o === "setter" && ((r = Object.create(r)).wrapped = !0), a.set(t.name, r), o === "accessor") {
-    const { name: n } = t;
+    const { name: s } = t;
     return { set(c) {
       const p = e.get.call(this);
-      e.set.call(this, c), this.requestUpdate(n, p, r, !0, c);
+      e.set.call(this, c), this.requestUpdate(s, p, r, !0, c);
     }, init(c) {
-      return c !== void 0 && this.C(n, void 0, r, c), c;
+      return c !== void 0 && this.C(s, void 0, r, c), c;
     } };
   }
   if (o === "setter") {
-    const { name: n } = t;
+    const { name: s } = t;
     return function(c) {
-      const p = this[n];
-      e.call(this, c), this.requestUpdate(n, p, r, !0, c);
+      const p = this[s];
+      e.call(this, c), this.requestUpdate(s, p, r, !0, c);
     };
   }
   throw Error("Unsupported decorator location: " + o);
 };
 function d(r) {
   return (e, t) => typeof t == "object" ? Oi(r, e, t) : ((o, i, a) => {
-    const n = i.hasOwnProperty(a);
-    return i.constructor.createProperty(a, o), n ? Object.getOwnPropertyDescriptor(i, a) : void 0;
+    const s = i.hasOwnProperty(a);
+    return i.constructor.createProperty(a, o), s ? Object.getOwnPropertyDescriptor(i, a) : void 0;
   })(r, e, t);
 }
-function A(r) {
+function I(r) {
   return d({ ...r, state: !0, attribute: !1 });
 }
 const et = (r, e, t) => (t.configurable = !0, t.enumerable = !0, Reflect.decorate && typeof e != "object" && Object.defineProperty(r, e, t), t);
-function k(r, e) {
+function C(r, e) {
   return (t, o, i) => {
-    const a = (n) => n.renderRoot?.querySelector(r) ?? null;
+    const a = (s) => s.renderRoot?.querySelector(r) ?? null;
     return et(t, o, { get() {
       return a(this);
     } });
   };
 }
-let Pi;
-function Fi(r) {
+let Fi;
+function Pi(r) {
   return (e, t) => et(e, t, { get() {
-    return (this.renderRoot ?? (Pi ??= document.createDocumentFragment())).querySelectorAll(r);
+    return (this.renderRoot ?? (Fi ??= document.createDocumentFragment())).querySelectorAll(r);
   } });
 }
-function K(r) {
+function Y(r) {
   return (e, t) => {
     const { slot: o, selector: i } = r ?? {}, a = "slot" + (o ? `[name=${o}]` : ":not([name])");
     return et(e, t, { get() {
-      const n = this.renderRoot?.querySelector(a), c = n?.assignedElements(r) ?? [];
+      const s = this.renderRoot?.querySelector(a), c = s?.assignedElements(r) ?? [];
       return i === void 0 ? c : c.filter((p) => p.matches(i));
     } });
   };
@@ -320,22 +320,22 @@ function No(r) {
     } });
   };
 }
-const Zt = globalThis, xo = (r) => r, Ze = Zt.trustedTypes, _o = Ze ? Ze.createPolicy("lit-html", { createHTML: (r) => r }) : void 0, Vo = "$lit$", ie = `lit$${Math.random().toFixed(9).slice(2)}$`, Uo = "?" + ie, Ri = `<${Uo}>`, ce = document, $e = () => ce.createComment(""), Se = (r) => r === null || typeof r != "object" && typeof r != "function", Qt = Array.isArray, Mi = (r) => Qt(r) || typeof r?.[Symbol.iterator] == "function", at = `[ 	
-\f\r]`, _e = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, wo = /-->/g, ko = />/g, le = RegExp(`>|${at}(?:([^\\s"'>=/]+)(${at}*=${at}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`, "g"), Co = /'/g, $o = /"/g, qo = /^(?:script|style|textarea|title)$/i, Bi = (r) => (e, ...t) => ({ _$litType$: r, strings: e, values: t }), l = Bi(1), q = /* @__PURE__ */ Symbol.for("lit-noChange"), h = /* @__PURE__ */ Symbol.for("lit-nothing"), So = /* @__PURE__ */ new WeakMap(), de = ce.createTreeWalker(ce, 129);
+const Zt = globalThis, xo = (r) => r, Ze = Zt.trustedTypes, wo = Ze ? Ze.createPolicy("lit-html", { createHTML: (r) => r }) : void 0, Vo = "$lit$", ie = `lit$${Math.random().toFixed(9).slice(2)}$`, Uo = "?" + ie, Ri = `<${Uo}>`, ce = document, $e = () => ce.createComment(""), Se = (r) => r === null || typeof r != "object" && typeof r != "function", Qt = Array.isArray, Mi = (r) => Qt(r) || typeof r?.[Symbol.iterator] == "function", at = `[ 	
+\f\r]`, we = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, _o = /-->/g, ko = />/g, le = RegExp(`>|${at}(?:([^\\s"'>=/]+)(${at}*=${at}*(?:[^ 	
+\f\r"'\`<>=]|("|')|))|$)`, "g"), Co = /'/g, $o = /"/g, qo = /^(?:script|style|textarea|title)$/i, Li = (r) => (e, ...t) => ({ _$litType$: r, strings: e, values: t }), l = Li(1), q = /* @__PURE__ */ Symbol.for("lit-noChange"), u = /* @__PURE__ */ Symbol.for("lit-nothing"), So = /* @__PURE__ */ new WeakMap(), de = ce.createTreeWalker(ce, 129);
 function Ho(r, e) {
   if (!Qt(r) || !r.hasOwnProperty("raw")) throw Error("invalid template strings array");
-  return _o !== void 0 ? _o.createHTML(e) : e;
+  return wo !== void 0 ? wo.createHTML(e) : e;
 }
-const Li = (r, e) => {
+const Bi = (r, e) => {
   const t = r.length - 1, o = [];
-  let i, a = e === 2 ? "<svg>" : e === 3 ? "<math>" : "", n = _e;
+  let i, a = e === 2 ? "<svg>" : e === 3 ? "<math>" : "", s = we;
   for (let c = 0; c < t; c++) {
     const p = r[c];
-    let g, u, v = -1, b = 0;
-    for (; b < p.length && (n.lastIndex = b, u = n.exec(p), u !== null); ) b = n.lastIndex, n === _e ? u[1] === "!--" ? n = wo : u[1] !== void 0 ? n = ko : u[2] !== void 0 ? (qo.test(u[2]) && (i = RegExp("</" + u[2], "g")), n = le) : u[3] !== void 0 && (n = le) : n === le ? u[0] === ">" ? (n = i ?? _e, v = -1) : u[1] === void 0 ? v = -2 : (v = n.lastIndex - u[2].length, g = u[1], n = u[3] === void 0 ? le : u[3] === '"' ? $o : Co) : n === $o || n === Co ? n = le : n === wo || n === ko ? n = _e : (n = le, i = void 0);
-    const y = n === le && r[c + 1].startsWith("/>") ? " " : "";
-    a += n === _e ? p + Ri : v >= 0 ? (o.push(g), p.slice(0, v) + Vo + p.slice(v) + ie + y) : p + ie + (v === -2 ? c : y);
+    let g, h, v = -1, b = 0;
+    for (; b < p.length && (s.lastIndex = b, h = s.exec(p), h !== null); ) b = s.lastIndex, s === we ? h[1] === "!--" ? s = _o : h[1] !== void 0 ? s = ko : h[2] !== void 0 ? (qo.test(h[2]) && (i = RegExp("</" + h[2], "g")), s = le) : h[3] !== void 0 && (s = le) : s === le ? h[0] === ">" ? (s = i ?? we, v = -1) : h[1] === void 0 ? v = -2 : (v = s.lastIndex - h[2].length, g = h[1], s = h[3] === void 0 ? le : h[3] === '"' ? $o : Co) : s === $o || s === Co ? s = le : s === _o || s === ko ? s = we : (s = le, i = void 0);
+    const x = s === le && r[c + 1].startsWith("/>") ? " " : "";
+    a += s === we ? p + Ri : v >= 0 ? (o.push(g), p.slice(0, v) + Vo + p.slice(v) + ie + x) : p + ie + (v === -2 ? c : x);
   }
   return [Ho(r, a + (r[t] || "<?>") + (e === 2 ? "</svg>" : e === 3 ? "</math>" : "")), o];
 };
@@ -343,8 +343,8 @@ class Ee {
   constructor({ strings: e, _$litType$: t }, o) {
     let i;
     this.parts = [];
-    let a = 0, n = 0;
-    const c = e.length - 1, p = this.parts, [g, u] = Li(e, t);
+    let a = 0, s = 0;
+    const c = e.length - 1, p = this.parts, [g, h] = Bi(e, t);
     if (this.el = Ee.createElement(g, o), de.currentNode = this.el.content, t === 2 || t === 3) {
       const v = this.el.content.firstChild;
       v.replaceWith(...v.childNodes);
@@ -352,14 +352,14 @@ class Ee {
     for (; (i = de.nextNode()) !== null && p.length < c; ) {
       if (i.nodeType === 1) {
         if (i.hasAttributes()) for (const v of i.getAttributeNames()) if (v.endsWith(Vo)) {
-          const b = u[n++], y = i.getAttribute(v).split(ie), _ = /([.?@])?(.*)/.exec(b);
-          p.push({ type: 1, index: a, name: _[2], strings: y, ctor: _[1] === "." ? Vi : _[1] === "?" ? Ui : _[1] === "@" ? qi : tt }), i.removeAttribute(v);
+          const b = h[s++], x = i.getAttribute(v).split(ie), y = /([.?@])?(.*)/.exec(b);
+          p.push({ type: 1, index: a, name: y[2], strings: x, ctor: y[1] === "." ? Vi : y[1] === "?" ? Ui : y[1] === "@" ? qi : tt }), i.removeAttribute(v);
         } else v.startsWith(ie) && (p.push({ type: 6, index: a }), i.removeAttribute(v));
         if (qo.test(i.tagName)) {
           const v = i.textContent.split(ie), b = v.length - 1;
           if (b > 0) {
             i.textContent = Ze ? Ze.emptyScript : "";
-            for (let y = 0; y < b; y++) i.append(v[y], $e()), de.nextNode(), p.push({ type: 2, index: ++a });
+            for (let x = 0; x < b; x++) i.append(v[x], $e()), de.nextNode(), p.push({ type: 2, index: ++a });
             i.append(v[b], $e());
           }
         }
@@ -395,13 +395,13 @@ class Ni {
   u(e) {
     const { el: { content: t }, parts: o } = this._$AD, i = (e?.creationScope ?? ce).importNode(t, !0);
     de.currentNode = i;
-    let a = de.nextNode(), n = 0, c = 0, p = o[0];
+    let a = de.nextNode(), s = 0, c = 0, p = o[0];
     for (; p !== void 0; ) {
-      if (n === p.index) {
+      if (s === p.index) {
         let g;
-        p.type === 2 ? g = new Te(a, a.nextSibling, this, e) : p.type === 1 ? g = new p.ctor(a, p.name, p.strings, this, e) : p.type === 6 && (g = new Hi(a, this, e)), this._$AV.push(g), p = o[++c];
+        p.type === 2 ? g = new Ie(a, a.nextSibling, this, e) : p.type === 1 ? g = new p.ctor(a, p.name, p.strings, this, e) : p.type === 6 && (g = new Hi(a, this, e)), this._$AV.push(g), p = o[++c];
       }
-      n !== p?.index && (a = de.nextNode(), n++);
+      s !== p?.index && (a = de.nextNode(), s++);
     }
     return de.currentNode = ce, i;
   }
@@ -410,12 +410,12 @@ class Ni {
     for (const o of this._$AV) o !== void 0 && (o.strings !== void 0 ? (o._$AI(e, o, t), t += o.strings.length - 2) : o._$AI(e[t])), t++;
   }
 }
-class Te {
+class Ie {
   get _$AU() {
     return this._$AM?._$AU ?? this._$Cv;
   }
   constructor(e, t, o, i) {
-    this.type = 2, this._$AH = h, this._$AN = void 0, this._$AA = e, this._$AB = t, this._$AM = o, this.options = i, this._$Cv = i?.isConnected ?? !0;
+    this.type = 2, this._$AH = u, this._$AN = void 0, this._$AA = e, this._$AB = t, this._$AM = o, this.options = i, this._$Cv = i?.isConnected ?? !0;
   }
   get parentNode() {
     let e = this._$AA.parentNode;
@@ -429,7 +429,7 @@ class Te {
     return this._$AB;
   }
   _$AI(e, t = this) {
-    e = ge(this, e, t), Se(e) ? e === h || e == null || e === "" ? (this._$AH !== h && this._$AR(), this._$AH = h) : e !== this._$AH && e !== q && this._(e) : e._$litType$ !== void 0 ? this.$(e) : e.nodeType !== void 0 ? this.T(e) : Mi(e) ? this.k(e) : this._(e);
+    e = ge(this, e, t), Se(e) ? e === u || e == null || e === "" ? (this._$AH !== u && this._$AR(), this._$AH = u) : e !== this._$AH && e !== q && this._(e) : e._$litType$ !== void 0 ? this.$(e) : e.nodeType !== void 0 ? this.T(e) : Mi(e) ? this.k(e) : this._(e);
   }
   O(e) {
     return this._$AA.parentNode.insertBefore(e, this._$AB);
@@ -438,14 +438,14 @@ class Te {
     this._$AH !== e && (this._$AR(), this._$AH = this.O(e));
   }
   _(e) {
-    this._$AH !== h && Se(this._$AH) ? this._$AA.nextSibling.data = e : this.T(ce.createTextNode(e)), this._$AH = e;
+    this._$AH !== u && Se(this._$AH) ? this._$AA.nextSibling.data = e : this.T(ce.createTextNode(e)), this._$AH = e;
   }
   $(e) {
     const { values: t, _$litType$: o } = e, i = typeof o == "number" ? this._$AC(e) : (o.el === void 0 && (o.el = Ee.createElement(Ho(o.h, o.h[0]), this.options)), o);
     if (this._$AH?._$AD === i) this._$AH.p(t);
     else {
-      const a = new Ni(i, this), n = a.u(this.options);
-      a.p(t), this.T(n), this._$AH = a;
+      const a = new Ni(i, this), s = a.u(this.options);
+      a.p(t), this.T(s), this._$AH = a;
     }
   }
   _$AC(e) {
@@ -456,7 +456,7 @@ class Te {
     Qt(this._$AH) || (this._$AH = [], this._$AR());
     const t = this._$AH;
     let o, i = 0;
-    for (const a of e) i === t.length ? t.push(o = new Te(this.O($e()), this.O($e()), this, this.options)) : o = t[i], o._$AI(a), i++;
+    for (const a of e) i === t.length ? t.push(o = new Ie(this.O($e()), this.O($e()), this, this.options)) : o = t[i], o._$AI(a), i++;
     i < t.length && (this._$AR(o && o._$AB.nextSibling, i), t.length = i);
   }
   _$AR(e = this._$AA.nextSibling, t) {
@@ -477,21 +477,21 @@ class tt {
     return this._$AM._$AU;
   }
   constructor(e, t, o, i, a) {
-    this.type = 1, this._$AH = h, this._$AN = void 0, this.element = e, this.name = t, this._$AM = i, this.options = a, o.length > 2 || o[0] !== "" || o[1] !== "" ? (this._$AH = Array(o.length - 1).fill(new String()), this.strings = o) : this._$AH = h;
+    this.type = 1, this._$AH = u, this._$AN = void 0, this.element = e, this.name = t, this._$AM = i, this.options = a, o.length > 2 || o[0] !== "" || o[1] !== "" ? (this._$AH = Array(o.length - 1).fill(new String()), this.strings = o) : this._$AH = u;
   }
   _$AI(e, t = this, o, i) {
     const a = this.strings;
-    let n = !1;
-    if (a === void 0) e = ge(this, e, t, 0), n = !Se(e) || e !== this._$AH && e !== q, n && (this._$AH = e);
+    let s = !1;
+    if (a === void 0) e = ge(this, e, t, 0), s = !Se(e) || e !== this._$AH && e !== q, s && (this._$AH = e);
     else {
       const c = e;
       let p, g;
-      for (e = a[0], p = 0; p < a.length - 1; p++) g = ge(this, c[o + p], t, p), g === q && (g = this._$AH[p]), n ||= !Se(g) || g !== this._$AH[p], g === h ? e = h : e !== h && (e += (g ?? "") + a[p + 1]), this._$AH[p] = g;
+      for (e = a[0], p = 0; p < a.length - 1; p++) g = ge(this, c[o + p], t, p), g === q && (g = this._$AH[p]), s ||= !Se(g) || g !== this._$AH[p], g === u ? e = u : e !== u && (e += (g ?? "") + a[p + 1]), this._$AH[p] = g;
     }
-    n && !i && this.j(e);
+    s && !i && this.j(e);
   }
   j(e) {
-    e === h ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, e ?? "");
+    e === u ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, e ?? "");
   }
 }
 class Vi extends tt {
@@ -499,7 +499,7 @@ class Vi extends tt {
     super(...arguments), this.type = 3;
   }
   j(e) {
-    this.element[this.name] = e === h ? void 0 : e;
+    this.element[this.name] = e === u ? void 0 : e;
   }
 }
 class Ui extends tt {
@@ -507,7 +507,7 @@ class Ui extends tt {
     super(...arguments), this.type = 4;
   }
   j(e) {
-    this.element.toggleAttribute(this.name, !!e && e !== h);
+    this.element.toggleAttribute(this.name, !!e && e !== u);
   }
 }
 class qi extends tt {
@@ -515,8 +515,8 @@ class qi extends tt {
     super(e, t, o, i, a), this.type = 5;
   }
   _$AI(e, t = this) {
-    if ((e = ge(this, e, t, 0) ?? h) === q) return;
-    const o = this._$AH, i = e === h && o !== h || e.capture !== o.capture || e.once !== o.once || e.passive !== o.passive, a = e !== h && (o === h || i);
+    if ((e = ge(this, e, t, 0) ?? u) === q) return;
+    const o = this._$AH, i = e === u && o !== u || e.capture !== o.capture || e.once !== o.once || e.passive !== o.passive, a = e !== u && (o === u || i);
     i && this.element.removeEventListener(this.name, this, o), a && this.element.addEventListener(this.name, this, e), this._$AH = e;
   }
   handleEvent(e) {
@@ -535,13 +535,13 @@ class Hi {
   }
 }
 const Wi = Zt.litHtmlPolyfillSupport;
-Wi?.(Ee, Te), (Zt.litHtmlVersions ??= []).push("3.3.2");
+Wi?.(Ee, Ie), (Zt.litHtmlVersions ??= []).push("3.3.2");
 const Jt = (r, e, t) => {
   const o = t?.renderBefore ?? e;
   let i = o._$litPart$;
   if (i === void 0) {
     const a = t?.renderBefore ?? null;
-    o._$litPart$ = i = new Te(e.insertBefore($e(), a), a, void 0, t ?? {});
+    o._$litPart$ = i = new Ie(e.insertBefore($e(), a), a, void 0, t ?? {});
   }
   return i._$AI(r), i;
 };
@@ -572,7 +572,7 @@ f._$litElement$ = !0, f.finalized = !0, eo.litElementHydrateSupport?.({ LitEleme
 const ji = eo.litElementPolyfillSupport;
 ji?.({ LitElement: f });
 (eo.litElementVersions ??= []).push("4.2.2");
-class Ki extends f {
+class Yi extends f {
   render() {
     return l`<slot></slot>`;
   }
@@ -584,13 +584,13 @@ class Ki extends f {
     this.setAttribute("aria-hidden", "true");
   }
 }
-const Yi = m`:host{font-size:var(--md-icon-size, 24px);width:var(--md-icon-size, 24px);height:var(--md-icon-size, 24px);color:inherit;font-variation-settings:inherit;font-weight:400;font-family:var(--md-icon-font, Material Symbols Outlined);display:inline-flex;font-style:normal;place-items:center;place-content:center;line-height:1;overflow:hidden;letter-spacing:normal;text-transform:none;user-select:none;white-space:nowrap;word-wrap:normal;flex-shrink:0;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;-moz-osx-font-smoothing:grayscale}::slotted(svg){fill:currentColor}::slotted(*){height:100%;width:100%}
+const Ki = m`:host{font-size:var(--md-icon-size, 24px);width:var(--md-icon-size, 24px);height:var(--md-icon-size, 24px);color:inherit;font-variation-settings:inherit;font-weight:400;font-family:var(--md-icon-font, Material Symbols Outlined);display:inline-flex;font-style:normal;place-items:center;place-content:center;line-height:1;overflow:hidden;letter-spacing:normal;text-transform:none;user-select:none;white-space:nowrap;word-wrap:normal;flex-shrink:0;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;-moz-osx-font-smoothing:grayscale}::slotted(svg){fill:currentColor}::slotted(*){height:100%;width:100%}
 `;
-let pt = class extends Ki {
+let pt = class extends Yi {
 };
-pt.styles = [Yi];
-pt = s([
-  w("md-icon")
+pt.styles = [Ki];
+pt = n([
+  k("md-icon")
 ], pt);
 const Wo = /* @__PURE__ */ Symbol("attachableController");
 let jo;
@@ -598,7 +598,7 @@ jo = new MutationObserver((r) => {
   for (const e of r)
     e.target[Wo]?.hostConnected();
 });
-class Ko {
+class Yo {
   get htmlFor() {
     return this.host.getAttribute("for");
   }
@@ -643,7 +643,7 @@ class Ko {
 const Gi = ["focusin", "focusout", "pointerdown"];
 class to extends f {
   constructor() {
-    super(...arguments), this.visible = !1, this.inward = !1, this.attachableController = new Ko(this, this.onControlChange.bind(this));
+    super(...arguments), this.visible = !1, this.inward = !1, this.attachableController = new Yo(this, this.onControlChange.bind(this));
   }
   get htmlFor() {
     return this.attachableController.htmlFor;
@@ -691,10 +691,10 @@ class to extends f {
     e.has("visible") && this.dispatchEvent(new Event("visibility-changed")), super.update(e);
   }
 }
-s([
+n([
   d({ type: Boolean, reflect: !0 })
 ], to.prototype, "visible", void 0);
-s([
+n([
   d({ type: Boolean, reflect: !0 })
 ], to.prototype, "inward", void 0);
 const Eo = /* @__PURE__ */ Symbol("handledByFocusRing");
@@ -703,8 +703,8 @@ const Xi = m`:host{animation-delay:0s,calc(var(--md-focus-ring-duration, 600ms)*
 let ht = class extends to {
 };
 ht.styles = [Xi];
-ht = s([
-  w("md-focus-ring")
+ht = n([
+  k("md-focus-ring")
 ], ht);
 const oe = { ATTRIBUTE: 1, PROPERTY: 3, BOOLEAN_ATTRIBUTE: 4 }, oo = (r) => (...e) => ({ _$litDirective$: r, values: e });
 let io = class {
@@ -762,10 +762,10 @@ function Zi() {
   };
 }
 const Qi = 450, zo = 225, Ji = 0.2, er = 10, tr = 75, or = 0.35, ir = "::after", rr = "forwards";
-var L;
+var B;
 (function(r) {
   r[r.INACTIVE = 0] = "INACTIVE", r[r.TOUCH_DELAY = 1] = "TOUCH_DELAY", r[r.HOLDING = 2] = "HOLDING", r[r.WAITING_FOR_CLICK = 3] = "WAITING_FOR_CLICK";
-})(L || (L = {}));
+})(B || (B = {}));
 const ar = [
   "click",
   "contextmenu",
@@ -775,9 +775,9 @@ const ar = [
   "pointerleave",
   "pointerup"
 ], sr = 150, nr = window.matchMedia("(forced-colors: active)");
-class Ie extends f {
+class Te extends f {
   constructor() {
-    super(...arguments), this.disabled = !1, this.hovered = !1, this.pressed = !1, this.rippleSize = "", this.rippleScale = "", this.initialSize = 0, this.state = L.INACTIVE, this.attachableController = new Ko(this, this.onControlChange.bind(this));
+    super(...arguments), this.disabled = !1, this.hovered = !1, this.pressed = !1, this.rippleSize = "", this.rippleScale = "", this.initialSize = 0, this.state = B.INACTIVE, this.attachableController = new Yo(this, this.onControlChange.bind(this));
   }
   get htmlFor() {
     return this.attachableController.htmlFor;
@@ -822,16 +822,16 @@ class Ie extends f {
    * @private only public for slider
    */
   handlePointerleave(e) {
-    this.shouldReactToEvent(e) && (this.hovered = !1, this.state !== L.INACTIVE && this.endPressAnimation());
+    this.shouldReactToEvent(e) && (this.hovered = !1, this.state !== B.INACTIVE && this.endPressAnimation());
   }
   handlePointerup(e) {
     if (this.shouldReactToEvent(e)) {
-      if (this.state === L.HOLDING) {
-        this.state = L.WAITING_FOR_CLICK;
+      if (this.state === B.HOLDING) {
+        this.state = B.WAITING_FOR_CLICK;
         return;
       }
-      if (this.state === L.TOUCH_DELAY) {
-        this.state = L.WAITING_FOR_CLICK, this.startPressAnimation(this.rippleStartEvent);
+      if (this.state === B.TOUCH_DELAY) {
+        this.state = B.WAITING_FOR_CLICK, this.startPressAnimation(this.rippleStartEvent);
         return;
       }
     }
@@ -839,21 +839,21 @@ class Ie extends f {
   async handlePointerdown(e) {
     if (this.shouldReactToEvent(e)) {
       if (this.rippleStartEvent = e, !this.isTouch(e)) {
-        this.state = L.WAITING_FOR_CLICK, this.startPressAnimation(e);
+        this.state = B.WAITING_FOR_CLICK, this.startPressAnimation(e);
         return;
       }
-      this.state = L.TOUCH_DELAY, await new Promise((t) => {
+      this.state = B.TOUCH_DELAY, await new Promise((t) => {
         setTimeout(t, sr);
-      }), this.state === L.TOUCH_DELAY && (this.state = L.HOLDING, this.startPressAnimation(e));
+      }), this.state === B.TOUCH_DELAY && (this.state = B.HOLDING, this.startPressAnimation(e));
     }
   }
   handleClick() {
     if (!this.disabled) {
-      if (this.state === L.WAITING_FOR_CLICK) {
+      if (this.state === B.WAITING_FOR_CLICK) {
         this.endPressAnimation();
         return;
       }
-      this.state === L.INACTIVE && (this.startPressAnimation(), this.endPressAnimation());
+      this.state === B.INACTIVE && (this.startPressAnimation(), this.endPressAnimation());
     }
   }
   handlePointercancel(e) {
@@ -863,16 +863,16 @@ class Ie extends f {
     this.disabled || this.endPressAnimation();
   }
   determineRippleSize() {
-    const { height: e, width: t } = this.getBoundingClientRect(), o = Math.max(e, t), i = Math.max(or * o, tr), a = this.currentCSSZoom ?? 1, n = Math.floor(o * Ji / a), p = Math.sqrt(t ** 2 + e ** 2) + er;
-    this.initialSize = n;
-    const g = (p + i) / n;
-    this.rippleScale = `${g / a}`, this.rippleSize = `${n}px`;
+    const { height: e, width: t } = this.getBoundingClientRect(), o = Math.max(e, t), i = Math.max(or * o, tr), a = this.currentCSSZoom ?? 1, s = Math.floor(o * Ji / a), p = Math.sqrt(t ** 2 + e ** 2) + er;
+    this.initialSize = s;
+    const g = (p + i) / s;
+    this.rippleScale = `${g / a}`, this.rippleSize = `${s}px`;
   }
   getNormalizedPointerEventCoords(e) {
-    const { scrollX: t, scrollY: o } = window, { left: i, top: a } = this.getBoundingClientRect(), n = t + i, c = o + a, { pageX: p, pageY: g } = e, u = this.currentCSSZoom ?? 1;
+    const { scrollX: t, scrollY: o } = window, { left: i, top: a } = this.getBoundingClientRect(), s = t + i, c = o + a, { pageX: p, pageY: g } = e, h = this.currentCSSZoom ?? 1;
     return {
-      x: (p - n) / u,
-      y: (g - c) / u
+      x: (p - s) / h,
+      y: (g - c) / h
     };
   }
   getTranslationCoordinates(e) {
@@ -880,14 +880,14 @@ class Ie extends f {
       x: (o / i - this.initialSize) / 2,
       y: (t / i - this.initialSize) / 2
     };
-    let n;
-    return e instanceof PointerEvent ? n = this.getNormalizedPointerEventCoords(e) : n = {
+    let s;
+    return e instanceof PointerEvent ? s = this.getNormalizedPointerEventCoords(e) : s = {
       x: o / i / 2,
       y: t / i / 2
-    }, n = {
-      x: n.x - this.initialSize / 2,
-      y: n.y - this.initialSize / 2
-    }, { startPoint: n, endPoint: a };
+    }, s = {
+      x: s.x - this.initialSize / 2,
+      y: s.y - this.initialSize / 2
+    }, { startPoint: s, endPoint: a };
   }
   startPressAnimation(e) {
     if (!this.mdRoot)
@@ -911,7 +911,7 @@ class Ie extends f {
     });
   }
   async endPressAnimation() {
-    this.rippleStartEvent = void 0, this.state = L.INACTIVE;
+    this.rippleStartEvent = void 0, this.state = B.INACTIVE;
     const e = this.growAnimation;
     let t = 1 / 0;
     if (typeof e?.currentTime == "number" ? t = e.currentTime : e?.currentTime && (t = e.currentTime.to("ms").value), t >= zo) {
@@ -974,27 +974,27 @@ class Ie extends f {
       e?.removeEventListener(o, this), t?.addEventListener(o, this);
   }
 }
-s([
+n([
   d({ type: Boolean, reflect: !0 })
-], Ie.prototype, "disabled", void 0);
-s([
-  A()
-], Ie.prototype, "hovered", void 0);
-s([
-  A()
-], Ie.prototype, "pressed", void 0);
-s([
-  k(".surface")
-], Ie.prototype, "mdRoot", void 0);
+], Te.prototype, "disabled", void 0);
+n([
+  I()
+], Te.prototype, "hovered", void 0);
+n([
+  I()
+], Te.prototype, "pressed", void 0);
+n([
+  C(".surface")
+], Te.prototype, "mdRoot", void 0);
 const lr = m`:host{display:flex;margin:auto;pointer-events:none}:host([disabled]){display:none}@media(forced-colors: active){:host{display:none}}:host,.surface{border-radius:inherit;position:absolute;inset:0;overflow:hidden}.surface{-webkit-tap-highlight-color:rgba(0,0,0,0)}.surface::before,.surface::after{content:"";opacity:0;position:absolute}.surface::before{background-color:var(--md-ripple-hover-color, var(--md-sys-color-on-surface, #1d1b20));inset:0;transition:opacity 15ms linear,background-color 15ms linear}.surface::after{background:radial-gradient(closest-side, var(--md-ripple-pressed-color, var(--md-sys-color-on-surface, #1d1b20)) max(100% - 70px, 65%), transparent 100%);transform-origin:center center;transition:opacity 375ms linear}.hovered::before{background-color:var(--md-ripple-hover-color, var(--md-sys-color-on-surface, #1d1b20));opacity:var(--md-ripple-hover-opacity, 0.08)}.pressed::after{opacity:var(--md-ripple-pressed-opacity, 0.12);transition-duration:105ms}
 `;
-let ut = class extends Ie {
+let ut = class extends Te {
 };
 ut.styles = [lr];
-ut = s([
-  w("md-ripple")
+ut = n([
+  k("md-ripple")
 ], ut);
-const Yo = [
+const Ko = [
   "role",
   "ariaAtomic",
   "ariaAutoComplete",
@@ -1033,7 +1033,7 @@ const Yo = [
   "ariaValueMin",
   "ariaValueNow",
   "ariaValueText"
-], dr = Yo.map(Go);
+], dr = Ko.map(Go);
 function st(r) {
   return dr.includes(r);
 }
@@ -1047,16 +1047,16 @@ function Q(r) {
     constructor() {
       super(...arguments), this[e] = /* @__PURE__ */ new Set();
     }
-    attributeChangedCallback(i, a, n) {
+    attributeChangedCallback(i, a, s) {
       if (!st(i)) {
-        super.attributeChangedCallback(i, a, n);
+        super.attributeChangedCallback(i, a, s);
         return;
       }
       if (this[Re].has(i))
         return;
       this[Re].add(i), this.removeAttribute(i), this[Re].delete(i);
       const c = vt(i);
-      n === null ? delete this.dataset[c] : this.dataset[c] = n, this.requestUpdate(vt(i), a);
+      s === null ? delete this.dataset[c] : this.dataset[c] = s, this.requestUpdate(vt(i), a);
     }
     getAttribute(i) {
       return st(i) ? super.getAttribute(mt(i)) : super.getAttribute(i);
@@ -1068,7 +1068,7 @@ function Q(r) {
   return e = Re, cr(t), t;
 }
 function cr(r) {
-  for (const e of Yo) {
+  for (const e of Ko) {
     const t = Go(e), o = mt(t), i = vt(t);
     r.createProperty(e, {
       attribute: t,
@@ -1083,8 +1083,8 @@ function cr(r) {
         return this.dataset[i] ?? null;
       },
       set(a) {
-        const n = this.dataset[i] ?? null;
-        a !== n && (a === null ? delete this.dataset[i] : this.dataset[i] = a, this.requestUpdate(e, n));
+        const s = this.dataset[i] ?? null;
+        a !== s && (a === null ? delete this.dataset[i] : this.dataset[i] = a, this.requestUpdate(e, s));
       }
     });
   }
@@ -1114,12 +1114,12 @@ function hr(r, ...e) {
       if (i)
         return;
       a.stopImmediatePropagation();
-      const n = Reflect.construct(a.constructor, [
+      const s = Reflect.construct(a.constructor, [
         a.type,
         a
       ]), c = new EventTarget();
-      n[Xo] = c, i = !0;
-      const p = r.dispatchEvent(n);
+      s[Xo] = c, i = !0;
+      const p = r.dispatchEvent(s);
       i = !1, p || a.preventDefault(), c.dispatchEvent(new Event("after"));
     }, {
       // Ensure this listener runs before other listeners.
@@ -1183,16 +1183,16 @@ function ro(r) {
     setCustomValidity(i) {
       this[Me] = i, this[Z]();
     }
-    requestUpdate(i, a, n) {
-      super.requestUpdate(i, a, n), this[Z]();
+    requestUpdate(i, a, s) {
+      super.requestUpdate(i, a, s), this[Z]();
     }
     firstUpdated(i) {
       super.firstUpdated(i), this[Z]();
     }
     [(e = Me, Z)]() {
       this[lt] || (this[lt] = this[ze]());
-      const { validity: i, validationMessage: a } = this[lt].getValidity(), n = !!this[Me], c = this[Me] || a;
-      this[N].setValidity({ ...i, customError: n }, c, this[Ae]() ?? void 0);
+      const { validity: i, validationMessage: a } = this[lt].getValidity(), s = !!this[Me], c = this[Me] || a;
+      this[N].setValidity({ ...i, customError: s }, c, this[Ae]() ?? void 0);
     }
     [ze]() {
       throw new Error("Implement [createValidator]");
@@ -1232,8 +1232,8 @@ function ao(r) {
     }
     attributeChangedCallback(o, i, a) {
       if (o === "name" || o === "disabled") {
-        const n = o === "disabled" ? i !== null : i;
-        this.requestUpdate(o, n);
+        const s = o === "disabled" ? i !== null : i;
+        this.requestUpdate(o, s);
         return;
       }
       super.attributeChangedCallback(o, i, a);
@@ -1251,9 +1251,9 @@ function ao(r) {
       this.disabled = o;
     }
   }
-  return e.formAssociated = !0, s([
+  return e.formAssociated = !0, n([
     d({ noAccessor: !0 })
-  ], e.prototype, "name", null), s([
+  ], e.prototype, "name", null), n([
     d({ type: Boolean, noAccessor: !0 })
   ], e.prototype, "disabled", null), e;
 }
@@ -1337,7 +1337,7 @@ class ae extends fr {
           class="touch"
           type="checkbox"
           role="switch"
-          aria-label=${this.ariaLabel || h}
+          aria-label=${this.ariaLabel || u}
           ?checked=${this.selected}
           ?disabled=${this.disabled}
           ?required=${this.required}
@@ -1443,31 +1443,31 @@ ae.shadowRootOptions = {
   mode: "open",
   delegatesFocus: !0
 };
-s([
+n([
   d({ type: Boolean })
 ], ae.prototype, "selected", void 0);
-s([
+n([
   d({ type: Boolean })
 ], ae.prototype, "icons", void 0);
-s([
+n([
   d({ type: Boolean, attribute: "show-only-selected-icon" })
 ], ae.prototype, "showOnlySelectedIcon", void 0);
-s([
+n([
   d({ type: Boolean })
 ], ae.prototype, "required", void 0);
-s([
+n([
   d()
 ], ae.prototype, "value", void 0);
-s([
-  k("input")
+n([
+  C("input")
 ], ae.prototype, "input", void 0);
 const gr = m`@layer styles, hcm;@layer styles{:host{display:inline-flex;outline:none;vertical-align:top;-webkit-tap-highlight-color:rgba(0,0,0,0);cursor:pointer}:host([disabled]){cursor:default}:host([touch-target=wrapper]){margin:max(0px,(48px - var(--md-switch-track-height, 32px))/2) 0px}md-focus-ring{--md-focus-ring-shape-start-start: var(--md-switch-track-shape-start-start, var(--md-switch-track-shape, var(--md-sys-shape-corner-full, 9999px)));--md-focus-ring-shape-start-end: var(--md-switch-track-shape-start-end, var(--md-switch-track-shape, var(--md-sys-shape-corner-full, 9999px)));--md-focus-ring-shape-end-end: var(--md-switch-track-shape-end-end, var(--md-switch-track-shape, var(--md-sys-shape-corner-full, 9999px)));--md-focus-ring-shape-end-start: var(--md-switch-track-shape-end-start, var(--md-switch-track-shape, var(--md-sys-shape-corner-full, 9999px)))}.switch{align-items:center;display:inline-flex;flex-shrink:0;position:relative;width:var(--md-switch-track-width, 52px);height:var(--md-switch-track-height, 32px);border-start-start-radius:var(--md-switch-track-shape-start-start, var(--md-switch-track-shape, var(--md-sys-shape-corner-full, 9999px)));border-start-end-radius:var(--md-switch-track-shape-start-end, var(--md-switch-track-shape, var(--md-sys-shape-corner-full, 9999px)));border-end-end-radius:var(--md-switch-track-shape-end-end, var(--md-switch-track-shape, var(--md-sys-shape-corner-full, 9999px)));border-end-start-radius:var(--md-switch-track-shape-end-start, var(--md-switch-track-shape, var(--md-sys-shape-corner-full, 9999px)))}input{appearance:none;height:max(100%,var(--md-switch-touch-target-size, 48px));outline:none;margin:0;position:absolute;width:max(100%,var(--md-switch-touch-target-size, 48px));z-index:1;cursor:inherit;top:50%;left:50%;transform:translate(-50%, -50%)}:host([touch-target=none]) input{display:none}}@layer styles{.track{position:absolute;width:100%;height:100%;box-sizing:border-box;border-radius:inherit;display:flex;justify-content:center;align-items:center}.track::before{content:"";display:flex;position:absolute;height:100%;width:100%;border-radius:inherit;box-sizing:border-box;transition-property:opacity,background-color;transition-timing-function:linear;transition-duration:67ms}.disabled .track{background-color:rgba(0,0,0,0);border-color:rgba(0,0,0,0)}.disabled .track::before,.disabled .track::after{transition:none;opacity:var(--md-switch-disabled-track-opacity, 0.12)}.disabled .track::before{background-clip:content-box}.selected .track::before{background-color:var(--md-switch-selected-track-color, var(--md-sys-color-primary, #6750a4))}.selected:hover .track::before{background-color:var(--md-switch-selected-hover-track-color, var(--md-sys-color-primary, #6750a4))}.selected:focus-within .track::before{background-color:var(--md-switch-selected-focus-track-color, var(--md-sys-color-primary, #6750a4))}.selected:active .track::before{background-color:var(--md-switch-selected-pressed-track-color, var(--md-sys-color-primary, #6750a4))}.selected.disabled .track{background-clip:border-box}.selected.disabled .track::before{background-color:var(--md-switch-disabled-selected-track-color, var(--md-sys-color-on-surface, #1d1b20))}.unselected .track::before{background-color:var(--md-switch-track-color, var(--md-sys-color-surface-container-highest, #e6e0e9));border-color:var(--md-switch-track-outline-color, var(--md-sys-color-outline, #79747e));border-style:solid;border-width:var(--md-switch-track-outline-width, 2px)}.unselected:hover .track::before{background-color:var(--md-switch-hover-track-color, var(--md-sys-color-surface-container-highest, #e6e0e9));border-color:var(--md-switch-hover-track-outline-color, var(--md-sys-color-outline, #79747e))}.unselected:focus-visible .track::before{background-color:var(--md-switch-focus-track-color, var(--md-sys-color-surface-container-highest, #e6e0e9));border-color:var(--md-switch-focus-track-outline-color, var(--md-sys-color-outline, #79747e))}.unselected:active .track::before{background-color:var(--md-switch-pressed-track-color, var(--md-sys-color-surface-container-highest, #e6e0e9));border-color:var(--md-switch-pressed-track-outline-color, var(--md-sys-color-outline, #79747e))}.unselected.disabled .track::before{background-color:var(--md-switch-disabled-track-color, var(--md-sys-color-surface-container-highest, #e6e0e9));border-color:var(--md-switch-disabled-track-outline-color, var(--md-sys-color-on-surface, #1d1b20))}}@layer hcm{@media(forced-colors: active){.selected .track::before{background:ButtonText;border-color:ButtonText}.disabled .track::before{border-color:GrayText;opacity:1}.disabled.selected .track::before{background:GrayText}}}@layer styles{.handle-container{display:flex;place-content:center;place-items:center;position:relative;transition:margin 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275)}.selected .handle-container{margin-inline-start:calc(var(--md-switch-track-width, 52px) - var(--md-switch-track-height, 32px))}.unselected .handle-container{margin-inline-end:calc(var(--md-switch-track-width, 52px) - var(--md-switch-track-height, 32px))}.disabled .handle-container{transition:none}.handle{border-start-start-radius:var(--md-switch-handle-shape-start-start, var(--md-switch-handle-shape, var(--md-sys-shape-corner-full, 9999px)));border-start-end-radius:var(--md-switch-handle-shape-start-end, var(--md-switch-handle-shape, var(--md-sys-shape-corner-full, 9999px)));border-end-end-radius:var(--md-switch-handle-shape-end-end, var(--md-switch-handle-shape, var(--md-sys-shape-corner-full, 9999px)));border-end-start-radius:var(--md-switch-handle-shape-end-start, var(--md-switch-handle-shape, var(--md-sys-shape-corner-full, 9999px)));height:var(--md-switch-handle-height, 16px);width:var(--md-switch-handle-width, 16px);transform-origin:center;transition-property:height,width;transition-duration:250ms,250ms;transition-timing-function:cubic-bezier(0.2, 0, 0, 1),cubic-bezier(0.2, 0, 0, 1);z-index:0}.handle::before{content:"";display:flex;inset:0;position:absolute;border-radius:inherit;box-sizing:border-box;transition:background-color 67ms linear}.disabled .handle,.disabled .handle::before{transition:none}.selected .handle{height:var(--md-switch-selected-handle-height, 24px);width:var(--md-switch-selected-handle-width, 24px)}.handle.with-icon{height:var(--md-switch-with-icon-handle-height, 24px);width:var(--md-switch-with-icon-handle-width, 24px)}.selected:not(.disabled):active .handle,.unselected:not(.disabled):active .handle{height:var(--md-switch-pressed-handle-height, 28px);width:var(--md-switch-pressed-handle-width, 28px);transition-timing-function:linear;transition-duration:100ms}.selected .handle::before{background-color:var(--md-switch-selected-handle-color, var(--md-sys-color-on-primary, #fff))}.selected:hover .handle::before{background-color:var(--md-switch-selected-hover-handle-color, var(--md-sys-color-primary-container, #eaddff))}.selected:focus-within .handle::before{background-color:var(--md-switch-selected-focus-handle-color, var(--md-sys-color-primary-container, #eaddff))}.selected:active .handle::before{background-color:var(--md-switch-selected-pressed-handle-color, var(--md-sys-color-primary-container, #eaddff))}.selected.disabled .handle::before{background-color:var(--md-switch-disabled-selected-handle-color, var(--md-sys-color-surface, #fef7ff));opacity:var(--md-switch-disabled-selected-handle-opacity, 1)}.unselected .handle::before{background-color:var(--md-switch-handle-color, var(--md-sys-color-outline, #79747e))}.unselected:hover .handle::before{background-color:var(--md-switch-hover-handle-color, var(--md-sys-color-on-surface-variant, #49454f))}.unselected:focus-within .handle::before{background-color:var(--md-switch-focus-handle-color, var(--md-sys-color-on-surface-variant, #49454f))}.unselected:active .handle::before{background-color:var(--md-switch-pressed-handle-color, var(--md-sys-color-on-surface-variant, #49454f))}.unselected.disabled .handle::before{background-color:var(--md-switch-disabled-handle-color, var(--md-sys-color-on-surface, #1d1b20));opacity:var(--md-switch-disabled-handle-opacity, 0.38)}md-ripple{border-radius:var(--md-switch-state-layer-shape, var(--md-sys-shape-corner-full, 9999px));height:var(--md-switch-state-layer-size, 40px);inset:unset;width:var(--md-switch-state-layer-size, 40px)}.selected md-ripple{--md-ripple-hover-color: var(--md-switch-selected-hover-state-layer-color, var(--md-sys-color-primary, #6750a4));--md-ripple-pressed-color: var(--md-switch-selected-pressed-state-layer-color, var(--md-sys-color-primary, #6750a4));--md-ripple-hover-opacity: var(--md-switch-selected-hover-state-layer-opacity, 0.08);--md-ripple-pressed-opacity: var(--md-switch-selected-pressed-state-layer-opacity, 0.12)}.unselected md-ripple{--md-ripple-hover-color: var(--md-switch-hover-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--md-ripple-pressed-color: var(--md-switch-pressed-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--md-ripple-hover-opacity: var(--md-switch-hover-state-layer-opacity, 0.08);--md-ripple-pressed-opacity: var(--md-switch-pressed-state-layer-opacity, 0.12)}}@layer hcm{@media(forced-colors: active){.unselected .handle::before{background:ButtonText}.disabled .handle::before{opacity:1}.disabled.unselected .handle::before{background:GrayText}}}@layer styles{.icons{position:relative;height:100%;width:100%}.icon{position:absolute;inset:0;margin:auto;display:flex;align-items:center;justify-content:center;fill:currentColor;transition:fill 67ms linear,opacity 33ms linear,transform 167ms cubic-bezier(0.2, 0, 0, 1);opacity:0}.disabled .icon{transition:none}.selected .icon--on,.unselected .icon--off{opacity:1}.unselected .handle:not(.with-icon) .icon--on{transform:rotate(-45deg)}.icon--off{width:var(--md-switch-icon-size, 16px);height:var(--md-switch-icon-size, 16px);color:var(--md-switch-icon-color, var(--md-sys-color-surface-container-highest, #e6e0e9))}.unselected:hover .icon--off{color:var(--md-switch-hover-icon-color, var(--md-sys-color-surface-container-highest, #e6e0e9))}.unselected:focus-within .icon--off{color:var(--md-switch-focus-icon-color, var(--md-sys-color-surface-container-highest, #e6e0e9))}.unselected:active .icon--off{color:var(--md-switch-pressed-icon-color, var(--md-sys-color-surface-container-highest, #e6e0e9))}.unselected.disabled .icon--off{color:var(--md-switch-disabled-icon-color, var(--md-sys-color-surface-container-highest, #e6e0e9));opacity:var(--md-switch-disabled-icon-opacity, 0.38)}.icon--on{width:var(--md-switch-selected-icon-size, 16px);height:var(--md-switch-selected-icon-size, 16px);color:var(--md-switch-selected-icon-color, var(--md-sys-color-on-primary-container, #21005d))}.selected:hover .icon--on{color:var(--md-switch-selected-hover-icon-color, var(--md-sys-color-on-primary-container, #21005d))}.selected:focus-within .icon--on{color:var(--md-switch-selected-focus-icon-color, var(--md-sys-color-on-primary-container, #21005d))}.selected:active .icon--on{color:var(--md-switch-selected-pressed-icon-color, var(--md-sys-color-on-primary-container, #21005d))}.selected.disabled .icon--on{color:var(--md-switch-disabled-selected-icon-color, var(--md-sys-color-on-surface, #1d1b20));opacity:var(--md-switch-disabled-selected-icon-opacity, 0.38)}}@layer hcm{@media(forced-colors: active){.icon--off{fill:Canvas}.icon--on{fill:ButtonText}.disabled.unselected .icon--off,.disabled.selected .icon--on{opacity:1}.disabled .icon--on{fill:GrayText}}}
 `;
 let bt = class extends ae {
 };
 bt.styles = [gr];
-bt = s([
-  w("md-switch")
+bt = n([
+  k("md-switch")
 ], bt);
 class br extends f {
   connectedCallback() {
@@ -1482,34 +1482,34 @@ const yr = m`:host,.shadow,.shadow::before,.shadow::after{border-radius:inherit;
 let yt = class extends br {
 };
 yt.styles = [yr];
-yt = s([
-  w("md-elevation")
+yt = n([
+  k("md-elevation")
 ], yt);
 function Jo(r) {
   r.addInitializer((e) => {
     const t = e;
     t.addEventListener("click", async (o) => {
-      const { type: i, [N]: a } = t, { form: n } = a;
-      if (!(!n || i === "button") && (await new Promise((c) => {
+      const { type: i, [N]: a } = t, { form: s } = a;
+      if (!(!s || i === "button") && (await new Promise((c) => {
         setTimeout(c);
       }), !o.defaultPrevented)) {
         if (i === "reset") {
-          n.reset();
+          s.reset();
           return;
         }
-        n.addEventListener("submit", (c) => {
+        s.addEventListener("submit", (c) => {
           Object.defineProperty(c, "submitter", {
             configurable: !0,
             enumerable: !0,
             get: () => t
           });
-        }, { capture: !0, once: !0 }), a.setFormValue(t.value), n.requestSubmit();
+        }, { capture: !0, once: !0 }), a.setFormValue(t.value), s.requestSubmit();
       }
     });
   });
 }
 const xr = Q(Oe(f));
-class F extends xr {
+class P extends xr {
   get name() {
     return this.getAttribute("name") ?? "";
   }
@@ -1550,10 +1550,10 @@ class F extends xr {
       id="button"
       class="button"
       ?disabled=${this.disabled}
-      aria-disabled=${this.softDisabled || h}
-      aria-label="${e || h}"
-      aria-haspopup="${t || h}"
-      aria-expanded="${o || h}">
+      aria-disabled=${this.softDisabled || u}
+      aria-label="${e || u}"
+      aria-haspopup="${t || u}"
+      aria-expanded="${o || u}">
       ${this.renderContent()}
     </button>`;
   }
@@ -1562,14 +1562,14 @@ class F extends xr {
     return l`<a
       id="link"
       class="button"
-      aria-label="${e || h}"
-      aria-haspopup="${t || h}"
-      aria-expanded="${o || h}"
-      aria-disabled=${this.disabled || this.softDisabled || h}
-      tabindex="${this.disabled && !this.softDisabled ? -1 : h}"
+      aria-label="${e || u}"
+      aria-haspopup="${t || u}"
+      aria-expanded="${o || u}"
+      aria-disabled=${this.disabled || this.softDisabled || u}
+      tabindex="${this.disabled && !this.softDisabled ? -1 : u}"
       href=${this.href}
-      download=${this.download || h}
-      target=${this.target || h}
+      download=${this.download || u}
+      target=${this.target || u}
       >${this.renderContent()}
     </a>`;
   }
@@ -1579,9 +1579,9 @@ class F extends xr {
       @slotchange="${this.handleSlotChange}"></slot>`;
     return l`
       <span class="touch"></span>
-      ${this.trailingIcon ? h : e}
+      ${this.trailingIcon ? u : e}
       <span class="label"><slot></slot></span>
-      ${this.trailingIcon ? e : h}
+      ${this.trailingIcon ? e : u}
     `;
   }
   handleClick(e) {
@@ -1595,115 +1595,115 @@ class F extends xr {
     this.hasIcon = this.assignedIcons.length > 0;
   }
 }
-Jo(F);
-F.formAssociated = !0;
-F.shadowRootOptions = {
+Jo(P);
+P.formAssociated = !0;
+P.shadowRootOptions = {
   mode: "open",
   delegatesFocus: !0
 };
-s([
+n([
   d({ type: Boolean, reflect: !0 })
-], F.prototype, "disabled", void 0);
-s([
+], P.prototype, "disabled", void 0);
+n([
   d({ type: Boolean, attribute: "soft-disabled", reflect: !0 })
-], F.prototype, "softDisabled", void 0);
-s([
+], P.prototype, "softDisabled", void 0);
+n([
   d()
-], F.prototype, "href", void 0);
-s([
+], P.prototype, "href", void 0);
+n([
   d()
-], F.prototype, "download", void 0);
-s([
+], P.prototype, "download", void 0);
+n([
   d()
-], F.prototype, "target", void 0);
-s([
+], P.prototype, "target", void 0);
+n([
   d({ type: Boolean, attribute: "trailing-icon", reflect: !0 })
-], F.prototype, "trailingIcon", void 0);
-s([
+], P.prototype, "trailingIcon", void 0);
+n([
   d({ type: Boolean, attribute: "has-icon", reflect: !0 })
-], F.prototype, "hasIcon", void 0);
-s([
+], P.prototype, "hasIcon", void 0);
+n([
   d()
-], F.prototype, "type", void 0);
-s([
+], P.prototype, "type", void 0);
+n([
   d({ reflect: !0 })
-], F.prototype, "value", void 0);
-s([
-  k(".button")
-], F.prototype, "buttonElement", void 0);
-s([
-  K({ slot: "icon", flatten: !0 })
-], F.prototype, "assignedIcons", void 0);
-class _r extends F {
+], P.prototype, "value", void 0);
+n([
+  C(".button")
+], P.prototype, "buttonElement", void 0);
+n([
+  Y({ slot: "icon", flatten: !0 })
+], P.prototype, "assignedIcons", void 0);
+class wr extends P {
   renderElevationOrOutline() {
     return l`<md-elevation part="elevation"></md-elevation>`;
   }
 }
-const wr = m`:host{--_container-color: var(--md-filled-button-container-color, var(--md-sys-color-primary, #6750a4));--_container-elevation: var(--md-filled-button-container-elevation, 0);--_container-height: var(--md-filled-button-container-height, 40px);--_container-shadow-color: var(--md-filled-button-container-shadow-color, var(--md-sys-color-shadow, #000));--_disabled-container-color: var(--md-filled-button-disabled-container-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-container-elevation: var(--md-filled-button-disabled-container-elevation, 0);--_disabled-container-opacity: var(--md-filled-button-disabled-container-opacity, 0.12);--_disabled-label-text-color: var(--md-filled-button-disabled-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-label-text-opacity: var(--md-filled-button-disabled-label-text-opacity, 0.38);--_focus-container-elevation: var(--md-filled-button-focus-container-elevation, 0);--_focus-label-text-color: var(--md-filled-button-focus-label-text-color, var(--md-sys-color-on-primary, #fff));--_hover-container-elevation: var(--md-filled-button-hover-container-elevation, 1);--_hover-label-text-color: var(--md-filled-button-hover-label-text-color, var(--md-sys-color-on-primary, #fff));--_hover-state-layer-color: var(--md-filled-button-hover-state-layer-color, var(--md-sys-color-on-primary, #fff));--_hover-state-layer-opacity: var(--md-filled-button-hover-state-layer-opacity, 0.08);--_label-text-color: var(--md-filled-button-label-text-color, var(--md-sys-color-on-primary, #fff));--_label-text-font: var(--md-filled-button-label-text-font, var(--md-sys-typescale-label-large-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-filled-button-label-text-line-height, var(--md-sys-typescale-label-large-line-height, 1.25rem));--_label-text-size: var(--md-filled-button-label-text-size, var(--md-sys-typescale-label-large-size, 0.875rem));--_label-text-weight: var(--md-filled-button-label-text-weight, var(--md-sys-typescale-label-large-weight, var(--md-ref-typeface-weight-medium, 500)));--_pressed-container-elevation: var(--md-filled-button-pressed-container-elevation, 0);--_pressed-label-text-color: var(--md-filled-button-pressed-label-text-color, var(--md-sys-color-on-primary, #fff));--_pressed-state-layer-color: var(--md-filled-button-pressed-state-layer-color, var(--md-sys-color-on-primary, #fff));--_pressed-state-layer-opacity: var(--md-filled-button-pressed-state-layer-opacity, 0.12);--_disabled-icon-color: var(--md-filled-button-disabled-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-icon-opacity: var(--md-filled-button-disabled-icon-opacity, 0.38);--_focus-icon-color: var(--md-filled-button-focus-icon-color, var(--md-sys-color-on-primary, #fff));--_hover-icon-color: var(--md-filled-button-hover-icon-color, var(--md-sys-color-on-primary, #fff));--_icon-color: var(--md-filled-button-icon-color, var(--md-sys-color-on-primary, #fff));--_icon-size: var(--md-filled-button-icon-size, 18px);--_pressed-icon-color: var(--md-filled-button-pressed-icon-color, var(--md-sys-color-on-primary, #fff));--_container-shape-start-start: var(--md-filled-button-container-shape-start-start, var(--md-filled-button-container-shape, var(--md-sys-shape-corner-full, 9999px)));--_container-shape-start-end: var(--md-filled-button-container-shape-start-end, var(--md-filled-button-container-shape, var(--md-sys-shape-corner-full, 9999px)));--_container-shape-end-end: var(--md-filled-button-container-shape-end-end, var(--md-filled-button-container-shape, var(--md-sys-shape-corner-full, 9999px)));--_container-shape-end-start: var(--md-filled-button-container-shape-end-start, var(--md-filled-button-container-shape, var(--md-sys-shape-corner-full, 9999px)));--_leading-space: var(--md-filled-button-leading-space, 24px);--_trailing-space: var(--md-filled-button-trailing-space, 24px);--_with-leading-icon-leading-space: var(--md-filled-button-with-leading-icon-leading-space, 16px);--_with-leading-icon-trailing-space: var(--md-filled-button-with-leading-icon-trailing-space, 24px);--_with-trailing-icon-leading-space: var(--md-filled-button-with-trailing-icon-leading-space, 24px);--_with-trailing-icon-trailing-space: var(--md-filled-button-with-trailing-icon-trailing-space, 16px)}
+const _r = m`:host{--_container-color: var(--md-filled-button-container-color, var(--md-sys-color-primary, #6750a4));--_container-elevation: var(--md-filled-button-container-elevation, 0);--_container-height: var(--md-filled-button-container-height, 40px);--_container-shadow-color: var(--md-filled-button-container-shadow-color, var(--md-sys-color-shadow, #000));--_disabled-container-color: var(--md-filled-button-disabled-container-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-container-elevation: var(--md-filled-button-disabled-container-elevation, 0);--_disabled-container-opacity: var(--md-filled-button-disabled-container-opacity, 0.12);--_disabled-label-text-color: var(--md-filled-button-disabled-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-label-text-opacity: var(--md-filled-button-disabled-label-text-opacity, 0.38);--_focus-container-elevation: var(--md-filled-button-focus-container-elevation, 0);--_focus-label-text-color: var(--md-filled-button-focus-label-text-color, var(--md-sys-color-on-primary, #fff));--_hover-container-elevation: var(--md-filled-button-hover-container-elevation, 1);--_hover-label-text-color: var(--md-filled-button-hover-label-text-color, var(--md-sys-color-on-primary, #fff));--_hover-state-layer-color: var(--md-filled-button-hover-state-layer-color, var(--md-sys-color-on-primary, #fff));--_hover-state-layer-opacity: var(--md-filled-button-hover-state-layer-opacity, 0.08);--_label-text-color: var(--md-filled-button-label-text-color, var(--md-sys-color-on-primary, #fff));--_label-text-font: var(--md-filled-button-label-text-font, var(--md-sys-typescale-label-large-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-filled-button-label-text-line-height, var(--md-sys-typescale-label-large-line-height, 1.25rem));--_label-text-size: var(--md-filled-button-label-text-size, var(--md-sys-typescale-label-large-size, 0.875rem));--_label-text-weight: var(--md-filled-button-label-text-weight, var(--md-sys-typescale-label-large-weight, var(--md-ref-typeface-weight-medium, 500)));--_pressed-container-elevation: var(--md-filled-button-pressed-container-elevation, 0);--_pressed-label-text-color: var(--md-filled-button-pressed-label-text-color, var(--md-sys-color-on-primary, #fff));--_pressed-state-layer-color: var(--md-filled-button-pressed-state-layer-color, var(--md-sys-color-on-primary, #fff));--_pressed-state-layer-opacity: var(--md-filled-button-pressed-state-layer-opacity, 0.12);--_disabled-icon-color: var(--md-filled-button-disabled-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-icon-opacity: var(--md-filled-button-disabled-icon-opacity, 0.38);--_focus-icon-color: var(--md-filled-button-focus-icon-color, var(--md-sys-color-on-primary, #fff));--_hover-icon-color: var(--md-filled-button-hover-icon-color, var(--md-sys-color-on-primary, #fff));--_icon-color: var(--md-filled-button-icon-color, var(--md-sys-color-on-primary, #fff));--_icon-size: var(--md-filled-button-icon-size, 18px);--_pressed-icon-color: var(--md-filled-button-pressed-icon-color, var(--md-sys-color-on-primary, #fff));--_container-shape-start-start: var(--md-filled-button-container-shape-start-start, var(--md-filled-button-container-shape, var(--md-sys-shape-corner-full, 9999px)));--_container-shape-start-end: var(--md-filled-button-container-shape-start-end, var(--md-filled-button-container-shape, var(--md-sys-shape-corner-full, 9999px)));--_container-shape-end-end: var(--md-filled-button-container-shape-end-end, var(--md-filled-button-container-shape, var(--md-sys-shape-corner-full, 9999px)));--_container-shape-end-start: var(--md-filled-button-container-shape-end-start, var(--md-filled-button-container-shape, var(--md-sys-shape-corner-full, 9999px)));--_leading-space: var(--md-filled-button-leading-space, 24px);--_trailing-space: var(--md-filled-button-trailing-space, 24px);--_with-leading-icon-leading-space: var(--md-filled-button-with-leading-icon-leading-space, 16px);--_with-leading-icon-trailing-space: var(--md-filled-button-with-leading-icon-trailing-space, 24px);--_with-trailing-icon-leading-space: var(--md-filled-button-with-trailing-icon-leading-space, 24px);--_with-trailing-icon-trailing-space: var(--md-filled-button-with-trailing-icon-trailing-space, 16px)}
 `;
 const kr = m`md-elevation{transition-duration:280ms}:host(:is([disabled],[soft-disabled])) md-elevation{transition:none}md-elevation{--md-elevation-level: var(--_container-elevation);--md-elevation-shadow-color: var(--_container-shadow-color)}:host(:focus-within) md-elevation{--md-elevation-level: var(--_focus-container-elevation)}:host(:hover) md-elevation{--md-elevation-level: var(--_hover-container-elevation)}:host(:active) md-elevation{--md-elevation-level: var(--_pressed-container-elevation)}:host(:is([disabled],[soft-disabled])) md-elevation{--md-elevation-level: var(--_disabled-container-elevation)}
 `;
 const no = m`:host{border-start-start-radius:var(--_container-shape-start-start);border-start-end-radius:var(--_container-shape-start-end);border-end-start-radius:var(--_container-shape-end-start);border-end-end-radius:var(--_container-shape-end-end);box-sizing:border-box;cursor:pointer;display:inline-flex;gap:8px;min-height:var(--_container-height);outline:none;padding-block:calc((var(--_container-height) - max(var(--_label-text-line-height),var(--_icon-size)))/2);padding-inline-start:var(--_leading-space);padding-inline-end:var(--_trailing-space);place-content:center;place-items:center;position:relative;font-family:var(--_label-text-font);font-size:var(--_label-text-size);line-height:var(--_label-text-line-height);font-weight:var(--_label-text-weight);text-overflow:ellipsis;text-wrap:nowrap;user-select:none;-webkit-tap-highlight-color:rgba(0,0,0,0);vertical-align:top;--md-ripple-hover-color: var(--_hover-state-layer-color);--md-ripple-pressed-color: var(--_pressed-state-layer-color);--md-ripple-hover-opacity: var(--_hover-state-layer-opacity);--md-ripple-pressed-opacity: var(--_pressed-state-layer-opacity)}md-focus-ring{--md-focus-ring-shape-start-start: var(--_container-shape-start-start);--md-focus-ring-shape-start-end: var(--_container-shape-start-end);--md-focus-ring-shape-end-end: var(--_container-shape-end-end);--md-focus-ring-shape-end-start: var(--_container-shape-end-start)}:host(:is([disabled],[soft-disabled])){cursor:default;pointer-events:none}.button{border-radius:inherit;cursor:inherit;display:inline-flex;align-items:center;justify-content:center;border:none;outline:none;-webkit-appearance:none;vertical-align:middle;background:rgba(0,0,0,0);text-decoration:none;min-width:calc(64px - var(--_leading-space) - var(--_trailing-space));width:100%;z-index:0;height:100%;font:inherit;color:var(--_label-text-color);padding:0;gap:inherit;text-transform:inherit}.button::-moz-focus-inner{padding:0;border:0}:host(:hover) .button{color:var(--_hover-label-text-color)}:host(:focus-within) .button{color:var(--_focus-label-text-color)}:host(:active) .button{color:var(--_pressed-label-text-color)}.background{background:var(--_container-color);border-radius:inherit;inset:0;position:absolute}.label{overflow:hidden}:is(.button,.label,.label slot),.label ::slotted(*){text-overflow:inherit}:host(:is([disabled],[soft-disabled])) .label{color:var(--_disabled-label-text-color);opacity:var(--_disabled-label-text-opacity)}:host(:is([disabled],[soft-disabled])) .background{background:var(--_disabled-container-color);opacity:var(--_disabled-container-opacity)}@media(forced-colors: active){.background{border:1px solid CanvasText}:host(:is([disabled],[soft-disabled])){--_disabled-icon-color: GrayText;--_disabled-icon-opacity: 1;--_disabled-container-opacity: 1;--_disabled-label-text-color: GrayText;--_disabled-label-text-opacity: 1}}:host([has-icon]:not([trailing-icon])){padding-inline-start:var(--_with-leading-icon-leading-space);padding-inline-end:var(--_with-leading-icon-trailing-space)}:host([has-icon][trailing-icon]){padding-inline-start:var(--_with-trailing-icon-leading-space);padding-inline-end:var(--_with-trailing-icon-trailing-space)}::slotted([slot=icon]){display:inline-flex;position:relative;writing-mode:horizontal-tb;fill:currentColor;flex-shrink:0;color:var(--_icon-color);font-size:var(--_icon-size);inline-size:var(--_icon-size);block-size:var(--_icon-size)}:host(:hover) ::slotted([slot=icon]){color:var(--_hover-icon-color)}:host(:focus-within) ::slotted([slot=icon]){color:var(--_focus-icon-color)}:host(:active) ::slotted([slot=icon]){color:var(--_pressed-icon-color)}:host(:is([disabled],[soft-disabled])) ::slotted([slot=icon]){color:var(--_disabled-icon-color);opacity:var(--_disabled-icon-opacity)}.touch{position:absolute;top:50%;height:48px;left:0;right:0;transform:translateY(-50%)}:host([touch-target=wrapper]){margin:max(0px,(48px - var(--_container-height))/2) 0}:host([touch-target=none]) .touch{display:none}
 `;
-let xt = class extends _r {
+let xt = class extends wr {
 };
 xt.styles = [
   no,
   kr,
-  wr
+  _r
 ];
-xt = s([
-  w("md-filled-button")
+xt = n([
+  k("md-filled-button")
 ], xt);
-class Cr extends F {
+class Cr extends P {
   renderElevationOrOutline() {
     return l`<div class="outline"></div>`;
   }
 }
 const $r = m`:host{--_container-height: var(--md-outlined-button-container-height, 40px);--_disabled-label-text-color: var(--md-outlined-button-disabled-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-label-text-opacity: var(--md-outlined-button-disabled-label-text-opacity, 0.38);--_disabled-outline-color: var(--md-outlined-button-disabled-outline-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-outline-opacity: var(--md-outlined-button-disabled-outline-opacity, 0.12);--_focus-label-text-color: var(--md-outlined-button-focus-label-text-color, var(--md-sys-color-primary, #6750a4));--_hover-label-text-color: var(--md-outlined-button-hover-label-text-color, var(--md-sys-color-primary, #6750a4));--_hover-state-layer-color: var(--md-outlined-button-hover-state-layer-color, var(--md-sys-color-primary, #6750a4));--_hover-state-layer-opacity: var(--md-outlined-button-hover-state-layer-opacity, 0.08);--_label-text-color: var(--md-outlined-button-label-text-color, var(--md-sys-color-primary, #6750a4));--_label-text-font: var(--md-outlined-button-label-text-font, var(--md-sys-typescale-label-large-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-outlined-button-label-text-line-height, var(--md-sys-typescale-label-large-line-height, 1.25rem));--_label-text-size: var(--md-outlined-button-label-text-size, var(--md-sys-typescale-label-large-size, 0.875rem));--_label-text-weight: var(--md-outlined-button-label-text-weight, var(--md-sys-typescale-label-large-weight, var(--md-ref-typeface-weight-medium, 500)));--_outline-color: var(--md-outlined-button-outline-color, var(--md-sys-color-outline, #79747e));--_outline-width: var(--md-outlined-button-outline-width, 1px);--_pressed-label-text-color: var(--md-outlined-button-pressed-label-text-color, var(--md-sys-color-primary, #6750a4));--_pressed-outline-color: var(--md-outlined-button-pressed-outline-color, var(--md-sys-color-outline, #79747e));--_pressed-state-layer-color: var(--md-outlined-button-pressed-state-layer-color, var(--md-sys-color-primary, #6750a4));--_pressed-state-layer-opacity: var(--md-outlined-button-pressed-state-layer-opacity, 0.12);--_disabled-icon-color: var(--md-outlined-button-disabled-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-icon-opacity: var(--md-outlined-button-disabled-icon-opacity, 0.38);--_focus-icon-color: var(--md-outlined-button-focus-icon-color, var(--md-sys-color-primary, #6750a4));--_hover-icon-color: var(--md-outlined-button-hover-icon-color, var(--md-sys-color-primary, #6750a4));--_icon-color: var(--md-outlined-button-icon-color, var(--md-sys-color-primary, #6750a4));--_icon-size: var(--md-outlined-button-icon-size, 18px);--_pressed-icon-color: var(--md-outlined-button-pressed-icon-color, var(--md-sys-color-primary, #6750a4));--_container-shape-start-start: var(--md-outlined-button-container-shape-start-start, var(--md-outlined-button-container-shape, var(--md-sys-shape-corner-full, 9999px)));--_container-shape-start-end: var(--md-outlined-button-container-shape-start-end, var(--md-outlined-button-container-shape, var(--md-sys-shape-corner-full, 9999px)));--_container-shape-end-end: var(--md-outlined-button-container-shape-end-end, var(--md-outlined-button-container-shape, var(--md-sys-shape-corner-full, 9999px)));--_container-shape-end-start: var(--md-outlined-button-container-shape-end-start, var(--md-outlined-button-container-shape, var(--md-sys-shape-corner-full, 9999px)));--_leading-space: var(--md-outlined-button-leading-space, 24px);--_trailing-space: var(--md-outlined-button-trailing-space, 24px);--_with-leading-icon-leading-space: var(--md-outlined-button-with-leading-icon-leading-space, 16px);--_with-leading-icon-trailing-space: var(--md-outlined-button-with-leading-icon-trailing-space, 24px);--_with-trailing-icon-leading-space: var(--md-outlined-button-with-trailing-icon-leading-space, 24px);--_with-trailing-icon-trailing-space: var(--md-outlined-button-with-trailing-icon-trailing-space, 16px);--_container-color: none;--_disabled-container-color: none;--_disabled-container-opacity: 0}.outline{inset:0;border-style:solid;position:absolute;box-sizing:border-box;border-color:var(--_outline-color);border-start-start-radius:var(--_container-shape-start-start);border-start-end-radius:var(--_container-shape-start-end);border-end-start-radius:var(--_container-shape-end-start);border-end-end-radius:var(--_container-shape-end-end)}:host(:active) .outline{border-color:var(--_pressed-outline-color)}:host(:is([disabled],[soft-disabled])) .outline{border-color:var(--_disabled-outline-color);opacity:var(--_disabled-outline-opacity)}@media(forced-colors: active){:host(:is([disabled],[soft-disabled])) .background{border-color:GrayText}:host(:is([disabled],[soft-disabled])) .outline{opacity:1}}.outline,md-ripple{border-width:var(--_outline-width)}md-ripple{inline-size:calc(100% - 2*var(--_outline-width));block-size:calc(100% - 2*var(--_outline-width));border-style:solid;border-color:rgba(0,0,0,0)}
 `;
-let _t = class extends Cr {
+let wt = class extends Cr {
 };
-_t.styles = [no, $r];
-_t = s([
-  w("md-outlined-button")
-], _t);
-class Sr extends F {
+wt.styles = [no, $r];
+wt = n([
+  k("md-outlined-button")
+], wt);
+class Sr extends P {
 }
 const Er = m`:host{--_container-height: var(--md-text-button-container-height, 40px);--_disabled-label-text-color: var(--md-text-button-disabled-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-label-text-opacity: var(--md-text-button-disabled-label-text-opacity, 0.38);--_focus-label-text-color: var(--md-text-button-focus-label-text-color, var(--md-sys-color-primary, #6750a4));--_hover-label-text-color: var(--md-text-button-hover-label-text-color, var(--md-sys-color-primary, #6750a4));--_hover-state-layer-color: var(--md-text-button-hover-state-layer-color, var(--md-sys-color-primary, #6750a4));--_hover-state-layer-opacity: var(--md-text-button-hover-state-layer-opacity, 0.08);--_label-text-color: var(--md-text-button-label-text-color, var(--md-sys-color-primary, #6750a4));--_label-text-font: var(--md-text-button-label-text-font, var(--md-sys-typescale-label-large-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-text-button-label-text-line-height, var(--md-sys-typescale-label-large-line-height, 1.25rem));--_label-text-size: var(--md-text-button-label-text-size, var(--md-sys-typescale-label-large-size, 0.875rem));--_label-text-weight: var(--md-text-button-label-text-weight, var(--md-sys-typescale-label-large-weight, var(--md-ref-typeface-weight-medium, 500)));--_pressed-label-text-color: var(--md-text-button-pressed-label-text-color, var(--md-sys-color-primary, #6750a4));--_pressed-state-layer-color: var(--md-text-button-pressed-state-layer-color, var(--md-sys-color-primary, #6750a4));--_pressed-state-layer-opacity: var(--md-text-button-pressed-state-layer-opacity, 0.12);--_disabled-icon-color: var(--md-text-button-disabled-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-icon-opacity: var(--md-text-button-disabled-icon-opacity, 0.38);--_focus-icon-color: var(--md-text-button-focus-icon-color, var(--md-sys-color-primary, #6750a4));--_hover-icon-color: var(--md-text-button-hover-icon-color, var(--md-sys-color-primary, #6750a4));--_icon-color: var(--md-text-button-icon-color, var(--md-sys-color-primary, #6750a4));--_icon-size: var(--md-text-button-icon-size, 18px);--_pressed-icon-color: var(--md-text-button-pressed-icon-color, var(--md-sys-color-primary, #6750a4));--_container-shape-start-start: var(--md-text-button-container-shape-start-start, var(--md-text-button-container-shape, var(--md-sys-shape-corner-full, 9999px)));--_container-shape-start-end: var(--md-text-button-container-shape-start-end, var(--md-text-button-container-shape, var(--md-sys-shape-corner-full, 9999px)));--_container-shape-end-end: var(--md-text-button-container-shape-end-end, var(--md-text-button-container-shape, var(--md-sys-shape-corner-full, 9999px)));--_container-shape-end-start: var(--md-text-button-container-shape-end-start, var(--md-text-button-container-shape, var(--md-sys-shape-corner-full, 9999px)));--_leading-space: var(--md-text-button-leading-space, 12px);--_trailing-space: var(--md-text-button-trailing-space, 12px);--_with-leading-icon-leading-space: var(--md-text-button-with-leading-icon-leading-space, 12px);--_with-leading-icon-trailing-space: var(--md-text-button-with-leading-icon-trailing-space, 16px);--_with-trailing-icon-leading-space: var(--md-text-button-with-trailing-icon-leading-space, 16px);--_with-trailing-icon-trailing-space: var(--md-text-button-with-trailing-icon-trailing-space, 12px);--_container-color: none;--_disabled-container-color: none;--_disabled-container-opacity: 0}
 `;
-let wt = class extends Sr {
+let _t = class extends Sr {
 };
-wt.styles = [no, Er];
-wt = s([
-  w("md-text-button")
-], wt);
+_t.styles = [no, Er];
+_t = n([
+  k("md-text-button")
+], _t);
 const ei = /* @__PURE__ */ Symbol.for(""), zr = (r) => {
   if (r?.r === ei) return r?._$litStatic$;
 }, re = (r, ...e) => ({ _$litStatic$: e.reduce((t, o, i) => t + ((a) => {
   if (a._$litStatic$ !== void 0) return a._$litStatic$;
   throw Error(`Value passed to 'literal' function must be a 'literal' result: ${a}. Use 'unsafeStatic' to pass non-literal values, but
             take care to ensure page security.`);
-})(o) + r[i + 1], r[0]), r: ei }), To = /* @__PURE__ */ new Map(), Ar = (r) => (e, ...t) => {
+})(o) + r[i + 1], r[0]), r: ei }), Io = /* @__PURE__ */ new Map(), Ar = (r) => (e, ...t) => {
   const o = t.length;
   let i, a;
-  const n = [], c = [];
-  let p, g = 0, u = !1;
+  const s = [], c = [];
+  let p, g = 0, h = !1;
   for (; g < o; ) {
-    for (p = e[g]; g < o && (a = t[g], (i = zr(a)) !== void 0); ) p += i + e[++g], u = !0;
-    g !== o && c.push(a), n.push(p), g++;
+    for (p = e[g]; g < o && (a = t[g], (i = zr(a)) !== void 0); ) p += i + e[++g], h = !0;
+    g !== o && c.push(a), s.push(p), g++;
   }
-  if (g === o && n.push(e[o]), u) {
-    const v = n.join("$$lit$$");
-    (e = To.get(v)) === void 0 && (n.raw = n, To.set(v, e = n)), t = c;
+  if (g === o && s.push(e[o]), h) {
+    const v = s.join("$$lit$$");
+    (e = Io.get(v)) === void 0 && (s.raw = s, Io.set(v, e = s)), t = c;
   }
   return r(e, ...t);
 }, lo = Ar(l);
-function Io(r, e = !0) {
+function To(r, e = !0) {
   return e && getComputedStyle(r).getPropertyValue("direction").trim() === "rtl";
 }
-const Tr = Q(Oe(f));
-class B extends Tr {
+const Ir = Q(Oe(f));
+class L extends Ir {
   get name() {
     return this.getAttribute("name") ?? "";
   }
@@ -1723,28 +1723,28 @@ class B extends Tr {
     return this[N].labels;
   }
   constructor() {
-    super(), this.disabled = !1, this.softDisabled = !1, this.flipIconInRtl = !1, this.href = "", this.download = "", this.target = "", this.ariaLabelSelected = "", this.toggle = !1, this.selected = !1, this.type = "submit", this.value = "", this.flipIcon = Io(this, this.flipIconInRtl), this.addEventListener("click", this.handleClick.bind(this));
+    super(), this.disabled = !1, this.softDisabled = !1, this.flipIconInRtl = !1, this.href = "", this.download = "", this.target = "", this.ariaLabelSelected = "", this.toggle = !1, this.selected = !1, this.type = "submit", this.value = "", this.flipIcon = To(this, this.flipIconInRtl), this.addEventListener("click", this.handleClick.bind(this));
   }
   willUpdate() {
     this.href && (this.disabled = !1, this.softDisabled = !1);
   }
   render() {
-    const e = this.href ? re`div` : re`button`, { ariaLabel: t, ariaHasPopup: o, ariaExpanded: i } = this, a = t && this.ariaLabelSelected, n = this.toggle ? this.selected : h;
-    let c = h;
+    const e = this.href ? re`div` : re`button`, { ariaLabel: t, ariaHasPopup: o, ariaExpanded: i } = this, a = t && this.ariaLabelSelected, s = this.toggle ? this.selected : u;
+    let c = u;
     return this.href || (c = a && this.selected ? this.ariaLabelSelected : t), lo`<${e}
         class="icon-button ${V(this.getRenderClasses())}"
         id="button"
-        aria-label="${c || h}"
-        aria-haspopup="${!this.href && o || h}"
-        aria-expanded="${!this.href && i || h}"
-        aria-pressed="${n}"
-        aria-disabled=${!this.href && this.softDisabled || h}
+        aria-label="${c || u}"
+        aria-haspopup="${!this.href && o || u}"
+        aria-expanded="${!this.href && i || u}"
+        aria-pressed="${s}"
+        aria-disabled=${!this.href && this.softDisabled || u}
         ?disabled="${!this.href && this.disabled}"
         @click="${this.handleClickOnChild}">
         ${this.renderFocusRing()}
         ${this.renderRipple()}
-        ${this.selected ? h : this.renderIcon()}
-        ${this.selected ? this.renderSelectedIcon() : h}
+        ${this.selected ? u : this.renderIcon()}
+        ${this.selected ? this.renderSelectedIcon() : u}
         ${this.href ? this.renderLink() : this.renderTouchTarget()}
   </${e}>`;
   }
@@ -1755,9 +1755,9 @@ class B extends Tr {
         class="link"
         id="link"
         href="${this.href}"
-        download="${this.download || h}"
-        target="${this.target || h}"
-        aria-label="${e || h}">
+        download="${this.download || u}"
+        target="${this.target || u}"
+        aria-label="${e || u}">
         ${this.renderTouchTarget()}
       </a>
     `;
@@ -1787,11 +1787,11 @@ class B extends Tr {
   renderRipple() {
     const e = !this.href && (this.disabled || this.softDisabled);
     return l`<md-ripple
-      for=${this.href ? "link" : h}
+      for=${this.href ? "link" : u}
       ?disabled="${e}"></md-ripple>`;
   }
   connectedCallback() {
-    this.flipIcon = Io(this, this.flipIconInRtl), super.connectedCallback();
+    this.flipIcon = To(this, this.flipIconInRtl), super.connectedCallback();
   }
   /** Handles a click on this element. */
   handleClick(e) {
@@ -1808,53 +1808,53 @@ class B extends Tr {
     await 0, !(!this.toggle || this.disabled || this.softDisabled || e.defaultPrevented) && (this.selected = !this.selected, this.dispatchEvent(new InputEvent("input", { bubbles: !0, composed: !0 })), this.dispatchEvent(new Event("change", { bubbles: !0 })));
   }
 }
-Jo(B);
-B.formAssociated = !0;
-B.shadowRootOptions = {
+Jo(L);
+L.formAssociated = !0;
+L.shadowRootOptions = {
   mode: "open",
   delegatesFocus: !0
 };
-s([
+n([
   d({ type: Boolean, reflect: !0 })
-], B.prototype, "disabled", void 0);
-s([
+], L.prototype, "disabled", void 0);
+n([
   d({ type: Boolean, attribute: "soft-disabled", reflect: !0 })
-], B.prototype, "softDisabled", void 0);
-s([
+], L.prototype, "softDisabled", void 0);
+n([
   d({ type: Boolean, attribute: "flip-icon-in-rtl" })
-], B.prototype, "flipIconInRtl", void 0);
-s([
+], L.prototype, "flipIconInRtl", void 0);
+n([
   d()
-], B.prototype, "href", void 0);
-s([
+], L.prototype, "href", void 0);
+n([
   d()
-], B.prototype, "download", void 0);
-s([
+], L.prototype, "download", void 0);
+n([
   d()
-], B.prototype, "target", void 0);
-s([
+], L.prototype, "target", void 0);
+n([
   d({ attribute: "aria-label-selected" })
-], B.prototype, "ariaLabelSelected", void 0);
-s([
+], L.prototype, "ariaLabelSelected", void 0);
+n([
   d({ type: Boolean })
-], B.prototype, "toggle", void 0);
-s([
+], L.prototype, "toggle", void 0);
+n([
   d({ type: Boolean, reflect: !0 })
-], B.prototype, "selected", void 0);
-s([
+], L.prototype, "selected", void 0);
+n([
   d()
-], B.prototype, "type", void 0);
-s([
+], L.prototype, "type", void 0);
+n([
   d({ reflect: !0 })
-], B.prototype, "value", void 0);
-s([
-  A()
-], B.prototype, "flipIcon", void 0);
-const Ir = m`:host{display:inline-flex;outline:none;-webkit-tap-highlight-color:rgba(0,0,0,0);height:var(--_container-height);width:var(--_container-width);justify-content:center}:host([touch-target=wrapper]){margin:max(0px,(48px - var(--_container-height))/2) max(0px,(48px - var(--_container-width))/2)}md-focus-ring{--md-focus-ring-shape-start-start: var(--_container-shape-start-start);--md-focus-ring-shape-start-end: var(--_container-shape-start-end);--md-focus-ring-shape-end-end: var(--_container-shape-end-end);--md-focus-ring-shape-end-start: var(--_container-shape-end-start)}:host(:is([disabled],[soft-disabled])){pointer-events:none}.icon-button{place-items:center;background:none;border:none;box-sizing:border-box;cursor:pointer;display:flex;place-content:center;outline:none;padding:0;position:relative;text-decoration:none;user-select:none;z-index:0;flex:1;border-start-start-radius:var(--_container-shape-start-start);border-start-end-radius:var(--_container-shape-start-end);border-end-start-radius:var(--_container-shape-end-start);border-end-end-radius:var(--_container-shape-end-end)}.icon ::slotted(*){font-size:var(--_icon-size);height:var(--_icon-size);width:var(--_icon-size);font-weight:inherit}md-ripple{z-index:-1;border-start-start-radius:var(--_container-shape-start-start);border-start-end-radius:var(--_container-shape-start-end);border-end-start-radius:var(--_container-shape-end-start);border-end-end-radius:var(--_container-shape-end-end)}.flip-icon .icon{transform:scaleX(-1)}.icon{display:inline-flex}.link{display:grid;height:100%;outline:none;place-items:center;position:absolute;width:100%}.touch{position:absolute;height:max(48px,100%);width:max(48px,100%)}:host([touch-target=none]) .touch{display:none}@media(forced-colors: active){:host(:is([disabled],[soft-disabled])){--_disabled-icon-color: GrayText;--_disabled-icon-opacity: 1}}
+], L.prototype, "value", void 0);
+n([
+  I()
+], L.prototype, "flipIcon", void 0);
+const Tr = m`:host{display:inline-flex;outline:none;-webkit-tap-highlight-color:rgba(0,0,0,0);height:var(--_container-height);width:var(--_container-width);justify-content:center}:host([touch-target=wrapper]){margin:max(0px,(48px - var(--_container-height))/2) max(0px,(48px - var(--_container-width))/2)}md-focus-ring{--md-focus-ring-shape-start-start: var(--_container-shape-start-start);--md-focus-ring-shape-start-end: var(--_container-shape-start-end);--md-focus-ring-shape-end-end: var(--_container-shape-end-end);--md-focus-ring-shape-end-start: var(--_container-shape-end-start)}:host(:is([disabled],[soft-disabled])){pointer-events:none}.icon-button{place-items:center;background:none;border:none;box-sizing:border-box;cursor:pointer;display:flex;place-content:center;outline:none;padding:0;position:relative;text-decoration:none;user-select:none;z-index:0;flex:1;border-start-start-radius:var(--_container-shape-start-start);border-start-end-radius:var(--_container-shape-start-end);border-end-start-radius:var(--_container-shape-end-start);border-end-end-radius:var(--_container-shape-end-end)}.icon ::slotted(*){font-size:var(--_icon-size);height:var(--_icon-size);width:var(--_icon-size);font-weight:inherit}md-ripple{z-index:-1;border-start-start-radius:var(--_container-shape-start-start);border-start-end-radius:var(--_container-shape-start-end);border-end-start-radius:var(--_container-shape-end-start);border-end-end-radius:var(--_container-shape-end-end)}.flip-icon .icon{transform:scaleX(-1)}.icon{display:inline-flex}.link{display:grid;height:100%;outline:none;place-items:center;position:absolute;width:100%}.touch{position:absolute;height:max(48px,100%);width:max(48px,100%)}:host([touch-target=none]) .touch{display:none}@media(forced-colors: active){:host(:is([disabled],[soft-disabled])){--_disabled-icon-color: GrayText;--_disabled-icon-opacity: 1}}
 `;
 const Dr = m`:host{--_disabled-icon-color: var(--md-icon-button-disabled-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-icon-opacity: var(--md-icon-button-disabled-icon-opacity, 0.38);--_icon-size: var(--md-icon-button-icon-size, 24px);--_selected-focus-icon-color: var(--md-icon-button-selected-focus-icon-color, var(--md-sys-color-primary, #6750a4));--_selected-hover-icon-color: var(--md-icon-button-selected-hover-icon-color, var(--md-sys-color-primary, #6750a4));--_selected-hover-state-layer-color: var(--md-icon-button-selected-hover-state-layer-color, var(--md-sys-color-primary, #6750a4));--_selected-hover-state-layer-opacity: var(--md-icon-button-selected-hover-state-layer-opacity, 0.08);--_selected-icon-color: var(--md-icon-button-selected-icon-color, var(--md-sys-color-primary, #6750a4));--_selected-pressed-icon-color: var(--md-icon-button-selected-pressed-icon-color, var(--md-sys-color-primary, #6750a4));--_selected-pressed-state-layer-color: var(--md-icon-button-selected-pressed-state-layer-color, var(--md-sys-color-primary, #6750a4));--_selected-pressed-state-layer-opacity: var(--md-icon-button-selected-pressed-state-layer-opacity, 0.12);--_state-layer-height: var(--md-icon-button-state-layer-height, 40px);--_state-layer-shape: var(--md-icon-button-state-layer-shape, var(--md-sys-shape-corner-full, 9999px));--_state-layer-width: var(--md-icon-button-state-layer-width, 40px);--_focus-icon-color: var(--md-icon-button-focus-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-icon-color: var(--md-icon-button-hover-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-state-layer-color: var(--md-icon-button-hover-state-layer-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-state-layer-opacity: var(--md-icon-button-hover-state-layer-opacity, 0.08);--_icon-color: var(--md-icon-button-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_pressed-icon-color: var(--md-icon-button-pressed-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_pressed-state-layer-color: var(--md-icon-button-pressed-state-layer-color, var(--md-sys-color-on-surface-variant, #49454f));--_pressed-state-layer-opacity: var(--md-icon-button-pressed-state-layer-opacity, 0.12);--_container-shape-start-start: 0;--_container-shape-start-end: 0;--_container-shape-end-end: 0;--_container-shape-end-start: 0;--_container-height: 0;--_container-width: 0;height:var(--_state-layer-height);width:var(--_state-layer-width)}:host([touch-target=wrapper]){margin:max(0px,(48px - var(--_state-layer-height))/2) max(0px,(48px - var(--_state-layer-width))/2)}md-focus-ring{--md-focus-ring-shape-start-start: var(--_state-layer-shape);--md-focus-ring-shape-start-end: var(--_state-layer-shape);--md-focus-ring-shape-end-end: var(--_state-layer-shape);--md-focus-ring-shape-end-start: var(--_state-layer-shape)}.standard{background-color:rgba(0,0,0,0);color:var(--_icon-color);--md-ripple-hover-color: var(--_hover-state-layer-color);--md-ripple-hover-opacity: var(--_hover-state-layer-opacity);--md-ripple-pressed-color: var(--_pressed-state-layer-color);--md-ripple-pressed-opacity: var(--_pressed-state-layer-opacity)}.standard:hover{color:var(--_hover-icon-color)}.standard:focus{color:var(--_focus-icon-color)}.standard:active{color:var(--_pressed-icon-color)}.standard:is(:disabled,[aria-disabled=true]){color:var(--_disabled-icon-color)}md-ripple{border-radius:var(--_state-layer-shape)}.standard:is(:disabled,[aria-disabled=true]){opacity:var(--_disabled-icon-opacity)}.selected:not(:disabled,[aria-disabled=true]){color:var(--_selected-icon-color)}.selected:not(:disabled,[aria-disabled=true]):hover{color:var(--_selected-hover-icon-color)}.selected:not(:disabled,[aria-disabled=true]):focus{color:var(--_selected-focus-icon-color)}.selected:not(:disabled,[aria-disabled=true]):active{color:var(--_selected-pressed-icon-color)}.selected{--md-ripple-hover-color: var(--_selected-hover-state-layer-color);--md-ripple-hover-opacity: var(--_selected-hover-state-layer-opacity);--md-ripple-pressed-color: var(--_selected-pressed-state-layer-color);--md-ripple-pressed-opacity: var(--_selected-pressed-state-layer-opacity)}
 `;
-let kt = class extends B {
+let kt = class extends L {
   getRenderClasses() {
     return {
       ...super.getRenderClasses(),
@@ -1862,9 +1862,9 @@ let kt = class extends B {
     };
   }
 };
-kt.styles = [Ir, Dr];
-kt = s([
-  w("md-icon-button")
+kt.styles = [Tr, Dr];
+kt = n([
+  k("md-icon-button")
 ], kt);
 class z extends f {
   constructor() {
@@ -1924,7 +1924,7 @@ class z extends f {
             </div>
             <div class="middle">
               <div class="label-wrapper">
-                ${t} ${o ? h : e}
+                ${t} ${o ? u : e}
               </div>
               <div class="content">
                 <slot></slot>
@@ -1949,10 +1949,10 @@ class z extends f {
   renderSupportingText() {
     const { supportingOrErrorText: e, counterText: t } = this;
     if (!e && !t)
-      return h;
-    const o = l`<span>${e}</span>`, i = t ? l`<span class="counter">${t}</span>` : h, n = this.error && this.errorText && !this.refreshErrorAlert ? "alert" : h;
+      return u;
+    const o = l`<span>${e}</span>`, i = t ? l`<span class="counter">${t}</span>` : u, s = this.error && this.errorText && !this.refreshErrorAlert ? "alert" : u;
     return l`
-      <div class="supporting-text" role=${n}>${o}${i}</div>
+      <div class="supporting-text" role=${s}>${o}${i}</div>
       <slot
         name="aria-describedby"
         @slotchange=${this.updateSlottedAriaDescribedBy}></slot>
@@ -1964,7 +1964,7 @@ class z extends f {
   }
   renderLabel(e) {
     if (!this.label)
-      return h;
+      return u;
     let t;
     e ? t = this.focused || this.populated || this.isAnimating : t = !this.focused && !this.populated && !this.isAnimating;
     const o = {
@@ -1991,81 +1991,81 @@ class z extends f {
     const { floatingLabelEl: e, restingLabelEl: t } = this;
     if (!e || !t)
       return [];
-    const { x: o, y: i, height: a } = e.getBoundingClientRect(), { x: n, y: c, height: p } = t.getBoundingClientRect(), g = e.scrollWidth, u = t.scrollWidth, v = u / g, b = n - o, y = c - i + Math.round((p - a * v) / 2), _ = `translateX(${b}px) translateY(${y}px) scale(${v})`, C = "translateX(0) translateY(0) scale(1)", E = t.clientWidth, $ = u > E ? `${E / v}px` : "";
+    const { x: o, y: i, height: a } = e.getBoundingClientRect(), { x: s, y: c, height: p } = t.getBoundingClientRect(), g = e.scrollWidth, h = t.scrollWidth, v = h / g, b = s - o, x = c - i + Math.round((p - a * v) / 2), y = `translateX(${b}px) translateY(${x}px) scale(${v})`, _ = "translateX(0) translateY(0) scale(1)", S = t.clientWidth, $ = h > S ? `${S / v}px` : "";
     return this.focused || this.populated ? [
-      { transform: _, width: $ },
-      { transform: C, width: $ }
-    ] : [
-      { transform: C, width: $ },
+      { transform: y, width: $ },
       { transform: _, width: $ }
+    ] : [
+      { transform: _, width: $ },
+      { transform: y, width: $ }
     ];
   }
   getSurfacePositionClientRect() {
     return this.containerEl.getBoundingClientRect();
   }
 }
-s([
+n([
   d({ type: Boolean })
 ], z.prototype, "disabled", void 0);
-s([
+n([
   d({ type: Boolean })
 ], z.prototype, "error", void 0);
-s([
+n([
   d({ type: Boolean })
 ], z.prototype, "focused", void 0);
-s([
+n([
   d()
 ], z.prototype, "label", void 0);
-s([
+n([
   d({ type: Boolean, attribute: "no-asterisk" })
 ], z.prototype, "noAsterisk", void 0);
-s([
+n([
   d({ type: Boolean })
 ], z.prototype, "populated", void 0);
-s([
+n([
   d({ type: Boolean })
 ], z.prototype, "required", void 0);
-s([
+n([
   d({ type: Boolean })
 ], z.prototype, "resizable", void 0);
-s([
+n([
   d({ attribute: "supporting-text" })
 ], z.prototype, "supportingText", void 0);
-s([
+n([
   d({ attribute: "error-text" })
 ], z.prototype, "errorText", void 0);
-s([
+n([
   d({ type: Number })
 ], z.prototype, "count", void 0);
-s([
+n([
   d({ type: Number })
 ], z.prototype, "max", void 0);
-s([
+n([
   d({ type: Boolean, attribute: "has-start" })
 ], z.prototype, "hasStart", void 0);
-s([
+n([
   d({ type: Boolean, attribute: "has-end" })
 ], z.prototype, "hasEnd", void 0);
-s([
-  K({ slot: "aria-describedby" })
+n([
+  Y({ slot: "aria-describedby" })
 ], z.prototype, "slottedAriaDescribedBy", void 0);
-s([
-  A()
+n([
+  I()
 ], z.prototype, "isAnimating", void 0);
-s([
-  A()
+n([
+  I()
 ], z.prototype, "refreshErrorAlert", void 0);
-s([
-  A()
+n([
+  I()
 ], z.prototype, "disableTransitions", void 0);
-s([
-  k(".label.floating")
+n([
+  C(".label.floating")
 ], z.prototype, "floatingLabelEl", void 0);
-s([
-  k(".label.resting")
+n([
+  C(".label.resting")
 ], z.prototype, "restingLabelEl", void 0);
-s([
-  k(".container")
+n([
+  C(".container")
 ], z.prototype, "containerEl", void 0);
 class Or extends z {
   renderBackground() {
@@ -2078,19 +2078,19 @@ class Or extends z {
     return l`<div class="active-indicator"></div>`;
   }
 }
-const Pr = m`@layer styles{:host{--_active-indicator-color: var(--md-filled-field-active-indicator-color, var(--md-sys-color-on-surface-variant, #49454f));--_active-indicator-height: var(--md-filled-field-active-indicator-height, 1px);--_bottom-space: var(--md-filled-field-bottom-space, 16px);--_container-color: var(--md-filled-field-container-color, var(--md-sys-color-surface-container-highest, #e6e0e9));--_content-color: var(--md-filled-field-content-color, var(--md-sys-color-on-surface, #1d1b20));--_content-font: var(--md-filled-field-content-font, var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto)));--_content-line-height: var(--md-filled-field-content-line-height, var(--md-sys-typescale-body-large-line-height, 1.5rem));--_content-size: var(--md-filled-field-content-size, var(--md-sys-typescale-body-large-size, 1rem));--_content-space: var(--md-filled-field-content-space, 16px);--_content-weight: var(--md-filled-field-content-weight, var(--md-sys-typescale-body-large-weight, var(--md-ref-typeface-weight-regular, 400)));--_disabled-active-indicator-color: var(--md-filled-field-disabled-active-indicator-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-active-indicator-height: var(--md-filled-field-disabled-active-indicator-height, 1px);--_disabled-active-indicator-opacity: var(--md-filled-field-disabled-active-indicator-opacity, 0.38);--_disabled-container-color: var(--md-filled-field-disabled-container-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-container-opacity: var(--md-filled-field-disabled-container-opacity, 0.04);--_disabled-content-color: var(--md-filled-field-disabled-content-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-content-opacity: var(--md-filled-field-disabled-content-opacity, 0.38);--_disabled-label-text-color: var(--md-filled-field-disabled-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-label-text-opacity: var(--md-filled-field-disabled-label-text-opacity, 0.38);--_disabled-leading-content-color: var(--md-filled-field-disabled-leading-content-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-leading-content-opacity: var(--md-filled-field-disabled-leading-content-opacity, 0.38);--_disabled-supporting-text-color: var(--md-filled-field-disabled-supporting-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-supporting-text-opacity: var(--md-filled-field-disabled-supporting-text-opacity, 0.38);--_disabled-trailing-content-color: var(--md-filled-field-disabled-trailing-content-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-trailing-content-opacity: var(--md-filled-field-disabled-trailing-content-opacity, 0.38);--_error-active-indicator-color: var(--md-filled-field-error-active-indicator-color, var(--md-sys-color-error, #b3261e));--_error-content-color: var(--md-filled-field-error-content-color, var(--md-sys-color-on-surface, #1d1b20));--_error-focus-active-indicator-color: var(--md-filled-field-error-focus-active-indicator-color, var(--md-sys-color-error, #b3261e));--_error-focus-content-color: var(--md-filled-field-error-focus-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-focus-label-text-color: var(--md-filled-field-error-focus-label-text-color, var(--md-sys-color-error, #b3261e));--_error-focus-leading-content-color: var(--md-filled-field-error-focus-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-focus-supporting-text-color: var(--md-filled-field-error-focus-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-focus-trailing-content-color: var(--md-filled-field-error-focus-trailing-content-color, var(--md-sys-color-error, #b3261e));--_error-hover-active-indicator-color: var(--md-filled-field-error-hover-active-indicator-color, var(--md-sys-color-on-error-container, #410e0b));--_error-hover-content-color: var(--md-filled-field-error-hover-content-color, var(--md-sys-color-on-surface, #1d1b20));--_error-hover-label-text-color: var(--md-filled-field-error-hover-label-text-color, var(--md-sys-color-on-error-container, #410e0b));--_error-hover-leading-content-color: var(--md-filled-field-error-hover-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-hover-state-layer-color: var(--md-filled-field-error-hover-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_error-hover-state-layer-opacity: var(--md-filled-field-error-hover-state-layer-opacity, 0.08);--_error-hover-supporting-text-color: var(--md-filled-field-error-hover-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-hover-trailing-content-color: var(--md-filled-field-error-hover-trailing-content-color, var(--md-sys-color-on-error-container, #410e0b));--_error-label-text-color: var(--md-filled-field-error-label-text-color, var(--md-sys-color-error, #b3261e));--_error-leading-content-color: var(--md-filled-field-error-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-supporting-text-color: var(--md-filled-field-error-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-trailing-content-color: var(--md-filled-field-error-trailing-content-color, var(--md-sys-color-error, #b3261e));--_focus-active-indicator-color: var(--md-filled-field-focus-active-indicator-color, var(--md-sys-color-primary, #6750a4));--_focus-active-indicator-height: var(--md-filled-field-focus-active-indicator-height, 3px);--_focus-content-color: var(--md-filled-field-focus-content-color, var(--md-sys-color-on-surface, #1d1b20));--_focus-label-text-color: var(--md-filled-field-focus-label-text-color, var(--md-sys-color-primary, #6750a4));--_focus-leading-content-color: var(--md-filled-field-focus-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_focus-supporting-text-color: var(--md-filled-field-focus-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_focus-trailing-content-color: var(--md-filled-field-focus-trailing-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-active-indicator-color: var(--md-filled-field-hover-active-indicator-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-active-indicator-height: var(--md-filled-field-hover-active-indicator-height, 1px);--_hover-content-color: var(--md-filled-field-hover-content-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-label-text-color: var(--md-filled-field-hover-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-leading-content-color: var(--md-filled-field-hover-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-state-layer-color: var(--md-filled-field-hover-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-state-layer-opacity: var(--md-filled-field-hover-state-layer-opacity, 0.08);--_hover-supporting-text-color: var(--md-filled-field-hover-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-trailing-content-color: var(--md-filled-field-hover-trailing-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_label-text-color: var(--md-filled-field-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_label-text-font: var(--md-filled-field-label-text-font, var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-filled-field-label-text-line-height, var(--md-sys-typescale-body-large-line-height, 1.5rem));--_label-text-populated-line-height: var(--md-filled-field-label-text-populated-line-height, var(--md-sys-typescale-body-small-line-height, 1rem));--_label-text-populated-size: var(--md-filled-field-label-text-populated-size, var(--md-sys-typescale-body-small-size, 0.75rem));--_label-text-size: var(--md-filled-field-label-text-size, var(--md-sys-typescale-body-large-size, 1rem));--_label-text-weight: var(--md-filled-field-label-text-weight, var(--md-sys-typescale-body-large-weight, var(--md-ref-typeface-weight-regular, 400)));--_leading-content-color: var(--md-filled-field-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_leading-space: var(--md-filled-field-leading-space, 16px);--_supporting-text-color: var(--md-filled-field-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_supporting-text-font: var(--md-filled-field-supporting-text-font, var(--md-sys-typescale-body-small-font, var(--md-ref-typeface-plain, Roboto)));--_supporting-text-leading-space: var(--md-filled-field-supporting-text-leading-space, 16px);--_supporting-text-line-height: var(--md-filled-field-supporting-text-line-height, var(--md-sys-typescale-body-small-line-height, 1rem));--_supporting-text-size: var(--md-filled-field-supporting-text-size, var(--md-sys-typescale-body-small-size, 0.75rem));--_supporting-text-top-space: var(--md-filled-field-supporting-text-top-space, 4px);--_supporting-text-trailing-space: var(--md-filled-field-supporting-text-trailing-space, 16px);--_supporting-text-weight: var(--md-filled-field-supporting-text-weight, var(--md-sys-typescale-body-small-weight, var(--md-ref-typeface-weight-regular, 400)));--_top-space: var(--md-filled-field-top-space, 16px);--_trailing-content-color: var(--md-filled-field-trailing-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_trailing-space: var(--md-filled-field-trailing-space, 16px);--_with-label-bottom-space: var(--md-filled-field-with-label-bottom-space, 8px);--_with-label-top-space: var(--md-filled-field-with-label-top-space, 8px);--_with-leading-content-leading-space: var(--md-filled-field-with-leading-content-leading-space, 12px);--_with-trailing-content-trailing-space: var(--md-filled-field-with-trailing-content-trailing-space, 12px);--_container-shape-start-start: var(--md-filled-field-container-shape-start-start, var(--md-filled-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)));--_container-shape-start-end: var(--md-filled-field-container-shape-start-end, var(--md-filled-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)));--_container-shape-end-end: var(--md-filled-field-container-shape-end-end, var(--md-filled-field-container-shape, var(--md-sys-shape-corner-none, 0px)));--_container-shape-end-start: var(--md-filled-field-container-shape-end-start, var(--md-filled-field-container-shape, var(--md-sys-shape-corner-none, 0px)))}.background,.state-layer{border-radius:inherit;inset:0;pointer-events:none;position:absolute}.background{background:var(--_container-color)}.state-layer{visibility:hidden}.field:not(.disabled):hover .state-layer{visibility:visible}.label.floating{position:absolute;top:var(--_with-label-top-space)}.field:not(.with-start) .label-wrapper{margin-inline-start:var(--_leading-space)}.field:not(.with-end) .label-wrapper{margin-inline-end:var(--_trailing-space)}.active-indicator{inset:auto 0 0 0;pointer-events:none;position:absolute;width:100%;z-index:1}.active-indicator::before,.active-indicator::after{border-bottom:var(--_active-indicator-height) solid var(--_active-indicator-color);inset:auto 0 0 0;content:"";position:absolute;width:100%}.active-indicator::after{opacity:0;transition:opacity 150ms cubic-bezier(0.2, 0, 0, 1)}.focused .active-indicator::after{opacity:1}.field:not(.with-start) .content ::slotted(*){padding-inline-start:var(--_leading-space)}.field:not(.with-end) .content ::slotted(*){padding-inline-end:var(--_trailing-space)}.field:not(.no-label) .content ::slotted(:not(textarea)){padding-bottom:var(--_with-label-bottom-space);padding-top:calc(var(--_with-label-top-space) + var(--_label-text-populated-line-height))}.field:not(.no-label) .content ::slotted(textarea){margin-bottom:var(--_with-label-bottom-space);margin-top:calc(var(--_with-label-top-space) + var(--_label-text-populated-line-height))}:hover .active-indicator::before{border-bottom-color:var(--_hover-active-indicator-color);border-bottom-width:var(--_hover-active-indicator-height)}.active-indicator::after{border-bottom-color:var(--_focus-active-indicator-color);border-bottom-width:var(--_focus-active-indicator-height)}:hover .state-layer{background:var(--_hover-state-layer-color);opacity:var(--_hover-state-layer-opacity)}.disabled .active-indicator::before{border-bottom-color:var(--_disabled-active-indicator-color);border-bottom-width:var(--_disabled-active-indicator-height);opacity:var(--_disabled-active-indicator-opacity)}.disabled .background{background:var(--_disabled-container-color);opacity:var(--_disabled-container-opacity)}.error .active-indicator::before{border-bottom-color:var(--_error-active-indicator-color)}.error:hover .active-indicator::before{border-bottom-color:var(--_error-hover-active-indicator-color)}.error:hover .state-layer{background:var(--_error-hover-state-layer-color);opacity:var(--_error-hover-state-layer-opacity)}.error .active-indicator::after{border-bottom-color:var(--_error-focus-active-indicator-color)}.resizable .container{bottom:var(--_focus-active-indicator-height);clip-path:inset(var(--_focus-active-indicator-height) 0 0 0)}.resizable .container>*{top:var(--_focus-active-indicator-height)}}@layer hcm{@media(forced-colors: active){.disabled .active-indicator::before{border-color:GrayText;opacity:1}}}
+const Fr = m`@layer styles{:host{--_active-indicator-color: var(--md-filled-field-active-indicator-color, var(--md-sys-color-on-surface-variant, #49454f));--_active-indicator-height: var(--md-filled-field-active-indicator-height, 1px);--_bottom-space: var(--md-filled-field-bottom-space, 16px);--_container-color: var(--md-filled-field-container-color, var(--md-sys-color-surface-container-highest, #e6e0e9));--_content-color: var(--md-filled-field-content-color, var(--md-sys-color-on-surface, #1d1b20));--_content-font: var(--md-filled-field-content-font, var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto)));--_content-line-height: var(--md-filled-field-content-line-height, var(--md-sys-typescale-body-large-line-height, 1.5rem));--_content-size: var(--md-filled-field-content-size, var(--md-sys-typescale-body-large-size, 1rem));--_content-space: var(--md-filled-field-content-space, 16px);--_content-weight: var(--md-filled-field-content-weight, var(--md-sys-typescale-body-large-weight, var(--md-ref-typeface-weight-regular, 400)));--_disabled-active-indicator-color: var(--md-filled-field-disabled-active-indicator-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-active-indicator-height: var(--md-filled-field-disabled-active-indicator-height, 1px);--_disabled-active-indicator-opacity: var(--md-filled-field-disabled-active-indicator-opacity, 0.38);--_disabled-container-color: var(--md-filled-field-disabled-container-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-container-opacity: var(--md-filled-field-disabled-container-opacity, 0.04);--_disabled-content-color: var(--md-filled-field-disabled-content-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-content-opacity: var(--md-filled-field-disabled-content-opacity, 0.38);--_disabled-label-text-color: var(--md-filled-field-disabled-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-label-text-opacity: var(--md-filled-field-disabled-label-text-opacity, 0.38);--_disabled-leading-content-color: var(--md-filled-field-disabled-leading-content-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-leading-content-opacity: var(--md-filled-field-disabled-leading-content-opacity, 0.38);--_disabled-supporting-text-color: var(--md-filled-field-disabled-supporting-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-supporting-text-opacity: var(--md-filled-field-disabled-supporting-text-opacity, 0.38);--_disabled-trailing-content-color: var(--md-filled-field-disabled-trailing-content-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-trailing-content-opacity: var(--md-filled-field-disabled-trailing-content-opacity, 0.38);--_error-active-indicator-color: var(--md-filled-field-error-active-indicator-color, var(--md-sys-color-error, #b3261e));--_error-content-color: var(--md-filled-field-error-content-color, var(--md-sys-color-on-surface, #1d1b20));--_error-focus-active-indicator-color: var(--md-filled-field-error-focus-active-indicator-color, var(--md-sys-color-error, #b3261e));--_error-focus-content-color: var(--md-filled-field-error-focus-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-focus-label-text-color: var(--md-filled-field-error-focus-label-text-color, var(--md-sys-color-error, #b3261e));--_error-focus-leading-content-color: var(--md-filled-field-error-focus-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-focus-supporting-text-color: var(--md-filled-field-error-focus-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-focus-trailing-content-color: var(--md-filled-field-error-focus-trailing-content-color, var(--md-sys-color-error, #b3261e));--_error-hover-active-indicator-color: var(--md-filled-field-error-hover-active-indicator-color, var(--md-sys-color-on-error-container, #410e0b));--_error-hover-content-color: var(--md-filled-field-error-hover-content-color, var(--md-sys-color-on-surface, #1d1b20));--_error-hover-label-text-color: var(--md-filled-field-error-hover-label-text-color, var(--md-sys-color-on-error-container, #410e0b));--_error-hover-leading-content-color: var(--md-filled-field-error-hover-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-hover-state-layer-color: var(--md-filled-field-error-hover-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_error-hover-state-layer-opacity: var(--md-filled-field-error-hover-state-layer-opacity, 0.08);--_error-hover-supporting-text-color: var(--md-filled-field-error-hover-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-hover-trailing-content-color: var(--md-filled-field-error-hover-trailing-content-color, var(--md-sys-color-on-error-container, #410e0b));--_error-label-text-color: var(--md-filled-field-error-label-text-color, var(--md-sys-color-error, #b3261e));--_error-leading-content-color: var(--md-filled-field-error-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-supporting-text-color: var(--md-filled-field-error-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-trailing-content-color: var(--md-filled-field-error-trailing-content-color, var(--md-sys-color-error, #b3261e));--_focus-active-indicator-color: var(--md-filled-field-focus-active-indicator-color, var(--md-sys-color-primary, #6750a4));--_focus-active-indicator-height: var(--md-filled-field-focus-active-indicator-height, 3px);--_focus-content-color: var(--md-filled-field-focus-content-color, var(--md-sys-color-on-surface, #1d1b20));--_focus-label-text-color: var(--md-filled-field-focus-label-text-color, var(--md-sys-color-primary, #6750a4));--_focus-leading-content-color: var(--md-filled-field-focus-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_focus-supporting-text-color: var(--md-filled-field-focus-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_focus-trailing-content-color: var(--md-filled-field-focus-trailing-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-active-indicator-color: var(--md-filled-field-hover-active-indicator-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-active-indicator-height: var(--md-filled-field-hover-active-indicator-height, 1px);--_hover-content-color: var(--md-filled-field-hover-content-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-label-text-color: var(--md-filled-field-hover-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-leading-content-color: var(--md-filled-field-hover-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-state-layer-color: var(--md-filled-field-hover-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-state-layer-opacity: var(--md-filled-field-hover-state-layer-opacity, 0.08);--_hover-supporting-text-color: var(--md-filled-field-hover-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-trailing-content-color: var(--md-filled-field-hover-trailing-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_label-text-color: var(--md-filled-field-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_label-text-font: var(--md-filled-field-label-text-font, var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-filled-field-label-text-line-height, var(--md-sys-typescale-body-large-line-height, 1.5rem));--_label-text-populated-line-height: var(--md-filled-field-label-text-populated-line-height, var(--md-sys-typescale-body-small-line-height, 1rem));--_label-text-populated-size: var(--md-filled-field-label-text-populated-size, var(--md-sys-typescale-body-small-size, 0.75rem));--_label-text-size: var(--md-filled-field-label-text-size, var(--md-sys-typescale-body-large-size, 1rem));--_label-text-weight: var(--md-filled-field-label-text-weight, var(--md-sys-typescale-body-large-weight, var(--md-ref-typeface-weight-regular, 400)));--_leading-content-color: var(--md-filled-field-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_leading-space: var(--md-filled-field-leading-space, 16px);--_supporting-text-color: var(--md-filled-field-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_supporting-text-font: var(--md-filled-field-supporting-text-font, var(--md-sys-typescale-body-small-font, var(--md-ref-typeface-plain, Roboto)));--_supporting-text-leading-space: var(--md-filled-field-supporting-text-leading-space, 16px);--_supporting-text-line-height: var(--md-filled-field-supporting-text-line-height, var(--md-sys-typescale-body-small-line-height, 1rem));--_supporting-text-size: var(--md-filled-field-supporting-text-size, var(--md-sys-typescale-body-small-size, 0.75rem));--_supporting-text-top-space: var(--md-filled-field-supporting-text-top-space, 4px);--_supporting-text-trailing-space: var(--md-filled-field-supporting-text-trailing-space, 16px);--_supporting-text-weight: var(--md-filled-field-supporting-text-weight, var(--md-sys-typescale-body-small-weight, var(--md-ref-typeface-weight-regular, 400)));--_top-space: var(--md-filled-field-top-space, 16px);--_trailing-content-color: var(--md-filled-field-trailing-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_trailing-space: var(--md-filled-field-trailing-space, 16px);--_with-label-bottom-space: var(--md-filled-field-with-label-bottom-space, 8px);--_with-label-top-space: var(--md-filled-field-with-label-top-space, 8px);--_with-leading-content-leading-space: var(--md-filled-field-with-leading-content-leading-space, 12px);--_with-trailing-content-trailing-space: var(--md-filled-field-with-trailing-content-trailing-space, 12px);--_container-shape-start-start: var(--md-filled-field-container-shape-start-start, var(--md-filled-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)));--_container-shape-start-end: var(--md-filled-field-container-shape-start-end, var(--md-filled-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)));--_container-shape-end-end: var(--md-filled-field-container-shape-end-end, var(--md-filled-field-container-shape, var(--md-sys-shape-corner-none, 0px)));--_container-shape-end-start: var(--md-filled-field-container-shape-end-start, var(--md-filled-field-container-shape, var(--md-sys-shape-corner-none, 0px)))}.background,.state-layer{border-radius:inherit;inset:0;pointer-events:none;position:absolute}.background{background:var(--_container-color)}.state-layer{visibility:hidden}.field:not(.disabled):hover .state-layer{visibility:visible}.label.floating{position:absolute;top:var(--_with-label-top-space)}.field:not(.with-start) .label-wrapper{margin-inline-start:var(--_leading-space)}.field:not(.with-end) .label-wrapper{margin-inline-end:var(--_trailing-space)}.active-indicator{inset:auto 0 0 0;pointer-events:none;position:absolute;width:100%;z-index:1}.active-indicator::before,.active-indicator::after{border-bottom:var(--_active-indicator-height) solid var(--_active-indicator-color);inset:auto 0 0 0;content:"";position:absolute;width:100%}.active-indicator::after{opacity:0;transition:opacity 150ms cubic-bezier(0.2, 0, 0, 1)}.focused .active-indicator::after{opacity:1}.field:not(.with-start) .content ::slotted(*){padding-inline-start:var(--_leading-space)}.field:not(.with-end) .content ::slotted(*){padding-inline-end:var(--_trailing-space)}.field:not(.no-label) .content ::slotted(:not(textarea)){padding-bottom:var(--_with-label-bottom-space);padding-top:calc(var(--_with-label-top-space) + var(--_label-text-populated-line-height))}.field:not(.no-label) .content ::slotted(textarea){margin-bottom:var(--_with-label-bottom-space);margin-top:calc(var(--_with-label-top-space) + var(--_label-text-populated-line-height))}:hover .active-indicator::before{border-bottom-color:var(--_hover-active-indicator-color);border-bottom-width:var(--_hover-active-indicator-height)}.active-indicator::after{border-bottom-color:var(--_focus-active-indicator-color);border-bottom-width:var(--_focus-active-indicator-height)}:hover .state-layer{background:var(--_hover-state-layer-color);opacity:var(--_hover-state-layer-opacity)}.disabled .active-indicator::before{border-bottom-color:var(--_disabled-active-indicator-color);border-bottom-width:var(--_disabled-active-indicator-height);opacity:var(--_disabled-active-indicator-opacity)}.disabled .background{background:var(--_disabled-container-color);opacity:var(--_disabled-container-opacity)}.error .active-indicator::before{border-bottom-color:var(--_error-active-indicator-color)}.error:hover .active-indicator::before{border-bottom-color:var(--_error-hover-active-indicator-color)}.error:hover .state-layer{background:var(--_error-hover-state-layer-color);opacity:var(--_error-hover-state-layer-opacity)}.error .active-indicator::after{border-bottom-color:var(--_error-focus-active-indicator-color)}.resizable .container{bottom:var(--_focus-active-indicator-height);clip-path:inset(var(--_focus-active-indicator-height) 0 0 0)}.resizable .container>*{top:var(--_focus-active-indicator-height)}}@layer hcm{@media(forced-colors: active){.disabled .active-indicator::before{border-color:GrayText;opacity:1}}}
 `;
 const ti = m`:host{display:inline-flex;resize:both}.field{display:flex;flex:1;flex-direction:column;writing-mode:horizontal-tb;max-width:100%}.container-overflow{border-start-start-radius:var(--_container-shape-start-start);border-start-end-radius:var(--_container-shape-start-end);border-end-end-radius:var(--_container-shape-end-end);border-end-start-radius:var(--_container-shape-end-start);display:flex;height:100%;position:relative}.container{align-items:center;border-radius:inherit;display:flex;flex:1;max-height:100%;min-height:100%;min-width:min-content;position:relative}.field,.container-overflow{resize:inherit}.resizable:not(.disabled) .container{resize:inherit;overflow:hidden}.disabled{pointer-events:none}slot[name=container]{border-radius:inherit}slot[name=container]::slotted(*){border-radius:inherit;inset:0;pointer-events:none;position:absolute}@layer styles{.start,.middle,.end{display:flex;box-sizing:border-box;height:100%;position:relative}.start{color:var(--_leading-content-color)}.end{color:var(--_trailing-content-color)}.start,.end{align-items:center;justify-content:center}.with-start .start{margin-inline:var(--_with-leading-content-leading-space) var(--_content-space)}.with-end .end{margin-inline:var(--_content-space) var(--_with-trailing-content-trailing-space)}.middle{align-items:stretch;align-self:baseline;flex:1}.content{color:var(--_content-color);display:flex;flex:1;opacity:0;transition:opacity 83ms cubic-bezier(0.2, 0, 0, 1)}.no-label .content,.focused .content,.populated .content{opacity:1;transition-delay:67ms}:is(.disabled,.disable-transitions) .content{transition:none}.content ::slotted(*){all:unset;color:currentColor;font-family:var(--_content-font);font-size:var(--_content-size);line-height:var(--_content-line-height);font-weight:var(--_content-weight);width:100%;overflow-wrap:revert;white-space:revert}.content ::slotted(:not(textarea)){padding-top:var(--_top-space);padding-bottom:var(--_bottom-space)}.content ::slotted(textarea){margin-top:var(--_top-space);margin-bottom:var(--_bottom-space)}:hover .content{color:var(--_hover-content-color)}:hover .start{color:var(--_hover-leading-content-color)}:hover .end{color:var(--_hover-trailing-content-color)}.focused .content{color:var(--_focus-content-color)}.focused .start{color:var(--_focus-leading-content-color)}.focused .end{color:var(--_focus-trailing-content-color)}.disabled .content{color:var(--_disabled-content-color)}.disabled.no-label .content,.disabled.focused .content,.disabled.populated .content{opacity:var(--_disabled-content-opacity)}.disabled .start{color:var(--_disabled-leading-content-color);opacity:var(--_disabled-leading-content-opacity)}.disabled .end{color:var(--_disabled-trailing-content-color);opacity:var(--_disabled-trailing-content-opacity)}.error .content{color:var(--_error-content-color)}.error .start{color:var(--_error-leading-content-color)}.error .end{color:var(--_error-trailing-content-color)}.error:hover .content{color:var(--_error-hover-content-color)}.error:hover .start{color:var(--_error-hover-leading-content-color)}.error:hover .end{color:var(--_error-hover-trailing-content-color)}.error.focused .content{color:var(--_error-focus-content-color)}.error.focused .start{color:var(--_error-focus-leading-content-color)}.error.focused .end{color:var(--_error-focus-trailing-content-color)}}@layer hcm{@media(forced-colors: active){.disabled :is(.start,.content,.end){color:GrayText;opacity:1}}}@layer styles{.label{box-sizing:border-box;color:var(--_label-text-color);overflow:hidden;max-width:100%;text-overflow:ellipsis;white-space:nowrap;z-index:1;font-family:var(--_label-text-font);font-size:var(--_label-text-size);line-height:var(--_label-text-line-height);font-weight:var(--_label-text-weight);width:min-content}.label-wrapper{inset:0;pointer-events:none;position:absolute}.label.resting{position:absolute;top:var(--_top-space)}.label.floating{font-size:var(--_label-text-populated-size);line-height:var(--_label-text-populated-line-height);transform-origin:top left}.label.hidden{opacity:0}.no-label .label{display:none}.label-wrapper{inset:0;position:absolute;text-align:initial}:hover .label{color:var(--_hover-label-text-color)}.focused .label{color:var(--_focus-label-text-color)}.disabled .label{color:var(--_disabled-label-text-color)}.disabled .label:not(.hidden){opacity:var(--_disabled-label-text-opacity)}.error .label{color:var(--_error-label-text-color)}.error:hover .label{color:var(--_error-hover-label-text-color)}.error.focused .label{color:var(--_error-focus-label-text-color)}}@layer hcm{@media(forced-colors: active){.disabled .label:not(.hidden){color:GrayText;opacity:1}}}@layer styles{.supporting-text{color:var(--_supporting-text-color);display:flex;font-family:var(--_supporting-text-font);font-size:var(--_supporting-text-size);line-height:var(--_supporting-text-line-height);font-weight:var(--_supporting-text-weight);gap:16px;justify-content:space-between;padding-inline-start:var(--_supporting-text-leading-space);padding-inline-end:var(--_supporting-text-trailing-space);padding-top:var(--_supporting-text-top-space)}.supporting-text :nth-child(2){flex-shrink:0}:hover .supporting-text{color:var(--_hover-supporting-text-color)}.focus .supporting-text{color:var(--_focus-supporting-text-color)}.disabled .supporting-text{color:var(--_disabled-supporting-text-color);opacity:var(--_disabled-supporting-text-opacity)}.error .supporting-text{color:var(--_error-supporting-text-color)}.error:hover .supporting-text{color:var(--_error-hover-supporting-text-color)}.error.focus .supporting-text{color:var(--_error-focus-supporting-text-color)}}@layer hcm{@media(forced-colors: active){.disabled .supporting-text{color:GrayText;opacity:1}}}
 `;
 let Ct = class extends Or {
 };
-Ct.styles = [ti, Pr];
-Ct = s([
-  w("md-filled-field")
+Ct.styles = [ti, Fr];
+Ct = n([
+  k("md-filled-field")
 ], Ct);
-const Fr = m`:host{--_active-indicator-color: var(--md-filled-text-field-active-indicator-color, var(--md-sys-color-on-surface-variant, #49454f));--_active-indicator-height: var(--md-filled-text-field-active-indicator-height, 1px);--_caret-color: var(--md-filled-text-field-caret-color, var(--md-sys-color-primary, #6750a4));--_container-color: var(--md-filled-text-field-container-color, var(--md-sys-color-surface-container-highest, #e6e0e9));--_disabled-active-indicator-color: var(--md-filled-text-field-disabled-active-indicator-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-active-indicator-height: var(--md-filled-text-field-disabled-active-indicator-height, 1px);--_disabled-active-indicator-opacity: var(--md-filled-text-field-disabled-active-indicator-opacity, 0.38);--_disabled-container-color: var(--md-filled-text-field-disabled-container-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-container-opacity: var(--md-filled-text-field-disabled-container-opacity, 0.04);--_disabled-input-text-color: var(--md-filled-text-field-disabled-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-input-text-opacity: var(--md-filled-text-field-disabled-input-text-opacity, 0.38);--_disabled-label-text-color: var(--md-filled-text-field-disabled-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-label-text-opacity: var(--md-filled-text-field-disabled-label-text-opacity, 0.38);--_disabled-leading-icon-color: var(--md-filled-text-field-disabled-leading-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-leading-icon-opacity: var(--md-filled-text-field-disabled-leading-icon-opacity, 0.38);--_disabled-supporting-text-color: var(--md-filled-text-field-disabled-supporting-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-supporting-text-opacity: var(--md-filled-text-field-disabled-supporting-text-opacity, 0.38);--_disabled-trailing-icon-color: var(--md-filled-text-field-disabled-trailing-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-trailing-icon-opacity: var(--md-filled-text-field-disabled-trailing-icon-opacity, 0.38);--_error-active-indicator-color: var(--md-filled-text-field-error-active-indicator-color, var(--md-sys-color-error, #b3261e));--_error-focus-active-indicator-color: var(--md-filled-text-field-error-focus-active-indicator-color, var(--md-sys-color-error, #b3261e));--_error-focus-caret-color: var(--md-filled-text-field-error-focus-caret-color, var(--md-sys-color-error, #b3261e));--_error-focus-input-text-color: var(--md-filled-text-field-error-focus-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_error-focus-label-text-color: var(--md-filled-text-field-error-focus-label-text-color, var(--md-sys-color-error, #b3261e));--_error-focus-leading-icon-color: var(--md-filled-text-field-error-focus-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-focus-supporting-text-color: var(--md-filled-text-field-error-focus-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-focus-trailing-icon-color: var(--md-filled-text-field-error-focus-trailing-icon-color, var(--md-sys-color-error, #b3261e));--_error-hover-active-indicator-color: var(--md-filled-text-field-error-hover-active-indicator-color, var(--md-sys-color-on-error-container, #410e0b));--_error-hover-input-text-color: var(--md-filled-text-field-error-hover-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_error-hover-label-text-color: var(--md-filled-text-field-error-hover-label-text-color, var(--md-sys-color-on-error-container, #410e0b));--_error-hover-leading-icon-color: var(--md-filled-text-field-error-hover-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-hover-state-layer-color: var(--md-filled-text-field-error-hover-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_error-hover-state-layer-opacity: var(--md-filled-text-field-error-hover-state-layer-opacity, 0.08);--_error-hover-supporting-text-color: var(--md-filled-text-field-error-hover-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-hover-trailing-icon-color: var(--md-filled-text-field-error-hover-trailing-icon-color, var(--md-sys-color-on-error-container, #410e0b));--_error-input-text-color: var(--md-filled-text-field-error-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_error-label-text-color: var(--md-filled-text-field-error-label-text-color, var(--md-sys-color-error, #b3261e));--_error-leading-icon-color: var(--md-filled-text-field-error-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-supporting-text-color: var(--md-filled-text-field-error-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-trailing-icon-color: var(--md-filled-text-field-error-trailing-icon-color, var(--md-sys-color-error, #b3261e));--_focus-active-indicator-color: var(--md-filled-text-field-focus-active-indicator-color, var(--md-sys-color-primary, #6750a4));--_focus-active-indicator-height: var(--md-filled-text-field-focus-active-indicator-height, 3px);--_focus-input-text-color: var(--md-filled-text-field-focus-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_focus-label-text-color: var(--md-filled-text-field-focus-label-text-color, var(--md-sys-color-primary, #6750a4));--_focus-leading-icon-color: var(--md-filled-text-field-focus-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_focus-supporting-text-color: var(--md-filled-text-field-focus-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_focus-trailing-icon-color: var(--md-filled-text-field-focus-trailing-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-active-indicator-color: var(--md-filled-text-field-hover-active-indicator-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-active-indicator-height: var(--md-filled-text-field-hover-active-indicator-height, 1px);--_hover-input-text-color: var(--md-filled-text-field-hover-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-label-text-color: var(--md-filled-text-field-hover-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-leading-icon-color: var(--md-filled-text-field-hover-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-state-layer-color: var(--md-filled-text-field-hover-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-state-layer-opacity: var(--md-filled-text-field-hover-state-layer-opacity, 0.08);--_hover-supporting-text-color: var(--md-filled-text-field-hover-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-trailing-icon-color: var(--md-filled-text-field-hover-trailing-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_input-text-color: var(--md-filled-text-field-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_input-text-font: var(--md-filled-text-field-input-text-font, var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto)));--_input-text-line-height: var(--md-filled-text-field-input-text-line-height, var(--md-sys-typescale-body-large-line-height, 1.5rem));--_input-text-placeholder-color: var(--md-filled-text-field-input-text-placeholder-color, var(--md-sys-color-on-surface-variant, #49454f));--_input-text-prefix-color: var(--md-filled-text-field-input-text-prefix-color, var(--md-sys-color-on-surface-variant, #49454f));--_input-text-size: var(--md-filled-text-field-input-text-size, var(--md-sys-typescale-body-large-size, 1rem));--_input-text-suffix-color: var(--md-filled-text-field-input-text-suffix-color, var(--md-sys-color-on-surface-variant, #49454f));--_input-text-weight: var(--md-filled-text-field-input-text-weight, var(--md-sys-typescale-body-large-weight, var(--md-ref-typeface-weight-regular, 400)));--_label-text-color: var(--md-filled-text-field-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_label-text-font: var(--md-filled-text-field-label-text-font, var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-filled-text-field-label-text-line-height, var(--md-sys-typescale-body-large-line-height, 1.5rem));--_label-text-populated-line-height: var(--md-filled-text-field-label-text-populated-line-height, var(--md-sys-typescale-body-small-line-height, 1rem));--_label-text-populated-size: var(--md-filled-text-field-label-text-populated-size, var(--md-sys-typescale-body-small-size, 0.75rem));--_label-text-size: var(--md-filled-text-field-label-text-size, var(--md-sys-typescale-body-large-size, 1rem));--_label-text-weight: var(--md-filled-text-field-label-text-weight, var(--md-sys-typescale-body-large-weight, var(--md-ref-typeface-weight-regular, 400)));--_leading-icon-color: var(--md-filled-text-field-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_leading-icon-size: var(--md-filled-text-field-leading-icon-size, 24px);--_supporting-text-color: var(--md-filled-text-field-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_supporting-text-font: var(--md-filled-text-field-supporting-text-font, var(--md-sys-typescale-body-small-font, var(--md-ref-typeface-plain, Roboto)));--_supporting-text-line-height: var(--md-filled-text-field-supporting-text-line-height, var(--md-sys-typescale-body-small-line-height, 1rem));--_supporting-text-size: var(--md-filled-text-field-supporting-text-size, var(--md-sys-typescale-body-small-size, 0.75rem));--_supporting-text-weight: var(--md-filled-text-field-supporting-text-weight, var(--md-sys-typescale-body-small-weight, var(--md-ref-typeface-weight-regular, 400)));--_trailing-icon-color: var(--md-filled-text-field-trailing-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_trailing-icon-size: var(--md-filled-text-field-trailing-icon-size, 24px);--_container-shape-start-start: var(--md-filled-text-field-container-shape-start-start, var(--md-filled-text-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)));--_container-shape-start-end: var(--md-filled-text-field-container-shape-start-end, var(--md-filled-text-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)));--_container-shape-end-end: var(--md-filled-text-field-container-shape-end-end, var(--md-filled-text-field-container-shape, var(--md-sys-shape-corner-none, 0px)));--_container-shape-end-start: var(--md-filled-text-field-container-shape-end-start, var(--md-filled-text-field-container-shape, var(--md-sys-shape-corner-none, 0px)));--_icon-input-space: var(--md-filled-text-field-icon-input-space, 16px);--_leading-space: var(--md-filled-text-field-leading-space, 16px);--_trailing-space: var(--md-filled-text-field-trailing-space, 16px);--_top-space: var(--md-filled-text-field-top-space, 16px);--_bottom-space: var(--md-filled-text-field-bottom-space, 16px);--_input-text-prefix-trailing-space: var(--md-filled-text-field-input-text-prefix-trailing-space, 2px);--_input-text-suffix-leading-space: var(--md-filled-text-field-input-text-suffix-leading-space, 2px);--_with-label-top-space: var(--md-filled-text-field-with-label-top-space, 8px);--_with-label-bottom-space: var(--md-filled-text-field-with-label-bottom-space, 8px);--_focus-caret-color: var(--md-filled-text-field-focus-caret-color, var(--md-sys-color-primary, #6750a4));--_with-leading-icon-leading-space: var(--md-filled-text-field-with-leading-icon-leading-space, 12px);--_with-trailing-icon-trailing-space: var(--md-filled-text-field-with-trailing-icon-trailing-space, 12px);--md-filled-field-active-indicator-color: var(--_active-indicator-color);--md-filled-field-active-indicator-height: var(--_active-indicator-height);--md-filled-field-bottom-space: var(--_bottom-space);--md-filled-field-container-color: var(--_container-color);--md-filled-field-container-shape-end-end: var(--_container-shape-end-end);--md-filled-field-container-shape-end-start: var(--_container-shape-end-start);--md-filled-field-container-shape-start-end: var(--_container-shape-start-end);--md-filled-field-container-shape-start-start: var(--_container-shape-start-start);--md-filled-field-content-color: var(--_input-text-color);--md-filled-field-content-font: var(--_input-text-font);--md-filled-field-content-line-height: var(--_input-text-line-height);--md-filled-field-content-size: var(--_input-text-size);--md-filled-field-content-space: var(--_icon-input-space);--md-filled-field-content-weight: var(--_input-text-weight);--md-filled-field-disabled-active-indicator-color: var(--_disabled-active-indicator-color);--md-filled-field-disabled-active-indicator-height: var(--_disabled-active-indicator-height);--md-filled-field-disabled-active-indicator-opacity: var(--_disabled-active-indicator-opacity);--md-filled-field-disabled-container-color: var(--_disabled-container-color);--md-filled-field-disabled-container-opacity: var(--_disabled-container-opacity);--md-filled-field-disabled-content-color: var(--_disabled-input-text-color);--md-filled-field-disabled-content-opacity: var(--_disabled-input-text-opacity);--md-filled-field-disabled-label-text-color: var(--_disabled-label-text-color);--md-filled-field-disabled-label-text-opacity: var(--_disabled-label-text-opacity);--md-filled-field-disabled-leading-content-color: var(--_disabled-leading-icon-color);--md-filled-field-disabled-leading-content-opacity: var(--_disabled-leading-icon-opacity);--md-filled-field-disabled-supporting-text-color: var(--_disabled-supporting-text-color);--md-filled-field-disabled-supporting-text-opacity: var(--_disabled-supporting-text-opacity);--md-filled-field-disabled-trailing-content-color: var(--_disabled-trailing-icon-color);--md-filled-field-disabled-trailing-content-opacity: var(--_disabled-trailing-icon-opacity);--md-filled-field-error-active-indicator-color: var(--_error-active-indicator-color);--md-filled-field-error-content-color: var(--_error-input-text-color);--md-filled-field-error-focus-active-indicator-color: var(--_error-focus-active-indicator-color);--md-filled-field-error-focus-content-color: var(--_error-focus-input-text-color);--md-filled-field-error-focus-label-text-color: var(--_error-focus-label-text-color);--md-filled-field-error-focus-leading-content-color: var(--_error-focus-leading-icon-color);--md-filled-field-error-focus-supporting-text-color: var(--_error-focus-supporting-text-color);--md-filled-field-error-focus-trailing-content-color: var(--_error-focus-trailing-icon-color);--md-filled-field-error-hover-active-indicator-color: var(--_error-hover-active-indicator-color);--md-filled-field-error-hover-content-color: var(--_error-hover-input-text-color);--md-filled-field-error-hover-label-text-color: var(--_error-hover-label-text-color);--md-filled-field-error-hover-leading-content-color: var(--_error-hover-leading-icon-color);--md-filled-field-error-hover-state-layer-color: var(--_error-hover-state-layer-color);--md-filled-field-error-hover-state-layer-opacity: var(--_error-hover-state-layer-opacity);--md-filled-field-error-hover-supporting-text-color: var(--_error-hover-supporting-text-color);--md-filled-field-error-hover-trailing-content-color: var(--_error-hover-trailing-icon-color);--md-filled-field-error-label-text-color: var(--_error-label-text-color);--md-filled-field-error-leading-content-color: var(--_error-leading-icon-color);--md-filled-field-error-supporting-text-color: var(--_error-supporting-text-color);--md-filled-field-error-trailing-content-color: var(--_error-trailing-icon-color);--md-filled-field-focus-active-indicator-color: var(--_focus-active-indicator-color);--md-filled-field-focus-active-indicator-height: var(--_focus-active-indicator-height);--md-filled-field-focus-content-color: var(--_focus-input-text-color);--md-filled-field-focus-label-text-color: var(--_focus-label-text-color);--md-filled-field-focus-leading-content-color: var(--_focus-leading-icon-color);--md-filled-field-focus-supporting-text-color: var(--_focus-supporting-text-color);--md-filled-field-focus-trailing-content-color: var(--_focus-trailing-icon-color);--md-filled-field-hover-active-indicator-color: var(--_hover-active-indicator-color);--md-filled-field-hover-active-indicator-height: var(--_hover-active-indicator-height);--md-filled-field-hover-content-color: var(--_hover-input-text-color);--md-filled-field-hover-label-text-color: var(--_hover-label-text-color);--md-filled-field-hover-leading-content-color: var(--_hover-leading-icon-color);--md-filled-field-hover-state-layer-color: var(--_hover-state-layer-color);--md-filled-field-hover-state-layer-opacity: var(--_hover-state-layer-opacity);--md-filled-field-hover-supporting-text-color: var(--_hover-supporting-text-color);--md-filled-field-hover-trailing-content-color: var(--_hover-trailing-icon-color);--md-filled-field-label-text-color: var(--_label-text-color);--md-filled-field-label-text-font: var(--_label-text-font);--md-filled-field-label-text-line-height: var(--_label-text-line-height);--md-filled-field-label-text-populated-line-height: var(--_label-text-populated-line-height);--md-filled-field-label-text-populated-size: var(--_label-text-populated-size);--md-filled-field-label-text-size: var(--_label-text-size);--md-filled-field-label-text-weight: var(--_label-text-weight);--md-filled-field-leading-content-color: var(--_leading-icon-color);--md-filled-field-leading-space: var(--_leading-space);--md-filled-field-supporting-text-color: var(--_supporting-text-color);--md-filled-field-supporting-text-font: var(--_supporting-text-font);--md-filled-field-supporting-text-line-height: var(--_supporting-text-line-height);--md-filled-field-supporting-text-size: var(--_supporting-text-size);--md-filled-field-supporting-text-weight: var(--_supporting-text-weight);--md-filled-field-top-space: var(--_top-space);--md-filled-field-trailing-content-color: var(--_trailing-icon-color);--md-filled-field-trailing-space: var(--_trailing-space);--md-filled-field-with-label-bottom-space: var(--_with-label-bottom-space);--md-filled-field-with-label-top-space: var(--_with-label-top-space);--md-filled-field-with-leading-content-leading-space: var(--_with-leading-icon-leading-space);--md-filled-field-with-trailing-content-trailing-space: var(--_with-trailing-icon-trailing-space)}
+const Pr = m`:host{--_active-indicator-color: var(--md-filled-text-field-active-indicator-color, var(--md-sys-color-on-surface-variant, #49454f));--_active-indicator-height: var(--md-filled-text-field-active-indicator-height, 1px);--_caret-color: var(--md-filled-text-field-caret-color, var(--md-sys-color-primary, #6750a4));--_container-color: var(--md-filled-text-field-container-color, var(--md-sys-color-surface-container-highest, #e6e0e9));--_disabled-active-indicator-color: var(--md-filled-text-field-disabled-active-indicator-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-active-indicator-height: var(--md-filled-text-field-disabled-active-indicator-height, 1px);--_disabled-active-indicator-opacity: var(--md-filled-text-field-disabled-active-indicator-opacity, 0.38);--_disabled-container-color: var(--md-filled-text-field-disabled-container-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-container-opacity: var(--md-filled-text-field-disabled-container-opacity, 0.04);--_disabled-input-text-color: var(--md-filled-text-field-disabled-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-input-text-opacity: var(--md-filled-text-field-disabled-input-text-opacity, 0.38);--_disabled-label-text-color: var(--md-filled-text-field-disabled-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-label-text-opacity: var(--md-filled-text-field-disabled-label-text-opacity, 0.38);--_disabled-leading-icon-color: var(--md-filled-text-field-disabled-leading-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-leading-icon-opacity: var(--md-filled-text-field-disabled-leading-icon-opacity, 0.38);--_disabled-supporting-text-color: var(--md-filled-text-field-disabled-supporting-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-supporting-text-opacity: var(--md-filled-text-field-disabled-supporting-text-opacity, 0.38);--_disabled-trailing-icon-color: var(--md-filled-text-field-disabled-trailing-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-trailing-icon-opacity: var(--md-filled-text-field-disabled-trailing-icon-opacity, 0.38);--_error-active-indicator-color: var(--md-filled-text-field-error-active-indicator-color, var(--md-sys-color-error, #b3261e));--_error-focus-active-indicator-color: var(--md-filled-text-field-error-focus-active-indicator-color, var(--md-sys-color-error, #b3261e));--_error-focus-caret-color: var(--md-filled-text-field-error-focus-caret-color, var(--md-sys-color-error, #b3261e));--_error-focus-input-text-color: var(--md-filled-text-field-error-focus-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_error-focus-label-text-color: var(--md-filled-text-field-error-focus-label-text-color, var(--md-sys-color-error, #b3261e));--_error-focus-leading-icon-color: var(--md-filled-text-field-error-focus-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-focus-supporting-text-color: var(--md-filled-text-field-error-focus-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-focus-trailing-icon-color: var(--md-filled-text-field-error-focus-trailing-icon-color, var(--md-sys-color-error, #b3261e));--_error-hover-active-indicator-color: var(--md-filled-text-field-error-hover-active-indicator-color, var(--md-sys-color-on-error-container, #410e0b));--_error-hover-input-text-color: var(--md-filled-text-field-error-hover-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_error-hover-label-text-color: var(--md-filled-text-field-error-hover-label-text-color, var(--md-sys-color-on-error-container, #410e0b));--_error-hover-leading-icon-color: var(--md-filled-text-field-error-hover-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-hover-state-layer-color: var(--md-filled-text-field-error-hover-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_error-hover-state-layer-opacity: var(--md-filled-text-field-error-hover-state-layer-opacity, 0.08);--_error-hover-supporting-text-color: var(--md-filled-text-field-error-hover-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-hover-trailing-icon-color: var(--md-filled-text-field-error-hover-trailing-icon-color, var(--md-sys-color-on-error-container, #410e0b));--_error-input-text-color: var(--md-filled-text-field-error-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_error-label-text-color: var(--md-filled-text-field-error-label-text-color, var(--md-sys-color-error, #b3261e));--_error-leading-icon-color: var(--md-filled-text-field-error-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-supporting-text-color: var(--md-filled-text-field-error-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-trailing-icon-color: var(--md-filled-text-field-error-trailing-icon-color, var(--md-sys-color-error, #b3261e));--_focus-active-indicator-color: var(--md-filled-text-field-focus-active-indicator-color, var(--md-sys-color-primary, #6750a4));--_focus-active-indicator-height: var(--md-filled-text-field-focus-active-indicator-height, 3px);--_focus-input-text-color: var(--md-filled-text-field-focus-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_focus-label-text-color: var(--md-filled-text-field-focus-label-text-color, var(--md-sys-color-primary, #6750a4));--_focus-leading-icon-color: var(--md-filled-text-field-focus-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_focus-supporting-text-color: var(--md-filled-text-field-focus-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_focus-trailing-icon-color: var(--md-filled-text-field-focus-trailing-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-active-indicator-color: var(--md-filled-text-field-hover-active-indicator-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-active-indicator-height: var(--md-filled-text-field-hover-active-indicator-height, 1px);--_hover-input-text-color: var(--md-filled-text-field-hover-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-label-text-color: var(--md-filled-text-field-hover-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-leading-icon-color: var(--md-filled-text-field-hover-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-state-layer-color: var(--md-filled-text-field-hover-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-state-layer-opacity: var(--md-filled-text-field-hover-state-layer-opacity, 0.08);--_hover-supporting-text-color: var(--md-filled-text-field-hover-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-trailing-icon-color: var(--md-filled-text-field-hover-trailing-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_input-text-color: var(--md-filled-text-field-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_input-text-font: var(--md-filled-text-field-input-text-font, var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto)));--_input-text-line-height: var(--md-filled-text-field-input-text-line-height, var(--md-sys-typescale-body-large-line-height, 1.5rem));--_input-text-placeholder-color: var(--md-filled-text-field-input-text-placeholder-color, var(--md-sys-color-on-surface-variant, #49454f));--_input-text-prefix-color: var(--md-filled-text-field-input-text-prefix-color, var(--md-sys-color-on-surface-variant, #49454f));--_input-text-size: var(--md-filled-text-field-input-text-size, var(--md-sys-typescale-body-large-size, 1rem));--_input-text-suffix-color: var(--md-filled-text-field-input-text-suffix-color, var(--md-sys-color-on-surface-variant, #49454f));--_input-text-weight: var(--md-filled-text-field-input-text-weight, var(--md-sys-typescale-body-large-weight, var(--md-ref-typeface-weight-regular, 400)));--_label-text-color: var(--md-filled-text-field-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_label-text-font: var(--md-filled-text-field-label-text-font, var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-filled-text-field-label-text-line-height, var(--md-sys-typescale-body-large-line-height, 1.5rem));--_label-text-populated-line-height: var(--md-filled-text-field-label-text-populated-line-height, var(--md-sys-typescale-body-small-line-height, 1rem));--_label-text-populated-size: var(--md-filled-text-field-label-text-populated-size, var(--md-sys-typescale-body-small-size, 0.75rem));--_label-text-size: var(--md-filled-text-field-label-text-size, var(--md-sys-typescale-body-large-size, 1rem));--_label-text-weight: var(--md-filled-text-field-label-text-weight, var(--md-sys-typescale-body-large-weight, var(--md-ref-typeface-weight-regular, 400)));--_leading-icon-color: var(--md-filled-text-field-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_leading-icon-size: var(--md-filled-text-field-leading-icon-size, 24px);--_supporting-text-color: var(--md-filled-text-field-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_supporting-text-font: var(--md-filled-text-field-supporting-text-font, var(--md-sys-typescale-body-small-font, var(--md-ref-typeface-plain, Roboto)));--_supporting-text-line-height: var(--md-filled-text-field-supporting-text-line-height, var(--md-sys-typescale-body-small-line-height, 1rem));--_supporting-text-size: var(--md-filled-text-field-supporting-text-size, var(--md-sys-typescale-body-small-size, 0.75rem));--_supporting-text-weight: var(--md-filled-text-field-supporting-text-weight, var(--md-sys-typescale-body-small-weight, var(--md-ref-typeface-weight-regular, 400)));--_trailing-icon-color: var(--md-filled-text-field-trailing-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_trailing-icon-size: var(--md-filled-text-field-trailing-icon-size, 24px);--_container-shape-start-start: var(--md-filled-text-field-container-shape-start-start, var(--md-filled-text-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)));--_container-shape-start-end: var(--md-filled-text-field-container-shape-start-end, var(--md-filled-text-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)));--_container-shape-end-end: var(--md-filled-text-field-container-shape-end-end, var(--md-filled-text-field-container-shape, var(--md-sys-shape-corner-none, 0px)));--_container-shape-end-start: var(--md-filled-text-field-container-shape-end-start, var(--md-filled-text-field-container-shape, var(--md-sys-shape-corner-none, 0px)));--_icon-input-space: var(--md-filled-text-field-icon-input-space, 16px);--_leading-space: var(--md-filled-text-field-leading-space, 16px);--_trailing-space: var(--md-filled-text-field-trailing-space, 16px);--_top-space: var(--md-filled-text-field-top-space, 16px);--_bottom-space: var(--md-filled-text-field-bottom-space, 16px);--_input-text-prefix-trailing-space: var(--md-filled-text-field-input-text-prefix-trailing-space, 2px);--_input-text-suffix-leading-space: var(--md-filled-text-field-input-text-suffix-leading-space, 2px);--_with-label-top-space: var(--md-filled-text-field-with-label-top-space, 8px);--_with-label-bottom-space: var(--md-filled-text-field-with-label-bottom-space, 8px);--_focus-caret-color: var(--md-filled-text-field-focus-caret-color, var(--md-sys-color-primary, #6750a4));--_with-leading-icon-leading-space: var(--md-filled-text-field-with-leading-icon-leading-space, 12px);--_with-trailing-icon-trailing-space: var(--md-filled-text-field-with-trailing-icon-trailing-space, 12px);--md-filled-field-active-indicator-color: var(--_active-indicator-color);--md-filled-field-active-indicator-height: var(--_active-indicator-height);--md-filled-field-bottom-space: var(--_bottom-space);--md-filled-field-container-color: var(--_container-color);--md-filled-field-container-shape-end-end: var(--_container-shape-end-end);--md-filled-field-container-shape-end-start: var(--_container-shape-end-start);--md-filled-field-container-shape-start-end: var(--_container-shape-start-end);--md-filled-field-container-shape-start-start: var(--_container-shape-start-start);--md-filled-field-content-color: var(--_input-text-color);--md-filled-field-content-font: var(--_input-text-font);--md-filled-field-content-line-height: var(--_input-text-line-height);--md-filled-field-content-size: var(--_input-text-size);--md-filled-field-content-space: var(--_icon-input-space);--md-filled-field-content-weight: var(--_input-text-weight);--md-filled-field-disabled-active-indicator-color: var(--_disabled-active-indicator-color);--md-filled-field-disabled-active-indicator-height: var(--_disabled-active-indicator-height);--md-filled-field-disabled-active-indicator-opacity: var(--_disabled-active-indicator-opacity);--md-filled-field-disabled-container-color: var(--_disabled-container-color);--md-filled-field-disabled-container-opacity: var(--_disabled-container-opacity);--md-filled-field-disabled-content-color: var(--_disabled-input-text-color);--md-filled-field-disabled-content-opacity: var(--_disabled-input-text-opacity);--md-filled-field-disabled-label-text-color: var(--_disabled-label-text-color);--md-filled-field-disabled-label-text-opacity: var(--_disabled-label-text-opacity);--md-filled-field-disabled-leading-content-color: var(--_disabled-leading-icon-color);--md-filled-field-disabled-leading-content-opacity: var(--_disabled-leading-icon-opacity);--md-filled-field-disabled-supporting-text-color: var(--_disabled-supporting-text-color);--md-filled-field-disabled-supporting-text-opacity: var(--_disabled-supporting-text-opacity);--md-filled-field-disabled-trailing-content-color: var(--_disabled-trailing-icon-color);--md-filled-field-disabled-trailing-content-opacity: var(--_disabled-trailing-icon-opacity);--md-filled-field-error-active-indicator-color: var(--_error-active-indicator-color);--md-filled-field-error-content-color: var(--_error-input-text-color);--md-filled-field-error-focus-active-indicator-color: var(--_error-focus-active-indicator-color);--md-filled-field-error-focus-content-color: var(--_error-focus-input-text-color);--md-filled-field-error-focus-label-text-color: var(--_error-focus-label-text-color);--md-filled-field-error-focus-leading-content-color: var(--_error-focus-leading-icon-color);--md-filled-field-error-focus-supporting-text-color: var(--_error-focus-supporting-text-color);--md-filled-field-error-focus-trailing-content-color: var(--_error-focus-trailing-icon-color);--md-filled-field-error-hover-active-indicator-color: var(--_error-hover-active-indicator-color);--md-filled-field-error-hover-content-color: var(--_error-hover-input-text-color);--md-filled-field-error-hover-label-text-color: var(--_error-hover-label-text-color);--md-filled-field-error-hover-leading-content-color: var(--_error-hover-leading-icon-color);--md-filled-field-error-hover-state-layer-color: var(--_error-hover-state-layer-color);--md-filled-field-error-hover-state-layer-opacity: var(--_error-hover-state-layer-opacity);--md-filled-field-error-hover-supporting-text-color: var(--_error-hover-supporting-text-color);--md-filled-field-error-hover-trailing-content-color: var(--_error-hover-trailing-icon-color);--md-filled-field-error-label-text-color: var(--_error-label-text-color);--md-filled-field-error-leading-content-color: var(--_error-leading-icon-color);--md-filled-field-error-supporting-text-color: var(--_error-supporting-text-color);--md-filled-field-error-trailing-content-color: var(--_error-trailing-icon-color);--md-filled-field-focus-active-indicator-color: var(--_focus-active-indicator-color);--md-filled-field-focus-active-indicator-height: var(--_focus-active-indicator-height);--md-filled-field-focus-content-color: var(--_focus-input-text-color);--md-filled-field-focus-label-text-color: var(--_focus-label-text-color);--md-filled-field-focus-leading-content-color: var(--_focus-leading-icon-color);--md-filled-field-focus-supporting-text-color: var(--_focus-supporting-text-color);--md-filled-field-focus-trailing-content-color: var(--_focus-trailing-icon-color);--md-filled-field-hover-active-indicator-color: var(--_hover-active-indicator-color);--md-filled-field-hover-active-indicator-height: var(--_hover-active-indicator-height);--md-filled-field-hover-content-color: var(--_hover-input-text-color);--md-filled-field-hover-label-text-color: var(--_hover-label-text-color);--md-filled-field-hover-leading-content-color: var(--_hover-leading-icon-color);--md-filled-field-hover-state-layer-color: var(--_hover-state-layer-color);--md-filled-field-hover-state-layer-opacity: var(--_hover-state-layer-opacity);--md-filled-field-hover-supporting-text-color: var(--_hover-supporting-text-color);--md-filled-field-hover-trailing-content-color: var(--_hover-trailing-icon-color);--md-filled-field-label-text-color: var(--_label-text-color);--md-filled-field-label-text-font: var(--_label-text-font);--md-filled-field-label-text-line-height: var(--_label-text-line-height);--md-filled-field-label-text-populated-line-height: var(--_label-text-populated-line-height);--md-filled-field-label-text-populated-size: var(--_label-text-populated-size);--md-filled-field-label-text-size: var(--_label-text-size);--md-filled-field-label-text-weight: var(--_label-text-weight);--md-filled-field-leading-content-color: var(--_leading-icon-color);--md-filled-field-leading-space: var(--_leading-space);--md-filled-field-supporting-text-color: var(--_supporting-text-color);--md-filled-field-supporting-text-font: var(--_supporting-text-font);--md-filled-field-supporting-text-line-height: var(--_supporting-text-line-height);--md-filled-field-supporting-text-size: var(--_supporting-text-size);--md-filled-field-supporting-text-weight: var(--_supporting-text-weight);--md-filled-field-top-space: var(--_top-space);--md-filled-field-trailing-content-color: var(--_trailing-icon-color);--md-filled-field-trailing-space: var(--_trailing-space);--md-filled-field-with-label-bottom-space: var(--_with-label-bottom-space);--md-filled-field-with-label-top-space: var(--_with-label-top-space);--md-filled-field-with-leading-content-leading-space: var(--_with-leading-icon-leading-space);--md-filled-field-with-trailing-content-trailing-space: var(--_with-trailing-icon-trailing-space)}
 `;
-const Rr = (r) => r.strings === void 0, Mr = {}, Br = (r, e = Mr) => r._$AH = e;
+const Rr = (r) => r.strings === void 0, Mr = {}, Lr = (r, e = Mr) => r._$AH = e;
 const Do = oo(class extends io {
   constructor(r) {
     if (super(r), r.type !== oe.PROPERTY && r.type !== oe.ATTRIBUTE && r.type !== oe.BOOLEAN_ATTRIBUTE) throw Error("The `live` directive is not allowed on child or event bindings");
@@ -2100,17 +2100,17 @@ const Do = oo(class extends io {
     return r;
   }
   update(r, [e]) {
-    if (e === q || e === h) return e;
+    if (e === q || e === u) return e;
     const t = r.element, o = r.name;
     if (r.type === oe.PROPERTY) {
       if (e === t[o]) return q;
     } else if (r.type === oe.BOOLEAN_ATTRIBUTE) {
       if (!!e === t.hasAttribute(o)) return q;
     } else if (r.type === oe.ATTRIBUTE && t.getAttribute(o) === e + "") return q;
-    return Br(r), e;
+    return Lr(r), e;
   }
 });
-const oi = "important", Lr = " !" + oi, be = oo(class extends io {
+const oi = "important", Br = " !" + oi, be = oo(class extends io {
   constructor(r) {
     if (super(r), r.type !== oe.ATTRIBUTE || r.name !== "style" || r.strings?.length > 2) throw Error("The `styleMap` directive must be used in the `style` attribute and must be the only part in the attribute.");
   }
@@ -2128,7 +2128,7 @@ const oi = "important", Lr = " !" + oi, be = oo(class extends io {
       const i = e[o];
       if (i != null) {
         this.ft.add(o);
-        const a = typeof i == "string" && i.endsWith(Lr);
+        const a = typeof i == "string" && i.endsWith(Br);
         o.includes("-") || a ? t.setProperty(o, a ? i.slice(0, -11) : i, a ? oi : "") : t[o] = i;
       }
     }
@@ -2143,15 +2143,15 @@ const Nr = {
     return r || null;
   }
 };
-const Qe = /* @__PURE__ */ Symbol("onReportValidity"), Be = /* @__PURE__ */ Symbol("privateCleanupFormListeners"), Le = /* @__PURE__ */ Symbol("privateDoNotReportInvalid"), Ne = /* @__PURE__ */ Symbol("privateIsSelfReportingValidity"), Ve = /* @__PURE__ */ Symbol("privateCallOnReportValidity");
+const Qe = /* @__PURE__ */ Symbol("onReportValidity"), Le = /* @__PURE__ */ Symbol("privateCleanupFormListeners"), Be = /* @__PURE__ */ Symbol("privateDoNotReportInvalid"), Ne = /* @__PURE__ */ Symbol("privateIsSelfReportingValidity"), Ve = /* @__PURE__ */ Symbol("privateCallOnReportValidity");
 function ii(r) {
   var e, t, o;
   class i extends r {
     // Mixins must have a constructor with `...args: any[]`
     // tslint:disable-next-line:no-any
-    constructor(...n) {
-      super(...n), this[e] = new AbortController(), this[t] = !1, this[o] = !1, this.addEventListener("invalid", (c) => {
-        this[Le] || !c.isTrusted || this.addEventListener("invalid", () => {
+    constructor(...s) {
+      super(...s), this[e] = new AbortController(), this[t] = !1, this[o] = !1, this.addEventListener("invalid", (c) => {
+        this[Be] || !c.isTrusted || this.addEventListener("invalid", () => {
           this[Ve](c);
         }, { once: !0 });
       }, {
@@ -2163,41 +2163,41 @@ function ii(r) {
       });
     }
     checkValidity() {
-      this[Le] = !0;
-      const n = super.checkValidity();
-      return this[Le] = !1, n;
+      this[Be] = !0;
+      const s = super.checkValidity();
+      return this[Be] = !1, s;
     }
     reportValidity() {
       this[Ne] = !0;
-      const n = super.reportValidity();
-      return n && this[Ve](null), this[Ne] = !1, n;
+      const s = super.reportValidity();
+      return s && this[Ve](null), this[Ne] = !1, s;
     }
-    [(e = Be, t = Le, o = Ne, Ve)](n) {
-      const c = n?.defaultPrevented;
-      c || (this[Qe](n), !(!c && n?.defaultPrevented)) || (this[Ne] || qr(this[N].form, this)) && this.focus();
+    [(e = Le, t = Be, o = Ne, Ve)](s) {
+      const c = s?.defaultPrevented;
+      c || (this[Qe](s), !(!c && s?.defaultPrevented)) || (this[Ne] || qr(this[N].form, this)) && this.focus();
     }
-    [Qe](n) {
+    [Qe](s) {
       throw new Error("Implement [onReportValidity]");
     }
-    formAssociatedCallback(n) {
-      super.formAssociatedCallback && super.formAssociatedCallback(n), this[Be].abort(), n && (this[Be] = new AbortController(), Vr(this, n, () => {
+    formAssociatedCallback(s) {
+      super.formAssociatedCallback && super.formAssociatedCallback(s), this[Le].abort(), s && (this[Le] = new AbortController(), Vr(this, s, () => {
         this[Ve](null);
-      }, this[Be].signal));
+      }, this[Le].signal));
     }
   }
   return i;
 }
 function Vr(r, e, t, o) {
   const i = Ur(e);
-  let a = !1, n, c = !1;
+  let a = !1, s, c = !1;
   i.addEventListener("before", () => {
-    c = !0, n = new AbortController(), a = !1, r.addEventListener("invalid", () => {
+    c = !0, s = new AbortController(), a = !1, r.addEventListener("invalid", () => {
       a = !0;
     }, {
-      signal: n.signal
+      signal: s.signal
     });
   }, { signal: o }), i.addEventListener("after", () => {
-    c = !1, n?.abort(), !a && t();
+    c = !1, s?.abort(), !a && t();
   }, { signal: o }), e.addEventListener("submit", () => {
     c || t();
   }, {
@@ -2234,8 +2234,8 @@ function qr(r, e) {
 class Hr extends so {
   computeValidity({ state: e, renderedControl: t }) {
     let o = t;
-    we(e) && !o ? (o = this.inputControl || document.createElement("input"), this.inputControl = o) : o || (o = this.textAreaControl || document.createElement("textarea"), this.textAreaControl = o);
-    const i = we(e) ? o : null;
+    _e(e) && !o ? (o = this.inputControl || document.createElement("input"), this.inputControl = o) : o || (o = this.textAreaControl || document.createElement("textarea"), this.textAreaControl = o);
+    const i = _e(e) ? o : null;
     if (i && (i.type = e.type), o.value !== e.value && (o.value = e.value), o.required = e.required, i) {
       const a = e;
       a.pattern ? i.pattern = a.pattern : i.removeAttribute("pattern"), a.min ? i.min = a.min : i.removeAttribute("min"), a.max ? i.max = a.max : i.removeAttribute("max"), a.step ? i.step = a.step : i.removeAttribute("step");
@@ -2247,23 +2247,23 @@ class Hr extends so {
   }
   equals({ state: e }, { state: t }) {
     const o = e.type === t.type && e.value === t.value && e.required === t.required && e.minLength === t.minLength && e.maxLength === t.maxLength;
-    return !we(e) || !we(t) ? o : o && e.pattern === t.pattern && e.min === t.min && e.max === t.max && e.step === t.step;
+    return !_e(e) || !_e(t) ? o : o && e.pattern === t.pattern && e.min === t.min && e.max === t.max && e.step === t.step;
   }
   copy({ state: e }) {
     return {
-      state: we(e) ? this.copyInput(e) : this.copyTextArea(e),
+      state: _e(e) ? this.copyInput(e) : this.copyTextArea(e),
       renderedControl: null
     };
   }
   copyInput(e) {
-    const { type: t, pattern: o, min: i, max: a, step: n } = e;
+    const { type: t, pattern: o, min: i, max: a, step: s } = e;
     return {
       ...this.copySharedState(e),
       type: t,
       pattern: o,
       min: i,
       max: a,
-      step: n
+      step: s
     };
   }
   copyTextArea(e) {
@@ -2276,11 +2276,11 @@ class Hr extends so {
     return { value: e, required: t, minLength: o, maxLength: i };
   }
 }
-function we(r) {
+function _e(r) {
   return r.type !== "textarea";
 }
 const Wr = Q(ii(ro(ao(Oe(f)))));
-class x extends Wr {
+class w extends Wr {
   constructor() {
     super(...arguments), this.error = !1, this.errorText = "", this.label = "", this.noAsterisk = !1, this.required = !1, this.value = "", this.prefixText = "", this.suffixText = "", this.hasLeadingIcon = !1, this.hasTrailingIcon = !1, this.supportingText = "", this.textDirection = "", this.rows = 2, this.cols = 20, this.inputMode = "", this.max = "", this.maxLength = -1, this.min = "", this.minLength = -1, this.noSpinner = !1, this.pattern = "", this.placeholder = "", this.readOnly = !1, this.multiple = !1, this.step = "", this.type = "text", this.autocomplete = "", this.dirty = !1, this.focused = !1, this.nativeError = !1, this.nativeErrorText = "";
   }
@@ -2461,7 +2461,7 @@ class x extends Wr {
     `;
   }
   renderInputOrTextarea() {
-    const e = { direction: this.textDirection }, t = this.ariaLabel || this.label || h, o = this.autocomplete, i = (this.maxLength ?? -1) > -1, a = (this.minLength ?? -1) > -1;
+    const e = { direction: this.textDirection }, t = this.ariaLabel || this.label || u, o = this.autocomplete, i = (this.maxLength ?? -1) > -1, a = (this.minLength ?? -1) > -1;
     if (this.type === "textarea")
       return l`
         <textarea
@@ -2470,12 +2470,12 @@ class x extends Wr {
           aria-describedby="description"
           aria-invalid=${this.hasError}
           aria-label=${t}
-          autocomplete=${o || h}
-          name=${this.name || h}
+          autocomplete=${o || u}
+          name=${this.name || u}
           ?disabled=${this.disabled}
-          maxlength=${i ? this.maxLength : h}
-          minlength=${a ? this.minLength : h}
-          placeholder=${this.placeholder || h}
+          maxlength=${i ? this.maxLength : u}
+          minlength=${a ? this.minLength : u}
+          placeholder=${this.placeholder || u}
           ?readonly=${this.readOnly}
           ?required=${this.required}
           rows=${this.rows}
@@ -2487,30 +2487,30 @@ class x extends Wr {
           @input=${this.handleInput}
           @select=${this.redispatchEvent}></textarea>
       `;
-    const n = this.renderPrefix(), c = this.renderSuffix(), p = this.inputMode;
+    const s = this.renderPrefix(), c = this.renderSuffix(), p = this.inputMode;
     return l`
       <div class="input-wrapper">
-        ${n}
+        ${s}
         <input
           class="input"
           style=${be(e)}
           aria-describedby="description"
           aria-invalid=${this.hasError}
           aria-label=${t}
-          autocomplete=${o || h}
-          name=${this.name || h}
+          autocomplete=${o || u}
+          name=${this.name || u}
           ?disabled=${this.disabled}
-          inputmode=${p || h}
-          max=${this.max || h}
-          maxlength=${i ? this.maxLength : h}
-          min=${this.min || h}
-          minlength=${a ? this.minLength : h}
-          pattern=${this.pattern || h}
-          placeholder=${this.placeholder || h}
+          inputmode=${p || u}
+          max=${this.max || u}
+          maxlength=${i ? this.maxLength : u}
+          min=${this.min || u}
+          minlength=${a ? this.minLength : u}
+          pattern=${this.pattern || u}
+          placeholder=${this.placeholder || u}
           ?readonly=${this.readOnly}
           ?required=${this.required}
           ?multiple=${this.multiple}
-          step=${this.step || h}
+          step=${this.step || u}
           type=${this.type}
           .value=${Do(this.value)}
           @change=${this.redispatchEvent}
@@ -2540,7 +2540,7 @@ class x extends Wr {
     return e ? l`<span class="${V({
       suffix: t,
       prefix: !t
-    })}">${e}</span>` : h;
+    })}">${e}</span>` : u;
   }
   getErrorText() {
     return this.error ? this.errorText : this.nativeErrorText;
@@ -2590,116 +2590,116 @@ class x extends Wr {
     this.nativeError = !!e, this.nativeErrorText = this.validationMessage, t === this.getErrorText() && this.field?.reannounceError();
   }
 }
-x.shadowRootOptions = {
+w.shadowRootOptions = {
   ...f.shadowRootOptions,
   delegatesFocus: !0
 };
-s([
+n([
   d({ type: Boolean, reflect: !0 })
-], x.prototype, "error", void 0);
-s([
+], w.prototype, "error", void 0);
+n([
   d({ attribute: "error-text" })
-], x.prototype, "errorText", void 0);
-s([
+], w.prototype, "errorText", void 0);
+n([
   d()
-], x.prototype, "label", void 0);
-s([
+], w.prototype, "label", void 0);
+n([
   d({ type: Boolean, attribute: "no-asterisk" })
-], x.prototype, "noAsterisk", void 0);
-s([
+], w.prototype, "noAsterisk", void 0);
+n([
   d({ type: Boolean, reflect: !0 })
-], x.prototype, "required", void 0);
-s([
+], w.prototype, "required", void 0);
+n([
   d()
-], x.prototype, "value", void 0);
-s([
+], w.prototype, "value", void 0);
+n([
   d({ attribute: "prefix-text" })
-], x.prototype, "prefixText", void 0);
-s([
+], w.prototype, "prefixText", void 0);
+n([
   d({ attribute: "suffix-text" })
-], x.prototype, "suffixText", void 0);
-s([
+], w.prototype, "suffixText", void 0);
+n([
   d({ type: Boolean, attribute: "has-leading-icon" })
-], x.prototype, "hasLeadingIcon", void 0);
-s([
+], w.prototype, "hasLeadingIcon", void 0);
+n([
   d({ type: Boolean, attribute: "has-trailing-icon" })
-], x.prototype, "hasTrailingIcon", void 0);
-s([
+], w.prototype, "hasTrailingIcon", void 0);
+n([
   d({ attribute: "supporting-text" })
-], x.prototype, "supportingText", void 0);
-s([
+], w.prototype, "supportingText", void 0);
+n([
   d({ attribute: "text-direction" })
-], x.prototype, "textDirection", void 0);
-s([
+], w.prototype, "textDirection", void 0);
+n([
   d({ type: Number })
-], x.prototype, "rows", void 0);
-s([
+], w.prototype, "rows", void 0);
+n([
   d({ type: Number })
-], x.prototype, "cols", void 0);
-s([
+], w.prototype, "cols", void 0);
+n([
   d({ reflect: !0 })
-], x.prototype, "inputMode", void 0);
-s([
+], w.prototype, "inputMode", void 0);
+n([
   d()
-], x.prototype, "max", void 0);
-s([
+], w.prototype, "max", void 0);
+n([
   d({ type: Number })
-], x.prototype, "maxLength", void 0);
-s([
+], w.prototype, "maxLength", void 0);
+n([
   d()
-], x.prototype, "min", void 0);
-s([
+], w.prototype, "min", void 0);
+n([
   d({ type: Number })
-], x.prototype, "minLength", void 0);
-s([
+], w.prototype, "minLength", void 0);
+n([
   d({ type: Boolean, attribute: "no-spinner" })
-], x.prototype, "noSpinner", void 0);
-s([
+], w.prototype, "noSpinner", void 0);
+n([
   d()
-], x.prototype, "pattern", void 0);
-s([
+], w.prototype, "pattern", void 0);
+n([
   d({ reflect: !0, converter: Nr })
-], x.prototype, "placeholder", void 0);
-s([
+], w.prototype, "placeholder", void 0);
+n([
   d({ type: Boolean, reflect: !0 })
-], x.prototype, "readOnly", void 0);
-s([
+], w.prototype, "readOnly", void 0);
+n([
   d({ type: Boolean, reflect: !0 })
-], x.prototype, "multiple", void 0);
-s([
+], w.prototype, "multiple", void 0);
+n([
   d()
-], x.prototype, "step", void 0);
-s([
+], w.prototype, "step", void 0);
+n([
   d({ reflect: !0 })
-], x.prototype, "type", void 0);
-s([
+], w.prototype, "type", void 0);
+n([
   d({ reflect: !0 })
-], x.prototype, "autocomplete", void 0);
-s([
-  A()
-], x.prototype, "dirty", void 0);
-s([
-  A()
-], x.prototype, "focused", void 0);
-s([
-  A()
-], x.prototype, "nativeError", void 0);
-s([
-  A()
-], x.prototype, "nativeErrorText", void 0);
-s([
-  k(".input")
-], x.prototype, "inputOrTextarea", void 0);
-s([
-  k(".field")
-], x.prototype, "field", void 0);
-s([
-  K({ slot: "leading-icon" })
-], x.prototype, "leadingIcons", void 0);
-s([
-  K({ slot: "trailing-icon" })
-], x.prototype, "trailingIcons", void 0);
-class jr extends x {
+], w.prototype, "autocomplete", void 0);
+n([
+  I()
+], w.prototype, "dirty", void 0);
+n([
+  I()
+], w.prototype, "focused", void 0);
+n([
+  I()
+], w.prototype, "nativeError", void 0);
+n([
+  I()
+], w.prototype, "nativeErrorText", void 0);
+n([
+  C(".input")
+], w.prototype, "inputOrTextarea", void 0);
+n([
+  C(".field")
+], w.prototype, "field", void 0);
+n([
+  Y({ slot: "leading-icon" })
+], w.prototype, "leadingIcons", void 0);
+n([
+  Y({ slot: "trailing-icon" })
+], w.prototype, "trailingIcons", void 0);
+class jr extends w {
   constructor() {
     super(...arguments), this.fieldTag = re`md-filled-field`;
   }
@@ -2711,11 +2711,11 @@ let $t = class extends jr {
     super(...arguments), this.fieldTag = re`md-filled-field`;
   }
 };
-$t.styles = [ri, Fr];
-$t = s([
-  w("md-filled-text-field")
+$t.styles = [ri, Pr];
+$t = n([
+  k("md-filled-text-field")
 ], $t);
-class Kr extends z {
+class Yr extends z {
   renderOutline(e) {
     return l`
       <div class="outline">
@@ -2730,17 +2730,17 @@ class Kr extends z {
     `;
   }
 }
-const Yr = m`@layer styles{:host{--_bottom-space: var(--md-outlined-field-bottom-space, 16px);--_content-color: var(--md-outlined-field-content-color, var(--md-sys-color-on-surface, #1d1b20));--_content-font: var(--md-outlined-field-content-font, var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto)));--_content-line-height: var(--md-outlined-field-content-line-height, var(--md-sys-typescale-body-large-line-height, 1.5rem));--_content-size: var(--md-outlined-field-content-size, var(--md-sys-typescale-body-large-size, 1rem));--_content-space: var(--md-outlined-field-content-space, 16px);--_content-weight: var(--md-outlined-field-content-weight, var(--md-sys-typescale-body-large-weight, var(--md-ref-typeface-weight-regular, 400)));--_disabled-content-color: var(--md-outlined-field-disabled-content-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-content-opacity: var(--md-outlined-field-disabled-content-opacity, 0.38);--_disabled-label-text-color: var(--md-outlined-field-disabled-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-label-text-opacity: var(--md-outlined-field-disabled-label-text-opacity, 0.38);--_disabled-leading-content-color: var(--md-outlined-field-disabled-leading-content-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-leading-content-opacity: var(--md-outlined-field-disabled-leading-content-opacity, 0.38);--_disabled-outline-color: var(--md-outlined-field-disabled-outline-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-outline-opacity: var(--md-outlined-field-disabled-outline-opacity, 0.12);--_disabled-outline-width: var(--md-outlined-field-disabled-outline-width, 1px);--_disabled-supporting-text-color: var(--md-outlined-field-disabled-supporting-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-supporting-text-opacity: var(--md-outlined-field-disabled-supporting-text-opacity, 0.38);--_disabled-trailing-content-color: var(--md-outlined-field-disabled-trailing-content-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-trailing-content-opacity: var(--md-outlined-field-disabled-trailing-content-opacity, 0.38);--_error-content-color: var(--md-outlined-field-error-content-color, var(--md-sys-color-on-surface, #1d1b20));--_error-focus-content-color: var(--md-outlined-field-error-focus-content-color, var(--md-sys-color-on-surface, #1d1b20));--_error-focus-label-text-color: var(--md-outlined-field-error-focus-label-text-color, var(--md-sys-color-error, #b3261e));--_error-focus-leading-content-color: var(--md-outlined-field-error-focus-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-focus-outline-color: var(--md-outlined-field-error-focus-outline-color, var(--md-sys-color-error, #b3261e));--_error-focus-supporting-text-color: var(--md-outlined-field-error-focus-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-focus-trailing-content-color: var(--md-outlined-field-error-focus-trailing-content-color, var(--md-sys-color-error, #b3261e));--_error-hover-content-color: var(--md-outlined-field-error-hover-content-color, var(--md-sys-color-on-surface, #1d1b20));--_error-hover-label-text-color: var(--md-outlined-field-error-hover-label-text-color, var(--md-sys-color-on-error-container, #410e0b));--_error-hover-leading-content-color: var(--md-outlined-field-error-hover-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-hover-outline-color: var(--md-outlined-field-error-hover-outline-color, var(--md-sys-color-on-error-container, #410e0b));--_error-hover-supporting-text-color: var(--md-outlined-field-error-hover-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-hover-trailing-content-color: var(--md-outlined-field-error-hover-trailing-content-color, var(--md-sys-color-on-error-container, #410e0b));--_error-label-text-color: var(--md-outlined-field-error-label-text-color, var(--md-sys-color-error, #b3261e));--_error-leading-content-color: var(--md-outlined-field-error-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-outline-color: var(--md-outlined-field-error-outline-color, var(--md-sys-color-error, #b3261e));--_error-supporting-text-color: var(--md-outlined-field-error-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-trailing-content-color: var(--md-outlined-field-error-trailing-content-color, var(--md-sys-color-error, #b3261e));--_focus-content-color: var(--md-outlined-field-focus-content-color, var(--md-sys-color-on-surface, #1d1b20));--_focus-label-text-color: var(--md-outlined-field-focus-label-text-color, var(--md-sys-color-primary, #6750a4));--_focus-leading-content-color: var(--md-outlined-field-focus-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_focus-outline-color: var(--md-outlined-field-focus-outline-color, var(--md-sys-color-primary, #6750a4));--_focus-outline-width: var(--md-outlined-field-focus-outline-width, 3px);--_focus-supporting-text-color: var(--md-outlined-field-focus-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_focus-trailing-content-color: var(--md-outlined-field-focus-trailing-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-content-color: var(--md-outlined-field-hover-content-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-label-text-color: var(--md-outlined-field-hover-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-leading-content-color: var(--md-outlined-field-hover-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-outline-color: var(--md-outlined-field-hover-outline-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-outline-width: var(--md-outlined-field-hover-outline-width, 1px);--_hover-supporting-text-color: var(--md-outlined-field-hover-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-trailing-content-color: var(--md-outlined-field-hover-trailing-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_label-text-color: var(--md-outlined-field-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_label-text-font: var(--md-outlined-field-label-text-font, var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-outlined-field-label-text-line-height, var(--md-sys-typescale-body-large-line-height, 1.5rem));--_label-text-padding-bottom: var(--md-outlined-field-label-text-padding-bottom, 8px);--_label-text-populated-line-height: var(--md-outlined-field-label-text-populated-line-height, var(--md-sys-typescale-body-small-line-height, 1rem));--_label-text-populated-size: var(--md-outlined-field-label-text-populated-size, var(--md-sys-typescale-body-small-size, 0.75rem));--_label-text-size: var(--md-outlined-field-label-text-size, var(--md-sys-typescale-body-large-size, 1rem));--_label-text-weight: var(--md-outlined-field-label-text-weight, var(--md-sys-typescale-body-large-weight, var(--md-ref-typeface-weight-regular, 400)));--_leading-content-color: var(--md-outlined-field-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_leading-space: var(--md-outlined-field-leading-space, 16px);--_outline-color: var(--md-outlined-field-outline-color, var(--md-sys-color-outline, #79747e));--_outline-label-padding: var(--md-outlined-field-outline-label-padding, 4px);--_outline-width: var(--md-outlined-field-outline-width, 1px);--_supporting-text-color: var(--md-outlined-field-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_supporting-text-font: var(--md-outlined-field-supporting-text-font, var(--md-sys-typescale-body-small-font, var(--md-ref-typeface-plain, Roboto)));--_supporting-text-leading-space: var(--md-outlined-field-supporting-text-leading-space, 16px);--_supporting-text-line-height: var(--md-outlined-field-supporting-text-line-height, var(--md-sys-typescale-body-small-line-height, 1rem));--_supporting-text-size: var(--md-outlined-field-supporting-text-size, var(--md-sys-typescale-body-small-size, 0.75rem));--_supporting-text-top-space: var(--md-outlined-field-supporting-text-top-space, 4px);--_supporting-text-trailing-space: var(--md-outlined-field-supporting-text-trailing-space, 16px);--_supporting-text-weight: var(--md-outlined-field-supporting-text-weight, var(--md-sys-typescale-body-small-weight, var(--md-ref-typeface-weight-regular, 400)));--_top-space: var(--md-outlined-field-top-space, 16px);--_trailing-content-color: var(--md-outlined-field-trailing-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_trailing-space: var(--md-outlined-field-trailing-space, 16px);--_with-leading-content-leading-space: var(--md-outlined-field-with-leading-content-leading-space, 12px);--_with-trailing-content-trailing-space: var(--md-outlined-field-with-trailing-content-trailing-space, 12px);--_container-shape-start-start: var(--md-outlined-field-container-shape-start-start, var(--md-outlined-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)));--_container-shape-start-end: var(--md-outlined-field-container-shape-start-end, var(--md-outlined-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)));--_container-shape-end-end: var(--md-outlined-field-container-shape-end-end, var(--md-outlined-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)));--_container-shape-end-start: var(--md-outlined-field-container-shape-end-start, var(--md-outlined-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)))}.outline{border-color:var(--_outline-color);border-radius:inherit;display:flex;pointer-events:none;height:100%;position:absolute;width:100%;z-index:1}.outline-start::before,.outline-start::after,.outline-panel-inactive::before,.outline-panel-inactive::after,.outline-panel-active::before,.outline-panel-active::after,.outline-end::before,.outline-end::after{border:inherit;content:"";inset:0;position:absolute}.outline-start,.outline-end{border:inherit;border-radius:inherit;box-sizing:border-box;position:relative}.outline-start::before,.outline-start::after,.outline-end::before,.outline-end::after{border-bottom-style:solid;border-top-style:solid}.outline-start::after,.outline-end::after{opacity:0;transition:opacity 150ms cubic-bezier(0.2, 0, 0, 1)}.focused .outline-start::after,.focused .outline-end::after{opacity:1}.outline-start::before,.outline-start::after{border-inline-start-style:solid;border-inline-end-style:none;border-start-start-radius:inherit;border-start-end-radius:0;border-end-start-radius:inherit;border-end-end-radius:0;margin-inline-end:var(--_outline-label-padding)}.outline-end{flex-grow:1;margin-inline-start:calc(-1*var(--_outline-label-padding))}.outline-end::before,.outline-end::after{border-inline-start-style:none;border-inline-end-style:solid;border-start-start-radius:0;border-start-end-radius:inherit;border-end-start-radius:0;border-end-end-radius:inherit}.outline-notch{align-items:flex-start;border:inherit;display:flex;margin-inline-start:calc(-1*var(--_outline-label-padding));margin-inline-end:var(--_outline-label-padding);max-width:calc(100% - var(--_leading-space) - var(--_trailing-space));padding:0 var(--_outline-label-padding);position:relative}.no-label .outline-notch{display:none}.outline-panel-inactive,.outline-panel-active{border:inherit;border-bottom-style:solid;inset:0;position:absolute}.outline-panel-inactive::before,.outline-panel-inactive::after,.outline-panel-active::before,.outline-panel-active::after{border-top-style:solid;border-bottom:none;bottom:auto;transform:scaleX(1);transition:transform 150ms cubic-bezier(0.2, 0, 0, 1)}.outline-panel-inactive::before,.outline-panel-active::before{right:50%;transform-origin:top left}.outline-panel-inactive::after,.outline-panel-active::after{left:50%;transform-origin:top right}.populated .outline-panel-inactive::before,.populated .outline-panel-inactive::after,.populated .outline-panel-active::before,.populated .outline-panel-active::after,.focused .outline-panel-inactive::before,.focused .outline-panel-inactive::after,.focused .outline-panel-active::before,.focused .outline-panel-active::after{transform:scaleX(0)}.outline-panel-active{opacity:0;transition:opacity 150ms cubic-bezier(0.2, 0, 0, 1)}.focused .outline-panel-active{opacity:1}.outline-label{display:flex;max-width:100%;transform:translateY(calc(-100% + var(--_label-text-padding-bottom)))}.outline-start,.field:not(.with-start) .content ::slotted(*){padding-inline-start:max(var(--_leading-space),max(var(--_container-shape-start-start),var(--_container-shape-end-start)) + var(--_outline-label-padding))}.field:not(.with-start) .label-wrapper{margin-inline-start:max(var(--_leading-space),max(var(--_container-shape-start-start),var(--_container-shape-end-start)) + var(--_outline-label-padding))}.field:not(.with-end) .content ::slotted(*){padding-inline-end:max(var(--_trailing-space),max(var(--_container-shape-start-end),var(--_container-shape-end-end)))}.field:not(.with-end) .label-wrapper{margin-inline-end:max(var(--_trailing-space),max(var(--_container-shape-start-end),var(--_container-shape-end-end)))}.outline-start::before,.outline-end::before,.outline-panel-inactive,.outline-panel-inactive::before,.outline-panel-inactive::after{border-width:var(--_outline-width)}:hover .outline{border-color:var(--_hover-outline-color);color:var(--_hover-outline-color)}:hover .outline-start::before,:hover .outline-end::before,:hover .outline-panel-inactive,:hover .outline-panel-inactive::before,:hover .outline-panel-inactive::after{border-width:var(--_hover-outline-width)}.focused .outline{border-color:var(--_focus-outline-color);color:var(--_focus-outline-color)}.outline-start::after,.outline-end::after,.outline-panel-active,.outline-panel-active::before,.outline-panel-active::after{border-width:var(--_focus-outline-width)}.disabled .outline{border-color:var(--_disabled-outline-color);color:var(--_disabled-outline-color)}.disabled .outline-start,.disabled .outline-end,.disabled .outline-panel-inactive{opacity:var(--_disabled-outline-opacity)}.disabled .outline-start::before,.disabled .outline-end::before,.disabled .outline-panel-inactive,.disabled .outline-panel-inactive::before,.disabled .outline-panel-inactive::after{border-width:var(--_disabled-outline-width)}.error .outline{border-color:var(--_error-outline-color);color:var(--_error-outline-color)}.error:hover .outline{border-color:var(--_error-hover-outline-color);color:var(--_error-hover-outline-color)}.error.focused .outline{border-color:var(--_error-focus-outline-color);color:var(--_error-focus-outline-color)}.resizable .container{bottom:var(--_focus-outline-width);inset-inline-end:var(--_focus-outline-width);clip-path:inset(var(--_focus-outline-width) 0 0 var(--_focus-outline-width))}.resizable .container>*{top:var(--_focus-outline-width);inset-inline-start:var(--_focus-outline-width)}.resizable .container:dir(rtl){clip-path:inset(var(--_focus-outline-width) var(--_focus-outline-width) 0 0)}}@layer hcm{@media(forced-colors: active){.disabled .outline{border-color:GrayText;color:GrayText}.disabled :is(.outline-start,.outline-end,.outline-panel-inactive){opacity:1}}}
+const Kr = m`@layer styles{:host{--_bottom-space: var(--md-outlined-field-bottom-space, 16px);--_content-color: var(--md-outlined-field-content-color, var(--md-sys-color-on-surface, #1d1b20));--_content-font: var(--md-outlined-field-content-font, var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto)));--_content-line-height: var(--md-outlined-field-content-line-height, var(--md-sys-typescale-body-large-line-height, 1.5rem));--_content-size: var(--md-outlined-field-content-size, var(--md-sys-typescale-body-large-size, 1rem));--_content-space: var(--md-outlined-field-content-space, 16px);--_content-weight: var(--md-outlined-field-content-weight, var(--md-sys-typescale-body-large-weight, var(--md-ref-typeface-weight-regular, 400)));--_disabled-content-color: var(--md-outlined-field-disabled-content-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-content-opacity: var(--md-outlined-field-disabled-content-opacity, 0.38);--_disabled-label-text-color: var(--md-outlined-field-disabled-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-label-text-opacity: var(--md-outlined-field-disabled-label-text-opacity, 0.38);--_disabled-leading-content-color: var(--md-outlined-field-disabled-leading-content-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-leading-content-opacity: var(--md-outlined-field-disabled-leading-content-opacity, 0.38);--_disabled-outline-color: var(--md-outlined-field-disabled-outline-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-outline-opacity: var(--md-outlined-field-disabled-outline-opacity, 0.12);--_disabled-outline-width: var(--md-outlined-field-disabled-outline-width, 1px);--_disabled-supporting-text-color: var(--md-outlined-field-disabled-supporting-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-supporting-text-opacity: var(--md-outlined-field-disabled-supporting-text-opacity, 0.38);--_disabled-trailing-content-color: var(--md-outlined-field-disabled-trailing-content-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-trailing-content-opacity: var(--md-outlined-field-disabled-trailing-content-opacity, 0.38);--_error-content-color: var(--md-outlined-field-error-content-color, var(--md-sys-color-on-surface, #1d1b20));--_error-focus-content-color: var(--md-outlined-field-error-focus-content-color, var(--md-sys-color-on-surface, #1d1b20));--_error-focus-label-text-color: var(--md-outlined-field-error-focus-label-text-color, var(--md-sys-color-error, #b3261e));--_error-focus-leading-content-color: var(--md-outlined-field-error-focus-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-focus-outline-color: var(--md-outlined-field-error-focus-outline-color, var(--md-sys-color-error, #b3261e));--_error-focus-supporting-text-color: var(--md-outlined-field-error-focus-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-focus-trailing-content-color: var(--md-outlined-field-error-focus-trailing-content-color, var(--md-sys-color-error, #b3261e));--_error-hover-content-color: var(--md-outlined-field-error-hover-content-color, var(--md-sys-color-on-surface, #1d1b20));--_error-hover-label-text-color: var(--md-outlined-field-error-hover-label-text-color, var(--md-sys-color-on-error-container, #410e0b));--_error-hover-leading-content-color: var(--md-outlined-field-error-hover-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-hover-outline-color: var(--md-outlined-field-error-hover-outline-color, var(--md-sys-color-on-error-container, #410e0b));--_error-hover-supporting-text-color: var(--md-outlined-field-error-hover-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-hover-trailing-content-color: var(--md-outlined-field-error-hover-trailing-content-color, var(--md-sys-color-on-error-container, #410e0b));--_error-label-text-color: var(--md-outlined-field-error-label-text-color, var(--md-sys-color-error, #b3261e));--_error-leading-content-color: var(--md-outlined-field-error-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-outline-color: var(--md-outlined-field-error-outline-color, var(--md-sys-color-error, #b3261e));--_error-supporting-text-color: var(--md-outlined-field-error-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-trailing-content-color: var(--md-outlined-field-error-trailing-content-color, var(--md-sys-color-error, #b3261e));--_focus-content-color: var(--md-outlined-field-focus-content-color, var(--md-sys-color-on-surface, #1d1b20));--_focus-label-text-color: var(--md-outlined-field-focus-label-text-color, var(--md-sys-color-primary, #6750a4));--_focus-leading-content-color: var(--md-outlined-field-focus-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_focus-outline-color: var(--md-outlined-field-focus-outline-color, var(--md-sys-color-primary, #6750a4));--_focus-outline-width: var(--md-outlined-field-focus-outline-width, 3px);--_focus-supporting-text-color: var(--md-outlined-field-focus-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_focus-trailing-content-color: var(--md-outlined-field-focus-trailing-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-content-color: var(--md-outlined-field-hover-content-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-label-text-color: var(--md-outlined-field-hover-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-leading-content-color: var(--md-outlined-field-hover-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-outline-color: var(--md-outlined-field-hover-outline-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-outline-width: var(--md-outlined-field-hover-outline-width, 1px);--_hover-supporting-text-color: var(--md-outlined-field-hover-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-trailing-content-color: var(--md-outlined-field-hover-trailing-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_label-text-color: var(--md-outlined-field-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_label-text-font: var(--md-outlined-field-label-text-font, var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-outlined-field-label-text-line-height, var(--md-sys-typescale-body-large-line-height, 1.5rem));--_label-text-padding-bottom: var(--md-outlined-field-label-text-padding-bottom, 8px);--_label-text-populated-line-height: var(--md-outlined-field-label-text-populated-line-height, var(--md-sys-typescale-body-small-line-height, 1rem));--_label-text-populated-size: var(--md-outlined-field-label-text-populated-size, var(--md-sys-typescale-body-small-size, 0.75rem));--_label-text-size: var(--md-outlined-field-label-text-size, var(--md-sys-typescale-body-large-size, 1rem));--_label-text-weight: var(--md-outlined-field-label-text-weight, var(--md-sys-typescale-body-large-weight, var(--md-ref-typeface-weight-regular, 400)));--_leading-content-color: var(--md-outlined-field-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_leading-space: var(--md-outlined-field-leading-space, 16px);--_outline-color: var(--md-outlined-field-outline-color, var(--md-sys-color-outline, #79747e));--_outline-label-padding: var(--md-outlined-field-outline-label-padding, 4px);--_outline-width: var(--md-outlined-field-outline-width, 1px);--_supporting-text-color: var(--md-outlined-field-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_supporting-text-font: var(--md-outlined-field-supporting-text-font, var(--md-sys-typescale-body-small-font, var(--md-ref-typeface-plain, Roboto)));--_supporting-text-leading-space: var(--md-outlined-field-supporting-text-leading-space, 16px);--_supporting-text-line-height: var(--md-outlined-field-supporting-text-line-height, var(--md-sys-typescale-body-small-line-height, 1rem));--_supporting-text-size: var(--md-outlined-field-supporting-text-size, var(--md-sys-typescale-body-small-size, 0.75rem));--_supporting-text-top-space: var(--md-outlined-field-supporting-text-top-space, 4px);--_supporting-text-trailing-space: var(--md-outlined-field-supporting-text-trailing-space, 16px);--_supporting-text-weight: var(--md-outlined-field-supporting-text-weight, var(--md-sys-typescale-body-small-weight, var(--md-ref-typeface-weight-regular, 400)));--_top-space: var(--md-outlined-field-top-space, 16px);--_trailing-content-color: var(--md-outlined-field-trailing-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_trailing-space: var(--md-outlined-field-trailing-space, 16px);--_with-leading-content-leading-space: var(--md-outlined-field-with-leading-content-leading-space, 12px);--_with-trailing-content-trailing-space: var(--md-outlined-field-with-trailing-content-trailing-space, 12px);--_container-shape-start-start: var(--md-outlined-field-container-shape-start-start, var(--md-outlined-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)));--_container-shape-start-end: var(--md-outlined-field-container-shape-start-end, var(--md-outlined-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)));--_container-shape-end-end: var(--md-outlined-field-container-shape-end-end, var(--md-outlined-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)));--_container-shape-end-start: var(--md-outlined-field-container-shape-end-start, var(--md-outlined-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)))}.outline{border-color:var(--_outline-color);border-radius:inherit;display:flex;pointer-events:none;height:100%;position:absolute;width:100%;z-index:1}.outline-start::before,.outline-start::after,.outline-panel-inactive::before,.outline-panel-inactive::after,.outline-panel-active::before,.outline-panel-active::after,.outline-end::before,.outline-end::after{border:inherit;content:"";inset:0;position:absolute}.outline-start,.outline-end{border:inherit;border-radius:inherit;box-sizing:border-box;position:relative}.outline-start::before,.outline-start::after,.outline-end::before,.outline-end::after{border-bottom-style:solid;border-top-style:solid}.outline-start::after,.outline-end::after{opacity:0;transition:opacity 150ms cubic-bezier(0.2, 0, 0, 1)}.focused .outline-start::after,.focused .outline-end::after{opacity:1}.outline-start::before,.outline-start::after{border-inline-start-style:solid;border-inline-end-style:none;border-start-start-radius:inherit;border-start-end-radius:0;border-end-start-radius:inherit;border-end-end-radius:0;margin-inline-end:var(--_outline-label-padding)}.outline-end{flex-grow:1;margin-inline-start:calc(-1*var(--_outline-label-padding))}.outline-end::before,.outline-end::after{border-inline-start-style:none;border-inline-end-style:solid;border-start-start-radius:0;border-start-end-radius:inherit;border-end-start-radius:0;border-end-end-radius:inherit}.outline-notch{align-items:flex-start;border:inherit;display:flex;margin-inline-start:calc(-1*var(--_outline-label-padding));margin-inline-end:var(--_outline-label-padding);max-width:calc(100% - var(--_leading-space) - var(--_trailing-space));padding:0 var(--_outline-label-padding);position:relative}.no-label .outline-notch{display:none}.outline-panel-inactive,.outline-panel-active{border:inherit;border-bottom-style:solid;inset:0;position:absolute}.outline-panel-inactive::before,.outline-panel-inactive::after,.outline-panel-active::before,.outline-panel-active::after{border-top-style:solid;border-bottom:none;bottom:auto;transform:scaleX(1);transition:transform 150ms cubic-bezier(0.2, 0, 0, 1)}.outline-panel-inactive::before,.outline-panel-active::before{right:50%;transform-origin:top left}.outline-panel-inactive::after,.outline-panel-active::after{left:50%;transform-origin:top right}.populated .outline-panel-inactive::before,.populated .outline-panel-inactive::after,.populated .outline-panel-active::before,.populated .outline-panel-active::after,.focused .outline-panel-inactive::before,.focused .outline-panel-inactive::after,.focused .outline-panel-active::before,.focused .outline-panel-active::after{transform:scaleX(0)}.outline-panel-active{opacity:0;transition:opacity 150ms cubic-bezier(0.2, 0, 0, 1)}.focused .outline-panel-active{opacity:1}.outline-label{display:flex;max-width:100%;transform:translateY(calc(-100% + var(--_label-text-padding-bottom)))}.outline-start,.field:not(.with-start) .content ::slotted(*){padding-inline-start:max(var(--_leading-space),max(var(--_container-shape-start-start),var(--_container-shape-end-start)) + var(--_outline-label-padding))}.field:not(.with-start) .label-wrapper{margin-inline-start:max(var(--_leading-space),max(var(--_container-shape-start-start),var(--_container-shape-end-start)) + var(--_outline-label-padding))}.field:not(.with-end) .content ::slotted(*){padding-inline-end:max(var(--_trailing-space),max(var(--_container-shape-start-end),var(--_container-shape-end-end)))}.field:not(.with-end) .label-wrapper{margin-inline-end:max(var(--_trailing-space),max(var(--_container-shape-start-end),var(--_container-shape-end-end)))}.outline-start::before,.outline-end::before,.outline-panel-inactive,.outline-panel-inactive::before,.outline-panel-inactive::after{border-width:var(--_outline-width)}:hover .outline{border-color:var(--_hover-outline-color);color:var(--_hover-outline-color)}:hover .outline-start::before,:hover .outline-end::before,:hover .outline-panel-inactive,:hover .outline-panel-inactive::before,:hover .outline-panel-inactive::after{border-width:var(--_hover-outline-width)}.focused .outline{border-color:var(--_focus-outline-color);color:var(--_focus-outline-color)}.outline-start::after,.outline-end::after,.outline-panel-active,.outline-panel-active::before,.outline-panel-active::after{border-width:var(--_focus-outline-width)}.disabled .outline{border-color:var(--_disabled-outline-color);color:var(--_disabled-outline-color)}.disabled .outline-start,.disabled .outline-end,.disabled .outline-panel-inactive{opacity:var(--_disabled-outline-opacity)}.disabled .outline-start::before,.disabled .outline-end::before,.disabled .outline-panel-inactive,.disabled .outline-panel-inactive::before,.disabled .outline-panel-inactive::after{border-width:var(--_disabled-outline-width)}.error .outline{border-color:var(--_error-outline-color);color:var(--_error-outline-color)}.error:hover .outline{border-color:var(--_error-hover-outline-color);color:var(--_error-hover-outline-color)}.error.focused .outline{border-color:var(--_error-focus-outline-color);color:var(--_error-focus-outline-color)}.resizable .container{bottom:var(--_focus-outline-width);inset-inline-end:var(--_focus-outline-width);clip-path:inset(var(--_focus-outline-width) 0 0 var(--_focus-outline-width))}.resizable .container>*{top:var(--_focus-outline-width);inset-inline-start:var(--_focus-outline-width)}.resizable .container:dir(rtl){clip-path:inset(var(--_focus-outline-width) var(--_focus-outline-width) 0 0)}}@layer hcm{@media(forced-colors: active){.disabled .outline{border-color:GrayText;color:GrayText}.disabled :is(.outline-start,.outline-end,.outline-panel-inactive){opacity:1}}}
 `;
-let St = class extends Kr {
+let St = class extends Yr {
 };
-St.styles = [ti, Yr];
-St = s([
-  w("md-outlined-field")
+St.styles = [ti, Kr];
+St = n([
+  k("md-outlined-field")
 ], St);
 const Gr = m`:host{--_caret-color: var(--md-outlined-text-field-caret-color, var(--md-sys-color-primary, #6750a4));--_disabled-input-text-color: var(--md-outlined-text-field-disabled-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-input-text-opacity: var(--md-outlined-text-field-disabled-input-text-opacity, 0.38);--_disabled-label-text-color: var(--md-outlined-text-field-disabled-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-label-text-opacity: var(--md-outlined-text-field-disabled-label-text-opacity, 0.38);--_disabled-leading-icon-color: var(--md-outlined-text-field-disabled-leading-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-leading-icon-opacity: var(--md-outlined-text-field-disabled-leading-icon-opacity, 0.38);--_disabled-outline-color: var(--md-outlined-text-field-disabled-outline-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-outline-opacity: var(--md-outlined-text-field-disabled-outline-opacity, 0.12);--_disabled-outline-width: var(--md-outlined-text-field-disabled-outline-width, 1px);--_disabled-supporting-text-color: var(--md-outlined-text-field-disabled-supporting-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-supporting-text-opacity: var(--md-outlined-text-field-disabled-supporting-text-opacity, 0.38);--_disabled-trailing-icon-color: var(--md-outlined-text-field-disabled-trailing-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-trailing-icon-opacity: var(--md-outlined-text-field-disabled-trailing-icon-opacity, 0.38);--_error-focus-caret-color: var(--md-outlined-text-field-error-focus-caret-color, var(--md-sys-color-error, #b3261e));--_error-focus-input-text-color: var(--md-outlined-text-field-error-focus-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_error-focus-label-text-color: var(--md-outlined-text-field-error-focus-label-text-color, var(--md-sys-color-error, #b3261e));--_error-focus-leading-icon-color: var(--md-outlined-text-field-error-focus-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-focus-outline-color: var(--md-outlined-text-field-error-focus-outline-color, var(--md-sys-color-error, #b3261e));--_error-focus-supporting-text-color: var(--md-outlined-text-field-error-focus-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-focus-trailing-icon-color: var(--md-outlined-text-field-error-focus-trailing-icon-color, var(--md-sys-color-error, #b3261e));--_error-hover-input-text-color: var(--md-outlined-text-field-error-hover-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_error-hover-label-text-color: var(--md-outlined-text-field-error-hover-label-text-color, var(--md-sys-color-on-error-container, #410e0b));--_error-hover-leading-icon-color: var(--md-outlined-text-field-error-hover-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-hover-outline-color: var(--md-outlined-text-field-error-hover-outline-color, var(--md-sys-color-on-error-container, #410e0b));--_error-hover-supporting-text-color: var(--md-outlined-text-field-error-hover-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-hover-trailing-icon-color: var(--md-outlined-text-field-error-hover-trailing-icon-color, var(--md-sys-color-on-error-container, #410e0b));--_error-input-text-color: var(--md-outlined-text-field-error-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_error-label-text-color: var(--md-outlined-text-field-error-label-text-color, var(--md-sys-color-error, #b3261e));--_error-leading-icon-color: var(--md-outlined-text-field-error-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-outline-color: var(--md-outlined-text-field-error-outline-color, var(--md-sys-color-error, #b3261e));--_error-supporting-text-color: var(--md-outlined-text-field-error-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-trailing-icon-color: var(--md-outlined-text-field-error-trailing-icon-color, var(--md-sys-color-error, #b3261e));--_focus-input-text-color: var(--md-outlined-text-field-focus-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_focus-label-text-color: var(--md-outlined-text-field-focus-label-text-color, var(--md-sys-color-primary, #6750a4));--_focus-leading-icon-color: var(--md-outlined-text-field-focus-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_focus-outline-color: var(--md-outlined-text-field-focus-outline-color, var(--md-sys-color-primary, #6750a4));--_focus-outline-width: var(--md-outlined-text-field-focus-outline-width, 3px);--_focus-supporting-text-color: var(--md-outlined-text-field-focus-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_focus-trailing-icon-color: var(--md-outlined-text-field-focus-trailing-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-input-text-color: var(--md-outlined-text-field-hover-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-label-text-color: var(--md-outlined-text-field-hover-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-leading-icon-color: var(--md-outlined-text-field-hover-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-outline-color: var(--md-outlined-text-field-hover-outline-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-outline-width: var(--md-outlined-text-field-hover-outline-width, 1px);--_hover-supporting-text-color: var(--md-outlined-text-field-hover-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-trailing-icon-color: var(--md-outlined-text-field-hover-trailing-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_input-text-color: var(--md-outlined-text-field-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_input-text-font: var(--md-outlined-text-field-input-text-font, var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto)));--_input-text-line-height: var(--md-outlined-text-field-input-text-line-height, var(--md-sys-typescale-body-large-line-height, 1.5rem));--_input-text-placeholder-color: var(--md-outlined-text-field-input-text-placeholder-color, var(--md-sys-color-on-surface-variant, #49454f));--_input-text-prefix-color: var(--md-outlined-text-field-input-text-prefix-color, var(--md-sys-color-on-surface-variant, #49454f));--_input-text-size: var(--md-outlined-text-field-input-text-size, var(--md-sys-typescale-body-large-size, 1rem));--_input-text-suffix-color: var(--md-outlined-text-field-input-text-suffix-color, var(--md-sys-color-on-surface-variant, #49454f));--_input-text-weight: var(--md-outlined-text-field-input-text-weight, var(--md-sys-typescale-body-large-weight, var(--md-ref-typeface-weight-regular, 400)));--_label-text-color: var(--md-outlined-text-field-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_label-text-font: var(--md-outlined-text-field-label-text-font, var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-outlined-text-field-label-text-line-height, var(--md-sys-typescale-body-large-line-height, 1.5rem));--_label-text-populated-line-height: var(--md-outlined-text-field-label-text-populated-line-height, var(--md-sys-typescale-body-small-line-height, 1rem));--_label-text-populated-size: var(--md-outlined-text-field-label-text-populated-size, var(--md-sys-typescale-body-small-size, 0.75rem));--_label-text-size: var(--md-outlined-text-field-label-text-size, var(--md-sys-typescale-body-large-size, 1rem));--_label-text-weight: var(--md-outlined-text-field-label-text-weight, var(--md-sys-typescale-body-large-weight, var(--md-ref-typeface-weight-regular, 400)));--_leading-icon-color: var(--md-outlined-text-field-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_leading-icon-size: var(--md-outlined-text-field-leading-icon-size, 24px);--_outline-color: var(--md-outlined-text-field-outline-color, var(--md-sys-color-outline, #79747e));--_outline-width: var(--md-outlined-text-field-outline-width, 1px);--_supporting-text-color: var(--md-outlined-text-field-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_supporting-text-font: var(--md-outlined-text-field-supporting-text-font, var(--md-sys-typescale-body-small-font, var(--md-ref-typeface-plain, Roboto)));--_supporting-text-line-height: var(--md-outlined-text-field-supporting-text-line-height, var(--md-sys-typescale-body-small-line-height, 1rem));--_supporting-text-size: var(--md-outlined-text-field-supporting-text-size, var(--md-sys-typescale-body-small-size, 0.75rem));--_supporting-text-weight: var(--md-outlined-text-field-supporting-text-weight, var(--md-sys-typescale-body-small-weight, var(--md-ref-typeface-weight-regular, 400)));--_trailing-icon-color: var(--md-outlined-text-field-trailing-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_trailing-icon-size: var(--md-outlined-text-field-trailing-icon-size, 24px);--_container-shape-start-start: var(--md-outlined-text-field-container-shape-start-start, var(--md-outlined-text-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)));--_container-shape-start-end: var(--md-outlined-text-field-container-shape-start-end, var(--md-outlined-text-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)));--_container-shape-end-end: var(--md-outlined-text-field-container-shape-end-end, var(--md-outlined-text-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)));--_container-shape-end-start: var(--md-outlined-text-field-container-shape-end-start, var(--md-outlined-text-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)));--_icon-input-space: var(--md-outlined-text-field-icon-input-space, 16px);--_leading-space: var(--md-outlined-text-field-leading-space, 16px);--_trailing-space: var(--md-outlined-text-field-trailing-space, 16px);--_top-space: var(--md-outlined-text-field-top-space, 16px);--_bottom-space: var(--md-outlined-text-field-bottom-space, 16px);--_input-text-prefix-trailing-space: var(--md-outlined-text-field-input-text-prefix-trailing-space, 2px);--_input-text-suffix-leading-space: var(--md-outlined-text-field-input-text-suffix-leading-space, 2px);--_focus-caret-color: var(--md-outlined-text-field-focus-caret-color, var(--md-sys-color-primary, #6750a4));--_with-leading-icon-leading-space: var(--md-outlined-text-field-with-leading-icon-leading-space, 12px);--_with-trailing-icon-trailing-space: var(--md-outlined-text-field-with-trailing-icon-trailing-space, 12px);--md-outlined-field-bottom-space: var(--_bottom-space);--md-outlined-field-container-shape-end-end: var(--_container-shape-end-end);--md-outlined-field-container-shape-end-start: var(--_container-shape-end-start);--md-outlined-field-container-shape-start-end: var(--_container-shape-start-end);--md-outlined-field-container-shape-start-start: var(--_container-shape-start-start);--md-outlined-field-content-color: var(--_input-text-color);--md-outlined-field-content-font: var(--_input-text-font);--md-outlined-field-content-line-height: var(--_input-text-line-height);--md-outlined-field-content-size: var(--_input-text-size);--md-outlined-field-content-space: var(--_icon-input-space);--md-outlined-field-content-weight: var(--_input-text-weight);--md-outlined-field-disabled-content-color: var(--_disabled-input-text-color);--md-outlined-field-disabled-content-opacity: var(--_disabled-input-text-opacity);--md-outlined-field-disabled-label-text-color: var(--_disabled-label-text-color);--md-outlined-field-disabled-label-text-opacity: var(--_disabled-label-text-opacity);--md-outlined-field-disabled-leading-content-color: var(--_disabled-leading-icon-color);--md-outlined-field-disabled-leading-content-opacity: var(--_disabled-leading-icon-opacity);--md-outlined-field-disabled-outline-color: var(--_disabled-outline-color);--md-outlined-field-disabled-outline-opacity: var(--_disabled-outline-opacity);--md-outlined-field-disabled-outline-width: var(--_disabled-outline-width);--md-outlined-field-disabled-supporting-text-color: var(--_disabled-supporting-text-color);--md-outlined-field-disabled-supporting-text-opacity: var(--_disabled-supporting-text-opacity);--md-outlined-field-disabled-trailing-content-color: var(--_disabled-trailing-icon-color);--md-outlined-field-disabled-trailing-content-opacity: var(--_disabled-trailing-icon-opacity);--md-outlined-field-error-content-color: var(--_error-input-text-color);--md-outlined-field-error-focus-content-color: var(--_error-focus-input-text-color);--md-outlined-field-error-focus-label-text-color: var(--_error-focus-label-text-color);--md-outlined-field-error-focus-leading-content-color: var(--_error-focus-leading-icon-color);--md-outlined-field-error-focus-outline-color: var(--_error-focus-outline-color);--md-outlined-field-error-focus-supporting-text-color: var(--_error-focus-supporting-text-color);--md-outlined-field-error-focus-trailing-content-color: var(--_error-focus-trailing-icon-color);--md-outlined-field-error-hover-content-color: var(--_error-hover-input-text-color);--md-outlined-field-error-hover-label-text-color: var(--_error-hover-label-text-color);--md-outlined-field-error-hover-leading-content-color: var(--_error-hover-leading-icon-color);--md-outlined-field-error-hover-outline-color: var(--_error-hover-outline-color);--md-outlined-field-error-hover-supporting-text-color: var(--_error-hover-supporting-text-color);--md-outlined-field-error-hover-trailing-content-color: var(--_error-hover-trailing-icon-color);--md-outlined-field-error-label-text-color: var(--_error-label-text-color);--md-outlined-field-error-leading-content-color: var(--_error-leading-icon-color);--md-outlined-field-error-outline-color: var(--_error-outline-color);--md-outlined-field-error-supporting-text-color: var(--_error-supporting-text-color);--md-outlined-field-error-trailing-content-color: var(--_error-trailing-icon-color);--md-outlined-field-focus-content-color: var(--_focus-input-text-color);--md-outlined-field-focus-label-text-color: var(--_focus-label-text-color);--md-outlined-field-focus-leading-content-color: var(--_focus-leading-icon-color);--md-outlined-field-focus-outline-color: var(--_focus-outline-color);--md-outlined-field-focus-outline-width: var(--_focus-outline-width);--md-outlined-field-focus-supporting-text-color: var(--_focus-supporting-text-color);--md-outlined-field-focus-trailing-content-color: var(--_focus-trailing-icon-color);--md-outlined-field-hover-content-color: var(--_hover-input-text-color);--md-outlined-field-hover-label-text-color: var(--_hover-label-text-color);--md-outlined-field-hover-leading-content-color: var(--_hover-leading-icon-color);--md-outlined-field-hover-outline-color: var(--_hover-outline-color);--md-outlined-field-hover-outline-width: var(--_hover-outline-width);--md-outlined-field-hover-supporting-text-color: var(--_hover-supporting-text-color);--md-outlined-field-hover-trailing-content-color: var(--_hover-trailing-icon-color);--md-outlined-field-label-text-color: var(--_label-text-color);--md-outlined-field-label-text-font: var(--_label-text-font);--md-outlined-field-label-text-line-height: var(--_label-text-line-height);--md-outlined-field-label-text-populated-line-height: var(--_label-text-populated-line-height);--md-outlined-field-label-text-populated-size: var(--_label-text-populated-size);--md-outlined-field-label-text-size: var(--_label-text-size);--md-outlined-field-label-text-weight: var(--_label-text-weight);--md-outlined-field-leading-content-color: var(--_leading-icon-color);--md-outlined-field-leading-space: var(--_leading-space);--md-outlined-field-outline-color: var(--_outline-color);--md-outlined-field-outline-width: var(--_outline-width);--md-outlined-field-supporting-text-color: var(--_supporting-text-color);--md-outlined-field-supporting-text-font: var(--_supporting-text-font);--md-outlined-field-supporting-text-line-height: var(--_supporting-text-line-height);--md-outlined-field-supporting-text-size: var(--_supporting-text-size);--md-outlined-field-supporting-text-weight: var(--_supporting-text-weight);--md-outlined-field-top-space: var(--_top-space);--md-outlined-field-trailing-content-color: var(--_trailing-icon-color);--md-outlined-field-trailing-space: var(--_trailing-space);--md-outlined-field-with-leading-content-leading-space: var(--_with-leading-icon-leading-space);--md-outlined-field-with-trailing-content-trailing-space: var(--_with-trailing-icon-trailing-space)}
 `;
-class Xr extends x {
+class Xr extends w {
   constructor() {
     super(...arguments), this.fieldTag = re`md-outlined-field`;
   }
@@ -2751,8 +2751,8 @@ let Et = class extends Xr {
   }
 };
 Et.styles = [ri, Gr];
-Et = s([
-  w("md-outlined-text-field")
+Et = n([
+  k("md-outlined-text-field")
 ], Et);
 function ai(r, e = J) {
   const t = co(r, e);
@@ -2792,9 +2792,9 @@ function Zr(r, e, t = J, o = !0) {
     const a = (i + e) % r.length;
     if (a < e && !o)
       return null;
-    const n = r[a];
-    if (t(n))
-      return n;
+    const s = r[a];
+    if (t(s))
+      return s;
   }
   return r[e] ? r[e] : null;
 }
@@ -2803,9 +2803,9 @@ function Qr(r, e, t = J, o = !0) {
     const a = (e - i + r.length) % r.length;
     if (a > e && !o)
       return null;
-    const n = r[a];
-    if (t(n))
-      return n;
+    const s = r[a];
+    if (t(s))
+      return s;
   }
   return r[e] ? r[e] : null;
 }
@@ -2816,7 +2816,7 @@ function Oo(r, e, t = J, o = !0) {
   } else
     return ai(r, t);
 }
-function Po(r, e, t = J, o = !0) {
+function Fo(r, e, t = J, o = !0) {
   if (e) {
     const i = Qr(r, e.index, t, o);
     return i && (i.tabIndex = 0, i.focus()), i;
@@ -2836,63 +2836,63 @@ const M = {
 };
 class Jr {
   constructor(e) {
-    this.handleKeydown = (u) => {
-      const v = u.key;
-      if (u.defaultPrevented || !this.isNavigableKey(v))
+    this.handleKeydown = (h) => {
+      const v = h.key;
+      if (h.defaultPrevented || !this.isNavigableKey(v))
         return;
       const b = this.items;
       if (!b.length)
         return;
-      const y = Ce(b, this.isActivatable);
-      u.preventDefault();
-      const _ = this.isRtl(), C = _ ? M.ArrowRight : M.ArrowLeft, E = _ ? M.ArrowLeft : M.ArrowRight;
-      let D = null;
+      const x = Ce(b, this.isActivatable);
+      h.preventDefault();
+      const y = this.isRtl(), _ = y ? M.ArrowRight : M.ArrowLeft, S = y ? M.ArrowLeft : M.ArrowRight;
+      let A = null;
       switch (v) {
         // Activate the next item
         case M.ArrowDown:
-        case E:
-          D = Oo(b, y, this.isActivatable, this.wrapNavigation());
+        case S:
+          A = Oo(b, x, this.isActivatable, this.wrapNavigation());
           break;
         // Activate the previous item
         case M.ArrowUp:
-        case C:
-          D = Po(b, y, this.isActivatable, this.wrapNavigation());
+        case _:
+          A = Fo(b, x, this.isActivatable, this.wrapNavigation());
           break;
         // Activate the first item
         case M.Home:
-          D = ai(b, this.isActivatable);
+          A = ai(b, this.isActivatable);
           break;
         // Activate the last item
         case M.End:
-          D = si(b, this.isActivatable);
+          A = si(b, this.isActivatable);
           break;
       }
-      D && y && y.item !== D && (y.item.tabIndex = -1);
+      A && x && x.item !== A && (x.item.tabIndex = -1);
     }, this.onDeactivateItems = () => {
-      const u = this.items;
-      for (const v of u)
+      const h = this.items;
+      for (const v of h)
         this.deactivateItem(v);
-    }, this.onRequestActivation = (u) => {
+    }, this.onRequestActivation = (h) => {
       this.onDeactivateItems();
-      const v = u.target;
+      const v = h.target;
       this.activateItem(v), v.focus();
     }, this.onSlotchange = () => {
-      const u = this.items;
+      const h = this.items;
       let v = !1;
-      for (const y of u) {
-        if (!y.disabled && y.tabIndex > -1 && !v) {
-          v = !0, y.tabIndex = 0;
+      for (const x of h) {
+        if (!x.disabled && x.tabIndex > -1 && !v) {
+          v = !0, x.tabIndex = 0;
           continue;
         }
-        y.tabIndex = -1;
+        x.tabIndex = -1;
       }
       if (v)
         return;
-      const b = co(u, this.isActivatable);
+      const b = co(h, this.isActivatable);
       b && (b.tabIndex = 0);
     };
-    const { isItem: t, getPossibleItems: o, isRtl: i, deactivateItem: a, activateItem: n, isNavigableKey: c, isActivatable: p, wrapNavigation: g } = e;
-    this.isItem = t, this.getPossibleItems = o, this.isRtl = i, this.deactivateItem = a, this.activateItem = n, this.isNavigableKey = c, this.isActivatable = p, this.wrapNavigation = g ?? (() => !0);
+    const { isItem: t, getPossibleItems: o, isRtl: i, deactivateItem: a, activateItem: s, isNavigableKey: c, isActivatable: p, wrapNavigation: g } = e;
+    this.isItem = t, this.getPossibleItems = o, this.isRtl = i, this.deactivateItem = a, this.activateItem = s, this.isNavigableKey = c, this.isActivatable = p, this.wrapNavigation = g ?? (() => !0);
   }
   /**
    * The items being managed by the list. Additionally, attempts to see if the
@@ -2928,7 +2928,7 @@ class Jr {
    */
   activatePreviousItem() {
     const e = this.items, t = Ce(e, this.isActivatable);
-    return t && (t.item.tabIndex = -1), Po(e, t, this.isActivatable, this.wrapNavigation());
+    return t && (t.item.tabIndex = -1), Fo(e, t, this.isActivatable, this.wrapNavigation());
   }
 }
 function ea(r, e) {
@@ -2938,7 +2938,7 @@ function ea(r, e) {
     detail: { initiator: r, reason: e, itemPath: [r] }
   });
 }
-const Fo = ea, zt = {
+const Po = ea, zt = {
   SPACE: "Space",
   ENTER: "Enter"
 }, Ro = {
@@ -2958,8 +2958,8 @@ function oa(r) {
 function At(r, e) {
   const t = new Event("md-contains", { bubbles: !0, composed: !0 });
   let o = [];
-  const i = (n) => {
-    o = n.composedPath();
+  const i = (s) => {
+    o = s.composedPath();
   };
   return e.addEventListener("md-contains", i), r.dispatchEvent(t), e.removeEventListener("md-contains", i), o.length > 0;
 }
@@ -2999,92 +2999,92 @@ class ia {
    * checking `getComputedStyle()` on the surface element.
    */
   async position() {
-    const { surfaceEl: e, anchorEl: t, anchorCorner: o, surfaceCorner: i, positioning: a, xOffset: n, yOffset: c, disableBlockFlip: p, disableInlineFlip: g, repositionStrategy: u } = this.getProperties(), v = o.toLowerCase().trim(), b = i.toLowerCase().trim();
+    const { surfaceEl: e, anchorEl: t, anchorCorner: o, surfaceCorner: i, positioning: a, xOffset: s, yOffset: c, disableBlockFlip: p, disableInlineFlip: g, repositionStrategy: h } = this.getProperties(), v = o.toLowerCase().trim(), b = i.toLowerCase().trim();
     if (!e || !t)
       return;
-    const y = window.innerWidth, _ = window.innerHeight, C = document.createElement("div");
-    C.style.opacity = "0", C.style.position = "fixed", C.style.display = "block", C.style.inset = "0", document.body.appendChild(C);
-    const E = C.getBoundingClientRect();
-    C.remove();
-    const D = window.innerHeight - E.bottom, $ = window.innerWidth - E.right;
+    const x = window.innerWidth, y = window.innerHeight, _ = document.createElement("div");
+    _.style.opacity = "0", _.style.position = "fixed", _.style.display = "block", _.style.inset = "0", document.body.appendChild(_);
+    const S = _.getBoundingClientRect();
+    _.remove();
+    const A = window.innerHeight - S.bottom, $ = window.innerWidth - S.right;
     this.surfaceStylesInternal = {
       display: "block",
       opacity: "0"
     }, this.host.requestUpdate(), await this.host.updateComplete, e.popover && e.isConnected && e.showPopover();
-    const P = e.getSurfacePositionClientRect ? e.getSurfacePositionClientRect() : e.getBoundingClientRect(), R = t.getSurfacePositionClientRect ? t.getSurfacePositionClientRect() : t.getBoundingClientRect(), [O, ee] = b.split("-"), [te, ne] = v.split("-"), Pe = getComputedStyle(e).direction === "ltr";
+    const O = e.getSurfacePositionClientRect ? e.getSurfacePositionClientRect() : e.getBoundingClientRect(), R = t.getSurfacePositionClientRect ? t.getSurfacePositionClientRect() : t.getBoundingClientRect(), [F, ee] = b.split("-"), [te, ne] = v.split("-"), Fe = getComputedStyle(e).direction === "ltr";
     let { blockInset: ue, blockOutOfBoundsCorrection: G, surfaceBlockProperty: mo } = this.calculateBlock({
-      surfaceRect: P,
+      surfaceRect: O,
       anchorRect: R,
       anchorBlock: te,
-      surfaceBlock: O,
+      surfaceBlock: F,
       yOffset: c,
       positioning: a,
-      windowInnerHeight: _,
-      blockScrollbarHeight: D
+      windowInnerHeight: y,
+      blockScrollbarHeight: A
     });
     if (G && !p) {
-      const it = O === "start" ? "end" : "start", rt = te === "start" ? "end" : "start", X = this.calculateBlock({
-        surfaceRect: P,
+      const it = F === "start" ? "end" : "start", rt = te === "start" ? "end" : "start", X = this.calculateBlock({
+        surfaceRect: O,
         anchorRect: R,
         anchorBlock: rt,
         surfaceBlock: it,
         yOffset: c,
         positioning: a,
-        windowInnerHeight: _,
-        blockScrollbarHeight: D
+        windowInnerHeight: y,
+        blockScrollbarHeight: A
       });
       G > X.blockOutOfBoundsCorrection && (ue = X.blockInset, G = X.blockOutOfBoundsCorrection, mo = X.surfaceBlockProperty);
     }
-    let { inlineInset: Fe, inlineOutOfBoundsCorrection: me, surfaceInlineProperty: vo } = this.calculateInline({
-      surfaceRect: P,
+    let { inlineInset: Pe, inlineOutOfBoundsCorrection: me, surfaceInlineProperty: vo } = this.calculateInline({
+      surfaceRect: O,
       anchorRect: R,
       anchorInline: ne,
       surfaceInline: ee,
-      xOffset: n,
+      xOffset: s,
       positioning: a,
-      isLTR: Pe,
-      windowInnerWidth: y,
+      isLTR: Fe,
+      windowInnerWidth: x,
       inlineScrollbarWidth: $
     });
     if (me && !g) {
       const it = ee === "start" ? "end" : "start", rt = ne === "start" ? "end" : "start", X = this.calculateInline({
-        surfaceRect: P,
+        surfaceRect: O,
         anchorRect: R,
         anchorInline: rt,
         surfaceInline: it,
-        xOffset: n,
+        xOffset: s,
         positioning: a,
-        isLTR: Pe,
-        windowInnerWidth: y,
+        isLTR: Fe,
+        windowInnerWidth: x,
         inlineScrollbarWidth: $
       });
-      Math.abs(me) > Math.abs(X.inlineOutOfBoundsCorrection) && (Fe = X.inlineInset, me = X.inlineOutOfBoundsCorrection, vo = X.surfaceInlineProperty);
+      Math.abs(me) > Math.abs(X.inlineOutOfBoundsCorrection) && (Pe = X.inlineInset, me = X.inlineOutOfBoundsCorrection, vo = X.surfaceInlineProperty);
     }
-    u === "move" && (ue = ue - G, Fe = Fe - me), this.surfaceStylesInternal = {
+    h === "move" && (ue = ue - G, Pe = Pe - me), this.surfaceStylesInternal = {
       display: "block",
       opacity: "1",
       [mo]: `${ue}px`,
-      [vo]: `${Fe}px`
-    }, u === "resize" && (G && (this.surfaceStylesInternal.height = `${P.height - G}px`), me && (this.surfaceStylesInternal.width = `${P.width - me}px`)), this.host.requestUpdate();
+      [vo]: `${Pe}px`
+    }, h === "resize" && (G && (this.surfaceStylesInternal.height = `${O.height - G}px`), me && (this.surfaceStylesInternal.width = `${O.width - me}px`)), this.host.requestUpdate();
   }
   /**
    * Calculates the css property, the inset, and the out of bounds correction
    * for the surface in the block direction.
    */
   calculateBlock(e) {
-    const { surfaceRect: t, anchorRect: o, anchorBlock: i, surfaceBlock: a, yOffset: n, positioning: c, windowInnerHeight: p, blockScrollbarHeight: g } = e, u = c === "fixed" || c === "document" ? 1 : 0, v = c === "document" ? 1 : 0, b = a === "start" ? 1 : 0, y = a === "end" ? 1 : 0, C = (i !== a ? 1 : 0) * o.height + n, E = b * o.top + y * (p - o.bottom - g), D = b * window.scrollY - y * window.scrollY, $ = Math.abs(Math.min(0, p - E - C - t.height));
-    return { blockInset: u * E + v * D + C, blockOutOfBoundsCorrection: $, surfaceBlockProperty: a === "start" ? "inset-block-start" : "inset-block-end" };
+    const { surfaceRect: t, anchorRect: o, anchorBlock: i, surfaceBlock: a, yOffset: s, positioning: c, windowInnerHeight: p, blockScrollbarHeight: g } = e, h = c === "fixed" || c === "document" ? 1 : 0, v = c === "document" ? 1 : 0, b = a === "start" ? 1 : 0, x = a === "end" ? 1 : 0, _ = (i !== a ? 1 : 0) * o.height + s, S = b * o.top + x * (p - o.bottom - g), A = b * window.scrollY - x * window.scrollY, $ = Math.abs(Math.min(0, p - S - _ - t.height));
+    return { blockInset: h * S + v * A + _, blockOutOfBoundsCorrection: $, surfaceBlockProperty: a === "start" ? "inset-block-start" : "inset-block-end" };
   }
   /**
    * Calculates the css property, the inset, and the out of bounds correction
    * for the surface in the inline direction.
    */
   calculateInline(e) {
-    const { isLTR: t, surfaceInline: o, anchorInline: i, anchorRect: a, surfaceRect: n, xOffset: c, positioning: p, windowInnerWidth: g, inlineScrollbarWidth: u } = e, v = p === "fixed" || p === "document" ? 1 : 0, b = p === "document" ? 1 : 0, y = t ? 1 : 0, _ = t ? 0 : 1, C = o === "start" ? 1 : 0, E = o === "end" ? 1 : 0, $ = (i !== o ? 1 : 0) * a.width + c, P = C * a.left + E * (g - a.right - u), R = C * (g - a.right - u) + E * a.left, O = y * P + _ * R, ee = C * window.scrollX - E * window.scrollX, te = E * window.scrollX - C * window.scrollX, ne = y * ee + _ * te, Pe = Math.abs(Math.min(0, g - O - $ - n.width)), ue = v * O + $ + b * ne;
+    const { isLTR: t, surfaceInline: o, anchorInline: i, anchorRect: a, surfaceRect: s, xOffset: c, positioning: p, windowInnerWidth: g, inlineScrollbarWidth: h } = e, v = p === "fixed" || p === "document" ? 1 : 0, b = p === "document" ? 1 : 0, x = t ? 1 : 0, y = t ? 0 : 1, _ = o === "start" ? 1 : 0, S = o === "end" ? 1 : 0, $ = (i !== o ? 1 : 0) * a.width + c, O = _ * a.left + S * (g - a.right - h), R = _ * (g - a.right - h) + S * a.left, F = x * O + y * R, ee = _ * window.scrollX - S * window.scrollX, te = S * window.scrollX - _ * window.scrollX, ne = x * ee + y * te, Fe = Math.abs(Math.min(0, g - F - $ - s.width)), ue = v * F + $ + b * ne;
     let G = o === "start" ? "inset-inline-start" : "inset-inline-end";
     return (p === "document" || p === "fixed") && (o === "start" && t || o === "end" && !t ? G = "left" : G = "right"), {
       inlineInset: ue,
-      inlineOutOfBoundsCorrection: Pe,
+      inlineOutOfBoundsCorrection: Fe,
       surfaceInlineProperty: G
     };
   }
@@ -3102,8 +3102,8 @@ class ia {
   async onUpdate() {
     const e = this.getProperties();
     let t = !1;
-    for (const [n, c] of Object.entries(e))
-      if (t = t || c !== this.lastValues[n], t)
+    for (const [s, c] of Object.entries(e))
+      if (t = t || c !== this.lastValues[s], t)
         break;
     const o = this.lastValues.isOpen !== e.isOpen, i = !!e.anchorEl, a = !!e.surfaceEl;
     t && i && a && (this.lastValues.isOpen = e.isOpen, e.isOpen ? (this.lastValues = e, await this.position(), e.onOpen()) : o && (await e.beforeClose(), this.close(), e.onClose()));
@@ -3207,9 +3207,9 @@ class ra {
       clearTimeout(this.cancelTypeaheadTimeout), this.lastActiveRecord && (this.lastActiveRecord[U.ITEM].tabIndex = -1), this.endTypeahead();
       return;
     }
-    const n = this.typaheadBuffer.length === 1;
+    const s = this.typaheadBuffer.length === 1;
     let c;
-    this.lastActiveRecord === a[0] && n ? c = a[1] ?? a[0] : c = a[0], this.lastActiveRecord && (this.lastActiveRecord[U.ITEM].tabIndex = -1), this.lastActiveRecord = c, c[U.ITEM].tabIndex = 0, c[U.ITEM].focus();
+    this.lastActiveRecord === a[0] && s ? c = a[1] ?? a[0] : c = a[0], this.lastActiveRecord && (this.lastActiveRecord[U.ITEM].tabIndex = -1), this.lastActiveRecord = c, c[U.ITEM].tabIndex = 0, c[U.ITEM].focus();
   }
 }
 const di = 200, ci = /* @__PURE__ */ new Set([
@@ -3381,7 +3381,7 @@ class T extends f {
       <div
         class="menu ${V(this.getSurfaceClasses())}"
         style=${be(this.menuPositionController.surfaceStyles)}
-        popover=${this.positioning === "popover" ? "manual" : h}>
+        popover=${this.positioning === "popover" ? "manual" : u}>
         ${this.renderElevation()}
         <div class="items">
           <div class="item-padding"> ${this.renderMenuItems()} </div>
@@ -3433,34 +3433,34 @@ class T extends f {
       return !0;
     const o = this.openDirection;
     this.dispatchEvent(new Event("opening")), e.classList.toggle("animating", !0);
-    const i = this.openCloseAnimationSignal.start(), a = e.offsetHeight, n = o === "UP", c = this.items, p = 500, g = 50, u = 250, v = (p - u) / c.length, b = e.animate([{ height: "0px" }, { height: `${a}px` }], {
+    const i = this.openCloseAnimationSignal.start(), a = e.offsetHeight, s = o === "UP", c = this.items, p = 500, g = 50, h = 250, v = (p - h) / c.length, b = e.animate([{ height: "0px" }, { height: `${a}px` }], {
       duration: p,
       easing: j.EMPHASIZED
-    }), y = t.animate([
-      { transform: n ? `translateY(-${a}px)` : "" },
+    }), x = t.animate([
+      { transform: s ? `translateY(-${a}px)` : "" },
       { transform: "" }
-    ], { duration: p, easing: j.EMPHASIZED }), _ = e.animate([{ opacity: 0 }, { opacity: 1 }], g), C = [];
+    ], { duration: p, easing: j.EMPHASIZED }), y = e.animate([{ opacity: 0 }, { opacity: 1 }], g), _ = [];
     for (let $ = 0; $ < c.length; $++) {
-      const P = n ? c.length - 1 - $ : $, R = c[P], O = R.animate([{ opacity: 0 }, { opacity: 1 }], {
-        duration: u,
+      const O = s ? c.length - 1 - $ : $, R = c[O], F = R.animate([{ opacity: 0 }, { opacity: 1 }], {
+        duration: h,
         delay: v * $
       });
-      R.classList.toggle("md-menu-hidden", !0), O.addEventListener("finish", () => {
+      R.classList.toggle("md-menu-hidden", !0), F.addEventListener("finish", () => {
         R.classList.toggle("md-menu-hidden", !1);
-      }), C.push([R, O]);
+      }), _.push([R, F]);
     }
-    let E = ($) => {
+    let S = ($) => {
     };
-    const D = new Promise(($) => {
-      E = $;
+    const A = new Promise(($) => {
+      S = $;
     });
     return i.addEventListener("abort", () => {
-      b.cancel(), y.cancel(), _.cancel(), C.forEach(([$, P]) => {
-        $.classList.toggle("md-menu-hidden", !1), P.cancel();
-      }), E(!0);
+      b.cancel(), x.cancel(), y.cancel(), _.forEach(([$, O]) => {
+        $.classList.toggle("md-menu-hidden", !1), O.cancel();
+      }), S(!0);
     }), b.addEventListener("finish", () => {
-      e.classList.toggle("animating", !1), this.openCloseAnimationSignal.finish(), E(!1);
-    }), await D;
+      e.classList.toggle("animating", !1), this.openCloseAnimationSignal.finish(), S(!1);
+    }), await A;
   }
   /**
    * Performs the closing animation:
@@ -3469,41 +3469,41 @@ class T extends f {
    */
   animateClose() {
     let e;
-    const t = new Promise((O) => {
-      e = O;
+    const t = new Promise((F) => {
+      e = F;
     }), o = this.surfaceEl, i = this.slotEl;
     if (!o || !i)
       return e(!1), t;
-    const n = this.openDirection === "UP";
+    const s = this.openDirection === "UP";
     this.dispatchEvent(new Event("closing")), o.classList.toggle("animating", !0);
-    const c = this.openCloseAnimationSignal.start(), p = o.offsetHeight, g = this.items, u = 150, v = 50, b = u - v, y = 50, _ = 50, C = 0.35, E = (u - _ - y) / g.length, D = o.animate([
+    const c = this.openCloseAnimationSignal.start(), p = o.offsetHeight, g = this.items, h = 150, v = 50, b = h - v, x = 50, y = 50, _ = 0.35, S = (h - y - x) / g.length, A = o.animate([
       { height: `${p}px` },
-      { height: `${p * C}px` }
+      { height: `${p * _}px` }
     ], {
-      duration: u,
+      duration: h,
       easing: j.EMPHASIZED_ACCELERATE
     }), $ = i.animate([
       { transform: "" },
       {
-        transform: n ? `translateY(-${p * (1 - C)}px)` : ""
+        transform: s ? `translateY(-${p * (1 - _)}px)` : ""
       }
-    ], { duration: u, easing: j.EMPHASIZED_ACCELERATE }), P = o.animate([{ opacity: 1 }, { opacity: 0 }], { duration: v, delay: b }), R = [];
-    for (let O = 0; O < g.length; O++) {
-      const ee = n ? O : g.length - 1 - O, te = g[ee], ne = te.animate([{ opacity: 1 }, { opacity: 0 }], {
-        duration: y,
-        delay: _ + E * O
+    ], { duration: h, easing: j.EMPHASIZED_ACCELERATE }), O = o.animate([{ opacity: 1 }, { opacity: 0 }], { duration: v, delay: b }), R = [];
+    for (let F = 0; F < g.length; F++) {
+      const ee = s ? F : g.length - 1 - F, te = g[ee], ne = te.animate([{ opacity: 1 }, { opacity: 0 }], {
+        duration: x,
+        delay: y + S * F
       });
       ne.addEventListener("finish", () => {
         te.classList.toggle("md-menu-hidden", !0);
       }), R.push([te, ne]);
     }
     return c.addEventListener("abort", () => {
-      D.cancel(), $.cancel(), P.cancel(), R.forEach(([O, ee]) => {
-        ee.cancel(), O.classList.toggle("md-menu-hidden", !1);
+      A.cancel(), $.cancel(), O.cancel(), R.forEach(([F, ee]) => {
+        ee.cancel(), F.classList.toggle("md-menu-hidden", !1);
       }), e(!1);
-    }), D.addEventListener("finish", () => {
-      o.classList.toggle("animating", !1), R.forEach(([O]) => {
-        O.classList.toggle("md-menu-hidden", !1);
+    }), A.addEventListener("finish", () => {
+      o.classList.toggle("animating", !1), R.forEach(([F]) => {
+        F.classList.toggle("md-menu-hidden", !1);
       }), this.openCloseAnimationSignal.finish(), this.dispatchEvent(new Event("closed")), e(!0);
     }), t;
   }
@@ -3575,77 +3575,77 @@ class T extends f {
     this.open && this.menuPositionController.position();
   }
 }
-s([
-  k(".menu")
+n([
+  C(".menu")
 ], T.prototype, "surfaceEl", void 0);
-s([
-  k("slot")
+n([
+  C("slot")
 ], T.prototype, "slotEl", void 0);
-s([
+n([
   d()
 ], T.prototype, "anchor", void 0);
-s([
+n([
   d()
 ], T.prototype, "positioning", void 0);
-s([
+n([
   d({ type: Boolean })
 ], T.prototype, "quick", void 0);
-s([
+n([
   d({ type: Boolean, attribute: "has-overflow" })
 ], T.prototype, "hasOverflow", void 0);
-s([
+n([
   d({ type: Boolean, reflect: !0 })
 ], T.prototype, "open", void 0);
-s([
+n([
   d({ type: Number, attribute: "x-offset" })
 ], T.prototype, "xOffset", void 0);
-s([
+n([
   d({ type: Number, attribute: "y-offset" })
 ], T.prototype, "yOffset", void 0);
-s([
+n([
   d({ type: Boolean, attribute: "no-horizontal-flip" })
 ], T.prototype, "noHorizontalFlip", void 0);
-s([
+n([
   d({ type: Boolean, attribute: "no-vertical-flip" })
 ], T.prototype, "noVerticalFlip", void 0);
-s([
+n([
   d({ type: Number, attribute: "typeahead-delay" })
 ], T.prototype, "typeaheadDelay", void 0);
-s([
+n([
   d({ attribute: "anchor-corner" })
 ], T.prototype, "anchorCorner", void 0);
-s([
+n([
   d({ attribute: "menu-corner" })
 ], T.prototype, "menuCorner", void 0);
-s([
+n([
   d({ type: Boolean, attribute: "stay-open-on-outside-click" })
 ], T.prototype, "stayOpenOnOutsideClick", void 0);
-s([
+n([
   d({ type: Boolean, attribute: "stay-open-on-focusout" })
 ], T.prototype, "stayOpenOnFocusout", void 0);
-s([
+n([
   d({ type: Boolean, attribute: "skip-restore-focus" })
 ], T.prototype, "skipRestoreFocus", void 0);
-s([
+n([
   d({ attribute: "default-focus" })
 ], T.prototype, "defaultFocus", void 0);
-s([
+n([
   d({ type: Boolean, attribute: "no-navigation-wrap" })
 ], T.prototype, "noNavigationWrap", void 0);
-s([
-  K({ flatten: !0 })
+n([
+  Y({ flatten: !0 })
 ], T.prototype, "slotItems", void 0);
-s([
-  A()
+n([
+  I()
 ], T.prototype, "typeaheadActive", void 0);
 const na = m`:host{--md-elevation-level: var(--md-menu-container-elevation, 2);--md-elevation-shadow-color: var(--md-menu-container-shadow-color, var(--md-sys-color-shadow, #000));min-width:112px;color:unset;display:contents}md-focus-ring{--md-focus-ring-shape: var(--md-menu-container-shape, var(--md-sys-shape-corner-extra-small, 4px))}.menu{border-radius:var(--md-menu-container-shape, var(--md-sys-shape-corner-extra-small, 4px));display:none;inset:auto;border:none;padding:0px;overflow:visible;background-color:rgba(0,0,0,0);color:inherit;opacity:0;z-index:20;position:absolute;user-select:none;max-height:inherit;height:inherit;min-width:inherit;max-width:inherit;scrollbar-width:inherit}.menu::backdrop{display:none}.fixed{position:fixed}.items{display:block;list-style-type:none;margin:0;outline:none;box-sizing:border-box;background-color:var(--md-menu-container-color, var(--md-sys-color-surface-container, #f3edf7));height:inherit;max-height:inherit;overflow:auto;min-width:inherit;max-width:inherit;border-radius:inherit;scrollbar-width:inherit}.item-padding{padding-block:var(--md-menu-top-space, 8px) var(--md-menu-bottom-space, 8px)}.has-overflow:not([popover]) .items{overflow:visible}.has-overflow.animating .items,.animating .items{overflow:hidden}.has-overflow.animating .items{pointer-events:none}.animating ::slotted(.md-menu-hidden){opacity:0}slot{display:block;height:inherit;max-height:inherit}::slotted(:is(md-divider,[role=separator])){margin:8px 0}@media(forced-colors: active){.menu{border-style:solid;border-color:CanvasText;border-width:1px}}
 `;
-let Tt = class extends T {
+let It = class extends T {
 };
-Tt.styles = [na];
-Tt = s([
-  w("md-menu")
-], Tt);
+It.styles = [na];
+It = n([
+  k("md-menu")
+], It);
 class la extends so {
   computeValidity(e) {
     return this.selectControl || (this.selectControl = document.createElement("select")), Jt(l`<option value=${e.value}></option>`, this.selectControl), this.selectControl.value = e.value, this.selectControl.required = e.required, {
@@ -3668,9 +3668,9 @@ function da(r) {
   }
   return e;
 }
-var Bo;
+var Lo;
 const Ue = /* @__PURE__ */ Symbol("value"), ca = Q(ii(ro(ao(Oe(f)))));
-class S extends ca {
+class E extends ca {
   /**
    * The value of the currently selected option.
    *
@@ -3712,7 +3712,7 @@ class S extends ca {
     return this.error || this.nativeError;
   }
   constructor() {
-    super(), this.quick = !1, this.required = !1, this.errorText = "", this.label = "", this.noAsterisk = !1, this.supportingText = "", this.error = !1, this.menuPositioning = "popover", this.clampMenuWidth = !1, this.typeaheadDelay = di, this.hasLeadingIcon = !1, this.displayText = "", this.menuAlign = "start", this[Bo] = "", this.lastUserSetValue = null, this.lastUserSetSelectedIndex = null, this.lastSelectedOption = null, this.lastSelectedOptionRecords = [], this.nativeError = !1, this.nativeErrorText = "", this.focused = !1, this.open = !1, this.defaultFocus = W.NONE, this.prevOpen = this.open, this.selectWidth = 0, this.addEventListener("focus", this.handleFocus.bind(this)), this.addEventListener("blur", this.handleBlur.bind(this));
+    super(), this.quick = !1, this.required = !1, this.errorText = "", this.label = "", this.noAsterisk = !1, this.supportingText = "", this.error = !1, this.menuPositioning = "popover", this.clampMenuWidth = !1, this.typeaheadDelay = di, this.hasLeadingIcon = !1, this.displayText = "", this.menuAlign = "start", this[Lo] = "", this.lastUserSetValue = null, this.lastUserSetSelectedIndex = null, this.lastSelectedOption = null, this.lastSelectedOptionRecords = [], this.nativeError = !1, this.nativeErrorText = "", this.focused = !1, this.open = !1, this.defaultFocus = W.NONE, this.prevOpen = this.open, this.selectWidth = 0, this.addEventListener("focus", this.handleFocus.bind(this)), this.addEventListener("blur", this.handleBlur.bind(this));
   }
   /**
    * Selects an option given the value of the option, and updates MdSelect's
@@ -3742,7 +3742,7 @@ class S extends ca {
   showPicker() {
     this.open = !0;
   }
-  [(Bo = Ue, Qe)](e) {
+  [(Lo = Ue, Qe)](e) {
     e?.preventDefault();
     const t = this.getErrorText();
     this.nativeError = !!e, this.nativeErrorText = this.validationMessage, t === this.getErrorText() && this.field?.reannounceError();
@@ -3784,7 +3784,7 @@ class S extends ca {
           part="field"
           id="field"
           tabindex=${this.disabled ? "-1" : "0"}
-          aria-label=${e || h}
+          aria-label=${e || u}
           aria-describedby="description"
           aria-expanded=${this.open ? "true" : "false"}
           aria-controls="listbox"
@@ -3851,7 +3851,7 @@ class S extends ca {
         .defaultFocus=${this.defaultFocus}
         role="listbox"
         tabindex="-1"
-        aria-label=${e || h}
+        aria-label=${e || u}
         stay-open-on-focusout
         part="menu"
         exportparts="focus-ring: menu-focus-ring"
@@ -4049,83 +4049,83 @@ class S extends ca {
     return this.field;
   }
 }
-S.shadowRootOptions = {
+E.shadowRootOptions = {
   ...f.shadowRootOptions,
   delegatesFocus: !0
 };
-s([
+n([
   d({ type: Boolean })
-], S.prototype, "quick", void 0);
-s([
+], E.prototype, "quick", void 0);
+n([
   d({ type: Boolean })
-], S.prototype, "required", void 0);
-s([
+], E.prototype, "required", void 0);
+n([
   d({ type: String, attribute: "error-text" })
-], S.prototype, "errorText", void 0);
-s([
+], E.prototype, "errorText", void 0);
+n([
   d()
-], S.prototype, "label", void 0);
-s([
+], E.prototype, "label", void 0);
+n([
   d({ type: Boolean, attribute: "no-asterisk" })
-], S.prototype, "noAsterisk", void 0);
-s([
+], E.prototype, "noAsterisk", void 0);
+n([
   d({ type: String, attribute: "supporting-text" })
-], S.prototype, "supportingText", void 0);
-s([
+], E.prototype, "supportingText", void 0);
+n([
   d({ type: Boolean, reflect: !0 })
-], S.prototype, "error", void 0);
-s([
+], E.prototype, "error", void 0);
+n([
   d({ attribute: "menu-positioning" })
-], S.prototype, "menuPositioning", void 0);
-s([
+], E.prototype, "menuPositioning", void 0);
+n([
   d({ type: Boolean, attribute: "clamp-menu-width" })
-], S.prototype, "clampMenuWidth", void 0);
-s([
+], E.prototype, "clampMenuWidth", void 0);
+n([
   d({ type: Number, attribute: "typeahead-delay" })
-], S.prototype, "typeaheadDelay", void 0);
-s([
+], E.prototype, "typeaheadDelay", void 0);
+n([
   d({ type: Boolean, attribute: "has-leading-icon" })
-], S.prototype, "hasLeadingIcon", void 0);
-s([
+], E.prototype, "hasLeadingIcon", void 0);
+n([
   d({ attribute: "display-text" })
-], S.prototype, "displayText", void 0);
-s([
+], E.prototype, "displayText", void 0);
+n([
   d({ attribute: "menu-align" })
-], S.prototype, "menuAlign", void 0);
-s([
+], E.prototype, "menuAlign", void 0);
+n([
   d()
-], S.prototype, "value", null);
-s([
+], E.prototype, "value", null);
+n([
   d({ type: Number, attribute: "selected-index" })
-], S.prototype, "selectedIndex", null);
-s([
-  A()
-], S.prototype, "nativeError", void 0);
-s([
-  A()
-], S.prototype, "nativeErrorText", void 0);
-s([
-  A()
-], S.prototype, "focused", void 0);
-s([
-  A()
-], S.prototype, "open", void 0);
-s([
-  A()
-], S.prototype, "defaultFocus", void 0);
-s([
-  k(".field")
-], S.prototype, "field", void 0);
-s([
-  k("md-menu")
-], S.prototype, "menu", void 0);
-s([
-  k("#label")
-], S.prototype, "labelEl", void 0);
-s([
-  K({ slot: "leading-icon", flatten: !0 })
-], S.prototype, "leadingIcons", void 0);
-class pa extends S {
+], E.prototype, "selectedIndex", null);
+n([
+  I()
+], E.prototype, "nativeError", void 0);
+n([
+  I()
+], E.prototype, "nativeErrorText", void 0);
+n([
+  I()
+], E.prototype, "focused", void 0);
+n([
+  I()
+], E.prototype, "open", void 0);
+n([
+  I()
+], E.prototype, "defaultFocus", void 0);
+n([
+  C(".field")
+], E.prototype, "field", void 0);
+n([
+  C("md-menu")
+], E.prototype, "menu", void 0);
+n([
+  C("#label")
+], E.prototype, "labelEl", void 0);
+n([
+  Y({ slot: "leading-icon", flatten: !0 })
+], E.prototype, "leadingIcons", void 0);
+class pa extends E {
   constructor() {
     super(...arguments), this.fieldTag = re`md-filled-field`;
   }
@@ -4134,13 +4134,13 @@ const ha = m`:host{--_text-field-active-indicator-color: var(--md-filled-select-
 `;
 const pi = m`:host{color:unset;min-width:210px;display:flex}.field{cursor:default;outline:none}.select{position:relative;flex-direction:column}.icon.trailing svg,.icon ::slotted(*){fill:currentColor}.icon ::slotted(*){width:inherit;height:inherit;font-size:inherit}.icon slot{display:flex;height:100%;width:100%;align-items:center;justify-content:center}.icon.trailing :is(.up,.down){opacity:0;transition:opacity 75ms linear 75ms}.select:not(.open) .down,.select.open .up{opacity:1}.field,.select,md-menu{min-width:inherit;width:inherit;max-width:inherit;display:flex}md-menu{min-width:var(--__menu-min-width);max-width:var(--__menu-max-width, inherit)}.menu-wrapper{width:0px;height:0px;max-width:inherit}md-menu ::slotted(:not[disabled]){cursor:pointer}.field,.select{width:100%}:host{display:inline-flex}:host([disabled]){pointer-events:none}
 `;
-let It = class extends pa {
+let Tt = class extends pa {
 };
-It.styles = [pi, ha];
-It = s([
-  w("md-filled-select")
-], It);
-class ua extends S {
+Tt.styles = [pi, ha];
+Tt = n([
+  k("md-filled-select")
+], Tt);
+class ua extends E {
   constructor() {
     super(...arguments), this.fieldTag = re`md-outlined-field`;
   }
@@ -4150,8 +4150,8 @@ const ma = m`:host{--_text-field-disabled-input-text-color: var(--md-outlined-se
 let Dt = class extends ua {
 };
 Dt.styles = [pi, ma];
-Dt = s([
-  w("md-outlined-select")
+Dt = n([
+  k("md-outlined-select")
 ], Dt);
 const va = m`:host{display:flex;--md-ripple-hover-color: var(--md-menu-item-hover-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--md-ripple-hover-opacity: var(--md-menu-item-hover-state-layer-opacity, 0.08);--md-ripple-pressed-color: var(--md-menu-item-pressed-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--md-ripple-pressed-opacity: var(--md-menu-item-pressed-state-layer-opacity, 0.12)}:host([disabled]){opacity:var(--md-menu-item-disabled-opacity, 0.3);pointer-events:none}md-focus-ring{z-index:1;--md-focus-ring-shape: 8px}a,button,li{background:none;border:none;padding:0;margin:0;text-align:unset;text-decoration:none}.list-item{border-radius:inherit;display:flex;flex:1;max-width:inherit;min-width:inherit;outline:none;-webkit-tap-highlight-color:rgba(0,0,0,0)}.list-item:not(.disabled){cursor:pointer}[slot=container]{pointer-events:none}md-ripple{border-radius:inherit}md-item{border-radius:inherit;flex:1;color:var(--md-menu-item-label-text-color, var(--md-sys-color-on-surface, #1d1b20));font-family:var(--md-menu-item-label-text-font, var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto)));font-size:var(--md-menu-item-label-text-size, var(--md-sys-typescale-body-large-size, 1rem));line-height:var(--md-menu-item-label-text-line-height, var(--md-sys-typescale-body-large-line-height, 1.5rem));font-weight:var(--md-menu-item-label-text-weight, var(--md-sys-typescale-body-large-weight, var(--md-ref-typeface-weight-regular, 400)));min-height:var(--md-menu-item-one-line-container-height, 56px);padding-top:var(--md-menu-item-top-space, 12px);padding-bottom:var(--md-menu-item-bottom-space, 12px);padding-inline-start:var(--md-menu-item-leading-space, 16px);padding-inline-end:var(--md-menu-item-trailing-space, 16px)}md-item[multiline]{min-height:var(--md-menu-item-two-line-container-height, 72px)}[slot=supporting-text]{color:var(--md-menu-item-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));font-family:var(--md-menu-item-supporting-text-font, var(--md-sys-typescale-body-medium-font, var(--md-ref-typeface-plain, Roboto)));font-size:var(--md-menu-item-supporting-text-size, var(--md-sys-typescale-body-medium-size, 0.875rem));line-height:var(--md-menu-item-supporting-text-line-height, var(--md-sys-typescale-body-medium-line-height, 1.25rem));font-weight:var(--md-menu-item-supporting-text-weight, var(--md-sys-typescale-body-medium-weight, var(--md-ref-typeface-weight-regular, 400)))}[slot=trailing-supporting-text]{color:var(--md-menu-item-trailing-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));font-family:var(--md-menu-item-trailing-supporting-text-font, var(--md-sys-typescale-label-small-font, var(--md-ref-typeface-plain, Roboto)));font-size:var(--md-menu-item-trailing-supporting-text-size, var(--md-sys-typescale-label-small-size, 0.6875rem));line-height:var(--md-menu-item-trailing-supporting-text-line-height, var(--md-sys-typescale-label-small-line-height, 1rem));font-weight:var(--md-menu-item-trailing-supporting-text-weight, var(--md-sys-typescale-label-small-weight, var(--md-ref-typeface-weight-medium, 500)))}:is([slot=start],[slot=end])::slotted(*){fill:currentColor}[slot=start]{color:var(--md-menu-item-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f))}[slot=end]{color:var(--md-menu-item-trailing-icon-color, var(--md-sys-color-on-surface-variant, #49454f))}.list-item{background-color:var(--md-menu-item-container-color, transparent)}.list-item.selected{background-color:var(--md-menu-item-selected-container-color, var(--md-sys-color-secondary-container, #e8def8))}.selected:not(.disabled) ::slotted(*){color:var(--md-menu-item-selected-label-text-color, var(--md-sys-color-on-secondary-container, #1d192b))}@media(forced-colors: active){:host([disabled]),:host([disabled]) slot{color:GrayText;opacity:1}.list-item{position:relative}.list-item.selected::before{content:"";position:absolute;inset:0;box-sizing:border-box;border-radius:inherit;pointer-events:none;border:3px double CanvasText}}
 `;
@@ -4187,11 +4187,11 @@ class po extends f {
     this.multiline = e;
   }
 }
-s([
+n([
   d({ type: Boolean, reflect: !0 })
 ], po.prototype, "multiline", void 0);
-s([
-  Fi(".text slot")
+n([
+  Pi(".text slot")
 ], po.prototype, "textSlots", void 0);
 function fa(r) {
   for (const e of r.assignedNodes({ flatten: !0 })) {
@@ -4206,8 +4206,8 @@ const ga = m`:host{color:var(--md-sys-color-on-surface, #1d1b20);font-family:var
 let Ot = class extends po {
 };
 Ot.styles = [ga];
-Ot = s([
-  w("md-item")
+Ot = n([
+  k("md-item")
 ], Ot);
 class ba {
   /**
@@ -4216,7 +4216,7 @@ class ba {
    */
   constructor(e, t) {
     this.host = e, this.internalTypeaheadText = null, this.onClick = () => {
-      this.host.keepOpen || this.host.dispatchEvent(Fo(this.host, {
+      this.host.keepOpen || this.host.dispatchEvent(Po(this.host, {
         kind: Ro.CLICK_SELECTION
       }));
     }, this.onKeydown = (o) => {
@@ -4227,7 +4227,7 @@ class ba {
       if (o.defaultPrevented)
         return;
       const i = o.code;
-      this.host.keepOpen && i !== "Escape" || li(i) && (o.preventDefault(), this.host.dispatchEvent(Fo(this.host, {
+      this.host.keepOpen && i !== "Escape" || li(i) && (o.preventDefault(), this.host.dispatchEvent(Po(this.host, {
         kind: Ro.KEYDOWN,
         key: i
       })));
@@ -4297,7 +4297,7 @@ function xa() {
     composed: !0
   });
 }
-class _a {
+class wa {
   /**
    * The recommended role of the select option.
    */
@@ -4347,10 +4347,10 @@ class _a {
     this.lastSelected !== this.host.selected && !this.firstUpdate && (this.host.selected ? this.host.dispatchEvent(ya()) : this.host.dispatchEvent(xa())), this.lastSelected = this.host.selected, this.firstUpdate = !1;
   }
 }
-const wa = Q(f);
-class H extends wa {
+const _a = Q(f);
+class H extends _a {
   constructor() {
-    super(...arguments), this.disabled = !1, this.isMenuItem = !0, this.selected = !1, this.value = "", this.type = "option", this.selectOptionController = new _a(this, {
+    super(...arguments), this.disabled = !1, this.isMenuItem = !0, this.selected = !1, this.value = "", this.type = "option", this.selectOptionController = new wa(this, {
       getHeadlineElements: () => this.headlineElements,
       getSupportingTextElements: () => this.supportingTextElements,
       getDefaultElements: () => this.defaultElements,
@@ -4400,11 +4400,11 @@ class H extends wa {
         id="item"
         tabindex=${this.disabled ? -1 : 0}
         role=${this.selectOptionController.role}
-        aria-label=${this.ariaLabel || h}
-        aria-selected=${this.ariaSelected || h}
-        aria-checked=${this.ariaChecked || h}
-        aria-expanded=${this.ariaExpanded || h}
-        aria-haspopup=${this.ariaHasPopup || h}
+        aria-label=${this.ariaLabel || u}
+        aria-selected=${this.ariaSelected || u}
+        aria-checked=${this.ariaChecked || u}
+        aria-expanded=${this.ariaExpanded || u}
+        aria-haspopup=${this.ariaHasPopup || u}
         class="list-item ${V(this.getRenderClasses())}"
         @click=${this.selectOptionController.onClick}
         @keydown=${this.selectOptionController.onKeydown}
@@ -4461,42 +4461,42 @@ H.shadowRootOptions = {
   ...f.shadowRootOptions,
   delegatesFocus: !0
 };
-s([
+n([
   d({ type: Boolean, reflect: !0 })
 ], H.prototype, "disabled", void 0);
-s([
+n([
   d({ type: Boolean, attribute: "md-menu-item", reflect: !0 })
 ], H.prototype, "isMenuItem", void 0);
-s([
+n([
   d({ type: Boolean })
 ], H.prototype, "selected", void 0);
-s([
+n([
   d()
 ], H.prototype, "value", void 0);
-s([
-  k(".list-item")
+n([
+  C(".list-item")
 ], H.prototype, "listItemRoot", void 0);
-s([
-  K({ slot: "headline" })
+n([
+  Y({ slot: "headline" })
 ], H.prototype, "headlineElements", void 0);
-s([
-  K({ slot: "supporting-text" })
+n([
+  Y({ slot: "supporting-text" })
 ], H.prototype, "supportingTextElements", void 0);
-s([
+n([
   No({ slot: "" })
 ], H.prototype, "defaultElements", void 0);
-s([
+n([
   d({ attribute: "typeahead-text" })
 ], H.prototype, "typeaheadText", null);
-s([
+n([
   d({ attribute: "display-text" })
 ], H.prototype, "displayText", null);
-let Pt = class extends H {
+let Ft = class extends H {
 };
-Pt.styles = [va];
-Pt = s([
-  w("md-select-option")
-], Pt);
+Ft.styles = [va];
+Ft = n([
+  k("md-select-option")
+], Ft);
 const ka = Q(f);
 class se extends ka {
   /**
@@ -4572,19 +4572,19 @@ se.shadowRootOptions = {
   ...f.shadowRootOptions,
   delegatesFocus: !0
 };
-s([
+n([
   d({ type: Boolean, reflect: !0 })
 ], se.prototype, "disabled", void 0);
-s([
+n([
   d({ type: Boolean, attribute: "soft-disabled", reflect: !0 })
 ], se.prototype, "softDisabled", void 0);
-s([
+n([
   d({ type: Boolean, attribute: "always-focusable" })
 ], se.prototype, "alwaysFocusable", void 0);
-s([
+n([
   d()
 ], se.prototype, "label", void 0);
-s([
+n([
   d({ type: Boolean, reflect: !0, attribute: "has-icon" })
 ], se.prototype, "hasIcon", void 0);
 class hi extends f {
@@ -4602,24 +4602,24 @@ class hi extends f {
     const t = e.key === "ArrowLeft", o = e.key === "ArrowRight", i = e.key === "Home", a = e.key === "End";
     if (!t && !o && !i && !a)
       return;
-    const { chips: n } = this;
-    if (n.length < 2)
+    const { chips: s } = this;
+    if (s.length < 2)
       return;
     if (e.preventDefault(), i || a) {
-      const b = i ? 0 : n.length - 1;
-      n[b].focus({ trailing: a }), this.updateTabIndices();
+      const b = i ? 0 : s.length - 1;
+      s[b].focus({ trailing: a }), this.updateTabIndices();
       return;
     }
-    const p = getComputedStyle(this).direction === "rtl" ? t : o, g = n.find((b) => b.matches(":focus-within"));
+    const p = getComputedStyle(this).direction === "rtl" ? t : o, g = s.find((b) => b.matches(":focus-within"));
     if (!g) {
-      (p ? n[0] : n[n.length - 1]).focus({ trailing: !p }), this.updateTabIndices();
+      (p ? s[0] : s[s.length - 1]).focus({ trailing: !p }), this.updateTabIndices();
       return;
     }
-    const u = n.indexOf(g);
-    let v = p ? u + 1 : u - 1;
-    for (; v !== u; ) {
-      v >= n.length ? v = 0 : v < 0 && (v = n.length - 1);
-      const b = n[v];
+    const h = s.indexOf(g);
+    let v = p ? h + 1 : h - 1;
+    for (; v !== h; ) {
+      v >= s.length ? v = 0 : v < 0 && (v = s.length - 1);
+      const b = s[v];
       if (b.disabled && !b.alwaysFocusable) {
         p ? v++ : v--;
         continue;
@@ -4642,17 +4642,17 @@ class hi extends f {
     t && (t.tabIndex = 0);
   }
 }
-s([
-  K()
+n([
+  Y()
 ], hi.prototype, "childElements", void 0);
 const Ca = m`:host{display:flex;flex-wrap:wrap;gap:8px}
 `;
-let Ft = class extends hi {
+let Pt = class extends hi {
 };
-Ft.styles = [Ca];
-Ft = s([
-  w("md-chip-set")
-], Ft);
+Pt.styles = [Ca];
+Pt = n([
+  k("md-chip-set")
+], Pt);
 const $a = m`.elevated{--md-elevation-level: var(--_elevated-container-elevation);--md-elevation-shadow-color: var(--_elevated-container-shadow-color)}.elevated::before{background:var(--_elevated-container-color)}.elevated:hover{--md-elevation-level: var(--_elevated-hover-container-elevation)}.elevated:focus-within{--md-elevation-level: var(--_elevated-focus-container-elevation)}.elevated:active{--md-elevation-level: var(--_elevated-pressed-container-elevation)}.elevated.disabled{--md-elevation-level: var(--_elevated-disabled-container-elevation)}.elevated.disabled::before{background:var(--_elevated-disabled-container-color);opacity:var(--_elevated-disabled-container-opacity)}@media(forced-colors: active){.elevated md-elevation{border:1px solid CanvasText}.elevated.disabled md-elevation{border-color:GrayText}}
 `;
 const qe = "aria-label-remove";
@@ -4687,8 +4687,8 @@ class ui extends se {
     const t = e.key === "ArrowLeft", o = e.key === "ArrowRight";
     if (!t && !o || !this.primaryAction || !this.trailingAction)
       return;
-    const a = getComputedStyle(this).direction === "rtl" ? t : o, n = this.primaryAction?.matches(":focus-within"), c = this.trailingAction?.matches(":focus-within");
-    if (a && c || !a && n)
+    const a = getComputedStyle(this).direction === "rtl" ? t : o, s = this.primaryAction?.matches(":focus-within"), c = this.trailingAction?.matches(":focus-within");
+    if (a && c || !a && s)
       return;
     e.preventDefault(), e.stopPropagation(), (a ? this.trailingAction : this.primaryAction).focus();
   }
@@ -4704,9 +4704,9 @@ function mi({ ariaLabel: r, disabled: e, focusListener: t, tabbable: o = !1 }) {
     <span id="remove-label" hidden aria-hidden="true">Remove</span>
     <button
       class="trailing action"
-      aria-label=${r || h}
-      aria-labelledby=${r ? h : "remove-label label"}
-      tabindex=${o ? h : -1}
+      aria-label=${r || u}
+      aria-labelledby=${r ? u : "remove-label label"}
+      tabindex=${o ? u : -1}
       @click=${Sa}
       @focus=${t}>
       <md-focus-ring part="trailing-focus-ring"></md-focus-ring>
@@ -4748,9 +4748,9 @@ class pe extends ui {
       <button
         class="primary action"
         id="button"
-        aria-label=${t || h}
+        aria-label=${t || u}
         aria-pressed=${this.selected}
-        aria-disabled=${this.softDisabled || h}
+        aria-disabled=${this.softDisabled || u}
         ?disabled=${this.disabled && !this.alwaysFocusable}
         @click=${this.handleClickOnChild}
         >${e}</button
@@ -4772,7 +4772,7 @@ class pe extends ui {
       focusListener: e,
       ariaLabel: this.ariaLabelRemove,
       disabled: this.disabled || this.softDisabled
-    }) : h;
+    }) : u;
   }
   renderOutline() {
     return this.elevated ? l`<md-elevation part="elevation"></md-elevation>` : super.renderOutline();
@@ -4787,23 +4787,23 @@ class pe extends ui {
     }
   }
 }
-s([
+n([
   d({ type: Boolean })
 ], pe.prototype, "elevated", void 0);
-s([
+n([
   d({ type: Boolean })
 ], pe.prototype, "removable", void 0);
-s([
+n([
   d({ type: Boolean, reflect: !0 })
 ], pe.prototype, "selected", void 0);
-s([
+n([
   d({ type: Boolean, reflect: !0, attribute: "has-selected-icon" })
 ], pe.prototype, "hasSelectedIcon", void 0);
-s([
-  k(".primary.action")
+n([
+  C(".primary.action")
 ], pe.prototype, "primaryAction", void 0);
-s([
-  k(".trailing.action")
+n([
+  C(".trailing.action")
 ], pe.prototype, "trailingAction", void 0);
 const Ea = m`:host{--_container-height: var(--md-filter-chip-container-height, 32px);--_disabled-label-text-color: var(--md-filter-chip-disabled-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-label-text-opacity: var(--md-filter-chip-disabled-label-text-opacity, 0.38);--_elevated-container-elevation: var(--md-filter-chip-elevated-container-elevation, 1);--_elevated-container-shadow-color: var(--md-filter-chip-elevated-container-shadow-color, var(--md-sys-color-shadow, #000));--_elevated-disabled-container-color: var(--md-filter-chip-elevated-disabled-container-color, var(--md-sys-color-on-surface, #1d1b20));--_elevated-disabled-container-elevation: var(--md-filter-chip-elevated-disabled-container-elevation, 0);--_elevated-disabled-container-opacity: var(--md-filter-chip-elevated-disabled-container-opacity, 0.12);--_elevated-focus-container-elevation: var(--md-filter-chip-elevated-focus-container-elevation, 1);--_elevated-hover-container-elevation: var(--md-filter-chip-elevated-hover-container-elevation, 2);--_elevated-pressed-container-elevation: var(--md-filter-chip-elevated-pressed-container-elevation, 1);--_elevated-selected-container-color: var(--md-filter-chip-elevated-selected-container-color, var(--md-sys-color-secondary-container, #e8def8));--_label-text-font: var(--md-filter-chip-label-text-font, var(--md-sys-typescale-label-large-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-filter-chip-label-text-line-height, var(--md-sys-typescale-label-large-line-height, 1.25rem));--_label-text-size: var(--md-filter-chip-label-text-size, var(--md-sys-typescale-label-large-size, 0.875rem));--_label-text-weight: var(--md-filter-chip-label-text-weight, var(--md-sys-typescale-label-large-weight, var(--md-ref-typeface-weight-medium, 500)));--_selected-focus-label-text-color: var(--md-filter-chip-selected-focus-label-text-color, var(--md-sys-color-on-secondary-container, #1d192b));--_selected-hover-label-text-color: var(--md-filter-chip-selected-hover-label-text-color, var(--md-sys-color-on-secondary-container, #1d192b));--_selected-hover-state-layer-color: var(--md-filter-chip-selected-hover-state-layer-color, var(--md-sys-color-on-secondary-container, #1d192b));--_selected-hover-state-layer-opacity: var(--md-filter-chip-selected-hover-state-layer-opacity, 0.08);--_selected-label-text-color: var(--md-filter-chip-selected-label-text-color, var(--md-sys-color-on-secondary-container, #1d192b));--_selected-pressed-label-text-color: var(--md-filter-chip-selected-pressed-label-text-color, var(--md-sys-color-on-secondary-container, #1d192b));--_selected-pressed-state-layer-color: var(--md-filter-chip-selected-pressed-state-layer-color, var(--md-sys-color-on-surface-variant, #49454f));--_selected-pressed-state-layer-opacity: var(--md-filter-chip-selected-pressed-state-layer-opacity, 0.12);--_elevated-container-color: var(--md-filter-chip-elevated-container-color, var(--md-sys-color-surface-container-low, #f7f2fa));--_disabled-outline-color: var(--md-filter-chip-disabled-outline-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-outline-opacity: var(--md-filter-chip-disabled-outline-opacity, 0.12);--_disabled-selected-container-color: var(--md-filter-chip-disabled-selected-container-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-selected-container-opacity: var(--md-filter-chip-disabled-selected-container-opacity, 0.12);--_focus-outline-color: var(--md-filter-chip-focus-outline-color, var(--md-sys-color-on-surface-variant, #49454f));--_outline-color: var(--md-filter-chip-outline-color, var(--md-sys-color-outline, #79747e));--_outline-width: var(--md-filter-chip-outline-width, 1px);--_selected-container-color: var(--md-filter-chip-selected-container-color, var(--md-sys-color-secondary-container, #e8def8));--_selected-outline-width: var(--md-filter-chip-selected-outline-width, 0px);--_focus-label-text-color: var(--md-filter-chip-focus-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-label-text-color: var(--md-filter-chip-hover-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-state-layer-color: var(--md-filter-chip-hover-state-layer-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-state-layer-opacity: var(--md-filter-chip-hover-state-layer-opacity, 0.08);--_label-text-color: var(--md-filter-chip-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_pressed-label-text-color: var(--md-filter-chip-pressed-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_pressed-state-layer-color: var(--md-filter-chip-pressed-state-layer-color, var(--md-sys-color-on-secondary-container, #1d192b));--_pressed-state-layer-opacity: var(--md-filter-chip-pressed-state-layer-opacity, 0.12);--_icon-size: var(--md-filter-chip-icon-size, 18px);--_disabled-leading-icon-color: var(--md-filter-chip-disabled-leading-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-leading-icon-opacity: var(--md-filter-chip-disabled-leading-icon-opacity, 0.38);--_selected-focus-leading-icon-color: var(--md-filter-chip-selected-focus-leading-icon-color, var(--md-sys-color-on-secondary-container, #1d192b));--_selected-hover-leading-icon-color: var(--md-filter-chip-selected-hover-leading-icon-color, var(--md-sys-color-on-secondary-container, #1d192b));--_selected-leading-icon-color: var(--md-filter-chip-selected-leading-icon-color, var(--md-sys-color-on-secondary-container, #1d192b));--_selected-pressed-leading-icon-color: var(--md-filter-chip-selected-pressed-leading-icon-color, var(--md-sys-color-on-secondary-container, #1d192b));--_focus-leading-icon-color: var(--md-filter-chip-focus-leading-icon-color, var(--md-sys-color-primary, #6750a4));--_hover-leading-icon-color: var(--md-filter-chip-hover-leading-icon-color, var(--md-sys-color-primary, #6750a4));--_leading-icon-color: var(--md-filter-chip-leading-icon-color, var(--md-sys-color-primary, #6750a4));--_pressed-leading-icon-color: var(--md-filter-chip-pressed-leading-icon-color, var(--md-sys-color-primary, #6750a4));--_disabled-trailing-icon-color: var(--md-filter-chip-disabled-trailing-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-trailing-icon-opacity: var(--md-filter-chip-disabled-trailing-icon-opacity, 0.38);--_selected-focus-trailing-icon-color: var(--md-filter-chip-selected-focus-trailing-icon-color, var(--md-sys-color-on-secondary-container, #1d192b));--_selected-hover-trailing-icon-color: var(--md-filter-chip-selected-hover-trailing-icon-color, var(--md-sys-color-on-secondary-container, #1d192b));--_selected-pressed-trailing-icon-color: var(--md-filter-chip-selected-pressed-trailing-icon-color, var(--md-sys-color-on-secondary-container, #1d192b));--_selected-trailing-icon-color: var(--md-filter-chip-selected-trailing-icon-color, var(--md-sys-color-on-secondary-container, #1d192b));--_focus-trailing-icon-color: var(--md-filter-chip-focus-trailing-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-trailing-icon-color: var(--md-filter-chip-hover-trailing-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_pressed-trailing-icon-color: var(--md-filter-chip-pressed-trailing-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_trailing-icon-color: var(--md-filter-chip-trailing-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_container-shape-start-start: var(--md-filter-chip-container-shape-start-start, var(--md-filter-chip-container-shape, var(--md-sys-shape-corner-small, 8px)));--_container-shape-start-end: var(--md-filter-chip-container-shape-start-end, var(--md-filter-chip-container-shape, var(--md-sys-shape-corner-small, 8px)));--_container-shape-end-end: var(--md-filter-chip-container-shape-end-end, var(--md-filter-chip-container-shape, var(--md-sys-shape-corner-small, 8px)));--_container-shape-end-start: var(--md-filter-chip-container-shape-end-start, var(--md-filter-chip-container-shape, var(--md-sys-shape-corner-small, 8px)));--_leading-space: var(--md-filter-chip-leading-space, 16px);--_trailing-space: var(--md-filter-chip-trailing-space, 16px);--_icon-label-space: var(--md-filter-chip-icon-label-space, 8px);--_with-leading-icon-leading-space: var(--md-filter-chip-with-leading-icon-leading-space, 8px);--_with-trailing-icon-trailing-space: var(--md-filter-chip-with-trailing-icon-trailing-space, 8px)}.selected.elevated::before{background:var(--_elevated-selected-container-color)}.checkmark{height:var(--_icon-size);width:var(--_icon-size)}.disabled .checkmark{opacity:var(--_disabled-leading-icon-opacity)}@media(forced-colors: active){.disabled .checkmark{opacity:1}}
 `;
@@ -4822,8 +4822,8 @@ Rt.styles = [
   vi,
   Ea
 ];
-Rt = s([
-  w("md-filter-chip")
+Rt = n([
+  k("md-filter-chip")
 ], Rt);
 class he extends ui {
   constructor() {
@@ -4855,21 +4855,21 @@ class he extends ui {
         <a
           class="primary action"
           id="link"
-          aria-label=${t || h}
+          aria-label=${t || u}
           href=${this.href}
-          target=${this.target || h}
+          target=${this.target || u}
           >${e}</a
         >
       ` : this.removeOnly ? l`
-        <span class="primary action" aria-label=${t || h}>
+        <span class="primary action" aria-label=${t || u}>
           ${e}
         </span>
       ` : l`
       <button
         class="primary action"
         id="button"
-        aria-label=${t || h}
-        aria-disabled=${this.softDisabled || h}
+        aria-label=${t || u}
+        aria-disabled=${this.softDisabled || u}
         ?disabled=${this.disabled && !this.alwaysFocusable}
         type="button"
         >${e}</button
@@ -4885,23 +4885,23 @@ class he extends ui {
     });
   }
 }
-s([
+n([
   d({ type: Boolean })
 ], he.prototype, "avatar", void 0);
-s([
+n([
   d()
 ], he.prototype, "href", void 0);
-s([
+n([
   d()
 ], he.prototype, "target", void 0);
-s([
+n([
   d({ type: Boolean, attribute: "remove-only" })
 ], he.prototype, "removeOnly", void 0);
-s([
+n([
   d({ type: Boolean, reflect: !0 })
 ], he.prototype, "selected", void 0);
-s([
-  k(".trailing.action")
+n([
+  C(".trailing.action")
 ], he.prototype, "trailingAction", void 0);
 const za = m`:host{--_container-height: var(--md-input-chip-container-height, 32px);--_disabled-label-text-color: var(--md-input-chip-disabled-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-label-text-opacity: var(--md-input-chip-disabled-label-text-opacity, 0.38);--_disabled-selected-container-color: var(--md-input-chip-disabled-selected-container-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-selected-container-opacity: var(--md-input-chip-disabled-selected-container-opacity, 0.12);--_label-text-font: var(--md-input-chip-label-text-font, var(--md-sys-typescale-label-large-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-input-chip-label-text-line-height, var(--md-sys-typescale-label-large-line-height, 1.25rem));--_label-text-size: var(--md-input-chip-label-text-size, var(--md-sys-typescale-label-large-size, 0.875rem));--_label-text-weight: var(--md-input-chip-label-text-weight, var(--md-sys-typescale-label-large-weight, var(--md-ref-typeface-weight-medium, 500)));--_selected-container-color: var(--md-input-chip-selected-container-color, var(--md-sys-color-secondary-container, #e8def8));--_selected-focus-label-text-color: var(--md-input-chip-selected-focus-label-text-color, var(--md-sys-color-on-secondary-container, #1d192b));--_selected-hover-label-text-color: var(--md-input-chip-selected-hover-label-text-color, var(--md-sys-color-on-secondary-container, #1d192b));--_selected-hover-state-layer-color: var(--md-input-chip-selected-hover-state-layer-color, var(--md-sys-color-on-secondary-container, #1d192b));--_selected-hover-state-layer-opacity: var(--md-input-chip-selected-hover-state-layer-opacity, 0.08);--_selected-label-text-color: var(--md-input-chip-selected-label-text-color, var(--md-sys-color-on-secondary-container, #1d192b));--_selected-outline-width: var(--md-input-chip-selected-outline-width, 0px);--_selected-pressed-label-text-color: var(--md-input-chip-selected-pressed-label-text-color, var(--md-sys-color-on-secondary-container, #1d192b));--_selected-pressed-state-layer-color: var(--md-input-chip-selected-pressed-state-layer-color, var(--md-sys-color-on-secondary-container, #1d192b));--_selected-pressed-state-layer-opacity: var(--md-input-chip-selected-pressed-state-layer-opacity, 0.12);--_disabled-outline-color: var(--md-input-chip-disabled-outline-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-outline-opacity: var(--md-input-chip-disabled-outline-opacity, 0.12);--_focus-label-text-color: var(--md-input-chip-focus-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_focus-outline-color: var(--md-input-chip-focus-outline-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-label-text-color: var(--md-input-chip-hover-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-state-layer-color: var(--md-input-chip-hover-state-layer-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-state-layer-opacity: var(--md-input-chip-hover-state-layer-opacity, 0.08);--_label-text-color: var(--md-input-chip-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_outline-color: var(--md-input-chip-outline-color, var(--md-sys-color-outline, #79747e));--_outline-width: var(--md-input-chip-outline-width, 1px);--_pressed-label-text-color: var(--md-input-chip-pressed-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_pressed-state-layer-color: var(--md-input-chip-pressed-state-layer-color, var(--md-sys-color-on-surface-variant, #49454f));--_pressed-state-layer-opacity: var(--md-input-chip-pressed-state-layer-opacity, 0.12);--_avatar-shape: var(--md-input-chip-avatar-shape, var(--md-sys-shape-corner-full, 9999px));--_avatar-size: var(--md-input-chip-avatar-size, 24px);--_disabled-avatar-opacity: var(--md-input-chip-disabled-avatar-opacity, 0.38);--_disabled-leading-icon-color: var(--md-input-chip-disabled-leading-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-leading-icon-opacity: var(--md-input-chip-disabled-leading-icon-opacity, 0.38);--_icon-size: var(--md-input-chip-icon-size, 18px);--_selected-focus-leading-icon-color: var(--md-input-chip-selected-focus-leading-icon-color, var(--md-sys-color-primary, #6750a4));--_selected-hover-leading-icon-color: var(--md-input-chip-selected-hover-leading-icon-color, var(--md-sys-color-primary, #6750a4));--_selected-leading-icon-color: var(--md-input-chip-selected-leading-icon-color, var(--md-sys-color-primary, #6750a4));--_selected-pressed-leading-icon-color: var(--md-input-chip-selected-pressed-leading-icon-color, var(--md-sys-color-primary, #6750a4));--_focus-leading-icon-color: var(--md-input-chip-focus-leading-icon-color, var(--md-sys-color-primary, #6750a4));--_hover-leading-icon-color: var(--md-input-chip-hover-leading-icon-color, var(--md-sys-color-primary, #6750a4));--_leading-icon-color: var(--md-input-chip-leading-icon-color, var(--md-sys-color-primary, #6750a4));--_pressed-leading-icon-color: var(--md-input-chip-pressed-leading-icon-color, var(--md-sys-color-primary, #6750a4));--_disabled-trailing-icon-color: var(--md-input-chip-disabled-trailing-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-trailing-icon-opacity: var(--md-input-chip-disabled-trailing-icon-opacity, 0.38);--_selected-focus-trailing-icon-color: var(--md-input-chip-selected-focus-trailing-icon-color, var(--md-sys-color-on-secondary-container, #1d192b));--_selected-hover-trailing-icon-color: var(--md-input-chip-selected-hover-trailing-icon-color, var(--md-sys-color-on-secondary-container, #1d192b));--_selected-pressed-trailing-icon-color: var(--md-input-chip-selected-pressed-trailing-icon-color, var(--md-sys-color-on-secondary-container, #1d192b));--_selected-trailing-icon-color: var(--md-input-chip-selected-trailing-icon-color, var(--md-sys-color-on-secondary-container, #1d192b));--_focus-trailing-icon-color: var(--md-input-chip-focus-trailing-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-trailing-icon-color: var(--md-input-chip-hover-trailing-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_pressed-trailing-icon-color: var(--md-input-chip-pressed-trailing-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_trailing-icon-color: var(--md-input-chip-trailing-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_container-shape-start-start: var(--md-input-chip-container-shape-start-start, var(--md-input-chip-container-shape, var(--md-sys-shape-corner-small, 8px)));--_container-shape-start-end: var(--md-input-chip-container-shape-start-end, var(--md-input-chip-container-shape, var(--md-sys-shape-corner-small, 8px)));--_container-shape-end-end: var(--md-input-chip-container-shape-end-end, var(--md-input-chip-container-shape, var(--md-sys-shape-corner-small, 8px)));--_container-shape-end-start: var(--md-input-chip-container-shape-end-start, var(--md-input-chip-container-shape, var(--md-sys-shape-corner-small, 8px)));--_leading-space: var(--md-input-chip-leading-space, 16px);--_trailing-space: var(--md-input-chip-trailing-space, 16px);--_icon-label-space: var(--md-input-chip-icon-label-space, 8px);--_with-leading-icon-leading-space: var(--md-input-chip-with-leading-icon-leading-space, 8px);--_with-trailing-icon-trailing-space: var(--md-input-chip-with-trailing-icon-trailing-space, 8px)}:host([avatar]){--_container-shape-start-start: var( --md-input-chip-container-shape-start-start, var(--md-input-chip-container-shape, calc(var(--_container-height) / 2)) );--_container-shape-start-end: var( --md-input-chip-container-shape-start-end, var(--md-input-chip-container-shape, calc(var(--_container-height) / 2)) );--_container-shape-end-end: var( --md-input-chip-container-shape-end-end, var(--md-input-chip-container-shape, calc(var(--_container-height) / 2)) );--_container-shape-end-start: var( --md-input-chip-container-shape-end-start, var(--md-input-chip-container-shape, calc(var(--_container-height) / 2)) )}.avatar .primary.action{padding-inline-start:4px}.avatar .leading.icon ::slotted(:first-child){border-radius:var(--_avatar-shape);height:var(--_avatar-size);width:var(--_avatar-size)}.disabled.avatar .leading.icon{opacity:var(--_disabled-avatar-opacity)}@media(forced-colors: active){.link .outline{border-color:ActiveText}.disabled.avatar .leading.icon{opacity:1}}
 `;
@@ -4913,33 +4913,33 @@ Mt.styles = [
   vi,
   za
 ];
-Mt = s([
-  w("md-input-chip")
+Mt = n([
+  k("md-input-chip")
 ], Mt);
 class ot extends f {
   constructor() {
     super(...arguments), this.inset = !1, this.insetStart = !1, this.insetEnd = !1;
   }
 }
-s([
+n([
   d({ type: Boolean, reflect: !0 })
 ], ot.prototype, "inset", void 0);
-s([
+n([
   d({ type: Boolean, reflect: !0, attribute: "inset-start" })
 ], ot.prototype, "insetStart", void 0);
-s([
+n([
   d({ type: Boolean, reflect: !0, attribute: "inset-end" })
 ], ot.prototype, "insetEnd", void 0);
 const Aa = m`:host{box-sizing:border-box;color:var(--md-divider-color, var(--md-sys-color-outline-variant, #cac4d0));display:flex;height:var(--md-divider-thickness, 1px);width:100%}:host([inset]),:host([inset-start]){padding-inline-start:16px}:host([inset]),:host([inset-end]){padding-inline-end:16px}:host::before{background:currentColor;content:"";height:100%;width:100%}@media(forced-colors: active){:host::before{background:CanvasText}}
 `;
-let Bt = class extends ot {
+let Lt = class extends ot {
 };
-Bt.styles = [Aa];
-Bt = s([
-  w("md-divider")
-], Bt);
-const He = /* @__PURE__ */ Symbol("isFocusable"), ct = /* @__PURE__ */ Symbol("privateIsFocusable"), We = /* @__PURE__ */ Symbol("externalTabIndex"), je = /* @__PURE__ */ Symbol("isUpdatingTabIndex"), Ke = /* @__PURE__ */ Symbol("updateTabIndex");
-function Ta(r) {
+Lt.styles = [Aa];
+Lt = n([
+  k("md-divider")
+], Lt);
+const He = /* @__PURE__ */ Symbol("isFocusable"), ct = /* @__PURE__ */ Symbol("privateIsFocusable"), We = /* @__PURE__ */ Symbol("externalTabIndex"), je = /* @__PURE__ */ Symbol("isUpdatingTabIndex"), Ye = /* @__PURE__ */ Symbol("updateTabIndex");
+function Ia(r) {
   var e, t, o;
   class i extends r {
     constructor() {
@@ -4948,36 +4948,36 @@ function Ta(r) {
     get [He]() {
       return this[ct];
     }
-    set [He](n) {
-      this[He] !== n && (this[ct] = n, this[Ke]());
+    set [He](s) {
+      this[He] !== s && (this[ct] = s, this[Ye]());
     }
     connectedCallback() {
-      super.connectedCallback(), this[Ke]();
+      super.connectedCallback(), this[Ye]();
     }
-    attributeChangedCallback(n, c, p) {
-      if (n !== "tabindex") {
-        super.attributeChangedCallback(n, c, p);
+    attributeChangedCallback(s, c, p) {
+      if (s !== "tabindex") {
+        super.attributeChangedCallback(s, c, p);
         return;
       }
       if (this.requestUpdate("tabIndex", Number(c ?? -1)), !this[je]) {
         if (!this.hasAttribute("tabindex")) {
-          this[We] = null, this[Ke]();
+          this[We] = null, this[Ye]();
           return;
         }
         this[We] = this.tabIndex;
       }
     }
-    [(e = ct, t = We, o = je, Ke)]() {
-      const n = this[He] ? 0 : -1, c = this[We] ?? n;
+    [(e = ct, t = We, o = je, Ye)]() {
+      const s = this[He] ? 0 : -1, c = this[We] ?? s;
       this[je] = !0, this.tabIndex = c, this[je] = !1;
     }
   }
-  return s([
+  return n([
     d({ noAccessor: !0 })
   ], i.prototype, "tabIndex", void 0), i;
 }
-const bi = /* @__PURE__ */ Symbol("animateIndicator"), Ia = Ta(f);
-class Y extends Ia {
+const bi = /* @__PURE__ */ Symbol("animateIndicator"), Ta = Ia(f);
+class K extends Ta {
   /**
    * @deprecated use `active`
    */
@@ -5005,9 +5005,9 @@ class Y extends Ia {
         role="presentation">
         <slot name="icon" @slotchange=${this.handleIconSlotChange}></slot>
         <slot @slotchange=${this.handleSlotChange}></slot>
-        ${this.fullWidthIndicator ? h : e}
+        ${this.fullWidthIndicator ? u : e}
       </div>
-      ${this.fullWidthIndicator ? e : h}
+      ${this.fullWidthIndicator ? e : u}
     </div>`;
   }
   getContentClasses() {
@@ -5041,8 +5041,8 @@ class Y extends Ia {
     const t = Da();
     if (!this.active)
       return t ? [{ opacity: 1 }, { transform: "none" }] : null;
-    const o = {}, i = e.indicator?.getBoundingClientRect() ?? {}, a = i.left, n = i.width, c = this.indicator.getBoundingClientRect(), p = c.left, g = c.width, u = n / g;
-    return !t && a !== void 0 && p !== void 0 && !isNaN(u) ? o.transform = `translateX(${(a - p).toFixed(4)}px) scaleX(${u.toFixed(4)})` : o.opacity = 0, [o, { transform: "none" }];
+    const o = {}, i = e.indicator?.getBoundingClientRect() ?? {}, a = i.left, s = i.width, c = this.indicator.getBoundingClientRect(), p = c.left, g = c.width, h = s / g;
+    return !t && a !== void 0 && p !== void 0 && !isNaN(h) ? o.transform = `translateX(${(a - p).toFixed(4)}px) scaleX(${h.toFixed(4)})` : o.opacity = 0, [o, { transform: "none" }];
   }
   handleSlotChange() {
     this.iconOnly = !1;
@@ -5057,33 +5057,33 @@ class Y extends Ia {
     this.hasIcon = this.assignedIcons.length > 0;
   }
 }
-s([
+n([
   d({ type: Boolean, reflect: !0, attribute: "md-tab" })
-], Y.prototype, "isTab", void 0);
-s([
+], K.prototype, "isTab", void 0);
+n([
   d({ type: Boolean, reflect: !0 })
-], Y.prototype, "active", void 0);
-s([
+], K.prototype, "active", void 0);
+n([
   d({ type: Boolean })
-], Y.prototype, "selected", null);
-s([
+], K.prototype, "selected", null);
+n([
   d({ type: Boolean, attribute: "has-icon" })
-], Y.prototype, "hasIcon", void 0);
-s([
+], K.prototype, "hasIcon", void 0);
+n([
   d({ type: Boolean, attribute: "icon-only" })
-], Y.prototype, "iconOnly", void 0);
-s([
-  k(".indicator")
-], Y.prototype, "indicator", void 0);
-s([
-  A()
-], Y.prototype, "fullWidthIndicator", void 0);
-s([
+], K.prototype, "iconOnly", void 0);
+n([
+  C(".indicator")
+], K.prototype, "indicator", void 0);
+n([
+  I()
+], K.prototype, "fullWidthIndicator", void 0);
+n([
   No({ flatten: !0 })
-], Y.prototype, "assignedDefaultNodes", void 0);
-s([
-  K({ slot: "icon", flatten: !0 })
-], Y.prototype, "assignedIcons", void 0);
+], K.prototype, "assignedDefaultNodes", void 0);
+n([
+  Y({ slot: "icon", flatten: !0 })
+], K.prototype, "assignedIcons", void 0);
 function Da() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
@@ -5140,8 +5140,8 @@ class ye extends f {
       return;
     for (const b of this.tabs)
       await b.updateComplete;
-    const o = e.offsetLeft, i = e.offsetWidth, a = this.scrollLeft, n = this.offsetWidth, c = 48, p = o - c, g = o + i - n + c, u = Math.min(p, Math.max(g, a)), v = this.focusedTab ? "auto" : "instant";
-    this.tabsScrollerElement.scrollTo({ behavior: v, top: 0, left: u });
+    const o = e.offsetLeft, i = e.offsetWidth, a = this.scrollLeft, s = this.offsetWidth, c = 48, p = o - c, g = o + i - s + c, h = Math.min(p, Math.max(g, a)), v = this.focusedTab ? "auto" : "instant";
+    this.tabsScrollerElement.scrollTo({ behavior: v, top: 0, left: h });
   }
   render() {
     return l`
@@ -5183,23 +5183,23 @@ class ye extends f {
     const t = e.key === "ArrowLeft", o = e.key === "ArrowRight", i = e.key === "Home", a = e.key === "End";
     if (e.defaultPrevented || !t && !o && !i && !a)
       return;
-    const { tabs: n } = this;
-    if (n.length < 2)
+    const { tabs: s } = this;
+    if (s.length < 2)
       return;
     e.preventDefault();
     let c;
     if (i || a)
-      c = i ? 0 : n.length - 1;
+      c = i ? 0 : s.length - 1;
     else {
-      const u = getComputedStyle(this).direction === "rtl" ? t : o, { focusedTab: v } = this;
+      const h = getComputedStyle(this).direction === "rtl" ? t : o, { focusedTab: v } = this;
       if (!v)
-        c = u ? 0 : n.length - 1;
+        c = h ? 0 : s.length - 1;
       else {
         const b = this.tabs.indexOf(v);
-        c = u ? b + 1 : b - 1, c >= n.length ? c = 0 : c < 0 && (c = n.length - 1);
+        c = h ? b + 1 : b - 1, c >= s.length ? c = 0 : c < 0 && (c = s.length - 1);
       }
     }
-    const p = n[c];
+    const p = s[c];
     p.focus(), this.autoActivate ? this.activateTab(p) : this.updateFocusableTab(p);
   }
   // scroll to item on keyup.
@@ -5217,33 +5217,33 @@ class ye extends f {
     !this.activeTab && e && this.activateTab(e), this.scrollToTab(this.activeTab);
   }
 }
-s([
-  K({ flatten: !0, selector: "[md-tab]" })
+n([
+  Y({ flatten: !0, selector: "[md-tab]" })
 ], ye.prototype, "tabs", void 0);
-s([
+n([
   d({ type: Number, attribute: "active-tab-index" })
 ], ye.prototype, "activeTabIndex", null);
-s([
+n([
   d({ type: Boolean, attribute: "auto-activate" })
 ], ye.prototype, "autoActivate", void 0);
-s([
-  k(".tabs")
+n([
+  C(".tabs")
 ], ye.prototype, "tabsScrollerElement", void 0);
-s([
-  k("slot")
+n([
+  C("slot")
 ], ye.prototype, "slotElement", void 0);
 function Oa(r) {
   return r instanceof HTMLElement && r.hasAttribute("md-tab");
 }
-const Pa = m`:host{box-sizing:border-box;display:flex;flex-direction:column;overflow:auto;scroll-behavior:smooth;scrollbar-width:none;position:relative}:host([hidden]){display:none}:host::-webkit-scrollbar{display:none}.tabs{align-items:end;display:flex;height:100%;overflow:inherit;scroll-behavior:inherit;scrollbar-width:inherit;justify-content:space-between;width:100%}::slotted(*){flex:1}::slotted([active]){z-index:1}
+const Fa = m`:host{box-sizing:border-box;display:flex;flex-direction:column;overflow:auto;scroll-behavior:smooth;scrollbar-width:none;position:relative}:host([hidden]){display:none}:host::-webkit-scrollbar{display:none}.tabs{align-items:end;display:flex;height:100%;overflow:inherit;scroll-behavior:inherit;scrollbar-width:inherit;justify-content:space-between;width:100%}::slotted(*){flex:1}::slotted([active]){z-index:1}
 `;
-let Lt = class extends ye {
+let Bt = class extends ye {
 };
-Lt.styles = [Pa];
-Lt = s([
-  w("md-tabs")
-], Lt);
-class yi extends Y {
+Bt.styles = [Fa];
+Bt = n([
+  k("md-tabs")
+], Bt);
+class yi extends K {
   constructor() {
     super(...arguments), this.inlineIcon = !1;
   }
@@ -5254,20 +5254,20 @@ class yi extends Y {
     };
   }
 }
-s([
+n([
   d({ type: Boolean, attribute: "inline-icon" })
 ], yi.prototype, "inlineIcon", void 0);
-const Fa = m`:host{--_active-indicator-color: var(--md-primary-tab-active-indicator-color, var(--md-sys-color-primary, #6750a4));--_active-indicator-height: var(--md-primary-tab-active-indicator-height, 3px);--_active-indicator-shape: var(--md-primary-tab-active-indicator-shape, 3px 3px 0px 0px);--_active-hover-state-layer-color: var(--md-primary-tab-active-hover-state-layer-color, var(--md-sys-color-primary, #6750a4));--_active-hover-state-layer-opacity: var(--md-primary-tab-active-hover-state-layer-opacity, 0.08);--_active-pressed-state-layer-color: var(--md-primary-tab-active-pressed-state-layer-color, var(--md-sys-color-primary, #6750a4));--_active-pressed-state-layer-opacity: var(--md-primary-tab-active-pressed-state-layer-opacity, 0.12);--_container-color: var(--md-primary-tab-container-color, var(--md-sys-color-surface, #fef7ff));--_container-elevation: var(--md-primary-tab-container-elevation, 0);--_container-height: var(--md-primary-tab-container-height, 48px);--_with-icon-and-label-text-container-height: var(--md-primary-tab-with-icon-and-label-text-container-height, 64px);--_hover-state-layer-color: var(--md-primary-tab-hover-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-state-layer-opacity: var(--md-primary-tab-hover-state-layer-opacity, 0.08);--_pressed-state-layer-color: var(--md-primary-tab-pressed-state-layer-color, var(--md-sys-color-primary, #6750a4));--_pressed-state-layer-opacity: var(--md-primary-tab-pressed-state-layer-opacity, 0.12);--_active-focus-icon-color: var(--md-primary-tab-active-focus-icon-color, var(--md-sys-color-primary, #6750a4));--_active-hover-icon-color: var(--md-primary-tab-active-hover-icon-color, var(--md-sys-color-primary, #6750a4));--_active-icon-color: var(--md-primary-tab-active-icon-color, var(--md-sys-color-primary, #6750a4));--_active-pressed-icon-color: var(--md-primary-tab-active-pressed-icon-color, var(--md-sys-color-primary, #6750a4));--_icon-size: var(--md-primary-tab-icon-size, 24px);--_focus-icon-color: var(--md-primary-tab-focus-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-icon-color: var(--md-primary-tab-hover-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_icon-color: var(--md-primary-tab-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_pressed-icon-color: var(--md-primary-tab-pressed-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_label-text-font: var(--md-primary-tab-label-text-font, var(--md-sys-typescale-title-small-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-primary-tab-label-text-line-height, var(--md-sys-typescale-title-small-line-height, 1.25rem));--_label-text-size: var(--md-primary-tab-label-text-size, var(--md-sys-typescale-title-small-size, 0.875rem));--_label-text-weight: var(--md-primary-tab-label-text-weight, var(--md-sys-typescale-title-small-weight, var(--md-ref-typeface-weight-medium, 500)));--_active-focus-label-text-color: var(--md-primary-tab-active-focus-label-text-color, var(--md-sys-color-primary, #6750a4));--_active-hover-label-text-color: var(--md-primary-tab-active-hover-label-text-color, var(--md-sys-color-primary, #6750a4));--_active-label-text-color: var(--md-primary-tab-active-label-text-color, var(--md-sys-color-primary, #6750a4));--_active-pressed-label-text-color: var(--md-primary-tab-active-pressed-label-text-color, var(--md-sys-color-primary, #6750a4));--_focus-label-text-color: var(--md-primary-tab-focus-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-label-text-color: var(--md-primary-tab-hover-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_label-text-color: var(--md-primary-tab-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_pressed-label-text-color: var(--md-primary-tab-pressed-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_container-shape-start-start: var(--md-primary-tab-container-shape-start-start, var(--md-primary-tab-container-shape, var(--md-sys-shape-corner-none, 0px)));--_container-shape-start-end: var(--md-primary-tab-container-shape-start-end, var(--md-primary-tab-container-shape, var(--md-sys-shape-corner-none, 0px)));--_container-shape-end-end: var(--md-primary-tab-container-shape-end-end, var(--md-primary-tab-container-shape, var(--md-sys-shape-corner-none, 0px)));--_container-shape-end-start: var(--md-primary-tab-container-shape-end-start, var(--md-primary-tab-container-shape, var(--md-sys-shape-corner-none, 0px)))}.content.stacked{flex-direction:column;gap:2px}.content.stacked.has-icon.has-label{height:var(--_with-icon-and-label-text-container-height)}
+const Pa = m`:host{--_active-indicator-color: var(--md-primary-tab-active-indicator-color, var(--md-sys-color-primary, #6750a4));--_active-indicator-height: var(--md-primary-tab-active-indicator-height, 3px);--_active-indicator-shape: var(--md-primary-tab-active-indicator-shape, 3px 3px 0px 0px);--_active-hover-state-layer-color: var(--md-primary-tab-active-hover-state-layer-color, var(--md-sys-color-primary, #6750a4));--_active-hover-state-layer-opacity: var(--md-primary-tab-active-hover-state-layer-opacity, 0.08);--_active-pressed-state-layer-color: var(--md-primary-tab-active-pressed-state-layer-color, var(--md-sys-color-primary, #6750a4));--_active-pressed-state-layer-opacity: var(--md-primary-tab-active-pressed-state-layer-opacity, 0.12);--_container-color: var(--md-primary-tab-container-color, var(--md-sys-color-surface, #fef7ff));--_container-elevation: var(--md-primary-tab-container-elevation, 0);--_container-height: var(--md-primary-tab-container-height, 48px);--_with-icon-and-label-text-container-height: var(--md-primary-tab-with-icon-and-label-text-container-height, 64px);--_hover-state-layer-color: var(--md-primary-tab-hover-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-state-layer-opacity: var(--md-primary-tab-hover-state-layer-opacity, 0.08);--_pressed-state-layer-color: var(--md-primary-tab-pressed-state-layer-color, var(--md-sys-color-primary, #6750a4));--_pressed-state-layer-opacity: var(--md-primary-tab-pressed-state-layer-opacity, 0.12);--_active-focus-icon-color: var(--md-primary-tab-active-focus-icon-color, var(--md-sys-color-primary, #6750a4));--_active-hover-icon-color: var(--md-primary-tab-active-hover-icon-color, var(--md-sys-color-primary, #6750a4));--_active-icon-color: var(--md-primary-tab-active-icon-color, var(--md-sys-color-primary, #6750a4));--_active-pressed-icon-color: var(--md-primary-tab-active-pressed-icon-color, var(--md-sys-color-primary, #6750a4));--_icon-size: var(--md-primary-tab-icon-size, 24px);--_focus-icon-color: var(--md-primary-tab-focus-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-icon-color: var(--md-primary-tab-hover-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_icon-color: var(--md-primary-tab-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_pressed-icon-color: var(--md-primary-tab-pressed-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_label-text-font: var(--md-primary-tab-label-text-font, var(--md-sys-typescale-title-small-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-primary-tab-label-text-line-height, var(--md-sys-typescale-title-small-line-height, 1.25rem));--_label-text-size: var(--md-primary-tab-label-text-size, var(--md-sys-typescale-title-small-size, 0.875rem));--_label-text-weight: var(--md-primary-tab-label-text-weight, var(--md-sys-typescale-title-small-weight, var(--md-ref-typeface-weight-medium, 500)));--_active-focus-label-text-color: var(--md-primary-tab-active-focus-label-text-color, var(--md-sys-color-primary, #6750a4));--_active-hover-label-text-color: var(--md-primary-tab-active-hover-label-text-color, var(--md-sys-color-primary, #6750a4));--_active-label-text-color: var(--md-primary-tab-active-label-text-color, var(--md-sys-color-primary, #6750a4));--_active-pressed-label-text-color: var(--md-primary-tab-active-pressed-label-text-color, var(--md-sys-color-primary, #6750a4));--_focus-label-text-color: var(--md-primary-tab-focus-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-label-text-color: var(--md-primary-tab-hover-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_label-text-color: var(--md-primary-tab-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_pressed-label-text-color: var(--md-primary-tab-pressed-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_container-shape-start-start: var(--md-primary-tab-container-shape-start-start, var(--md-primary-tab-container-shape, var(--md-sys-shape-corner-none, 0px)));--_container-shape-start-end: var(--md-primary-tab-container-shape-start-end, var(--md-primary-tab-container-shape, var(--md-sys-shape-corner-none, 0px)));--_container-shape-end-end: var(--md-primary-tab-container-shape-end-end, var(--md-primary-tab-container-shape, var(--md-sys-shape-corner-none, 0px)));--_container-shape-end-start: var(--md-primary-tab-container-shape-end-start, var(--md-primary-tab-container-shape, var(--md-sys-shape-corner-none, 0px)))}.content.stacked{flex-direction:column;gap:2px}.content.stacked.has-icon.has-label{height:var(--_with-icon-and-label-text-container-height)}
 `;
 const xi = m`:host{display:inline-flex;align-items:center;justify-content:center;outline:none;padding:0 16px;position:relative;-webkit-tap-highlight-color:rgba(0,0,0,0);vertical-align:middle;user-select:none;font-family:var(--_label-text-font);font-size:var(--_label-text-size);line-height:var(--_label-text-line-height);font-weight:var(--_label-text-weight);color:var(--_label-text-color);z-index:0;--md-ripple-hover-color: var(--_hover-state-layer-color);--md-ripple-hover-opacity: var(--_hover-state-layer-opacity);--md-ripple-pressed-color: var(--_pressed-state-layer-color);--md-ripple-pressed-opacity: var(--_pressed-state-layer-opacity);--md-elevation-level: var(--_container-elevation)}md-focus-ring{--md-focus-ring-shape: 8px}:host([active]) md-focus-ring{margin-bottom:calc(var(--_active-indicator-height) + 1px)}.button::before{background:var(--_container-color);content:"";inset:0;position:absolute;z-index:-1}.button::before,md-ripple,md-elevation{border-start-start-radius:var(--_container-shape-start-start);border-start-end-radius:var(--_container-shape-start-end);border-end-end-radius:var(--_container-shape-end-end);border-end-start-radius:var(--_container-shape-end-start)}.content{position:relative;box-sizing:border-box;display:inline-flex;flex-direction:row;align-items:center;justify-content:center;height:var(--_container-height);gap:8px}.indicator{position:absolute;box-sizing:border-box;z-index:-1;transform-origin:bottom left;background:var(--_active-indicator-color);border-radius:var(--_active-indicator-shape);height:var(--_active-indicator-height);inset:auto 0 0 0;opacity:0}::slotted([slot=icon]){display:inline-flex;position:relative;writing-mode:horizontal-tb;fill:currentColor;color:var(--_icon-color);font-size:var(--_icon-size);width:var(--_icon-size);height:var(--_icon-size)}:host(:hover){color:var(--_hover-label-text-color);cursor:pointer}:host(:hover) ::slotted([slot=icon]){color:var(--_hover-icon-color)}:host(:focus){color:var(--_focus-label-text-color)}:host(:focus) ::slotted([slot=icon]){color:var(--_focus-icon-color)}:host(:active){color:var(--_pressed-label-text-color)}:host(:active) ::slotted([slot=icon]){color:var(--_pressed-icon-color)}:host([active]) .indicator{opacity:1}:host([active]){color:var(--_active-label-text-color);--md-ripple-hover-color: var(--_active-hover-state-layer-color);--md-ripple-hover-opacity: var(--_active-hover-state-layer-opacity);--md-ripple-pressed-color: var(--_active-pressed-state-layer-color);--md-ripple-pressed-opacity: var(--_active-pressed-state-layer-opacity)}:host([active]) ::slotted([slot=icon]){color:var(--_active-icon-color)}:host([active]:hover){color:var(--_active-hover-label-text-color)}:host([active]:hover) ::slotted([slot=icon]){color:var(--_active-hover-icon-color)}:host([active]:focus){color:var(--_active-focus-label-text-color)}:host([active]:focus) ::slotted([slot=icon]){color:var(--_active-focus-icon-color)}:host([active]:active){color:var(--_active-pressed-label-text-color)}:host([active]:active) ::slotted([slot=icon]){color:var(--_active-pressed-icon-color)}:host,::slotted(*){white-space:nowrap}@media(forced-colors: active){.indicator{background:CanvasText}}
 `;
 let Nt = class extends yi {
 };
-Nt.styles = [xi, Fa];
-Nt = s([
-  w("md-primary-tab")
+Nt.styles = [xi, Pa];
+Nt = n([
+  k("md-primary-tab")
 ], Nt);
-class Ra extends Y {
+class Ra extends K {
   constructor() {
     super(...arguments), this.fullWidthIndicator = !0;
   }
@@ -5277,10 +5277,10 @@ const Ma = m`:host{--_active-indicator-color: var(--md-secondary-tab-active-indi
 let Vt = class extends Ra {
 };
 Vt.styles = [xi, Ma];
-Vt = s([
-  w("md-secondary-tab")
+Vt = n([
+  k("md-secondary-tab")
 ], Vt);
-const Ba = {
+const La = {
   dialog: [
     [
       // Dialog slide down
@@ -5332,7 +5332,7 @@ const Ba = {
       { duration: 300, easing: "linear", fill: "forwards" }
     ]
   ]
-}, La = {
+}, Ba = {
   dialog: [
     [
       // Dialog slide up
@@ -5386,7 +5386,7 @@ const Ba = {
   ]
 };
 const Na = Q(f);
-class I extends Na {
+class D extends Na {
   // We do not use `delegatesFocus: true` due to a Chromium bug with
   // selecting text.
   // See https://bugs.chromium.org/p/chromium/issues/detail?id=950357
@@ -5400,7 +5400,7 @@ class I extends Na {
     e !== this.isOpen && (this.isOpen = e, e ? (this.setAttribute("open", ""), this.show()) : (this.removeAttribute("open"), this.close()));
   }
   constructor() {
-    super(), this.quick = !1, this.returnValue = "", this.noFocusTrap = !1, this.getOpenAnimation = () => Ba, this.getCloseAnimation = () => La, this.isOpen = !1, this.isOpening = !1, this.isConnectedPromise = this.getIsConnectedPromise(), this.isAtScrollTop = !1, this.isAtScrollBottom = !1, this.nextClickIsFromContent = !1, this.hasHeadline = !1, this.hasActions = !1, this.hasIcon = !1, this.escapePressedWithoutCancel = !1, this.treewalker = document.createTreeWalker(this, NodeFilter.SHOW_ELEMENT), this.addEventListener("submit", this.handleSubmit);
+    super(), this.quick = !1, this.returnValue = "", this.noFocusTrap = !1, this.getOpenAnimation = () => La, this.getCloseAnimation = () => Ba, this.isOpen = !1, this.isOpening = !1, this.isConnectedPromise = this.getIsConnectedPromise(), this.isAtScrollTop = !1, this.isAtScrollBottom = !1, this.nextClickIsFromContent = !1, this.hasHeadline = !1, this.hasActions = !1, this.hasIcon = !1, this.escapePressedWithoutCancel = !1, this.treewalker = document.createTreeWalker(this, NodeFilter.SHOW_ELEMENT), this.addEventListener("submit", this.handleSubmit);
   }
   /**
    * Opens the dialog and fires a cancelable `open` event. After a dialog's
@@ -5478,21 +5478,21 @@ class I extends Na {
       <div class="scrim"></div>
       <dialog
         class=${V(t)}
-        aria-label=${a || h}
-        aria-labelledby=${this.hasHeadline ? "headline" : h}
-        role=${this.type === "alert" ? "alertdialog" : h}
+        aria-label=${a || u}
+        aria-labelledby=${this.hasHeadline ? "headline" : u}
+        role=${this.type === "alert" ? "alertdialog" : u}
         @cancel=${this.handleCancel}
         @click=${this.handleDialogClick}
         @close=${this.handleClose}
         @keydown=${this.handleKeydown}
-        .returnValue=${this.returnValue || h}>
-        ${o ? i : h}
+        .returnValue=${this.returnValue || u}>
+        ${o ? i : u}
         <div class="container" @click=${this.handleContentClick}>
           <div class="headline">
             <div class="icon" aria-hidden="true">
               <slot name="icon" @slotchange=${this.handleIconChange}></slot>
             </div>
-            <h2 id="headline" aria-hidden=${!this.hasHeadline || h}>
+            <h2 id="headline" aria-hidden=${!this.hasHeadline || u}>
               <slot
                 name="headline"
                 @slotchange=${this.handleHeadlineChange}></slot>
@@ -5511,7 +5511,7 @@ class I extends Na {
             <slot name="actions" @slotchange=${this.handleActionsChange}></slot>
           </div>
         </div>
-        ${o ? i : h}
+        ${o ? i : u}
       </dialog>
     `;
   }
@@ -5553,25 +5553,25 @@ class I extends Na {
   async animateDialog(e) {
     if (this.cancelAnimations?.abort(), this.cancelAnimations = new AbortController(), this.quick)
       return;
-    const { dialog: t, scrim: o, container: i, headline: a, content: n, actions: c } = this;
-    if (!t || !o || !i || !a || !n || !c)
+    const { dialog: t, scrim: o, container: i, headline: a, content: s, actions: c } = this;
+    if (!t || !o || !i || !a || !s || !c)
       return;
-    const { container: p, dialog: g, scrim: u, headline: v, content: b, actions: y } = e, _ = [
+    const { container: p, dialog: g, scrim: h, headline: v, content: b, actions: x } = e, y = [
       [t, g ?? []],
-      [o, u ?? []],
+      [o, h ?? []],
       [i, p ?? []],
       [a, v ?? []],
-      [n, b ?? []],
-      [c, y ?? []]
-    ], C = [];
-    for (const [E, D] of _)
-      for (const $ of D) {
-        const P = E.animate(...$);
+      [s, b ?? []],
+      [c, x ?? []]
+    ], _ = [];
+    for (const [S, A] of y)
+      for (const $ of A) {
+        const O = S.animate(...$);
         this.cancelAnimations.signal.addEventListener("abort", () => {
-          P.cancel();
-        }), C.push(P);
+          O.cancel();
+        }), _.push(O);
       }
-    await Promise.all(C.map((E) => E.finished.catch(() => {
+    await Promise.all(_.map((S) => S.finished.catch(() => {
     })));
   }
   handleHeadlineChange(e) {
@@ -5601,12 +5601,12 @@ class I extends Na {
       this.dialog?.focus();
       return;
     }
-    const i = e.target === this.firstFocusTrap, a = !i, n = e.relatedTarget === t, c = e.relatedTarget === o, p = !n && !c;
+    const i = e.target === this.firstFocusTrap, a = !i, s = e.relatedTarget === t, c = e.relatedTarget === o, p = !s && !c;
     if (a && c || i && p) {
       t.focus();
       return;
     }
-    if (i && n || a && p) {
+    if (i && s || a && p) {
       o.focus();
       return;
     }
@@ -5622,77 +5622,77 @@ class I extends Na {
     return [e, t];
   }
 }
-s([
+n([
   d({ type: Boolean })
-], I.prototype, "open", null);
-s([
+], D.prototype, "open", null);
+n([
   d({ type: Boolean })
-], I.prototype, "quick", void 0);
-s([
+], D.prototype, "quick", void 0);
+n([
   d({ attribute: !1 })
-], I.prototype, "returnValue", void 0);
-s([
+], D.prototype, "returnValue", void 0);
+n([
   d()
-], I.prototype, "type", void 0);
-s([
+], D.prototype, "type", void 0);
+n([
   d({ type: Boolean, attribute: "no-focus-trap" })
-], I.prototype, "noFocusTrap", void 0);
-s([
-  k("dialog")
-], I.prototype, "dialog", void 0);
-s([
-  k(".scrim")
-], I.prototype, "scrim", void 0);
-s([
-  k(".container")
-], I.prototype, "container", void 0);
-s([
-  k(".headline")
-], I.prototype, "headline", void 0);
-s([
-  k(".content")
-], I.prototype, "content", void 0);
-s([
-  k(".actions")
-], I.prototype, "actions", void 0);
-s([
-  A()
-], I.prototype, "isAtScrollTop", void 0);
-s([
-  A()
-], I.prototype, "isAtScrollBottom", void 0);
-s([
-  k(".scroller")
-], I.prototype, "scroller", void 0);
-s([
-  k(".top.anchor")
-], I.prototype, "topAnchor", void 0);
-s([
-  k(".bottom.anchor")
-], I.prototype, "bottomAnchor", void 0);
-s([
-  k(".focus-trap")
-], I.prototype, "firstFocusTrap", void 0);
-s([
-  A()
-], I.prototype, "hasHeadline", void 0);
-s([
-  A()
-], I.prototype, "hasActions", void 0);
-s([
-  A()
-], I.prototype, "hasIcon", void 0);
+], D.prototype, "noFocusTrap", void 0);
+n([
+  C("dialog")
+], D.prototype, "dialog", void 0);
+n([
+  C(".scrim")
+], D.prototype, "scrim", void 0);
+n([
+  C(".container")
+], D.prototype, "container", void 0);
+n([
+  C(".headline")
+], D.prototype, "headline", void 0);
+n([
+  C(".content")
+], D.prototype, "content", void 0);
+n([
+  C(".actions")
+], D.prototype, "actions", void 0);
+n([
+  I()
+], D.prototype, "isAtScrollTop", void 0);
+n([
+  I()
+], D.prototype, "isAtScrollBottom", void 0);
+n([
+  C(".scroller")
+], D.prototype, "scroller", void 0);
+n([
+  C(".top.anchor")
+], D.prototype, "topAnchor", void 0);
+n([
+  C(".bottom.anchor")
+], D.prototype, "bottomAnchor", void 0);
+n([
+  C(".focus-trap")
+], D.prototype, "firstFocusTrap", void 0);
+n([
+  I()
+], D.prototype, "hasHeadline", void 0);
+n([
+  I()
+], D.prototype, "hasActions", void 0);
+n([
+  I()
+], D.prototype, "hasIcon", void 0);
 function Va(r) {
   const e = ":is(button,input,select,textarea,object,:is(a,area)[href],[tabindex],[contenteditable=true])", t = ":not(:disabled,[disabled])";
   return r.matches(e + t + ':not([tabindex^="-"])') ? !0 : !r.localName.includes("-") || !r.matches(t) ? !1 : r.shadowRoot?.delegatesFocus ?? !1;
 }
 const Ua = m`:host{border-start-start-radius:var(--md-dialog-container-shape-start-start, var(--md-dialog-container-shape, var(--md-sys-shape-corner-extra-large, 28px)));border-start-end-radius:var(--md-dialog-container-shape-start-end, var(--md-dialog-container-shape, var(--md-sys-shape-corner-extra-large, 28px)));border-end-end-radius:var(--md-dialog-container-shape-end-end, var(--md-dialog-container-shape, var(--md-sys-shape-corner-extra-large, 28px)));border-end-start-radius:var(--md-dialog-container-shape-end-start, var(--md-dialog-container-shape, var(--md-sys-shape-corner-extra-large, 28px)));display:contents;margin:auto;max-height:min(560px,100% - 48px);max-width:min(560px,100% - 48px);min-height:140px;min-width:280px;position:fixed;height:fit-content;width:fit-content}dialog{background:rgba(0,0,0,0);border:none;border-radius:inherit;flex-direction:column;height:inherit;margin:inherit;max-height:inherit;max-width:inherit;min-height:inherit;min-width:inherit;outline:none;overflow:visible;padding:0;width:inherit}dialog[open]{display:flex}::backdrop{background:none}.scrim{background:var(--md-sys-color-scrim, #000);display:none;inset:0;opacity:32%;pointer-events:none;position:fixed;z-index:1}:host([open]) .scrim{display:flex}h2{all:unset;align-self:stretch}.headline{align-items:center;color:var(--md-dialog-headline-color, var(--md-sys-color-on-surface, #1d1b20));display:flex;flex-direction:column;font-family:var(--md-dialog-headline-font, var(--md-sys-typescale-headline-small-font, var(--md-ref-typeface-brand, Roboto)));font-size:var(--md-dialog-headline-size, var(--md-sys-typescale-headline-small-size, 1.5rem));line-height:var(--md-dialog-headline-line-height, var(--md-sys-typescale-headline-small-line-height, 2rem));font-weight:var(--md-dialog-headline-weight, var(--md-sys-typescale-headline-small-weight, var(--md-ref-typeface-weight-regular, 400)));position:relative}slot[name=headline]::slotted(*){align-items:center;align-self:stretch;box-sizing:border-box;display:flex;gap:8px;padding:24px 24px 0}.icon{display:flex}slot[name=icon]::slotted(*){color:var(--md-dialog-icon-color, var(--md-sys-color-secondary, #625b71));fill:currentColor;font-size:var(--md-dialog-icon-size, 24px);margin-top:24px;height:var(--md-dialog-icon-size, 24px);width:var(--md-dialog-icon-size, 24px)}.has-icon slot[name=headline]::slotted(*){justify-content:center;padding-top:16px}.scrollable slot[name=headline]::slotted(*){padding-bottom:16px}.scrollable.has-headline slot[name=content]::slotted(*){padding-top:8px}.container{border-radius:inherit;display:flex;flex-direction:column;flex-grow:1;overflow:hidden;position:relative;transform-origin:top}.container::before{background:var(--md-dialog-container-color, var(--md-sys-color-surface-container-high, #ece6f0));border-radius:inherit;content:"";inset:0;position:absolute}.scroller{display:flex;flex:1;flex-direction:column;overflow:hidden;z-index:1}.scrollable .scroller{overflow-y:scroll}.content{color:var(--md-dialog-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));font-family:var(--md-dialog-supporting-text-font, var(--md-sys-typescale-body-medium-font, var(--md-ref-typeface-plain, Roboto)));font-size:var(--md-dialog-supporting-text-size, var(--md-sys-typescale-body-medium-size, 0.875rem));line-height:var(--md-dialog-supporting-text-line-height, var(--md-sys-typescale-body-medium-line-height, 1.25rem));flex:1;font-weight:var(--md-dialog-supporting-text-weight, var(--md-sys-typescale-body-medium-weight, var(--md-ref-typeface-weight-regular, 400)));height:min-content;position:relative}slot[name=content]::slotted(*){box-sizing:border-box;padding:24px}.anchor{position:absolute}.top.anchor{top:0}.bottom.anchor{bottom:0}.actions{position:relative}slot[name=actions]::slotted(*){box-sizing:border-box;display:flex;gap:8px;justify-content:flex-end;padding:16px 24px 24px}.has-actions slot[name=content]::slotted(*){padding-bottom:8px}md-divider{display:none;position:absolute}.has-headline.show-top-divider .headline md-divider,.has-actions.show-bottom-divider .actions md-divider{display:flex}.headline md-divider{bottom:0}.actions md-divider{top:0}@media(forced-colors: active){dialog{outline:2px solid WindowText}}
 `;
-let Ut = class extends I {
+let Ut = class extends D {
 };
 Ut.styles = [Ua];
-Ut = s([
-  w("md-dialog")
+Ut = n([
+  k("md-dialog")
 ], Ut);
 const qa = Q(f);
 class xe extends qa {
@@ -5705,10 +5705,10 @@ class xe extends qa {
       <div
         class="progress ${V(this.getRenderClasses())}"
         role="progressbar"
-        aria-label="${e || h}"
+        aria-label="${e || u}"
         aria-valuemin="0"
         aria-valuemax=${this.max}
-        aria-valuenow=${this.indeterminate ? h : this.value}
+        aria-valuenow=${this.indeterminate ? u : this.value}
         >${this.renderIndicator()}</div
       >
     `;
@@ -5720,16 +5720,16 @@ class xe extends qa {
     };
   }
 }
-s([
+n([
   d({ type: Number })
 ], xe.prototype, "value", void 0);
-s([
+n([
   d({ type: Number })
 ], xe.prototype, "max", void 0);
-s([
+n([
   d({ type: Boolean })
 ], xe.prototype, "indeterminate", void 0);
-s([
+n([
   d({ type: Boolean, attribute: "four-color" })
 ], xe.prototype, "fourColor", void 0);
 class Ha extends xe {
@@ -5771,10 +5771,10 @@ const Wa = m`:host{--_active-indicator-color: var(--md-circular-progress-active-
 let qt = class extends Ha {
 };
 qt.styles = [Wa];
-qt = s([
-  w("md-circular-progress")
+qt = n([
+  k("md-circular-progress")
 ], qt);
-class _i extends xe {
+class wi extends xe {
   constructor() {
     super(...arguments), this.buffer = 0;
   }
@@ -5786,9 +5786,9 @@ class _i extends xe {
       transform: `scaleX(${(this.indeterminate ? 1 : this.value / this.max) * 100}%)`
     }, t = this.buffer ?? 0, o = t > 0, a = {
       transform: `scaleX(${(this.indeterminate || !o ? 1 : t / this.max) * 100}%)`
-    }, n = this.indeterminate || !o || t >= this.max || this.value >= this.max;
+    }, s = this.indeterminate || !o || t >= this.max || this.value >= this.max;
     return l`
-      <div class="dots" ?hidden=${n}></div>
+      <div class="dots" ?hidden=${s}></div>
       <div class="inactive-track" style=${be(a)}></div>
       <div class="bar primary-bar" style=${be(e)}>
         <div class="bar-inner"></div>
@@ -5799,16 +5799,16 @@ class _i extends xe {
     `;
   }
 }
-s([
+n([
   d({ type: Number })
-], _i.prototype, "buffer", void 0);
+], wi.prototype, "buffer", void 0);
 const ja = m`:host{--_active-indicator-color: var(--md-linear-progress-active-indicator-color, var(--md-sys-color-primary, #6750a4));--_active-indicator-height: var(--md-linear-progress-active-indicator-height, 4px);--_four-color-active-indicator-four-color: var(--md-linear-progress-four-color-active-indicator-four-color, var(--md-sys-color-tertiary-container, #ffd8e4));--_four-color-active-indicator-one-color: var(--md-linear-progress-four-color-active-indicator-one-color, var(--md-sys-color-primary, #6750a4));--_four-color-active-indicator-three-color: var(--md-linear-progress-four-color-active-indicator-three-color, var(--md-sys-color-tertiary, #7d5260));--_four-color-active-indicator-two-color: var(--md-linear-progress-four-color-active-indicator-two-color, var(--md-sys-color-primary-container, #eaddff));--_track-color: var(--md-linear-progress-track-color, var(--md-sys-color-surface-container-highest, #e6e0e9));--_track-height: var(--md-linear-progress-track-height, 4px);--_track-shape: var(--md-linear-progress-track-shape, var(--md-sys-shape-corner-none, 0px));border-radius:var(--_track-shape);display:flex;position:relative;min-width:80px;height:var(--_track-height);content-visibility:auto;contain:strict}.progress,.dots,.inactive-track,.bar,.bar-inner{position:absolute}.progress{direction:ltr;inset:0;border-radius:inherit;overflow:hidden;display:flex;align-items:center}.bar{animation:none;width:100%;height:var(--_active-indicator-height);transform-origin:left center;transition:transform 250ms cubic-bezier(0.4, 0, 0.6, 1)}.secondary-bar{display:none}.bar-inner{inset:0;animation:none;background:var(--_active-indicator-color)}.inactive-track{background:var(--_track-color);inset:0;transition:transform 250ms cubic-bezier(0.4, 0, 0.6, 1);transform-origin:left center}.dots{inset:0;animation:linear infinite 250ms;animation-name:buffering;background-color:var(--_track-color);background-repeat:repeat-x;-webkit-mask-image:url("data:image/svg+xml,%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5 2' preserveAspectRatio='xMinYMin slice'%3E%3Ccircle cx='1' cy='1' r='1'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5 2' preserveAspectRatio='xMinYMin slice'%3E%3Ccircle cx='1' cy='1' r='1'/%3E%3C/svg%3E");z-index:-1}.dots[hidden]{display:none}.indeterminate .bar{transition:none}.indeterminate .primary-bar{inset-inline-start:-145.167%}.indeterminate .secondary-bar{inset-inline-start:-54.8889%;display:block}.indeterminate .primary-bar{animation:linear infinite 2s;animation-name:primary-indeterminate-translate}.indeterminate .primary-bar>.bar-inner{animation:linear infinite 2s primary-indeterminate-scale}.indeterminate.four-color .primary-bar>.bar-inner{animation-name:primary-indeterminate-scale,four-color;animation-duration:2s,4s}.indeterminate .secondary-bar{animation:linear infinite 2s;animation-name:secondary-indeterminate-translate}.indeterminate .secondary-bar>.bar-inner{animation:linear infinite 2s secondary-indeterminate-scale}.indeterminate.four-color .secondary-bar>.bar-inner{animation-name:secondary-indeterminate-scale,four-color;animation-duration:2s,4s}:host(:dir(rtl)){transform:scale(-1)}@keyframes primary-indeterminate-scale{0%{transform:scaleX(0.08)}36.65%{animation-timing-function:cubic-bezier(0.334731, 0.12482, 0.785844, 1);transform:scaleX(0.08)}69.15%{animation-timing-function:cubic-bezier(0.06, 0.11, 0.6, 1);transform:scaleX(0.661479)}100%{transform:scaleX(0.08)}}@keyframes secondary-indeterminate-scale{0%{animation-timing-function:cubic-bezier(0.205028, 0.057051, 0.57661, 0.453971);transform:scaleX(0.08)}19.15%{animation-timing-function:cubic-bezier(0.152313, 0.196432, 0.648374, 1.00432);transform:scaleX(0.457104)}44.15%{animation-timing-function:cubic-bezier(0.257759, -0.003163, 0.211762, 1.38179);transform:scaleX(0.72796)}100%{transform:scaleX(0.08)}}@keyframes buffering{0%{transform:translateX(calc(var(--_track-height) / 2 * 5))}}@keyframes primary-indeterminate-translate{0%{transform:translateX(0px)}20%{animation-timing-function:cubic-bezier(0.5, 0, 0.701732, 0.495819);transform:translateX(0px)}59.15%{animation-timing-function:cubic-bezier(0.302435, 0.381352, 0.55, 0.956352);transform:translateX(83.6714%)}100%{transform:translateX(200.611%)}}@keyframes secondary-indeterminate-translate{0%{animation-timing-function:cubic-bezier(0.15, 0, 0.515058, 0.409685);transform:translateX(0px)}25%{animation-timing-function:cubic-bezier(0.31033, 0.284058, 0.8, 0.733712);transform:translateX(37.6519%)}48.35%{animation-timing-function:cubic-bezier(0.4, 0.627035, 0.6, 0.902026);transform:translateX(84.3862%)}100%{transform:translateX(160.278%)}}@keyframes four-color{0%{background:var(--_four-color-active-indicator-one-color)}15%{background:var(--_four-color-active-indicator-one-color)}25%{background:var(--_four-color-active-indicator-two-color)}40%{background:var(--_four-color-active-indicator-two-color)}50%{background:var(--_four-color-active-indicator-three-color)}65%{background:var(--_four-color-active-indicator-three-color)}75%{background:var(--_four-color-active-indicator-four-color)}90%{background:var(--_four-color-active-indicator-four-color)}100%{background:var(--_four-color-active-indicator-one-color)}}@media(forced-colors: active){:host{outline:1px solid CanvasText}.bar-inner,.dots{background-color:CanvasText}}
 `;
-let Ht = class extends _i {
+let Ht = class extends wi {
 };
 Ht.styles = [ja];
-Ht = s([
-  w("md-linear-progress")
+Ht = n([
+  k("md-linear-progress")
 ], Ht);
 class ho extends f {
   render() {
@@ -5820,37 +5820,38 @@ class ho extends f {
     `;
   }
 }
-const Ka = m`:host{--_container-color: var(--md-elevated-card-container-color, var(--md-sys-color-surface-container-low, #f7f2fa));--_container-elevation: var(--md-elevated-card-container-elevation, 1);--_container-shadow-color: var(--md-elevated-card-container-shadow-color, var(--md-sys-color-shadow, #000));--_container-shape: var(--md-elevated-card-container-shape, var(--md-sys-shape-corner-medium, 12px))}
+const Ya = m`:host{--_container-color: var(--md-elevated-card-container-color, var(--md-sys-color-surface-container-low, #f7f2fa));--_container-elevation: var(--md-elevated-card-container-elevation, 1);--_container-shadow-color: var(--md-elevated-card-container-shadow-color, var(--md-sys-color-shadow, #000));--_container-shape: var(--md-elevated-card-container-shape, var(--md-sys-shape-corner-medium, 12px))}
 `;
 const uo = m`:host{border-radius:var(--_container-shape);box-sizing:border-box;display:flex;flex-direction:column;position:relative;z-index:0}md-elevation,.background,.outline{border-radius:inherit;inset:0;pointer-events:none;position:absolute}.background{background:var(--_container-color);z-index:-1}.outline{border:1px solid rgba(0,0,0,0);z-index:1}md-elevation{z-index:-1;--md-elevation-level: var(--_container-elevation);--md-elevation-shadow-color: var(--_container-shadow-color)}slot{border-radius:inherit}
 `;
 let Wt = class extends ho {
 };
-Wt.styles = [uo, Ka];
-Wt = s([
-  w("md-elevated-card")
+Wt.styles = [uo, Ya];
+Wt = n([
+  k("md-elevated-card")
 ], Wt);
-const Ya = m`:host{--_container-color: var(--md-filled-card-container-color, var(--md-sys-color-surface-container-highest, #e6e0e9));--_container-elevation: var(--md-filled-card-container-elevation, 0);--_container-shadow-color: var(--md-filled-card-container-shadow-color, var(--md-sys-color-shadow, #000));--_container-shape: var(--md-filled-card-container-shape, var(--md-sys-shape-corner-medium, 12px))}
+const Ka = m`:host{--_container-color: var(--md-filled-card-container-color, var(--md-sys-color-surface-container-highest, #e6e0e9));--_container-elevation: var(--md-filled-card-container-elevation, 0);--_container-shadow-color: var(--md-filled-card-container-shadow-color, var(--md-sys-color-shadow, #000));--_container-shape: var(--md-filled-card-container-shape, var(--md-sys-shape-corner-medium, 12px))}
 `;
 let jt = class extends ho {
 };
-jt.styles = [uo, Ya];
-jt = s([
-  w("md-filled-card")
+jt.styles = [uo, Ka];
+jt = n([
+  k("md-filled-card")
 ], jt);
 const Ga = m`:host{--_container-color: var(--md-outlined-card-container-color, var(--md-sys-color-surface, #fef7ff));--_container-elevation: var(--md-outlined-card-container-elevation, 0);--_container-shadow-color: var(--md-outlined-card-container-shadow-color, var(--md-sys-color-shadow, #000));--_container-shape: var(--md-outlined-card-container-shape, var(--md-sys-shape-corner-medium, 12px));--_outline-color: var(--md-outlined-card-outline-color, var(--md-sys-color-outline-variant, #cac4d0));--_outline-width: var(--md-outlined-card-outline-width, 1px)}.outline{border-color:var(--_outline-color);border-width:var(--_outline-width)}
 `;
-let Kt = class extends ho {
+let Yt = class extends ho {
 };
-Kt.styles = [uo, Ga];
-Kt = s([
-  w("md-outlined-card")
-], Kt);
+Yt.styles = [uo, Ga];
+Yt = n([
+  k("md-outlined-card")
+], Yt);
 class Xa extends f {
   static properties = {
     label: { type: String },
     active: { type: Boolean, reflect: !0 },
-    count: { type: Number }
+    count: { type: Number },
+    variant: { type: String, reflect: !0 }
   };
   static styles = m`
     :host {
@@ -5865,7 +5866,7 @@ class Xa extends f {
       cursor: pointer;
       transition: all 0.15s ease;
       
-      /* Opaque white background by default */
+      /* Opaque background by default; overridden by variant */
       background-color: var(--wy-filter-chip-bg, var(--md-sys-color-surface));
       border: 1px solid var(--wy-filter-chip-border, transparent);
       color: var(--wy-filter-chip-text, var(--md-sys-color-on-surface));
@@ -5907,6 +5908,13 @@ class Xa extends f {
       box-shadow: none;
     }
 
+    /* Soft variant: no border, Surface Variant background */
+    :host([variant="soft"]) {
+      background-color: var(--wy-filter-chip-soft-bg, var(--md-sys-color-surface-variant));
+      border: none;
+      border-width: 0;
+    }
+
     .count {
       opacity: 0.7;
       font-size: 10px;
@@ -5943,10 +5951,11 @@ class Za extends f {
     hideViewToggle: { type: Boolean, attribute: "hide-view-toggle" },
     hideDetailsToggle: { type: Boolean, attribute: "hide-details-toggle" },
     showFeaturedOnly: { type: Boolean, attribute: "show-featured-only" },
+    chipVariant: { type: String, attribute: "chip-variant" },
     isScrolled: { type: Boolean, state: !0 }
   };
   constructor() {
-    super(), this.viewMode = "grid", this.showDetails = !1, this.activeCategory = "all", this.categories = ["Productivity", "Expertise", "Travel & Shopping"], this.searchValue = "", this.hideViewToggle = !1, this.hideDetailsToggle = !1, this.showFeaturedOnly = !1, this.isScrolled = !1, this._scrollThreshold = 50;
+    super(), this.viewMode = "grid", this.showDetails = !1, this.activeCategory = "all", this.categories = ["Productivity", "Expertise", "Travel & Shopping"], this.searchValue = "", this.hideViewToggle = !1, this.hideDetailsToggle = !1, this.showFeaturedOnly = !1, this.chipVariant = "", this.isScrolled = !1, this._scrollThreshold = 50;
   }
   connectedCallback() {
     super.connectedCallback(), this._handleScroll = this._handleScroll.bind(this), setTimeout(() => {
@@ -5965,27 +5974,27 @@ class Za extends f {
   _findScrollableContainer() {
     const e = document.querySelector(".prompt-area");
     if (e) {
-      const n = window.getComputedStyle(e);
-      if (n.overflowY === "auto" || n.overflowY === "scroll")
+      const s = window.getComputedStyle(e);
+      if (s.overflowY === "auto" || s.overflowY === "scroll")
         return e;
     }
     const t = document.querySelector(".main-content");
     if (t) {
-      const n = window.getComputedStyle(t);
-      if (n.overflowY === "auto" || n.overflowY === "scroll")
+      const s = window.getComputedStyle(t);
+      if (s.overflowY === "auto" || s.overflowY === "scroll")
         return t;
     }
     const o = this.parentElement?.querySelectorAll('[class*="scroll"], [class*="area"]');
     if (o)
-      for (const n of o) {
-        const c = window.getComputedStyle(n);
+      for (const s of o) {
+        const c = window.getComputedStyle(s);
         if (c.overflowY === "auto" || c.overflowY === "scroll")
-          return n;
+          return s;
       }
     let i = this.parentElement;
     for (; i && i !== document.body; ) {
-      const n = window.getComputedStyle(i);
-      if (n.overflowY === "auto" || n.overflowY === "scroll")
+      const s = window.getComputedStyle(i);
+      if (s.overflowY === "auto" || s.overflowY === "scroll")
         return i;
       i = i.parentElement;
     }
@@ -6377,17 +6386,20 @@ class Za extends f {
 
         <div class="category-section">
           <wy-filter-chip
+            variant="${this.chipVariant || "default"}"
             label="Featured"
             ?active="${this.showFeaturedOnly}"
             @click="${this._toggleFeatured}"
           ></wy-filter-chip>
           <wy-filter-chip
+            variant="${this.chipVariant || "default"}"
             label="All"
             ?active="${this.activeCategory === "all" && !this.showFeaturedOnly}"
             @click="${() => this._setCategory("all")}"
           ></wy-filter-chip>
           ${this.categories.map((e) => l`
             <wy-filter-chip
+              variant="${this.chipVariant || "default"}"
               label="${e}"
               ?active="${this.activeCategory === e && !this.showFeaturedOnly}"
               @click="${() => this._setCategory(e)}"
@@ -7216,11 +7228,11 @@ class is extends f {
                 @mouseenter="${() => this._focusedSuggestionIndex = o}"
               >
                 <span>${t.value}</span>
-                ${t.count ? l`<span class="suggestion-count">(${t.count})</span>` : h}
+                ${t.count ? l`<span class="suggestion-count">(${t.count})</span>` : u}
               </div>
             `)}
           </div>
-        ` : h}
+        ` : u}
       </div>
     `;
   }
@@ -7584,7 +7596,7 @@ class as extends f {
     const e = this.options.find((i) => i.value === this.value), t = e ? e.label : this.placeholder, o = !e;
     return l`
             <div class="container">
-                ${this.label ? l`<div class="label">${this.label}</div>` : h}
+                ${this.label ? l`<div class="label">${this.label}</div>` : u}
                 <button 
                     class="selector ${this._showDropdown ? "open" : ""}"
                     @click="${this._toggleDropdown}"
@@ -7604,8 +7616,8 @@ class as extends f {
                                 class="item ${i.value === this.value ? "selected" : ""} ${a === this._focusedIndex ? "focused" : ""}"
                                 role="option"
                                 aria-selected="${i.value === this.value}"
-                                @mousedown="${(n) => {
-      n.preventDefault(), this._select(i.value);
+                                @mousedown="${(s) => {
+      s.preventDefault(), this._select(i.value);
     }}"
                                 @mouseenter="${() => this._focusedIndex = a}"
                             >
@@ -7613,7 +7625,7 @@ class as extends f {
                             </div>
                         `) : l`<div class="no-results">No options available</div>`}
                     </div>
-                ` : h}
+                ` : u}
             </div>
         `;
   }
@@ -8042,7 +8054,7 @@ class ns extends f {
                             tabindex="${t === a ? "0" : "-1"}"
                             ?disabled="${this.disabled || !e}"
                             @click="${() => this._select(a)}"
-                            @keydown="${(n) => this._handleKeyDown(n, a)}"
+                            @keydown="${(s) => this._handleKeyDown(s, a)}"
                         >
                             ${this._getDisplayLabel(a)}
                         </button>
@@ -8397,8 +8409,8 @@ class ds extends f {
     }
   }
   _insertVariable(e) {
-    const t = this.shadowRoot.querySelector("textarea"), o = t.selectionStart, i = t.selectionEnd, a = this.value.substring(0, o), n = this.value.substring(i), c = `{{${e}}}`;
-    this.value = a + c + n, this.dispatchEvent(new CustomEvent("input", {
+    const t = this.shadowRoot.querySelector("textarea"), o = t.selectionStart, i = t.selectionEnd, a = this.value.substring(0, o), s = this.value.substring(i), c = `{{${e}}}`;
+    this.value = a + c + s, this.dispatchEvent(new CustomEvent("input", {
       detail: { value: this.value },
       bubbles: !0,
       composed: !0
@@ -9092,8 +9104,8 @@ class ps extends f {
     this._notifyChange(i);
   }
   _handleStepChange(e, t) {
-    const { index: o, step: i } = t.detail, a = [...this.variations], n = a[e];
-    n.steps && (n.steps[o] = i, this._notifyChange(a));
+    const { index: o, step: i } = t.detail, a = [...this.variations], s = a[e];
+    s.steps && (s.steps[o] = i, this._notifyChange(a));
   }
   _handleStepDelete(e, t) {
     const { index: o } = t.detail, i = [...this.variations], a = i[e];
@@ -9153,7 +9165,7 @@ class ps extends f {
 
 This action cannot be undone.`;
     if (confirm(o)) {
-      const i = this.variations.filter((a, n) => n !== e);
+      const i = this.variations.filter((a, s) => s !== e);
       this._notifyChange(i), this._expandedIndex === e ? this._expandedIndex = -1 : this._expandedIndex > e && this._expandedIndex--;
     }
   }
@@ -9178,7 +9190,7 @@ This action cannot be undone.`;
     }));
   }
   _renderVariation(e, t) {
-    const o = this._expandedIndex === t, i = t === 0, a = t === this.variations.length - 1, n = e.steps && e.steps.length > 0, c = e.template || !n, p = n ? "multi" : "single", g = (e.variables || []).map((u) => u.name);
+    const o = this._expandedIndex === t, i = t === 0, a = t === this.variations.length - 1, s = e.steps && e.steps.length > 0, c = e.template || !s, p = s ? "multi" : "single", g = (e.variables || []).map((h) => h.name);
     return l`
             <div class="variation-card ${o ? "expanded" : ""}">
                 <!-- Header -->
@@ -9187,7 +9199,7 @@ This action cannot be undone.`;
                         <span class="material-symbols-outlined drag-handle">drag_indicator</span>
                     ` : ""}
                     <h3 class="variation-title">${e.name || "Unnamed Variation"}</h3>
-                    ${n ? l`
+                    ${s ? l`
                         <span class="variation-badge">Multi-Step</span>
                     ` : ""}
                     <span class="material-symbols-outlined collapse-icon">expand_more</span>
@@ -9202,9 +9214,9 @@ This action cannot be undone.`;
                                 <input
                                     type="text"
                                     .value="${e.name || ""}"
-                                    @input="${(u) => this._handleFieldChange(t, "name", u.target.value)}"
+                                    @input="${(h) => this._handleFieldChange(t, "name", h.target.value)}"
                                     placeholder="e.g., Tina Barney Style Photo"
-                                    @click="${(u) => u.stopPropagation()}"
+                                    @click="${(h) => h.stopPropagation()}"
                                 >
                             </wy-form-field>
 
@@ -9216,9 +9228,9 @@ This action cannot be undone.`;
                                 <input
                                     type="text"
                                     .value="${e.id || ""}"
-                                    @input="${(u) => this._handleFieldChange(t, "id", u.target.value)}"
+                                    @input="${(h) => this._handleFieldChange(t, "id", h.target.value)}"
                                     placeholder="e.g., tina-barney"
-                                    @click="${(u) => u.stopPropagation()}"
+                                    @click="${(h) => h.stopPropagation()}"
                                 >
                             </wy-form-field>
 
@@ -9227,14 +9239,14 @@ This action cannot be undone.`;
                                 <textarea
                                     rows="3"
                                     .value="${e.description || ""}"
-                                    @input="${(u) => this._handleFieldChange(t, "description", u.target.value)}"
+                                    @input="${(h) => this._handleFieldChange(t, "description", h.target.value)}"
                                     placeholder="Description shown in variation selector"
-                                    @click="${(u) => u.stopPropagation()}"
+                                    @click="${(h) => h.stopPropagation()}"
                                 ></textarea>
                             </wy-form-field>
 
                             <!-- Mode Toggle -->
-                            <div class="mode-toggle" @click="${(u) => u.stopPropagation()}">
+                            <div class="mode-toggle" @click="${(h) => h.stopPropagation()}">
                                 <label>
                                     <input 
                                         type="radio" 
@@ -9257,7 +9269,7 @@ This action cannot be undone.`;
                                 </label>
                             </div>
 
-                            ${c && !n ? l`
+                            ${c && !s ? l`
                                 <!-- Template Mode -->
                                 <div class="section-divider"></div>
                                 
@@ -9269,8 +9281,8 @@ This action cannot be undone.`;
                                     </p>
                                     <wy-variable-editor
                                         .variables="${e.variables || []}"
-                                        @change="${(u) => this._handleVariableChange(t, u)}"
-                                        @click="${(u) => u.stopPropagation()}"
+                                        @change="${(h) => this._handleVariableChange(t, h)}"
+                                        @click="${(h) => h.stopPropagation()}"
                                     ></wy-variable-editor>
                                 </div>
 
@@ -9285,13 +9297,13 @@ This action cannot be undone.`;
                                         .variables="${g}"
                                         placeholder="Enter your prompt template here..."
                                         rows="12"
-                                        @input="${(u) => this._handleTemplateChange(t, u)}"
-                                        @click="${(u) => u.stopPropagation()}"
+                                        @input="${(h) => this._handleTemplateChange(t, h)}"
+                                        @click="${(h) => h.stopPropagation()}"
                                     ></wy-code-textarea>
                                 </div>
                             ` : ""}
 
-                            ${n ? l`
+                            ${s ? l`
                                 <!-- Multi-Step Mode -->
                                 <div class="section-divider"></div>
                                 
@@ -9300,20 +9312,20 @@ This action cannot be undone.`;
                                     <p class="field-description">
                                         Define the sequence of prompts for this variation
                                     </p>
-                                    <div class="steps-section" @click="${(u) => u.stopPropagation()}">
-                                        ${e.steps.map((u, v) => {
-      const y = (this._expandedStepsByVariation[t] || []).includes(v);
+                                    <div class="steps-section" @click="${(h) => h.stopPropagation()}">
+                                        ${e.steps.map((h, v) => {
+      const x = (this._expandedStepsByVariation[t] || []).includes(v);
       return l`
                                             <wy-step-editor
-                                                .step="${u}"
+                                                .step="${h}"
                                                 .index="${v}"
                                                 .total="${e.steps.length}"
-                                                .expanded="${y}"
-                                                @step-change="${(_) => this._handleStepChange(t, _)}"
-                                                @step-delete="${(_) => this._handleStepDelete(t, _)}"
-                                                @step-move-up="${(_) => this._handleStepMoveUp(t, _)}"
-                                                @step-move-down="${(_) => this._handleStepMoveDown(t, _)}"
-                                                @step-toggle="${(_) => this._handleStepToggle(t, _)}"
+                                                .expanded="${x}"
+                                                @step-change="${(y) => this._handleStepChange(t, y)}"
+                                                @step-delete="${(y) => this._handleStepDelete(t, y)}"
+                                                @step-move-up="${(y) => this._handleStepMoveUp(t, y)}"
+                                                @step-move-down="${(y) => this._handleStepMoveDown(t, y)}"
+                                                @step-toggle="${(y) => this._handleStepToggle(t, y)}"
                                             ></wy-step-editor>
                                         `;
     })}
@@ -9330,7 +9342,7 @@ This action cannot be undone.`;
                         </div>
 
                         <!-- Variation Controls -->
-                        <div class="variation-controls" @click="${(u) => u.stopPropagation()}">
+                        <div class="variation-controls" @click="${(h) => h.stopPropagation()}">
                             ${this.allowReorder ? l`
                                 <button
                                     class="control-button"
@@ -11110,6 +11122,37 @@ class gs extends f {
         line-height: 1;
     }
 
+    /* Labeled Button - Icon with text label */
+    .labeled-btn {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        height: 40px;
+        padding: 0 16px 0 12px;
+        border-radius: 20px;
+        border: none;
+        cursor: pointer;
+        font-family: var(--font-sans);
+        font-size: 14px;
+        font-weight: 500;
+        transition: background-color 0.2s, transform 0.15s;
+    }
+
+    .labeled-btn.primary {
+        background: var(--md-sys-color-primary);
+        color: var(--md-sys-color-on-primary);
+    }
+
+    .labeled-btn.primary:hover {
+        opacity: 0.9;
+        transform: scale(1.02);
+    }
+
+    .labeled-btn .material-symbols-outlined {
+        font-size: 18px;
+        line-height: 1;
+    }
+
     .header-main {
         display: flex;
         justify-content: space-between;
@@ -11659,8 +11702,12 @@ class gs extends f {
             <div class="header-top">
                 ${this.mode === "locked" ? l`
                     <div class="header-actions-left">
-                        <button class="icon-btn primary" @click="${this._handleCopy}" aria-label="Copy to clipboard" title="Copy">
+                        <button class="labeled-btn primary" @click="${this._handleCopy}" aria-label="Copy to clipboard" title="Copy">
                             <span class="material-symbols-outlined">content_copy</span>
+                            <span>Copy Prompt</span>
+                        </button>
+                        <button class="icon-btn filled" @click="${this._handleCopyLink}" aria-label="Copy link" title="Share">
+                            <span class="material-symbols-outlined">link</span>
                         </button>
                         <button class="icon-btn filled" @click="${() => this.mode = "edit"}" aria-label="Edit prompt" title="Edit">
                             <span class="material-symbols-outlined">edit</span>
@@ -11781,7 +11828,7 @@ class gs extends f {
             .value="${a}"
             variant="switch"
             show-selected-value-text
-            @change="${(n) => this._handleInput(e.name, n.detail.value)}"
+            @change="${(s) => this._handleInput(e.name, s.detail.value)}"
           ></wy-option-toggle>
         </div>
       `;
@@ -11895,6 +11942,12 @@ class gs extends f {
       );
     this.dispatchEvent(new CustomEvent("download", {
       detail: { text: e, title: this.title },
+      bubbles: !0,
+      composed: !0
+    }));
+  }
+  _handleCopyLink() {
+    this.dispatchEvent(new CustomEvent("copy-link", {
       bubbles: !0,
       composed: !0
     }));
@@ -12655,7 +12708,7 @@ class xs extends f {
   }
 }
 customElements.define("wy-app-bar", xs);
-class _s extends f {
+class ws extends f {
   static properties = {
     showFilters: { type: Boolean, attribute: "show-filters" },
     activeFilterCount: { type: Number, attribute: "active-filter-count" },
@@ -13233,8 +13286,573 @@ class _s extends f {
     super.disconnectedCallback(), this._searchTimeout && clearTimeout(this._searchTimeout);
   }
 }
-customElements.define("wy-library-header", _s);
-class ws extends f {
+customElements.define("wy-library-header", ws);
+class _s extends f {
+  static properties = {
+    variant: { type: String },
+    size: { type: String },
+    icon: { type: String },
+    iconPosition: { type: String, attribute: "icon-position" },
+    disabled: { type: Boolean, reflect: !0 },
+    fullWidth: { type: Boolean, attribute: "full-width" }
+  };
+  static styles = m`
+    /* Fonts are loaded globally via HTML link tags - no @import needed in Shadow DOM */
+
+    :host {
+      display: inline-block;
+    }
+
+    :host([full-width]) {
+      display: block;
+      width: 100%;
+    }
+
+    :host([full-width]) .button {
+      width: 100%;
+      justify-content: center;
+    }
+
+    :host([disabled]) {
+      pointer-events: none;
+    }
+
+    .button {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-sm);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      font-family: var(--font-sans);
+      font-weight: var(--wy-button-font-weight, 500);
+      border-radius: var(--md-sys-shape-corner-full);
+      transition: 
+        transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+        box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+        background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+    }
+
+    /* State layer for hover/focus/pressed */
+    .button::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+      pointer-events: none;
+      border-radius: inherit;
+    }
+
+    /* Focus visible outline */
+    .button:focus-visible {
+      outline: 3px solid var(--md-sys-color-primary);
+      outline-offset: 2px;
+    }
+
+    /* ===== SIZE VARIANTS ===== */
+    
+    /* Large: 56px height */
+    .button.size-large {
+      height: 56px;
+      padding: 16px 40px;
+      font-size: 1rem;
+    }
+
+    .button.size-large .icon {
+      font-size: 18px;
+    }
+
+    /* Medium: 44px height (default) */
+    .button.size-medium {
+      height: 44px;
+      padding: 10px 32px;
+      font-size: 0.875rem;
+    }
+
+    .button.size-medium .icon {
+      font-size: 16px;
+    }
+
+    /* Small: 32px height */
+    .button.size-small {
+      height: 32px;
+      padding: 6px 20px;
+      font-size: 0.75rem;
+    }
+
+    .button.size-small .icon {
+      font-size: 14px;
+    }
+
+    /* ===== PRIMARY VARIANT (Filled Hunter Green) ===== */
+    .button.variant-primary {
+      background-color: var(--wy-button-primary-bg);
+      color: var(--wy-button-primary-fg);
+    }
+
+    .button.variant-primary::before {
+      background-color: var(--wy-button-primary-fg);
+    }
+
+    .button.variant-primary:hover:not(:disabled) {
+      background-color: var(--wy-button-primary-hover-bg);
+      box-shadow: var(--wy-button-primary-shadow-hover);
+      transform: translateY(-2px);
+    }
+
+    .button.variant-primary:hover:not(:disabled)::before {
+      opacity: var(--md-sys-state-hover-opacity);
+    }
+
+    .button.variant-primary:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .button.variant-primary:active:not(:disabled)::before {
+      opacity: var(--md-sys-state-pressed-opacity);
+    }
+
+    /* ===== SECONDARY VARIANT (Tonal - Warm Clay / Serif) ===== */
+    .button.variant-secondary {
+      background-color: var(--wy-button-secondary-bg);
+      color: var(--wy-button-secondary-fg);
+      /* font-family: var(--font-serif); Removed in favor of sans-serif */
+    }
+
+    .button.variant-secondary::before {
+      background-color: var(--md-sys-color-primary);
+    }
+
+    .button.variant-secondary:hover:not(:disabled) {
+      background-color: var(--wy-button-secondary-hover-bg);
+    }
+
+    .button.variant-secondary:hover:not(:disabled)::before {
+      opacity: var(--md-sys-state-hover-opacity);
+    }
+
+    .button.variant-secondary:active:not(:disabled)::before {
+      opacity: var(--md-sys-state-pressed-opacity);
+    }
+
+    /* ===== OUTLINED VARIANT (Editorial) ===== */
+    .button.variant-outlined {
+      background-color: var(--wy-button-outlined-bg);
+      color: var(--wy-button-outlined-fg);
+      border: 1px solid var(--wy-button-outlined-border);
+      /* font-family: var(--font-serif); Removed in favor of sans-serif */
+    }
+
+    .button.variant-outlined::before {
+      background-color: var(--wy-button-secondary-bg);
+    }
+
+    .button.variant-outlined:hover:not(:disabled) {
+      background-color: var(--wy-button-outlined-hover-bg);
+    }
+
+    .button.variant-outlined:hover:not(:disabled)::before {
+      opacity: 0.3;
+    }
+
+    .button.variant-outlined:active:not(:disabled)::before {
+      opacity: 0.5;
+    }
+
+    /* ===== TEXT VARIANT (Utility - ALL CAPS) ===== */
+    .button.variant-text {
+      background-color: transparent;
+      color: var(--wy-button-text-fg);
+      text-transform: uppercase;
+      letter-spacing: var(--wy-button-tracking-architectural);
+      font-weight: 700;
+      font-size: 0.75rem;
+    }
+
+    .button.variant-text::before {
+      background-color: var(--md-sys-color-primary);
+    }
+
+    .button.variant-text.muted {
+      color: var(--wy-button-text-fg-muted);
+    }
+
+    .button.variant-text:hover:not(:disabled) {
+      background-color: var(--wy-button-text-hover-bg);
+      color: var(--wy-button-text-fg);
+    }
+
+    .button.variant-text:hover:not(:disabled)::before {
+      opacity: 0;
+    }
+
+    /* Text variant with leading indicator dot */
+    .button.variant-text .indicator-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: color-mix(in srgb, currentColor 30%, transparent);
+    }
+
+    /* ===== DISABLED STATE ===== */
+    .button:disabled {
+      opacity: var(--md-sys-state-disabled-opacity);
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    /* ===== ICON STYLING ===== */
+    .icon {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      font-feature-settings: 'liga';
+    }
+
+    /* Content wrapper for proper ordering */
+    .content {
+      display: contents;
+    }
+  `;
+  constructor() {
+    super(), this.variant = "primary", this.size = "medium", this.iconPosition = "trailing", this.disabled = !1, this.fullWidth = !1;
+  }
+  render() {
+    const e = [
+      "button",
+      `variant-${this.variant}`,
+      `size-${this.size}`
+    ].join(" "), t = this.icon ? l`<span class="icon">${this.icon}</span>` : null;
+    return l`
+      <button 
+        class="${e}" 
+        part="button"
+        ?disabled="${this.disabled}"
+        @click="${this._handleClick}"
+      >
+        ${this.iconPosition === "leading" ? t : null}
+        <span class="label"><slot></slot></span>
+        ${this.iconPosition === "trailing" ? t : null}
+      </button>
+    `;
+  }
+  _handleClick(e) {
+    this.disabled && (e.preventDefault(), e.stopPropagation());
+  }
+}
+customElements.define("wy-button", _s);
+class ks extends f {
+  static properties = {
+    variant: { type: String },
+    icon: { type: String },
+    label: { type: String },
+    size: { type: String },
+    disabled: { type: Boolean, reflect: !0 }
+  };
+  static styles = m`
+    /* Fonts are loaded globally via HTML link tags - no @import needed in Shadow DOM */
+
+    :host {
+      display: inline-block;
+    }
+
+    :host([disabled]) {
+      pointer-events: none;
+    }
+
+    .button {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      cursor: pointer;
+      border-radius: 50%;
+      padding: 0;
+      transition: 
+        transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+        box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+        background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+        border-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+    }
+
+    /* State layer for hover/focus/pressed */
+    .button::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+      pointer-events: none;
+      border-radius: inherit;
+    }
+
+    /* Focus visible outline */
+    .button:focus-visible {
+      outline: 3px solid var(--md-sys-color-primary);
+      outline-offset: 2px;
+    }
+
+    /* ===== SIZE VARIANTS ===== */
+    
+    /* Default: 56px */
+    .button.size-default {
+      width: 56px;
+      height: 56px;
+    }
+
+    .button.size-default .icon {
+      font-size: 24px;
+    }
+
+    /* Small: 44px */
+    .button.size-small {
+      width: 44px;
+      height: 44px;
+    }
+
+    .button.size-small .icon {
+      font-size: 20px;
+    }
+
+    /* Tiny: 32px */
+    .button.size-tiny {
+      width: 32px;
+      height: 32px;
+    }
+
+    .button.size-tiny .icon {
+      font-size: 16px;
+    }
+
+    /* ===== FILLED VARIANT (Hunter Green) ===== */
+    .button.variant-filled {
+      background-color: var(--wy-icon-button-filled-bg, var(--md-sys-color-primary, #2C4C3B));
+      color: var(--wy-icon-button-filled-fg, var(--md-sys-color-on-primary, #FFFFFF));
+      box-shadow: var(--wy-icon-button-filled-shadow, 0 4px 12px rgba(44, 76, 59, 0.2));
+    }
+
+    .button.variant-filled::before {
+      background-color: var(--wy-icon-button-filled-fg, var(--md-sys-color-on-primary, #FFFFFF));
+    }
+
+    .button.variant-filled:hover:not(:disabled) {
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(44, 76, 59, 0.3);
+    }
+
+    .button.variant-filled:hover:not(:disabled)::before {
+      opacity: var(--md-sys-state-hover-opacity);
+    }
+
+    .button.variant-filled:active:not(:disabled) {
+      transform: scale(1);
+    }
+
+    .button.variant-filled:active:not(:disabled)::before {
+      opacity: var(--md-sys-state-pressed-opacity);
+    }
+
+    /* ===== OUTLINED VARIANT (Alabaster) ===== */
+    .button.variant-outlined {
+      background-color: var(--wy-icon-button-outlined-bg);
+      color: var(--wy-icon-button-outlined-fg);
+      border: none;
+    }
+
+    .button.variant-outlined::before {
+      background-color: var(--md-sys-color-primary);
+    }
+
+    .button.variant-outlined:hover:not(:disabled) {
+      border-color: var(--md-sys-color-primary);
+      transform: scale(1.05);
+    }
+
+    .button.variant-outlined:hover:not(:disabled)::before {
+      opacity: var(--md-sys-state-hover-opacity);
+    }
+
+    .button.variant-outlined:active:not(:disabled) {
+      transform: scale(1);
+    }
+
+    .button.variant-outlined:active:not(:disabled)::before {
+      opacity: var(--md-sys-state-pressed-opacity);
+    }
+
+    /* ===== DISABLED STATE ===== */
+    .button:disabled {
+      opacity: var(--md-sys-state-disabled-opacity);
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    /* ===== ICON STYLING ===== */
+    .icon {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      font-feature-settings: 'liga';
+    }
+  `;
+  constructor() {
+    super(), this.variant = "filled", this.icon = "add", this.label = "", this.size = "default", this.disabled = !1;
+  }
+  render() {
+    const e = [
+      "button",
+      `variant-${this.variant}`,
+      `size-${this.size}`
+    ].join(" ");
+    return l`
+      <button 
+        class="${e}" 
+        part="button"
+        ?disabled="${this.disabled}"
+        aria-label="${this.label || this.icon}"
+        title="${this.label || this.icon}"
+        @click="${this._handleClick}"
+      >
+        <span class="icon">${this.icon}</span>
+      </button>
+    `;
+  }
+  _handleClick(e) {
+    this.disabled && (e.preventDefault(), e.stopPropagation());
+  }
+}
+customElements.define("wy-icon-button", ks);
+class Cs extends f {
+  static properties = {
+    label: { type: String },
+    variant: { type: String },
+    interactive: { type: Boolean }
+  };
+  static styles = m`
+    :host {
+      display: inline-block;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 24px;
+      border-radius: var(--md-sys-shape-corner-full);
+      font-family: var(--font-sans);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: var(--wy-button-tracking-architectural);
+      transition: 
+        background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+        border-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+        color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+    }
+
+    /* ===== DEFAULT VARIANT ===== */
+    .tag.variant-default {
+      background-color: var(--wy-utility-tag-bg);
+      color: var(--wy-utility-tag-fg);
+      border: 1px solid var(--wy-utility-tag-border);
+      cursor: default;
+    }
+
+    .tag.variant-default.interactive {
+      cursor: pointer;
+    }
+
+    .tag.variant-default.interactive:hover {
+      background-color: color-mix(in srgb, var(--md-sys-color-primary) 10%, transparent);
+      border-color: color-mix(in srgb, var(--md-sys-color-primary) 20%, transparent);
+    }
+
+    /* ===== ADD VARIANT ===== */
+    .tag.variant-add {
+      background-color: transparent;
+      color: var(--wy-utility-tag-add-fg);
+      border: 1px dashed var(--wy-utility-tag-add-border);
+      cursor: pointer;
+    }
+
+    .tag.variant-add:hover {
+      border-color: color-mix(in srgb, var(--md-sys-color-primary) 60%, transparent);
+      color: var(--md-sys-color-text-heading);
+    }
+
+    .tag.variant-add:focus-visible {
+      outline: 3px solid var(--md-sys-color-primary);
+      outline-offset: 2px;
+    }
+
+    /* Plus icon for add variant */
+    .plus-icon {
+      font-weight: 700;
+      font-size: 12px;
+    }
+  `;
+  constructor() {
+    super(), this.label = "", this.variant = "default", this.interactive = !1;
+  }
+  render() {
+    const e = this.variant === "add" || this.interactive, t = [
+      "tag",
+      `variant-${this.variant}`,
+      e ? "interactive" : ""
+    ].filter(Boolean).join(" ");
+    return e ? l`
+        <button 
+          class="${t}" 
+          part="tag"
+          @click="${this._handleClick}"
+        >
+          ${this.variant === "add" ? l`<span class="plus-icon">+</span>` : null}
+          ${this.label}
+        </button>
+      ` : l`
+      <span class="${t}" part="tag">
+        ${this.label}
+      </span>
+    `;
+  }
+  _handleClick(e) {
+    this.dispatchEvent(new CustomEvent("click", {
+      bubbles: !0,
+      composed: !0,
+      detail: { label: this.label }
+    }));
+  }
+}
+customElements.define("wy-utility-tag", Cs);
+class $s extends f {
   static properties = {
     name: { type: String },
     role: { type: String },
@@ -13314,8 +13932,8 @@ class ws extends f {
     `;
   }
 }
-customElements.define("wy-profile-card", ws);
-class ks extends f {
+customElements.define("wy-profile-card", $s);
+class Ss extends f {
   static properties = {
     name: { type: String },
     role: { type: String },
@@ -13391,8 +14009,8 @@ class ks extends f {
     `;
   }
 }
-customElements.define("wy-bio-card", ks);
-const Cs = [
+customElements.define("wy-bio-card", Ss);
+const Es = [
   {
     id: "p1",
     title: "Hudson Yards Development",
@@ -13422,7 +14040,7 @@ const Cs = [
     summary: "Strategic stake in next-gen computing infrastructure."
   }
 ];
-class $s extends f {
+class zs extends f {
   static properties = {
     filter: { type: String },
     title: { type: String }
@@ -13479,7 +14097,7 @@ class $s extends f {
     }
   `;
   render() {
-    const e = Cs.filter((t) => t.category === this.filter);
+    const e = Es.filter((t) => t.category === this.filter);
     return l`
       <div>
         <h2>${this.title || "Projects"}</h2>
@@ -13501,8 +14119,8 @@ class $s extends f {
     `;
   }
 }
-customElements.define("wy-project-list", $s);
-class Ss extends f {
+customElements.define("wy-project-list", zs);
+class As extends f {
   static properties = {
     title: { type: String },
     value: { type: String },
@@ -13588,8 +14206,8 @@ class Ss extends f {
     `;
   }
 }
-customElements.define("wy-metric-card", Ss);
-class Es extends f {
+customElements.define("wy-metric-card", As);
+class Is extends f {
   static properties = {
     title: { type: String },
     items: { type: Array }
@@ -13726,8 +14344,8 @@ class Es extends f {
     `;
   }
 }
-customElements.define("wy-allocation-card", Es);
-class zs extends f {
+customElements.define("wy-allocation-card", Is);
+class Ts extends f {
   static properties = {
     image: { type: String },
     category: { type: String },
@@ -13813,8 +14431,657 @@ class zs extends f {
     `;
   }
 }
-customElements.define("wy-insight-card", zs);
-class As extends f {
+customElements.define("wy-insight-card", Ts);
+class Ds extends f {
+  static properties = {
+    title: { type: String },
+    workId: { type: String, attribute: "work-id" },
+    variantCount: { type: Number, attribute: "variant-count" },
+    modifiedLabel: { type: String, attribute: "modified-label" },
+    status: { type: String },
+    selected: { type: Boolean, reflect: !0 },
+    favorite: { type: Boolean, reflect: !0 },
+    loading: { type: Boolean, reflect: !0 },
+    noImage: { type: Boolean, attribute: "no-image", reflect: !0 },
+    imageSrc: { type: String, attribute: "image-src" },
+    imageAlt: { type: String, attribute: "image-alt" },
+    imageAspectRatio: { type: String, attribute: "image-aspect-ratio" },
+    imageObjectPosition: { type: String, attribute: "image-object-position" },
+    interactive: { type: Boolean, reflect: !0 },
+    statusLabels: { attribute: !1 },
+    metaPrimary: { attribute: !1 },
+    metaSecondary: { attribute: !1 },
+    _imageFailed: { state: !0 },
+    _metaTone: { state: !0 }
+  };
+  constructor() {
+    super(), this.title = "", this.workId = "", this.variantCount = 0, this.modifiedLabel = "", this.status = "", this.selected = !1, this.favorite = !1, this.loading = !1, this.noImage = !1, this.imageSrc = "", this.imageAlt = "", this.imageAspectRatio = "4 / 5", this.imageObjectPosition = "50% 50%", this.interactive = !0, this.statusLabels = void 0, this.metaPrimary = "", this.metaSecondary = "", this._imageFailed = !1, this._metaTone = "light-bg";
+  }
+  static styles = m`
+      @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@400;500;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
+
+      :host {
+        display: block;
+        --wy-artwork-card-radius: 16px;
+        --wy-artwork-card-outline: var(--md-sys-color-outline-variant);
+        --wy-artwork-card-bg: var(--md-sys-color-surface-container-lowest);
+        --wy-artwork-card-overlay-bg: color-mix(in srgb, var(--md-sys-color-surface-container-lowest) 92%, transparent);
+        --wy-artwork-card-overlay-fg: var(--md-sys-color-on-surface);
+        --wy-artwork-card-overlay-muted: var(--md-sys-color-on-surface-variant);
+        --wy-artwork-card-control-bg: color-mix(in srgb, var(--md-sys-color-scrim) 20%, transparent);
+        --wy-artwork-card-control-bg-hover: color-mix(in srgb, var(--md-sys-color-scrim) 30%, transparent);
+        --wy-artwork-card-control-fg: var(--md-sys-color-on-primary);
+        --wy-artwork-card-selected-ring: var(--md-sys-color-primary);
+        --wy-artwork-card-selected-overlay: color-mix(in srgb, var(--md-sys-color-primary) 10%, transparent);
+        --wy-artwork-card-placeholder-bg: var(--md-sys-color-surface-container);
+        --wy-artwork-card-placeholder-pattern: color-mix(in srgb, var(--md-sys-color-primary) 12%, transparent);
+        --wy-artwork-card-status-bg: color-mix(in srgb, var(--md-sys-color-surface-container-high) 88%, transparent);
+        --wy-artwork-card-status-fg: var(--md-sys-color-on-surface);
+        --wy-artwork-card-status-border: color-mix(in srgb, var(--md-sys-color-outline) 30%, transparent);
+        --wy-artwork-card-favorite-active: var(--md-sys-color-primary);
+        outline: none;
+      }
+
+      .material-symbols-outlined {
+        font-family: 'Material Symbols Outlined';
+        font-weight: normal;
+        font-style: normal;
+        line-height: 1;
+        letter-spacing: normal;
+        text-transform: none;
+        display: inline-block;
+        white-space: nowrap;
+        direction: ltr;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        font-feature-settings: 'liga';
+      }
+
+      article {
+        position: relative;
+        border-radius: var(--wy-artwork-card-radius);
+        overflow: hidden;
+        background: var(--wy-artwork-card-bg);
+        border: 1px solid var(--wy-artwork-card-outline);
+        transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+        box-shadow: 0 1px 2px color-mix(in srgb, var(--md-sys-color-shadow) 10%, transparent);
+      }
+
+      :host(:hover) article,
+      :host(:focus-within) article {
+        border-color: color-mix(in srgb, var(--md-sys-color-primary) 45%, var(--wy-artwork-card-outline));
+        box-shadow: 0 10px 20px color-mix(in srgb, var(--md-sys-color-shadow) 12%, transparent);
+      }
+
+      :host([interactive]):hover article {
+        transform: translateY(-2px);
+      }
+
+      :host([selected]) article {
+        border-color: var(--wy-artwork-card-selected-ring);
+        box-shadow:
+          0 0 0 2px color-mix(in srgb, var(--wy-artwork-card-selected-ring) 60%, transparent),
+          0 10px 20px color-mix(in srgb, var(--md-sys-color-shadow) 12%, transparent);
+      }
+
+      .surface {
+        position: relative;
+        width: 100%;
+        border: 0;
+        background: transparent;
+        color: inherit;
+        padding: 0;
+        margin: 0;
+        display: block;
+        text-align: left;
+        cursor: pointer;
+      }
+
+      :host(:not([interactive])) .surface {
+        cursor: default;
+      }
+
+      .surface:focus-visible {
+        outline: 2px solid var(--md-sys-color-primary);
+        outline-offset: -2px;
+      }
+
+      .media {
+        position: relative;
+        width: 100%;
+        aspect-ratio: var(--wy-artwork-card-aspect, 4 / 5);
+        background: var(--wy-artwork-card-placeholder-bg);
+        overflow: hidden;
+      }
+
+      .media.loading::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(
+            90deg,
+            color-mix(in srgb, var(--md-sys-color-surface-container-high) 75%, transparent) 20%,
+            color-mix(in srgb, var(--md-sys-color-surface-container-highest) 95%, transparent) 50%,
+            color-mix(in srgb, var(--md-sys-color-surface-container-high) 75%, transparent) 80%
+          );
+        background-size: 220% 100%;
+        animation: shimmer 1.4s linear infinite;
+        z-index: 1;
+      }
+
+      .media.selected::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: var(--wy-artwork-card-selected-overlay);
+        pointer-events: none;
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: var(--wy-artwork-card-object-position, 50% 50%);
+        display: block;
+        transition: transform 220ms ease;
+      }
+
+      :host([interactive]):hover img {
+        transform: scale(1.03);
+      }
+
+      .placeholder {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        background:
+          radial-gradient(circle, var(--wy-artwork-card-placeholder-pattern) 1px, transparent 1px) 0 0 / 18px 18px,
+          var(--wy-artwork-card-placeholder-bg);
+        color: var(--md-sys-color-on-surface-variant);
+      }
+
+      .placeholder-badge {
+        width: 72px;
+        height: 72px;
+        border-radius: 999px;
+        display: grid;
+        place-items: center;
+        border: 1px solid color-mix(in srgb, var(--md-sys-color-outline) 25%, transparent);
+        background: color-mix(in srgb, var(--md-sys-color-surface-container-high) 85%, transparent);
+        font-family: var(--font-serif, 'Playfair Display', serif);
+        font-weight: 700;
+        font-size: 1.5rem;
+        letter-spacing: -0.02em;
+      }
+
+      .controls {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        right: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        z-index: 3;
+        opacity: 0;
+        transform: translateY(-4px);
+        transition: opacity 160ms ease, transform 160ms ease;
+        pointer-events: none;
+      }
+
+      .controls-left,
+      .controls-right {
+        display: flex;
+        gap: 8px;
+        pointer-events: auto;
+      }
+
+      :host(:hover) .controls,
+      :host(:focus-within) .controls,
+      :host([selected]) .controls {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .select {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 40px;
+        min-height: 40px;
+        position: relative;
+      }
+
+      .select-input {
+        position: absolute;
+        inset: 0;
+        margin: 0;
+        opacity: 0;
+        cursor: pointer;
+      }
+
+      .select-visual,
+      .favorite {
+        width: 30px;
+        height: 30px;
+        border-radius: 999px;
+        border: 1px solid color-mix(in srgb, white 72%, transparent);
+        background: color-mix(in srgb, var(--md-sys-color-scrim) 46%, transparent);
+        color: var(--md-sys-color-inverse-on-surface, var(--wy-artwork-card-control-fg));
+        backdrop-filter: blur(10px);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 140ms ease, border-color 140ms ease, transform 140ms ease, opacity 140ms ease;
+        box-sizing: border-box;
+        opacity: 0.62;
+      }
+
+      .favorite {
+        appearance: none;
+        cursor: pointer;
+        padding: 0;
+        font: inherit;
+        font-size: 1rem;
+        line-height: 1;
+      }
+
+      .favorite-glyph {
+        display: inline-block;
+        transform: translateY(-0.5px);
+        font-size: 18px;
+        line-height: 1;
+        font-variation-settings: 'FILL' 0, 'wght' 500, 'opsz' 20;
+      }
+
+      .favorite:hover,
+      .select:hover .select-visual {
+        background: color-mix(in srgb, var(--md-sys-color-scrim) 52%, transparent);
+        transform: translateY(-1px);
+        opacity: 1;
+      }
+
+      .favorite:focus-visible,
+      .select-input:focus-visible + .select-visual {
+        outline: 2px solid var(--md-sys-color-primary);
+        outline-offset: 2px;
+      }
+
+      .select-input:checked + .select-visual {
+        background: color-mix(in srgb, var(--md-sys-color-primary) 85%, transparent);
+        border-color: var(--md-sys-color-primary);
+        opacity: 1;
+      }
+
+      .select-visual {
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+        border-width: 2px;
+      }
+
+      .select-check {
+        opacity: 0;
+        transform: scale(0.8);
+        transition: opacity 120ms ease, transform 120ms ease;
+        font-size: 16px;
+        line-height: 1;
+        color: var(--md-sys-color-on-primary);
+        font-weight: 700;
+        font-variation-settings: 'FILL' 1, 'wght' 600, 'opsz' 20;
+      }
+
+      .select-input:checked + .select-visual .select-check {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      .favorite[data-active='true'] {
+        color: color-mix(in srgb, var(--wy-artwork-card-favorite-active) 88%, white);
+        border-color: color-mix(in srgb, white 68%, transparent);
+        background: color-mix(in srgb, var(--md-sys-color-scrim) 48%, transparent);
+        opacity: 1;
+      }
+
+      .favorite[data-active='true'] .favorite-glyph {
+        font-variation-settings: 'FILL' 1, 'wght' 600, 'opsz' 20;
+      }
+
+      .status-chip {
+        padding: 4px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--wy-artwork-card-status-border);
+        background: var(--wy-artwork-card-status-bg);
+        color: var(--wy-artwork-card-status-fg);
+        font-family: var(--font-body, 'DM Sans', sans-serif);
+        font-size: 0.7rem;
+        line-height: 1;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        backdrop-filter: blur(6px);
+      }
+
+      .status-chip.meta-pill-variant {
+        border: 1px solid white;
+        background: var(--wy-artwork-card-meta-chip-bg);
+        font-size: 0.6rem;
+        color: var(--wy-artwork-card-meta-fg);
+      }
+
+      .meta-pill {
+        position: absolute;
+        left: 50%;
+        bottom: 14px;
+        transform: translateX(-50%) translateY(8px);
+        z-index: 4;
+        width: calc(100% - 28px);
+        max-width: 95%;
+        opacity: 0;
+        transition: opacity 180ms ease, transform 180ms ease;
+        pointer-events: none;
+        border-radius: 8px;
+        backdrop-filter: blur(40px) saturate(1.15);
+        -webkit-backdrop-filter: blur(40px) saturate(1.15);
+      }
+
+      :host(:hover) .meta-pill,
+      :host(:focus-within) .meta-pill {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+
+      .meta-surface {
+        --wy-artwork-card-meta-fg: var(--md-sys-color-on-surface);
+        --wy-artwork-card-meta-muted: var(--md-sys-color-on-surface-variant);
+        --wy-artwork-card-meta-chip-bg: color-mix(in srgb, var(--md-sys-color-surface-container-lowest) 22%, transparent);
+        --wy-artwork-card-meta-scrim: color-mix(in srgb, var(--md-sys-color-surface-container-lowest) 20%, transparent);
+        border-radius: 8px;
+        background: transparent;
+        color: var(--wy-artwork-card-meta-fg);
+        box-shadow: 0 8px 18px color-mix(in srgb, var(--md-sys-color-shadow) 12%, transparent);
+        padding: 8px 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        min-width: 0;
+        position: relative;
+      }
+
+      .meta-surface[data-tone='dark-bg'] {
+        --wy-artwork-card-meta-fg: var(--md-sys-color-inverse-on-surface, var(--md-sys-color-on-surface));
+        --wy-artwork-card-meta-muted: color-mix(in srgb, var(--md-sys-color-inverse-on-surface, var(--md-sys-color-on-surface)) 82%, transparent);
+        --wy-artwork-card-meta-chip-bg: color-mix(in srgb, var(--md-sys-color-scrim) 16%, transparent);
+        --wy-artwork-card-meta-scrim: color-mix(in srgb, var(--md-sys-color-scrim) 14%, transparent);
+      }
+
+      .meta-surface[data-tone='light-bg'] {
+        --wy-artwork-card-meta-fg: var(--md-sys-color-on-surface);
+        --wy-artwork-card-meta-muted: var(--md-sys-color-on-surface-variant);
+        --wy-artwork-card-meta-chip-bg: color-mix(in srgb, var(--md-sys-color-surface-container-lowest) 22%, transparent);
+        --wy-artwork-card-meta-scrim: color-mix(in srgb, var(--md-sys-color-surface-container-lowest) 20%, transparent);
+      }
+
+      .meta-surface::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: var(--wy-artwork-card-meta-scrim);
+        pointer-events: none;
+      }
+
+      .meta-surface > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      .meta-status-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        max-width: 100%;
+      }
+
+      .meta-main-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 4px;
+        min-width: 0;
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .title {
+        font-family: var(--font-body, 'DM Sans', sans-serif);
+        font-weight: 600;
+        font-size: 0.95rem;
+        line-height: 1.1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+
+      .meta-text {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+        min-width: 0;
+        max-width: 100%;
+        color: var(--wy-artwork-card-meta-muted);
+        font-family: var(--font-body, 'DM Sans', sans-serif);
+        font-size: 0.75rem;
+        line-height: 1.1;
+        white-space: nowrap;
+        flex: 0 0 auto;
+      }
+
+      .meta-text span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        article,
+        .controls,
+        .meta-pill,
+        img,
+        .favorite,
+        .select-visual {
+          transition: none;
+          animation: none;
+        }
+      }
+
+      @keyframes shimmer {
+        from { background-position: 200% 0; }
+        to { background-position: -20% 0; }
+      }
+    `;
+  willUpdate(e) {
+    e.has("imageSrc") && (this._imageFailed = !1, this._metaTone = "light-bg");
+  }
+  updated(e) {
+    e.has("imageAspectRatio") && this.imageAspectRatio && this.style.setProperty("--wy-artwork-card-aspect", this.imageAspectRatio), e.has("imageObjectPosition") && this.style.setProperty("--wy-artwork-card-object-position", this.imageObjectPosition || "50% 50%");
+  }
+  get _label() {
+    return this.title || this.workId || "Untitled";
+  }
+  get _variantLabel() {
+    const e = Number.isFinite(this.variantCount) ? this.variantCount : 0;
+    return `${e} ${e === 1 ? "Variant" : "Variants"}`;
+  }
+  get _statusList() {
+    return Array.isArray(this.statusLabels) && this.statusLabels.length ? this.statusLabels.filter(Boolean) : this.status ? [this.status] : [];
+  }
+  _emit(e, t) {
+    this.dispatchEvent(new CustomEvent(e, {
+      detail: t,
+      bubbles: !0,
+      composed: !0
+    }));
+  }
+  _onOpenClick() {
+    this.interactive && this._emit("wy-artwork-card-open", { workId: this.workId });
+  }
+  _onOpenKeydown(e) {
+    this.interactive && (e.key === "Enter" || e.key === " ") && (e.preventDefault(), this._emit("wy-artwork-card-open", { workId: this.workId }));
+  }
+  _onFavoriteClick(e) {
+    if (e.stopPropagation(), !this.interactive) return;
+    const t = !this.favorite;
+    this._emit("wy-artwork-card-toggle-favorite", {
+      workId: this.workId,
+      nextFavorite: t
+    });
+  }
+  _onSelectClick(e) {
+    if (e.stopPropagation(), !this.interactive) return;
+    const t = e.currentTarget;
+    this._emit("wy-artwork-card-toggle-select", {
+      workId: this.workId,
+      nextSelected: t.checked,
+      shiftKey: !!e.shiftKey,
+      metaKey: !!e.metaKey,
+      ctrlKey: !!e.ctrlKey
+    });
+  }
+  _onSelectChange(e) {
+    e.stopPropagation();
+  }
+  _updateMetaToneFromImage(e) {
+    try {
+      if (!e || !e.naturalWidth || !e.naturalHeight)
+        return;
+      const t = document.createElement("canvas"), o = t.getContext("2d", { willReadFrequently: !0 });
+      if (!o) return;
+      t.width = 24, t.height = 24;
+      const i = e.naturalWidth, a = e.naturalHeight, s = Math.max(1, i * 0.72), c = Math.max(1, a * 0.22), p = Math.max(0, (i - s) / 2), g = Math.max(0, Math.min(a - c, a * 0.64));
+      o.drawImage(e, p, g, s, c, 0, 0, t.width, t.height);
+      const { data: h } = o.getImageData(0, 0, t.width, t.height);
+      let v = 0, b = 0;
+      for (let y = 0; y < h.length; y += 4) {
+        const _ = h[y + 3] / 255;
+        if (_ <= 0) continue;
+        const S = h[y] / 255, A = h[y + 1] / 255, $ = h[y + 2] / 255, O = 0.2126 * S + 0.7152 * A + 0.0722 * $;
+        v += O * _, b += _;
+      }
+      if (b === 0) return;
+      const x = v / b;
+      this._metaTone = x > 0.58 ? "light-bg" : "dark-bg";
+    } catch {
+      this._metaTone = "light-bg";
+    }
+  }
+  _onImageLoad(e) {
+    this._updateMetaToneFromImage(e?.currentTarget), this._emit("wy-artwork-card-image-load", {
+      workId: this.workId,
+      src: this.imageSrc
+    });
+  }
+  _onImageError() {
+    this._imageFailed = !0, this._emit("wy-artwork-card-image-error", {
+      workId: this.workId,
+      src: this.imageSrc
+    });
+  }
+  render() {
+    const e = !!this.imageSrc && !this.noImage && !this._imageFailed, t = !!this.loading && !this.noImage && !this._imageFailed, o = this._statusList, i = this._label, a = this.metaPrimary || this._variantLabel, s = Number(this.variantCount) >= 2 && !!a;
+    return l`
+          <article part="container" aria-selected=${String(this.selected)}>
+            <div class="controls" part="controls">
+              <div class="controls-left">
+                <label class="select" aria-label="Select ${i}">
+                  <input
+                    class="select-input"
+                    type="checkbox"
+                    ?checked=${this.selected}
+                    ?disabled=${!this.interactive}
+                    aria-label="Select ${i}"
+                    @click=${this._onSelectClick}
+                    @change=${this._onSelectChange}
+                  >
+                  <span class="select-visual" aria-hidden="true">
+                    <span class="material-symbols-outlined select-check">check</span>
+                  </span>
+                </label>
+              </div>
+              <div class="controls-right">
+                <button
+                  class="favorite"
+                  type="button"
+                  ?disabled=${!this.interactive}
+                  data-active=${String(this.favorite)}
+                  aria-label=${this.favorite ? "Remove from favorites" : "Add to favorites"}
+                  aria-pressed=${String(this.favorite)}
+                  @click=${this._onFavoriteClick}
+                >
+                  <span class="material-symbols-outlined favorite-glyph" aria-hidden="true">favorite</span>
+                </button>
+              </div>
+            </div>
+
+            <div
+              class="surface"
+              role=${this.interactive ? "button" : "img"}
+              tabindex=${this.interactive ? "0" : "-1"}
+              aria-label=${this.interactive ? `Open ${i}` : i}
+              @click=${this._onOpenClick}
+              @keydown=${this._onOpenKeydown}
+              part="surface"
+            >
+              <div class="media ${t ? "loading" : ""} ${this.selected ? "selected" : ""}" part="media">
+                ${e ? l`
+                  <img
+                    src=${this.imageSrc}
+                    alt=${this.imageAlt || i}
+                    loading="lazy"
+                    decoding="async"
+                    @load=${this._onImageLoad}
+                    @error=${this._onImageError}
+                    part="image"
+                  >
+                ` : ""}
+
+                ${e ? "" : l`
+                  <div class="placeholder" part="placeholder">
+                    <div class="placeholder-badge" aria-hidden="true">
+                      ${(i || "WY").slice(0, 2).toUpperCase()}
+                    </div>
+                  </div>
+                `}
+
+                <div class="meta-pill" part="meta-pill">
+                  <div class="meta-surface" data-tone=${this._metaTone}>
+                    ${o.length ? l`
+                      <div class="meta-status-row" part="status-row">
+                        ${o.map((c) => l`<span class="status-chip meta-pill-variant" part="status-chip">${c}</span>`)}
+                      </div>
+                    ` : ""}
+                    <div class="meta-main-row" part="meta-main-row">
+                      <div class="title" title=${i}>${i}</div>
+                      ${s ? l`
+                        <div class="meta-text">
+                          <span title=${a}>${a}</span>
+                        </div>
+                      ` : ""}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        `;
+  }
+}
+customElements.define("wy-artwork-card", Ds);
+class Os extends f {
   static properties = {
     title: { type: String },
     artist: { type: String },
@@ -13978,8 +15245,8 @@ class As extends f {
     e.stopPropagation(), this.favorite = !this.favorite, this.requestUpdate();
   }
 }
-customElements.define("wy-work-card", As);
-class Ts extends f {
+customElements.define("wy-work-card", Os);
+class Fs extends f {
   static properties = {
     density: { type: String },
     // 'spacious', 'compact'
@@ -14058,8 +15325,8 @@ class Ts extends f {
     `;
   }
 }
-customElements.define("wy-works-grid", Ts);
-class Is extends f {
+customElements.define("wy-works-grid", Fs);
+class Ps extends f {
   static properties = {
     title: { type: String },
     paperSize: { type: String, attribute: "paper-size" },
@@ -14216,8 +15483,8 @@ class Is extends f {
     `;
   }
 }
-customElements.define("wy-plot-card", Is);
-class Ds extends f {
+customElements.define("wy-plot-card", Ps);
+class Rs extends f {
   static properties = {
     status: { type: String },
     // 'synced', 'syncing', 'error'
@@ -14314,6 +15581,6 @@ class Ds extends f {
     `;
   }
 }
-customElements.define("wy-backup-status", Ds);
+customElements.define("wy-backup-status", Rs);
 console.log("[m3-design-v2] Web components registered");
 //# sourceMappingURL=web-components.js.map
