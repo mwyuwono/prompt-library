@@ -46,6 +46,10 @@ class PromptLibrary {
         this.syncControlsBar();
         this.filterPrompts();
         this.showAdminButtonIfLocal();
+
+        // Handle deep linking via URL hash
+        window.addEventListener('hashchange', () => this.handleHashChange());
+        this.handleHashChange();
     }
 
     /**
@@ -290,6 +294,14 @@ Server will start on http://localhost:3001`;
             if ((e.metaKey || e.ctrlKey) && e.key === '/') {
                 e.preventDefault();
                 this.showShortcutsModal();
+            }
+
+            // Cmd/Ctrl + Shift + C - Copy prompt link (when modal is open)
+            if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'C') {
+                if (this.promptModal?.open && this.activePromptId) {
+                    e.preventDefault();
+                    this.copyPromptLink();
+                }
             }
         });
     }
@@ -1126,7 +1138,13 @@ Server will start on http://localhost:3001`;
                 if (variation.variables) {
                     this.promptModal.variables = variation.variables;
                 }
+                // Update URL hash to reflect new variation
+                this.updateUrlHash(prompt.id, variation.id);
             }
+        });
+
+        this.promptModal.addEventListener('copy-link', () => {
+            this.copyPromptLink();
         });
 
         this.promptModal.addEventListener('variable-change', (e) => {
@@ -1248,6 +1266,9 @@ Server will start on http://localhost:3001`;
 
         // Handle keyboard visibility on mobile
         this.setupKeyboardHandling();
+
+        // Update URL hash for deep linking
+        this.updateUrlHash(prompt.id, prompt.activeVariationId);
     }
 
     /**
@@ -1302,6 +1323,81 @@ Server will start on http://localhost:3001`;
 
         // Cleanup keyboard handling
         this.cleanupKeyboardHandling();
+
+        // Clear URL hash (use replaceState to avoid adding history entry)
+        if (window.location.hash) {
+            history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
+    }
+
+    /**
+     * Open a prompt by its ID (and optionally a specific variation)
+     * Used for deep linking via URL hash
+     */
+    openPromptById(promptId, variationId = null) {
+        // Find prompt in full prompts array (not filtered)
+        const prompt = this.prompts.find(p => p.id === promptId);
+        if (!prompt) return false;
+
+        // Set active variation if specified
+        if (variationId && prompt.variations) {
+            const variation = prompt.variations.find(v => v.id === variationId);
+            if (variation) {
+                prompt.activeVariationId = variationId;
+            }
+        }
+
+        // Clear filters to ensure prompt is visible, then find its index
+        this.searchTerm = '';
+        this.selectedCategory = '';
+        this.showFeaturedOnly = false;
+        this.filterPrompts();
+        this.syncControlsBar();
+
+        const index = this.filteredPrompts.findIndex(p => p.id === promptId);
+        if (index >= 0) {
+            this.openPromptModal(index);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Handle URL hash changes for deep linking
+     */
+    handleHashChange() {
+        const hash = window.location.hash.slice(1); // Remove leading #
+        if (!hash) return;
+
+        // Parse hash: "prompt-id" or "prompt-id/variation-id"
+        const [promptId, variationId] = hash.split('/');
+        if (promptId) {
+            this.openPromptById(promptId, variationId);
+        }
+    }
+
+    /**
+     * Update URL hash when modal opens
+     */
+    updateUrlHash(promptId, variationId = null) {
+        const hash = variationId ? `${promptId}/${variationId}` : promptId;
+        history.replaceState(null, '', `#${hash}`);
+    }
+
+    /**
+     * Copy shareable link for current prompt to clipboard
+     */
+    copyPromptLink() {
+        const prompt = this.filteredPrompts[this.activePromptIndex];
+        if (!prompt) return;
+
+        const variationId = prompt.activeVariationId;
+        const hash = variationId ? `${prompt.id}/${variationId}` : prompt.id;
+        const url = `${window.location.origin}${window.location.pathname}#${hash}`;
+
+        navigator.clipboard.writeText(url).then(() => {
+            this.showToast('Link copied to clipboard!');
+        });
     }
 
     /**
@@ -2259,6 +2355,10 @@ Server will start on http://localhost:3001`;
                     <div class="shortcut-item">
                         <span class="shortcut-keys"><kbd>${modKey}</kbd> + <kbd>/</kbd></span>
                         <span class="shortcut-description">Show this help</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="shortcut-keys"><kbd>${modKey}</kbd> + <kbd>Shift</kbd> + <kbd>C</kbd></span>
+                        <span class="shortcut-description">Copy prompt link (in modal)</span>
                     </div>
                 </div>
             `;
