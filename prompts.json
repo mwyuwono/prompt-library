@@ -3,7 +3,7 @@
     "id": "audio-essay",
     "title": "Audio Essay",
     "description": "Generate long-form essays optimized for audio narration with proper formatting and sources",
-    "category": "Creativity",
+    "category": "Writing",
     "image": "",
     "template": "Topic: {{topic}}\n\nWrite a three-thousand-word essay on the topic above. Structure the essay entirely in paragraphs, avoiding lists, tables and . The goal is to create the script for a continuous narrative suitable for listening as if it were a chapter of a book read aloud by a professional narrator.\n\nStyle and Language Rules:\n\nSpell out numbers and dates fully. For example:\nInstead of \"1st,\" write \"first.\"\nInstead of \"1950s,\" write \"nineteen fifties.\"\nInstead of \"2024,\" write \"twenty twenty-four.\"\nInstead of \"5%,\" write \"five percent.\"\nInstead of \"24/7,\" write \"twenty-four hours a day, seven days a week.\"\nAvoid abbreviations and acronyms unless they are spelled out in full (e.g., write \"McKinsey and Company\" instead of \"McKinsey & Co.\").\nDo not use symbols (%, $, &). Always write the words out.\nAvoid inline references such as \"(Smith, 1999)\" or \"[1]\".. Instead, all references and sources should be collected at the end of the essay in a concise \"References\" section.\n\nAudience and Depth:\n\nWrite for a highly intelligent audience that expects both accuracy and depth. Assume the audience already knows something about the topic and provide insights that go beyond common knowledge and surface-level facts.\nIncorporate historical, cultural, and technical context where relevant to deepen understanding.\nUse metaphors or analogies sparingly and only if they improve clarity.\nFactual Rigor:\n\nVerify claims with precise supporting details. For example, if you write \"the Sumner Tunnel was once the deepest underwater tunnel in the world,\" also state its depth in feet and meters, the year it was completed, and the context of what surpassed it.\nWhere possible, provide exact figures, dates, names, or dimensions to anchor the narrative in concrete fact.\nDo not leave generalizations unsupported. For instance, if you say something was \"transformative,\" explain what specific change it caused, how it was measured, and what its consequences were.\n\nTone:\n\nPrecise, information dense, and void of fluff and filler words.\n\nConclusion and Learning Extensions:\n\nAt the end of the essay, provide a short \"References\" section with the sources used.\nAfter the references, concisely state three areas for deeper learning. These should be appropriate for expert-level listeners. ",
     "variables": [
@@ -22,7 +22,7 @@
     "id": "classical-scene-porcelain",
     "title": "Ceramic Vessel Design",
     "description": "Transform ceramic vessel designs with classical figures while maintaining original style",
-    "category": "Creativity",
+    "category": "Atelier",
     "image": "",
     "template": "{{scene_description}}\n\nKeep the aesthetic of the ceramic vessel, but alter the composition to include the figures mentioned above. Weave these new figures into the current scenery so that the original elements and the new scene coexist naturally.\n\nAll figures in the scene are strictly nude, masculine males with idealized, classically Roman features and muscular anatomy. The figures represent virility and physical perfection. Avoid long hair or other characteristics that could read feminine. The scene is dynamic, depicting the figures in visually interesting and appealing poses.\n\nMaintain the artwork style and vessel form from the uploaded image in the newly created scenery.\n\nEnsure all edits are seamlessly integrated with the existing artwork. Colors must be harmonious with the original palette, and surrounding imagery and elements must flow naturally without making the new scene stand out as an obvious edit. Subtly echo decorative motifs, border patterns, and stylistic elements from the existing vessel in the edited sections to create visual continuity and coherence.\n\nThe negative space around the new scenery must be harmonious with the existing vessel, ensuring sufficient negative space for the piece to feel elegant. the male figures are surrounded by a bit of empty space to make them more prominent as the subject of the image. If new elements overlap or interact with existing elements, the integration must be seamless and thoughtful.\n\n{{ko_imari_palette}}\n\n{{mask_instructions}}",
     "variables": [
@@ -61,7 +61,7 @@
     "id": "character-swap-male",
     "title": "Academic Drawing Figure",
     "description": "Transform the subject of an image into a classical figure while maintaining original pose and artistic style",
-    "category": "Creativity",
+    "category": "Atelier",
     "icon": "swap_horiz",
     "featured": false,
     "template": "Edit the uploaded image to replace the character's head and face with that of a 19-year-old male Roman athlete, strictly maintaining the original pose, angle, and perspective.\n\nCharacter Details (Adapted to Style):\n\nFace: A classical facial structure featuring an aquiline nose and high cheekbones. Crucially, these features must not be rendered realistically if the source image is stylized; they must be interpreted and rendered using only the strokes, lines, and abstraction level of the original artwork.\n\nHair: Very short hair. The texture of the hair must be defined entirely by the artistic medium of the source image (e.g., cross-hatching or engraved lines). No headgear.\n\nExpression: An expression that is natural and consistent with the body language and context of the original pose.\n\nPhysique & Proportions: The figure should have a natural, athletic build reminiscent of classical Greco-Roman sculpture. Focus on sculptural muscle mass and functional strength rather than extreme bodybuilding proportions. The musculature should be well-defined but avoid hyper-vascularity or exaggerated \"cartoonish\" volume. Ensure the traps and shoulders are proportionate to a natural athlete, maintaining a sleek, alluring, and realistic silhouette.\n\nStyle & Technical Execution:\n\nSeamless Integration: The new head and refined physique must perfectly match the exact medium, substrate texture (e.g., aged paper grain), line quality, and level of detail of the source image.\n\nLighting & Values: Strictly adhere to the shading values, contrast, and lighting direction of the original image to ensure the swap appears authentic.\n\nContingency: If the original pose hides portions of the face, apply the classical aesthetic and hair type to the visible portions of the head and neck.",
@@ -306,14 +306,14 @@
     "id": "character-portrait",
     "title": "Portrait Creator",
     "description": "Transform reference photos into high-quality portraits",
-    "category": "Creativity",
+    "category": "Atelier",
     "image": "",
     "variables": [],
     "variations": [
       {
         "id": "visual-anchor",
-        "name": "Visual Anchor Method",
-        "description": "Three-step process: analyze facial structure, summarize key features, then merge with style reference. Best when you have both likeness and style images.",
+        "name": "Likeness + Style Reference",
+        "description": "Upload two images: a likeness photo AND a style reference painting. Three-step merge process for maximum control.",
         "template": "Step 1:\nAnalyze the attached reference photographs to identify the subject's visual anchor: the fixed facial characteristics that must remain unchanged to preserve likeness. These include, at minimum, overall craniofacial structure, eye spacing and orientation, nasal form, mouth proportions, jawline, and any distinctive asymmetries or contours.\n\nOnce this visual anchor is established, reinterpret the subject through the conventions of classical portraiture. Describe the figure in the style of a 19th-century academic oil painting, introducing restrained idealization—refinement of skin, lighting, and expression—while preserving immediate recognizability. The final portrait should convey gravity, dignity, and psychological depth, balancing faithful likeness with the pathos and nobility characteristic of high academic painting.\n\nStep 2: Provide a summary of this Visual Anchor Then ask for a Style Reference Image in order to move to image generation.\n\nStep 3: I will provide a Style Reference Image. You must generate a high-fidelity image that merges the subject's \"Visual Anchor\" with the style, medium, and atmosphere of the reference image. The subject must look like they belong in that world, as if they were the original sitter for that specific piece of art.\n\nLet's Begin: I am uploading the likeness references now.",
         "steps": [
           {
@@ -341,20 +341,20 @@
       },
       {
         "id": "likeness-lock",
-        "name": "Likeness Lock Method",
-        "description": "Creates explicit constraint checklist before generation to prioritize identity preservation. Best when likeness accuracy is critical.",
+        "name": "Strict Likeness Match",
+        "description": "Prioritizes facial accuracy over style. Uses a constraint checklist to preserve key identity features.",
         "template": "Step 1 — Likeness Lock + Visual Anchor extraction\n\"Analyze the attached likeness reference photos. Your primary objective is preserving identity.\nPriority order: facial geometry and feature placement (highest) > expression > pose > lighting > wardrobe > background/painterly effects (lowest).\nDefine the subject's Visual Anchor as a set of non-negotiable constraints. Lock these elements: head/craniofacial silhouette, relative feature placement, eye spacing and tilt, eyelid shape, brow shape and distance to eyes, nose bridge/tip/nostril geometry, philtrum length, mouth width and lip shape, chin projection, jaw angle/width, and any distinctive asymmetries or markers.\nAllowed changes: painterly rendering, skin finish, lighting design, color palette, edge softness, canvas/varnish effects.\nDisallowed changes: altering facial proportions, moving features, beautifying asymmetries, changing age/ethnicity cues.\"\n\nStep 2 — Output constraints, then request style reference\n\"Output the Visual Anchor as a bullet checklist of explicit constraints (10–20 items) written as 'must match' statements. Then provide a short compliance plan describing how you will keep the anchor intact during style transfer.\nThen ask me for a Style Reference Image to proceed.\"\n\nStep 3 — Generate\n\"Using the Style Reference Image, generate a 19th-century academic oil portrait that matches its brushwork, palette, lighting (chiaroscuro), composition conventions, and surface finish. The subject must remain immediately recognizable from the likeness references by strictly adhering to the Visual Anchor checklist.\nBefore finalizing, perform a quick internal cross-check: confirm each anchor item is satisfied.\"\nLet's Begin: I am uploading the likeness references now."
       },
       {
         "id": "character-reference-only",
-        "name": "Character Reference Only (No Style Image)",
-        "description": "Generates classical oil portrait directly from reference photos without style image. Best for standalone portraits with automatic style.",
+        "name": "Likeness Only",
+        "description": "Upload only a likeness photo—no style reference needed. Automatically renders in classical oil portrait style.",
         "template": "Analyze the uploaded reference images to identify and preserve the subject's Visual Anchor: the immutable facial characteristics that define their identity. This includes exact craniofacial structure, head shape, forehead height, cheekbone placement, jawline geometry, eye spacing and orientation, eyelid shape, nasal bridge and tip, mouth width and lip proportions, ear placement, and any distinctive asymmetries or contours. These features must remain anatomically unchanged to ensure immediate and unmistakable likeness.\n\nRender the subject as a classical, museum-quality oil portrait in the tradition of refined academic painting.\n\nApply idealization only at the surface level—subtle refinement of skin texture, unified tonal transitions, and painterly handling of edges—while strictly preserving the subject's facial proportions, expression, and bone structure as seen in the reference images. Avoid transformation toward an archetypal face.\n\nClothing should be simple and classical in form, rendered in soft natural fabrics with minimal ornamentation, allowing focus to remain on the face. Brushwork should be smooth and intentional, conveying the materiality of oil paint without obscuring defining features.\n\nThe final image should read as a refined classical oil painting that depicts the same individual from the reference images, instantly recognizable, with identity fully preserved and expressed through a restrained, timeless painterly aesthetic."
       },
       {
         "id": "custom-style-clothing",
-        "name": "Custom Style & Clothing",
-        "description": "Allows you to specify artistic style and clothing details before generation. Most flexible option for custom requirements.",
+        "name": "Custom Text Input",
+        "description": "Specify style and clothing via text fields. Most flexible option when you have specific requirements.",
         "template": "Before uploading the reference photographs, please specify:\n\nStyle: {{style}}\nClothing: {{clothing}}\n\nOnce you provide this information, I will analyze the reference photographs to identify the subject's visual anchor: the fixed facial characteristics that must remain unchanged to preserve likeness.\n\nI will then reinterpret the subject through the conventions of classical portraiture, rendering the figure in an oil painting in your specified style and clothing, introducing restrained idealization—refinement of skin, lighting, and expression—while preserving immediate recognizability. The final portrait will convey gravity, dignity, and psychological depth, balancing faithful likeness with the pathos and nobility characteristic of a museum quality painting.",
         "variables": [
           {
@@ -380,7 +380,7 @@
     "id": "song-creator",
     "title": "Song Creator (Suno)",
     "description": "Annotate lyrics to match a specific artist's performance style and delivery",
-    "category": "Creativity",
+    "category": "Writing",
     "icon": "music_note",
     "featured": false,
     "template": "### Task\nAnnotate the provided text to match the specific musical performance style of a target artist.\n\n### Inputs\n\nArtist: {{artist}}\n\nLyrics to Process: \"\"\"\n{{lyrics}}\n\"\"\"\n\n### Instructions\n\nStyle Header: Begin with the sentence: \"In the style of the artist with first name [First Name] and last name [Last Name], who is known for...\" followed by a precise description of their cadence, delivery, and instrumentation.\n\nAnnotation: Rewrite the provided lyrics, inserting detailed performance notes between lines and words. Capture the artist's specific quirks (e.g., vocal runs, spoken word sections, specific ad-libs, breathing patterns).\n\n### Strict Guardrails\n\nALL non-lyrical text (headers, cues, moods, ad-libs) MUST be inside square brackets [ ].\n\nExample: [Verse 1 - Fast Tempo] text text [Audible breath] text...\n\nDo not output any preamble or post-script conversation.\n",
@@ -406,7 +406,7 @@
     "id": "architectural-rendering",
     "title": "Architectural Rendering",
     "description": "Transform images into architectural renderings across historical styles and periods",
-    "category": "Creativity",
+    "category": "Atelier",
     "icon": "architecture",
     "variables": [],
     "variations": [
@@ -455,7 +455,7 @@
     "id": "academic-drawing",
     "title": "Academic Drawing",
     "description": "Convert an image or create an academic drawing of an idealized male figure in classical style",
-    "category": "Creativity",
+    "category": "Atelier",
     "icon": "brush",
     "variables": [],
     "variations": [
@@ -487,7 +487,7 @@
     "id": "artist-guide",
     "title": "Artist Guide",
     "description": "Expert guidance for reproducing reference images in oil painting, watercolor, or drawing with technical analysis",
-    "category": "Creativity",
+    "category": "Atelier",
     "icon": "palette",
     "variables": [
       {
@@ -530,7 +530,7 @@
     "id": "restyle-image",
     "title": "Photography",
     "description": "Transform photographs into fine-art using multiple variations",
-    "category": "Creativity",
+    "category": "Atelier",
     "icon": "camera_alt",
     "variables": [
       {
@@ -593,7 +593,7 @@
     "id": "audio-essay-discovery",
     "title": "Essay Topic Discovery",
     "description": "Multi-step workflow to discover interdisciplinary topics and generate scripts for long-form audio essays. ",
-    "category": "Creativity",
+    "category": "Writing",
     "icon": "headphones",
     "steps": [
       {
@@ -670,7 +670,7 @@
     "id": "portrait-iconography",
     "title": "Art Iconography",
     "description": "Brainstorm visual symbolism for portraits using 19th-century art history and iconographic language",
-    "category": "Creativity",
+    "category": "Atelier",
     "icon": "image",
     "template": "Core message/intent of the artwork: {{message}}\n\nAct as a specialist in 19th-century Art History and Iconography. I want to brainstorm a portrait of a subject that visually communicates a specific hidden message.\n\nProvide a detailed breakdown of how an artist of this era would communicate the message entered above using the following four categories:\n\n* The 'Language of Objects': Suggest 3-4 specific items (memento mori, flora, or household objects) that act as metaphors for the message.\n* Composition & Lighting: Describe how the use of shadows (chiaroscuro), perspective, or the placement of the subject in the frame reinforces the secret meaning.\n* The 'Somatic' (Body) Code: Detail specific gestures, gazes, or anatomical focuses (e.g., tension in the hands, the direction of the eyes) that hint at the internal state.\n* Environmental Cues: Describe a background, window view, or architectural detail that provides a 'thematic echoes' of the main message.\n\nEnsure the suggestions feel grounded in the 19th-century aesthetic (Romanticism, Realism, or the Gilded Age) rather than modern fantasy.",
     "variables": [
@@ -688,7 +688,7 @@
     "id": "art-critique",
     "title": "Artwork Critique",
     "description": "Get constructive critique on your artwork with two modes: reference matching for studies and technique analysis for original pieces",
-    "category": "Creativity",
+    "category": "Atelier",
     "icon": "palette",
     "variables": [],
     "variations": [
@@ -835,5 +835,17 @@
     ],
     "featured": false,
     "slug": "cultural-city-guide"
+  },
+  {
+    "id": "style-dna-extractor",
+    "title": "Style DNA Extractor",
+    "description": "Analyze a style reference image to extract its aesthetic DNA into a portable, subject-agnostic prompt",
+    "category": "Atelier",
+    "image": "",
+    "template": "Task: Analyze the provided \"Style Reference\" image to extract its aesthetic and emotional DNA into a standalone, portable prompt.\n\nRequirements for the Output Prompt:\n\nAesthetic Detail: Describe the specific medium, brushwork, line quality, and texture.\n\nColor & Light: Define the color palette and the specific lighting/atmosphere.\n\nEmotional Mood: Capture the \"vibe\" or emotional weight of the piece (e.g., \"melancholic,\" \"vibrant\").\n\nSubject-Agnostic: Do not describe the specific objects or people in this reference. Use the placeholder [Subject] to ensure the style is transferable.\n\nZero Context Dependency: Do not use transition words or references to this current conversation (e.g., avoid \"as seen above\").\n\nOutput Format:\n\nProvide the prompt text only.\n\nDo not include any introduction, conversational commentary, or \"Here is your prompt\" headers.\n\nThe output should be ready for immediate copy-pasting.",
+    "variables": [],
+    "slug": "style-dna-extractor",
+    "icon": "palette",
+    "featured": false
   }
 ]

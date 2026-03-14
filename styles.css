@@ -1228,9 +1228,10 @@ body.modal-open {
 }
 
 /* New Brand: 3-Color Badge System */
-/* Gold variant - Creativity, Lifestyle, Inspiration */
+/* Gold variant - Atelier, Writing, Lifestyle, Inspiration */
 .card-category.badge-gold,
-.prompt-card[data-category="Creativity"] .card-category,
+.prompt-card[data-category="Atelier"] .card-category,
+.prompt-card[data-category="Writing"] .card-category,
 .prompt-card[data-category="Lifestyle"] .card-category,
 .prompt-card[data-category="Inspiration"] .card-category {
     background-color: rgba(196, 164, 132, 0.1);
