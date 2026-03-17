@@ -7935,7 +7935,7 @@ class ns extends f {
         }
 
         .selected-value-text {
-            margin: var(--spacing-md, 16px) 0 0 0;
+            margin: var(--spacing-sm, 8px) 0 0 0;
             color: color-mix(in srgb, var(--md-sys-color-on-surface, #121714) 86%, transparent);
             font-family: var(--font-body, 'DM Sans', sans-serif);
             font-size: var(--md-sys-typescale-body-medium-size, 1rem);
@@ -11163,6 +11163,7 @@ class gs extends f {
         justify-content: space-between;
         align-items: flex-end;
         gap: 24px;
+        margin-bottom: var(--spacing-lg, 24px);
     }
 
     /* Header-main inside content (for multi-step prompts) */
@@ -11215,7 +11216,6 @@ class gs extends f {
       line-height: 1.6;
       color: var(--md-sys-color-text-muted);
       margin: 0;
-      max-width: 500px;
     }
 
     .customize-btn {
@@ -11823,17 +11823,18 @@ class gs extends f {
   _renderVariable(e) {
     const t = e.inputType || e.type || "text";
     if (t === "toggle") {
-      const o = Array.isArray(e.options) && e.options.length >= 2 ? [e.options[0], e.options[1]] : ["", "true"], i = Array.isArray(e.optionDescriptions) && e.optionDescriptions.length >= 2 ? [e.optionDescriptions[0], e.optionDescriptions[1]] : null, a = this._values[e.name], s = a ?? o[0];
+      const o = Array.isArray(e.options) && e.options.length >= 2 ? [e.options[0], e.options[1]] : ["", "true"], i = Array.isArray(e.optionDescriptions) && e.optionDescriptions.length >= 2 ? [e.optionDescriptions[0], e.optionDescriptions[1]] : null, a = e.size || "default", s = this._values[e.name], c = s ?? o[0];
       return l`
         <div class="form-group">
           <wy-option-toggle
             .label="${e.label || ""}"
             .options="${o}"
             .valueDescriptions="${i}"
-            .value="${s}"
+            .value="${c}"
+            size="${a}"
             variant="switch"
             show-selected-value-text
-            @change="${(c) => this._handleInput(e.name, c.detail.value)}"
+            @change="${(p) => this._handleInput(e.name, p.detail.value)}"
           ></wy-option-toggle>
         </div>
       `;
