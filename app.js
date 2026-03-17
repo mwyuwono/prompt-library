@@ -1134,10 +1134,8 @@ Server will start on http://localhost:3001`;
             const prompt = this.filteredPrompts[this.activePromptIndex];
             if (prompt && variation) {
                 prompt.activeVariationId = variation.id;
-                // Update variables if variation has its own
-                if (variation.variables) {
-                    this.promptModal.variables = variation.variables;
-                }
+                // Always update variables using helper that handles fallback logic
+                this.promptModal.variables = this.getActiveVariables(prompt);
                 // Update URL hash to reflect new variation
                 this.updateUrlHash(prompt.id, variation.id);
             }
