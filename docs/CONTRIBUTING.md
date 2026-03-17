@@ -32,6 +32,7 @@ All documentation in this project follows a high-density standard. Prefer concis
 - **Never create root-level status reports** (e.g., `FIX-COMPLETE.md`, `SESSION-SUMMARY.md`). Completed work goes in `docs/ARCHIVE.md` as a condensed entry.
 - **Never duplicate the data model.** It's defined in `README.md`. Reference it, don't copy it.
 - **Keep CLAUDE.md focused** on rules and constraints for AI tools, not on explaining what the project does (that's `README.md`).
+- **For web-component styling rules, defer to `CLAUDE.md`.** It includes the shadow-DOM/design-system boundaries that local CSS must respect.
 - **Completed checklists are dead weight.** Remove them or move to archive. Only keep checklists that describe *future* verification steps.
 - **No emojis in documentation** unless explicitly requested.
 

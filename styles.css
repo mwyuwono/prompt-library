@@ -2128,7 +2128,8 @@ wy-links-modal::part(modal-actions) {
     max-width: 36rem;
 }
 
-/* DEPRECATED: Use design system wy-prompt-modal .variation-selector-container instead */
+/* DEPRECATED: The live variation selector/description renders inside wy-prompt-modal shadow DOM.
+   Update m3-design-v2 prompt-modal styles instead of relying on page-level selectors here. */
 /* Variation Selector with Web Components */
 .variation-selector-container {
     margin-bottom: var(--space-sm);

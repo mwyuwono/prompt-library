@@ -44,6 +44,7 @@ No build process required for either mode. Admin requires Node.js server for API
 - Do **not** implement local overrides unless explicitly requested
 - If a local override is unavoidable, call it out and confirm before proceeding
 - First verify whether a component is sourced from the design system and update it there
+- For `wy-*` components, first check whether the visible UI is rendered inside shadow DOM; if it is, fix styling in `m3-design-v2` via component styles, CSS custom properties, or exposed parts rather than page-level selectors in this repo
 
 ### Where to Make Style Changes
 
