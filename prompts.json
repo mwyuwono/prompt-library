@@ -486,7 +486,7 @@
   {
     "id": "artist-guide",
     "title": "Artist Guide",
-    "description": "Expert guidance for reproducing reference images in oil painting, watercolor, or drawing with technical analysis",
+    "description": "Expert guidance for reproducing reference images in oil painting, watercolor, or drawing. Includes a Blocking-In Study mode that generates abstract underpainting visualizations.",
     "category": "Atelier",
     "icon": "palette",
     "variables": [
@@ -498,7 +498,8 @@
           "Low",
           "Mid"
         ],
-        "value": "Low"
+        "value": "Low",
+        "description": "For Blocking-In Study: Low = pure abstract color map with flat shapes; Mid = adds secondary planes, temperature shifts, and edge variation"
       }
     ],
     "variations": [
