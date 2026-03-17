@@ -2132,7 +2132,7 @@ wy-links-modal::part(modal-actions) {
 /* Variation Selector with Web Components */
 .variation-selector-container {
     margin-bottom: var(--space-sm);
-    padding: 0 var(--space-lg);
+    padding: var(--spacing-md, 16px) var(--space-lg);
 }
 
 [data-variation-dropdown] {
@@ -2141,7 +2141,11 @@ wy-links-modal::part(modal-actions) {
 
 .variation-description-panel {
     margin-top: 16px; /* Match reference design gap */
+    margin-left: var(--space-md);
+    margin-right: var(--space-md);
     display: block;
+    background-color: var(--md-sys-color-border-variant);
+    border-radius: var(--md-sys-shape-corner-small);
 }
 
 wy-info-panel[data-variation-description]:empty,
