@@ -11824,7 +11824,6 @@ class gs extends f {
           <wy-option-toggle
             .label="${e.label || ""}"
             .options="${o}"
-            .labels="${["Off", "On"]}"
             .value="${a}"
             variant="switch"
             show-selected-value-text
