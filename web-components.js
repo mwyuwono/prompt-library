@@ -10967,7 +10967,7 @@ class gs extends f {
         }), this._values = i;
       }
     }
-    if (e.has("variables") && this.variables && this.variables.length > 0) {
+    if (e.has("variables") && this.variables) {
       const t = {};
       this.variables.forEach((o) => {
         t[o.name] = o.value || "";
