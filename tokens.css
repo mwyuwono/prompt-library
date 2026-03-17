@@ -177,10 +177,12 @@
     --wy-filter-chip-text-hover: var(--md-sys-color-on-surface);
     --wy-filter-chip-border: transparent;
     --wy-filter-chip-border-hover: transparent;
-    --wy-filter-chip-hover-bg: var(--md-sys-color-surface-variant);
+    --wy-filter-chip-hover-bg: color-mix(in srgb, var(--wy-button-primary-bg) 15%, transparent);
     --wy-filter-chip-focus: var(--md-sys-color-primary);
     --wy-filter-chip-active-bg: var(--md-sys-color-primary);
     --wy-filter-chip-active-fg: var(--md-sys-color-on-primary);
+    --wy-filter-chip-min-height: 28px;
+    --wy-filter-chip-padding: 5px 13px;
 
     /* Button System Tokens */
     --wy-button-primary-bg: var(--md-sys-color-primary);
