@@ -7735,6 +7735,7 @@ class ns extends f {
   static properties = {
     options: { type: Array },
     labels: { type: Array },
+    valueDescriptions: { type: Array },
     value: { type: String },
     checked: { type: Boolean, reflect: !0 },
     label: { type: String },
@@ -7746,7 +7747,7 @@ class ns extends f {
     ariaLabel: { type: String, attribute: "aria-label" }
   };
   constructor() {
-    super(), this.options = null, this.labels = null, this.value = "", this.checked = !1, this.label = "", this.description = "", this.disabled = !1, this.variant = "segmented", this.size = "default", this.showSelectedValueText = !1, this.ariaLabel = "";
+    super(), this.options = null, this.labels = null, this.valueDescriptions = null, this.value = "", this.checked = !1, this.label = "", this.description = "", this.disabled = !1, this.variant = "segmented", this.size = "default", this.showSelectedValueText = !1, this.ariaLabel = "";
   }
   static styles = m`
         :host {
@@ -7983,6 +7984,10 @@ class ns extends f {
   _getSelectedValue() {
     return this._hasValidOptions() ? this.options[this._getSelectedIndex()] ?? "" : "";
   }
+  _getSelectedDescription() {
+    const e = this._getSelectedIndex();
+    return Array.isArray(this.valueDescriptions) && this.valueDescriptions.length === 2 && this.valueDescriptions[e] ? this.valueDescriptions[e] : this._getSelectedValue();
+  }
   _getA11yLabel() {
     return this.ariaLabel || this.label || "Option toggle";
   }
@@ -8062,7 +8067,7 @@ class ns extends f {
                 </div>
             `}
             ${i ? l`
-                <p class="selected-value-text">${this._getSelectedValue()}</p>
+                <p class="selected-value-text">${this._getSelectedDescription()}</p>
             ` : ""}
         `;
   }
@@ -11818,16 +11823,17 @@ class gs extends f {
   _renderVariable(e) {
     const t = e.inputType || e.type || "text";
     if (t === "toggle") {
-      const o = Array.isArray(e.options) && e.options.length >= 2 ? [e.options[0], e.options[1]] : ["", "true"], i = this._values[e.name], a = i ?? o[0];
+      const o = Array.isArray(e.options) && e.options.length >= 2 ? [e.options[0], e.options[1]] : ["", "true"], i = Array.isArray(e.optionDescriptions) && e.optionDescriptions.length >= 2 ? [e.optionDescriptions[0], e.optionDescriptions[1]] : null, a = this._values[e.name], s = a ?? o[0];
       return l`
         <div class="form-group">
           <wy-option-toggle
             .label="${e.label || ""}"
             .options="${o}"
-            .value="${a}"
+            .valueDescriptions="${i}"
+            .value="${s}"
             variant="switch"
             show-selected-value-text
-            @change="${(s) => this._handleInput(e.name, s.detail.value)}"
+            @change="${(c) => this._handleInput(e.name, c.detail.value)}"
           ></wy-option-toggle>
         </div>
       `;
