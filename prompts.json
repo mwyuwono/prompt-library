@@ -518,8 +518,11 @@
             "label": "Fidelity",
             "inputType": "toggle",
             "options": ["Low", "Mid"],
-            "value": "Low",
-            "description": "Low = pure abstract color map; Mid = adds secondary planes and temperature shifts"
+            "optionDescriptions": [
+              "Pure abstract color map with flat shapes, no edge variation or temperature shifts",
+              "Adds secondary planes, color temperature variation, and edge differentiation"
+            ],
+            "value": "Low"
           }
         ],
         "template": "Analyze the attached finished oil painting and generate a new image that visualizes its blocking-in stage. Fidelity: {{fidelity}}.\n\nFidelity level definitions — apply only the one selected above:\n\n* Low — Reduce all forms to the broadest flat primary masses. Use a single flat local color per region. No secondary planes, edge variation, directional brushwork, or temperature shifts. The result should read as a pure abstract color map.\n\n* Mid — Reduce forms to primary masses but allow secondary planes where major surfaces turn. Introduce color temperature variation within masses (warm lights, cool shadows). Differentiate hard edges at form boundaries from soft edges at gradual transitions. Suggest volume with directional brushwork. Still no fine textures, highlights, or rendered detail.\n\nConstraints common to all fidelity levels:\n\n* Composition: Maintain the exact proportions and layout of the original.\n* Style: Thin underpainting aesthetic — a 'lean' first layer or lay-in. A front-on map of the painting's masses.\n* Presentation: Flat, front-on perspective. No framing, easel, or context — just the study itself.\n\nThe goal is to strip away the 'rendered' data (skin texture, leaf detail) and reveal only the 'abstract' data beneath it."
