@@ -36,7 +36,15 @@
         "name": "mask_instructions",
         "label": "Masked Image",
         "inputType": "toggle",
+        "labels": [
+          "Off",
+          "On"
+        ],
         "options": [
+          "",
+          "Limit all edits to only the areas masked by the user. Ensure the mask is not visible in the resulting image."
+        ],
+        "optionDescriptions": [
           "",
           "Limit all edits to only the areas masked by the user. Ensure the mask is not visible in the resulting image."
         ],
@@ -46,7 +54,15 @@
         "name": "ko_imari_palette",
         "label": "Ko-Imari Palette",
         "inputType": "toggle",
+        "labels": [
+          "Off",
+          "On"
+        ],
         "options": [
+          "",
+          "Use skin tones consistent with the 'Ko-Imari' palette, specifically rendering the figures' skin as the unpainted, translucent milky-white of the porcelain (nigoshide), with anatomical details and muscular definition rendered in fine, delicate outlines with appropriate shading for a Ko-Imari vessel."
+        ],
+        "optionDescriptions": [
           "",
           "Use skin tones consistent with the 'Ko-Imari' palette, specifically rendering the figures' skin as the unpainted, translucent milky-white of the porcelain (nigoshide), with anatomical details and muscular definition rendered in fine, delicate outlines with appropriate shading for a Ko-Imari vessel."
         ],
