@@ -51,6 +51,12 @@
   /* App-specific tokens */
   --modal-blur-amount: 16px;
   --modal-blur-saturation: 180%;
+
+  /* Toast semantic colors for the locally synced bundle */
+  --wy-toast-success-color: var(--md-sys-color-primary);
+  --wy-toast-error-color: #B3261E;
+  --wy-toast-warning-color: var(--md-sys-color-secondary);
+  --wy-toast-info-color: var(--md-sys-color-secondary);
   
   /* Motion tokens - Fallback if CDN import fails */
   --md-sys-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
@@ -130,11 +136,7 @@
     --md-sys-color-text-muted: #667f71;
     --md-sys-color-text-heading: #2C4C3B;
     
-    /* Links Modal Specific Colors */
-    --wy-links-modal-title-color: #1C1917;
-    --wy-links-modal-header-color: #292524;
-    --wy-links-modal-chip-text-color: #44403C;
-    --wy-links-modal-close-color: #A8A29E;
+    /* Links Modal Tokens changed by design-system dark mode */
     --wy-links-modal-chip-border: #D9D4C7;
     --wy-links-modal-text-muted: #78716C;
     
@@ -153,38 +155,7 @@
     --wy-info-panel-border: #D7D3C8;
     --wy-info-panel-text-color: #52525B;
 
-    /* Library Header Component Colors */
-    --wy-status-success-color: #438E64;
-    --wy-library-header-scrolled-bg: rgba(248, 247, 244, 0.8);
-
-    /* Component Tokens - Controls Bar */
-    --wy-controls-bar-bg: color-mix(in srgb, var(--md-sys-color-primary) 10%, transparent);
-    --wy-controls-bar-fg: var(--md-sys-color-on-primary);
-    --wy-controls-search-bg: var(--md-sys-color-surface-container-lowest);
-    --wy-controls-toggle-bg: var(--md-sys-color-surface-container-high);
-    --wy-controls-chip-text: color-mix(in srgb, var(--wy-controls-bar-fg) 60%, transparent);
-    --wy-controls-chip-text-hover: var(--wy-controls-bar-fg);
-    --wy-controls-chip-border: color-mix(in srgb, var(--wy-controls-bar-fg) 20%, transparent);
-    --wy-controls-chip-border-hover: color-mix(in srgb, var(--wy-controls-bar-fg) 40%, transparent);
-    --wy-controls-chip-hover-bg: color-mix(in srgb, var(--wy-controls-bar-fg) 5%, transparent);
-    --wy-controls-chip-focus: color-mix(in srgb, var(--wy-controls-bar-fg) 50%, transparent);
-    --wy-controls-chip-active-bg: var(--md-sys-color-primary);
-    --wy-controls-chip-active-fg: var(--md-sys-color-on-primary);
-
-    /* Filter Chip Colors */
-    --wy-filter-chip-bg: var(--md-sys-color-surface-container-lowest);
-    --wy-filter-chip-text: var(--md-sys-color-on-surface);
-    --wy-filter-chip-text-hover: var(--md-sys-color-on-surface);
-    --wy-filter-chip-border: transparent;
-    --wy-filter-chip-border-hover: transparent;
-    --wy-filter-chip-hover-bg: color-mix(in srgb, var(--wy-button-primary-bg) 15%, transparent);
-    --wy-filter-chip-focus: var(--md-sys-color-primary);
-    --wy-filter-chip-active-bg: var(--md-sys-color-primary);
-    --wy-filter-chip-active-fg: var(--md-sys-color-on-primary);
-    --wy-filter-chip-min-height: 28px;
-    --wy-filter-chip-padding: 5px 13px;
-
-    /* Button System Tokens */
+    /* Button System Tokens changed by design-system dark mode */
     --wy-button-primary-bg: var(--md-sys-color-primary);
     --wy-button-primary-fg: var(--md-sys-color-on-primary);
     --wy-button-primary-hover-bg: #1e3428;
@@ -202,18 +173,11 @@
     --wy-button-text-fg: var(--md-sys-color-primary);
     --wy-button-text-fg-muted: color-mix(in srgb, var(--md-sys-color-primary) 60%, transparent);
     --wy-button-text-hover-bg: color-mix(in srgb, var(--md-sys-color-primary) 5%, transparent);
-    
-    --wy-icon-button-filled-bg: var(--md-sys-color-primary);
-    --wy-icon-button-filled-fg: var(--md-sys-color-on-primary);
-    --wy-icon-button-filled-shadow: 0 4px 12px rgba(44, 76, 59, 0.2);
-    --wy-icon-button-outlined-bg: var(--md-sys-color-background);
-    --wy-icon-button-outlined-fg: var(--md-sys-color-primary);
-    --wy-icon-button-outlined-border: color-mix(in srgb, var(--md-sys-color-primary) 20%, transparent);
-    
-    --wy-utility-tag-bg: color-mix(in srgb, var(--md-sys-color-primary) 5%, transparent);
-    --wy-utility-tag-fg: var(--md-sys-color-primary);
-    --wy-utility-tag-border: color-mix(in srgb, var(--md-sys-color-primary) 10%, transparent);
-    --wy-utility-tag-add-border: color-mix(in srgb, var(--md-sys-color-primary) 30%, transparent);
-    --wy-utility-tag-add-fg: color-mix(in srgb, var(--md-sys-color-primary) 40%, transparent);
+
+    /* Toast semantic colors changed by design-system dark mode */
+    --wy-toast-success-color: var(--md-sys-color-primary);
+    --wy-toast-error-color: #B3261E;
+    --wy-toast-warning-color: var(--md-sys-color-secondary);
+    --wy-toast-info-color: var(--md-sys-color-secondary);
   }
 }

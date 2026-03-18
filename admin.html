@@ -7,7 +7,7 @@
     <title>Prompt Editor - Admin</title>
 
     <!-- Design System CSS -->
-    <link rel="stylesheet" href="tokens.css?v=20260202">
+    <link rel="stylesheet" href="tokens.css?v=20260317-1945">
     
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet">
@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Admin Page Styles -->
-    <link rel="stylesheet" href="admin.css?v=20260202">
+    <link rel="stylesheet" href="admin.css?v=20260317-1945">
 </head>
 <body class="admin-page">
     <!-- Prompt List Sidebar -->
@@ -52,12 +52,9 @@
     <wy-toast id="toast"></wy-toast>
 
     <!-- Design System Web Components -->
-    <script type="module">
-        // CSS custom properties fix for Shadow DOM - replaces :host-context() for browser compatibility
-        import './web-components.js?v=20260317-1745';
-    </script>
+    <script type="module" src="components/index.js?v=20260317-1945"></script>
 
     <!-- Admin Logic -->
-    <script type="module" src="admin.js?v=20260202"></script>
+    <script type="module" src="admin.js?v=20260317-1945"></script>
 </body>
 </html>
