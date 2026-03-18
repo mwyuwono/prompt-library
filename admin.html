@@ -52,7 +52,10 @@
     <wy-toast id="toast"></wy-toast>
 
     <!-- Design System Web Components -->
-    <script type="module" src="components/index.js?v=20260317-1945"></script>
+    <script type="module">
+        // Admin uses an explicit cache-busted local bundle to avoid stale relative imports.
+        import './web-components.js?v=20260317-1945';
+    </script>
 
     <!-- Admin Logic -->
     <script type="module" src="admin.js?v=20260317-1945"></script>

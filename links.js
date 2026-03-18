@@ -26,19 +26,26 @@ class LinksManager {
      * Wait for wy-links-modal component to be registered
      */
     async waitForComponent() {
+        try {
+            await customElements.whenDefined('wy-links-modal');
+        } catch (error) {
+            console.warn('wy-links-modal component registration failed:', error);
+            return;
+        }
+
         const maxAttempts = 50;
         let attempts = 0;
-        
+
         while (attempts < maxAttempts) {
             this.modal = document.getElementById('linksModal');
-            if (this.modal && this.modal.tagName === 'WY-LINKS-MODAL') {
+            if (this.modal && typeof this.modal.show === 'function' && typeof this.modal.close === 'function') {
                 return;
             }
             await new Promise(resolve => setTimeout(resolve, 100));
             attempts++;
         }
-        
-        console.warn('wy-links-modal component not found after waiting');
+
+        console.warn('wy-links-modal component not upgraded after waiting');
     }
 
     /**

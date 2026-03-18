@@ -34,7 +34,7 @@ class PromptLibrary {
      */
     async init() {
         await this.loadPrompts();
-        this.createPromptModal();
+        await this.createPromptModal();
         this.setupEventListeners();
         this.setupKeyboardShortcuts();
         this.populateCategoryFilter();
@@ -897,8 +897,10 @@ Server will start on http://localhost:3001`;
     /**
      * Create/get modal container for prompt details (web component)
      */
-    createPromptModal() {
-        if (this.promptModal) return;
+    async createPromptModal() {
+        if (this.promptModal && customElements.get('wy-prompt-modal')) return;
+
+        await customElements.whenDefined('wy-prompt-modal');
 
         // Get the web component from the DOM
         this.promptModal = document.getElementById('promptModal');
@@ -988,12 +990,12 @@ Server will start on http://localhost:3001`;
     /**
      * Open prompt modal with selected prompt details
      */
-    openPromptModal(index) {
+    async openPromptModal(index) {
         const prompt = this.filteredPrompts[index];
         if (!prompt) return;
 
-        if (!this.promptModal) {
-            this.createPromptModal();
+        if (!this.promptModal || !customElements.get('wy-prompt-modal')) {
+            await this.createPromptModal();
         }
 
         this.activePromptIndex = index;
@@ -1640,6 +1642,11 @@ Server will start on http://localhost:3001`;
      * Show keyboard shortcuts modal (uses wy-modal web component)
      */
     showShortcutsModal() {
+        if (!customElements.get('wy-modal')) {
+            console.warn('wy-modal is not registered yet');
+            return;
+        }
+
         const modal = document.getElementById('shortcutsModal');
         if (!modal) return;
 
