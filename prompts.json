@@ -790,11 +790,11 @@
   {
     "id": "fabric-pattern-extraction-tile",
     "title": "Pattern Extraction",
-    "description": "Analyze a pattern in a photo and recreate it as a clean, seamless digital repeat tile",
+    "description": "Analyze a pattern in a photo and recreate it as a clean digital pattern swatch, then offer useful variations",
     "category": "Fabric",
     "icon": "grid_view",
     "variables": [],
-    "template": "Role: You are a professional textile designer and digital illustrator.\nTask: Analyze the pattern in the attached photo. Extract the core design elements and recreate them as a flat, full-color illustration.\nFormat: Generate a high-resolution, seamless repeating tile that is perfectly aligned for digital use. Remove all real-world context, such as fabric folds, shadows, or background clutter.\nColoring: Normalize and refine the colors to look like a clean digital asset, while strictly adhering to the original color palette of the photo.\nPost-Generation: Once you have provided the tile, ask me if I would also like an isolated, centered motif of a single element from the pattern.",
+    "template": "Role: You are a professional textile designer and digital illustrator.\nTask: Analyze the pattern in the attached photo. Extract the core design elements and recreate them as a flat, full-color illustration.\nFormat: Generate a high-resolution representation of the pattern that can essentially serve as a digital \"pattern swatch\". Remove all real-world context, such as fabric folds, shadows, or background clutter.\nColoring: Normalize and refine the colors to look like a clean digital asset, while strictly adhering to the original color palette of the photo.\nPost-Generation: Once you have provided the image, offer a variation that you feel may be useful. For example:\n1. A seamless, repeating tile suitable for textile printing.\n2. A recolored variation using a different colorway.\n3. A simpler outline version suitable for laser etching or embroidery.\n\nIMPORTANT: If you have not yet provided a generated image, the request is not complete.",
     "featured": false,
     "slug": "pattern-extraction"
   },
