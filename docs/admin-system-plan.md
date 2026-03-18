@@ -11,7 +11,7 @@ admin.html          # Page shell
 admin.js            # Orchestration (state, event handlers, sidebar)
 admin.css           # Layout (280px sidebar + main grid)
 server.js           # Express server with API endpoints
-web-components.js   # Local design system bundle (DO NOT use CDN for admin)
+web-components.js   # Local design system bundle (DO NOT use CDN for admin; keep ?v= cache-busted)
 ```
 
 ### Web Components (from m3-design-v2, Lit 3.x)
@@ -73,11 +73,11 @@ Images saved to `public/images/` with timestamp filenames. All changes write to 
 
 | Symptom | Fix |
 |---------|-----|
-| Editor doesn't appear | Check `admin.html` imports local `web-components.js` (not CDN) |
+| Editor doesn't appear | Check `admin.html` imports local `web-components.js?v=...` (not CDN) |
 | Save does nothing | Verify using local bundle with save fix |
 | Image upload fails | Ensure `public/images/` directory exists |
 | Archived prompt still visible | Verify `app.js` has `filter(p => !p.archived)` |
 
 ## Design System Source
 
-Components built with Lit 3.x from `m3-design-v2`. Admin uses local copy (`web-components.js`) with save fix. Do not switch to CDN without verifying multi-step form submission works.
+Components built with Lit 3.x from `m3-design-v2`. Admin uses a local, cache-busted copy (`web-components.js?v=...`). Public uses the pinned CDN bundle via `components/index.js`. Do not collapse these into a single bare local import without verifying modal registration and multi-step form submission.

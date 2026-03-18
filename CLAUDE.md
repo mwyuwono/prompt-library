@@ -162,6 +162,11 @@ import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@<commit>/dist/web-comp
 
 CSS tokens still use `@main` (less frequently updated, cache issues less critical).
 
+**Loader topology matters:**
+- Public site (`index.html` -> `components/index.js`) should keep using the pinned CDN bundle.
+- Admin (`admin.html`) should keep using the explicit local `web-components.js?v=...` import.
+- Do **not** switch public to a bare local `../web-components.js` import without a versioned URL and fresh verification. That caused a modal regression because the browser could reuse a stale local bundle even while other components still looked upgraded.
+
 ### CDN Cache Issues
 
 If design system changes don't appear, see [docs/cdn-troubleshooting.md](docs/cdn-troubleshooting.md) for purge commands and verification steps.
@@ -185,6 +190,7 @@ When design system tokens or styles change in `m3-design-v2`:
    - CSS tokens use `@main` which is CDN-cached
    - Without cache-busting, browsers load stale CSS even after CDN purge
    - This causes wrong colors, borders, spacing despite correct component code
+   - For admin's local bundle, `web-components.js` also needs an explicit `?v=` bump when the bundled JS changes
 
 4. **Verification:**
    After updating cache-busting and hard refresh (Cmd+Shift+R), use `getComputedStyle()` to verify tokens resolve to correct values.

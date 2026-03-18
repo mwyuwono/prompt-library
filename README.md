@@ -23,7 +23,7 @@ No build process required. Static file hosting needed for `fetch('prompts.json')
 
 **Stack:** HTML/CSS/JS only. No frameworks, bundlers, or npm dependencies (public site).
 
-**Design system:** Shared `m3-design-v2` via CDN (CSS tokens) and local bundle (Web Components via Lit 3.x).
+**Design system:** Shared `m3-design-v2` via CDN (CSS tokens). Web components are split intentionally: public uses the pinned CDN bundle through `components/index.js`, while admin uses the local cache-busted `web-components.js`.
 
 ```
 /
@@ -36,8 +36,8 @@ No build process required. Static file hosting needed for `fetch('prompts.json')
 ├── admin.js            # Admin orchestration
 ├── admin.css           # Admin layout
 ├── server.js           # Express server (admin API)
-├── web-components.js   # Local design system bundle (DO NOT edit directly)
-├── components/index.js # Component loader
+├── web-components.js   # Local admin bundle copy (DO NOT edit directly)
+├── components/index.js # Public component loader (pinned CDN bundle)
 └── public/images/      # Prompt thumbnails
 ```
 
