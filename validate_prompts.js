@@ -1,17 +1,55 @@
-const prompts = require("./prompts.json");
+import prompts from "./prompts.json" with { type: "json" };
+
+function getTemplateVariables(template = "") {
+    return (template.match(/\{\{([a-zA-Z0-9_]+)\}\}/g) || [])
+        .map((variable) => variable.slice(2, -2));
+}
+
+function validateMissingVariables(ownerLabel, template, availableVariables) {
+    let hasErrors = false;
+    const templateVariables = getTemplateVariables(template);
+
+    const undefinedVariables = templateVariables.filter(
+        (variable) => !availableVariables.includes(variable)
+    );
+    if (undefinedVariables.length > 0) {
+        hasErrors = true;
+        console.error(`❌ ERROR in ${ownerLabel}:`);
+        console.error(
+            `  - The following variables are used in the template but not defined: ${undefinedVariables.join(", ")}`
+        );
+    }
+
+    return hasErrors;
+}
+
+function validateUnusedVariables(ownerLabel, definedVariables, usedVariables) {
+    const unusedVariables = definedVariables.filter(
+        (variable) => !usedVariables.includes(variable)
+    );
+
+    if (unusedVariables.length > 0) {
+        console.error(`❌ ERROR in ${ownerLabel}:`);
+        console.error(
+            `  - The following variables are defined but not used in the template: ${unusedVariables.join(", ")}`
+        );
+        return true;
+    }
+
+    return false;
+}
 
 function validatePrompts() {
     let hasErrors = false;
 
-    // 1. Check for unique IDs
-    const ids = prompts.map(p => p.id);
+    const ids = prompts.map((prompt) => prompt.id);
     const uniqueIds = new Set(ids);
     if (ids.length !== uniqueIds.size) {
         hasErrors = true;
         console.error("❌ ERROR: Duplicate IDs found!");
-        const counts = ids.reduce((acc, id) => {
-            acc[id] = (acc[id] || 0) + 1;
-            return acc;
+        const counts = ids.reduce((accumulator, id) => {
+            accumulator[id] = (accumulator[id] || 0) + 1;
+            return accumulator;
         }, {});
         for (const id in counts) {
             if (counts[id] > 1) {
@@ -22,34 +60,52 @@ function validatePrompts() {
         console.log("✅ All prompt IDs are unique.");
     }
 
-    // 2. Check for consistent categories
-    const categories = prompts.map(p => p.category);
+    const categories = prompts.map((prompt) => prompt.category);
     const uniqueCategories = [...new Set(categories)].sort();
     console.log("\nFound categories:", uniqueCategories.join(", "));
 
-
-    // 3. Template-Variable Consistency & 4. Variable-Template Consistency
     console.log("\nChecking template and variable consistency...");
-    prompts.forEach(prompt => {
-        const templateVariables = (prompt.template.match(/\{\{([a-zA-Z0-9_]+)\}\}/g) || [])
-            .map(v => v.substring(2, v.length - 2));
-        const definedVariables = prompt.variables ? prompt.variables.map(v => v.name) : [];
+    prompts.forEach((prompt) => {
+        const promptVariables = prompt.variables ? prompt.variables.map((variable) => variable.name) : [];
+        const promptTemplateVariables = getTemplateVariables(prompt.template || "");
+        const variationTemplateVariables = [];
 
-        // Check if all defined variables are used in the template
-        const unusedVariables = definedVariables.filter(v => !templateVariables.includes(v));
-        if (unusedVariables.length > 0) {
-            hasErrors = true;
-            console.error(`❌ ERROR in prompt "${prompt.id}":`);
-            console.error(`  - The following variables are defined but not used in the template: ${unusedVariables.join(", ")}`);
+        if (prompt.template) {
+            hasErrors =
+                validateMissingVariables(`prompt "${prompt.id}"`, prompt.template, promptVariables) ||
+                hasErrors;
         }
 
-        // Check if all template variables are defined
-        const undefinedVariables = templateVariables.filter(v => !definedVariables.includes(v));
-        if (undefinedVariables.length > 0) {
-            hasErrors = true;
-            console.error(`❌ ERROR in prompt "${prompt.id}":`);
-            console.error(`  - The following variables are used in the template but not defined: ${undefinedVariables.join(", ")}`);
+        if (prompt.variations?.length) {
+            prompt.variations.forEach((variation) => {
+                const variationVariables = variation.variables
+                    ? variation.variables.map((variable) => variable.name)
+                    : [];
+                const availableVariables = [...new Set([...promptVariables, ...variationVariables])];
+                const usedVariables = getTemplateVariables(variation.template || "");
+
+                variationTemplateVariables.push(...usedVariables);
+
+                hasErrors =
+                    validateMissingVariables(
+                        `variation "${variation.id}" in prompt "${prompt.id}"`,
+                        variation.template,
+                        availableVariables
+                    ) || hasErrors;
+
+                hasErrors =
+                    validateUnusedVariables(
+                        `variation "${variation.id}" in prompt "${prompt.id}"`,
+                        variationVariables,
+                        usedVariables
+                    ) || hasErrors;
+            });
         }
+
+        const allPromptLevelUsage = [...promptTemplateVariables, ...variationTemplateVariables];
+        hasErrors =
+            validateUnusedVariables(`prompt "${prompt.id}"`, promptVariables, allPromptLevelUsage) ||
+            hasErrors;
     });
 
     if (!hasErrors) {

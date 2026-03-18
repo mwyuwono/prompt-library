@@ -785,6 +785,17 @@
     "slug": "fabric-pattern-repeat"
   },
   {
+    "id": "fabric-pattern-extraction-tile",
+    "title": "Pattern Extraction Tile",
+    "description": "Analyze a photographed textile pattern and recreate it as a clean, seamless digital repeat tile",
+    "category": "Fabric",
+    "icon": "grid_view",
+    "variables": [],
+    "template": "Role: You are a professional textile designer and digital illustrator.\nTask: Analyze the pattern in the attached photo. Extract the core design elements and recreate them as a flat, full-color illustration.\nFormat: Generate a high-resolution, seamless repeating tile that is perfectly aligned for digital use. Remove all real-world context, such as fabric folds, shadows, or background clutter.\nColoring: Normalize and refine the colors to look like a clean digital asset, while strictly adhering to the original color palette of the photo.\nPost-Generation: Once you have provided the tile, ask me if I would also like an isolated, centered motif of a single element from the pattern.",
+    "featured": false,
+    "slug": "fabric-pattern-extraction-tile"
+  },
+  {
     "id": "fabric-vector-prep",
     "title": "Vector Trace Prep",
     "description": "Simplify an image into a flat, high-contrast graphic optimized for vector tracing with a limited color palette",
