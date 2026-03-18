@@ -533,7 +533,10 @@
             "name": "fidelity",
             "label": "Fidelity",
             "inputType": "toggle",
-            "options": ["Low", "Mid"],
+            "options": [
+              "Low",
+              "Mid"
+            ],
             "optionDescriptions": [
               "Pure abstract color map with flat shapes, no edge variation or temperature shifts",
               "Adds secondary planes, color temperature variation, and edge differentiation"
@@ -786,14 +789,14 @@
   },
   {
     "id": "fabric-pattern-extraction-tile",
-    "title": "Pattern Extraction Tile",
-    "description": "Analyze a photographed textile pattern and recreate it as a clean, seamless digital repeat tile",
+    "title": "Pattern Extraction",
+    "description": "Analyze a pattern in a photo and recreate it as a clean, seamless digital repeat tile",
     "category": "Fabric",
     "icon": "grid_view",
     "variables": [],
     "template": "Role: You are a professional textile designer and digital illustrator.\nTask: Analyze the pattern in the attached photo. Extract the core design elements and recreate them as a flat, full-color illustration.\nFormat: Generate a high-resolution, seamless repeating tile that is perfectly aligned for digital use. Remove all real-world context, such as fabric folds, shadows, or background clutter.\nColoring: Normalize and refine the colors to look like a clean digital asset, while strictly adhering to the original color palette of the photo.\nPost-Generation: Once you have provided the tile, ask me if I would also like an isolated, centered motif of a single element from the pattern.",
     "featured": false,
-    "slug": "fabric-pattern-extraction-tile"
+    "slug": "pattern-extraction"
   },
   {
     "id": "fabric-vector-prep",
