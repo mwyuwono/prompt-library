@@ -11315,8 +11315,8 @@ class gs extends g {
     }
 
     .variation-selector-container {
-        margin: 0 var(--spacing-xl, 32px);
-        padding: var(--spacing-xl, 32px);
+        margin: var(--spacing-xl, 32px) var(--spacing-xl, 32px) 0;
+        padding: var(--spacing-md, 16px);
         display: flex;
         flex-direction: column;
         gap: var(--spacing-md, 16px);
