@@ -386,11 +386,19 @@
             "value": ""
           }
         ]
+      },
+      {
+        "id": "variation-5",
+        "name": "My New Variation",
+        "description": "",
+        "template": "",
+        "variables": []
       }
     ],
     "featured": false,
     "slug": "portrait-creator",
-    "icon": "face_right"
+    "icon": "face_right",
+    "template": ""
   },
   {
     "id": "song-creator",

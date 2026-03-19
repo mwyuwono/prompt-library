@@ -67,11 +67,13 @@ if (fs.existsSync(componentPath)) {
     // Check for conversion methods
     const hasConvertToVariations = componentContent.includes('_convertToVariations()');
     const hasConvertFromVariations = componentContent.includes('_convertFromVariations()');
+    const hasVariationSaveSync = componentContent.includes('_syncVariationTemplatesForSave()');
     const hasConvertButton = componentContent.includes('Convert to Variations');
     const hasCardHeader = componentContent.includes('card-header-with-action');
     
     console.log(`  ${hasConvertToVariations ? '✓' : '✗'} Has _convertToVariations method`);
     console.log(`  ${hasConvertFromVariations ? '✓' : '✗'} Has _convertFromVariations method`);
+    console.log(`  ${hasVariationSaveSync ? '✓' : '✗'} Has variation save sync method`);
     console.log(`  ${hasConvertButton ? '✓' : '✓'} Has "Convert to Variations" button`);
     console.log(`  ${hasCardHeader ? '✓' : '✗'} Has card-header-with-action CSS`);
 } else {
@@ -82,9 +84,11 @@ if (fs.existsSync(componentPath)) {
 const bundleContent = fs.readFileSync(bundlePath, 'utf-8');
 const hasConversionCode = bundleContent.includes('_convertToVariations') && 
                           bundleContent.includes('_convertFromVariations');
+const hasVariationSaveSyncInBundle = bundleContent.includes('_syncVariationTemplatesForSave');
 
 console.log('\n✓ Checking compiled bundle');
 console.log(`  ${hasConversionCode ? '✓' : '✗'} Contains conversion methods`);
+console.log(`  ${hasVariationSaveSyncInBundle ? '✓' : '✗'} Contains variation save sync`);
 
 if (bundleContent.includes('Convert to Variations')) {
     console.log('  ✓ Contains "Convert to Variations" UI text');
@@ -107,7 +111,8 @@ const allChecks = [
     fs.existsSync(bundlePath),
     fs.statSync(bundlePath).size >= 670000,
     fs.readFileSync(adminPath, 'utf-8').includes('?v='),
-    hasConversionCode
+    hasConversionCode,
+    hasVariationSaveSyncInBundle
 ];
 
 const passed = allChecks.filter(Boolean).length;
