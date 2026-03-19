@@ -11315,11 +11315,12 @@ class gs extends g {
     }
 
     .variation-selector-container {
-        padding: var(--spacing-xl, 32px) var(--spacing-xl, 32px) var(--spacing-md, 16px);
+        margin: 0 var(--spacing-xl, 32px);
+        padding: var(--spacing-xl, 32px);
         display: flex;
         flex-direction: column;
         gap: var(--spacing-md, 16px);
-        background-color: var(--wy-info-panel-bg);
+        background-color: var(--md-sys-color-surface-container-high);
         border-radius: var(--md-sys-shape-corner-medium, 12px);
     }
 
