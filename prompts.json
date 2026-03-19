@@ -390,7 +390,7 @@
       {
         "id": "variation-5",
         "name": "My New Variation",
-        "description": "",
+        "description": "testing description ",
         "template": "",
         "variables": []
       }

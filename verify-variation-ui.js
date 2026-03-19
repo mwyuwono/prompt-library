@@ -57,38 +57,66 @@ if (fs.existsSync(adminPath)) {
     console.log('\n✗ admin.html not found');
 }
 
-// Check 3: Verify the component file has conversion methods
-const componentPath = path.join(__dirname, '../m3-design-v2/src/components/wy-prompt-editor.js');
-if (fs.existsSync(componentPath)) {
-    const componentContent = fs.readFileSync(componentPath, 'utf-8');
+// Check 3: Verify source components use the new textarea event contract
+const promptEditorPath = path.join(__dirname, '../m3-design-v2/src/components/wy-prompt-editor.js');
+const stepEditorPath = path.join(__dirname, '../m3-design-v2/src/components/wy-step-editor.js');
+const variationEditorPath = path.join(__dirname, '../m3-design-v2/src/components/wy-variation-editor.js');
+const codeTextareaPath = path.join(__dirname, '../m3-design-v2/src/components/wy-code-textarea.js');
+
+if (fs.existsSync(promptEditorPath) && fs.existsSync(stepEditorPath) && fs.existsSync(variationEditorPath) && fs.existsSync(codeTextareaPath)) {
+    const promptEditorContent = fs.readFileSync(promptEditorPath, 'utf-8');
+    const stepEditorContent = fs.readFileSync(stepEditorPath, 'utf-8');
+    const variationEditorContent = fs.readFileSync(variationEditorPath, 'utf-8');
+    const codeTextareaContent = fs.readFileSync(codeTextareaPath, 'utf-8');
     
-    console.log('\n✓ Source component found');
+    console.log('\n✓ Source components found');
     
-    // Check for conversion methods
-    const hasConvertToVariations = componentContent.includes('_convertToVariations()');
-    const hasConvertFromVariations = componentContent.includes('_convertFromVariations()');
-    const hasVariationSaveSync = componentContent.includes('_syncVariationTemplatesForSave()');
-    const hasConvertButton = componentContent.includes('Convert to Variations');
-    const hasCardHeader = componentContent.includes('card-header-with-action');
+    const hasConvertToVariations = promptEditorContent.includes('_convertToVariations()');
+    const hasConvertFromVariations = promptEditorContent.includes('_convertFromVariations()');
+    const hasVariationSaveSync = promptEditorContent.includes('_syncVariationTemplatesForSave()');
+    const usesValueInputInPromptEditor = promptEditorContent.includes('@value-input="${(e) => this._handleFieldChange(\'template\', e.detail.value)}"');
+    const usesValueInputInStepEditor = stepEditorContent.includes('@value-input="${this._handleTemplateChange}"');
+    const usesValueInputInVariationEditor = variationEditorContent.includes('@value-input="${(e) => this._handleTemplateChange(index, e)}"');
+    const codeTextareaUsesValueInput = codeTextareaContent.includes("new CustomEvent('value-input'");
+    const codeTextareaUsesValueChange = codeTextareaContent.includes("new CustomEvent('value-change'");
+    const codeTextareaStillUsesCustomInput = codeTextareaContent.includes("new CustomEvent('input'");
+    const codeTextareaStillUsesCustomChange = codeTextareaContent.includes("new CustomEvent('change'");
     
     console.log(`  ${hasConvertToVariations ? '✓' : '✗'} Has _convertToVariations method`);
     console.log(`  ${hasConvertFromVariations ? '✓' : '✗'} Has _convertFromVariations method`);
     console.log(`  ${hasVariationSaveSync ? '✓' : '✗'} Has variation save sync method`);
-    console.log(`  ${hasConvertButton ? '✓' : '✓'} Has "Convert to Variations" button`);
-    console.log(`  ${hasCardHeader ? '✓' : '✗'} Has card-header-with-action CSS`);
+    console.log(`  ${usesValueInputInPromptEditor ? '✓' : '✗'} Prompt editor uses value-input`);
+    console.log(`  ${usesValueInputInStepEditor ? '✓' : '✗'} Step editor uses value-input`);
+    console.log(`  ${usesValueInputInVariationEditor ? '✓' : '✗'} Variation editor uses value-input`);
+    console.log(`  ${codeTextareaUsesValueInput ? '✓' : '✗'} Code textarea dispatches value-input`);
+    console.log(`  ${codeTextareaUsesValueChange ? '✓' : '✗'} Code textarea dispatches value-change`);
+    console.log(`  ${!codeTextareaStillUsesCustomInput ? '✓' : '✗'} Code textarea no longer dispatches custom input`);
+    console.log(`  ${!codeTextareaStillUsesCustomChange ? '✓' : '✗'} Code textarea no longer dispatches custom change`);
 } else {
-    console.log('\n⚠ Source component not found (expected if not in same parent dir)');
+    console.log('\n⚠ Source components not found');
 }
 
-// Check 4: Verify bundle contains the conversion code
+// Check 4: Verify bundle contains the new event contract and save sync
 const bundleContent = fs.readFileSync(bundlePath, 'utf-8');
 const hasConversionCode = bundleContent.includes('_convertToVariations') && 
                           bundleContent.includes('_convertFromVariations');
 const hasVariationSaveSyncInBundle = bundleContent.includes('_syncVariationTemplatesForSave');
+const bundleUsesValueInput = bundleContent.includes('value-input');
+const bundleUsesValueChange = bundleContent.includes('value-change');
+const bundleHasCodeTextareaValueInputDispatch = bundleContent.includes('dispatchEvent(new CustomEvent("value-input"');
+const bundleHasCodeTextareaValueChangeDispatch = bundleContent.includes('dispatchEvent(new CustomEvent("value-change"');
+const bundleHasCodeTextareaCustomInputDispatch = bundleContent.includes('dispatchEvent(new CustomEvent("input"');
+const bundleHasCodeTextareaCustomChangeDispatch = bundleContent.includes('dispatchEvent(new CustomEvent("change", {\n      detail: { value: this.value }');
 
 console.log('\n✓ Checking compiled bundle');
 console.log(`  ${hasConversionCode ? '✓' : '✗'} Contains conversion methods`);
 console.log(`  ${hasVariationSaveSyncInBundle ? '✓' : '✗'} Contains variation save sync`);
+console.log(`  ${bundleUsesValueInput ? '✓' : '✗'} Contains value-input event usage`);
+console.log(`  ${bundleUsesValueChange ? '✓' : '✗'} Contains value-change event usage`);
+console.log(`  ${bundleHasCodeTextareaValueInputDispatch ? '✓' : '✗'} Code textarea dispatches value-input in bundle`);
+console.log(`  ${bundleHasCodeTextareaValueChangeDispatch ? '✓' : '✗'} Code textarea dispatches value-change in bundle`);
+console.log(`  ${!bundleHasCodeTextareaCustomInputDispatch ? '✓' : '✗'} Code textarea no longer dispatches custom input in bundle`);
+console.log(`  ${!bundleHasCodeTextareaCustomChangeDispatch ? '✓' : '✗'} Code textarea no longer dispatches custom change in bundle`);
 
 if (bundleContent.includes('Convert to Variations')) {
     console.log('  ✓ Contains "Convert to Variations" UI text');
@@ -112,7 +140,13 @@ const allChecks = [
     fs.statSync(bundlePath).size >= 670000,
     fs.readFileSync(adminPath, 'utf-8').includes('?v='),
     hasConversionCode,
-    hasVariationSaveSyncInBundle
+    hasVariationSaveSyncInBundle,
+    bundleUsesValueInput,
+    bundleUsesValueChange,
+    bundleHasCodeTextareaValueInputDispatch,
+    bundleHasCodeTextareaValueChangeDispatch,
+    !bundleHasCodeTextareaCustomInputDispatch,
+    !bundleHasCodeTextareaCustomChangeDispatch
 ];
 
 const passed = allChecks.filter(Boolean).length;

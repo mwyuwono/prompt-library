@@ -8387,14 +8387,14 @@ class ds extends g {
         }
     `;
   _handleInput(e) {
-    this.value = e.target.value, this.dispatchEvent(new CustomEvent("input", {
+    this.value = e.target.value, this.dispatchEvent(new CustomEvent("value-input", {
       detail: { value: this.value },
       bubbles: !0,
       composed: !0
     }));
   }
   _handleChange(e) {
-    this.value = e.target.value, this.dispatchEvent(new CustomEvent("change", {
+    this.value = e.target.value, this.dispatchEvent(new CustomEvent("value-change", {
       detail: { value: this.value },
       bubbles: !0,
       composed: !0
@@ -8408,7 +8408,7 @@ class ds extends g {
   }
   _insertVariable(e) {
     const t = this.shadowRoot.querySelector("textarea"), o = t.selectionStart, r = t.selectionEnd, a = this.value.substring(0, o), s = this.value.substring(r), c = `{{${e}}}`;
-    this.value = a + c + s, this.dispatchEvent(new CustomEvent("input", {
+    this.value = a + c + s, this.dispatchEvent(new CustomEvent("value-input", {
       detail: { value: this.value },
       bubbles: !0,
       composed: !0
@@ -9295,7 +9295,7 @@ This action cannot be undone.`;
                                         .variables="${f}"
                                         placeholder="Enter your prompt template here..."
                                         rows="12"
-                                        @input="${(h) => this._handleTemplateChange(t, h)}"
+                                        @value-input="${(h) => this._handleTemplateChange(t, h)}"
                                         @click="${(h) => h.stopPropagation()}"
                                     ></wy-code-textarea>
                                 </div>
@@ -10067,7 +10067,7 @@ Convert to single-step mode instead.`);
                                     .variables="${t}"
                                     placeholder="Enter your prompt template here. Use {{variable-name}} for substitutions."
                                     rows="12"
-                                    @input="${(o) => this._handleFieldChange("template", o.detail.value)}"
+                                    @value-input="${(o) => this._handleFieldChange("template", o.detail.value)}"
                                 ></wy-code-textarea>
                             </div>
                         ` : ""}
@@ -10523,7 +10523,7 @@ This action cannot be undone.`;
                                     .variables="${e}"
                                     placeholder="Enter your prompt template here..."
                                     rows="12"
-                                    @input="${this._handleTemplateChange}"
+                                    @value-input="${this._handleTemplateChange}"
                                 ></wy-code-textarea>
                             </div>
                         </div>
