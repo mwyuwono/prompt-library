@@ -5,9 +5,8 @@
  * Components are registered as custom elements via Lit 3.x
  */
 
-// Import from CDN (deployed to all environments)
-// Using commit hash instead of @main for reliable CDN delivery
-// @main is unreliable - see docs/css-changes-not-appearing-postmortem.md Lesson 8
-import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@3ed0427/dist/web-components.js';
+// Import local bundle for workspace verification of in-flight design system changes.
+// Keep the URL versioned to avoid stale browser caches while testing.
+import '../web-components.js?v=20260319-1532';
 
-console.log('[Components] m3-design-v2 web components registered (CDN)');
+console.log('[Components] m3-design-v2 web components registered (local bundle)');
