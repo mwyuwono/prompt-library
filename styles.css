@@ -95,6 +95,40 @@ body {
 
 /* App body overrides (design system provides base body styles) */
 body {
+    /* Public-site-only token overrides so admin remains unaffected */
+    --md-sys-color-primary: #5A6B2E;
+    --md-sys-color-on-primary: #FFFFFF;
+    --md-sys-color-primary-container: #D7EBA0;
+    --md-sys-color-primary-fixed-dim: #C9DD93;
+    --md-sys-color-secondary: #2E301D;
+    --md-sys-color-on-secondary: #FFFFFF;
+    --md-sys-color-secondary-container: #E2E6BA;
+    --md-sys-color-on-secondary-container: #505433;
+    --md-sys-color-secondary-fixed-dim: #D4D8AD;
+    --md-sys-color-on-secondary-fixed: #3E4222;
+    --md-sys-color-background: #F2F4F4;
+    --md-sys-color-surface: #F9F9F9;
+    --md-sys-color-surface-bright: #F9F9F9;
+    --md-sys-color-surface-container: #EBEEEF;
+    --md-sys-color-surface-container-low: #F2F4F4;
+    --md-sys-color-surface-container-lowest: #FFFFFF;
+    --md-sys-color-surface-container-high: #E4E9EA;
+    --md-sys-color-surface-container-highest: #DDE4E5;
+    --md-sys-color-surface-variant: #DDE4E5;
+    --md-sys-color-outline-variant: #ADB3B4;
+    --md-sys-color-on-background: #2D3435;
+    --md-sys-color-on-surface: #2D3435;
+    --md-sys-color-on-surface-variant: #626643;
+    --md-sys-color-text-main: #2D3435;
+    --md-sys-color-text-muted: #626643;
+    --wy-button-primary-bg: var(--color-action-primary);
+    --wy-button-primary-fg: var(--color-text-contrast);
+    --wy-button-primary-hover-bg: var(--color-primary);
+    --wy-button-outlined-fg: var(--color-primary);
+    --wy-button-outlined-border: rgba(173, 179, 180, 0.35);
+    --wy-button-outlined-hover-bg: var(--md-sys-color-surface-container-low);
+    --wy-button-text-fg: var(--color-primary);
+    --wy-button-text-hover-bg: var(--md-sys-color-surface-container-low);
     background-color: var(--md-sys-color-surface-container);
     color: var(--color-text-primary);
     overflow-x: hidden;
@@ -132,7 +166,9 @@ body {
     font-family: var(--font-sans);
     font-size: var(--text-xs);
     color: var(--color-text-secondary);
-    background: transparent;
+    background: color-mix(in srgb, var(--md-sys-color-surface-container-lowest) 80%, transparent);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -238,10 +274,10 @@ wy-button:not(:defined) {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    background-color: var(--md-sys-color-primary, #2C4C3B);
-    color: var(--md-sys-color-on-primary, #FFFFFF);
+    background-color: var(--wy-button-primary-bg, var(--color-action-primary));
+    color: var(--wy-button-primary-fg, var(--color-text-contrast));
     border: none;
-    border-radius: 9999px;
+    border-radius: 0.375rem;
     padding: 6px 20px;
     font-family: var(--font-sans, 'DM Sans', sans-serif);
     font-size: 0.75rem;
@@ -263,9 +299,9 @@ wy-button:not(:defined) {
 }
 
 .quick-link-btn {
-    background: var(--color-border-subtle);
-    color: var(--color-text-primary);
-    border: none;
+    background: var(--md-sys-color-surface-container-lowest);
+    color: var(--color-primary);
+    border: 1px solid rgba(173, 179, 180, 0.2);
     height: 26px;
     padding: 0 16px;
     border-radius: 20px;
@@ -282,11 +318,11 @@ wy-button:not(:defined) {
 }
 
 .quick-link-btn:hover {
-    background: var(--color-surface-hover);
+    background: var(--md-sys-color-surface-container-low);
 }
 
 .quick-link-btn:focus-visible {
-    outline: 3px solid var(--color-action-primary);
+    outline: 3px solid var(--color-primary);
     outline-offset: 2px;
 }
 
@@ -511,17 +547,17 @@ wy-button:not(:defined) {
     font-size: var(--md-sys-typescale-title-large-size);
     font-weight: var(--md-sys-typescale-title-large-weight);
     line-height: var(--md-sys-typescale-title-large-line-height);
-    color: var(--color-text-primary);
+    color: var(--color-action-primary);
     margin: 0;
     padding-bottom: var(--space-sm);
-    border-bottom: 2px solid var(--color-border-subtle);
+    border-bottom: none;
 }
 
 .category-items {
     display: flex;
     flex-direction: column;
     gap: 1px;
-    background-color: var(--color-page-background);
+    background-color: transparent;
 }
 
 .prompt-list-item {
@@ -530,7 +566,7 @@ wy-button:not(:defined) {
     gap: var(--space-md);
     /* Minimal padding for table-like appearance */
     padding: var(--space-md) var(--space-lg);
-    background: var(--color-page-background);
+    background: var(--md-sys-color-surface-container-low);
     border-radius: 0;
     cursor: pointer;
     transition: all var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
@@ -545,7 +581,7 @@ wy-button:not(:defined) {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: var(--color-action-primary);
+    background-color: var(--color-primary);
     opacity: 0;
     transition: opacity var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
     pointer-events: none;
@@ -560,7 +596,7 @@ wy-button:not(:defined) {
 }
 
 .prompt-list-item:focus-visible {
-    outline: 3px solid var(--color-action-primary);
+    outline: 3px solid var(--color-primary);
     outline-offset: 2px;
 }
 
@@ -741,7 +777,7 @@ wy-button:not(:defined) {
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
-    background: var(--color-card-surface);
+    background: var(--md-sys-color-surface-container-lowest);
     padding: var(--space-xl);
     border-radius: 999px;
     color: var(--color-action-primary);
@@ -873,7 +909,7 @@ body.modal-open {
 .prompt-card {
     /* New brand: white background with soft border */
     background: var(--color-white);
-    border: 1px solid var(--color-border-subtle);
+    border: none;
     border-radius: var(--radius-lg);
 
     /* Flexible height with flex layout */
@@ -896,7 +932,7 @@ body.modal-open {
     color: var(--color-text-primary);
 
     /* Subtle shadow that enhances on hover */
-    box-shadow: var(--shadow-subtle);
+    box-shadow: 0 20px 40px rgba(45, 52, 53, 0.04);
 
     /* Smooth transitions */
     transition: box-shadow var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized),
@@ -909,7 +945,7 @@ body.modal-open {
 
 /* Featured Olive Card Variant (for cards without images or special prompts) */
 .prompt-card.featured-olive {
-    background: var(--color-olive);
+    background: var(--color-card-dark);
     border: none;
     color: var(--color-white);
 }
@@ -922,7 +958,7 @@ body.modal-open {
     right: 0;
     width: 200px;
     height: 200px;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(215, 235, 160, 0.18);
     border-radius: 50%;
     filter: blur(60px);
     pointer-events: none;
@@ -932,13 +968,13 @@ body.modal-open {
 
 /* Card hover state - New brand elegant hover effect */
 .prompt-card:hover {
-    box-shadow: var(--shadow-large);
+    box-shadow: 0 24px 48px rgba(45, 52, 53, 0.08);
     transform: translateY(-2px);
 }
 
 .prompt-card:active {
     transform: translateY(0);
-    box-shadow: var(--shadow-medium);
+    box-shadow: 0 14px 28px rgba(45, 52, 53, 0.06);
 }
 
 /* Safari: prevent column/transform paint glitches (titles disappearing, hover flicker). */
@@ -963,7 +999,7 @@ body.modal-open {
 
 /* Featured olive card hover - Enhanced shadow */
 .prompt-card.featured-olive:hover {
-    box-shadow: var(--shadow-xl);
+    box-shadow: 0 28px 56px rgba(46, 48, 29, 0.16);
 }
 
 .card-thumbnail {
@@ -973,7 +1009,7 @@ body.modal-open {
     flex-shrink: 0;
     overflow: hidden;
     position: relative;
-    background-color: var(--color-emphasis-background);
+    background-color: var(--md-sys-color-surface-container-high);
 }
 
 /* Gradient overlay on thumbnail images */
@@ -981,7 +1017,7 @@ body.modal-open {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, transparent 60%);
+    background: linear-gradient(to top, rgba(46, 48, 29, 0.55) 0%, transparent 60%);
     opacity: 0.6;
     pointer-events: none;
     z-index: 1;
@@ -1086,8 +1122,8 @@ body.modal-open {
 
 /* Card Badge (e.g., CREATIVITY) */
 .card-badge {
-    background: var(--color-linen);
-    color: var(--color-text-primary);
+    background: var(--md-sys-color-surface-container-low);
+    color: var(--color-action-primary);
     font-family: var(--font-sans);
     font-size: 10px;
     font-weight: 700;
@@ -1121,14 +1157,14 @@ body.modal-open {
     border-radius: var(--md-sys-shape-corner-full);
     background-color: transparent;
     border: none;
-    color: var(--color-charcoal);
+    color: var(--color-primary);
     transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized),
         transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
 }
 
 .prompt-card:hover .card-arrow-button {
     opacity: 1;
-    background-color: var(--color-gold);
+    background-color: var(--color-action-primary);
     color: var(--color-white);
     transform: scale(1.05);
 }
@@ -1165,7 +1201,7 @@ body.modal-open {
 /* Enhanced frosted glass badges over images - Reference design */
 .card-thumbnail+.card-content .card-header .card-category,
 .card-thumbnail+.card-content .card-header .variable-count-badge {
-    background-color: rgba(30, 30, 30, 0.75);
+    background-color: rgba(46, 48, 29, 0.82);
     backdrop-filter: blur(16px) saturate(180%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
     color: var(--color-text-contrast);
@@ -1206,7 +1242,7 @@ body.modal-open {
     letter-spacing: var(--tracking-tight);
     margin-bottom: var(--spacing-sm);
     /* Default: Charcoal on white cards */
-    color: var(--color-charcoal);
+    color: var(--color-text-primary);
 }
 
 /* Meeting Minutes Architect: Small Uppercase Badge per mockup */
@@ -1218,8 +1254,8 @@ body.modal-open {
     line-height: var(--leading-tight);
 
     /* Warm beige background with Hunter Green text per mockup */
-    background-color: var(--md-sys-color-surface-container-high);
-    color: var(--md-sys-color-primary);
+    background-color: var(--md-sys-color-secondary-fixed-dim);
+    color: var(--md-sys-color-on-secondary-fixed);
     padding: 0.375rem 0.75rem;
     border-radius: 4px;
     letter-spacing: 0.15em;
@@ -1234,16 +1270,16 @@ body.modal-open {
 .prompt-card[data-category="Writing"] .card-category,
 .prompt-card[data-category="Lifestyle"] .card-category,
 .prompt-card[data-category="Inspiration"] .card-category {
-    background-color: rgba(196, 164, 132, 0.1);
-    color: var(--color-gold);
+    background-color: rgba(201, 221, 147, 0.45);
+    color: #35450B;
 }
 
 /* Olive variant - Productivity, Expertise */
 .card-category.badge-olive,
 .prompt-card[data-category="Productivity"] .card-category,
 .prompt-card[data-category="Expertise"] .card-category {
-    background-color: rgba(61, 68, 53, 0.1);
-    color: var(--color-olive);
+    background-color: rgba(90, 107, 46, 0.14);
+    color: var(--color-primary);
 }
 
 /* Warm Grey variant - Travel & Shopping, Editing, and others */
@@ -1254,8 +1290,8 @@ body.modal-open {
 .prompt-card[data-category="Education"] .card-category,
 .prompt-card[data-category="Photography"] .card-category,
 .prompt-card[data-category="Audio"] .card-category {
-    background-color: rgba(112, 112, 112, 0.1);
-    color: var(--color-warmgrey);
+    background-color: var(--md-sys-color-surface-container-high);
+    color: var(--color-text-secondary);
 }
 
 /* Card Icon Styles */
@@ -1270,13 +1306,13 @@ body.modal-open {
 }
 
 .card-icon-container.icon-featured {
-    background-color: var(--md-sys-color-primary, #2C4C3B);
+    background-color: var(--color-primary);
     color: var(--color-white);
 }
 
 .card-icon-container.icon-neutral {
-    background-color: var(--color-emphasis-background);
-    color: var(--color-charcoal);
+    background-color: var(--md-sys-color-surface-container-high);
+    color: var(--color-primary);
 }
 
 .card-icon-container .material-symbols-outlined {
@@ -1301,7 +1337,7 @@ body.modal-open {
     letter-spacing: var(--tracking-widest);
 
     /* Meeting Minutes Architect: Match pill style */
-    background-color: var(--tag-bg);
+    background-color: var(--md-sys-color-surface-container-high);
     color: var(--color-text-secondary);
 
     padding: 0.25rem 0.75rem;
@@ -1333,7 +1369,7 @@ body.modal-open {
     line-height: var(--line-height-card-description);
     letter-spacing: var(--tracking-normal);
     /* Default: Warm Grey on white cards */
-    color: var(--color-warmgrey);
+    color: var(--color-text-secondary);
     margin-bottom: 0;
     cursor: pointer;
 
@@ -1388,7 +1424,7 @@ body.modal-open {
 }
 
 .prompt-card:focus-visible {
-    outline: 3px solid var(--color-gold);
+    outline: 3px solid var(--color-primary);
     outline-offset: 2px;
 }
 
@@ -1428,7 +1464,7 @@ body.modal-open {
     font-weight: 700;
     line-height: var(--leading-tight);
     /* Meeting Minutes Architect: Hunter Green labels per mockup */
-    color: var(--md-sys-color-primary);
+    color: var(--color-primary);
     margin-bottom: 0.5rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -1451,8 +1487,9 @@ body.modal-open {
     min-height: 2.75rem;
 
     /* White background with subtle border per mockup */
-    border: 1px solid var(--md-sys-color-outline-variant);
-    border-radius: 8px;
+    border: 0;
+    border-bottom: 1px solid var(--md-sys-color-outline-variant);
+    border-radius: 0;
 
     /* Typography */
     font-family: var(--font-sans);
@@ -1462,11 +1499,11 @@ body.modal-open {
 
     color: var(--md-sys-color-on-surface);
     /* White input background on clay surface */
-    background-color: var(--md-sys-color-surface-container-lowest);
+    background-color: var(--md-sys-color-surface-container-high);
 
     /* Smooth transition */
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+    box-shadow: none;
 }
 
 /* @deprecated */
@@ -1477,14 +1514,15 @@ body.modal-open {
 
 /* @deprecated */
 .variable-input:hover {
-    border-color: var(--md-sys-color-secondary);
+    border-color: var(--color-primary);
 }
 
 /* @deprecated */
 .variable-input:focus {
     outline: none;
-    border-color: var(--md-sys-color-primary);
-    box-shadow: 0 0 0 1px var(--md-sys-color-primary);
+    border-color: var(--color-primary);
+    background-color: var(--md-sys-color-surface-container-lowest);
+    box-shadow: none;
 }
 
 /* @deprecated */
@@ -1511,26 +1549,27 @@ body.modal-open {
     min-height: 300px;
     max-height: 60vh;
     padding: 1rem;
-    border: 1px solid var(--color-border-subtle);
-    border-radius: var(--md-sys-shape-corner-medium);
+    border: 0;
+    border-bottom: 1px solid var(--md-sys-color-outline-variant);
+    border-radius: 0;
     font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
     font-size: var(--text-sm);
     line-height: 1.6;
     color: var(--color-text-primary);
-    background-color: var(--color-card-surface);
+    background-color: var(--md-sys-color-surface-container-high);
     resize: vertical;
     overflow-y: auto;
     transition: all var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
 }
 
 .template-textarea:hover {
-    border-color: var(--color-text-primary);
+    border-color: var(--color-primary);
 }
 
 .template-textarea:focus {
     outline: none;
-    border-color: var(--color-action-primary);
-    border-width: 1px;
+    border-color: var(--color-primary);
+    background-color: var(--md-sys-color-surface-container-lowest);
 }
 
 /* Card Actions - Meeting Minutes Architect (right-aligned) */
@@ -1576,7 +1615,7 @@ body.modal-open {
     right: var(--space-xl);
 
     /* New brand: charcoal background */
-    background-color: var(--color-charcoal);
+    background-color: var(--color-action-primary);
     color: var(--color-white);
 
     padding: 0.875rem 1rem;
@@ -1686,8 +1725,8 @@ body.modal-open {
     justify-content: space-between;
     align-items: center;
     padding: var(--space-lg);
-    background-color: var(--color-card-surface);
-    border: 1px solid var(--color-border-subtle);
+    background-color: var(--md-sys-color-surface-container-lowest);
+    border: none;
     border-radius: 12px;
 }
 
@@ -1704,8 +1743,8 @@ body.modal-open {
     font-size: var(--text-sm);
     font-weight: var(--weight-semibold);
     color: var(--color-text-primary);
-    background-color: var(--color-card-surface);
-    border: 1.5px solid var(--color-border-subtle);
+    background-color: var(--md-sys-color-surface-container-high);
+    border: none;
     border-radius: 8px;
     min-width: 2.5rem;
     text-align: center;
@@ -1942,8 +1981,8 @@ body.modal-open {
 
 /* Search Highlighting */
 mark {
-    background-color: var(--color-surface-hover);
-    color: var(--color-action-primary);
+    background-color: var(--md-sys-color-primary-fixed-dim);
+    color: var(--color-text-primary);
     padding: 0.125rem 0.25rem;
     border-radius: 4px;
     font-weight: var(--weight-medium);
