@@ -776,6 +776,26 @@
     "slug": "fabric-colorways"
   },
   {
+    "id": "fabric-imagery",
+    "title": "Fabric Imagery",
+    "description": "Turn a story into French Modernist textile motifs and offer a follow-up fabric pattern image prompt",
+    "category": "Fabric",
+    "icon": "image",
+    "variables": [
+      {
+        "name": "story",
+        "label": "Story",
+        "placeholder": "e.g., A woman in a striped boatneck walks through a seaside garden at dusk carrying letters tied with ribbon",
+        "value": "",
+        "inputType": "textarea",
+        "rows": 6
+      }
+    ],
+    "template": "Story: {{story}}\n\nAct as a textile designer's muse. For the story provided above, respond with twenty relevant physical objects that can be translated into fabric patterns.\n\nThe aesthetic is French Modernism: a blend of classical imagery, simple abstracted illustrations, and botanicals. Think 1920s and 30s avant-garde. Think Jean Cocteau meets Matisse.\n\nAfter your response, offer to write an image prompt that elicits a fabric pattern based on the provided imagery and executed in the style of House of Hackney, Dedar, Schumacher, or Lee Jofa.",
+    "featured": false,
+    "slug": "fabric-imagery"
+  },
+  {
     "id": "fabric-pattern-repeat",
     "title": "Pattern Repeat Design",
     "description": "Generate a new seamless repeating tile inspired by the visual style, color palette, and motifs of a reference image",
