@@ -796,6 +796,17 @@
     "slug": "fabric-imagery"
   },
   {
+    "id": "fabric-rendering",
+    "title": "Fabric Rendering",
+    "description": "Turn a flat fabric design into a photorealistic luxury textile swatch with woven texture and artisanal print character",
+    "category": "Fabric",
+    "icon": "camera_alt",
+    "variables": [],
+    "template": "Based on the uploaded image of a fabric design, generate a photorealistic, close-up photograph of a luxury textile swatch. The rendering must preserve the exact motifs, layout, and colors of the input pattern. The design is executed with the sophisticated artistry of high-end design houses like Schumacher or Dedar, completely transforming the surface texture. Prioritizing textile physics over crisp precision, the dye must appear fully absorbed and integrated into the individual woven fibers rather than resting on the surface. All boundaries and curves must be rendered with organic, non-vector irregularity, avoiding mathematical precision to convey an authentic, artisanal hand-blocked feel with subtle, natural texture variations throughout the printed areas.",
+    "featured": false,
+    "slug": "fabric-rendering"
+  },
+  {
     "id": "fabric-pattern-repeat",
     "title": "Pattern Repeat Design",
     "description": "Generate a new seamless repeating tile inspired by the visual style, color palette, and motifs of a reference image",
