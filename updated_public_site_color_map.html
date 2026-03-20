@@ -1,0 +1,132 @@
+# Public Site Color Map
+
+Edit the `New Color` column, or replace a `Current Color` value inline if that is easier for you.
+
+Design-system-backed rows are intentionally left as tokens or source expressions instead of flattened hex values. Some
+updates may need to be implemented in `m3-design-v2` instead of this repo.
+
+## Global Tokens And Semantic Mappings
+
+### Core App Mappings From `tokens.css`
+
+| Component | Selector / Token | Property | Current Color | New Color | Notes |
+| --- | --- | --- | --- | --- | --- |
+| Page background | `--color-page-background` | background token | `var(--md-sys-color-background)` | `#FCFBF6` | App
+semantic mapping to design system |
+| Card surface | `--color-card-surface` | surface token | `var(--md-sys-color-surface-container-lowest)` | `#FFFFFF` |
+App semantic mapping to design system |
+| Dark card surface | `--color-card-dark` | surface token | `var(--md-sys-color-primary)` | `#315522` | App semantic
+mapping to design system |
+| Primary text | `--color-text-primary` | text token | `var(--md-sys-color-text-main)` | `#000000` | App semantic
+mapping to design system |
+| Secondary text | `--color-text-secondary` | text token | `var(--md-sys-color-text-muted)` | `#315522` | App semantic
+mapping to design system |
+| Contrast text | `--color-text-contrast` | text token | `var(--md-sys-color-on-primary)` | `#FCFBF6` | App semantic
+mapping to design system |
+| Primary brand | `--color-primary` | brand token | `var(--md-sys-color-primary)` | `#315522` | App semantic mapping to
+design system |
+| Accent / action | `--color-action-primary` | action token | `var(--md-sys-color-secondary)` | `#A0860D` | App semantic
+mapping to design system |
+| Accent / action hover | `--color-action-primary-hover` | action hover token | `#7A6E62` | `#8A730B` | Local hardcoded
+value |
+| Emphasis background | `--color-emphasis-background` | surface accent token | `color-mix(in srgb,
+var(--md-sys-color-secondary) 10%, transparent)` | `rgba(160, 134, 13, 0.1)` | Local derived token |
+| Surface hover | `--color-surface-hover` | hover token | `color-mix(in srgb, var(--md-sys-color-text-muted) 10%,
+transparent)` | `rgba(49, 85, 34, 0.05)` | Local derived token |
+| Subtle border | `--color-border-subtle` | border token | `color-mix(in srgb, var(--md-sys-color-text-muted) 10%,
+transparent)` | `rgba(0, 0, 0, 0.08)` | Local derived token |
+| Legacy linen | `--color-linen` | legacy surface token | `var(--md-sys-color-background)` | `#FCFBF6` | Legacy mapping
+still used in public styles |
+| Legacy charcoal | `--color-charcoal` | legacy dark text/surface token | `var(--md-sys-color-on-background)` |
+`#000000` | Legacy mapping still used in public styles |
+| Legacy white | `--color-white` | legacy white/surface token | `var(--md-sys-color-surface-container-lowest)` |
+`#FFFFFF` | Legacy mapping still used in public styles |
+| Legacy olive | `--color-olive` | legacy brand token | `var(--md-sys-color-primary)` | `#315522` | Legacy mapping still
+used in public styles |
+| Legacy gold | `--color-gold` | legacy accent token | `var(--md-sys-color-secondary)` | `#A0860D` | Legacy mapping
+still used in public styles |
+| Legacy warm grey | `--color-warmgrey` | legacy muted token | `var(--md-sys-color-text-muted)` | `#5E5E5E` | Legacy
+mapping still used in public styles |
+
+### Shared Design Tokens Referenced Directly
+
+| Component | Selector / Token | Property | Current Color | New Color | Notes |
+| --- | --- | --- | --- | --- | --- |
+| Design system primary | `--md-sys-color-primary` | primary | design-system token | `#315522` | Shared token, not
+locally defined in light mode |
+| Design system on-primary | `--md-sys-color-on-primary` | on-primary text | design-system token | `#FCFBF6` | Shared
+token, used by buttons and featured states |
+| Design system secondary | `--md-sys-color-secondary` | secondary | design-system token | `#A0860D` | Shared token,
+used by accent states |
+| Design system background | `--md-sys-color-background` | background | design-system token | `#FCFBF6` | Shared token,
+used for page/list backgrounds |
+| Design system surface container | `--md-sys-color-surface-container` | surface | design-system token | `#FFFFFF` |
+Shared token, used by `body` |
+| Design system text main | `--md-sys-color-text-main` | text | design-system token | `#000000` | Shared token via app
+mappings |
+| Design system text muted | `--md-sys-color-text-muted` | text | design-system token | `#315522` | Shared token via app
+mappings |
+
+### Global Surface Details
+
+| Component | Selector / Token | Property | Current Color | New Color | Notes |
+| --- | --- | --- | --- | --- | --- |
+| Body | `body` | background-color | `var(--md-sys-color-surface-container)` | `#FFFFFF` | Local style using DS token |
+| Body | `body` | text color | `var(--color-text-primary)` | `#000000` | Local style |
+| Text selection | `::selection` | background-color | `var(--color-gold)` | `#A0860D` | Local style |
+| Text selection | `::selection` | color | `var(--color-white)` | `#FFFFFF` | Local style |
+
+## Header And Top-Level Navigation
+
+### Header Bar
+
+| Component | Selector / Token | Property | Current Color | New Color | Notes |
+| --- | --- | --- | --- | --- | --- |
+| Top header | `.header-top` | text color | `var(--color-text-secondary)` | `#315522` | Local style |
+| Header logo text | `.header-logo-text` | color | `var(--color-text-primary)` | `#000000` | Local style |
+| Legacy sticky header | `.header` | background-color | `rgba(249, 247, 242, 0.95)` | `rgba(252, 251, 246, 0.95)` |
+Local style |
+| Hamburger bars | `.hamburger span` | background | `var(--color-charcoal)` | `#000000` | Local style |
+
+## Prompt Cards, Badges, Inputs, Editor States
+
+### Card Shell
+
+| Component | Selector / Token | Property | Current Color | New Color | Notes |
+| --- | --- | --- | --- | --- | --- |
+| Standard prompt card | `.prompt-card` | background | `var(--color-white)` | `#FFFFFF` | Local style |
+| Standard prompt card | `.prompt-card` | border | `1px solid var(--color-border-subtle)` | `1px solid rgba(0,0,0,0.08)`
+| Local style |
+| Featured olive card | `.prompt-card.featured-olive` | background | `var(--color-olive)` | `#315522` | Local variant |
+| Featured olive card | `.prompt-card.featured-olive` | text color | `var(--color-white)` | `#FCFBF6` | Local variant |
+| Card focus | `.prompt-card:focus-visible` | outline | `3px solid var(--color-gold)` | `3px solid #A0860D` | Local
+state color |
+
+### Card Text And Meta
+
+| Component | Selector / Token | Property | Current Color | New Color | Notes |
+| --- | --- | --- | --- | --- | --- |
+| Card badge | `.card-badge` | background | `var(--color-linen)` | `#FCFBF6` | Local style |
+| Default category pill | `.card-category` | background-color | `var(--md-sys-color-surface-container-high)` | `rgba(49,
+85, 34, 0.1)` | DS token used directly |
+| Default category pill | `.card-category` | color | `var(--md-sys-color-primary)` | `#315522` | DS token used directly
+|
+| Card title | `.card-title` | color | `var(--color-charcoal)` | `#000000` | Local style |
+| Featured icon container | `.card-icon-container.icon-featured` | background-color | `var(--md-sys-color-primary,
+#2C4C3B)` | `#315522` | DS token with fallback |
+
+### Inputs And Template Editing
+
+| Component | Selector / Token | Property | Current Color | New Color | Notes |
+| --- | --- | --- | --- | --- | --- |
+| Variable input focus | `.variable-input:focus` | border-color | `var(--md-sys-color-primary)` | `#315522` | DS token
+used directly |
+| Template textarea focus | `.template-textarea:focus` | border-color | `var(--color-action-primary)` | `#A0860D` |
+Local state color |
+
+## Implementation Notes For Later
+
+- New colors are based on the Flamingo Estate brand identity: Merino (`#FCFBF6`), Estate Green (`#315522`), and Buttered
+Rum (`#A0860D`).
+- Rows marked as design-system-backed may need implementation in `m3-design-v2`.
+- Most prompt-card, prompt-list, quick-link, and textarea colors are local to this repo.
