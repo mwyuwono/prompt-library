@@ -37,26 +37,26 @@
   /* Semantic mappings for legacy code */
   --color-page-background: var(--md-sys-color-background);
   --color-card-surface: var(--md-sys-color-surface-container-lowest);
-  --color-card-dark: var(--md-sys-color-secondary);
+  --color-card-dark: var(--md-sys-color-primary);
   --color-text-primary: var(--md-sys-color-text-main);
   --color-text-secondary: var(--md-sys-color-text-muted);
   --color-text-contrast: var(--md-sys-color-on-primary);
   --color-primary: var(--md-sys-color-primary);
   --color-action-primary: var(--md-sys-color-secondary);
-  --color-action-primary-hover: var(--color-primary);
-  --color-emphasis-background: #626643;
-  --color-surface-hover: #E4E9EA;
-  --color-border-subtle: rgba(173, 179, 180, 0.15);
+  --color-action-primary-hover: #7A6E62;
+  --color-emphasis-background: color-mix(in srgb, var(--md-sys-color-secondary) 10%, transparent);
+  --color-surface-hover: color-mix(in srgb, var(--md-sys-color-text-muted) 10%, transparent);
+  --color-border-subtle: color-mix(in srgb, var(--md-sys-color-text-muted) 10%, transparent);
 
   /* App-specific tokens */
   --modal-blur-amount: 16px;
   --modal-blur-saturation: 180%;
 
   /* Toast semantic colors for the locally synced bundle */
-  --wy-toast-success-color: var(--color-primary);
+  --wy-toast-success-color: var(--md-sys-color-primary);
   --wy-toast-error-color: #B3261E;
-  --wy-toast-warning-color: var(--color-action-primary);
-  --wy-toast-info-color: var(--color-action-primary);
+  --wy-toast-warning-color: var(--md-sys-color-secondary);
+  --wy-toast-info-color: var(--md-sys-color-secondary);
   
   /* Motion tokens - Fallback if CDN import fails */
   --md-sys-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
