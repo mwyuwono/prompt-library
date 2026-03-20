@@ -778,16 +778,16 @@
   {
     "id": "fabric-imagery",
     "title": "Fabric Imagery",
-    "description": "Turn a story into French Modernist textile motifs and offer a follow-up fabric pattern image prompt",
+    "description": "Suggest textile motifs inspired by a story. ",
     "category": "Fabric",
     "icon": "image",
     "variables": [
       {
         "name": "story",
         "label": "Story",
-        "placeholder": "e.g., A woman in a striped boatneck walks through a seaside garden at dusk carrying letters tied with ribbon",
+        "placeholder": "e.g., Narcissus tragedy",
         "value": "",
-        "inputType": "textarea",
+        "inputType": "text",
         "rows": 6
       }
     ],
