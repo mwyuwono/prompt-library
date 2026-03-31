@@ -65,6 +65,11 @@
                 "name": "Image Outpainter",
                 "company": "Hugging Face",
                 "url": "https://huggingface.co/spaces/fffiloni/Image-Outpainter"
+            },
+            {
+                "name": "Luma Labs",
+                "company": "Luma AI",
+                "url": "https://app.lumalabs.ai"
             }
         ]
     },
