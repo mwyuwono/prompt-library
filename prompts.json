@@ -900,6 +900,43 @@
     "slug": "procrastination"
   },
   {
+    "id": "gemma-chunk-processor",
+    "title": "Gemma Chunk Processor",
+    "description": "Generate a Python chunk-processing script for Ollama Gemma over text and image files",
+    "category": "Productivity",
+    "icon": "data_object",
+    "variables": [
+      {
+        "name": "objective",
+        "label": "Objective",
+        "placeholder": "e.g., Translate each passage to French while preserving formatting",
+        "value": "",
+        "inputType": "textarea",
+        "rows": 4
+      },
+      {
+        "name": "input",
+        "label": "Input Path or Glob",
+        "placeholder": "e.g., /path/to/docs/*.txt or /path/to/assets/*",
+        "value": "",
+        "inputType": "textarea",
+        "rows": 3
+      },
+      {
+        "name": "output_mode",
+        "label": "Output Mode",
+        "value": "seamless",
+        "inputType": "toggle",
+        "options": [
+          "seamless",
+          "separated"
+        ]
+      }
+    ],
+    "template": "## USER CONFIG\n\n### OBJECTIVE\n{{objective}}\n\n### INPUT\n{{input}}\n\n### OUTPUT_MODE\n{{output_mode}}\n\n---\n\n## Task\n\nWrite a Python script that processes the INPUT file(s) using the Ollama local API (`gemma4:e2b`) to accomplish the OBJECTIVE. Each unit (chunk or file) is processed independently. No context passes between units.\n\nSave the output file in the same directory as the first matched input file, using the input filename plus a short descriptive suffix derived from the OBJECTIVE, for example `_clean`, `_translated`, or `_extracted`.\n\n---\n\n### API\n\n- Endpoint: `http://localhost:11434/api/generate`\n- Model: `gemma4:e2b`\n- Always use `stream: true` to prevent `aiohttp` read timeouts on long responses\n- Options: `temperature: 0`, `num_ctx: 4096`\n- Use `aiohttp` and `asyncio`\n\n---\n\n### File Type Detection\n\nDetect each file's type by extension, case-insensitive:\n\n- Text: `.txt` `.md` `.csv` `.json` `.xml` `.html` `.rst` `.log`\n- Image: `.jpg` `.jpeg` `.png` `.gif` `.webp` `.bmp`\n- Unknown: exit with a clear error asking the user to add the extension to the detection list\n\nA single glob can return a mix of text and image files; each is handled according to its own type.\n\n---\n\n### System Prompt\n\nDerive a tight, task-specific system prompt from the OBJECTIVE. Append this exact sentence:\n\n`Output only the result. Do not summarize, add commentary, or change anything beyond the stated task.`\n\n---\n\n### Text File Processing\n\n- Choose a chunk size appropriate for `gemma4:e2b`; lean toward smaller chunks, around 150 words, for output quality, and adjust only if the OBJECTIVE clearly benefits from wider context\n- Split on whitespace, never mid-word\n- Send each chunk as a text-only request with no `images` field\n- Join results according to OUTPUT_MODE:\n  - `seamless`: concatenate without separators\n  - `separated`: join with a blank line between chunks\n\n---\n\n### Image File Processing\n\n- One request per image, never chunk images\n- Base64-encode the file and send via the `images` field:\n  `{\"model\": \"gemma4:e2b\", \"prompt\": PROMPT, \"images\": [BASE64_STRING], \"stream\": true, \"options\": {...}}`\n- Write the model's text response to the output file\n\n---\n\n### Multi-File Output\n\n- If more than one file matches, prefix each file's output block with `=== <filename> ===\\n`\n- If a single file matches, do not add a prefix\n\nWrite all results in sorted input-file order.\n\n---\n\n### Concurrency and Timeout\n\n- Process all units sequentially with `CONCURRENCY = 1`\n- Per-unit timeout: 600 seconds\n\n---\n\n### Retry\n\n- Retry failed units up to 2 times, waiting 5 seconds and then 10 seconds\n- On total failure:\n  - Text chunk: write the original chunk unchanged\n  - Image file: write `[ERROR: <filename> could not be processed]`\n  - Log details to `review.log` in the output directory\n\n---\n\n### Progress and Status\n\n- Print a startup summary with model, input pattern, file count, output path, and chunk size\n- Show a `tqdm` progress bar and use `tqdm.write()` for all per-unit lines\n- Print a final summary with output path, log path, and error count, omitting error count if it is zero\n\n---\n\n### Dependencies and Setup\n\n- Requires: `aiohttp`, `tqdm`\n- Add `pip install aiohttp tqdm` as a comment at the top of the script\n- Create a `.venv` in the script's directory if one does not exist, then install dependencies into it",
+    "featured": false
+  },
+  {
     "id": "cultural-city-guide",
     "title": "Cultural City Guide",
     "description": "Scored, logistics-ready cultural itinerary for historic sites, libraries, antiques, and restaurants matched to your preferences",
