@@ -75,14 +75,15 @@
   },
   {
     "id": "character-swap-male",
-    "title": "Academic Drawing Figure",
+    "title": "Figure Replacement",
     "description": "Transform the subject of an image into a classical figure while maintaining original pose and artistic style",
     "category": "Atelier",
     "icon": "swap_horiz",
     "featured": false,
     "template": "Edit the uploaded image to replace the character's head and face with that of a 19-year-old male Roman athlete, strictly maintaining the original pose, angle, and perspective.\n\nCharacter Details (Adapted to Style):\n\nFace: A classical facial structure featuring an aquiline nose and high cheekbones. Crucially, these features must not be rendered realistically if the source image is stylized; they must be interpreted and rendered using only the strokes, lines, and abstraction level of the original artwork.\n\nHair: Very short hair. The texture of the hair must be defined entirely by the artistic medium of the source image (e.g., cross-hatching or engraved lines). No headgear.\n\nExpression: An expression that is natural and consistent with the body language and context of the original pose.\n\nPhysique & Proportions: The figure should have a natural, athletic build reminiscent of classical Greco-Roman sculpture. Focus on sculptural muscle mass and functional strength rather than extreme bodybuilding proportions. The musculature should be well-defined but avoid hyper-vascularity or exaggerated \"cartoonish\" volume. Ensure the traps and shoulders are proportionate to a natural athlete, maintaining a sleek, alluring, and realistic silhouette.\n\nStyle & Technical Execution:\n\nSeamless Integration: The new head and refined physique must perfectly match the exact medium, substrate texture (e.g., aged paper grain), line quality, and level of detail of the source image.\n\nLighting & Values: Strictly adhere to the shading values, contrast, and lighting direction of the original image to ensure the swap appears authentic.\n\nContingency: If the original pose hides portions of the face, apply the classical aesthetic and hair type to the visible portions of the head and neck.",
     "variables": [],
-    "slug": "academic-drawing-figure"
+    "slug": "figure-replacement",
+    "image": "public/images/1775766209619.jpg"
   },
   {
     "id": "proofreader",
@@ -519,7 +520,8 @@
         "template": "Subject: {{subject}}\n\nCreate an academic drawing of a nude male figure presented in a balanced, idealized standing pose derived from classical statuary and 19th-century academic practice, emphasizing idealized male beauty. Incorporate the subject description above into the composition.\n\nThe figure stands upright with weight evenly distributed, one leg bearing slightly more load while the opposite leg relaxes, creating a subtle, restrained contrapposto.\n\nThe pelvis is level and stable; the torso is erect and open, with the rib cage lifted and aligned cleanly over the hips. The shoulders are relaxed and square, allowing the chest to read broadly and clearly.\n\nThe arms are held in a natural, neutral arrangement—one arm resting loosely at the side, the other gently bent at the elbow with the hand relaxed near the hip—posed to reveal proportional relationships without gesture or narrative intent.\n\nThe head is upright and centered, facing forward with a slight classical turn. Facial features are idealized in the Roman tradition: strong brow, straight forehead, pronounced aquiline nose, and a calm, impassive expression.\n\nHair is short, close-cropped, and classical in character—neatly contoured to the skull, with minimal volume, subtle wave or texture at the crown, and no modern styling or exaggerated curls.\n\nThe pose emphasizes symmetry, proportion, and clarity of form, allowing the ideal male anatomy to be read in full: harmonious relationships between head, torso, and limbs; clear transitions between major masses; balanced distribution of weight.\n\nRendered in the tradition of 19th-century French academic draftsmanship (Bargue, Gérôme, early École des Beaux-Arts). Emphasize structural clarity, anatomical rigor, and restraint.\n\nUse charcoal or graphite with precise contour control, subtle variation in line weight, and economical modeling. Shading should rely on clear planes, measured tonal transitions, and unified halftones rather than expressive or sketch-like marks.\n\nAnatomy must be deliberate and canonical: clear articulation of rib cage, pelvis, scapulae, and major muscle groups, with emphasis on volume and proportion over surface texture.\n\nLighting is controlled and directional, atelier-style, using a single dominant light source to establish calm shadow masses and restrained highlights.\n\nThe background remains minimal or blank, reinforcing the studio study context.\n\nOverall effect: a museum-quality academic figure study—idealized, disciplined, and timeless—classical in spirit, restrained in execution, and visually clean."
       }
     ],
-    "featured": false
+    "featured": true,
+    "slug": "academic-drawing"
   },
   {
     "id": "artist-guide",
