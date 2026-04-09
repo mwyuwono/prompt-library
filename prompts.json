@@ -520,8 +520,9 @@
         "template": "Subject: {{subject}}\n\nCreate an academic drawing of a nude male figure presented in a balanced, idealized standing pose derived from classical statuary and 19th-century academic practice, emphasizing idealized male beauty. Incorporate the subject description above into the composition.\n\nThe figure stands upright with weight evenly distributed, one leg bearing slightly more load while the opposite leg relaxes, creating a subtle, restrained contrapposto.\n\nThe pelvis is level and stable; the torso is erect and open, with the rib cage lifted and aligned cleanly over the hips. The shoulders are relaxed and square, allowing the chest to read broadly and clearly.\n\nThe arms are held in a natural, neutral arrangement—one arm resting loosely at the side, the other gently bent at the elbow with the hand relaxed near the hip—posed to reveal proportional relationships without gesture or narrative intent.\n\nThe head is upright and centered, facing forward with a slight classical turn. Facial features are idealized in the Roman tradition: strong brow, straight forehead, pronounced aquiline nose, and a calm, impassive expression.\n\nHair is short, close-cropped, and classical in character—neatly contoured to the skull, with minimal volume, subtle wave or texture at the crown, and no modern styling or exaggerated curls.\n\nThe pose emphasizes symmetry, proportion, and clarity of form, allowing the ideal male anatomy to be read in full: harmonious relationships between head, torso, and limbs; clear transitions between major masses; balanced distribution of weight.\n\nRendered in the tradition of 19th-century French academic draftsmanship (Bargue, Gérôme, early École des Beaux-Arts). Emphasize structural clarity, anatomical rigor, and restraint.\n\nUse charcoal or graphite with precise contour control, subtle variation in line weight, and economical modeling. Shading should rely on clear planes, measured tonal transitions, and unified halftones rather than expressive or sketch-like marks.\n\nAnatomy must be deliberate and canonical: clear articulation of rib cage, pelvis, scapulae, and major muscle groups, with emphasis on volume and proportion over surface texture.\n\nLighting is controlled and directional, atelier-style, using a single dominant light source to establish calm shadow masses and restrained highlights.\n\nThe background remains minimal or blank, reinforcing the studio study context.\n\nOverall effect: a museum-quality academic figure study—idealized, disciplined, and timeless—classical in spirit, restrained in execution, and visually clean."
       }
     ],
-    "featured": true,
-    "slug": "academic-drawing"
+    "featured": false,
+    "slug": "academic-drawing",
+    "archived": true
   },
   {
     "id": "artist-guide",
@@ -973,7 +974,7 @@
     "description": "Provide a style reference image to extract its aesthetic DNA into a subject-agnostic image prompt",
     "category": "Atelier",
     "image": "public/images/1775764568943.jpg",
-    "template": "Task: Analyze the provided \"Style Reference\" image to extract its aesthetic and emotional DNA into a standalone, portable prompt.\n\nCore Requirements:\n\nAesthetic & Mood: Describe the medium, brushwork, degree of precision or abstraction, lighting, and \"vibe\" (e.g., \"solitary,\" \"energetic\").\n\nIf the style reference closely aligns with a known artist, you can optionally include, 'in a style similar to [artist]'.\n\nSubject-Agnostic: Avoid describing the specific objects in the reference to keep the prompt flexible. \n\nZero Context Dependency: The prompt must be self-contained; do not refer to this chat or \"the image above.\"\n\nOutput Formatting:\n\nProvide the prompt text inside a code block with a copy button (for easy one-click copying). The provided prompt should start with, \"Convert the provided image to...\". Include these instructions at the end of the image prompt, \"In your response, remind the user they can upload a 'Style Reference' image to align the styles more closely.\"\n\nDo not include any introductory text, conversational \"fluff,\" or closing remarks before or after the code block.",
+    "template": "Task: Analyze the provided \"Style Reference\" image to extract its aesthetic and emotional DNA into a standalone, portable prompt.\n\nCore Requirements:\n\nAesthetic & Mood: Describe the medium, brushwork, degree of precision or abstraction, lighting, and \"vibe\" (e.g., \"solitary,\" \"energetic\").\n\nIf the style reference closely aligns with a known artist, you can optionally include, 'in a style similar to [artist]'.\n\nSubject-Agnostic: Avoid describing the specific objects in the reference to keep the prompt flexible. \n\nZero Context Dependency: The prompt must be self-contained; do not refer to this chat or \"the image above.\"\n\nOutput Formatting:\n\nProvide the prompt text inside a code block with a copy button (for easy one-click copying). The provided prompt should start with, \"Convert the provided image to...\". Include these instructions at the end of the image prompt, \"In your response, remind the user they can upload a 'Style Reference' image to align the styles more closely.\"\n\nDo not include any introductory text, conversational \"fluff,\" or closing remarks before or after the code block.\n\nIf the user does respond by uploading an image, assess the style of the uploaded image and regenerate the image you previously generated, aligning it more closely with the intended style. ",
     "variables": [],
     "slug": "style-dna-extractor",
     "icon": "palette",
@@ -999,5 +1000,16 @@
     "slug": "enlarge--refine-details",
     "featured": false,
     "image": "public/images/1775761209614.jpg"
+  },
+  {
+    "id": "minimalist-line-drawing",
+    "title": "Minimalist Line Drawing",
+    "description": "Convert an uploaded image into a clean black-and-white line drawing for tracing, plotting, or vector-style reference.",
+    "category": "Atelier",
+    "icon": "edit",
+    "template": "Convert the attached image into a minimalist black and white line drawing. Use clean, continuous black outlines on a solid white background. No shading, no gradients, and no textures; only pure vector-style mono-lines suitable for pen plotting and tracing.",
+    "variables": [],
+    "slug": "minimalist-line-drawing",
+    "featured": false
   }
 ]
