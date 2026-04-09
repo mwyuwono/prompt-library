@@ -971,5 +971,25 @@
     "slug": "style-dna-extractor",
     "icon": "palette",
     "featured": false
+  },
+  {
+    "id": "architectural-detail-trace-prep",
+    "title": "Architectural Detail Trace Prep",
+    "description": "Turn a reference photo into trace-ready prompts that isolate specific architectural details for hand-tracing",
+    "category": "Atelier",
+    "icon": "architecture",
+    "template": "Task: Analyze the attached 'reference' image and generate a series of highly specific, individual image-generation prompts. Each generated prompt must focus on one specific detail from the list provided below. The goal of these prompts is to generate a new image that acts as a high-precision enlargement of the detail to serve as a reference for hand-tracing. I will include the same image reference--provided here--with each of the individual prompts when I use them. If you reference the image file in the individual prompts, refer to it as 'the reference image' rather than by file name.\n\nThe Details to Isolate:\n\n{{details_to_isolate}}\n\nRequirements for Each Generated Prompt:\nFor every item listed above, write a prompt that ensures the resulting image is a macro-Isolation where The detail must fill at least 80% of the frame. the shape, character and form of the enlarged detail must be consistent with the provided reference image.\n\nOutput Format:\nProvide the results as a numbered list of ready-to-copy prompts. Format it as:\n\"Prompt for [Detail Name]: \n[Full descriptive prompt text here]\"",
+    "variables": [
+      {
+        "name": "details_to_isolate",
+        "label": "Details to Isolate",
+        "placeholder": "e.g., portico column capitals, window frame",
+        "value": "",
+        "inputType": "text",
+        "rows": 6
+      }
+    ],
+    "slug": "architectural-detail-trace-prep",
+    "featured": false
   }
 ]
