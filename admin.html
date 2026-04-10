@@ -21,7 +21,15 @@
     <!-- Prompt List Sidebar -->
     <aside id="prompt-list" class="prompt-list">
         <div class="sidebar-header">
-            <h2>Prompts</h2>
+            <div class="sidebar-title-row">
+                <h2 id="sidebarTitle">Prompts</h2>
+                <button id="newPromptButton" class="new-prompt-button" type="button">New Prompt</button>
+            </div>
+            <div class="dataset-switch" role="tablist" aria-label="Prompt dataset">
+                <button id="publicDatasetButton" class="dataset-button active" type="button" data-dataset="public">Public</button>
+                <button id="privateDatasetButton" class="dataset-button" type="button" data-dataset="private">Private</button>
+            </div>
+            <p id="datasetStatus" class="dataset-status">Editing public prompts in <code>prompts.json</code>.</p>
             <a href="/index.html" class="view-public-link" target="_blank">
                 <span class="material-symbols-outlined">open_in_new</span>
                 View Public Site

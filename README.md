@@ -14,7 +14,7 @@ open http://localhost:8000
 
 # Admin interface (requires Node.js)
 node server.js
-open http://localhost:3000/admin
+open http://localhost:3001/admin.html
 ```
 
 No build process required. Static file hosting needed for `fetch('prompts.json')` to work.
@@ -109,6 +109,37 @@ Prompts can be multi-step workflows via a `steps` array. Each step has its own `
 See [docs/admin-system-plan.md](docs/admin-system-plan.md) for API reference, component details, and troubleshooting.
 
 **Workflow:** Edit in admin -> Save -> Changes written to `prompts.json` -> Commit and push to deploy via Vercel.
+
+## Private Prompt Vault
+
+Private prompts can live in a separate encrypted payload for casual hiding.
+
+- Public prompts stay in `prompts.json`.
+- Private prompts should be stored locally in `private-prompts.source.json` (gitignored).
+- The private vault UI is served from `private.html`.
+- Admin can edit either dataset from `/admin.html` using the `Public` / `Private` switch.
+- Only `private-prompts.enc.json` is deployed; the plaintext source file is not.
+
+Generate or refresh the encrypted file with:
+
+```bash
+cp private-prompts.source.example.json private-prompts.source.json
+echo 'your-passcode' > private-passcode.txt
+npm run encrypt:private
+```
+
+To change the private passcode later:
+
+```bash
+echo 'your-new-passcode' > private-passcode.txt
+npm run encrypt:private
+```
+
+That re-encrypts the current `private-prompts.source.json` with the new passcode. After that, restart `node server.js` if the admin is already running, then redeploy so the updated `private-prompts.enc.json` is published.
+
+Deploy workflow:
+- Public edits: deploy `prompts.json` and any referenced images
+- Private edits: deploy `private-prompts.enc.json` and any referenced images
 
 ## Design System
 

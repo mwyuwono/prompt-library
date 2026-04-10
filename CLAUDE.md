@@ -28,7 +28,7 @@ python3 -m http.server 8000  # Then open http://localhost:8000
 
 **Admin Interface:**
 ```bash
-node server.js  # Then open http://localhost:3000/admin
+node server.js  # Then open http://localhost:3001/admin.html
 ```
 
 No build process required for either mode. Admin requires Node.js server for API endpoints.
@@ -356,7 +356,7 @@ This project includes a local-only admin interface for editing prompts visually.
 
 **Quick Start:**
 1. Start server: `node server.js`
-2. Open: http://localhost:3000/admin
+2. Open: http://localhost:3001/admin.html
 3. Select prompt from sidebar
 4. Edit in multi-step form
 5. Save changes → updates `prompts.json`

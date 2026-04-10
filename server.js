@@ -3,6 +3,7 @@ import multer from 'multer';
 import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
+import crypto from 'crypto';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -10,6 +11,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+const PBKDF2_ITERATIONS = 250000;
 
 // Middleware
 app.use(cors());
@@ -45,30 +47,114 @@ const upload = multer({
     }
 });
 
-// Helper functions for prompts.json
-const PROMPTS_FILE = path.join(__dirname, 'prompts.json');
+// Helper functions for prompt datasets
+const PUBLIC_PROMPTS_FILE = path.join(__dirname, 'prompts.json');
+const PRIVATE_PROMPTS_SOURCE_FILE = path.join(__dirname, 'private-prompts.source.json');
+const PRIVATE_PROMPTS_ENCRYPTED_FILE = path.join(__dirname, 'private-prompts.enc.json');
+const PRIVATE_PASSPHRASE_FILE = path.join(__dirname, 'private-passcode.txt');
 
-function readPrompts() {
+function getDataset(req) {
+    return req.query.dataset === 'private' ? 'private' : 'public';
+}
+
+function getPromptsFile(dataset) {
+    return dataset === 'private' ? PRIVATE_PROMPTS_SOURCE_FILE : PUBLIC_PROMPTS_FILE;
+}
+
+function readPrompts(dataset = 'public') {
     try {
-        const data = fs.readFileSync(PROMPTS_FILE, 'utf8');
+        const file = getPromptsFile(dataset);
+        if (!fs.existsSync(file)) {
+            return [];
+        }
+
+        const data = fs.readFileSync(file, 'utf8');
         return JSON.parse(data);
     } catch (error) {
-        console.error('Error reading prompts.json:', error);
+        console.error(`Error reading ${dataset} prompts:`, error);
         return [];
     }
 }
 
-function writePrompts(prompts) {
+function writePrompts(dataset, prompts) {
     try {
+        const file = getPromptsFile(dataset);
         // Atomic write using temp file + rename
-        const tempFile = `${PROMPTS_FILE}.tmp`;
+        const tempFile = `${file}.tmp`;
         fs.writeFileSync(tempFile, JSON.stringify(prompts, null, 2), 'utf8');
-        fs.renameSync(tempFile, PROMPTS_FILE);
+        fs.renameSync(tempFile, file);
         return true;
     } catch (error) {
-        console.error('Error writing prompts.json:', error);
+        console.error(`Error writing ${dataset} prompts:`, error);
         return false;
     }
+}
+
+function getPrivatePassphrase() {
+    if (process.env.PRIVATE_PROMPTS_PASSPHRASE) {
+        return process.env.PRIVATE_PROMPTS_PASSPHRASE;
+    }
+
+    if (fs.existsSync(PRIVATE_PASSPHRASE_FILE)) {
+        const passphrase = fs.readFileSync(PRIVATE_PASSPHRASE_FILE, 'utf8').trim();
+        return passphrase || null;
+    }
+
+    return null;
+}
+
+function encryptPrivatePrompts(prompts, passphrase) {
+    const salt = crypto.randomBytes(16);
+    const iv = crypto.randomBytes(12);
+    const key = crypto.pbkdf2Sync(passphrase, salt, PBKDF2_ITERATIONS, 32, 'sha256');
+    const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
+    const ciphertext = Buffer.concat([
+        cipher.update(JSON.stringify(prompts, null, 2), 'utf8'),
+        cipher.final()
+    ]);
+    const authTag = cipher.getAuthTag();
+
+    const payload = {
+        version: 1,
+        salt: salt.toString('base64'),
+        iv: iv.toString('base64'),
+        ciphertext: Buffer.concat([ciphertext, authTag]).toString('base64')
+    };
+
+    fs.writeFileSync(PRIVATE_PROMPTS_ENCRYPTED_FILE, `${JSON.stringify(payload, null, 2)}\n`, 'utf8');
+}
+
+function syncPrivateEncryptedPayload(prompts) {
+    const passphrase = getPrivatePassphrase();
+    if (!passphrase) {
+        return {
+            ok: false,
+            message: 'Private source saved, but encrypted vault was not updated because no passphrase is configured.'
+        };
+    }
+
+    encryptPrivatePrompts(prompts, passphrase);
+    return {
+        ok: true,
+        message: 'Private source and encrypted vault updated.'
+    };
+}
+
+function createPromptShell({ title = 'Untitled Prompt', category = 'Productivity' } = {}) {
+    const slugBase = title
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '') || 'untitled-prompt';
+
+    return {
+        id: `${slugBase}-${Date.now()}`,
+        title,
+        description: '',
+        category,
+        template: '',
+        variables: []
+    };
 }
 
 // API Routes
@@ -79,12 +165,15 @@ function writePrompts(prompts) {
  */
 app.get('/api/prompts', (req, res) => {
     try {
-        const prompts = readPrompts();
+        const dataset = getDataset(req);
+        const prompts = readPrompts(dataset);
         const categories = [...new Set(prompts.map(p => p.category).filter(Boolean))].sort();
         
         res.json({
             prompts,
-            categories
+            categories,
+            dataset,
+            encryptedVaultReady: dataset === 'private' ? Boolean(getPrivatePassphrase()) : true
         });
     } catch (error) {
         res.status(500).json({ error: 'Failed to load prompts' });
@@ -97,7 +186,8 @@ app.get('/api/prompts', (req, res) => {
  */
 app.get('/api/prompts/:id', (req, res) => {
     try {
-        const prompts = readPrompts();
+        const dataset = getDataset(req);
+        const prompts = readPrompts(dataset);
         const prompt = prompts.find(p => p.id === req.params.id);
         
         if (!prompt) {
@@ -116,7 +206,8 @@ app.get('/api/prompts/:id', (req, res) => {
  */
 app.put('/api/prompts/:id', (req, res) => {
     try {
-        const prompts = readPrompts();
+        const dataset = getDataset(req);
+        const prompts = readPrompts(dataset);
         const index = prompts.findIndex(p => p.id === req.params.id);
         
         if (index === -1) {
@@ -141,17 +232,55 @@ app.put('/api/prompts/:id', (req, res) => {
         
         prompts[index] = updatedPrompt;
         
-        if (!writePrompts(prompts)) {
+        if (!writePrompts(dataset, prompts)) {
             return res.status(500).json({ error: 'Failed to save prompts' });
         }
+
+        const encryption = dataset === 'private'
+            ? syncPrivateEncryptedPayload(prompts)
+            : { ok: true, message: 'Public prompts saved.' };
         
         res.json({
             success: true,
-            prompt: updatedPrompt
+            prompt: updatedPrompt,
+            dataset,
+            encryption
         });
     } catch (error) {
         console.error('Error updating prompt:', error);
         res.status(500).json({ error: 'Failed to update prompt' });
+    }
+});
+
+/**
+ * POST /api/prompts
+ * Creates a new prompt shell in the selected dataset
+ */
+app.post('/api/prompts', (req, res) => {
+    try {
+        const dataset = getDataset(req);
+        const prompts = readPrompts(dataset);
+        const prompt = createPromptShell(req.body || {});
+
+        prompts.push(prompt);
+
+        if (!writePrompts(dataset, prompts)) {
+            return res.status(500).json({ error: 'Failed to create prompt' });
+        }
+
+        const encryption = dataset === 'private'
+            ? syncPrivateEncryptedPayload(prompts)
+            : { ok: true, message: 'Public prompts updated.' };
+
+        res.status(201).json({
+            success: true,
+            prompt,
+            dataset,
+            encryption
+        });
+    } catch (error) {
+        console.error('Error creating prompt:', error);
+        res.status(500).json({ error: 'Failed to create prompt' });
     }
 });
 
@@ -161,7 +290,8 @@ app.put('/api/prompts/:id', (req, res) => {
  */
 app.post('/api/prompts/:id/archive', (req, res) => {
     try {
-        const prompts = readPrompts();
+        const dataset = getDataset(req);
+        const prompts = readPrompts(dataset);
         const prompt = prompts.find(p => p.id === req.params.id);
         
         if (!prompt) {
@@ -170,13 +300,19 @@ app.post('/api/prompts/:id/archive', (req, res) => {
         
         prompt.archived = !prompt.archived;
         
-        if (!writePrompts(prompts)) {
+        if (!writePrompts(dataset, prompts)) {
             return res.status(500).json({ error: 'Failed to save prompts' });
         }
+
+        const encryption = dataset === 'private'
+            ? syncPrivateEncryptedPayload(prompts)
+            : { ok: true, message: 'Public prompts updated.' };
         
         res.json({
             success: true,
-            archived: prompt.archived
+            archived: prompt.archived,
+            dataset,
+            encryption
         });
     } catch (error) {
         res.status(500).json({ error: 'Failed to toggle archive' });

@@ -28,12 +28,65 @@
     border-bottom: 1px solid var(--md-sys-color-outline-variant, #DDD);
 }
 
+.sidebar-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-sm, 8px);
+}
+
 .sidebar-header h2 {
     font-family: var(--font-serif, 'Playfair Display', serif);
     font-size: 1.5rem;
     font-weight: 600;
     color: var(--md-sys-color-on-surface, #121714);
     margin: 0 0 var(--spacing-sm, 8px) 0;
+}
+
+.new-prompt-button {
+    border: 1px solid var(--md-sys-color-outline-variant, #DDD);
+    border-radius: var(--md-sys-shape-corner-full, 9999px);
+    background: transparent;
+    color: var(--md-sys-color-primary, #2C4C3B);
+    font-family: var(--font-body, 'DM Sans', sans-serif);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.4rem 0.75rem;
+    cursor: pointer;
+}
+
+.dataset-switch {
+    display: inline-flex;
+    gap: var(--spacing-xs, 4px);
+    padding: var(--spacing-xs, 4px);
+    margin-bottom: var(--spacing-sm, 8px);
+    border-radius: var(--md-sys-shape-corner-full, 9999px);
+    background: var(--md-sys-color-surface-variant, #ECE9E4);
+}
+
+.dataset-button {
+    border: none;
+    border-radius: var(--md-sys-shape-corner-full, 9999px);
+    background: transparent;
+    color: var(--md-sys-color-on-surface-variant, #3F4944);
+    font-family: var(--font-body, 'DM Sans', sans-serif);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.4rem 0.75rem;
+    cursor: pointer;
+}
+
+.dataset-button.active {
+    background: var(--md-sys-color-primary, #2C4C3B);
+    color: var(--md-sys-color-on-primary, #FFF);
+}
+
+.dataset-status {
+    margin: 0 0 var(--spacing-sm, 8px) 0;
+    color: var(--md-sys-color-on-surface-variant, #3F4944);
+    font-family: var(--font-body, 'DM Sans', sans-serif);
+    font-size: 0.75rem;
+    line-height: 1.5;
 }
 
 .view-public-link {
@@ -151,6 +204,11 @@
     padding: 2px 6px;
     border-radius: var(--md-sys-shape-corner-full, 9999px);
     white-space: nowrap;
+}
+
+.prompt-item .badge.neutral {
+    background: var(--md-sys-color-secondary-container, #DDE5DC);
+    color: var(--md-sys-color-on-secondary-container, #141E17);
 }
 
 /* Main Content */

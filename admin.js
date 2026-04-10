@@ -5,6 +5,8 @@ let prompts = [];
 let categories = [];
 let currentPromptId = null;
 let sidebarSearch = '';
+let currentDataset = 'public';
+let privateVaultReady = false;
 
 // DOM Elements
 const editor = document.getElementById('editor');
@@ -13,12 +15,19 @@ const sidebarSearchInput = document.getElementById('sidebar-search-input');
 const toast = document.getElementById('toast');
 const editorContainer = document.getElementById('editor-container');
 const emptyState = document.getElementById('empty-state');
+const publicDatasetButton = document.getElementById('publicDatasetButton');
+const privateDatasetButton = document.getElementById('privateDatasetButton');
+const datasetStatus = document.getElementById('datasetStatus');
+const sidebarTitle = document.getElementById('sidebarTitle');
+const newPromptButton = document.getElementById('newPromptButton');
 
 /**
  * Initialize admin interface
  */
 async function init() {
     console.log('Initializing admin interface...');
+    currentDataset = getDatasetFromUrl();
+    updateDatasetUI();
     
     await loadPrompts();
     renderPromptList();
@@ -56,10 +65,10 @@ function hideEmptyState() {
  */
 async function loadPrompts() {
     try {
-        console.log('Loading prompts from /api/prompts...');
+        console.log(`Loading ${currentDataset} prompts from /api/prompts...`);
         console.log('Current URL:', window.location.href);
         
-        const response = await fetch('/api/prompts');
+        const response = await fetch(`/api/prompts?dataset=${currentDataset}`);
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
@@ -67,6 +76,8 @@ async function loadPrompts() {
         const data = await response.json();
         prompts = data.prompts;
         categories = data.categories;
+        privateVaultReady = Boolean(data.encryptedVaultReady);
+        updateDatasetUI();
         
         console.log(`Loaded ${prompts.length} prompts and ${categories.length} categories`);
     } catch (error) {
@@ -122,7 +133,7 @@ function showServerNotRunningError() {
  */
 async function savePrompt(prompt) {
     try {
-        const response = await fetch(`/api/prompts/${prompt.id}`, {
+        const response = await fetch(`/api/prompts/${prompt.id}?dataset=${currentDataset}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(prompt)
@@ -135,6 +146,28 @@ async function savePrompt(prompt) {
         return await response.json();
     } catch (error) {
         console.error('Error saving prompt:', error);
+        throw error;
+    }
+}
+
+async function createPrompt() {
+    try {
+        const response = await fetch(`/api/prompts?dataset=${currentDataset}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                title: currentDataset === 'private' ? 'Untitled Private Prompt' : 'Untitled Prompt',
+                category: categories[0] || 'Productivity'
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to create prompt');
+        }
+        
+        return await response.json();
+    } catch (error) {
+        console.error('Error creating prompt:', error);
         throw error;
     }
 }
@@ -187,6 +220,21 @@ async function deleteImage(filename) {
  * Setup event listeners
  */
 function setupEventListeners() {
+    publicDatasetButton.addEventListener('click', () => switchDataset('public'));
+    privateDatasetButton.addEventListener('click', () => switchDataset('private'));
+
+    newPromptButton.addEventListener('click', async () => {
+        try {
+            const result = await createPrompt();
+            await loadPrompts();
+            renderPromptList();
+            loadPrompt(result.prompt.id);
+            showSaveResult(result, 'Prompt created');
+        } catch (error) {
+            showToast('Error creating prompt', 'error');
+        }
+    });
+
     // Sidebar search
     sidebarSearchInput.addEventListener('input', () => {
         sidebarSearch = sidebarSearchInput.value.toLowerCase();
@@ -197,7 +245,7 @@ function setupEventListeners() {
     editor.addEventListener('save', async (e) => {
         try {
             const result = await savePrompt(e.detail.prompt);
-            showToast('Prompt saved successfully', 'success');
+            showSaveResult(result, 'Prompt saved');
             
             // Reload prompts and update list
             await loadPrompts();
@@ -274,6 +322,22 @@ function setupEventListeners() {
     });
 }
 
+async function switchDataset(dataset) {
+    if (dataset === currentDataset) return;
+
+    currentDataset = dataset;
+    currentPromptId = null;
+    sidebarSearch = '';
+    sidebarSearchInput.value = '';
+    window.location.hash = '';
+    updateDatasetUrl();
+    updateDatasetUI();
+    showEmptyState();
+
+    await loadPrompts();
+    renderPromptList();
+}
+
 /**
  * Render prompt list sidebar
  */
@@ -285,6 +349,7 @@ function renderPromptList() {
     promptListItems.innerHTML = filtered.map(p => {
         const iconName = p.icon || 'article';
         const archivedBadge = p.archived ? '<span class="badge">Archived</span>' : '';
+        const privateBadge = currentDataset === 'private' ? '<span class="badge neutral">Private</span>' : '';
         const activeClass = p.id === currentPromptId ? 'active' : '';
         const archivedClass = p.archived ? 'archived' : '';
         
@@ -295,6 +360,7 @@ function renderPromptList() {
                     <div class="prompt-item-title">${p.title}</div>
                 </div>
                 ${archivedBadge}
+                ${privateBadge}
             </div>
         `;
     }).join('');
@@ -355,6 +421,42 @@ function showToast(message, type = 'success') {
         // Fallback if toast component not loaded
         console.log(`[${type.toUpperCase()}] ${message}`);
         alert(message);
+    }
+}
+
+function showSaveResult(result, successMessage) {
+    if (!result?.encryption || result.encryption.ok) {
+        showToast(successMessage, 'success');
+        return;
+    }
+
+    showToast(result.encryption.message || `${successMessage}, but encrypted vault was not updated`, 'warning');
+}
+
+function getDatasetFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('dataset') === 'private' ? 'private' : 'public';
+}
+
+function updateDatasetUrl() {
+    const url = new URL(window.location.href);
+    url.searchParams.set('dataset', currentDataset);
+    history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
+}
+
+function updateDatasetUI() {
+    const isPrivate = currentDataset === 'private';
+
+    publicDatasetButton.classList.toggle('active', !isPrivate);
+    privateDatasetButton.classList.toggle('active', isPrivate);
+    sidebarTitle.textContent = isPrivate ? 'Private Prompts' : 'Prompts';
+
+    if (isPrivate) {
+        datasetStatus.innerHTML = privateVaultReady
+            ? 'Editing local private prompts in <code>private-prompts.source.json</code>. Saves also refresh the encrypted vault.'
+            : 'Editing local private prompts in <code>private-prompts.source.json</code>. Add <code>PRIVATE_PROMPTS_PASSPHRASE</code> or <code>private-passcode.txt</code> to refresh the encrypted vault on save.';
+    } else {
+        datasetStatus.innerHTML = 'Editing public prompts in <code>prompts.json</code>.';
     }
 }
 

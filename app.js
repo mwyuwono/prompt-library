@@ -3,7 +3,8 @@
  */
 
 class PromptLibrary {
-    constructor() {
+    constructor(options = {}) {
+        this.options = options;
         this.prompts = [];
         this.filteredPrompts = [];
         this.searchTerm = '';
@@ -125,46 +126,61 @@ Server will start on http://localhost:3001`;
      */
     async loadPrompts() {
         try {
-            const response = await fetch('prompts.json');
+            const configuredPrompts = Array.isArray(this.options.prompts) ? this.options.prompts : null;
+            if (configuredPrompts) {
+                this.initializePrompts(configuredPrompts);
+                return;
+            }
+
+            const sourceUrl = this.options.sourceUrl || 'prompts.json';
+            const response = await fetch(sourceUrl);
             const allPrompts = await response.json();
-            
-            // Filter out archived prompts from public site
-            this.prompts = allPrompts.filter(p => !p.archived);
-
-            // Load saved variable values and metadata from localStorage
-            this.prompts.forEach(prompt => {
-                // Process prompt-level variables
-                if (prompt.variables) {
-                    this.applyVariableDisplayHints(prompt);
-                    this.loadVariableValues(prompt.id, prompt.variables);
-                }
-
-                // Process variation-level variables
-                if (prompt.variations) {
-                    prompt.variations.forEach(variation => {
-                        if (variation.variables) {
-                            this.applyVariableDisplayHintsToArray(variation.variables);
-                            this.loadVariableValues(prompt.id, variation.variables);
-                        }
-                    });
-                }
-                // Load metadata (usage count, last used)
-                const metadata = this.loadPromptMetadata(prompt.id);
-                if (metadata) {
-                    Object.assign(prompt, metadata);
-                }
-                // Initialize active variation ID (defaults to first variation)
-                if (prompt.variations && prompt.variations.length > 0) {
-                    prompt.activeVariationId = prompt.variations[0].id;
-                }
-            });
-
-            this.filteredPrompts = [...this.prompts];
+            this.initializePrompts(allPrompts);
         } catch (error) {
             console.error('Error loading prompts:', error);
             this.prompts = [];
             this.filteredPrompts = [];
         }
+    }
+
+    initializePrompts(allPrompts) {
+        const shouldFilterArchived = this.options.filterArchived !== false;
+
+        this.prompts = shouldFilterArchived
+            ? allPrompts.filter(prompt => !prompt.archived)
+            : [...allPrompts];
+
+        // Load saved variable values and metadata from localStorage
+        this.prompts.forEach(prompt => {
+            // Process prompt-level variables
+            if (prompt.variables) {
+                this.applyVariableDisplayHints(prompt);
+                this.loadVariableValues(prompt.id, prompt.variables);
+            }
+
+            // Process variation-level variables
+            if (prompt.variations) {
+                prompt.variations.forEach(variation => {
+                    if (variation.variables) {
+                        this.applyVariableDisplayHintsToArray(variation.variables);
+                        this.loadVariableValues(prompt.id, variation.variables);
+                    }
+                });
+            }
+
+            // Load metadata (usage count, last used)
+            const metadata = this.loadPromptMetadata(prompt.id);
+            if (metadata) {
+                Object.assign(prompt, metadata);
+            }
+
+            // Initialize active variation ID (defaults to first variation)
+            if (prompt.variations && prompt.variations.length > 0) {
+                prompt.activeVariationId = prompt.variations[0].id;
+            }
+        });
+
+        this.filteredPrompts = [...this.prompts];
     }
 
     /**
@@ -1718,7 +1734,14 @@ Server will start on http://localhost:3001`;
 
 }
 
+window.PromptLibrary = PromptLibrary;
+
 // Initialize the application when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    new PromptLibrary();
+    const config = window.PROMPT_LIBRARY_CONFIG || {};
+    if (config.autoInit === false) {
+        return;
+    }
+
+    new PromptLibrary(config);
 });

@@ -1,6 +1,12 @@
 # Prompt Authoring Guide
 
-Rules for adding or editing prompts in `prompts.json`.
+Rules for adding or editing prompts in `prompts.json` and the local private prompt source.
+
+## Files
+
+- Public prompts live in `prompts.json`
+- Private prompts live in `private-prompts.source.json`
+- Deployed private vault data lives in `private-prompts.enc.json`
 
 ## Variable Substitution
 
@@ -57,7 +63,7 @@ The `details` field hides when `include_details` equals the empty string (toggle
 
 ## Checklist
 
-Before committing changes to `prompts.json`:
+Before committing public prompt changes to `prompts.json`:
 
 - All `{{variable}}` placeholders have entries in `variables`
 - No manual placeholders like `[Describe...]`
@@ -65,3 +71,10 @@ Before committing changes to `prompts.json`:
 - `inputType` is omitted, `"textarea"`, or `"toggle"` only
 - JSON validates (run through a formatter)
 - Test in UI: variables render, preview compiles, copy works
+
+For private prompt changes:
+
+- Update `private-prompts.source.json` through admin or locally
+- Run `npm run encrypt:private` after changes if the encrypted vault was not auto-refreshed
+- If rotating the passcode, update `private-passcode.txt` first, then run `npm run encrypt:private`
+- Deploy `private-prompts.enc.json`, not the plaintext source file
