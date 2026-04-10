@@ -1954,7 +1954,7 @@ mark {
 /* Utility Classes */
 [hidden],
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .private-vault-layout {

@@ -109,7 +109,7 @@ function base64ToUint8Array(base64) {
 
 function setBusy(isBusy) {
     unlockButton.disabled = isBusy;
-    unlockButton.textContent = isBusy ? 'Unlocking...' : 'Unlock private prompts';
+    unlockButton.textContent = isBusy ? 'Unlocking...' : 'Continue';
     passcodeInput.disabled = isBusy;
 }
 

@@ -33,13 +33,12 @@
             <div class="container main-container private-vault-layout">
                 <section id="vaultGate" class="vault-gate" aria-labelledby="vaultHeading">
                     <div class="vault-card">
-                        <p class="vault-eyebrow">Private prompts stay encrypted until you unlock them.</p>
+                        <p class="vault-eyebrow">Private</p>
                         <h1 id="vaultHeading" class="vault-title">Enter passcode</h1>
-                        <p class="vault-copy">This is designed to hide prompts from casual viewers, not provide strong security.</p>
                         <form id="vaultUnlockForm" class="vault-form">
                             <label class="vault-label" for="vaultPasscode">Passcode</label>
-                            <input id="vaultPasscode" name="passcode" type="password" class="vault-input" autocomplete="current-password" required>
-                            <button id="vaultUnlockButton" type="submit" class="vault-submit">Unlock private prompts</button>
+                            <input id="vaultPasscode" name="passcode" type="password" class="vault-input" autocomplete="current-password" inputmode="numeric" pattern="[0-9]*" required>
+                            <button id="vaultUnlockButton" type="submit" class="vault-submit">Continue</button>
                             <p id="vaultMessage" class="vault-message" role="status" aria-live="polite"></p>
                         </form>
                     </div>
