@@ -34,8 +34,10 @@ form?.addEventListener('submit', async (event) => {
 
         new window.PromptLibrary({
             prompts,
-            filterArchived: true
+            filterArchived: true,
+            startFeaturedOnly: false
         });
+        hideFeaturedFilter();
     } catch (error) {
         console.error('Private vault unlock failed:', error);
         setMessage('Unable to unlock private prompts. Check the passcode and try again.', 'error');
@@ -116,4 +118,35 @@ function setBusy(isBusy) {
 function setMessage(text, tone) {
     message.textContent = text;
     message.dataset.tone = tone || '';
+}
+
+function hideFeaturedFilter() {
+    const controlsBar = document.getElementById('controlsBar');
+    if (!controlsBar) {
+        return;
+    }
+
+    const apply = () => {
+        const featuredChip = controlsBar.shadowRoot?.querySelector('wy-filter-chip[label="Featured"]');
+        if (featuredChip) {
+            featuredChip.style.display = 'none';
+        }
+    };
+
+    const attachObserver = () => {
+        if (!controlsBar.shadowRoot || controlsBar.__privateVaultFeaturedObserver) {
+            return;
+        }
+
+        const observer = new MutationObserver(() => apply());
+        observer.observe(controlsBar.shadowRoot, { childList: true, subtree: true });
+        controlsBar.__privateVaultFeaturedObserver = observer;
+        apply();
+    };
+
+    customElements.whenDefined('wy-controls-bar').then(() => {
+        apply();
+        attachObserver();
+        requestAnimationFrame(apply);
+    });
 }

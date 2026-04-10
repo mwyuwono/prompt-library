@@ -8,10 +8,10 @@ class PromptLibrary {
         this.prompts = [];
         this.filteredPrompts = [];
         this.searchTerm = '';
-        this.selectedCategory = ''; // Default to Featured (no category selected)
+        this.selectedCategory = options.initialCategory || '';
         this.showDetails = true; // Default to visible on desktop
         this.currentView = 'grid'; // Default to grid view
-        this.showFeaturedOnly = true; // Default to Featured tab
+        this.showFeaturedOnly = options.startFeaturedOnly ?? true;
 
         // DOM elements
         this.promptGrid = document.getElementById('promptGrid');
