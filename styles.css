@@ -290,10 +290,31 @@ wy-button:not(:defined) {
     outline-offset: 2px;
 }
 
+.private-link-btn {
+    position: fixed;
+    right: max(var(--space-md), env(safe-area-inset-right));
+    bottom: max(var(--space-md), env(safe-area-inset-bottom));
+    z-index: 1100;
+    height: 36px;
+    padding: 0 18px;
+    line-height: 36px;
+    box-shadow: var(--shadow-large);
+    background: color-mix(in srgb, var(--md-sys-color-surface) 92%, white);
+}
+
+.private-link-btn:hover {
+    background: var(--color-surface-hover);
+}
+
 /* Hide quick links on mobile */
 @media (max-width: 768px) {
     .quick-links {
         display: none;
+    }
+
+    .private-link-btn {
+        right: max(var(--space-sm), env(safe-area-inset-right));
+        bottom: max(var(--space-sm), env(safe-area-inset-bottom));
     }
 }
 
