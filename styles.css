@@ -861,7 +861,9 @@ body.modal-open {
 /* Controls Bar - Design system component host */
 .controls-bar {
     display: block;
-    width: 100%;
+    width: var(--wy-controls-bar-normal-width, 100%);
+    max-width: var(--wy-controls-bar-normal-max-width, none);
+    margin-inline: var(--wy-controls-bar-normal-margin-inline, 0);
     position: relative;
     z-index: 100;
     background: transparent;
@@ -882,6 +884,9 @@ body.modal-open {
 
 @media (min-width: 769px) {
     .controls-bar {
+        --wy-controls-bar-normal-width: fit-content;
+        --wy-controls-bar-normal-max-width: calc(100% - 32px);
+        --wy-controls-bar-normal-margin-inline: auto;
         --wy-controls-container-padding-desktop: 8px 8px;
         --wy-controls-container-bg: #ACAAA0;
         --wy-controls-container-margin-inline: 8px;
