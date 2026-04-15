@@ -6037,9 +6037,9 @@ class Za extends g {
       z-index: 100;
       width: auto;
       max-width: 900px;
-      background-color: var(--wy-controls-container-bg, var(--wy-controls-bar-bg, color-mix(in srgb, var(--md-sys-color-surface) 60%, transparent)));
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
+      background-color: var(--wy-controls-container-bg, var(--wy-controls-bar-bg, color-mix(in srgb, var(--md-sys-color-surface) 60%, transparent))) !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
       border-radius: 9999px;
       overflow: visible; /* Ensure pill shape isn't clipped */
       padding: 8px 24px;
