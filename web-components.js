@@ -5951,12 +5951,15 @@ class Za extends g {
     super(), this.viewMode = "grid", this.showDetails = !1, this.activeCategory = "all", this.categories = ["Productivity", "Expertise", "Travel & Shopping"], this.searchValue = "", this.hideViewToggle = !1, this.hideDetailsToggle = !1, this.showFeaturedOnly = !1, this.chipVariant = "", this.isScrolled = !1, this._scrollThreshold = 50;
   }
   connectedCallback() {
-    super.connectedCallback(), this._handleScroll = this._handleScroll.bind(this), setTimeout(() => {
+    super.connectedCallback(), this._handleScroll = this._handleScroll.bind(this), this._handleViewportChange = this._handleViewportChange.bind(this), window.addEventListener("resize", this._handleViewportChange, { passive: !0 }), setTimeout(() => {
       this._setupScrollListener();
     }, 100);
   }
   disconnectedCallback() {
-    super.disconnectedCallback(), this._removeScrollListener();
+    super.disconnectedCallback(), window.removeEventListener("resize", this._handleViewportChange), this._removeScrollListener();
+  }
+  _handleViewportChange() {
+    this._syncScrolledHostSurface();
   }
   _setupScrollListener() {
     this._removeScrollListener(), this._scrollContainer = this._findScrollableContainer(), this._scrollContainer === window ? window.addEventListener("scroll", this._handleScroll, { passive: !0 }) : this._scrollContainer && this._scrollContainer.addEventListener("scroll", this._handleScroll, { passive: !0 }), this._handleScroll();
@@ -5998,7 +6001,11 @@ class Za extends g {
     let e;
     this._scrollContainer === window ? e = window.scrollY || document.documentElement.scrollTop : e = this._scrollContainer ? this._scrollContainer.scrollTop : 0;
     const t = this.isScrolled;
-    this.isScrolled = e > this._scrollThreshold, t !== this.isScrolled && this.requestUpdate();
+    this.isScrolled = e > this._scrollThreshold, t !== this.isScrolled && (this._syncScrolledHostSurface(), this.requestUpdate());
+  }
+  _syncScrolledHostSurface() {
+    const e = typeof window < "u" && window.matchMedia("(max-width: 768px)").matches;
+    this.isScrolled && !e ? (this.style.setProperty("background-color", "var(--wy-controls-container-bg, var(--wy-controls-bar-bg, color-mix(in srgb, var(--md-sys-color-surface) 60%, transparent)))"), this.style.setProperty("backdrop-filter", "none"), this.style.setProperty("-webkit-backdrop-filter", "none")) : (this.style.removeProperty("background-color"), this.style.removeProperty("backdrop-filter"), this.style.removeProperty("-webkit-backdrop-filter"));
   }
   static styles = m`
     /* Required fonts - load in page <head>:
@@ -6328,7 +6335,7 @@ class Za extends g {
     }
   `;
   render() {
-    return this.isScrolled ? this.setAttribute("data-scrolled", "") : this.removeAttribute("data-scrolled"), l`
+    return this.isScrolled ? this.setAttribute("data-scrolled", "") : this.removeAttribute("data-scrolled"), this._syncScrolledHostSurface(), l`
       <div class="controls-container" part="controls-container">
         <div class="search-section">
           <input
