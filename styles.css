@@ -1409,6 +1409,20 @@ body.modal-open {
     /* Match reference white/80 */
 }
 
+/* Lists inside description areas */
+.card-description ol,
+.card-description ul,
+.prompt-list-item-description ol,
+.prompt-list-item-description ul {
+    margin: var(--spacing-xxs, 2px) 0 0;
+    padding-left: 1.4em;
+}
+
+.card-description li + li,
+.prompt-list-item-description li + li {
+    margin-top: var(--spacing-xxs, 2px);
+}
+
 /* Hide/Show classes for toggle functionality */
 .card-description.hidden {
     display: none;

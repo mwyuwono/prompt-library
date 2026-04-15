@@ -774,7 +774,7 @@ Server will start on http://localhost:3001`;
                 <div class="prompt-list-item-header">
                     <h3 class="prompt-list-item-title">${this.highlightText(prompt.title, this.searchTerm)}</h3>
                 </div>
-                <p class="prompt-list-item-description ${hiddenClass}">${this.highlightText(prompt.description, this.searchTerm)}</p>
+                <div class="prompt-list-item-description ${hiddenClass}">${this.renderDescription(prompt.description, this.searchTerm)}</div>
             </div>
             <div class="prompt-list-item-meta">
                 <span class="variable-count-badge ${hiddenClass}">${variableCount > 0 ? `${variableCount} variable${variableCount > 1 ? 's' : ''}` : 'No variables'}</span>
@@ -958,7 +958,7 @@ Server will start on http://localhost:3001`;
                 <div>
                     ${headerRowHTML}
                     <h3 class="card-title">${this.highlightText(prompt.title, this.searchTerm)}</h3>
-                    <p class="card-description ${hiddenClass}">${this.highlightText(prompt.description, this.searchTerm)}</p>
+                    <div class="card-description ${hiddenClass}">${this.renderDescription(prompt.description, this.searchTerm)}</div>
                 </div>
                 <div class="card-footer">
                     <div class="card-arrow-button">
@@ -1820,6 +1820,66 @@ Server will start on http://localhost:3001`;
         if (modal) {
             modal.open = false;
         }
+    }
+
+    /**
+     * Render description text as lightweight markdown (ordered/unordered lists, bold).
+     * Plain-text descriptions are returned unchanged.
+     */
+    renderDescription(text, searchTerm) {
+        if (!text) return '';
+
+        const processInline = (str) => {
+            let escaped = this.escapeHTML(str);
+            escaped = escaped.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            if (searchTerm) {
+                const regex = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+                escaped = escaped.replace(regex, '<mark>$1</mark>');
+            }
+            return escaped;
+        };
+
+        // Fast path: no list syntax — return plain highlighted text (existing behaviour)
+        if (!/^(\d+\.|-|\*) /m.test(text)) {
+            return processInline(text);
+        }
+
+        const lines = text.split('\n');
+        const parts = [];
+        let listItems = null;
+        let listType = null;
+
+        const flushList = () => {
+            if (listItems) {
+                const tag = listType === 'ol' ? 'ol' : 'ul';
+                parts.push(`<${tag}>${listItems.join('')}</${tag}>`);
+                listItems = null;
+                listType = null;
+            }
+        };
+
+        lines.forEach(line => {
+            const trimmed = line.trim();
+            const orderedMatch = trimmed.match(/^(\d+)\.\s+(.+)/);
+            if (orderedMatch) {
+                if (listType === 'ul') flushList();
+                if (!listItems) { listItems = []; listType = 'ol'; }
+                listItems.push(`<li>${processInline(orderedMatch[2])}</li>`);
+                return;
+            }
+            const unorderedMatch = trimmed.match(/^[-*]\s+(.+)/);
+            if (unorderedMatch) {
+                if (listType === 'ol') flushList();
+                if (!listItems) { listItems = []; listType = 'ul'; }
+                listItems.push(`<li>${processInline(unorderedMatch[1])}</li>`);
+                return;
+            }
+            flushList();
+            if (trimmed) parts.push(processInline(trimmed));
+        });
+
+        flushList();
+        return parts.join('');
     }
 
     /**
