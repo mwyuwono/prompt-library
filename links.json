@@ -23,11 +23,6 @@
                 "name": "Perplexity",
                 "company": "Perplexity",
                 "url": "https://perplexity.ai"
-            },
-            {
-                "name": "Poe",
-                "company": "Quora",
-                "url": "https://poe.com"
             }
         ]
     },
@@ -47,19 +42,14 @@
                 "url": "https://platform.openai.com/playground/images"
             },
             {
-                "name": "Black Forest Labs",
-                "company": "Black Forest Labs",
-                "url": "https://blackforestlabs.ai"
-            },
-            {
                 "name": "Midjourney",
                 "company": "Midjourney",
                 "url": "https://midjourney.com"
             },
             {
-                "name": "ImageFX",
-                "company": "Google Labs",
-                "url": "https://aitestkitchen.withgoogle.com/tools/image-fx"
+                "name": "Luma Labs",
+                "company": "Luma Labs",
+                "url": "https://app.lumalabs.ai"
             },
             {
                 "name": "Image Outpainter",
@@ -88,6 +78,11 @@
                 "url": "https://stitch.withgoogle.com"
             },
             {
+                "name": "Google Mixboard",
+                "company": "Google",
+                "url": "https://mixboard.google.com/projects/39fd75f5d58046b4b301f01d3fe5e24f?boardId=2c0b99e0-670b-4407-bc74-269f79a4cede"
+            },
+            {
                 "name": "OpenAI Academy",
                 "company": "OpenAI",
                 "url": "https://academy.openai.com/home/tags/prompt-packs-6849a0f98c613939acef841c"
@@ -107,11 +102,6 @@
                 "name": "Suno",
                 "company": "Suno",
                 "url": "https://suno.com"
-            },
-            {
-                "name": "Udio",
-                "company": "Udio",
-                "url": "https://udio.com"
             }
         ]
     }

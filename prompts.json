@@ -990,6 +990,7 @@
     "template": "Convert the attached image into a minimalist black and white line drawing. Use clean, continuous black outlines on a solid white background. No shading, no gradients, and no textures; only pure vector-style mono-lines suitable for pen plotting and tracing.",
     "variables": [],
     "slug": "minimalist-line-drawing",
-    "featured": false
+    "featured": false,
+    "image": "public/images/1776263511993.jpg"
   }
 ]
