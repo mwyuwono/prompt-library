@@ -6005,7 +6005,7 @@ class Za extends g {
   }
   _syncScrolledHostSurface() {
     const e = typeof window < "u" && window.matchMedia("(max-width: 768px)").matches;
-    this.isScrolled && !e ? (this.style.setProperty("background", "var(--wy-controls-container-bg, var(--wy-controls-bar-bg, color-mix(in srgb, var(--md-sys-color-surface) 60%, transparent)))"), this.style.setProperty("backdrop-filter", "none"), this.style.setProperty("-webkit-backdrop-filter", "none")) : (this.style.removeProperty("background"), this.style.removeProperty("backdrop-filter"), this.style.removeProperty("-webkit-backdrop-filter"));
+    this.isScrolled && !e ? (this.style.setProperty("background", "var(--wy-controls-container-bg, transparent)"), this.style.setProperty("backdrop-filter", "none"), this.style.setProperty("-webkit-backdrop-filter", "none")) : (this.style.removeProperty("background"), this.style.removeProperty("backdrop-filter"), this.style.removeProperty("-webkit-backdrop-filter"));
   }
   static styles = m`
     /* Required fonts - load in page <head>:
