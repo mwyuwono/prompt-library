@@ -888,6 +888,17 @@
     "slug": "fabric-vector-prep"
   },
   {
+    "id": "fabric-restyle-match",
+    "title": "Restyle to Match Rendering",
+    "description": "Two-step workflow: paste this with a rendering you love, then upload your mockup to restyle it to match that rendering's ink colors, fabric, and texture.",
+    "category": "Fabric",
+    "icon": "style",
+    "variables": [],
+    "template": "[Start here: paste this prompt and your inspiration rendering image together in your first message to the LLM. Once it confirms it's ready, upload the mockup you want restyled.]\n\nThe attached image is a fabric rendering that I like. I'm going to upload a fabric design mockup in my next message, and I want you to maintain the design of my mockup but match it to this rendering style, ink colors, fabric color, and texture. Tell me when you're ready for the image I want you to restyle.",
+    "featured": false,
+    "slug": "fabric-restyle-match"
+  },
+  {
     "id": "gemma-chunk-processor",
     "title": "Gemma Chunk Processor",
     "description": "Generate a Python chunk-processing script for Ollama Gemma over text and image files",
