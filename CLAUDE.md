@@ -119,6 +119,10 @@ If you find yourself writing `::part()` selectors for padding, gaps, max-width, 
     --wy-controls-padding-desktop: 32px;
     --wy-controls-container-gap: var(--spacing-md);
     --wy-controls-container-max-width: none;
+    --wy-controls-container-padding-desktop: 8px 8px;
+    --wy-controls-container-bg: #ACAAA0;
+    --wy-controls-container-margin-inline: 8px;
+    --wy-controls-container-radius: 100px;
 }
 ```
 

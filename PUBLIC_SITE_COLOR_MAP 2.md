@@ -256,11 +256,16 @@ Design-system-backed rows are intentionally left as tokens or source expressions
 | Toast warning | `--wy-toast-warning-color` | semantic color | `var(--md-sys-color-secondary)` |  | Local token in `tokens.css` |
 | Toast info | `--wy-toast-info-color` | semantic color | `var(--md-sys-color-secondary)` |  | Local token in `tokens.css` |
 
+### Local Public Component Color Overrides
+
+| Component | Selector / Token | Property | Current Color | New Color | Notes |
+| --- | --- | --- | --- | --- | --- |
+| Controls bar | `.controls-bar` / `--wy-controls-container-bg` | container background | `#ACAAA0` |  | Local host sets the app-specific controls container background via design-system custom property |
+
 ### Components With No Local Public Color Overrides In This Repo
 
 | Component | Selector / Token | Property | Current Color | New Color | Notes |
 | --- | --- | --- | --- | --- | --- |
-| Controls bar | `wy-controls-bar#controlsBar` | color source | design system component styles |  | Local host sets spacing/layout only, not color |
 | Prompt modal | `wy-prompt-modal#promptModal` | color source | design system component styles |  | No local public color overrides found |
 | Links modal | `wy-links-modal#linksModal` | color source | design system component styles |  | Mobile override changes spacing only |
 | Keyboard shortcuts modal | `wy-modal#shortcutsModal` | color source | design system component styles |  | No local public color overrides found |
