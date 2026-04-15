@@ -6,6 +6,6 @@
  */
 
 // Public site uses the pinned CDN bundle for reliable production delivery.
-import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@c56277e/dist/web-components.js';
+import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@eee1279/dist/web-components.js';
 
 console.log('[Components] m3-design-v2 web components registered (CDN)');
