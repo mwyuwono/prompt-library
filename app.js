@@ -116,21 +116,19 @@ class PromptLibrary {
             return;
         }
 
-        const viewportWidth = document.documentElement.clientWidth || window.innerWidth;
         const headerRect = this.headerTop.getBoundingClientRect();
         const logoRect = this.headerLogoGroup.getBoundingClientRect();
         const actionsRect = this.headerActions.getBoundingClientRect();
         const edgeGap = 12;
         const floatingLeft = Math.max(edgeGap, logoRect.right + edgeGap);
-        const floatingRight = Math.max(edgeGap, viewportWidth - actionsRect.left + edgeGap);
         const controlsHeight = this.controlsBar.offsetHeight || 60;
         const top = Math.max(0, headerRect.top + ((headerRect.height - controlsHeight) / 2));
 
+        const maxWidth = actionsRect.left - floatingLeft - edgeGap;
         this.controlsBar.style.setProperty('--wy-controls-floating-left', `${floatingLeft}px`);
-        this.controlsBar.style.setProperty('--wy-controls-floating-right', `${floatingRight}px`);
         this.controlsBar.style.setProperty('--wy-controls-floating-top', `${top}px`);
         this.controlsBar.style.setProperty('--wy-controls-floating-width', 'auto');
-        this.controlsBar.style.setProperty('--wy-controls-floating-max-width', 'none');
+        this.controlsBar.style.setProperty('--wy-controls-floating-max-width', `${maxWidth}px`);
         this.controlsBar.style.setProperty('--wy-controls-floating-transform', 'none');
         this.controlsBar.style.setProperty('--wy-controls-floating-return-transform', 'translateY(-8px) scale(0.98)');
         this.controlsBar.style.setProperty('--wy-controls-floating-z-index', '1001');
@@ -148,7 +146,6 @@ class PromptLibrary {
 
         [
             '--wy-controls-floating-top',
-            '--wy-controls-floating-right',
             '--wy-controls-floating-left',
             '--wy-controls-floating-width',
             '--wy-controls-floating-max-width',

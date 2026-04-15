@@ -95,7 +95,7 @@ body {
 
 /* App body overrides (design system provides base body styles) */
 body {
-    background-color: var(--md-sys-color-surface-container);
+    background-color: var(--color-emphasis-background);
     color: var(--color-text-primary);
     overflow-x: hidden;
 }
@@ -876,9 +876,10 @@ body.modal-open {
     margin-inline: var(--wy-controls-bar-normal-margin-inline, 0);
     position: relative;
     z-index: 100;
-    background: transparent;
     border-top: none;
     border-bottom: none;
+    border-radius: var(--md-sys-shape-corner-full);
+    --wy-controls-bar-bg: var(--color-controls-bar-surface);
     
     /* Track height for gap collapse when scrolled */
     --wy-controls-bar-height: 60px;
@@ -891,7 +892,7 @@ body.modal-open {
     --wy-controls-container-max-width: none; /* No max-width constraint for prompt-library */
     --wy-controls-container-gap: var(--spacing-md);
     --wy-controls-container-gap-scrolled: var(--space-xs);
-    --wy-controls-bar-padding-scrolled: 4px 6px;
+    --wy-controls-bar-padding-scrolled: var(--spacing-sm);
     --wy-controls-search-width-scrolled: 168px;
     --wy-controls-category-max-width-scrolled: 100%;
 }
@@ -902,9 +903,6 @@ body.modal-open {
         --wy-controls-bar-normal-max-width: calc(100% - 32px);
         --wy-controls-bar-normal-margin-inline: auto;
         --wy-controls-container-padding-desktop: 8px 8px;
-        --wy-controls-container-bg: #ACAAA0;
-        --wy-controls-container-margin-inline: 8px;
-        --wy-controls-container-radius: 100px;
     }
 }
 

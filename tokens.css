@@ -45,6 +45,7 @@
   --color-action-primary: var(--md-sys-color-secondary);
   --color-action-primary-hover: #7A6E62;
   --color-emphasis-background: color-mix(in srgb, var(--md-sys-color-secondary) 10%, transparent);
+  --color-controls-bar-surface: #31504024;
   --color-surface-hover: color-mix(in srgb, var(--md-sys-color-text-muted) 10%, transparent);
   --color-border-subtle: color-mix(in srgb, var(--md-sys-color-text-muted) 10%, transparent);
 
