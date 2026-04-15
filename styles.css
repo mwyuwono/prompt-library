@@ -163,6 +163,16 @@ body {
     gap: var(--space-sm);
 }
 
+body.controls-floating .header-logo-text {
+    display: none;
+}
+
+body.controls-floating:not(.private-vault-page) .header-top .quick-links,
+body.controls-floating:not(.private-vault-page) .header-top .quick-link-btn,
+body.controls-floating:not(.private-vault-page) #adminButton {
+    display: none !important;
+}
+
 /* ========================================
    DEPRECATED: Legacy Header Button Styles
 
@@ -880,6 +890,10 @@ body.modal-open {
     --wy-controls-padding-scrolled: var(--spacing-sm);
     --wy-controls-container-max-width: none; /* No max-width constraint for prompt-library */
     --wy-controls-container-gap: var(--spacing-md);
+    --wy-controls-container-gap-scrolled: var(--space-xs);
+    --wy-controls-bar-padding-scrolled: 4px 6px;
+    --wy-controls-search-width-scrolled: 168px;
+    --wy-controls-category-max-width-scrolled: 100%;
 }
 
 @media (min-width: 769px) {
@@ -1993,8 +2007,17 @@ mark {
 }
 
 .private-vault-layout {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: var(--space-lg);
+    min-height: 0;
+}
+
+#vaultApp {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 .vault-gate {

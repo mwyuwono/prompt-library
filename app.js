@@ -21,11 +21,18 @@ class PromptLibrary {
         this.emptyState = document.getElementById('emptyState');
         this.toast = document.getElementById('toast');
         this.paletteLink = document.getElementById('paletteLink');
+        this.headerTop = document.querySelector('.header-top');
+        this.headerLogoGroup = document.querySelector('.header-logo-group');
+        this.headerActions = document.querySelector('.header-actions');
         this.showDetailsToggle = null;
         this.viewToggleBtns = [];
         this.promptModal = null;
         this.activePromptIndex = null;
         this.activePromptId = null;
+        this.floatingControlsObserver = null;
+        this.floatingHeaderObserver = null;
+        this.boundFloatingControlsUpdate = null;
+        this.floatingControlsFrame = 0;
 
         this.init();
     }
@@ -42,10 +49,113 @@ class PromptLibrary {
         this.syncControlsBar();
         this.filterPrompts();
         this.showAdminButtonIfLocal();
+        this.setupFloatingControlsHeader();
 
         // Handle deep linking via URL hash
         window.addEventListener('hashchange', () => this.handleHashChange());
         this.handleHashChange();
+    }
+
+    setupFloatingControlsHeader() {
+        if (!this.controlsBar || !this.headerTop || !this.headerLogoGroup || !this.headerActions) {
+            return;
+        }
+
+        this.boundFloatingControlsUpdate = () => this.updateFloatingControlsHeader();
+
+        this.floatingControlsObserver = new MutationObserver(this.boundFloatingControlsUpdate);
+        this.floatingControlsObserver.observe(this.controlsBar, {
+            attributes: true,
+            attributeFilter: ['data-scrolled', 'data-scroll-state']
+        });
+
+        this.floatingHeaderObserver = new MutationObserver(this.boundFloatingControlsUpdate);
+        this.floatingHeaderObserver.observe(this.headerTop, {
+            attributes: true,
+            childList: true,
+            subtree: true
+        });
+
+        window.addEventListener('resize', this.boundFloatingControlsUpdate, { passive: true });
+        this.updateFloatingControlsHeader();
+    }
+
+    updateFloatingControlsHeader() {
+        if (!this.controlsBar) {
+            return;
+        }
+
+        const isDesktop = window.matchMedia('(min-width: 769px)').matches;
+        const isFloating = isDesktop && this.controlsBar.hasAttribute('data-scrolled');
+
+        document.body.classList.toggle('controls-floating', isFloating);
+
+        if (!isFloating) {
+            this.clearFloatingControlsLayout();
+            return;
+        }
+
+        if (this.floatingControlsFrame) {
+            cancelAnimationFrame(this.floatingControlsFrame);
+        }
+
+        this.floatingControlsFrame = requestAnimationFrame(() => {
+            this.floatingControlsFrame = 0;
+            this.positionFloatingControlsBar();
+        });
+    }
+
+    positionFloatingControlsBar() {
+        if (!this.controlsBar || !this.headerTop || !this.headerLogoGroup || !this.headerActions) {
+            return;
+        }
+
+        const isDesktop = window.matchMedia('(min-width: 769px)').matches;
+        if (!isDesktop || !this.controlsBar.hasAttribute('data-scrolled')) {
+            this.clearFloatingControlsLayout();
+            return;
+        }
+
+        const viewportWidth = document.documentElement.clientWidth || window.innerWidth;
+        const headerRect = this.headerTop.getBoundingClientRect();
+        const logoRect = this.headerLogoGroup.getBoundingClientRect();
+        const actionsRect = this.headerActions.getBoundingClientRect();
+        const edgeGap = 12;
+        const floatingLeft = Math.max(edgeGap, logoRect.right + edgeGap);
+        const floatingRight = Math.max(edgeGap, viewportWidth - actionsRect.left + edgeGap);
+        const controlsHeight = this.controlsBar.offsetHeight || 60;
+        const top = Math.max(0, headerRect.top + ((headerRect.height - controlsHeight) / 2));
+
+        this.controlsBar.style.setProperty('--wy-controls-floating-left', `${floatingLeft}px`);
+        this.controlsBar.style.setProperty('--wy-controls-floating-right', `${floatingRight}px`);
+        this.controlsBar.style.setProperty('--wy-controls-floating-top', `${top}px`);
+        this.controlsBar.style.setProperty('--wy-controls-floating-width', 'auto');
+        this.controlsBar.style.setProperty('--wy-controls-floating-max-width', 'none');
+        this.controlsBar.style.setProperty('--wy-controls-floating-transform', 'none');
+        this.controlsBar.style.setProperty('--wy-controls-floating-return-transform', 'translateY(-8px) scale(0.98)');
+        this.controlsBar.style.setProperty('--wy-controls-floating-z-index', '1001');
+    }
+
+    clearFloatingControlsLayout() {
+        if (this.floatingControlsFrame) {
+            cancelAnimationFrame(this.floatingControlsFrame);
+            this.floatingControlsFrame = 0;
+        }
+
+        if (!this.controlsBar) {
+            return;
+        }
+
+        [
+            '--wy-controls-floating-top',
+            '--wy-controls-floating-right',
+            '--wy-controls-floating-left',
+            '--wy-controls-floating-width',
+            '--wy-controls-floating-max-width',
+            '--wy-controls-floating-transform',
+            '--wy-controls-floating-return-transform',
+            '--wy-controls-floating-z-index'
+        ].forEach(property => this.controlsBar.style.removeProperty(property));
     }
 
     /**
