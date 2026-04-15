@@ -880,6 +880,15 @@ body.modal-open {
     --wy-controls-container-gap: var(--spacing-md);
 }
 
+@media (min-width: 769px) {
+    .controls-bar {
+        --wy-controls-container-padding-desktop: 8px 8px;
+        --wy-controls-container-bg: #ACAAA0;
+        --wy-controls-container-margin-inline: 8px;
+        --wy-controls-container-radius: 100px;
+    }
+}
+
 /* Smooth transition when filtering prompts */
 .prompt-card,
 .prompt-list-item,
