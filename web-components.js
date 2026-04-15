@@ -258,7 +258,7 @@ let ve = class extends HTMLElement {
   }
 };
 ve.elementStyles = [], ve.shadowRootOptions = { mode: "open" }, ve[ke("elementProperties")] = /* @__PURE__ */ new Map(), ve[ke("finalized")] = /* @__PURE__ */ new Map(), Ir?.({ ReactiveElement: ve }), (Je.reactiveElementVersions ??= []).push("2.1.2");
-const Dr = { attribute: !0, type: String, converter: Xe, reflect: !1, hasChanged: Xt }, Or = (i = Dr, e, t) => {
+const Dr = { attribute: !0, type: String, converter: Xe, reflect: !1, hasChanged: Xt }, Fr = (i = Dr, e, t) => {
   const { kind: o, metadata: r } = t;
   let a = globalThis.litPropertyMetadata.get(r);
   if (a === void 0 && globalThis.litPropertyMetadata.set(r, a = /* @__PURE__ */ new Map()), o === "setter" && ((i = Object.create(i)).wrapped = !0), a.set(t.name, i), o === "accessor") {
@@ -280,7 +280,7 @@ const Dr = { attribute: !0, type: String, converter: Xe, reflect: !1, hasChanged
   throw Error("Unsupported decorator location: " + o);
 };
 function d(i) {
-  return (e, t) => typeof t == "object" ? Or(i, e, t) : ((o, r, a) => {
+  return (e, t) => typeof t == "object" ? Fr(i, e, t) : ((o, r, a) => {
     const s = r.hasOwnProperty(a);
     return r.constructor.createProperty(a, o), s ? Object.getOwnPropertyDescriptor(r, a) : void 0;
   })(i, e, t);
@@ -297,10 +297,10 @@ function C(i, e) {
     } });
   };
 }
-let Fr;
+let Or;
 function Pr(i) {
   return (e, t) => et(e, t, { get() {
-    return (this.renderRoot ?? (Fr ??= document.createDocumentFragment())).querySelectorAll(i);
+    return (this.renderRoot ?? (Or ??= document.createDocumentFragment())).querySelectorAll(i);
   } });
 }
 function Y(i) {
@@ -320,7 +320,7 @@ function Vo(i) {
     } });
   };
 }
-const Zt = globalThis, xo = (i) => i, Ze = Zt.trustedTypes, wo = Ze ? Ze.createPolicy("lit-html", { createHTML: (i) => i }) : void 0, No = "$lit$", re = `lit$${Math.random().toFixed(9).slice(2)}$`, Uo = "?" + re, Rr = `<${Uo}>`, ce = document, $e = () => ce.createComment(""), Se = (i) => i === null || typeof i != "object" && typeof i != "function", Qt = Array.isArray, Mr = (i) => Qt(i) || typeof i?.[Symbol.iterator] == "function", at = `[ 	
+const Zt = globalThis, xo = (i) => i, Ze = Zt.trustedTypes, wo = Ze ? Ze.createPolicy("lit-html", { createHTML: (i) => i }) : void 0, No = "$lit$", re = `lit$${Math.random().toFixed(9).slice(2)}$`, Uo = "?" + re, Mr = `<${Uo}>`, ce = document, $e = () => ce.createComment(""), Se = (i) => i === null || typeof i != "object" && typeof i != "function", Qt = Array.isArray, Rr = (i) => Qt(i) || typeof i?.[Symbol.iterator] == "function", at = `[ 	
 \f\r]`, we = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, _o = /-->/g, ko = />/g, le = RegExp(`>|${at}(?:([^\\s"'>=/]+)(${at}*=${at}*(?:[^ 	
 \f\r"'\`<>=]|("|')|))|$)`, "g"), Co = /'/g, $o = /"/g, qo = /^(?:script|style|textarea|title)$/i, Lr = (i) => (e, ...t) => ({ _$litType$: i, strings: e, values: t }), l = Lr(1), q = /* @__PURE__ */ Symbol.for("lit-noChange"), u = /* @__PURE__ */ Symbol.for("lit-nothing"), So = /* @__PURE__ */ new WeakMap(), de = ce.createTreeWalker(ce, 129);
 function Ho(i, e) {
@@ -335,7 +335,7 @@ const Br = (i, e) => {
     let f, h, v = -1, b = 0;
     for (; b < p.length && (s.lastIndex = b, h = s.exec(p), h !== null); ) b = s.lastIndex, s === we ? h[1] === "!--" ? s = _o : h[1] !== void 0 ? s = ko : h[2] !== void 0 ? (qo.test(h[2]) && (r = RegExp("</" + h[2], "g")), s = le) : h[3] !== void 0 && (s = le) : s === le ? h[0] === ">" ? (s = r ?? we, v = -1) : h[1] === void 0 ? v = -2 : (v = s.lastIndex - h[2].length, f = h[1], s = h[3] === void 0 ? le : h[3] === '"' ? $o : Co) : s === $o || s === Co ? s = le : s === _o || s === ko ? s = we : (s = le, r = void 0);
     const x = s === le && i[c + 1].startsWith("/>") ? " " : "";
-    a += s === we ? p + Rr : v >= 0 ? (o.push(f), p.slice(0, v) + No + p.slice(v) + re + x) : p + re + (v === -2 ? c : x);
+    a += s === we ? p + Mr : v >= 0 ? (o.push(f), p.slice(0, v) + No + p.slice(v) + re + x) : p + re + (v === -2 ? c : x);
   }
   return [Ho(i, a + (i[t] || "<?>") + (e === 2 ? "</svg>" : e === 3 ? "</math>" : "")), o];
 };
@@ -429,7 +429,7 @@ class Te {
     return this._$AB;
   }
   _$AI(e, t = this) {
-    e = ge(this, e, t), Se(e) ? e === u || e == null || e === "" ? (this._$AH !== u && this._$AR(), this._$AH = u) : e !== this._$AH && e !== q && this._(e) : e._$litType$ !== void 0 ? this.$(e) : e.nodeType !== void 0 ? this.T(e) : Mr(e) ? this.k(e) : this._(e);
+    e = ge(this, e, t), Se(e) ? e === u || e == null || e === "" ? (this._$AH !== u && this._$AR(), this._$AH = u) : e !== this._$AH && e !== q && this._(e) : e._$litType$ !== void 0 ? this.$(e) : e.nodeType !== void 0 ? this.T(e) : Rr(e) ? this.k(e) : this._(e);
   }
   O(e) {
     return this._$AA.parentNode.insertBefore(e, this._$AB);
@@ -1040,7 +1040,7 @@ function st(i) {
 function Go(i) {
   return i.replace("aria", "aria-").replace(/Elements?/g, "").toLowerCase();
 }
-const Re = /* @__PURE__ */ Symbol("privateIgnoreAttributeChangesFor");
+const Me = /* @__PURE__ */ Symbol("privateIgnoreAttributeChangesFor");
 function Q(i) {
   var e;
   class t extends i {
@@ -1052,9 +1052,9 @@ function Q(i) {
         super.attributeChangedCallback(r, a, s);
         return;
       }
-      if (this[Re].has(r))
+      if (this[Me].has(r))
         return;
-      this[Re].add(r), this.removeAttribute(r), this[Re].delete(r);
+      this[Me].add(r), this.removeAttribute(r), this[Me].delete(r);
       const c = vt(r);
       s === null ? delete this.dataset[c] : this.dataset[c] = s, this.requestUpdate(vt(r), a);
     }
@@ -1065,7 +1065,7 @@ function Q(i) {
       super.removeAttribute(r), st(r) && (super.removeAttribute(mt(r)), this.requestUpdate());
     }
   }
-  return e = Re, ci(t), t;
+  return e = Me, ci(t), t;
 }
 function ci(i) {
   for (const e of Ko) {
@@ -1150,7 +1150,7 @@ function De(i, e) {
   return o || e.preventDefault(), o;
 }
 const V = /* @__PURE__ */ Symbol("internals"), nt = /* @__PURE__ */ Symbol("privateInternals");
-function Oe(i) {
+function Fe(i) {
   class e extends i {
     get [V]() {
       return this[nt] || (this[nt] = this.attachInternals()), this[nt];
@@ -1158,7 +1158,7 @@ function Oe(i) {
   }
   return e;
 }
-const ze = /* @__PURE__ */ Symbol("createValidator"), Ae = /* @__PURE__ */ Symbol("getValidityAnchor"), lt = /* @__PURE__ */ Symbol("privateValidator"), Z = /* @__PURE__ */ Symbol("privateSyncValidity"), Me = /* @__PURE__ */ Symbol("privateCustomValidationMessage");
+const ze = /* @__PURE__ */ Symbol("createValidator"), Ae = /* @__PURE__ */ Symbol("getValidityAnchor"), lt = /* @__PURE__ */ Symbol("privateValidator"), Z = /* @__PURE__ */ Symbol("privateSyncValidity"), Re = /* @__PURE__ */ Symbol("privateCustomValidationMessage");
 function io(i) {
   var e;
   class t extends i {
@@ -1181,7 +1181,7 @@ function io(i) {
       return this[Z](), this[V].reportValidity();
     }
     setCustomValidity(r) {
-      this[Me] = r, this[Z]();
+      this[Re] = r, this[Z]();
     }
     requestUpdate(r, a, s) {
       super.requestUpdate(r, a, s), this[Z]();
@@ -1189,9 +1189,9 @@ function io(i) {
     firstUpdated(r) {
       super.firstUpdated(r), this[Z]();
     }
-    [(e = Me, Z)]() {
+    [(e = Re, Z)]() {
       this[lt] || (this[lt] = this[ze]());
-      const { validity: r, validationMessage: a } = this[lt].getValidity(), s = !!this[Me], c = this[Me] || a;
+      const { validity: r, validationMessage: a } = this[lt].getValidity(), s = !!this[Re], c = this[Re] || a;
       this[V].setValidity({ ...r, customError: s }, c, this[Ae]() ?? void 0);
     }
     [ze]() {
@@ -1318,7 +1318,7 @@ class vi extends so {
     return { checked: e, required: t };
   }
 }
-const fi = Q(io(ao(Oe(g))));
+const fi = Q(io(ao(Fe(g))));
 class ae extends fi {
   constructor() {
     super(), this.selected = !1, this.icons = !1, this.showOnlySelectedIcon = !1, this.required = !1, this.value = "on", this.addEventListener("click", (e) => {
@@ -1508,7 +1508,7 @@ function Jo(i) {
     });
   });
 }
-const xi = Q(Oe(g));
+const xi = Q(Fe(g));
 class P extends xi {
   get name() {
     return this.getAttribute("name") ?? "";
@@ -1702,7 +1702,7 @@ const er = /* @__PURE__ */ Symbol.for(""), zi = (i) => {
 function Io(i, e = !0) {
   return e && getComputedStyle(i).getPropertyValue("direction").trim() === "rtl";
 }
-const Ti = Q(Oe(g));
+const Ti = Q(Fe(g));
 class L extends Ti {
   get name() {
     return this.getAttribute("name") ?? "";
@@ -2067,7 +2067,7 @@ n([
 n([
   C(".container")
 ], z.prototype, "containerEl", void 0);
-class Oi extends z {
+class Fi extends z {
   renderBackground() {
     return l` <div class="background"></div> `;
   }
@@ -2078,23 +2078,23 @@ class Oi extends z {
     return l`<div class="active-indicator"></div>`;
   }
 }
-const Fi = m`@layer styles{:host{--_active-indicator-color: var(--md-filled-field-active-indicator-color, var(--md-sys-color-on-surface-variant, #49454f));--_active-indicator-height: var(--md-filled-field-active-indicator-height, 1px);--_bottom-space: var(--md-filled-field-bottom-space, 16px);--_container-color: var(--md-filled-field-container-color, var(--md-sys-color-surface-container-highest, #e6e0e9));--_content-color: var(--md-filled-field-content-color, var(--md-sys-color-on-surface, #1d1b20));--_content-font: var(--md-filled-field-content-font, var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto)));--_content-line-height: var(--md-filled-field-content-line-height, var(--md-sys-typescale-body-large-line-height, 1.5rem));--_content-size: var(--md-filled-field-content-size, var(--md-sys-typescale-body-large-size, 1rem));--_content-space: var(--md-filled-field-content-space, 16px);--_content-weight: var(--md-filled-field-content-weight, var(--md-sys-typescale-body-large-weight, var(--md-ref-typeface-weight-regular, 400)));--_disabled-active-indicator-color: var(--md-filled-field-disabled-active-indicator-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-active-indicator-height: var(--md-filled-field-disabled-active-indicator-height, 1px);--_disabled-active-indicator-opacity: var(--md-filled-field-disabled-active-indicator-opacity, 0.38);--_disabled-container-color: var(--md-filled-field-disabled-container-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-container-opacity: var(--md-filled-field-disabled-container-opacity, 0.04);--_disabled-content-color: var(--md-filled-field-disabled-content-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-content-opacity: var(--md-filled-field-disabled-content-opacity, 0.38);--_disabled-label-text-color: var(--md-filled-field-disabled-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-label-text-opacity: var(--md-filled-field-disabled-label-text-opacity, 0.38);--_disabled-leading-content-color: var(--md-filled-field-disabled-leading-content-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-leading-content-opacity: var(--md-filled-field-disabled-leading-content-opacity, 0.38);--_disabled-supporting-text-color: var(--md-filled-field-disabled-supporting-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-supporting-text-opacity: var(--md-filled-field-disabled-supporting-text-opacity, 0.38);--_disabled-trailing-content-color: var(--md-filled-field-disabled-trailing-content-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-trailing-content-opacity: var(--md-filled-field-disabled-trailing-content-opacity, 0.38);--_error-active-indicator-color: var(--md-filled-field-error-active-indicator-color, var(--md-sys-color-error, #b3261e));--_error-content-color: var(--md-filled-field-error-content-color, var(--md-sys-color-on-surface, #1d1b20));--_error-focus-active-indicator-color: var(--md-filled-field-error-focus-active-indicator-color, var(--md-sys-color-error, #b3261e));--_error-focus-content-color: var(--md-filled-field-error-focus-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-focus-label-text-color: var(--md-filled-field-error-focus-label-text-color, var(--md-sys-color-error, #b3261e));--_error-focus-leading-content-color: var(--md-filled-field-error-focus-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-focus-supporting-text-color: var(--md-filled-field-error-focus-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-focus-trailing-content-color: var(--md-filled-field-error-focus-trailing-content-color, var(--md-sys-color-error, #b3261e));--_error-hover-active-indicator-color: var(--md-filled-field-error-hover-active-indicator-color, var(--md-sys-color-on-error-container, #410e0b));--_error-hover-content-color: var(--md-filled-field-error-hover-content-color, var(--md-sys-color-on-surface, #1d1b20));--_error-hover-label-text-color: var(--md-filled-field-error-hover-label-text-color, var(--md-sys-color-on-error-container, #410e0b));--_error-hover-leading-content-color: var(--md-filled-field-error-hover-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-hover-state-layer-color: var(--md-filled-field-error-hover-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_error-hover-state-layer-opacity: var(--md-filled-field-error-hover-state-layer-opacity, 0.08);--_error-hover-supporting-text-color: var(--md-filled-field-error-hover-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-hover-trailing-content-color: var(--md-filled-field-error-hover-trailing-content-color, var(--md-sys-color-on-error-container, #410e0b));--_error-label-text-color: var(--md-filled-field-error-label-text-color, var(--md-sys-color-error, #b3261e));--_error-leading-content-color: var(--md-filled-field-error-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-supporting-text-color: var(--md-filled-field-error-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-trailing-content-color: var(--md-filled-field-error-trailing-content-color, var(--md-sys-color-error, #b3261e));--_focus-active-indicator-color: var(--md-filled-field-focus-active-indicator-color, var(--md-sys-color-primary, #6750a4));--_focus-active-indicator-height: var(--md-filled-field-focus-active-indicator-height, 3px);--_focus-content-color: var(--md-filled-field-focus-content-color, var(--md-sys-color-on-surface, #1d1b20));--_focus-label-text-color: var(--md-filled-field-focus-label-text-color, var(--md-sys-color-primary, #6750a4));--_focus-leading-content-color: var(--md-filled-field-focus-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_focus-supporting-text-color: var(--md-filled-field-focus-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_focus-trailing-content-color: var(--md-filled-field-focus-trailing-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-active-indicator-color: var(--md-filled-field-hover-active-indicator-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-active-indicator-height: var(--md-filled-field-hover-active-indicator-height, 1px);--_hover-content-color: var(--md-filled-field-hover-content-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-label-text-color: var(--md-filled-field-hover-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-leading-content-color: var(--md-filled-field-hover-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-state-layer-color: var(--md-filled-field-hover-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-state-layer-opacity: var(--md-filled-field-hover-state-layer-opacity, 0.08);--_hover-supporting-text-color: var(--md-filled-field-hover-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-trailing-content-color: var(--md-filled-field-hover-trailing-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_label-text-color: var(--md-filled-field-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_label-text-font: var(--md-filled-field-label-text-font, var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-filled-field-label-text-line-height, var(--md-sys-typescale-body-large-line-height, 1.5rem));--_label-text-populated-line-height: var(--md-filled-field-label-text-populated-line-height, var(--md-sys-typescale-body-small-line-height, 1rem));--_label-text-populated-size: var(--md-filled-field-label-text-populated-size, var(--md-sys-typescale-body-small-size, 0.75rem));--_label-text-size: var(--md-filled-field-label-text-size, var(--md-sys-typescale-body-large-size, 1rem));--_label-text-weight: var(--md-filled-field-label-text-weight, var(--md-sys-typescale-body-large-weight, var(--md-ref-typeface-weight-regular, 400)));--_leading-content-color: var(--md-filled-field-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_leading-space: var(--md-filled-field-leading-space, 16px);--_supporting-text-color: var(--md-filled-field-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_supporting-text-font: var(--md-filled-field-supporting-text-font, var(--md-sys-typescale-body-small-font, var(--md-ref-typeface-plain, Roboto)));--_supporting-text-leading-space: var(--md-filled-field-supporting-text-leading-space, 16px);--_supporting-text-line-height: var(--md-filled-field-supporting-text-line-height, var(--md-sys-typescale-body-small-line-height, 1rem));--_supporting-text-size: var(--md-filled-field-supporting-text-size, var(--md-sys-typescale-body-small-size, 0.75rem));--_supporting-text-top-space: var(--md-filled-field-supporting-text-top-space, 4px);--_supporting-text-trailing-space: var(--md-filled-field-supporting-text-trailing-space, 16px);--_supporting-text-weight: var(--md-filled-field-supporting-text-weight, var(--md-sys-typescale-body-small-weight, var(--md-ref-typeface-weight-regular, 400)));--_top-space: var(--md-filled-field-top-space, 16px);--_trailing-content-color: var(--md-filled-field-trailing-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_trailing-space: var(--md-filled-field-trailing-space, 16px);--_with-label-bottom-space: var(--md-filled-field-with-label-bottom-space, 8px);--_with-label-top-space: var(--md-filled-field-with-label-top-space, 8px);--_with-leading-content-leading-space: var(--md-filled-field-with-leading-content-leading-space, 12px);--_with-trailing-content-trailing-space: var(--md-filled-field-with-trailing-content-trailing-space, 12px);--_container-shape-start-start: var(--md-filled-field-container-shape-start-start, var(--md-filled-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)));--_container-shape-start-end: var(--md-filled-field-container-shape-start-end, var(--md-filled-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)));--_container-shape-end-end: var(--md-filled-field-container-shape-end-end, var(--md-filled-field-container-shape, var(--md-sys-shape-corner-none, 0px)));--_container-shape-end-start: var(--md-filled-field-container-shape-end-start, var(--md-filled-field-container-shape, var(--md-sys-shape-corner-none, 0px)))}.background,.state-layer{border-radius:inherit;inset:0;pointer-events:none;position:absolute}.background{background:var(--_container-color)}.state-layer{visibility:hidden}.field:not(.disabled):hover .state-layer{visibility:visible}.label.floating{position:absolute;top:var(--_with-label-top-space)}.field:not(.with-start) .label-wrapper{margin-inline-start:var(--_leading-space)}.field:not(.with-end) .label-wrapper{margin-inline-end:var(--_trailing-space)}.active-indicator{inset:auto 0 0 0;pointer-events:none;position:absolute;width:100%;z-index:1}.active-indicator::before,.active-indicator::after{border-bottom:var(--_active-indicator-height) solid var(--_active-indicator-color);inset:auto 0 0 0;content:"";position:absolute;width:100%}.active-indicator::after{opacity:0;transition:opacity 150ms cubic-bezier(0.2, 0, 0, 1)}.focused .active-indicator::after{opacity:1}.field:not(.with-start) .content ::slotted(*){padding-inline-start:var(--_leading-space)}.field:not(.with-end) .content ::slotted(*){padding-inline-end:var(--_trailing-space)}.field:not(.no-label) .content ::slotted(:not(textarea)){padding-bottom:var(--_with-label-bottom-space);padding-top:calc(var(--_with-label-top-space) + var(--_label-text-populated-line-height))}.field:not(.no-label) .content ::slotted(textarea){margin-bottom:var(--_with-label-bottom-space);margin-top:calc(var(--_with-label-top-space) + var(--_label-text-populated-line-height))}:hover .active-indicator::before{border-bottom-color:var(--_hover-active-indicator-color);border-bottom-width:var(--_hover-active-indicator-height)}.active-indicator::after{border-bottom-color:var(--_focus-active-indicator-color);border-bottom-width:var(--_focus-active-indicator-height)}:hover .state-layer{background:var(--_hover-state-layer-color);opacity:var(--_hover-state-layer-opacity)}.disabled .active-indicator::before{border-bottom-color:var(--_disabled-active-indicator-color);border-bottom-width:var(--_disabled-active-indicator-height);opacity:var(--_disabled-active-indicator-opacity)}.disabled .background{background:var(--_disabled-container-color);opacity:var(--_disabled-container-opacity)}.error .active-indicator::before{border-bottom-color:var(--_error-active-indicator-color)}.error:hover .active-indicator::before{border-bottom-color:var(--_error-hover-active-indicator-color)}.error:hover .state-layer{background:var(--_error-hover-state-layer-color);opacity:var(--_error-hover-state-layer-opacity)}.error .active-indicator::after{border-bottom-color:var(--_error-focus-active-indicator-color)}.resizable .container{bottom:var(--_focus-active-indicator-height);clip-path:inset(var(--_focus-active-indicator-height) 0 0 0)}.resizable .container>*{top:var(--_focus-active-indicator-height)}}@layer hcm{@media(forced-colors: active){.disabled .active-indicator::before{border-color:GrayText;opacity:1}}}
+const Oi = m`@layer styles{:host{--_active-indicator-color: var(--md-filled-field-active-indicator-color, var(--md-sys-color-on-surface-variant, #49454f));--_active-indicator-height: var(--md-filled-field-active-indicator-height, 1px);--_bottom-space: var(--md-filled-field-bottom-space, 16px);--_container-color: var(--md-filled-field-container-color, var(--md-sys-color-surface-container-highest, #e6e0e9));--_content-color: var(--md-filled-field-content-color, var(--md-sys-color-on-surface, #1d1b20));--_content-font: var(--md-filled-field-content-font, var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto)));--_content-line-height: var(--md-filled-field-content-line-height, var(--md-sys-typescale-body-large-line-height, 1.5rem));--_content-size: var(--md-filled-field-content-size, var(--md-sys-typescale-body-large-size, 1rem));--_content-space: var(--md-filled-field-content-space, 16px);--_content-weight: var(--md-filled-field-content-weight, var(--md-sys-typescale-body-large-weight, var(--md-ref-typeface-weight-regular, 400)));--_disabled-active-indicator-color: var(--md-filled-field-disabled-active-indicator-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-active-indicator-height: var(--md-filled-field-disabled-active-indicator-height, 1px);--_disabled-active-indicator-opacity: var(--md-filled-field-disabled-active-indicator-opacity, 0.38);--_disabled-container-color: var(--md-filled-field-disabled-container-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-container-opacity: var(--md-filled-field-disabled-container-opacity, 0.04);--_disabled-content-color: var(--md-filled-field-disabled-content-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-content-opacity: var(--md-filled-field-disabled-content-opacity, 0.38);--_disabled-label-text-color: var(--md-filled-field-disabled-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-label-text-opacity: var(--md-filled-field-disabled-label-text-opacity, 0.38);--_disabled-leading-content-color: var(--md-filled-field-disabled-leading-content-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-leading-content-opacity: var(--md-filled-field-disabled-leading-content-opacity, 0.38);--_disabled-supporting-text-color: var(--md-filled-field-disabled-supporting-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-supporting-text-opacity: var(--md-filled-field-disabled-supporting-text-opacity, 0.38);--_disabled-trailing-content-color: var(--md-filled-field-disabled-trailing-content-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-trailing-content-opacity: var(--md-filled-field-disabled-trailing-content-opacity, 0.38);--_error-active-indicator-color: var(--md-filled-field-error-active-indicator-color, var(--md-sys-color-error, #b3261e));--_error-content-color: var(--md-filled-field-error-content-color, var(--md-sys-color-on-surface, #1d1b20));--_error-focus-active-indicator-color: var(--md-filled-field-error-focus-active-indicator-color, var(--md-sys-color-error, #b3261e));--_error-focus-content-color: var(--md-filled-field-error-focus-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-focus-label-text-color: var(--md-filled-field-error-focus-label-text-color, var(--md-sys-color-error, #b3261e));--_error-focus-leading-content-color: var(--md-filled-field-error-focus-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-focus-supporting-text-color: var(--md-filled-field-error-focus-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-focus-trailing-content-color: var(--md-filled-field-error-focus-trailing-content-color, var(--md-sys-color-error, #b3261e));--_error-hover-active-indicator-color: var(--md-filled-field-error-hover-active-indicator-color, var(--md-sys-color-on-error-container, #410e0b));--_error-hover-content-color: var(--md-filled-field-error-hover-content-color, var(--md-sys-color-on-surface, #1d1b20));--_error-hover-label-text-color: var(--md-filled-field-error-hover-label-text-color, var(--md-sys-color-on-error-container, #410e0b));--_error-hover-leading-content-color: var(--md-filled-field-error-hover-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-hover-state-layer-color: var(--md-filled-field-error-hover-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_error-hover-state-layer-opacity: var(--md-filled-field-error-hover-state-layer-opacity, 0.08);--_error-hover-supporting-text-color: var(--md-filled-field-error-hover-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-hover-trailing-content-color: var(--md-filled-field-error-hover-trailing-content-color, var(--md-sys-color-on-error-container, #410e0b));--_error-label-text-color: var(--md-filled-field-error-label-text-color, var(--md-sys-color-error, #b3261e));--_error-leading-content-color: var(--md-filled-field-error-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-supporting-text-color: var(--md-filled-field-error-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-trailing-content-color: var(--md-filled-field-error-trailing-content-color, var(--md-sys-color-error, #b3261e));--_focus-active-indicator-color: var(--md-filled-field-focus-active-indicator-color, var(--md-sys-color-primary, #6750a4));--_focus-active-indicator-height: var(--md-filled-field-focus-active-indicator-height, 3px);--_focus-content-color: var(--md-filled-field-focus-content-color, var(--md-sys-color-on-surface, #1d1b20));--_focus-label-text-color: var(--md-filled-field-focus-label-text-color, var(--md-sys-color-primary, #6750a4));--_focus-leading-content-color: var(--md-filled-field-focus-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_focus-supporting-text-color: var(--md-filled-field-focus-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_focus-trailing-content-color: var(--md-filled-field-focus-trailing-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-active-indicator-color: var(--md-filled-field-hover-active-indicator-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-active-indicator-height: var(--md-filled-field-hover-active-indicator-height, 1px);--_hover-content-color: var(--md-filled-field-hover-content-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-label-text-color: var(--md-filled-field-hover-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-leading-content-color: var(--md-filled-field-hover-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-state-layer-color: var(--md-filled-field-hover-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-state-layer-opacity: var(--md-filled-field-hover-state-layer-opacity, 0.08);--_hover-supporting-text-color: var(--md-filled-field-hover-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-trailing-content-color: var(--md-filled-field-hover-trailing-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_label-text-color: var(--md-filled-field-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_label-text-font: var(--md-filled-field-label-text-font, var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-filled-field-label-text-line-height, var(--md-sys-typescale-body-large-line-height, 1.5rem));--_label-text-populated-line-height: var(--md-filled-field-label-text-populated-line-height, var(--md-sys-typescale-body-small-line-height, 1rem));--_label-text-populated-size: var(--md-filled-field-label-text-populated-size, var(--md-sys-typescale-body-small-size, 0.75rem));--_label-text-size: var(--md-filled-field-label-text-size, var(--md-sys-typescale-body-large-size, 1rem));--_label-text-weight: var(--md-filled-field-label-text-weight, var(--md-sys-typescale-body-large-weight, var(--md-ref-typeface-weight-regular, 400)));--_leading-content-color: var(--md-filled-field-leading-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_leading-space: var(--md-filled-field-leading-space, 16px);--_supporting-text-color: var(--md-filled-field-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_supporting-text-font: var(--md-filled-field-supporting-text-font, var(--md-sys-typescale-body-small-font, var(--md-ref-typeface-plain, Roboto)));--_supporting-text-leading-space: var(--md-filled-field-supporting-text-leading-space, 16px);--_supporting-text-line-height: var(--md-filled-field-supporting-text-line-height, var(--md-sys-typescale-body-small-line-height, 1rem));--_supporting-text-size: var(--md-filled-field-supporting-text-size, var(--md-sys-typescale-body-small-size, 0.75rem));--_supporting-text-top-space: var(--md-filled-field-supporting-text-top-space, 4px);--_supporting-text-trailing-space: var(--md-filled-field-supporting-text-trailing-space, 16px);--_supporting-text-weight: var(--md-filled-field-supporting-text-weight, var(--md-sys-typescale-body-small-weight, var(--md-ref-typeface-weight-regular, 400)));--_top-space: var(--md-filled-field-top-space, 16px);--_trailing-content-color: var(--md-filled-field-trailing-content-color, var(--md-sys-color-on-surface-variant, #49454f));--_trailing-space: var(--md-filled-field-trailing-space, 16px);--_with-label-bottom-space: var(--md-filled-field-with-label-bottom-space, 8px);--_with-label-top-space: var(--md-filled-field-with-label-top-space, 8px);--_with-leading-content-leading-space: var(--md-filled-field-with-leading-content-leading-space, 12px);--_with-trailing-content-trailing-space: var(--md-filled-field-with-trailing-content-trailing-space, 12px);--_container-shape-start-start: var(--md-filled-field-container-shape-start-start, var(--md-filled-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)));--_container-shape-start-end: var(--md-filled-field-container-shape-start-end, var(--md-filled-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)));--_container-shape-end-end: var(--md-filled-field-container-shape-end-end, var(--md-filled-field-container-shape, var(--md-sys-shape-corner-none, 0px)));--_container-shape-end-start: var(--md-filled-field-container-shape-end-start, var(--md-filled-field-container-shape, var(--md-sys-shape-corner-none, 0px)))}.background,.state-layer{border-radius:inherit;inset:0;pointer-events:none;position:absolute}.background{background:var(--_container-color)}.state-layer{visibility:hidden}.field:not(.disabled):hover .state-layer{visibility:visible}.label.floating{position:absolute;top:var(--_with-label-top-space)}.field:not(.with-start) .label-wrapper{margin-inline-start:var(--_leading-space)}.field:not(.with-end) .label-wrapper{margin-inline-end:var(--_trailing-space)}.active-indicator{inset:auto 0 0 0;pointer-events:none;position:absolute;width:100%;z-index:1}.active-indicator::before,.active-indicator::after{border-bottom:var(--_active-indicator-height) solid var(--_active-indicator-color);inset:auto 0 0 0;content:"";position:absolute;width:100%}.active-indicator::after{opacity:0;transition:opacity 150ms cubic-bezier(0.2, 0, 0, 1)}.focused .active-indicator::after{opacity:1}.field:not(.with-start) .content ::slotted(*){padding-inline-start:var(--_leading-space)}.field:not(.with-end) .content ::slotted(*){padding-inline-end:var(--_trailing-space)}.field:not(.no-label) .content ::slotted(:not(textarea)){padding-bottom:var(--_with-label-bottom-space);padding-top:calc(var(--_with-label-top-space) + var(--_label-text-populated-line-height))}.field:not(.no-label) .content ::slotted(textarea){margin-bottom:var(--_with-label-bottom-space);margin-top:calc(var(--_with-label-top-space) + var(--_label-text-populated-line-height))}:hover .active-indicator::before{border-bottom-color:var(--_hover-active-indicator-color);border-bottom-width:var(--_hover-active-indicator-height)}.active-indicator::after{border-bottom-color:var(--_focus-active-indicator-color);border-bottom-width:var(--_focus-active-indicator-height)}:hover .state-layer{background:var(--_hover-state-layer-color);opacity:var(--_hover-state-layer-opacity)}.disabled .active-indicator::before{border-bottom-color:var(--_disabled-active-indicator-color);border-bottom-width:var(--_disabled-active-indicator-height);opacity:var(--_disabled-active-indicator-opacity)}.disabled .background{background:var(--_disabled-container-color);opacity:var(--_disabled-container-opacity)}.error .active-indicator::before{border-bottom-color:var(--_error-active-indicator-color)}.error:hover .active-indicator::before{border-bottom-color:var(--_error-hover-active-indicator-color)}.error:hover .state-layer{background:var(--_error-hover-state-layer-color);opacity:var(--_error-hover-state-layer-opacity)}.error .active-indicator::after{border-bottom-color:var(--_error-focus-active-indicator-color)}.resizable .container{bottom:var(--_focus-active-indicator-height);clip-path:inset(var(--_focus-active-indicator-height) 0 0 0)}.resizable .container>*{top:var(--_focus-active-indicator-height)}}@layer hcm{@media(forced-colors: active){.disabled .active-indicator::before{border-color:GrayText;opacity:1}}}
 `;
 const tr = m`:host{display:inline-flex;resize:both}.field{display:flex;flex:1;flex-direction:column;writing-mode:horizontal-tb;max-width:100%}.container-overflow{border-start-start-radius:var(--_container-shape-start-start);border-start-end-radius:var(--_container-shape-start-end);border-end-end-radius:var(--_container-shape-end-end);border-end-start-radius:var(--_container-shape-end-start);display:flex;height:100%;position:relative}.container{align-items:center;border-radius:inherit;display:flex;flex:1;max-height:100%;min-height:100%;min-width:min-content;position:relative}.field,.container-overflow{resize:inherit}.resizable:not(.disabled) .container{resize:inherit;overflow:hidden}.disabled{pointer-events:none}slot[name=container]{border-radius:inherit}slot[name=container]::slotted(*){border-radius:inherit;inset:0;pointer-events:none;position:absolute}@layer styles{.start,.middle,.end{display:flex;box-sizing:border-box;height:100%;position:relative}.start{color:var(--_leading-content-color)}.end{color:var(--_trailing-content-color)}.start,.end{align-items:center;justify-content:center}.with-start .start{margin-inline:var(--_with-leading-content-leading-space) var(--_content-space)}.with-end .end{margin-inline:var(--_content-space) var(--_with-trailing-content-trailing-space)}.middle{align-items:stretch;align-self:baseline;flex:1}.content{color:var(--_content-color);display:flex;flex:1;opacity:0;transition:opacity 83ms cubic-bezier(0.2, 0, 0, 1)}.no-label .content,.focused .content,.populated .content{opacity:1;transition-delay:67ms}:is(.disabled,.disable-transitions) .content{transition:none}.content ::slotted(*){all:unset;color:currentColor;font-family:var(--_content-font);font-size:var(--_content-size);line-height:var(--_content-line-height);font-weight:var(--_content-weight);width:100%;overflow-wrap:revert;white-space:revert}.content ::slotted(:not(textarea)){padding-top:var(--_top-space);padding-bottom:var(--_bottom-space)}.content ::slotted(textarea){margin-top:var(--_top-space);margin-bottom:var(--_bottom-space)}:hover .content{color:var(--_hover-content-color)}:hover .start{color:var(--_hover-leading-content-color)}:hover .end{color:var(--_hover-trailing-content-color)}.focused .content{color:var(--_focus-content-color)}.focused .start{color:var(--_focus-leading-content-color)}.focused .end{color:var(--_focus-trailing-content-color)}.disabled .content{color:var(--_disabled-content-color)}.disabled.no-label .content,.disabled.focused .content,.disabled.populated .content{opacity:var(--_disabled-content-opacity)}.disabled .start{color:var(--_disabled-leading-content-color);opacity:var(--_disabled-leading-content-opacity)}.disabled .end{color:var(--_disabled-trailing-content-color);opacity:var(--_disabled-trailing-content-opacity)}.error .content{color:var(--_error-content-color)}.error .start{color:var(--_error-leading-content-color)}.error .end{color:var(--_error-trailing-content-color)}.error:hover .content{color:var(--_error-hover-content-color)}.error:hover .start{color:var(--_error-hover-leading-content-color)}.error:hover .end{color:var(--_error-hover-trailing-content-color)}.error.focused .content{color:var(--_error-focus-content-color)}.error.focused .start{color:var(--_error-focus-leading-content-color)}.error.focused .end{color:var(--_error-focus-trailing-content-color)}}@layer hcm{@media(forced-colors: active){.disabled :is(.start,.content,.end){color:GrayText;opacity:1}}}@layer styles{.label{box-sizing:border-box;color:var(--_label-text-color);overflow:hidden;max-width:100%;text-overflow:ellipsis;white-space:nowrap;z-index:1;font-family:var(--_label-text-font);font-size:var(--_label-text-size);line-height:var(--_label-text-line-height);font-weight:var(--_label-text-weight);width:min-content}.label-wrapper{inset:0;pointer-events:none;position:absolute}.label.resting{position:absolute;top:var(--_top-space)}.label.floating{font-size:var(--_label-text-populated-size);line-height:var(--_label-text-populated-line-height);transform-origin:top left}.label.hidden{opacity:0}.no-label .label{display:none}.label-wrapper{inset:0;position:absolute;text-align:initial}:hover .label{color:var(--_hover-label-text-color)}.focused .label{color:var(--_focus-label-text-color)}.disabled .label{color:var(--_disabled-label-text-color)}.disabled .label:not(.hidden){opacity:var(--_disabled-label-text-opacity)}.error .label{color:var(--_error-label-text-color)}.error:hover .label{color:var(--_error-hover-label-text-color)}.error.focused .label{color:var(--_error-focus-label-text-color)}}@layer hcm{@media(forced-colors: active){.disabled .label:not(.hidden){color:GrayText;opacity:1}}}@layer styles{.supporting-text{color:var(--_supporting-text-color);display:flex;font-family:var(--_supporting-text-font);font-size:var(--_supporting-text-size);line-height:var(--_supporting-text-line-height);font-weight:var(--_supporting-text-weight);gap:16px;justify-content:space-between;padding-inline-start:var(--_supporting-text-leading-space);padding-inline-end:var(--_supporting-text-trailing-space);padding-top:var(--_supporting-text-top-space)}.supporting-text :nth-child(2){flex-shrink:0}:hover .supporting-text{color:var(--_hover-supporting-text-color)}.focus .supporting-text{color:var(--_focus-supporting-text-color)}.disabled .supporting-text{color:var(--_disabled-supporting-text-color);opacity:var(--_disabled-supporting-text-opacity)}.error .supporting-text{color:var(--_error-supporting-text-color)}.error:hover .supporting-text{color:var(--_error-hover-supporting-text-color)}.error.focus .supporting-text{color:var(--_error-focus-supporting-text-color)}}@layer hcm{@media(forced-colors: active){.disabled .supporting-text{color:GrayText;opacity:1}}}
 `;
-let Ct = class extends Oi {
+let Ct = class extends Fi {
 };
-Ct.styles = [tr, Fi];
+Ct.styles = [tr, Oi];
 Ct = n([
   k("md-filled-field")
 ], Ct);
 const Pi = m`:host{--_active-indicator-color: var(--md-filled-text-field-active-indicator-color, var(--md-sys-color-on-surface-variant, #49454f));--_active-indicator-height: var(--md-filled-text-field-active-indicator-height, 1px);--_caret-color: var(--md-filled-text-field-caret-color, var(--md-sys-color-primary, #6750a4));--_container-color: var(--md-filled-text-field-container-color, var(--md-sys-color-surface-container-highest, #e6e0e9));--_disabled-active-indicator-color: var(--md-filled-text-field-disabled-active-indicator-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-active-indicator-height: var(--md-filled-text-field-disabled-active-indicator-height, 1px);--_disabled-active-indicator-opacity: var(--md-filled-text-field-disabled-active-indicator-opacity, 0.38);--_disabled-container-color: var(--md-filled-text-field-disabled-container-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-container-opacity: var(--md-filled-text-field-disabled-container-opacity, 0.04);--_disabled-input-text-color: var(--md-filled-text-field-disabled-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-input-text-opacity: var(--md-filled-text-field-disabled-input-text-opacity, 0.38);--_disabled-label-text-color: var(--md-filled-text-field-disabled-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-label-text-opacity: var(--md-filled-text-field-disabled-label-text-opacity, 0.38);--_disabled-leading-icon-color: var(--md-filled-text-field-disabled-leading-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-leading-icon-opacity: var(--md-filled-text-field-disabled-leading-icon-opacity, 0.38);--_disabled-supporting-text-color: var(--md-filled-text-field-disabled-supporting-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-supporting-text-opacity: var(--md-filled-text-field-disabled-supporting-text-opacity, 0.38);--_disabled-trailing-icon-color: var(--md-filled-text-field-disabled-trailing-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-trailing-icon-opacity: var(--md-filled-text-field-disabled-trailing-icon-opacity, 0.38);--_error-active-indicator-color: var(--md-filled-text-field-error-active-indicator-color, var(--md-sys-color-error, #b3261e));--_error-focus-active-indicator-color: var(--md-filled-text-field-error-focus-active-indicator-color, var(--md-sys-color-error, #b3261e));--_error-focus-caret-color: var(--md-filled-text-field-error-focus-caret-color, var(--md-sys-color-error, #b3261e));--_error-focus-input-text-color: var(--md-filled-text-field-error-focus-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_error-focus-label-text-color: var(--md-filled-text-field-error-focus-label-text-color, var(--md-sys-color-error, #b3261e));--_error-focus-leading-icon-color: var(--md-filled-text-field-error-focus-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-focus-supporting-text-color: var(--md-filled-text-field-error-focus-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-focus-trailing-icon-color: var(--md-filled-text-field-error-focus-trailing-icon-color, var(--md-sys-color-error, #b3261e));--_error-hover-active-indicator-color: var(--md-filled-text-field-error-hover-active-indicator-color, var(--md-sys-color-on-error-container, #410e0b));--_error-hover-input-text-color: var(--md-filled-text-field-error-hover-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_error-hover-label-text-color: var(--md-filled-text-field-error-hover-label-text-color, var(--md-sys-color-on-error-container, #410e0b));--_error-hover-leading-icon-color: var(--md-filled-text-field-error-hover-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-hover-state-layer-color: var(--md-filled-text-field-error-hover-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_error-hover-state-layer-opacity: var(--md-filled-text-field-error-hover-state-layer-opacity, 0.08);--_error-hover-supporting-text-color: var(--md-filled-text-field-error-hover-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-hover-trailing-icon-color: var(--md-filled-text-field-error-hover-trailing-icon-color, var(--md-sys-color-on-error-container, #410e0b));--_error-input-text-color: var(--md-filled-text-field-error-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_error-label-text-color: var(--md-filled-text-field-error-label-text-color, var(--md-sys-color-error, #b3261e));--_error-leading-icon-color: var(--md-filled-text-field-error-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_error-supporting-text-color: var(--md-filled-text-field-error-supporting-text-color, var(--md-sys-color-error, #b3261e));--_error-trailing-icon-color: var(--md-filled-text-field-error-trailing-icon-color, var(--md-sys-color-error, #b3261e));--_focus-active-indicator-color: var(--md-filled-text-field-focus-active-indicator-color, var(--md-sys-color-primary, #6750a4));--_focus-active-indicator-height: var(--md-filled-text-field-focus-active-indicator-height, 3px);--_focus-input-text-color: var(--md-filled-text-field-focus-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_focus-label-text-color: var(--md-filled-text-field-focus-label-text-color, var(--md-sys-color-primary, #6750a4));--_focus-leading-icon-color: var(--md-filled-text-field-focus-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_focus-supporting-text-color: var(--md-filled-text-field-focus-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_focus-trailing-icon-color: var(--md-filled-text-field-focus-trailing-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-active-indicator-color: var(--md-filled-text-field-hover-active-indicator-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-active-indicator-height: var(--md-filled-text-field-hover-active-indicator-height, 1px);--_hover-input-text-color: var(--md-filled-text-field-hover-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-label-text-color: var(--md-filled-text-field-hover-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-leading-icon-color: var(--md-filled-text-field-hover-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-state-layer-color: var(--md-filled-text-field-hover-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-state-layer-opacity: var(--md-filled-text-field-hover-state-layer-opacity, 0.08);--_hover-supporting-text-color: var(--md-filled-text-field-hover-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-trailing-icon-color: var(--md-filled-text-field-hover-trailing-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_input-text-color: var(--md-filled-text-field-input-text-color, var(--md-sys-color-on-surface, #1d1b20));--_input-text-font: var(--md-filled-text-field-input-text-font, var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto)));--_input-text-line-height: var(--md-filled-text-field-input-text-line-height, var(--md-sys-typescale-body-large-line-height, 1.5rem));--_input-text-placeholder-color: var(--md-filled-text-field-input-text-placeholder-color, var(--md-sys-color-on-surface-variant, #49454f));--_input-text-prefix-color: var(--md-filled-text-field-input-text-prefix-color, var(--md-sys-color-on-surface-variant, #49454f));--_input-text-size: var(--md-filled-text-field-input-text-size, var(--md-sys-typescale-body-large-size, 1rem));--_input-text-suffix-color: var(--md-filled-text-field-input-text-suffix-color, var(--md-sys-color-on-surface-variant, #49454f));--_input-text-weight: var(--md-filled-text-field-input-text-weight, var(--md-sys-typescale-body-large-weight, var(--md-ref-typeface-weight-regular, 400)));--_label-text-color: var(--md-filled-text-field-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_label-text-font: var(--md-filled-text-field-label-text-font, var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-filled-text-field-label-text-line-height, var(--md-sys-typescale-body-large-line-height, 1.5rem));--_label-text-populated-line-height: var(--md-filled-text-field-label-text-populated-line-height, var(--md-sys-typescale-body-small-line-height, 1rem));--_label-text-populated-size: var(--md-filled-text-field-label-text-populated-size, var(--md-sys-typescale-body-small-size, 0.75rem));--_label-text-size: var(--md-filled-text-field-label-text-size, var(--md-sys-typescale-body-large-size, 1rem));--_label-text-weight: var(--md-filled-text-field-label-text-weight, var(--md-sys-typescale-body-large-weight, var(--md-ref-typeface-weight-regular, 400)));--_leading-icon-color: var(--md-filled-text-field-leading-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_leading-icon-size: var(--md-filled-text-field-leading-icon-size, 24px);--_supporting-text-color: var(--md-filled-text-field-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_supporting-text-font: var(--md-filled-text-field-supporting-text-font, var(--md-sys-typescale-body-small-font, var(--md-ref-typeface-plain, Roboto)));--_supporting-text-line-height: var(--md-filled-text-field-supporting-text-line-height, var(--md-sys-typescale-body-small-line-height, 1rem));--_supporting-text-size: var(--md-filled-text-field-supporting-text-size, var(--md-sys-typescale-body-small-size, 0.75rem));--_supporting-text-weight: var(--md-filled-text-field-supporting-text-weight, var(--md-sys-typescale-body-small-weight, var(--md-ref-typeface-weight-regular, 400)));--_trailing-icon-color: var(--md-filled-text-field-trailing-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_trailing-icon-size: var(--md-filled-text-field-trailing-icon-size, 24px);--_container-shape-start-start: var(--md-filled-text-field-container-shape-start-start, var(--md-filled-text-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)));--_container-shape-start-end: var(--md-filled-text-field-container-shape-start-end, var(--md-filled-text-field-container-shape, var(--md-sys-shape-corner-extra-small, 4px)));--_container-shape-end-end: var(--md-filled-text-field-container-shape-end-end, var(--md-filled-text-field-container-shape, var(--md-sys-shape-corner-none, 0px)));--_container-shape-end-start: var(--md-filled-text-field-container-shape-end-start, var(--md-filled-text-field-container-shape, var(--md-sys-shape-corner-none, 0px)));--_icon-input-space: var(--md-filled-text-field-icon-input-space, 16px);--_leading-space: var(--md-filled-text-field-leading-space, 16px);--_trailing-space: var(--md-filled-text-field-trailing-space, 16px);--_top-space: var(--md-filled-text-field-top-space, 16px);--_bottom-space: var(--md-filled-text-field-bottom-space, 16px);--_input-text-prefix-trailing-space: var(--md-filled-text-field-input-text-prefix-trailing-space, 2px);--_input-text-suffix-leading-space: var(--md-filled-text-field-input-text-suffix-leading-space, 2px);--_with-label-top-space: var(--md-filled-text-field-with-label-top-space, 8px);--_with-label-bottom-space: var(--md-filled-text-field-with-label-bottom-space, 8px);--_focus-caret-color: var(--md-filled-text-field-focus-caret-color, var(--md-sys-color-primary, #6750a4));--_with-leading-icon-leading-space: var(--md-filled-text-field-with-leading-icon-leading-space, 12px);--_with-trailing-icon-trailing-space: var(--md-filled-text-field-with-trailing-icon-trailing-space, 12px);--md-filled-field-active-indicator-color: var(--_active-indicator-color);--md-filled-field-active-indicator-height: var(--_active-indicator-height);--md-filled-field-bottom-space: var(--_bottom-space);--md-filled-field-container-color: var(--_container-color);--md-filled-field-container-shape-end-end: var(--_container-shape-end-end);--md-filled-field-container-shape-end-start: var(--_container-shape-end-start);--md-filled-field-container-shape-start-end: var(--_container-shape-start-end);--md-filled-field-container-shape-start-start: var(--_container-shape-start-start);--md-filled-field-content-color: var(--_input-text-color);--md-filled-field-content-font: var(--_input-text-font);--md-filled-field-content-line-height: var(--_input-text-line-height);--md-filled-field-content-size: var(--_input-text-size);--md-filled-field-content-space: var(--_icon-input-space);--md-filled-field-content-weight: var(--_input-text-weight);--md-filled-field-disabled-active-indicator-color: var(--_disabled-active-indicator-color);--md-filled-field-disabled-active-indicator-height: var(--_disabled-active-indicator-height);--md-filled-field-disabled-active-indicator-opacity: var(--_disabled-active-indicator-opacity);--md-filled-field-disabled-container-color: var(--_disabled-container-color);--md-filled-field-disabled-container-opacity: var(--_disabled-container-opacity);--md-filled-field-disabled-content-color: var(--_disabled-input-text-color);--md-filled-field-disabled-content-opacity: var(--_disabled-input-text-opacity);--md-filled-field-disabled-label-text-color: var(--_disabled-label-text-color);--md-filled-field-disabled-label-text-opacity: var(--_disabled-label-text-opacity);--md-filled-field-disabled-leading-content-color: var(--_disabled-leading-icon-color);--md-filled-field-disabled-leading-content-opacity: var(--_disabled-leading-icon-opacity);--md-filled-field-disabled-supporting-text-color: var(--_disabled-supporting-text-color);--md-filled-field-disabled-supporting-text-opacity: var(--_disabled-supporting-text-opacity);--md-filled-field-disabled-trailing-content-color: var(--_disabled-trailing-icon-color);--md-filled-field-disabled-trailing-content-opacity: var(--_disabled-trailing-icon-opacity);--md-filled-field-error-active-indicator-color: var(--_error-active-indicator-color);--md-filled-field-error-content-color: var(--_error-input-text-color);--md-filled-field-error-focus-active-indicator-color: var(--_error-focus-active-indicator-color);--md-filled-field-error-focus-content-color: var(--_error-focus-input-text-color);--md-filled-field-error-focus-label-text-color: var(--_error-focus-label-text-color);--md-filled-field-error-focus-leading-content-color: var(--_error-focus-leading-icon-color);--md-filled-field-error-focus-supporting-text-color: var(--_error-focus-supporting-text-color);--md-filled-field-error-focus-trailing-content-color: var(--_error-focus-trailing-icon-color);--md-filled-field-error-hover-active-indicator-color: var(--_error-hover-active-indicator-color);--md-filled-field-error-hover-content-color: var(--_error-hover-input-text-color);--md-filled-field-error-hover-label-text-color: var(--_error-hover-label-text-color);--md-filled-field-error-hover-leading-content-color: var(--_error-hover-leading-icon-color);--md-filled-field-error-hover-state-layer-color: var(--_error-hover-state-layer-color);--md-filled-field-error-hover-state-layer-opacity: var(--_error-hover-state-layer-opacity);--md-filled-field-error-hover-supporting-text-color: var(--_error-hover-supporting-text-color);--md-filled-field-error-hover-trailing-content-color: var(--_error-hover-trailing-icon-color);--md-filled-field-error-label-text-color: var(--_error-label-text-color);--md-filled-field-error-leading-content-color: var(--_error-leading-icon-color);--md-filled-field-error-supporting-text-color: var(--_error-supporting-text-color);--md-filled-field-error-trailing-content-color: var(--_error-trailing-icon-color);--md-filled-field-focus-active-indicator-color: var(--_focus-active-indicator-color);--md-filled-field-focus-active-indicator-height: var(--_focus-active-indicator-height);--md-filled-field-focus-content-color: var(--_focus-input-text-color);--md-filled-field-focus-label-text-color: var(--_focus-label-text-color);--md-filled-field-focus-leading-content-color: var(--_focus-leading-icon-color);--md-filled-field-focus-supporting-text-color: var(--_focus-supporting-text-color);--md-filled-field-focus-trailing-content-color: var(--_focus-trailing-icon-color);--md-filled-field-hover-active-indicator-color: var(--_hover-active-indicator-color);--md-filled-field-hover-active-indicator-height: var(--_hover-active-indicator-height);--md-filled-field-hover-content-color: var(--_hover-input-text-color);--md-filled-field-hover-label-text-color: var(--_hover-label-text-color);--md-filled-field-hover-leading-content-color: var(--_hover-leading-icon-color);--md-filled-field-hover-state-layer-color: var(--_hover-state-layer-color);--md-filled-field-hover-state-layer-opacity: var(--_hover-state-layer-opacity);--md-filled-field-hover-supporting-text-color: var(--_hover-supporting-text-color);--md-filled-field-hover-trailing-content-color: var(--_hover-trailing-icon-color);--md-filled-field-label-text-color: var(--_label-text-color);--md-filled-field-label-text-font: var(--_label-text-font);--md-filled-field-label-text-line-height: var(--_label-text-line-height);--md-filled-field-label-text-populated-line-height: var(--_label-text-populated-line-height);--md-filled-field-label-text-populated-size: var(--_label-text-populated-size);--md-filled-field-label-text-size: var(--_label-text-size);--md-filled-field-label-text-weight: var(--_label-text-weight);--md-filled-field-leading-content-color: var(--_leading-icon-color);--md-filled-field-leading-space: var(--_leading-space);--md-filled-field-supporting-text-color: var(--_supporting-text-color);--md-filled-field-supporting-text-font: var(--_supporting-text-font);--md-filled-field-supporting-text-line-height: var(--_supporting-text-line-height);--md-filled-field-supporting-text-size: var(--_supporting-text-size);--md-filled-field-supporting-text-weight: var(--_supporting-text-weight);--md-filled-field-top-space: var(--_top-space);--md-filled-field-trailing-content-color: var(--_trailing-icon-color);--md-filled-field-trailing-space: var(--_trailing-space);--md-filled-field-with-label-bottom-space: var(--_with-label-bottom-space);--md-filled-field-with-label-top-space: var(--_with-label-top-space);--md-filled-field-with-leading-content-leading-space: var(--_with-leading-icon-leading-space);--md-filled-field-with-trailing-content-trailing-space: var(--_with-trailing-icon-trailing-space)}
 `;
-const Ri = (i) => i.strings === void 0, Mi = {}, Li = (i, e = Mi) => i._$AH = e;
+const Mi = (i) => i.strings === void 0, Ri = {}, Li = (i, e = Ri) => i._$AH = e;
 const Do = oo(class extends ro {
   constructor(i) {
     if (super(i), i.type !== oe.PROPERTY && i.type !== oe.ATTRIBUTE && i.type !== oe.BOOLEAN_ATTRIBUTE) throw Error("The `live` directive is not allowed on child or event bindings");
-    if (!Ri(i)) throw Error("`live` bindings can only contain a single expression");
+    if (!Mi(i)) throw Error("`live` bindings can only contain a single expression");
   }
   render(i) {
     return i;
@@ -2279,7 +2279,7 @@ class Hi extends so {
 function _e(i) {
   return i.type !== "textarea";
 }
-const Wi = Q(rr(io(ao(Oe(g)))));
+const Wi = Q(rr(io(ao(Fe(g)))));
 class w extends Wi {
   constructor() {
     super(...arguments), this.error = !1, this.errorText = "", this.label = "", this.noAsterisk = !1, this.required = !1, this.value = "", this.prefixText = "", this.suffixText = "", this.hasLeadingIcon = !1, this.hasTrailingIcon = !1, this.supportingText = "", this.textDirection = "", this.rows = 2, this.cols = 20, this.inputMode = "", this.max = "", this.maxLength = -1, this.min = "", this.minLength = -1, this.noSpinner = !1, this.pattern = "", this.placeholder = "", this.readOnly = !1, this.multiple = !1, this.step = "", this.type = "text", this.autocomplete = "", this.dirty = !1, this.focused = !1, this.nativeError = !1, this.nativeErrorText = "";
@@ -2809,14 +2809,14 @@ function Qi(i, e, t = J, o = !0) {
   }
   return i[e] ? i[e] : null;
 }
-function Oo(i, e, t = J, o = !0) {
+function Fo(i, e, t = J, o = !0) {
   if (e) {
     const r = Zi(i, e.index, t, o);
     return r && (r.tabIndex = 0, r.focus()), r;
   } else
     return ar(i, t);
 }
-function Fo(i, e, t = J, o = !0) {
+function Oo(i, e, t = J, o = !0) {
   if (e) {
     const r = Qi(i, e.index, t, o);
     return r && (r.tabIndex = 0, r.focus()), r;
@@ -2826,7 +2826,7 @@ function Fo(i, e, t = J, o = !0) {
 function J(i) {
   return !i.disabled;
 }
-const M = {
+const R = {
   ArrowDown: "ArrowDown",
   ArrowLeft: "ArrowLeft",
   ArrowUp: "ArrowUp",
@@ -2845,25 +2845,25 @@ class Ji {
         return;
       const x = Ce(b, this.isActivatable);
       h.preventDefault();
-      const y = this.isRtl(), _ = y ? M.ArrowRight : M.ArrowLeft, S = y ? M.ArrowLeft : M.ArrowRight;
+      const y = this.isRtl(), _ = y ? R.ArrowRight : R.ArrowLeft, S = y ? R.ArrowLeft : R.ArrowRight;
       let A = null;
       switch (v) {
         // Activate the next item
-        case M.ArrowDown:
+        case R.ArrowDown:
         case S:
-          A = Oo(b, x, this.isActivatable, this.wrapNavigation());
-          break;
-        // Activate the previous item
-        case M.ArrowUp:
-        case _:
           A = Fo(b, x, this.isActivatable, this.wrapNavigation());
           break;
+        // Activate the previous item
+        case R.ArrowUp:
+        case _:
+          A = Oo(b, x, this.isActivatable, this.wrapNavigation());
+          break;
         // Activate the first item
-        case M.Home:
+        case R.Home:
           A = ar(b, this.isActivatable);
           break;
         // Activate the last item
-        case M.End:
+        case R.End:
           A = sr(b, this.isActivatable);
           break;
       }
@@ -2918,7 +2918,7 @@ class Ji {
    */
   activateNextItem() {
     const e = this.items, t = Ce(e, this.isActivatable);
-    return t && (t.item.tabIndex = -1), Oo(e, t, this.isActivatable, this.wrapNavigation());
+    return t && (t.item.tabIndex = -1), Fo(e, t, this.isActivatable, this.wrapNavigation());
   }
   /**
    * Activates the previous item in the list. If at the start of the list, the
@@ -2928,7 +2928,7 @@ class Ji {
    */
   activatePreviousItem() {
     const e = this.items, t = Ce(e, this.isActivatable);
-    return t && (t.item.tabIndex = -1), Fo(e, t, this.isActivatable, this.wrapNavigation());
+    return t && (t.item.tabIndex = -1), Oo(e, t, this.isActivatable, this.wrapNavigation());
   }
 }
 function ea(i, e) {
@@ -2941,7 +2941,7 @@ function ea(i, e) {
 const Po = ea, zt = {
   SPACE: "Space",
   ENTER: "Enter"
-}, Ro = {
+}, Mo = {
   CLICK_SELECTION: "click-selection",
   KEYDOWN: "keydown"
 }, ta = {
@@ -2969,7 +2969,7 @@ const W = {
   FIRST_ITEM: "first-item",
   LAST_ITEM: "last-item"
 };
-const Mo = {
+const Ro = {
   END_START: "end-start",
   START_START: "start-start"
 };
@@ -3011,21 +3011,21 @@ class ra {
       display: "block",
       opacity: "0"
     }, this.host.requestUpdate(), await this.host.updateComplete, e.popover && e.isConnected && e.showPopover();
-    const O = e.getSurfacePositionClientRect ? e.getSurfacePositionClientRect() : e.getBoundingClientRect(), R = t.getSurfacePositionClientRect ? t.getSurfacePositionClientRect() : t.getBoundingClientRect(), [F, ee] = b.split("-"), [te, ne] = v.split("-"), Fe = getComputedStyle(e).direction === "ltr";
+    const F = e.getSurfacePositionClientRect ? e.getSurfacePositionClientRect() : e.getBoundingClientRect(), M = t.getSurfacePositionClientRect ? t.getSurfacePositionClientRect() : t.getBoundingClientRect(), [O, ee] = b.split("-"), [te, ne] = v.split("-"), Oe = getComputedStyle(e).direction === "ltr";
     let { blockInset: ue, blockOutOfBoundsCorrection: G, surfaceBlockProperty: mo } = this.calculateBlock({
-      surfaceRect: O,
-      anchorRect: R,
+      surfaceRect: F,
+      anchorRect: M,
       anchorBlock: te,
-      surfaceBlock: F,
+      surfaceBlock: O,
       yOffset: c,
       positioning: a,
       windowInnerHeight: y,
       blockScrollbarHeight: A
     });
     if (G && !p) {
-      const rt = F === "start" ? "end" : "start", it = te === "start" ? "end" : "start", X = this.calculateBlock({
-        surfaceRect: O,
-        anchorRect: R,
+      const rt = O === "start" ? "end" : "start", it = te === "start" ? "end" : "start", X = this.calculateBlock({
+        surfaceRect: F,
+        anchorRect: M,
         anchorBlock: it,
         surfaceBlock: rt,
         yOffset: c,
@@ -3036,25 +3036,25 @@ class ra {
       G > X.blockOutOfBoundsCorrection && (ue = X.blockInset, G = X.blockOutOfBoundsCorrection, mo = X.surfaceBlockProperty);
     }
     let { inlineInset: Pe, inlineOutOfBoundsCorrection: me, surfaceInlineProperty: vo } = this.calculateInline({
-      surfaceRect: O,
-      anchorRect: R,
+      surfaceRect: F,
+      anchorRect: M,
       anchorInline: ne,
       surfaceInline: ee,
       xOffset: s,
       positioning: a,
-      isLTR: Fe,
+      isLTR: Oe,
       windowInnerWidth: x,
       inlineScrollbarWidth: $
     });
     if (me && !f) {
       const rt = ee === "start" ? "end" : "start", it = ne === "start" ? "end" : "start", X = this.calculateInline({
-        surfaceRect: O,
-        anchorRect: R,
+        surfaceRect: F,
+        anchorRect: M,
         anchorInline: it,
         surfaceInline: rt,
         xOffset: s,
         positioning: a,
-        isLTR: Fe,
+        isLTR: Oe,
         windowInnerWidth: x,
         inlineScrollbarWidth: $
       });
@@ -3065,7 +3065,7 @@ class ra {
       opacity: "1",
       [mo]: `${ue}px`,
       [vo]: `${Pe}px`
-    }, h === "resize" && (G && (this.surfaceStylesInternal.height = `${O.height - G}px`), me && (this.surfaceStylesInternal.width = `${O.width - me}px`)), this.host.requestUpdate();
+    }, h === "resize" && (G && (this.surfaceStylesInternal.height = `${F.height - G}px`), me && (this.surfaceStylesInternal.width = `${F.width - me}px`)), this.host.requestUpdate();
   }
   /**
    * Calculates the css property, the inset, and the out of bounds correction
@@ -3080,11 +3080,11 @@ class ra {
    * for the surface in the inline direction.
    */
   calculateInline(e) {
-    const { isLTR: t, surfaceInline: o, anchorInline: r, anchorRect: a, surfaceRect: s, xOffset: c, positioning: p, windowInnerWidth: f, inlineScrollbarWidth: h } = e, v = p === "fixed" || p === "document" ? 1 : 0, b = p === "document" ? 1 : 0, x = t ? 1 : 0, y = t ? 0 : 1, _ = o === "start" ? 1 : 0, S = o === "end" ? 1 : 0, $ = (r !== o ? 1 : 0) * a.width + c, O = _ * a.left + S * (f - a.right - h), R = _ * (f - a.right - h) + S * a.left, F = x * O + y * R, ee = _ * window.scrollX - S * window.scrollX, te = S * window.scrollX - _ * window.scrollX, ne = x * ee + y * te, Fe = Math.abs(Math.min(0, f - F - $ - s.width)), ue = v * F + $ + b * ne;
+    const { isLTR: t, surfaceInline: o, anchorInline: r, anchorRect: a, surfaceRect: s, xOffset: c, positioning: p, windowInnerWidth: f, inlineScrollbarWidth: h } = e, v = p === "fixed" || p === "document" ? 1 : 0, b = p === "document" ? 1 : 0, x = t ? 1 : 0, y = t ? 0 : 1, _ = o === "start" ? 1 : 0, S = o === "end" ? 1 : 0, $ = (r !== o ? 1 : 0) * a.width + c, F = _ * a.left + S * (f - a.right - h), M = _ * (f - a.right - h) + S * a.left, O = x * F + y * M, ee = _ * window.scrollX - S * window.scrollX, te = S * window.scrollX - _ * window.scrollX, ne = x * ee + y * te, Oe = Math.abs(Math.min(0, f - O - $ - s.width)), ue = v * O + $ + b * ne;
     let G = o === "start" ? "inset-inline-start" : "inset-inline-end";
     return (p === "document" || p === "fixed") && (o === "start" && t || o === "end" && !t ? G = "left" : G = "right"), {
       inlineInset: ue,
-      inlineOutOfBoundsCorrection: Fe,
+      inlineOutOfBoundsCorrection: Oe,
       surfaceInlineProperty: G
     };
   }
@@ -3213,13 +3213,13 @@ class ia {
   }
 }
 const dr = 200, cr = /* @__PURE__ */ new Set([
-  M.ArrowDown,
-  M.ArrowUp,
-  M.Home,
-  M.End
+  R.ArrowDown,
+  R.ArrowUp,
+  R.Home,
+  R.End
 ]), aa = /* @__PURE__ */ new Set([
-  M.ArrowLeft,
-  M.ArrowRight,
+  R.ArrowLeft,
+  R.ArrowRight,
   ...cr
 ]);
 function sa(i = document) {
@@ -3248,7 +3248,7 @@ class I extends g {
     this.currentAnchorElement = e, this.requestUpdate("anchorElement");
   }
   constructor() {
-    super(), this.anchor = "", this.positioning = "absolute", this.quick = !1, this.hasOverflow = !1, this.open = !1, this.xOffset = 0, this.yOffset = 0, this.noHorizontalFlip = !1, this.noVerticalFlip = !1, this.typeaheadDelay = dr, this.anchorCorner = Mo.END_START, this.menuCorner = Mo.START_START, this.stayOpenOnOutsideClick = !1, this.stayOpenOnFocusout = !1, this.skipRestoreFocus = !1, this.defaultFocus = W.FIRST_ITEM, this.noNavigationWrap = !1, this.typeaheadActive = !0, this.isSubmenu = !1, this.pointerPath = [], this.isRepositioning = !1, this.openCloseAnimationSignal = Zr(), this.listController = new Ji({
+    super(), this.anchor = "", this.positioning = "absolute", this.quick = !1, this.hasOverflow = !1, this.open = !1, this.xOffset = 0, this.yOffset = 0, this.noHorizontalFlip = !1, this.noVerticalFlip = !1, this.typeaheadDelay = dr, this.anchorCorner = Ro.END_START, this.menuCorner = Ro.START_START, this.stayOpenOnOutsideClick = !1, this.stayOpenOnFocusout = !1, this.skipRestoreFocus = !1, this.defaultFocus = W.FIRST_ITEM, this.noNavigationWrap = !1, this.typeaheadActive = !0, this.isSubmenu = !1, this.pointerPath = [], this.isRepositioning = !1, this.openCloseAnimationSignal = Zr(), this.listController = new Ji({
       isItem: (e) => e.hasAttribute("md-menu-item"),
       getPossibleItems: () => this.slotItems,
       isRtl: () => getComputedStyle(this).direction === "rtl",
@@ -3261,7 +3261,7 @@ class I extends g {
       isNavigableKey: (e) => {
         if (!this.isSubmenu)
           return aa.has(e);
-        const o = getComputedStyle(this).direction === "rtl" ? M.ArrowLeft : M.ArrowRight;
+        const o = getComputedStyle(this).direction === "rtl" ? R.ArrowLeft : R.ArrowRight;
         return e === o ? !0 : cr.has(e);
       },
       wrapNavigation: () => !this.noNavigationWrap
@@ -3441,13 +3441,13 @@ class I extends g {
       { transform: "" }
     ], { duration: p, easing: j.EMPHASIZED }), y = e.animate([{ opacity: 0 }, { opacity: 1 }], f), _ = [];
     for (let $ = 0; $ < c.length; $++) {
-      const O = s ? c.length - 1 - $ : $, R = c[O], F = R.animate([{ opacity: 0 }, { opacity: 1 }], {
+      const F = s ? c.length - 1 - $ : $, M = c[F], O = M.animate([{ opacity: 0 }, { opacity: 1 }], {
         duration: h,
         delay: v * $
       });
-      R.classList.toggle("md-menu-hidden", !0), F.addEventListener("finish", () => {
-        R.classList.toggle("md-menu-hidden", !1);
-      }), _.push([R, F]);
+      M.classList.toggle("md-menu-hidden", !0), O.addEventListener("finish", () => {
+        M.classList.toggle("md-menu-hidden", !1);
+      }), _.push([M, O]);
     }
     let S = ($) => {
     };
@@ -3455,8 +3455,8 @@ class I extends g {
       S = $;
     });
     return r.addEventListener("abort", () => {
-      b.cancel(), x.cancel(), y.cancel(), _.forEach(([$, O]) => {
-        $.classList.toggle("md-menu-hidden", !1), O.cancel();
+      b.cancel(), x.cancel(), y.cancel(), _.forEach(([$, F]) => {
+        $.classList.toggle("md-menu-hidden", !1), F.cancel();
       }), S(!0);
     }), b.addEventListener("finish", () => {
       e.classList.toggle("animating", !1), this.openCloseAnimationSignal.finish(), S(!1);
@@ -3469,8 +3469,8 @@ class I extends g {
    */
   animateClose() {
     let e;
-    const t = new Promise((F) => {
-      e = F;
+    const t = new Promise((O) => {
+      e = O;
     }), o = this.surfaceEl, r = this.slotEl;
     if (!o || !r)
       return e(!1), t;
@@ -3487,23 +3487,23 @@ class I extends g {
       {
         transform: s ? `translateY(-${p * (1 - _)}px)` : ""
       }
-    ], { duration: h, easing: j.EMPHASIZED_ACCELERATE }), O = o.animate([{ opacity: 1 }, { opacity: 0 }], { duration: v, delay: b }), R = [];
-    for (let F = 0; F < f.length; F++) {
-      const ee = s ? F : f.length - 1 - F, te = f[ee], ne = te.animate([{ opacity: 1 }, { opacity: 0 }], {
+    ], { duration: h, easing: j.EMPHASIZED_ACCELERATE }), F = o.animate([{ opacity: 1 }, { opacity: 0 }], { duration: v, delay: b }), M = [];
+    for (let O = 0; O < f.length; O++) {
+      const ee = s ? O : f.length - 1 - O, te = f[ee], ne = te.animate([{ opacity: 1 }, { opacity: 0 }], {
         duration: x,
-        delay: y + S * F
+        delay: y + S * O
       });
       ne.addEventListener("finish", () => {
         te.classList.toggle("md-menu-hidden", !0);
-      }), R.push([te, ne]);
+      }), M.push([te, ne]);
     }
     return c.addEventListener("abort", () => {
-      A.cancel(), $.cancel(), O.cancel(), R.forEach(([F, ee]) => {
-        ee.cancel(), F.classList.toggle("md-menu-hidden", !1);
+      A.cancel(), $.cancel(), F.cancel(), M.forEach(([O, ee]) => {
+        ee.cancel(), O.classList.toggle("md-menu-hidden", !1);
       }), e(!1);
     }), A.addEventListener("finish", () => {
-      o.classList.toggle("animating", !1), R.forEach(([F]) => {
-        F.classList.toggle("md-menu-hidden", !1);
+      o.classList.toggle("animating", !1), M.forEach(([O]) => {
+        O.classList.toggle("md-menu-hidden", !1);
       }), this.openCloseAnimationSignal.finish(), this.dispatchEvent(new Event("closed")), e(!0);
     }), t;
   }
@@ -3669,7 +3669,7 @@ function da(i) {
   return e;
 }
 var Lo;
-const Ue = /* @__PURE__ */ Symbol("value"), ca = Q(rr(io(ao(Oe(g)))));
+const Ue = /* @__PURE__ */ Symbol("value"), ca = Q(rr(io(ao(Fe(g)))));
 class E extends ca {
   /**
    * The value of the currently selected option.
@@ -4203,12 +4203,12 @@ function fa(i) {
 }
 const ga = m`:host{color:var(--md-sys-color-on-surface, #1d1b20);font-family:var(--md-sys-typescale-body-large-font, var(--md-ref-typeface-plain, Roboto));font-size:var(--md-sys-typescale-body-large-size, 1rem);font-weight:var(--md-sys-typescale-body-large-weight, var(--md-ref-typeface-weight-regular, 400));line-height:var(--md-sys-typescale-body-large-line-height, 1.5rem);align-items:center;box-sizing:border-box;display:flex;gap:16px;min-height:56px;overflow:hidden;padding:12px 16px;position:relative;text-overflow:ellipsis}:host([multiline]){min-height:72px}[name=overline]{color:var(--md-sys-color-on-surface-variant, #49454f);font-family:var(--md-sys-typescale-label-small-font, var(--md-ref-typeface-plain, Roboto));font-size:var(--md-sys-typescale-label-small-size, 0.6875rem);font-weight:var(--md-sys-typescale-label-small-weight, var(--md-ref-typeface-weight-medium, 500));line-height:var(--md-sys-typescale-label-small-line-height, 1rem)}[name=supporting-text]{color:var(--md-sys-color-on-surface-variant, #49454f);font-family:var(--md-sys-typescale-body-medium-font, var(--md-ref-typeface-plain, Roboto));font-size:var(--md-sys-typescale-body-medium-size, 0.875rem);font-weight:var(--md-sys-typescale-body-medium-weight, var(--md-ref-typeface-weight-regular, 400));line-height:var(--md-sys-typescale-body-medium-line-height, 1.25rem)}[name=trailing-supporting-text]{color:var(--md-sys-color-on-surface-variant, #49454f);font-family:var(--md-sys-typescale-label-small-font, var(--md-ref-typeface-plain, Roboto));font-size:var(--md-sys-typescale-label-small-size, 0.6875rem);font-weight:var(--md-sys-typescale-label-small-weight, var(--md-ref-typeface-weight-medium, 500));line-height:var(--md-sys-typescale-label-small-line-height, 1rem)}[name=container]::slotted(*){inset:0;position:absolute}.default-slot{display:inline}.default-slot,.text ::slotted(*){overflow:hidden;text-overflow:ellipsis}.text{display:flex;flex:1;flex-direction:column;overflow:hidden}
 `;
-let Ot = class extends po {
+let Ft = class extends po {
 };
-Ot.styles = [ga];
-Ot = n([
+Ft.styles = [ga];
+Ft = n([
   k("md-item")
-], Ot);
+], Ft);
 class ba {
   /**
    * @param host The MenuItem in which to attach this controller to.
@@ -4217,7 +4217,7 @@ class ba {
   constructor(e, t) {
     this.host = e, this.internalTypeaheadText = null, this.onClick = () => {
       this.host.keepOpen || this.host.dispatchEvent(Po(this.host, {
-        kind: Ro.CLICK_SELECTION
+        kind: Mo.CLICK_SELECTION
       }));
     }, this.onKeydown = (o) => {
       if (this.host.href && o.code === "Enter") {
@@ -4228,7 +4228,7 @@ class ba {
         return;
       const r = o.code;
       this.host.keepOpen && r !== "Escape" || lr(r) && (o.preventDefault(), this.host.dispatchEvent(Po(this.host, {
-        kind: Ro.KEYDOWN,
+        kind: Mo.KEYDOWN,
         key: r
       })));
     }, this.getHeadlineElements = t.getHeadlineElements, this.getSupportingTextElements = t.getSupportingTextElements, this.getDefaultElements = t.getDefaultElements, this.getInteractiveElement = t.getInteractiveElement, this.host.addController(this);
@@ -4491,12 +4491,12 @@ n([
 n([
   d({ attribute: "display-text" })
 ], H.prototype, "displayText", null);
-let Ft = class extends H {
+let Ot = class extends H {
 };
-Ft.styles = [va];
-Ft = n([
+Ot.styles = [va];
+Ot = n([
   k("md-select-option")
-], Ft);
+], Ot);
 const ka = Q(g);
 class se extends ka {
   /**
@@ -4813,18 +4813,18 @@ const fr = m`:host{border-start-start-radius:var(--_container-shape-start-start)
 `;
 const gr = m`.trailing.action{align-items:center;justify-content:center;padding-inline-start:var(--_icon-label-space);padding-inline-end:var(--_with-trailing-icon-trailing-space)}.trailing.action :is(md-ripple,md-focus-ring){border-radius:50%;height:calc(1.3333333333*var(--_icon-size));width:calc(1.3333333333*var(--_icon-size))}.trailing.action md-focus-ring{inset:unset}.has-trailing .primary.action{padding-inline-end:0}.trailing.icon{color:var(--_trailing-icon-color);height:var(--_icon-size);width:var(--_icon-size)}:where(:hover) .trailing.icon{color:var(--_hover-trailing-icon-color)}:where(:focus) .trailing.icon{color:var(--_focus-trailing-icon-color)}:where(:active) .trailing.icon{color:var(--_pressed-trailing-icon-color)}:where(.disabled) .trailing.icon{color:var(--_disabled-trailing-icon-color);opacity:var(--_disabled-trailing-icon-opacity)}:where(.selected) .trailing.icon{color:var(--_selected-trailing-icon-color)}:where(.selected:hover) .trailing.icon{color:var(--_selected-hover-trailing-icon-color)}:where(.selected:focus) .trailing.icon{color:var(--_selected-focus-trailing-icon-color)}:where(.selected:active) .trailing.icon{color:var(--_selected-pressed-trailing-icon-color)}@media(forced-colors: active){.trailing.icon{color:ButtonText}:where(.disabled) .trailing.icon{color:GrayText;opacity:1}}
 `;
-let Rt = class extends pe {
+let Mt = class extends pe {
 };
-Rt.styles = [
+Mt.styles = [
   fr,
   $a,
   gr,
   vr,
   Ea
 ];
-Rt = n([
+Mt = n([
   k("md-filter-chip")
-], Rt);
+], Mt);
 class he extends ur {
   constructor() {
     super(...arguments), this.avatar = !1, this.href = "", this.target = "", this.removeOnly = !1, this.selected = !1;
@@ -4905,17 +4905,17 @@ n([
 ], he.prototype, "trailingAction", void 0);
 const za = m`:host{--_container-height: var(--md-input-chip-container-height, 32px);--_disabled-label-text-color: var(--md-input-chip-disabled-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-label-text-opacity: var(--md-input-chip-disabled-label-text-opacity, 0.38);--_disabled-selected-container-color: var(--md-input-chip-disabled-selected-container-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-selected-container-opacity: var(--md-input-chip-disabled-selected-container-opacity, 0.12);--_label-text-font: var(--md-input-chip-label-text-font, var(--md-sys-typescale-label-large-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-input-chip-label-text-line-height, var(--md-sys-typescale-label-large-line-height, 1.25rem));--_label-text-size: var(--md-input-chip-label-text-size, var(--md-sys-typescale-label-large-size, 0.875rem));--_label-text-weight: var(--md-input-chip-label-text-weight, var(--md-sys-typescale-label-large-weight, var(--md-ref-typeface-weight-medium, 500)));--_selected-container-color: var(--md-input-chip-selected-container-color, var(--md-sys-color-secondary-container, #e8def8));--_selected-focus-label-text-color: var(--md-input-chip-selected-focus-label-text-color, var(--md-sys-color-on-secondary-container, #1d192b));--_selected-hover-label-text-color: var(--md-input-chip-selected-hover-label-text-color, var(--md-sys-color-on-secondary-container, #1d192b));--_selected-hover-state-layer-color: var(--md-input-chip-selected-hover-state-layer-color, var(--md-sys-color-on-secondary-container, #1d192b));--_selected-hover-state-layer-opacity: var(--md-input-chip-selected-hover-state-layer-opacity, 0.08);--_selected-label-text-color: var(--md-input-chip-selected-label-text-color, var(--md-sys-color-on-secondary-container, #1d192b));--_selected-outline-width: var(--md-input-chip-selected-outline-width, 0px);--_selected-pressed-label-text-color: var(--md-input-chip-selected-pressed-label-text-color, var(--md-sys-color-on-secondary-container, #1d192b));--_selected-pressed-state-layer-color: var(--md-input-chip-selected-pressed-state-layer-color, var(--md-sys-color-on-secondary-container, #1d192b));--_selected-pressed-state-layer-opacity: var(--md-input-chip-selected-pressed-state-layer-opacity, 0.12);--_disabled-outline-color: var(--md-input-chip-disabled-outline-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-outline-opacity: var(--md-input-chip-disabled-outline-opacity, 0.12);--_focus-label-text-color: var(--md-input-chip-focus-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_focus-outline-color: var(--md-input-chip-focus-outline-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-label-text-color: var(--md-input-chip-hover-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-state-layer-color: var(--md-input-chip-hover-state-layer-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-state-layer-opacity: var(--md-input-chip-hover-state-layer-opacity, 0.08);--_label-text-color: var(--md-input-chip-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_outline-color: var(--md-input-chip-outline-color, var(--md-sys-color-outline, #79747e));--_outline-width: var(--md-input-chip-outline-width, 1px);--_pressed-label-text-color: var(--md-input-chip-pressed-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_pressed-state-layer-color: var(--md-input-chip-pressed-state-layer-color, var(--md-sys-color-on-surface-variant, #49454f));--_pressed-state-layer-opacity: var(--md-input-chip-pressed-state-layer-opacity, 0.12);--_avatar-shape: var(--md-input-chip-avatar-shape, var(--md-sys-shape-corner-full, 9999px));--_avatar-size: var(--md-input-chip-avatar-size, 24px);--_disabled-avatar-opacity: var(--md-input-chip-disabled-avatar-opacity, 0.38);--_disabled-leading-icon-color: var(--md-input-chip-disabled-leading-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-leading-icon-opacity: var(--md-input-chip-disabled-leading-icon-opacity, 0.38);--_icon-size: var(--md-input-chip-icon-size, 18px);--_selected-focus-leading-icon-color: var(--md-input-chip-selected-focus-leading-icon-color, var(--md-sys-color-primary, #6750a4));--_selected-hover-leading-icon-color: var(--md-input-chip-selected-hover-leading-icon-color, var(--md-sys-color-primary, #6750a4));--_selected-leading-icon-color: var(--md-input-chip-selected-leading-icon-color, var(--md-sys-color-primary, #6750a4));--_selected-pressed-leading-icon-color: var(--md-input-chip-selected-pressed-leading-icon-color, var(--md-sys-color-primary, #6750a4));--_focus-leading-icon-color: var(--md-input-chip-focus-leading-icon-color, var(--md-sys-color-primary, #6750a4));--_hover-leading-icon-color: var(--md-input-chip-hover-leading-icon-color, var(--md-sys-color-primary, #6750a4));--_leading-icon-color: var(--md-input-chip-leading-icon-color, var(--md-sys-color-primary, #6750a4));--_pressed-leading-icon-color: var(--md-input-chip-pressed-leading-icon-color, var(--md-sys-color-primary, #6750a4));--_disabled-trailing-icon-color: var(--md-input-chip-disabled-trailing-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_disabled-trailing-icon-opacity: var(--md-input-chip-disabled-trailing-icon-opacity, 0.38);--_selected-focus-trailing-icon-color: var(--md-input-chip-selected-focus-trailing-icon-color, var(--md-sys-color-on-secondary-container, #1d192b));--_selected-hover-trailing-icon-color: var(--md-input-chip-selected-hover-trailing-icon-color, var(--md-sys-color-on-secondary-container, #1d192b));--_selected-pressed-trailing-icon-color: var(--md-input-chip-selected-pressed-trailing-icon-color, var(--md-sys-color-on-secondary-container, #1d192b));--_selected-trailing-icon-color: var(--md-input-chip-selected-trailing-icon-color, var(--md-sys-color-on-secondary-container, #1d192b));--_focus-trailing-icon-color: var(--md-input-chip-focus-trailing-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_hover-trailing-icon-color: var(--md-input-chip-hover-trailing-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_pressed-trailing-icon-color: var(--md-input-chip-pressed-trailing-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_trailing-icon-color: var(--md-input-chip-trailing-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_container-shape-start-start: var(--md-input-chip-container-shape-start-start, var(--md-input-chip-container-shape, var(--md-sys-shape-corner-small, 8px)));--_container-shape-start-end: var(--md-input-chip-container-shape-start-end, var(--md-input-chip-container-shape, var(--md-sys-shape-corner-small, 8px)));--_container-shape-end-end: var(--md-input-chip-container-shape-end-end, var(--md-input-chip-container-shape, var(--md-sys-shape-corner-small, 8px)));--_container-shape-end-start: var(--md-input-chip-container-shape-end-start, var(--md-input-chip-container-shape, var(--md-sys-shape-corner-small, 8px)));--_leading-space: var(--md-input-chip-leading-space, 16px);--_trailing-space: var(--md-input-chip-trailing-space, 16px);--_icon-label-space: var(--md-input-chip-icon-label-space, 8px);--_with-leading-icon-leading-space: var(--md-input-chip-with-leading-icon-leading-space, 8px);--_with-trailing-icon-trailing-space: var(--md-input-chip-with-trailing-icon-trailing-space, 8px)}:host([avatar]){--_container-shape-start-start: var( --md-input-chip-container-shape-start-start, var(--md-input-chip-container-shape, calc(var(--_container-height) / 2)) );--_container-shape-start-end: var( --md-input-chip-container-shape-start-end, var(--md-input-chip-container-shape, calc(var(--_container-height) / 2)) );--_container-shape-end-end: var( --md-input-chip-container-shape-end-end, var(--md-input-chip-container-shape, calc(var(--_container-height) / 2)) );--_container-shape-end-start: var( --md-input-chip-container-shape-end-start, var(--md-input-chip-container-shape, calc(var(--_container-height) / 2)) )}.avatar .primary.action{padding-inline-start:4px}.avatar .leading.icon ::slotted(:first-child){border-radius:var(--_avatar-shape);height:var(--_avatar-size);width:var(--_avatar-size)}.disabled.avatar .leading.icon{opacity:var(--_disabled-avatar-opacity)}@media(forced-colors: active){.link .outline{border-color:ActiveText}.disabled.avatar .leading.icon{opacity:1}}
 `;
-let Mt = class extends he {
+let Rt = class extends he {
 };
-Mt.styles = [
+Rt.styles = [
   fr,
   gr,
   vr,
   za
 ];
-Mt = n([
+Rt = n([
   k("md-input-chip")
-], Mt);
+], Rt);
 class ot extends g {
   constructor() {
     super(...arguments), this.inset = !1, this.insetStart = !1, this.insetEnd = !1;
@@ -5155,7 +5155,7 @@ class ye extends g {
   }
   async handleTabClick(e) {
     const t = e.target;
-    await 0, !(e.defaultPrevented || !Oa(t) || t.active) && this.activateTab(t);
+    await 0, !(e.defaultPrevented || !Fa(t) || t.active) && this.activateTab(t);
   }
   activateTab(e) {
     const { tabs: t } = this, o = this.activeTab;
@@ -5232,14 +5232,14 @@ n([
 n([
   C("slot")
 ], ye.prototype, "slotElement", void 0);
-function Oa(i) {
+function Fa(i) {
   return i instanceof HTMLElement && i.hasAttribute("md-tab");
 }
-const Fa = m`:host{box-sizing:border-box;display:flex;flex-direction:column;overflow:auto;scroll-behavior:smooth;scrollbar-width:none;position:relative}:host([hidden]){display:none}:host::-webkit-scrollbar{display:none}.tabs{align-items:end;display:flex;height:100%;overflow:inherit;scroll-behavior:inherit;scrollbar-width:inherit;justify-content:space-between;width:100%}::slotted(*){flex:1}::slotted([active]){z-index:1}
+const Oa = m`:host{box-sizing:border-box;display:flex;flex-direction:column;overflow:auto;scroll-behavior:smooth;scrollbar-width:none;position:relative}:host([hidden]){display:none}:host::-webkit-scrollbar{display:none}.tabs{align-items:end;display:flex;height:100%;overflow:inherit;scroll-behavior:inherit;scrollbar-width:inherit;justify-content:space-between;width:100%}::slotted(*){flex:1}::slotted([active]){z-index:1}
 `;
 let Bt = class extends ye {
 };
-Bt.styles = [Fa];
+Bt.styles = [Oa];
 Bt = n([
   k("md-tabs")
 ], Bt);
@@ -5267,16 +5267,16 @@ Vt.styles = [xr, Pa];
 Vt = n([
   k("md-primary-tab")
 ], Vt);
-class Ra extends K {
+class Ma extends K {
   constructor() {
     super(...arguments), this.fullWidthIndicator = !0;
   }
 }
-const Ma = m`:host{--_active-indicator-color: var(--md-secondary-tab-active-indicator-color, var(--md-sys-color-primary, #6750a4));--_active-indicator-height: var(--md-secondary-tab-active-indicator-height, 2px);--_active-label-text-color: var(--md-secondary-tab-active-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_container-color: var(--md-secondary-tab-container-color, var(--md-sys-color-surface, #fef7ff));--_container-elevation: var(--md-secondary-tab-container-elevation, 0);--_container-height: var(--md-secondary-tab-container-height, 48px);--_focus-label-text-color: var(--md-secondary-tab-focus-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-label-text-color: var(--md-secondary-tab-hover-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-state-layer-color: var(--md-secondary-tab-hover-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-state-layer-opacity: var(--md-secondary-tab-hover-state-layer-opacity, 0.08);--_label-text-font: var(--md-secondary-tab-label-text-font, var(--md-sys-typescale-title-small-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-secondary-tab-label-text-line-height, var(--md-sys-typescale-title-small-line-height, 1.25rem));--_label-text-size: var(--md-secondary-tab-label-text-size, var(--md-sys-typescale-title-small-size, 0.875rem));--_label-text-weight: var(--md-secondary-tab-label-text-weight, var(--md-sys-typescale-title-small-weight, var(--md-ref-typeface-weight-medium, 500)));--_pressed-label-text-color: var(--md-secondary-tab-pressed-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_pressed-state-layer-color: var(--md-secondary-tab-pressed-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_pressed-state-layer-opacity: var(--md-secondary-tab-pressed-state-layer-opacity, 0.12);--_active-focus-icon-color: var(--md-secondary-tab-active-focus-icon-color, );--_active-focus-label-text-color: var(--md-secondary-tab-active-focus-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_active-hover-icon-color: var(--md-secondary-tab-active-hover-icon-color, );--_active-hover-label-text-color: var(--md-secondary-tab-active-hover-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_active-hover-state-layer-color: var(--md-secondary-tab-active-hover-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_active-hover-state-layer-opacity: var(--md-secondary-tab-active-hover-state-layer-opacity, 0.08);--_active-icon-color: var(--md-secondary-tab-active-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_active-indicator-shape: var(--md-secondary-tab-active-indicator-shape, 0);--_active-pressed-icon-color: var(--md-secondary-tab-active-pressed-icon-color, );--_active-pressed-label-text-color: var(--md-secondary-tab-active-pressed-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_active-pressed-state-layer-color: var(--md-secondary-tab-active-pressed-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_active-pressed-state-layer-opacity: var(--md-secondary-tab-active-pressed-state-layer-opacity, 0.12);--_label-text-color: var(--md-secondary-tab-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_focus-icon-color: var(--md-secondary-tab-focus-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-icon-color: var(--md-secondary-tab-hover-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_icon-size: var(--md-secondary-tab-icon-size, 24px);--_icon-color: var(--md-secondary-tab-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_pressed-icon-color: var(--md-secondary-tab-pressed-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_container-shape-start-start: var(--md-secondary-tab-container-shape-start-start, var(--md-secondary-tab-container-shape, var(--md-sys-shape-corner-none, 0px)));--_container-shape-start-end: var(--md-secondary-tab-container-shape-start-end, var(--md-secondary-tab-container-shape, var(--md-sys-shape-corner-none, 0px)));--_container-shape-end-end: var(--md-secondary-tab-container-shape-end-end, var(--md-secondary-tab-container-shape, var(--md-sys-shape-corner-none, 0px)));--_container-shape-end-start: var(--md-secondary-tab-container-shape-end-start, var(--md-secondary-tab-container-shape, var(--md-sys-shape-corner-none, 0px)))}
+const Ra = m`:host{--_active-indicator-color: var(--md-secondary-tab-active-indicator-color, var(--md-sys-color-primary, #6750a4));--_active-indicator-height: var(--md-secondary-tab-active-indicator-height, 2px);--_active-label-text-color: var(--md-secondary-tab-active-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_container-color: var(--md-secondary-tab-container-color, var(--md-sys-color-surface, #fef7ff));--_container-elevation: var(--md-secondary-tab-container-elevation, 0);--_container-height: var(--md-secondary-tab-container-height, 48px);--_focus-label-text-color: var(--md-secondary-tab-focus-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-label-text-color: var(--md-secondary-tab-hover-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-state-layer-color: var(--md-secondary-tab-hover-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-state-layer-opacity: var(--md-secondary-tab-hover-state-layer-opacity, 0.08);--_label-text-font: var(--md-secondary-tab-label-text-font, var(--md-sys-typescale-title-small-font, var(--md-ref-typeface-plain, Roboto)));--_label-text-line-height: var(--md-secondary-tab-label-text-line-height, var(--md-sys-typescale-title-small-line-height, 1.25rem));--_label-text-size: var(--md-secondary-tab-label-text-size, var(--md-sys-typescale-title-small-size, 0.875rem));--_label-text-weight: var(--md-secondary-tab-label-text-weight, var(--md-sys-typescale-title-small-weight, var(--md-ref-typeface-weight-medium, 500)));--_pressed-label-text-color: var(--md-secondary-tab-pressed-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_pressed-state-layer-color: var(--md-secondary-tab-pressed-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_pressed-state-layer-opacity: var(--md-secondary-tab-pressed-state-layer-opacity, 0.12);--_active-focus-icon-color: var(--md-secondary-tab-active-focus-icon-color, );--_active-focus-label-text-color: var(--md-secondary-tab-active-focus-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_active-hover-icon-color: var(--md-secondary-tab-active-hover-icon-color, );--_active-hover-label-text-color: var(--md-secondary-tab-active-hover-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_active-hover-state-layer-color: var(--md-secondary-tab-active-hover-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_active-hover-state-layer-opacity: var(--md-secondary-tab-active-hover-state-layer-opacity, 0.08);--_active-icon-color: var(--md-secondary-tab-active-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_active-indicator-shape: var(--md-secondary-tab-active-indicator-shape, 0);--_active-pressed-icon-color: var(--md-secondary-tab-active-pressed-icon-color, );--_active-pressed-label-text-color: var(--md-secondary-tab-active-pressed-label-text-color, var(--md-sys-color-on-surface, #1d1b20));--_active-pressed-state-layer-color: var(--md-secondary-tab-active-pressed-state-layer-color, var(--md-sys-color-on-surface, #1d1b20));--_active-pressed-state-layer-opacity: var(--md-secondary-tab-active-pressed-state-layer-opacity, 0.12);--_label-text-color: var(--md-secondary-tab-label-text-color, var(--md-sys-color-on-surface-variant, #49454f));--_focus-icon-color: var(--md-secondary-tab-focus-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_hover-icon-color: var(--md-secondary-tab-hover-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_icon-size: var(--md-secondary-tab-icon-size, 24px);--_icon-color: var(--md-secondary-tab-icon-color, var(--md-sys-color-on-surface-variant, #49454f));--_pressed-icon-color: var(--md-secondary-tab-pressed-icon-color, var(--md-sys-color-on-surface, #1d1b20));--_container-shape-start-start: var(--md-secondary-tab-container-shape-start-start, var(--md-secondary-tab-container-shape, var(--md-sys-shape-corner-none, 0px)));--_container-shape-start-end: var(--md-secondary-tab-container-shape-start-end, var(--md-secondary-tab-container-shape, var(--md-sys-shape-corner-none, 0px)));--_container-shape-end-end: var(--md-secondary-tab-container-shape-end-end, var(--md-secondary-tab-container-shape, var(--md-sys-shape-corner-none, 0px)));--_container-shape-end-start: var(--md-secondary-tab-container-shape-end-start, var(--md-secondary-tab-container-shape, var(--md-sys-shape-corner-none, 0px)))}
 `;
-let Nt = class extends Ra {
+let Nt = class extends Ma {
 };
-Nt.styles = [xr, Ma];
+Nt.styles = [xr, Ra];
 Nt = n([
   k("md-secondary-tab")
 ], Nt);
@@ -5566,10 +5566,10 @@ class D extends Va {
     ], _ = [];
     for (const [S, A] of y)
       for (const $ of A) {
-        const O = S.animate(...$);
+        const F = S.animate(...$);
         this.cancelAnimations.signal.addEventListener("abort", () => {
-          O.cancel();
-        }), _.push(O);
+          F.cancel();
+        }), _.push(F);
       }
     await Promise.all(_.map((S) => S.finished.catch(() => {
     })));
@@ -5945,10 +5945,11 @@ class Za extends g {
     hideDetailsToggle: { type: Boolean, attribute: "hide-details-toggle" },
     showFeaturedOnly: { type: Boolean, attribute: "show-featured-only" },
     chipVariant: { type: String, attribute: "chip-variant" },
-    isScrolled: { type: Boolean, state: !0 }
+    isScrolled: { type: Boolean, state: !0 },
+    scrollState: { type: String, state: !0 }
   };
   constructor() {
-    super(), this.viewMode = "grid", this.showDetails = !1, this.activeCategory = "all", this.categories = ["Productivity", "Expertise", "Travel & Shopping"], this.searchValue = "", this.hideViewToggle = !1, this.hideDetailsToggle = !1, this.showFeaturedOnly = !1, this.chipVariant = "", this.isScrolled = !1, this._scrollThreshold = 50;
+    super(), this.viewMode = "grid", this.showDetails = !1, this.activeCategory = "all", this.categories = ["Productivity", "Expertise", "Travel & Shopping"], this.searchValue = "", this.hideViewToggle = !1, this.hideDetailsToggle = !1, this.showFeaturedOnly = !1, this.chipVariant = "", this.isScrolled = !1, this.scrollState = "normal", this._scrollEnterThreshold = 64, this._scrollExitThreshold = 12, this._minScrollableDistance = 96, this._returnDuration = 300, this._scrollFrame = 0, this._returnTimer = 0;
   }
   connectedCallback() {
     super.connectedCallback(), this._handleScroll = this._handleScroll.bind(this), this._handleViewportChange = this._handleViewportChange.bind(this), window.addEventListener("resize", this._handleViewportChange, { passive: !0 }), setTimeout(() => {
@@ -5956,10 +5957,10 @@ class Za extends g {
     }, 100);
   }
   disconnectedCallback() {
-    super.disconnectedCallback(), window.removeEventListener("resize", this._handleViewportChange), this._removeScrollListener();
+    super.disconnectedCallback(), window.removeEventListener("resize", this._handleViewportChange), this._scrollFrame && (cancelAnimationFrame(this._scrollFrame), this._scrollFrame = 0), clearTimeout(this._returnTimer), this._removeScrollListener();
   }
   _handleViewportChange() {
-    this._syncScrolledHostSurface();
+    this._handleScroll(), this._syncScrolledHostSurface();
   }
   _setupScrollListener() {
     this._removeScrollListener(), this._scrollContainer = this._findScrollableContainer(), this._scrollContainer === window ? window.addEventListener("scroll", this._handleScroll, { passive: !0 }) : this._scrollContainer && this._scrollContainer.addEventListener("scroll", this._handleScroll, { passive: !0 }), this._handleScroll();
@@ -5997,11 +5998,45 @@ class Za extends g {
     const a = window.getComputedStyle(document.body);
     return a.overflowY === "auto" || a.overflowY === "scroll" ? document.body : window;
   }
+  _getScrollMetrics() {
+    let e = 0, t = 0;
+    if (this._scrollContainer === window) {
+      const o = document.documentElement, r = document.body;
+      e = window.scrollY || o.scrollTop || r.scrollTop || 0, t = Math.max(
+        0,
+        Math.max(o.scrollHeight, r.scrollHeight) - window.innerHeight
+      );
+    } else
+      e = this._scrollContainer ? this._scrollContainer.scrollTop : 0, t = this._scrollContainer ? Math.max(0, this._scrollContainer.scrollHeight - this._scrollContainer.clientHeight) : 0;
+    return {
+      scrollY: Math.min(Math.max(e, 0), t),
+      maxScroll: t
+    };
+  }
   _handleScroll() {
-    let e;
-    this._scrollContainer === window ? e = window.scrollY || document.documentElement.scrollTop : e = this._scrollContainer ? this._scrollContainer.scrollTop : 0;
-    const t = this.isScrolled;
-    this.isScrolled = e > this._scrollThreshold, t !== this.isScrolled && (this._syncScrolledHostSurface(), this.requestUpdate());
+    this._scrollFrame || (this._scrollFrame = requestAnimationFrame(() => {
+      this._scrollFrame = 0, this._updateScrollState();
+    }));
+  }
+  _updateScrollState() {
+    const { scrollY: e, maxScroll: t } = this._getScrollMetrics();
+    if (!(!(typeof window < "u" && window.matchMedia("(max-width: 768px)").matches) && t >= this._minScrollableDistance)) {
+      this._setScrollState("normal");
+      return;
+    }
+    if (this.scrollState === "normal" || this.scrollState === "returning") {
+      e >= this._scrollEnterThreshold && this._setScrollState("floating");
+      return;
+    }
+    this.scrollState === "floating" && e <= this._scrollExitThreshold && this._setScrollState("returning");
+  }
+  _setScrollState(e) {
+    this.scrollState !== e && (clearTimeout(this._returnTimer), this.scrollState = e, this.isScrolled = e !== "normal", this._syncStateAttributes(), this.requestUpdate(), e === "returning" && (this._returnTimer = setTimeout(() => {
+      this.scrollState === "returning" && this._setScrollState("normal");
+    }, this._returnDuration)));
+  }
+  _syncStateAttributes() {
+    this.isScrolled ? this.setAttribute("data-scrolled", "") : this.removeAttribute("data-scrolled"), this.setAttribute("data-scroll-state", this.scrollState), this._syncScrolledHostSurface();
   }
   _syncScrolledHostSurface() {
     const e = typeof window < "u" && window.matchMedia("(max-width: 768px)").matches;
@@ -6017,6 +6052,9 @@ class Za extends g {
       background-color: var(--wy-controls-bar-bg, transparent);
       border-bottom: var(--wy-controls-bar-border, none);
       padding: var(--wy-controls-bar-padding, 8px 32px);
+      width: var(--wy-controls-bar-normal-width, 100%);
+      max-width: var(--wy-controls-bar-normal-max-width, none);
+      margin-inline: var(--wy-controls-bar-normal-margin-inline, 0);
       box-sizing: border-box;
       
       /* Configurable layout properties */
@@ -6052,9 +6090,20 @@ class Za extends g {
       padding: 8px 24px;
       box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
       transition: 
+        top var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1)),
+        transform var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1)),
+        width var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1)),
+        max-width var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1)),
         padding var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1)),
         background-color var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1)),
+        box-shadow var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1)),
         opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+    }
+
+    :host([data-scroll-state="returning"]) {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-8px) scale(0.98);
+      box-shadow: 0 4px 18px 0 rgba(31, 38, 135, 0);
     }
 
     .material-symbols-outlined {
@@ -6335,7 +6384,7 @@ class Za extends g {
     }
   `;
   render() {
-    return this.isScrolled ? this.setAttribute("data-scrolled", "") : this.removeAttribute("data-scrolled"), this._syncScrolledHostSurface(), l`
+    return this._syncStateAttributes(), l`
       <div class="controls-container" part="controls-container">
         <div class="search-section">
           <input
@@ -14992,8 +15041,8 @@ class Ds extends g {
       for (let y = 0; y < h.length; y += 4) {
         const _ = h[y + 3] / 255;
         if (_ <= 0) continue;
-        const S = h[y] / 255, A = h[y + 1] / 255, $ = h[y + 2] / 255, O = 0.2126 * S + 0.7152 * A + 0.0722 * $;
-        v += O * _, b += _;
+        const S = h[y] / 255, A = h[y + 1] / 255, $ = h[y + 2] / 255, F = 0.2126 * S + 0.7152 * A + 0.0722 * $;
+        v += F * _, b += _;
       }
       if (b === 0) return;
       const x = v / b;
@@ -15104,7 +15153,7 @@ class Ds extends g {
   }
 }
 customElements.define("wy-artwork-card", Ds);
-class Os extends g {
+class Fs extends g {
   static properties = {
     title: { type: String },
     artist: { type: String },
@@ -15268,8 +15317,8 @@ class Os extends g {
     e.stopPropagation(), this.favorite = !this.favorite, this.requestUpdate();
   }
 }
-customElements.define("wy-work-card", Os);
-class Fs extends g {
+customElements.define("wy-work-card", Fs);
+class Os extends g {
   static properties = {
     density: { type: String },
     // 'spacious', 'compact'
@@ -15348,7 +15397,7 @@ class Fs extends g {
     `;
   }
 }
-customElements.define("wy-works-grid", Fs);
+customElements.define("wy-works-grid", Os);
 class Ps extends g {
   static properties = {
     title: { type: String },
@@ -15507,7 +15556,7 @@ class Ps extends g {
   }
 }
 customElements.define("wy-plot-card", Ps);
-class Rs extends g {
+class Ms extends g {
   static properties = {
     status: { type: String },
     // 'synced', 'syncing', 'error'
@@ -15604,6 +15653,6 @@ class Rs extends g {
     `;
   }
 }
-customElements.define("wy-backup-status", Rs);
+customElements.define("wy-backup-status", Ms);
 console.log("[m3-design-v2] Web components registered");
 //# sourceMappingURL=web-components.js.map
