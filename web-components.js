@@ -6020,6 +6020,12 @@ class Za extends g {
       --wy-controls-container-max-width: 1600px;
       --wy-controls-container-gap: 12px;
       --wy-controls-container-gap-scrolled: 16px;
+      --wy-controls-container-padding-desktop: 0 var(--wy-controls-padding-desktop, 32px);
+      --wy-controls-container-padding-tablet: 0 var(--wy-controls-padding-tablet, 24px);
+      --wy-controls-container-padding-mobile: 0 var(--wy-controls-padding-mobile, 16px);
+      --wy-controls-container-margin-inline: auto;
+      --wy-controls-container-bg: transparent;
+      --wy-controls-container-radius: 0;
     }
 
     /* Sticky Pill State - when scrolled */
@@ -6071,8 +6077,10 @@ class Za extends g {
       align-items: center;
       gap: var(--wy-controls-container-gap, 12px);
       max-width: var(--wy-controls-container-max-width, 1600px);
-      margin: 0 auto;
-      padding: 0 var(--wy-controls-padding-desktop, 32px);
+      margin: 0 var(--wy-controls-container-margin-inline, auto);
+      padding: var(--wy-controls-container-padding-desktop, 0 var(--wy-controls-padding-desktop, 32px));
+      background-color: var(--wy-controls-container-bg, transparent);
+      border-radius: var(--wy-controls-container-radius, 0);
     }
 
     :host([data-scrolled]) .controls-container {
@@ -6247,7 +6255,7 @@ class Za extends g {
     /* Tablet responsive padding */
     @media (min-width: 768px) and (max-width: 1023px) {
       .controls-container {
-        padding: 0 var(--wy-controls-padding-tablet, 24px);
+        padding: var(--wy-controls-container-padding-tablet, 0 var(--wy-controls-padding-tablet, 24px));
       }
     }
 
@@ -6271,7 +6279,7 @@ class Za extends g {
       .controls-container {
         flex-wrap: wrap;
         gap: 8px;
-        padding: 0 var(--wy-controls-padding-mobile, 16px);
+        padding: var(--wy-controls-container-padding-mobile, 0 var(--wy-controls-padding-mobile, 16px));
       }
 
       .search-section {
@@ -11715,8 +11723,7 @@ class gs extends g {
     `;
   }
   render() {
-    const e = this.variations.length > 0 ? this.variations[this.activeVariationIndex].template : this.template, t = this._compilePrompt(e);
-    const i = this.variations[this.activeVariationIndex];
+    const e = this.variations.length > 0 ? this.variations[this.activeVariationIndex].template : this.template, t = this._compilePrompt(e), o = this.variations[this.activeVariationIndex];
     return l`
       <div class="scrim" @click="${this._close}"></div>
       <div class="modal-container">
@@ -11774,7 +11781,7 @@ class gs extends g {
 
         ${this.mode === "locked" && this.variables.length > 0 && !(this.steps && this.steps.length > 0) ? l`
           <div class="tabs-container">
-              <wy-tabs active-tab="${this.activeTab}" @tab-change="${(o) => this.activeTab = o.detail.tab}">
+              <wy-tabs active-tab="${this.activeTab}" @tab-change="${(r) => this.activeTab = r.detail.tab}">
                 <button class="tab-item ${this.activeTab === "variables" ? "active" : ""}" role="tab" data-tab="variables">Variables</button>
                 <button class="tab-item ${this.activeTab === "preview" ? "active" : ""}" role="tab" data-tab="preview">Final Preview</button>
               </wy-tabs>
@@ -11803,15 +11810,15 @@ class gs extends g {
                 <div class="variation-selector-container">
                   <wy-dropdown
                     label="STYLE"
-                    .value="${i?.id || ""}"
-                    .options="${this.variations.map((o) => ({ value: o.id, label: o.name }))}"
+                    .value="${o?.id || ""}"
+                    .options="${this.variations.map((r) => ({ value: r.id, label: r.name }))}"
                     variant="subtle"
                     @change="${this._handleVariationDropdownChange}"
                   ></wy-dropdown>
-                  ${i?.description ? l`
+                  ${o?.description ? l`
                     <wy-info-panel class="variation-description-panel">
-                      <p class="variation-description-heading">Variant: ${i.name}</p>
-                      <p class="variation-description-copy">${i.description}</p>
+                      <p class="variation-description-heading">Variant: ${o.name}</p>
+                      <p class="variation-description-copy">${o.description}</p>
                     </wy-info-panel>
                   ` : ""}
                 </div>
@@ -11820,7 +11827,7 @@ class gs extends g {
               <div class="body">
                 ${this.activeTab === "variables" && this.variables.length > 0 ? l`
                   <div class="variables-grid">
-                    ${this.variables.map((o) => this._renderVariable(o))}
+                    ${this.variables.map((r) => this._renderVariable(r))}
                   </div>
                 ` : l`
                   <div class="preview-area">${t}</div>
@@ -11832,7 +11839,7 @@ class gs extends g {
               <textarea 
                 class="editor-area" 
                 .value="${this.template}"
-                @input="${(o) => this.template = o.target.value}"
+                @input="${(r) => this.template = r.target.value}"
               ></textarea>
             </div>
           `}
