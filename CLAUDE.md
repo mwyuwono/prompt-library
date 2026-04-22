@@ -201,14 +201,29 @@ When design system tokens or styles change in `m3-design-v2`:
 
 ### Available Design Tokens
 
-Prefer these over hardcoded values:
-- **Colors**: `--md-sys-color-primary`, `--md-sys-color-background`, `--md-sys-color-surface-*`, `--md-sys-color-text-main`
-- **Typography**: `--font-serif`, `--font-sans`, `--md-sys-typescale-*`
-- **Spacing**: `--spacing-xxs` (2px) through `--spacing-3xl` (64px)
-- **Shape**: `--md-sys-shape-corner-xs` through `--md-sys-shape-corner-full`
-- **Motion**: `--md-sys-motion-duration-short1` through `long4`, `--md-sys-motion-easing-*`
-- **State**: `--md-sys-state-hover-opacity`, `--md-sys-state-focus-opacity`
-- **Category**: `--wy-color-productivity`, `--wy-color-expertise`, `--wy-color-travel`
+The design system was migrated to **"The Nineteenth"** aesthetic (April 2026). Prefer the new canonical token names; legacy `--md-sys-*` aliases still resolve but are deprecated for new code.
+
+**Canonical color tokens (use these):**
+- `--paper` (#FFFAF5) — primary background
+- `--paper-deep` (#F4EFEB) — card surfaces
+- `--paper-edge` (#E8E2DA) — borders, hairlines
+- `--ink` (#282828) — text, primary actions
+- `--ink-mute` (#868685) — secondary copy
+- `--ink-soft` (#B8B3AC) — captions, disabled
+- `--white` (#FFFFFF) — form inputs only
+- `--ok` / `--err` — success / error states (sparingly)
+
+**Typography:** `--ff-serif` (Playfair Display), `--ff-sans` (Inter), `--ff-mono`
+
+**Spacing — 4px grid:** `--s-1` (4px) through `--s-10` (128px)
+
+**Shape:** `--radius-0` (0, default), `--radius-1` (2px), `--radius-pill` (999px, chips only)
+
+**Motion:** `--ease`, `--ease-in-out`, `--dur-1` (150ms) through `--dur-4` (800ms)
+
+**State opacity:** `--md-sys-state-hover-opacity` (0.08), `--md-sys-state-focus-opacity` (0.12)
+
+**Dark mode:** Not supported. Do not add `prefers-color-scheme: dark` blocks.
 
 ## Architecture Overview
 
