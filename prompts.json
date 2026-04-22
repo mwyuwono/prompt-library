@@ -618,6 +618,13 @@
         "name": "Antique Photo Colorization",
         "description": "Upload a black-and-white or sepia photograph — the model adds natural, contemporary-quality color while preserving the original subject and setting unchanged.",
         "template": "Transform this antique photograph into a seamless, high-quality color photograph. The colorization should be completely natural, replicating the aesthetic of a photo taken with a contemporary color camera, while preserving the original subject and setting without any changes."
+      },
+      {
+        "id": "photorendering",
+        "name": "Photographic Rendering",
+        "description": "Convert a provided image mockup into a photorealistic rendering",
+        "template": "Convert the provided composite mockup into a photorealistic architectural rendering suitable for a high-end design portfolio.\n\nCore Directives:\n\nStructural Fidelity: This design represents my intentions, I just want you to refine it. Do not add or subtract elements unless requested. Ensure existing elements are perfectly integrated as any part of the provided image may have been pasted in from elsewhere and may not be consistent with perspective, lighting, scale, etc. \n\nPerspective & Geometry: Automatically correct any lens distortion, \"keystoning,\" or skewed angles. Ensure all vertical lines are perfectly parallel to the frame edges (Standard Architectural 2-Point Perspective).\n\nMateriality & Texture: Uphold the texture and materiality but increase fidelity so the image is consistent with a professional quality DSLR. \n\nLighting & Atmosphere: Implement a sophisticated natural lighting scheme. \n\nPhotographic Quality: Emulate a full-frame DSLR capture using a wide-angle tilt-shift lens. The final output must be indistinguishable from a physical photograph, featuring natural micro-shadows and high dynamic range (HDR) without looking \"plastic\" or over-processed.",
+        "variables": []
       }
     ],
     "featured": false,
