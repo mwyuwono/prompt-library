@@ -33,6 +33,9 @@ class PromptLibrary {
         this.floatingHeaderObserver = null;
         this.boundFloatingControlsUpdate = null;
         this.floatingControlsFrame = 0;
+        this.masonryFrame = 0;
+        this.boundMasonryUpdate = null;
+        this.masonryResizeObserver = null;
 
         this.init();
     }
@@ -117,17 +120,15 @@ class PromptLibrary {
         }
 
         const headerRect = this.headerTop.getBoundingClientRect();
-        const logoRect = this.headerLogoGroup.getBoundingClientRect();
-        const actionsRect = this.headerActions.getBoundingClientRect();
-        const edgeGap = 12;
-        const floatingLeft = Math.max(edgeGap, logoRect.right + edgeGap);
+        const edgeGap = window.matchMedia('(max-width: 900px)').matches ? 12 : 20;
+        const viewportWidth = document.documentElement.clientWidth || window.innerWidth;
         const controlsHeight = this.controlsBar.offsetHeight || 60;
-        const top = Math.max(0, headerRect.top + ((headerRect.height - controlsHeight) / 2));
+        const top = Math.max(edgeGap, headerRect.top + ((headerRect.height - controlsHeight) / 2));
+        const maxWidth = Math.max(280, viewportWidth - (edgeGap * 2));
 
-        const maxWidth = actionsRect.left - floatingLeft - edgeGap;
-        this.controlsBar.style.setProperty('--wy-controls-floating-left', `${floatingLeft}px`);
+        this.controlsBar.style.setProperty('--wy-controls-floating-left', `${edgeGap}px`);
         this.controlsBar.style.setProperty('--wy-controls-floating-top', `${top}px`);
-        this.controlsBar.style.setProperty('--wy-controls-floating-width', 'auto');
+        this.controlsBar.style.setProperty('--wy-controls-floating-width', `calc(100vw - ${edgeGap * 2}px)`);
         this.controlsBar.style.setProperty('--wy-controls-floating-max-width', `${maxWidth}px`);
         this.controlsBar.style.setProperty('--wy-controls-floating-transform', 'none');
         this.controlsBar.style.setProperty('--wy-controls-floating-return-transform', 'translateY(-8px) scale(0.98)');
@@ -294,6 +295,8 @@ Server will start on http://localhost:3001`;
      * Setup event listeners
      */
     setupEventListeners() {
+        this.boundMasonryUpdate = () => this.scheduleMasonryLayout();
+
         if (this.controlsBar) {
             this.controlsBar.addEventListener('filter-change', (e) => {
                 const { search, searchValue, viewMode, showDetails, category, showFeaturedOnly } = e.detail;
@@ -326,6 +329,12 @@ Server will start on http://localhost:3001`;
             });
         }
 
+        window.addEventListener('resize', this.boundMasonryUpdate, { passive: true });
+
+        if (window.ResizeObserver && this.promptGrid) {
+            this.masonryResizeObserver = new ResizeObserver(this.boundMasonryUpdate);
+            this.masonryResizeObserver.observe(this.promptGrid);
+        }
     }
 
     /**
@@ -529,6 +538,8 @@ Server will start on http://localhost:3001`;
                 badge.classList.add('hidden');
             }
         });
+
+        this.scheduleMasonryLayout();
     }
 
     /**
@@ -568,6 +579,7 @@ Server will start on http://localhost:3001`;
             }
             element.style.height = '';
             element.style.opacity = '';
+            this.scheduleMasonryLayout();
             return;
         }
 
@@ -599,6 +611,7 @@ Server will start on http://localhost:3001`;
                 element.style.opacity = '';
                 element.__detailToggleHandler = null;
                 element.removeEventListener('transitionend', onEnd);
+                this.scheduleMasonryLayout();
             };
 
             element.__detailToggleHandler = onEnd;
@@ -629,6 +642,7 @@ Server will start on http://localhost:3001`;
                 element.style.opacity = '';
                 element.__detailToggleHandler = null;
                 element.removeEventListener('transitionend', onEnd);
+                this.scheduleMasonryLayout();
             };
 
             element.__detailToggleHandler = onEnd;
@@ -641,6 +655,7 @@ Server will start on http://localhost:3001`;
      */
     renderPrompts() {
         if (this.currentView === 'list') {
+            this.clearMasonryLayout();
             this.renderListView();
         } else {
             this.renderGridView();
@@ -659,6 +674,7 @@ Server will start on http://localhost:3001`;
         // Show/hide empty state
         if (this.filteredPrompts.length === 0 && !isFabricCategoryMode) {
             this.emptyState.classList.remove('hidden');
+            this.clearMasonryLayout();
             return;
         } else {
             this.emptyState.classList.add('hidden');
@@ -673,6 +689,109 @@ Server will start on http://localhost:3001`;
         this.filteredPrompts.forEach((prompt, index) => {
             const card = this.createPromptCard(prompt, index);
             this.promptGrid.appendChild(card);
+        });
+
+        this.bindMasonryImageUpdates();
+        this.scheduleMasonryLayout();
+    }
+
+    /**
+     * Schedule masonry measurements after DOM/layout changes settle.
+     */
+    scheduleMasonryLayout() {
+        if (this.currentView !== 'grid' || !this.promptGrid) {
+            return;
+        }
+
+        if (this.masonryFrame) {
+            cancelAnimationFrame(this.masonryFrame);
+        }
+
+        this.masonryFrame = requestAnimationFrame(() => {
+            this.masonryFrame = requestAnimationFrame(() => {
+                this.masonryFrame = 0;
+                this.layoutMasonryGrid();
+            });
+        });
+    }
+
+    /**
+     * Use CSS Grid row spans to pack variable-height cards without changing DOM order.
+     */
+    layoutMasonryGrid() {
+        if (!this.promptGrid || this.currentView !== 'grid') {
+            return;
+        }
+
+        const isSingleColumn = window.matchMedia('(max-width: 899px)').matches;
+        const cards = Array.from(this.promptGrid.querySelectorAll('.prompt-card'));
+
+        if (isSingleColumn || cards.length === 0) {
+            this.clearMasonryLayout();
+            return;
+        }
+
+        const computedStyle = window.getComputedStyle(this.promptGrid);
+        const rowHeight = parseFloat(computedStyle.getPropertyValue('grid-auto-rows')) || 8;
+        const rowGap = parseFloat(computedStyle.getPropertyValue('row-gap')) || 0;
+
+        cards.forEach(card => {
+            card.style.gridRowEnd = '';
+            const cardHeight = card.getBoundingClientRect().height;
+            const rowSpan = Math.ceil((cardHeight + rowGap) / (rowHeight + rowGap));
+            card.style.gridRowEnd = `span ${Math.max(1, rowSpan)}`;
+        });
+
+        requestAnimationFrame(() => {
+            this.updateMasonryCardRules(cards);
+        });
+    }
+
+    updateMasonryCardRules(cards) {
+        if (!this.promptGrid || this.currentView !== 'grid') {
+            return;
+        }
+
+        const topEdge = Math.min(...cards.map(card => card.offsetTop));
+        const leftEdges = cards.map(card => Math.round(card.getBoundingClientRect().left));
+        const firstColumnLeft = Math.min(...leftEdges);
+
+        cards.forEach(card => {
+            const cardLeft = Math.round(card.getBoundingClientRect().left);
+            card.dataset.masonryColumn = cardLeft > firstColumnLeft + 1 ? '2' : '1';
+            card.dataset.masonryTop = String(Math.abs(card.offsetTop - topEdge) <= 1);
+        });
+    }
+
+    clearMasonryLayout() {
+        if (this.masonryFrame) {
+            cancelAnimationFrame(this.masonryFrame);
+            this.masonryFrame = 0;
+        }
+
+        if (!this.promptGrid) {
+            return;
+        }
+
+        this.promptGrid.querySelectorAll('.prompt-card').forEach(card => {
+            card.style.gridRowEnd = '';
+            delete card.dataset.masonryColumn;
+            delete card.dataset.masonryTop;
+        });
+    }
+
+    bindMasonryImageUpdates() {
+        if (!this.promptGrid) {
+            return;
+        }
+
+        this.promptGrid.querySelectorAll('.prompt-card img').forEach(image => {
+            if (image.complete) {
+                return;
+            }
+
+            image.addEventListener('load', this.boundMasonryUpdate, { once: true });
+            image.addEventListener('error', this.boundMasonryUpdate, { once: true });
         });
     }
 

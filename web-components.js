@@ -1516,7 +1516,7 @@ __publicField(WyButton, "styles", i`
       text-decoration: none;
       font-family: var(--font-sans);
       font-weight: var(--wy-button-font-weight, 500);
-      border-radius: var(--radius-0);
+      border-radius: var(--wy-button-radius, var(--radius-pill, 999px));
       transition: 
         transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
         box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
@@ -1757,7 +1757,7 @@ __publicField(WyFilterChip, "styles", i`
       padding: var(--wy-filter-chip-padding, 5px 13px);
       min-height: var(--wy-filter-chip-min-height, 28px);
       box-sizing: border-box;
-      border-radius: 0;
+      border-radius: var(--wy-filter-chip-radius, var(--radius-pill, 999px));
       font-family: var(--wy-filter-chip-font-family, var(--font-sans, 'DM Sans', sans-serif));
       font-size: var(--wy-filter-chip-font-size, 11px);
       font-weight: var(--wy-filter-chip-font-weight, 500);
@@ -1978,7 +1978,7 @@ var WyControlsBar = class extends i4 {
       this.style.setProperty("margin-inline", "0");
       this.style.setProperty(
         "transform",
-        this.scrollState === "returning" ? "translateX(-50%) translateY(-8px) scale(0.98)" : "translateX(-50%)"
+        this.scrollState === "returning" ? "var(--wy-controls-floating-return-transform, translateX(-50%) translateY(-8px) scale(0.98))" : "var(--wy-controls-floating-transform, translateX(-50%))"
       );
     } else {
       this.style.removeProperty("background");
@@ -2186,6 +2186,7 @@ __publicField(WyControlsBar, "styles", i`
       --wy-controls-floating-z-index: 100;
       --wy-controls-floating-width: auto;
       --wy-controls-floating-max-width: min(900px, calc(100% - 32px));
+      --wy-controls-radius: var(--radius-pill, 999px);
     }
 
     /* Bottom hairline */
@@ -2203,13 +2204,13 @@ __publicField(WyControlsBar, "styles", i`
       position: fixed;
       top: var(--wy-controls-floating-top, 16px);
       left: var(--wy-controls-floating-left, 50%);
-      transform: translateX(-50%);
+      transform: var(--wy-controls-floating-transform, translateX(-50%));
       z-index: var(--wy-controls-floating-z-index, 100);
       width: var(--wy-controls-floating-width, auto);
       max-width: var(--wy-controls-floating-max-width, min(900px, calc(100% - 32px)));
       background: var(--paper, #F7F4EE);
       border: 1px solid var(--paper-edge, #DDD6C8);
-      border-radius: 0;
+      border-radius: var(--wy-controls-radius, 999px);
       padding: var(--s-2, 8px) var(--s-5, 24px);
       box-shadow: 0 12px 40px rgba(26, 26, 26, 0.08);
       transition:
@@ -2226,7 +2227,7 @@ __publicField(WyControlsBar, "styles", i`
 
     :host([data-scroll-state="returning"]) {
       opacity: 0;
-      transform: translateX(-50%) translateY(-8px) scale(0.98);
+      transform: var(--wy-controls-floating-return-transform, translateX(-50%) translateY(-8px) scale(0.98));
       box-shadow: none;
     }
 
@@ -2264,7 +2265,7 @@ __publicField(WyControlsBar, "styles", i`
       background: transparent;
       color: var(--ink, #1A1A1A);
       border: 1px solid var(--paper-edge, #DDD6C8);
-      border-radius: 0;
+      border-radius: var(--wy-controls-radius, 999px);
       font-family: var(--ff-sans, 'Inter', system-ui, sans-serif);
       font-size: 13px;
       font-weight: 400;
@@ -2368,7 +2369,7 @@ __publicField(WyControlsBar, "styles", i`
       align-items: center;
       background: transparent;
       border: 1px solid var(--paper-edge, #DDD6C8);
-      border-radius: 0;
+      border-radius: var(--wy-controls-radius, 999px);
       padding: 2px;
       height: 32px;
       box-sizing: border-box;
@@ -2382,7 +2383,7 @@ __publicField(WyControlsBar, "styles", i`
       justify-content: center;
       background: transparent;
       border: none;
-      border-radius: 0;
+      border-radius: var(--wy-controls-radius, 999px);
       color: var(--ink-mute, #868685);
       cursor: pointer;
       padding: 0;
@@ -2501,7 +2502,7 @@ __publicField(WyControlsBar, "styles", i`
       background: transparent;
       color: var(--ink-mute, #6B6B6A);
       border: 1px solid var(--paper-edge, #DDD6C8);
-      border-radius: 0;
+      border-radius: var(--wy-controls-radius, 999px);
       font-family: var(--ff-sans, 'Inter', system-ui, sans-serif);
       font-size: 11px;
       font-weight: 500;
@@ -2616,7 +2617,7 @@ __publicField(WyControlsBar, "styles", i`
         padding: 0;
         background: transparent;
         color: transparent;
-        border-radius: 0;
+        border-radius: var(--wy-controls-radius, 999px);
         cursor: pointer;
         transition:
           width 250ms cubic-bezier(0.2, 0, 0, 1),
@@ -2669,7 +2670,7 @@ __publicField(WyControlsBar, "styles", i`
         background: transparent;
         color: var(--ink, #1A1A1A);
         border: 1px solid var(--paper-edge, #DDD6C8);
-        border-radius: 0;
+        border-radius: var(--wy-controls-radius, 999px);
         cursor: text;
       }
 

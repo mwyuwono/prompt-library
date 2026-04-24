@@ -65,7 +65,7 @@ export class WyButton extends LitElement {
       text-decoration: none;
       font-family: var(--font-sans);
       font-weight: var(--wy-button-font-weight, 500);
-      border-radius: var(--radius-0);
+      border-radius: var(--wy-button-radius, var(--radius-pill, 999px));
       transition: 
         transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
         box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),

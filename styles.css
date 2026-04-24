@@ -40,7 +40,8 @@
     --tracking-wide:   0.04em;  --tracking-wider:  0.12em;
     --tracking-widest: var(--tr-eyebrow);
 
-    --radius-sm:0; --radius-md:0; --radius-lg:0; --radius-xl:0; --radius-full:0;
+    --radius-sm: var(--radius-1); --radius-md: var(--radius-pill);
+    --radius-lg: var(--radius-pill); --radius-xl: var(--radius-pill); --radius-full: var(--radius-pill);
 
     --shadow-subtle: none; --shadow-medium: none;
     --shadow-large: var(--shadow-modal); --shadow-xl: var(--shadow-modal);
@@ -120,7 +121,7 @@ body.controls-floating:not(.private-vault-page) #adminButton { display: none !im
 
 .btn-filters, .btn-download {
     background: var(--ink); color: var(--paper); border: none;
-    height: 28px; padding: 0 14px; border-radius: 0;
+    height: 28px; padding: 0 14px; border-radius: var(--radius-pill);
     font-family: var(--ff-sans); font-size: var(--fs-ui-xs); font-weight: 500;
     line-height: 1; text-transform: uppercase; letter-spacing: var(--tr-eyebrow);
     cursor: pointer; display: none; align-items: center; gap: 6px;
@@ -132,7 +133,7 @@ body.controls-floating:not(.private-vault-page) #adminButton { display: none !im
 wy-button:not(:defined) {
     display: inline-flex; align-items: center; justify-content: center;
     gap: 0.5rem; background-color: var(--ink); color: var(--paper);
-    border: none; border-radius: 0; padding: 8px 20px;
+    border: none; border-radius: var(--radius-pill); padding: 8px 20px;
     font-family: var(--ff-sans); font-size: var(--fs-ui-xs); font-weight: 500;
     text-transform: uppercase; letter-spacing: var(--tr-eyebrow);
     cursor: pointer; height: 32px;
@@ -170,6 +171,9 @@ wy-button:not(:defined) {
 .prompt-grid {
     display: grid;
     grid-template-columns: 1fr;
+    grid-auto-rows: 8px;
+    grid-auto-flow: row dense;
+    align-items: start;
     column-gap: 0;
     row-gap: 0;
     padding: 0 var(--outer-gutter) var(--s-9);
@@ -341,7 +345,9 @@ body.modal-open {
     --wy-controls-bar-padding-scrolled: 10px 16px;
     --wy-controls-search-width-scrolled: 180px;
     --wy-controls-category-max-width-scrolled: 100%;
+    --wy-controls-radius: var(--radius-pill);
 }
+.controls-bar[data-scrolled] { border-radius: var(--radius-pill); }
 @media (min-width: 769px) { .controls-bar { --wy-controls-container-padding-desktop: 0; } }
 
 .prompt-card, .prompt-list-item, .category-section {
@@ -356,7 +362,9 @@ body.modal-open {
     border-radius: 0;
     display: grid;
     grid-template-rows: auto 1fr;
-    padding: var(--space-2xl) var(--inner-gutter);
+    align-self: start;
+    height: max-content;
+    padding: var(--space-2xl) var(--inner-gutter) var(--space-lg);
     color: var(--ink);
     box-shadow: none;
     transition: opacity var(--dur-1) var(--ease);
@@ -373,6 +381,18 @@ body.modal-open {
         padding-left: calc(var(--inner-gutter) + var(--s-6));
     }
     .prompt-card:nth-child(odd)  { padding-right: calc(var(--inner-gutter) + var(--s-6)); }
+    .prompt-card[data-masonry-column="1"] {
+        border-left: none;
+        padding-left: var(--inner-gutter);
+        padding-right: calc(var(--inner-gutter) + var(--s-6));
+    }
+    .prompt-card[data-masonry-column="2"] {
+        border-left: var(--hair) solid var(--rule-soft);
+        padding-left: calc(var(--inner-gutter) + var(--s-6));
+        padding-right: var(--inner-gutter);
+    }
+    .prompt-card[data-masonry-top="true"] { border-top: none; }
+    .prompt-card[data-masonry-top="false"] { border-top: var(--hair) solid var(--rule-soft); }
 }
 
 @media (max-width: 899px) {
@@ -500,12 +520,16 @@ body.modal-open {
 }
 
 .card-footer {
+    position: absolute;
+    right: 0;
+    bottom: 0;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-top: var(--space-md);
-    padding-top: var(--space-md);
-    border-top: var(--hair) solid var(--rule-soft);
+    justify-content: flex-end;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+    pointer-events: none;
 }
 
 .prompt-card.has-image .card-footer .card-category,
@@ -514,14 +538,19 @@ body.modal-open {
 .card-arrow-button {
     display: flex; align-items: center; justify-content: center;
     width: 36px; height: 36px;
-    opacity: 1; border-radius: 0;
+    opacity: 0; border-radius: var(--radius-pill);
     background-color: transparent;
     border: var(--hair) solid var(--ink);
     color: var(--ink);
-    transition: background-color var(--dur-1) var(--ease), color var(--dur-1) var(--ease);
+    transition:
+        opacity var(--dur-1) var(--ease),
+        background-color var(--dur-1) var(--ease),
+        color var(--dur-1) var(--ease);
     margin-left: auto;
+    pointer-events: none;
 }
-.prompt-card:hover .card-arrow-button {
+.prompt-card:hover .card-arrow-button,
+.prompt-card:focus-visible .card-arrow-button {
     opacity: 1; background-color: var(--ink); color: var(--paper); transform: none;
 }
 .prompt-card:active .card-arrow-button { transform: none; }
@@ -533,7 +562,7 @@ body.modal-open {
 
 @media (max-width: 768px) {
     .card-arrow-button { display: none; }
-    .card-footer { padding-top: var(--space-sm); }
+    .card-footer { display: none; }
 }
 
 .prompt-card.featured-olive .card-title       { color: var(--ink); }
@@ -596,7 +625,7 @@ body.modal-open {
 .variable-input {
     width: 100%;
     padding: 12px 14px; min-height: 44px;
-    border: var(--hair) solid var(--paper-edge); border-radius: 0;
+    border: var(--hair) solid var(--paper-edge); border-radius: var(--radius-pill);
     font-family: var(--ff-sans); font-size: var(--fs-body); font-weight: 400;
     line-height: 1.5; color: var(--ink);
     background-color: var(--paper);
@@ -608,7 +637,10 @@ body.modal-open {
 .variable-input:focus        { outline: none; border-color: var(--ink); }
 .variable-input.has-value    { border-color: var(--paper-edge); }
 
-.variable-textarea { min-height: 160px; max-height: 50vh; resize: vertical; overflow-y: auto; }
+.variable-textarea {
+    min-height: 160px; max-height: 50vh; resize: vertical; overflow-y: auto;
+    border-radius: 18px;
+}
 
 .template-editor { margin-bottom: var(--space-lg); }
 
@@ -616,7 +648,7 @@ body.modal-open {
     width: 100%;
     min-height: 280px; max-height: 60vh;
     padding: 16px;
-    border: var(--hair) solid var(--paper-edge); border-radius: 0;
+    border: var(--hair) solid var(--paper-edge); border-radius: 18px;
     font-family: var(--ff-mono); font-size: var(--fs-body-s); line-height: 1.65;
     color: var(--ink); background-color: var(--paper);
     resize: vertical; overflow-y: auto;
@@ -674,7 +706,7 @@ body.modal-open {
     display: inline-block; padding: 6px 10px;
     font-family: var(--ff-mono); font-size: var(--fs-ui-xs); font-weight: 500;
     color: var(--ink); background-color: var(--paper);
-    border: var(--hair) solid var(--paper-edge); border-radius: 0;
+    border: var(--hair) solid var(--paper-edge); border-radius: var(--radius-pill);
     min-width: 28px; text-align: center; letter-spacing: 0;
 }
 .shortcut-description { color: var(--ink-mute); font-family: var(--ff-sans); font-size: var(--fs-body-s); font-weight: 400; }
@@ -730,7 +762,7 @@ mark {
 
 .vault-input {
     width: 100%; min-height: 48px; padding: 0 14px;
-    border: var(--hair) solid var(--paper-edge); border-radius: 0;
+    border: var(--hair) solid var(--paper-edge); border-radius: var(--radius-pill);
     background: var(--paper); color: var(--ink);
     font-family: var(--ff-sans); font-size: var(--fs-body);
     transition: border-color var(--dur-1) var(--ease);
@@ -739,7 +771,7 @@ mark {
 
 .vault-submit {
     min-height: 48px; padding: 0 var(--space-lg);
-    border: none; border-radius: 0;
+    border: none; border-radius: var(--radius-pill);
     background: var(--ink); color: var(--paper);
     font-family: var(--ff-sans); font-size: var(--fs-ui-xs); font-weight: 500;
     text-transform: uppercase; letter-spacing: var(--tr-eyebrow);
