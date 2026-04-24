@@ -16,7 +16,7 @@ export class WyFilterChip extends LitElement {
       padding: var(--wy-filter-chip-padding, 5px 13px);
       min-height: var(--wy-filter-chip-min-height, 28px);
       box-sizing: border-box;
-      border-radius: 9999px;
+      border-radius: 0;
       font-family: var(--wy-filter-chip-font-family, var(--font-sans, 'DM Sans', sans-serif));
       font-size: var(--wy-filter-chip-font-size, 11px);
       font-weight: var(--wy-filter-chip-font-weight, 500);

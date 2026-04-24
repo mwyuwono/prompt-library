@@ -166,8 +166,9 @@ export class WyLinksModal extends LitElement {
       width: 100%;
       max-width: 56rem; /* max-w-4xl = 896px */
       max-height: 90vh; /* Constrain height to enable scrolling */
-      background: var(--md-sys-color-surface);
-      border-radius: var(--md-sys-shape-corner-medium);
+      background: var(--paper, #F7F4EE);
+      border: 1px solid var(--paper-edge, #DDD6C8);
+      border-radius: 0;
       box-shadow: var(--shadow-modal); /* shadow-2xl */
       overflow: hidden;
       border: 1px solid color-mix(in srgb, var(--md-sys-color-on-surface) 5%, transparent); /* border-black/5 */
@@ -335,8 +336,10 @@ export class WyLinksModal extends LitElement {
       align-items: center;
       justify-content: center;
       padding: calc(var(--spacing-sm, 0.5rem) * 1.25) var(--spacing-lg, 1.5rem); /* 10px 24px = 1.25 * 8px, 24px */
-      border-radius: var(--md-sys-shape-corner-full);
-      font-family: var(--font-sans); /* DM Sans */
+      border-radius: 0;
+      font-family: var(--ff-sans, 'Inter', sans-serif);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
       font-size: 0.875rem; /* text-sm = 14px */
       font-weight: 500; /* font-medium */
       cursor: pointer;

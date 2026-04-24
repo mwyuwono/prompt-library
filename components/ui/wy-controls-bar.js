@@ -244,10 +244,11 @@ export class WyControlsBar extends LitElement {
       z-index: var(--wy-controls-floating-z-index, 100);
       width: var(--wy-controls-floating-width, auto);
       max-width: var(--wy-controls-floating-max-width, min(900px, calc(100% - 32px)));
-      background: var(--paper, #FFFAF5);
-      border-radius: 9999px;
+      background: var(--paper, #F7F4EE);
+      border: 1px solid var(--paper-edge, #DDD6C8);
+      border-radius: 0;
       padding: var(--s-2, 8px) var(--s-5, 24px);
-      box-shadow: 0 8px 32px rgba(40, 40, 40, 0.08);
+      box-shadow: 0 12px 40px rgba(26, 26, 26, 0.08);
       transition:
         top 300ms cubic-bezier(0.2, 0, 0, 1),
         transform 300ms cubic-bezier(0.2, 0, 0, 1),
@@ -297,10 +298,10 @@ export class WyControlsBar extends LitElement {
       width: 100%;
       height: 36px;
       padding: 0 var(--s-4, 16px) 0 40px;
-      background: var(--paper-deep, #F4EFEB);
-      color: var(--ink, #282828);
-      border: 1px solid transparent;
-      border-radius: 9999px;
+      background: transparent;
+      color: var(--ink, #1A1A1A);
+      border: 1px solid var(--paper-edge, #DDD6C8);
+      border-radius: 0;
       font-family: var(--ff-sans, 'Inter', system-ui, sans-serif);
       font-size: 13px;
       font-weight: 400;
@@ -318,13 +319,13 @@ export class WyControlsBar extends LitElement {
     }
 
     .search-input:hover {
-      background: color-mix(in srgb, var(--paper-deep, #F4EFEB) 80%, var(--paper-edge, #E8E2DA));
+      border-color: var(--ink-soft, #A8A49C);
     }
 
     .search-input:focus {
-      background: var(--white, #fff);
-      border-color: var(--ink, #282828);
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--ink, #282828) 10%, transparent);
+      background: transparent;
+      border-color: var(--ink, #1A1A1A);
+      box-shadow: none;
     }
 
     .search-icon {
@@ -402,10 +403,10 @@ export class WyControlsBar extends LitElement {
     .view-toggle {
       display: inline-flex;
       align-items: center;
-      background: var(--paper-deep, #F4EFEB);
-      border: 1px solid transparent;
-      border-radius: 9999px;
-      padding: 3px;
+      background: transparent;
+      border: 1px solid var(--paper-edge, #DDD6C8);
+      border-radius: 0;
+      padding: 2px;
       height: 32px;
       box-sizing: border-box;
     }
@@ -418,7 +419,7 @@ export class WyControlsBar extends LitElement {
       justify-content: center;
       background: transparent;
       border: none;
-      border-radius: 9999px;
+      border-radius: 0;
       color: var(--ink-mute, #868685);
       cursor: pointer;
       padding: 0;
@@ -434,9 +435,9 @@ export class WyControlsBar extends LitElement {
     }
 
     .view-btn.active {
-      background: var(--white, #fff);
-      color: var(--ink, #282828);
-      box-shadow: 0 1px 2px rgba(40, 40, 40, 0.08);
+      background: var(--ink, #1A1A1A);
+      color: var(--paper, #F7F4EE);
+      box-shadow: none;
     }
 
     /* Details toggle (custom checkbox) */
@@ -529,19 +530,20 @@ export class WyControlsBar extends LitElement {
 
     .chip {
       flex-shrink: 0;
-      height: 30px;
+      height: 28px;
       padding: 0 14px;
       display: inline-flex;
       align-items: center;
       gap: 6px;
       background: transparent;
-      color: var(--ink-mute, #868685);
-      border: 1px solid var(--paper-edge, #E8E2DA);
-      border-radius: 9999px;
+      color: var(--ink-mute, #6B6B6A);
+      border: 1px solid var(--paper-edge, #DDD6C8);
+      border-radius: 0;
       font-family: var(--ff-sans, 'Inter', system-ui, sans-serif);
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 500;
-      letter-spacing: 0.01em;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
       white-space: nowrap;
       cursor: pointer;
       transition:
@@ -651,7 +653,7 @@ export class WyControlsBar extends LitElement {
         padding: 0;
         background: transparent;
         color: transparent;
-        border-radius: 50%;
+        border-radius: 0;
         cursor: pointer;
         transition:
           width 250ms cubic-bezier(0.2, 0, 0, 1),
@@ -701,9 +703,10 @@ export class WyControlsBar extends LitElement {
       :host([data-mobile-search]) .search-input {
         width: 100%;
         padding: 0 var(--s-4, 16px) 0 40px;
-        background: var(--paper-deep, #F4EFEB);
-        color: var(--ink, #282828);
-        border-radius: 9999px;
+        background: transparent;
+        color: var(--ink, #1A1A1A);
+        border: 1px solid var(--paper-edge, #DDD6C8);
+        border-radius: 0;
         cursor: text;
       }
 

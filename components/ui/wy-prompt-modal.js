@@ -144,16 +144,16 @@ export class WyPromptModal extends LitElement {
       width: 90%;
       max-width: 800px;
       max-height: 90vh;
-      background: var(--wy-prompt-modal-surface, var(--md-sys-color-surface));
-      border-radius: var(--md-sys-shape-corner-medium, 16px);
+      background: var(--wy-prompt-modal-surface, var(--paper, #F7F4EE));
+      border-radius: 0;
       box-shadow: var(--shadow-modal);
       transform: translate(-50%, -50%) scale(0.95);
       transition: transform 0.3s cubic-bezier(0.2, 0, 0.2, 1);
       display: flex;
       flex-direction: column;
       overflow: hidden; /* Clip content to border-radius */
-      border: 1px solid var(--md-sys-color-outline-variant);
-      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      border: 1px solid var(--paper-edge, #DDD6C8);
+      font-family: var(--ff-sans, 'Inter', sans-serif);
     }
 
     :host([open]) .modal-container {
@@ -206,18 +206,21 @@ export class WyPromptModal extends LitElement {
     }
 
     .icon-btn.filled {
-        background: var(--md-sys-color-surface-container-high);
-        color: var(--md-sys-color-on-surface);
+        background: transparent;
+        color: var(--ink, #1A1A1A);
+        border: 1px solid var(--paper-edge, #DDD6C8);
+        border-radius: 0;
     }
 
     .icon-btn.filled:hover {
-        background: var(--md-sys-color-surface-container-highest);
-        transform: scale(1.05);
+        background: var(--ink, #1A1A1A);
+        color: var(--paper, #F7F4EE);
     }
 
     .icon-btn.primary {
-        background: var(--md-sys-color-primary);
-        color: var(--md-sys-color-on-primary);
+        background: var(--ink, #1A1A1A);
+        color: var(--paper, #F7F4EE);
+        border-radius: 0;
     }
 
     .icon-btn.primary:hover {
@@ -256,8 +259,12 @@ export class WyPromptModal extends LitElement {
     }
 
     .labeled-btn.primary {
-        background: var(--md-sys-color-primary, #282828);
-        color: var(--md-sys-color-on-primary, #ffffff);
+        background: var(--ink, #1A1A1A);
+        color: var(--paper, #F7F4EE);
+        border-radius: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        font-size: 12px;
     }
 
     .labeled-btn.primary:hover {
@@ -285,12 +292,13 @@ export class WyPromptModal extends LitElement {
 
     .badge {
       display: none; /* Hidden on all screen sizes */
-      padding: 4px 12px;
-      background: var(--wy-prompt-modal-badge-bg, color-mix(in srgb, var(--md-sys-color-primary) 10%, transparent));
-      color: var(--md-sys-color-text-heading);
-      border-radius: 999px;
-      font-family: var(--font-sans, 'DM Sans', sans-serif);
-      font-size: 0.75rem;
+      padding: 4px 0;
+      background: transparent;
+      color: var(--ink-mute, #6B6B6A);
+      border-radius: 0;
+      font-family: var(--ff-serif, 'Lora', serif);
+      font-style: italic;
+      font-size: 0.875rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.15em; /* Wider tracking */
@@ -301,9 +309,10 @@ export class WyPromptModal extends LitElement {
     }
 
     .title-group h2 {
-      font-family: var(--font-display, 'Playfair Display', serif);
+      font-family: var(--ff-serif, 'Lora', serif);
       font-size: 2.5rem; /* Larger Title */
       font-weight: 500;
+      letter-spacing: -0.015em;
       margin: 0 0 12px 0;
       color: var(--md-sys-color-text-heading);
       line-height: 1.1;
@@ -332,13 +341,15 @@ export class WyPromptModal extends LitElement {
         display: flex;
         align-items: center;
         gap: 8px;
-        background: var(--md-sys-color-primary);
-        color: var(--md-sys-color-on-primary);
+        background: var(--ink, #1A1A1A);
+        color: var(--paper, #F7F4EE);
         border: none;
         padding: 10px 20px;
-        border-radius: 999px;
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
-        font-size: 0.875rem;
+        border-radius: 0;
+        font-family: var(--ff-sans, 'Inter', sans-serif);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
         font-weight: 500;
         cursor: pointer;
         transition: background 0.2s;
@@ -483,9 +494,9 @@ export class WyPromptModal extends LitElement {
         font-family: var(--font-sans, 'DM Sans', sans-serif);
         font-size: 0.875rem;
         color: var(--md-sys-color-on-surface);
-        background: var(--md-sys-color-surface-container-lowest);
-        border: 1px solid var(--md-sys-color-outline-variant);
-        border-radius: 999px;
+        background: transparent;
+        border: 1px solid var(--paper-edge, #DDD6C8);
+        border-radius: 0;
         padding: 6px 12px;
     }
 
@@ -583,10 +594,12 @@ export class WyPromptModal extends LitElement {
         justify-content: center;
         gap: 8px;
         background: transparent;
-        border: 1px solid var(--md-sys-color-outline);
-        color: var(--md-sys-color-on-surface);
+        border: 1px solid var(--ink, #1A1A1A);
+        color: var(--ink, #1A1A1A);
         padding: 12px 24px;
-        border-radius: 999px;
+        border-radius: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
         font-family: var(--font-sans, 'DM Sans', sans-serif);
         font-size: 0.875rem;
         font-weight: 500;

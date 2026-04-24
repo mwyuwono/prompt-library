@@ -1757,7 +1757,7 @@ __publicField(WyFilterChip, "styles", i`
       padding: var(--wy-filter-chip-padding, 5px 13px);
       min-height: var(--wy-filter-chip-min-height, 28px);
       box-sizing: border-box;
-      border-radius: 9999px;
+      border-radius: 0;
       font-family: var(--wy-filter-chip-font-family, var(--font-sans, 'DM Sans', sans-serif));
       font-size: var(--wy-filter-chip-font-size, 11px);
       font-weight: var(--wy-filter-chip-font-weight, 500);
@@ -2207,10 +2207,11 @@ __publicField(WyControlsBar, "styles", i`
       z-index: var(--wy-controls-floating-z-index, 100);
       width: var(--wy-controls-floating-width, auto);
       max-width: var(--wy-controls-floating-max-width, min(900px, calc(100% - 32px)));
-      background: var(--paper, #FFFAF5);
-      border-radius: 9999px;
+      background: var(--paper, #F7F4EE);
+      border: 1px solid var(--paper-edge, #DDD6C8);
+      border-radius: 0;
       padding: var(--s-2, 8px) var(--s-5, 24px);
-      box-shadow: 0 8px 32px rgba(40, 40, 40, 0.08);
+      box-shadow: 0 12px 40px rgba(26, 26, 26, 0.08);
       transition:
         top 300ms cubic-bezier(0.2, 0, 0, 1),
         transform 300ms cubic-bezier(0.2, 0, 0, 1),
@@ -2260,10 +2261,10 @@ __publicField(WyControlsBar, "styles", i`
       width: 100%;
       height: 36px;
       padding: 0 var(--s-4, 16px) 0 40px;
-      background: var(--paper-deep, #F4EFEB);
-      color: var(--ink, #282828);
-      border: 1px solid transparent;
-      border-radius: 9999px;
+      background: transparent;
+      color: var(--ink, #1A1A1A);
+      border: 1px solid var(--paper-edge, #DDD6C8);
+      border-radius: 0;
       font-family: var(--ff-sans, 'Inter', system-ui, sans-serif);
       font-size: 13px;
       font-weight: 400;
@@ -2281,13 +2282,13 @@ __publicField(WyControlsBar, "styles", i`
     }
 
     .search-input:hover {
-      background: color-mix(in srgb, var(--paper-deep, #F4EFEB) 80%, var(--paper-edge, #E8E2DA));
+      border-color: var(--ink-soft, #A8A49C);
     }
 
     .search-input:focus {
-      background: var(--white, #fff);
-      border-color: var(--ink, #282828);
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--ink, #282828) 10%, transparent);
+      background: transparent;
+      border-color: var(--ink, #1A1A1A);
+      box-shadow: none;
     }
 
     .search-icon {
@@ -2365,10 +2366,10 @@ __publicField(WyControlsBar, "styles", i`
     .view-toggle {
       display: inline-flex;
       align-items: center;
-      background: var(--paper-deep, #F4EFEB);
-      border: 1px solid transparent;
-      border-radius: 9999px;
-      padding: 3px;
+      background: transparent;
+      border: 1px solid var(--paper-edge, #DDD6C8);
+      border-radius: 0;
+      padding: 2px;
       height: 32px;
       box-sizing: border-box;
     }
@@ -2381,7 +2382,7 @@ __publicField(WyControlsBar, "styles", i`
       justify-content: center;
       background: transparent;
       border: none;
-      border-radius: 9999px;
+      border-radius: 0;
       color: var(--ink-mute, #868685);
       cursor: pointer;
       padding: 0;
@@ -2397,9 +2398,9 @@ __publicField(WyControlsBar, "styles", i`
     }
 
     .view-btn.active {
-      background: var(--white, #fff);
-      color: var(--ink, #282828);
-      box-shadow: 0 1px 2px rgba(40, 40, 40, 0.08);
+      background: var(--ink, #1A1A1A);
+      color: var(--paper, #F7F4EE);
+      box-shadow: none;
     }
 
     /* Details toggle (custom checkbox) */
@@ -2492,19 +2493,20 @@ __publicField(WyControlsBar, "styles", i`
 
     .chip {
       flex-shrink: 0;
-      height: 30px;
+      height: 28px;
       padding: 0 14px;
       display: inline-flex;
       align-items: center;
       gap: 6px;
       background: transparent;
-      color: var(--ink-mute, #868685);
-      border: 1px solid var(--paper-edge, #E8E2DA);
-      border-radius: 9999px;
+      color: var(--ink-mute, #6B6B6A);
+      border: 1px solid var(--paper-edge, #DDD6C8);
+      border-radius: 0;
       font-family: var(--ff-sans, 'Inter', system-ui, sans-serif);
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 500;
-      letter-spacing: 0.01em;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
       white-space: nowrap;
       cursor: pointer;
       transition:
@@ -2614,7 +2616,7 @@ __publicField(WyControlsBar, "styles", i`
         padding: 0;
         background: transparent;
         color: transparent;
-        border-radius: 50%;
+        border-radius: 0;
         cursor: pointer;
         transition:
           width 250ms cubic-bezier(0.2, 0, 0, 1),
@@ -2664,9 +2666,10 @@ __publicField(WyControlsBar, "styles", i`
       :host([data-mobile-search]) .search-input {
         width: 100%;
         padding: 0 var(--s-4, 16px) 0 40px;
-        background: var(--paper-deep, #F4EFEB);
-        color: var(--ink, #282828);
-        border-radius: 9999px;
+        background: transparent;
+        color: var(--ink, #1A1A1A);
+        border: 1px solid var(--paper-edge, #DDD6C8);
+        border-radius: 0;
         cursor: text;
       }
 
@@ -7366,16 +7369,16 @@ __publicField(WyPromptModal, "styles", i`
       width: 90%;
       max-width: 800px;
       max-height: 90vh;
-      background: var(--wy-prompt-modal-surface, var(--md-sys-color-surface));
-      border-radius: var(--md-sys-shape-corner-medium, 16px);
+      background: var(--wy-prompt-modal-surface, var(--paper, #F7F4EE));
+      border-radius: 0;
       box-shadow: var(--shadow-modal);
       transform: translate(-50%, -50%) scale(0.95);
       transition: transform 0.3s cubic-bezier(0.2, 0, 0.2, 1);
       display: flex;
       flex-direction: column;
       overflow: hidden; /* Clip content to border-radius */
-      border: 1px solid var(--md-sys-color-outline-variant);
-      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      border: 1px solid var(--paper-edge, #DDD6C8);
+      font-family: var(--ff-sans, 'Inter', sans-serif);
     }
 
     :host([open]) .modal-container {
@@ -7428,18 +7431,21 @@ __publicField(WyPromptModal, "styles", i`
     }
 
     .icon-btn.filled {
-        background: var(--md-sys-color-surface-container-high);
-        color: var(--md-sys-color-on-surface);
+        background: transparent;
+        color: var(--ink, #1A1A1A);
+        border: 1px solid var(--paper-edge, #DDD6C8);
+        border-radius: 0;
     }
 
     .icon-btn.filled:hover {
-        background: var(--md-sys-color-surface-container-highest);
-        transform: scale(1.05);
+        background: var(--ink, #1A1A1A);
+        color: var(--paper, #F7F4EE);
     }
 
     .icon-btn.primary {
-        background: var(--md-sys-color-primary);
-        color: var(--md-sys-color-on-primary);
+        background: var(--ink, #1A1A1A);
+        color: var(--paper, #F7F4EE);
+        border-radius: 0;
     }
 
     .icon-btn.primary:hover {
@@ -7478,8 +7484,12 @@ __publicField(WyPromptModal, "styles", i`
     }
 
     .labeled-btn.primary {
-        background: var(--md-sys-color-primary, #282828);
-        color: var(--md-sys-color-on-primary, #ffffff);
+        background: var(--ink, #1A1A1A);
+        color: var(--paper, #F7F4EE);
+        border-radius: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        font-size: 12px;
     }
 
     .labeled-btn.primary:hover {
@@ -7507,12 +7517,13 @@ __publicField(WyPromptModal, "styles", i`
 
     .badge {
       display: none; /* Hidden on all screen sizes */
-      padding: 4px 12px;
-      background: var(--wy-prompt-modal-badge-bg, color-mix(in srgb, var(--md-sys-color-primary) 10%, transparent));
-      color: var(--md-sys-color-text-heading);
-      border-radius: 999px;
-      font-family: var(--font-sans, 'DM Sans', sans-serif);
-      font-size: 0.75rem;
+      padding: 4px 0;
+      background: transparent;
+      color: var(--ink-mute, #6B6B6A);
+      border-radius: 0;
+      font-family: var(--ff-serif, 'Lora', serif);
+      font-style: italic;
+      font-size: 0.875rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.15em; /* Wider tracking */
@@ -7523,9 +7534,10 @@ __publicField(WyPromptModal, "styles", i`
     }
 
     .title-group h2 {
-      font-family: var(--font-display, 'Playfair Display', serif);
+      font-family: var(--ff-serif, 'Lora', serif);
       font-size: 2.5rem; /* Larger Title */
       font-weight: 500;
+      letter-spacing: -0.015em;
       margin: 0 0 12px 0;
       color: var(--md-sys-color-text-heading);
       line-height: 1.1;
@@ -7554,13 +7566,15 @@ __publicField(WyPromptModal, "styles", i`
         display: flex;
         align-items: center;
         gap: 8px;
-        background: var(--md-sys-color-primary);
-        color: var(--md-sys-color-on-primary);
+        background: var(--ink, #1A1A1A);
+        color: var(--paper, #F7F4EE);
         border: none;
         padding: 10px 20px;
-        border-radius: 999px;
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
-        font-size: 0.875rem;
+        border-radius: 0;
+        font-family: var(--ff-sans, 'Inter', sans-serif);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
         font-weight: 500;
         cursor: pointer;
         transition: background 0.2s;
@@ -7705,9 +7719,9 @@ __publicField(WyPromptModal, "styles", i`
         font-family: var(--font-sans, 'DM Sans', sans-serif);
         font-size: 0.875rem;
         color: var(--md-sys-color-on-surface);
-        background: var(--md-sys-color-surface-container-lowest);
-        border: 1px solid var(--md-sys-color-outline-variant);
-        border-radius: 999px;
+        background: transparent;
+        border: 1px solid var(--paper-edge, #DDD6C8);
+        border-radius: 0;
         padding: 6px 12px;
     }
 
@@ -7805,10 +7819,12 @@ __publicField(WyPromptModal, "styles", i`
         justify-content: center;
         gap: 8px;
         background: transparent;
-        border: 1px solid var(--md-sys-color-outline);
-        color: var(--md-sys-color-on-surface);
+        border: 1px solid var(--ink, #1A1A1A);
+        color: var(--ink, #1A1A1A);
         padding: 12px 24px;
-        border-radius: 999px;
+        border-radius: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
         font-family: var(--font-sans, 'DM Sans', sans-serif);
         font-size: 0.875rem;
         font-weight: 500;
@@ -8154,8 +8170,9 @@ __publicField(WyLinksModal, "styles", i`
       width: 100%;
       max-width: 56rem; /* max-w-4xl = 896px */
       max-height: 90vh; /* Constrain height to enable scrolling */
-      background: var(--md-sys-color-surface);
-      border-radius: var(--md-sys-shape-corner-medium);
+      background: var(--paper, #F7F4EE);
+      border: 1px solid var(--paper-edge, #DDD6C8);
+      border-radius: 0;
       box-shadow: var(--shadow-modal); /* shadow-2xl */
       overflow: hidden;
       border: 1px solid color-mix(in srgb, var(--md-sys-color-on-surface) 5%, transparent); /* border-black/5 */
@@ -8323,8 +8340,10 @@ __publicField(WyLinksModal, "styles", i`
       align-items: center;
       justify-content: center;
       padding: calc(var(--spacing-sm, 0.5rem) * 1.25) var(--spacing-lg, 1.5rem); /* 10px 24px = 1.25 * 8px, 24px */
-      border-radius: var(--md-sys-shape-corner-full);
-      font-family: var(--font-sans); /* DM Sans */
+      border-radius: 0;
+      font-family: var(--ff-sans, 'Inter', sans-serif);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
       font-size: 0.875rem; /* text-sm = 14px */
       font-weight: 500; /* font-medium */
       cursor: pointer;
