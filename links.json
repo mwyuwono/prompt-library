@@ -91,6 +91,11 @@
                 "name": "Pomelli",
                 "company": "Google Labs",
                 "url": "https://labs.google.com/pomelli"
+            },
+            {
+                "name": "Claude Design",
+                "company": "Anthropic",
+                "url": "https://claude.ai/design"
             }
         ]
     },

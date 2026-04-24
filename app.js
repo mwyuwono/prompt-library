@@ -11,7 +11,7 @@ class PromptLibrary {
         this.selectedCategory = options.initialCategory || '';
         this.showDetails = true; // Default to visible on desktop
         this.currentView = 'grid'; // Default to grid view
-        this.showFeaturedOnly = options.startFeaturedOnly ?? true;
+        this.showFeaturedOnly = options.startFeaturedOnly ?? false;
 
         // DOM elements
         this.promptGrid = document.getElementById('promptGrid');
