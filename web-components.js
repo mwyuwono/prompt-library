@@ -1830,6 +1830,7 @@ var WyControlsBar = class extends i4 {
     this.chipVariant = "";
     this.isScrolled = false;
     this.scrollState = "normal";
+    this._mobileSearchOpen = false;
     this._scrollEnterThreshold = 64;
     this._scrollExitThreshold = 12;
     this._minScrollableDistance = 96;
@@ -1881,38 +1882,28 @@ var WyControlsBar = class extends i4 {
     const promptArea = document.querySelector(".prompt-area");
     if (promptArea) {
       const style = window.getComputedStyle(promptArea);
-      if (style.overflowY === "auto" || style.overflowY === "scroll") {
-        return promptArea;
-      }
+      if (style.overflowY === "auto" || style.overflowY === "scroll") return promptArea;
     }
     const mainContent = document.querySelector(".main-content");
     if (mainContent) {
       const style = window.getComputedStyle(mainContent);
-      if (style.overflowY === "auto" || style.overflowY === "scroll") {
-        return mainContent;
-      }
+      if (style.overflowY === "auto" || style.overflowY === "scroll") return mainContent;
     }
     const siblings = this.parentElement?.querySelectorAll('[class*="scroll"], [class*="area"]');
     if (siblings) {
       for (const sibling of siblings) {
         const style = window.getComputedStyle(sibling);
-        if (style.overflowY === "auto" || style.overflowY === "scroll") {
-          return sibling;
-        }
+        if (style.overflowY === "auto" || style.overflowY === "scroll") return sibling;
       }
     }
     let element = this.parentElement;
     while (element && element !== document.body) {
       const style = window.getComputedStyle(element);
-      if (style.overflowY === "auto" || style.overflowY === "scroll") {
-        return element;
-      }
+      if (style.overflowY === "auto" || style.overflowY === "scroll") return element;
       element = element.parentElement;
     }
     const bodyStyle = window.getComputedStyle(document.body);
-    if (bodyStyle.overflowY === "auto" || bodyStyle.overflowY === "scroll") {
-      return document.body;
-    }
+    if (bodyStyle.overflowY === "auto" || bodyStyle.overflowY === "scroll") return document.body;
     return window;
   }
   _getScrollMetrics() {
@@ -1922,23 +1913,15 @@ var WyControlsBar = class extends i4 {
       const documentElement = document.documentElement;
       const body = document.body;
       rawScrollY = window.scrollY || documentElement.scrollTop || body.scrollTop || 0;
-      maxScroll = Math.max(
-        0,
-        Math.max(documentElement.scrollHeight, body.scrollHeight) - window.innerHeight
-      );
+      maxScroll = Math.max(0, Math.max(documentElement.scrollHeight, body.scrollHeight) - window.innerHeight);
     } else {
       rawScrollY = this._scrollContainer ? this._scrollContainer.scrollTop : 0;
       maxScroll = this._scrollContainer ? Math.max(0, this._scrollContainer.scrollHeight - this._scrollContainer.clientHeight) : 0;
     }
-    return {
-      scrollY: Math.min(Math.max(rawScrollY, 0), maxScroll),
-      maxScroll
-    };
+    return { scrollY: Math.min(Math.max(rawScrollY, 0), maxScroll), maxScroll };
   }
   _handleScroll() {
-    if (this._scrollFrame) {
-      return;
-    }
+    if (this._scrollFrame) return;
     this._scrollFrame = requestAnimationFrame(() => {
       this._scrollFrame = 0;
       this._updateScrollState();
@@ -1953,9 +1936,7 @@ var WyControlsBar = class extends i4 {
       return;
     }
     if (this.scrollState === "normal" || this.scrollState === "returning") {
-      if (scrollY >= this._scrollEnterThreshold) {
-        this._setScrollState("floating");
-      }
+      if (scrollY >= this._scrollEnterThreshold) this._setScrollState("floating");
       return;
     }
     if (this.scrollState === "floating" && scrollY <= this._scrollExitThreshold) {
@@ -1963,9 +1944,7 @@ var WyControlsBar = class extends i4 {
     }
   }
   _setScrollState(nextState) {
-    if (this.scrollState === nextState) {
-      return;
-    }
+    if (this.scrollState === nextState) return;
     clearTimeout(this._returnTimer);
     this.scrollState = nextState;
     this.isScrolled = nextState !== "normal";
@@ -1973,25 +1952,20 @@ var WyControlsBar = class extends i4 {
     this.requestUpdate();
     if (nextState === "returning") {
       this._returnTimer = setTimeout(() => {
-        if (this.scrollState === "returning") {
-          this._setScrollState("normal");
-        }
+        if (this.scrollState === "returning") this._setScrollState("normal");
       }, this._returnDuration);
     }
   }
   _syncStateAttributes() {
-    if (this.isScrolled) {
-      this.setAttribute("data-scrolled", "");
-    } else {
-      this.removeAttribute("data-scrolled");
-    }
+    if (this.isScrolled) this.setAttribute("data-scrolled", "");
+    else this.removeAttribute("data-scrolled");
     this.setAttribute("data-scroll-state", this.scrollState);
     this._syncScrolledHostSurface();
   }
   _syncScrolledHostSurface() {
     const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches;
     if (this.isScrolled && !isMobile) {
-      this.style.setProperty("background", "var(--wy-controls-container-bg, var(--wy-controls-bar-bg, transparent))");
+      this.style.setProperty("background", "var(--paper, #FFFAF5)");
       this.style.setProperty("backdrop-filter", "none");
       this.style.setProperty("-webkit-backdrop-filter", "none");
       this.style.setProperty("position", "fixed");
@@ -2004,7 +1978,7 @@ var WyControlsBar = class extends i4 {
       this.style.setProperty("margin-inline", "0");
       this.style.setProperty(
         "transform",
-        this.scrollState === "returning" ? "var(--wy-controls-floating-return-transform, translateX(-50%) translateY(-8px) scale(0.98))" : "var(--wy-controls-floating-transform, translateX(-50%))"
+        this.scrollState === "returning" ? "translateX(-50%) translateY(-8px) scale(0.98)" : "translateX(-50%)"
       );
     } else {
       this.style.removeProperty("background");
@@ -2021,87 +1995,113 @@ var WyControlsBar = class extends i4 {
       this.style.removeProperty("transform");
     }
   }
+  updated(changedProperties) {
+    if (changedProperties.has("_mobileSearchOpen")) {
+      if (this._mobileSearchOpen) {
+        this.setAttribute("data-mobile-search", "");
+        setTimeout(() => {
+          this.shadowRoot?.querySelector(".search-input")?.focus();
+        }, 260);
+      } else {
+        this.removeAttribute("data-mobile-search");
+      }
+    }
+  }
   render() {
     this._syncStateAttributes();
+    const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches;
+    const showToggles = !this.isScrolled && (!this.hideViewToggle || !this.hideDetailsToggle);
     return b2`
       <div class="controls-container" part="controls-container">
-        <div class="search-section">
+
+        <div class="search-section ${this.searchValue ? "has-value" : ""}">
           <input
             type="search"
             class="search-input"
-            placeholder="Search prompts..."
+            placeholder="Search prompts…"
             .value="${this.searchValue}"
             @input="${this._handleSearch}"
+            @focus="${this._handleSearchFocus}"
+            @click="${this._handleSearchFocus}"
+            aria-label="Search prompts"
           >
-          <span class="material-symbols-outlined search-icon">search</span>
+          <span class="search-icon" aria-hidden="true">search</span>
+          <button
+            class="search-clear"
+            @click="${this._clearSearch}"
+            aria-label="Clear search"
+            tabindex="${this.searchValue ? "0" : "-1"}"
+          >close</button>
         </div>
 
-        ${!this.isScrolled && (!this.hideViewToggle || !this.hideDetailsToggle) ? b2`
+        ${showToggles ? b2`
           <div class="divider"></div>
-
           <div class="toggle-section">
             ${!this.hideViewToggle ? b2`
-              <div class="view-toggle">
+              <div class="view-toggle" role="group" aria-label="View mode">
                 <button
                   class="view-btn ${this.viewMode === "list" ? "active" : ""}"
                   @click="${() => this._setViewMode("list")}"
                   aria-label="List view"
-                >
-                  <span class="material-symbols-outlined">format_list_bulleted</span>
-                </button>
+                  aria-pressed="${this.viewMode === "list"}"
+                >format_list_bulleted</button>
                 <button
                   class="view-btn ${this.viewMode === "grid" ? "active" : ""}"
                   @click="${() => this._setViewMode("grid")}"
                   aria-label="Grid view"
-                >
-                  <span class="material-symbols-outlined">grid_view</span>
-                </button>
+                  aria-pressed="${this.viewMode === "grid"}"
+                >grid_view</button>
               </div>
             ` : ""}
-
             ${!this.hideDetailsToggle ? b2`
-              <div class="details-toggle-control">
-                <wy-option-toggle
-                  variant="switch"
-                  size="compact"
-                  aria-label="Descriptions"
-                  .options="${["false", "true"]}"
-                  .labels="${["Off", "On"]}"
-                  .value="${this.showDetails ? "true" : "false"}"
-                  @change="${this._setDetailsFromToggle}"
-                ></wy-option-toggle>
+              <label
+                class="details-toggle-control ${this.showDetails ? "is-on" : ""}"
+                @click="${this._toggleDetails}"
+              >
+                <input
+                  type="checkbox"
+                  ?checked="${this.showDetails}"
+                  tabindex="0"
+                  aria-label="Show descriptions"
+                >
+                <span class="toggle-track">
+                  <span class="toggle-thumb"></span>
+                </span>
                 <span class="toggle-label">Descriptions</span>
-              </div>
+              </label>
             ` : ""}
           </div>
-
           <div class="divider"></div>
-        ` : b2`
-          ${this.isScrolled ? b2`<div class="divider"></div>` : ""}
-        `}
+        ` : this.isScrolled ? b2`<div class="divider"></div>` : ""}
 
         <div class="category-section">
-          <wy-filter-chip
-            variant="${this.chipVariant || "default"}"
-            label="Featured"
-            ?active="${this.showFeaturedOnly}"
-            @click="${this._toggleFeatured}"
-          ></wy-filter-chip>
-          <wy-filter-chip
-            variant="${this.chipVariant || "default"}"
-            label="All"
-            ?active="${this.activeCategory === "all" && !this.showFeaturedOnly}"
-            @click="${() => this._setCategory("all")}"
-          ></wy-filter-chip>
-          ${this.categories.map((cat) => b2`
-            <wy-filter-chip
-              variant="${this.chipVariant || "default"}"
-              label="${cat}"
-              ?active="${this.activeCategory === cat && !this.showFeaturedOnly}"
-              @click="${() => this._setCategory(cat)}"
-            ></wy-filter-chip>
-          `)}
+          <div class="chips-track" role="tablist">
+            <button
+              class="chip chip--featured ${this.showFeaturedOnly ? "active" : ""}"
+              aria-pressed="${this.showFeaturedOnly}"
+              @click="${this._toggleFeatured}"
+            >Featured</button>
+            <button
+              class="chip ${this.activeCategory === "all" && !this.showFeaturedOnly ? "active" : ""}"
+              aria-pressed="${this.activeCategory === "all" && !this.showFeaturedOnly}"
+              @click="${() => this._setCategory("all")}"
+            >All</button>
+            ${this.categories.map((cat) => b2`
+              <button
+                class="chip ${this.activeCategory === cat && !this.showFeaturedOnly ? "active" : ""}"
+                aria-pressed="${this.activeCategory === cat && !this.showFeaturedOnly}"
+                @click="${() => this._setCategory(cat)}"
+              >${cat}</button>
+            `)}
+          </div>
         </div>
+
+        <button
+          class="mobile-cancel"
+          @click="${this._closeMobileSearch}"
+          aria-label="Close search"
+        >Cancel</button>
+
       </div>
     `;
   }
@@ -2109,19 +2109,34 @@ var WyControlsBar = class extends i4 {
     this.searchValue = e9.target.value;
     this._notifyChange();
   }
+  _handleSearchFocus() {
+    const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches;
+    if (isMobile && !this._mobileSearchOpen) {
+      this._mobileSearchOpen = true;
+    }
+  }
+  _clearSearch() {
+    this.searchValue = "";
+    this._notifyChange();
+    this.shadowRoot?.querySelector(".search-input")?.focus();
+  }
+  _closeMobileSearch() {
+    this.searchValue = "";
+    this._mobileSearchOpen = false;
+    this._notifyChange();
+  }
   _setViewMode(mode) {
     this.viewMode = mode;
     this._notifyChange();
   }
-  _setDetailsFromToggle(event) {
-    this.showDetails = event.detail.checked;
+  _toggleDetails(e9) {
+    e9.preventDefault();
+    this.showDetails = !this.showDetails;
     this._notifyChange();
   }
   _setCategory(cat) {
     this.activeCategory = cat;
-    if (this.showFeaturedOnly) {
-      this.showFeaturedOnly = false;
-    }
+    if (this.showFeaturedOnly) this.showFeaturedOnly = false;
     this._notifyChange();
   }
   _toggleFeatured() {
@@ -2153,194 +2168,192 @@ __publicField(WyControlsBar, "properties", {
   showFeaturedOnly: { type: Boolean, attribute: "show-featured-only" },
   chipVariant: { type: String, attribute: "chip-variant" },
   isScrolled: { type: Boolean, state: true },
-  scrollState: { type: String, state: true }
+  scrollState: { type: String, state: true },
+  _mobileSearchOpen: { type: Boolean, state: true }
 });
 __publicField(WyControlsBar, "styles", i`
-    /* Required fonts - load in page <head>:
-       <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
-    */
-
     :host {
       display: block;
-      background-color: var(--wy-controls-bar-bg, transparent);
-      border-bottom: var(--wy-controls-bar-border, none);
-      padding: var(--wy-controls-bar-padding, 8px 32px);
-      width: var(--wy-controls-bar-normal-width, 100%);
-      max-width: var(--wy-controls-bar-normal-max-width, none);
-      margin-inline: var(--wy-controls-bar-normal-margin-inline, 0);
+      background-color: transparent;
+      padding: var(--s-3, 12px) var(--s-7, 32px);
+      width: 100%;
       box-sizing: border-box;
-      
-      /* Configurable layout properties */
-      --wy-controls-padding-desktop: var(--spacing-xl, 32px);
-      --wy-controls-padding-tablet: var(--spacing-lg, 24px);
-      --wy-controls-padding-mobile: var(--spacing-md, 16px);
-      --wy-controls-padding-scrolled: var(--spacing-sm, 8px);
-      --wy-controls-container-max-width: 1600px;
-      --wy-controls-container-gap: 12px;
-      --wy-controls-container-gap-scrolled: 16px;
-      --wy-controls-container-padding-desktop: 0 var(--wy-controls-padding-desktop, 32px);
-      --wy-controls-container-padding-tablet: 0 var(--wy-controls-padding-tablet, 24px);
-      --wy-controls-container-padding-mobile: 0 var(--wy-controls-padding-mobile, 16px);
-      --wy-controls-container-margin-inline: auto;
-      --wy-controls-container-bg: transparent;
-      --wy-controls-container-radius: 0;
+      position: relative;
+
       --wy-controls-floating-top: 16px;
       --wy-controls-floating-right: auto;
       --wy-controls-floating-left: 50%;
       --wy-controls-floating-z-index: 100;
       --wy-controls-floating-width: auto;
       --wy-controls-floating-max-width: min(900px, calc(100% - 32px));
-      --wy-controls-floating-transform: translateX(-50%);
-      --wy-controls-floating-return-transform: translateX(-50%) translateY(-8px) scale(0.98);
-      --wy-controls-bar-padding-scrolled: 8px 24px;
-      --wy-controls-search-width: 192px;
-      --wy-controls-search-width-scrolled: 280px;
-      --wy-controls-category-max-width-scrolled: 600px;
     }
 
-    /* Sticky Pill State - when scrolled */
+    /* Bottom hairline */
+    :host::after {
+      content: '';
+      position: absolute;
+      left: var(--s-7, 32px);
+      right: var(--s-7, 32px);
+      bottom: 0;
+      height: 1px;
+      background: var(--paper-edge, #E8E2DA);
+    }
+
     :host([data-scrolled]) {
       position: fixed;
       top: var(--wy-controls-floating-top, 16px);
-      right: var(--wy-controls-floating-right, auto);
       left: var(--wy-controls-floating-left, 50%);
-      transform: var(--wy-controls-floating-transform, translateX(-50%));
+      transform: translateX(-50%);
       z-index: var(--wy-controls-floating-z-index, 100);
       width: var(--wy-controls-floating-width, auto);
       max-width: var(--wy-controls-floating-max-width, min(900px, calc(100% - 32px)));
-      background-color: var(--wy-controls-container-bg, var(--wy-controls-bar-bg, color-mix(in srgb, var(--md-sys-color-surface) 60%, transparent)));
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
+      background: var(--paper, #FFFAF5);
       border-radius: 9999px;
-      overflow: visible; /* Ensure pill shape isn't clipped */
-      padding: var(--wy-controls-bar-padding-scrolled, 8px 24px);
-      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
-      transition: 
-        top var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1)),
-        transform var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1)),
-        width var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1)),
-        max-width var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1)),
-        padding var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1)),
-        background-color var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1)),
-        box-shadow var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1)),
-        opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+      padding: var(--s-2, 8px) var(--s-5, 24px);
+      box-shadow: 0 8px 32px rgba(40, 40, 40, 0.08);
+      transition:
+        top 300ms cubic-bezier(0.2, 0, 0, 1),
+        transform 300ms cubic-bezier(0.2, 0, 0, 1),
+        padding 300ms cubic-bezier(0.2, 0, 0, 1),
+        box-shadow 300ms cubic-bezier(0.2, 0, 0, 1),
+        opacity 200ms cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    :host([data-scrolled])::after {
+      display: none;
     }
 
     :host([data-scroll-state="returning"]) {
       opacity: 0;
-      transform: var(--wy-controls-floating-return-transform, translateX(-50%) translateY(-8px) scale(0.98));
-      box-shadow: 0 4px 18px 0 rgba(31, 38, 135, 0);
+      transform: translateX(-50%) translateY(-8px) scale(0.98);
+      box-shadow: none;
     }
 
-    .material-symbols-outlined {
-      font-family: 'Material Symbols Outlined';
-      font-variation-settings:
-        'FILL' var(--wy-controls-icon-fill, 0),
-        'wght' var(--wy-controls-icon-weight, 300),
-        'GRAD' var(--wy-controls-icon-grad, 0),
-        'opsz' var(--wy-controls-icon-opsz, 24);
-      font-size: var(--wy-controls-icon-size, 24px);
-      line-height: 1;
-      letter-spacing: normal;
-      text-transform: none;
-      display: inline-block;
-      white-space: nowrap;
-      word-wrap: normal;
-      direction: ltr;
-      user-select: none;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      text-rendering: optimizeLegibility;
-    }
-
+    /* ---- Controls container ---- */
     .controls-container {
       display: flex;
       flex-wrap: nowrap;
       align-items: center;
-      gap: var(--wy-controls-container-gap, 12px);
-      max-width: var(--wy-controls-container-max-width, 1600px);
-      margin: 0 var(--wy-controls-container-margin-inline, auto);
-      padding: var(--wy-controls-container-padding-desktop, 0 var(--wy-controls-padding-desktop, 32px));
-      background-color: var(--wy-controls-container-bg, transparent);
-      border-radius: var(--wy-controls-container-radius, 0);
+      gap: var(--s-5, 24px);
+      max-width: 1600px;
+      margin: 0 auto;
     }
 
     :host([data-scrolled]) .controls-container {
-      gap: var(--wy-controls-container-gap-scrolled, 16px);
+      gap: var(--s-4, 16px);
       max-width: 100%;
-      padding: var(--wy-controls-container-gap-scrolled, 16px);
-      border-radius: 9999px; /* Pill shape for scrolled state */
-      transition: gap var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1)),
-                  padding var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1));
     }
 
-    /* Search Section */
+    /* ---- Search ---- */
     .search-section {
       flex: 0 0 auto;
-      width: var(--wy-controls-search-width, 192px);
+      width: 260px;
       position: relative;
+      transition: width 250ms cubic-bezier(0.2, 0, 0, 1);
     }
 
     :host([data-scrolled]) .search-section {
-      width: var(--wy-controls-search-width-scrolled, 280px);
-      transition: width var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1));
+      width: 280px;
     }
 
     .search-input {
       width: 100%;
-      height: 32px;
-      background-color: var(--wy-controls-search-bg, var(--md-sys-color-surface));
+      height: 36px;
+      padding: 0 var(--s-4, 16px) 0 40px;
+      background: var(--paper-deep, #F4EFEB);
+      color: var(--ink, #282828);
       border: 1px solid transparent;
       border-radius: 9999px;
-      padding: 0 12px 0 36px;
-      font-family: var(--font-body, 'DM Sans', sans-serif);
-      font-size: 0.75rem;
-      color: var(--md-sys-color-on-surface, #1f2937);
+      font-family: var(--ff-sans, 'Inter', system-ui, sans-serif);
+      font-size: 13px;
+      font-weight: 400;
+      outline: none;
       box-sizing: border-box;
-      box-shadow: none;
-      transition: all 0.2s;
+      transition:
+        background 150ms cubic-bezier(0.2, 0, 0, 1),
+        border-color 150ms cubic-bezier(0.2, 0, 0, 1),
+        box-shadow 150ms cubic-bezier(0.2, 0, 0, 1);
     }
 
     .search-input::placeholder {
-      color: var(--md-sys-color-on-surface-variant, #9ca3af);
-      opacity: 0.7;
+      color: var(--ink-mute, #868685);
+      font-weight: 300;
+    }
+
+    .search-input:hover {
+      background: color-mix(in srgb, var(--paper-deep, #F4EFEB) 80%, var(--paper-edge, #E8E2DA));
     }
 
     .search-input:focus {
-      outline: none;
-      background-color: var(--wy-controls-search-bg-focus, var(--wy-controls-search-bg, var(--md-sys-color-surface, #fff)));
-      border-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 20%, transparent);
-      box-shadow: 0 0 0 1px color-mix(in srgb, var(--md-sys-color-primary, #282828) 20%, transparent);
+      background: var(--white, #fff);
+      border-color: var(--ink, #282828);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--ink, #282828) 10%, transparent);
     }
 
     .search-icon {
       position: absolute;
-      left: 12px;
+      left: 14px;
       top: 50%;
       transform: translateY(-50%);
+      font-family: 'Material Symbols Outlined';
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
       font-size: 18px;
-      color: var(--md-sys-color-on-surface-variant, #9ca3af);
-      opacity: 0.7;
+      line-height: 1;
+      color: var(--ink-mute, #868685);
       pointer-events: none;
+      user-select: none;
+      transition: color 150ms cubic-bezier(0.2, 0, 0, 1);
     }
 
-    .search-input:focus + .search-icon {
-      color: var(--md-sys-color-primary, #282828);
+    .search-section:focus-within .search-icon {
+      color: var(--ink, #282828);
     }
 
-    /* Divider */
+    .search-clear {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 22px;
+      height: 22px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      border-radius: 50%;
+      color: var(--ink-mute, #868685);
+      cursor: pointer;
+      padding: 0;
+      font-family: 'Material Symbols Outlined';
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+      font-size: 16px;
+      line-height: 1;
+      transition: background 150ms cubic-bezier(0.2, 0, 0, 1), color 150ms cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .search-clear:hover {
+      background: color-mix(in srgb, var(--ink, #282828) 8%, transparent);
+      color: var(--ink, #282828);
+    }
+
+    .search-section.has-value .search-clear {
+      display: flex;
+    }
+
+    /* ---- Divider ---- */
     .divider {
       width: 1px;
-      height: 24px;
-      background-color: var(--rule, var(--md-sys-color-outline-variant, #e5e7eb));
+      height: 20px;
+      background: var(--paper-edge, #E8E2DA);
       flex-shrink: 0;
     }
 
-    /* Toggle Section */
+    /* ---- Toggles ---- */
     .toggle-section {
       display: flex;
       align-items: center;
-      gap: var(--s-4, 16px);
+      gap: var(--s-5, 24px);
       flex-shrink: 0;
     }
 
@@ -2348,100 +2361,376 @@ __publicField(WyControlsBar, "styles", i`
       display: none;
     }
 
-    /* View Toggle */
+    /* View toggle pill */
     .view-toggle {
-      background-color: var(--wy-controls-toggle-bg, var(--md-sys-color-surface-container-high, #f3f4f6));
-      border: 1px solid var(--md-sys-color-outline-variant, transparent);
-      border-radius: 0;
-      display: flex;
-      padding: 2px;
+      display: inline-flex;
+      align-items: center;
+      background: var(--paper-deep, #F4EFEB);
+      border: 1px solid transparent;
+      border-radius: 9999px;
+      padding: 3px;
+      height: 32px;
+      box-sizing: border-box;
     }
 
     .view-btn {
-      border: none;
-      background: transparent;
-      height: 28px;
-      width: 28px;
-      padding: 0;
-      border-radius: 0;
-      cursor: pointer;
-      display: flex;
+      width: 26px;
+      height: 26px;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      color: var(--md-sys-color-on-surface-variant, #9ca3af);
-      opacity: 0.7;
-      transition: all 0.15s;
+      background: transparent;
+      border: none;
+      border-radius: 9999px;
+      color: var(--ink-mute, #868685);
+      cursor: pointer;
+      padding: 0;
+      font-family: 'Material Symbols Outlined';
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+      font-size: 16px;
+      line-height: 1;
+      transition: background 150ms cubic-bezier(0.2, 0, 0, 1), color 150ms cubic-bezier(0.2, 0, 0, 1);
     }
 
-    .view-btn:hover:not(.active) {
-      color: var(--md-sys-color-on-surface, #1f2937);
-      opacity: 1;
+    .view-btn:hover {
+      color: var(--ink, #282828);
     }
 
     .view-btn.active {
-      background-color: var(--md-sys-color-surface, #fff);
-      color: var(--md-sys-color-primary, #282828);
-      opacity: 1;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.05), 0 0 0 1px var(--md-sys-color-outline-variant, #e5e7eb);
+      background: var(--white, #fff);
+      color: var(--ink, #282828);
+      box-shadow: 0 1px 2px rgba(40, 40, 40, 0.08);
     }
 
-    .view-btn .material-symbols-outlined,
-    .view-btn md-icon {
-      font-size: 16px;
-      --md-icon-size: 16px;
-    }
-
-    /* Details Toggle */
+    /* Details toggle (custom checkbox) */
     .details-toggle-control {
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: var(--s-2, 8px);
+      cursor: pointer;
+      user-select: none;
     }
 
-    .details-toggle-control wy-option-toggle {
-      width: auto;
+    .details-toggle-control input[type="checkbox"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+      pointer-events: none;
+    }
+
+    .toggle-track {
+      width: 28px;
+      height: 16px;
+      background: var(--paper-edge, #E8E2DA);
+      border-radius: 9999px;
+      position: relative;
+      flex-shrink: 0;
+      transition: background 150ms cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .toggle-thumb {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 12px;
+      height: 12px;
+      background: var(--white, #fff);
+      border-radius: 50%;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+      transition: transform 150ms cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .details-toggle-control.is-on .toggle-track {
+      background: var(--ink, #282828);
+    }
+
+    .details-toggle-control.is-on .toggle-thumb {
+      transform: translateX(12px);
     }
 
     .toggle-label {
-      font-family: var(--font-body, 'DM Sans', sans-serif);
-      font-size: 9px;
-      font-weight: 500;
-      letter-spacing: 0.1em;
+      font-family: var(--ff-sans, 'Inter', system-ui, sans-serif);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--md-sys-color-on-surface-variant, #64748b);
+      color: var(--ink-mute, #868685);
+      white-space: nowrap;
     }
 
-    /* Category Section */
+    /* ---- Category chips ---- */
     .category-section {
-      display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      flex: 1;
-      padding: 2px 0;
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-      mask-image: linear-gradient(to right, black 90%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to right, black 90%, transparent 100%);
+      flex: 1 1 auto;
+      min-width: 0;
+      position: relative;
     }
 
-    .category-section::-webkit-scrollbar {
+    .chips-track {
+      display: flex;
+      align-items: center;
+      gap: var(--s-2, 8px);
+      overflow-x: auto;
+      padding: 2px 24px 2px 0;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      -webkit-overflow-scrolling: touch;
+      -webkit-mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
+      mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
+    }
+
+    .chips-track::-webkit-scrollbar {
       display: none;
     }
 
     :host([data-scrolled]) .category-section {
       flex: 0 1 auto;
-      max-width: var(--wy-controls-category-max-width-scrolled, 600px);
-      transition: max-width var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1));
+      max-width: 600px;
+      transition: max-width 300ms cubic-bezier(0.2, 0, 0, 1);
     }
 
-    /* ---------- Tablet (901–1023px): compact single row ---------- */
-    @media (min-width: 901px) and (max-width: 1023px) {
+    .chip {
+      flex-shrink: 0;
+      height: 30px;
+      padding: 0 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: transparent;
+      color: var(--ink-mute, #868685);
+      border: 1px solid var(--paper-edge, #E8E2DA);
+      border-radius: 9999px;
+      font-family: var(--ff-sans, 'Inter', system-ui, sans-serif);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+      cursor: pointer;
+      transition:
+        color 150ms cubic-bezier(0.2, 0, 0, 1),
+        background 150ms cubic-bezier(0.2, 0, 0, 1),
+        border-color 150ms cubic-bezier(0.2, 0, 0, 1),
+        transform 150ms cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .chip:hover {
+      color: var(--ink, #282828);
+      border-color: color-mix(in srgb, var(--ink, #282828) 25%, var(--paper-edge, #E8E2DA));
+      background: color-mix(in srgb, var(--ink, #282828) 3%, transparent);
+    }
+
+    .chip:active {
+      transform: scale(0.98);
+    }
+
+    .chip.active {
+      background: var(--ink, #282828);
+      color: var(--paper, #FFFAF5);
+      border-color: var(--ink, #282828);
+    }
+
+    .chip.active:hover {
+      background: color-mix(in srgb, var(--ink, #282828) 92%, var(--paper, #FFFAF5));
+    }
+
+    /* Featured dot marker */
+    .chip--featured::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.9;
+      flex-shrink: 0;
+    }
+
+    /* ---- Mobile cancel button ---- */
+    .mobile-cancel {
+      flex: 0 0 auto;
+      display: none;
+      height: 36px;
+      padding: 0 var(--s-2, 8px);
+      background: transparent;
+      border: none;
+      font-family: var(--ff-sans, 'Inter', system-ui, sans-serif);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink, #282828);
+      cursor: pointer;
+    }
+
+    /* ---- Mobile (≤768px) ---- */
+    @media (max-width: 768px) {
       :host {
-        padding: var(--wy-controls-bar-padding, var(--s-2, 8px) var(--s-5, 24px));
+        padding: var(--s-3, 12px) var(--s-4, 16px);
+      }
+
+      :host::after {
+        left: var(--s-4, 16px);
+        right: var(--s-4, 16px);
+      }
+
+      :host([data-scrolled]) {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        width: 100%;
+        max-width: 100%;
+        border-radius: 0;
+        padding: var(--s-3, 12px) var(--s-4, 16px);
+        background: transparent;
+        box-shadow: none;
+      }
+
+      :host([data-scrolled])::after {
+        display: block;
+        left: var(--s-4, 16px);
+        right: var(--s-4, 16px);
       }
 
       .controls-container {
-        padding: var(--wy-controls-container-padding-tablet, 0 var(--wy-controls-padding-tablet, var(--s-5, 24px)));
+        gap: var(--s-3, 12px);
+      }
+
+      .divider,
+      .toggle-section {
+        display: none;
+      }
+
+      /* Collapsed: search is an icon button */
+      .search-section {
+        flex: 0 0 auto;
+        width: 36px;
+        transition:
+          width 250ms cubic-bezier(0.2, 0, 0, 1),
+          flex 250ms cubic-bezier(0.2, 0, 0, 1);
+      }
+
+      .search-input {
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        background: transparent;
+        color: transparent;
+        border-radius: 50%;
+        cursor: pointer;
+        transition:
+          width 250ms cubic-bezier(0.2, 0, 0, 1),
+          padding 250ms cubic-bezier(0.2, 0, 0, 1),
+          background 250ms cubic-bezier(0.2, 0, 0, 1),
+          color 150ms cubic-bezier(0.2, 0, 0, 1) 100ms,
+          border-radius 250ms cubic-bezier(0.2, 0, 0, 1),
+          border-color 150ms cubic-bezier(0.2, 0, 0, 1),
+          box-shadow 150ms cubic-bezier(0.2, 0, 0, 1);
+      }
+
+      .search-input::placeholder {
+        color: transparent;
+        transition: color 150ms cubic-bezier(0.2, 0, 0, 1);
+      }
+
+      .search-icon {
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: var(--ink, #282828);
+        transition:
+          left 250ms cubic-bezier(0.2, 0, 0, 1),
+          transform 250ms cubic-bezier(0.2, 0, 0, 1),
+          color 150ms cubic-bezier(0.2, 0, 0, 1);
+      }
+
+      .search-clear {
+        display: none !important;
+      }
+
+      /* Category section: flex fills remaining space */
+      .category-section {
+        flex: 1 1 auto;
+        min-width: 0;
+        transition:
+          opacity 250ms cubic-bezier(0.2, 0, 0, 1),
+          transform 250ms cubic-bezier(0.2, 0, 0, 1),
+          max-width 250ms cubic-bezier(0.2, 0, 0, 1);
+      }
+
+      /* Search open state */
+      :host([data-mobile-search]) .search-section {
+        flex: 1 1 auto;
+        width: auto;
+      }
+
+      :host([data-mobile-search]) .search-input {
+        width: 100%;
+        padding: 0 var(--s-4, 16px) 0 40px;
+        background: var(--paper-deep, #F4EFEB);
+        color: var(--ink, #282828);
+        border-radius: 9999px;
+        cursor: text;
+      }
+
+      :host([data-mobile-search]) .search-input::placeholder {
+        color: var(--ink-mute, #868685);
+      }
+
+      :host([data-mobile-search]) .search-icon {
+        left: 14px;
+        transform: translate(0, -50%);
+        color: var(--ink-mute, #868685);
+      }
+
+      :host([data-mobile-search]) .search-section.has-value .search-clear {
+        display: flex !important;
+      }
+
+      :host([data-mobile-search]) .category-section {
+        opacity: 0;
+        max-width: 0;
+        transform: translateX(12px);
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      :host([data-mobile-search]) .mobile-cancel {
+        display: inline-flex;
+        align-items: center;
+      }
+    }
+
+    /* ---- Tablet narrow (769–900px) ---- */
+    @media (min-width: 769px) and (max-width: 900px) {
+      .controls-container {
+        flex-wrap: wrap;
+        gap: var(--s-2, 8px) var(--s-1, 4px);
+      }
+
+      .search-section {
+        flex: 1 1 auto;
+        width: auto;
+        min-width: 120px;
+        max-width: 240px;
+      }
+
+      .divider { display: none; }
+
+      .toggle-label { display: none; }
+
+      .toggle-section { gap: var(--s-2, 8px); }
+
+      .category-section {
+        flex: 0 0 100%;
+        order: 1;
+      }
+    }
+
+    /* ---- Tablet (901–1023px) ---- */
+    @media (min-width: 901px) and (max-width: 1023px) {
+      :host {
+        padding: var(--s-2, 8px) var(--s-5, 24px);
+      }
+
+      .controls-container {
         gap: var(--s-2, 8px);
       }
 
@@ -2455,104 +2744,6 @@ __publicField(WyControlsBar, "styles", i`
 
       .toggle-label {
         display: none;
-      }
-    }
-
-    /* ---------- Narrow tablet (769–900px): categories wrap to row 2 ---------- */
-    @media (min-width: 769px) and (max-width: 900px) {
-      :host {
-        padding: var(--wy-controls-bar-padding, var(--s-2, 8px) var(--s-5, 24px));
-      }
-
-      .controls-container {
-        flex-wrap: wrap;
-        gap: var(--s-2, 8px) var(--s-1, 4px);
-        padding: var(--wy-controls-container-padding-tablet, 0 var(--wy-controls-padding-tablet, var(--s-5, 24px)));
-      }
-
-      .search-section {
-        flex: 1 1 auto;
-        width: auto;
-        min-width: 120px;
-        max-width: 240px;
-      }
-
-      .divider {
-        display: none;
-      }
-
-      .toggle-label {
-        display: none;
-      }
-
-      .toggle-section {
-        gap: var(--s-2, 8px);
-      }
-
-      .category-section {
-        flex: 0 0 100%;
-        order: 1;
-      }
-    }
-
-    /* ---------- Mobile (≤768px): stacked, no sticky pill ---------- */
-    @media (max-width: 768px) {
-      :host([data-scrolled]) {
-        position: relative;
-        top: auto;
-        left: auto;
-        transform: none;
-        width: 100%;
-        max-width: 100%;
-        border-radius: 0;
-        padding: var(--wy-controls-bar-padding, var(--s-2, 8px) var(--s-6, 32px));
-        background-color: var(--wy-controls-bar-bg, transparent);
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
-        box-shadow: none;
-      }
-
-      .controls-container {
-        flex-wrap: wrap;
-        gap: var(--s-2, 8px);
-        padding: var(--wy-controls-container-padding-mobile, 0 var(--wy-controls-padding-mobile, var(--s-4, 16px)));
-      }
-
-      .search-section,
-      :host([data-scrolled]) .search-section {
-        flex: 0 0 100%;
-        width: 100%;
-        order: -1;
-      }
-
-      :host([data-scrolled]) .search-input {
-        height: 32px;
-        font-size: 0.75rem;
-        background-color: var(--wy-controls-search-bg, var(--md-sys-color-surface-container-high, #f3f4f6));
-      }
-
-      .divider,
-      :host([data-scrolled]) .divider {
-        display: none;
-      }
-
-      .toggle-section {
-        gap: var(--s-3, 12px);
-      }
-
-      :host([data-scrolled]) .toggle-section {
-        display: flex;
-      }
-
-      .category-section,
-      :host([data-scrolled]) .category-section {
-        flex: 0 0 100%;
-        width: 100%;
-        max-width: 100%;
-        order: 1;
-        overflow-x: auto;
-        overflow-y: hidden;
-        -webkit-overflow-scrolling: touch;
       }
     }
   `);
