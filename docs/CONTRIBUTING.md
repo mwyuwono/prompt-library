@@ -22,7 +22,6 @@ All documentation in this project follows a high-density standard. Prefer concis
 | `CLAUDE.md` | AI assistant instructions, design system rules | Claude Code guidance |
 | `docs/admin-system-plan.md` | Admin API reference and components | Admin system |
 | `docs/prompt-authoring.md` | How to write prompts | Content authors |
-| `docs/cdn-troubleshooting.md` | CDN cache operations | Design system ops |
 | `docs/CONTRIBUTING.md` | This file - documentation standards | Meta |
 | `docs/ARCHIVE.md` | Historical implementation notes | Read-only reference |
 | `skills/` | Agent Skills for AI-assisted dev | AI tools |
@@ -32,7 +31,7 @@ All documentation in this project follows a high-density standard. Prefer concis
 - **Never create root-level status reports** (e.g., `FIX-COMPLETE.md`, `SESSION-SUMMARY.md`). Completed work goes in `docs/ARCHIVE.md` as a condensed entry.
 - **Never duplicate the data model.** It's defined in `README.md`. Reference it, don't copy it.
 - **Keep CLAUDE.md focused** on rules and constraints for AI tools, not on explaining what the project does (that's `README.md`).
-- **For web-component styling rules, defer to `CLAUDE.md`.** It includes the shadow-DOM/design-system boundaries that local CSS must respect.
+- **For web-component styling rules, defer to `CLAUDE.md`.** It includes the shadow-DOM/local design-system boundaries that local CSS must respect.
 - **Completed checklists are dead weight.** Remove them or move to archive. Only keep checklists that describe *future* verification steps.
 - **No emojis in documentation** unless explicitly requested.
 
@@ -43,7 +42,7 @@ All documentation in this project follows a high-density standard. Prefer concis
 | New feature shipped | Update `README.md` if user-facing. Add archive entry if complex. |
 | Bug fixed | No doc update unless it changes usage or reveals a gotcha worth noting. |
 | API changed | Update `docs/admin-system-plan.md`. |
-| Design system change | Check if `CLAUDE.md` rules or `docs/cdn-troubleshooting.md` need updates. |
+| Local design system change | Check if `CLAUDE.md` rules need updates. |
 | New prompt added | No doc update needed (self-service via admin). |
 
 ### Style

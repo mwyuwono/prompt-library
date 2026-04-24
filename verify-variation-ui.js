@@ -23,11 +23,11 @@ if (fs.existsSync(bundlePath)) {
     console.log(`  Size: ${sizeKB} KB`);
     console.log(`  Modified: ${modDate}`);
     
-    // Check if it's the recent deployment (should be ~673 KB)
-    if (stats.size >= 670000 && stats.size <= 675000) {
-        console.log('  ✓ Bundle size matches deployed version (~673 KB)');
+    // Local bundle is generated from components/ui via npm run build:components.
+    if (stats.size >= 250000 && stats.size <= 350000) {
+        console.log('  ✓ Bundle size matches local component build (~288 KB)');
     } else {
-        console.log('  ⚠ Bundle size unexpected (expected ~673 KB)');
+        console.log('  ⚠ Bundle size unexpected (expected ~288 KB)');
     }
 } else {
     console.log('✗ web-components.js not found');
@@ -39,7 +39,7 @@ if (fs.existsSync(adminPath)) {
     const adminContent = fs.readFileSync(adminPath, 'utf-8');
     
     // Check for cache-busting parameter
-    const cacheBustMatch = adminContent.match(/web-components\.js\?v=(\d{8}-\d{4})/);
+    const cacheBustMatch = adminContent.match(/web-components\.js\?v=([^'"]+)/);
     if (cacheBustMatch) {
         console.log('\n✓ admin.html has cache-busting');
         console.log(`  Parameter: ?v=${cacheBustMatch[1]}`);
@@ -58,10 +58,10 @@ if (fs.existsSync(adminPath)) {
 }
 
 // Check 3: Verify source components use the new textarea event contract
-const promptEditorPath = path.join(__dirname, '../m3-design-v2/src/components/wy-prompt-editor.js');
-const stepEditorPath = path.join(__dirname, '../m3-design-v2/src/components/wy-step-editor.js');
-const variationEditorPath = path.join(__dirname, '../m3-design-v2/src/components/wy-variation-editor.js');
-const codeTextareaPath = path.join(__dirname, '../m3-design-v2/src/components/wy-code-textarea.js');
+const promptEditorPath = path.join(__dirname, 'components/ui/wy-prompt-editor.js');
+const stepEditorPath = path.join(__dirname, 'components/ui/wy-step-editor.js');
+const variationEditorPath = path.join(__dirname, 'components/ui/wy-variation-editor.js');
+const codeTextareaPath = path.join(__dirname, 'components/ui/wy-code-textarea.js');
 
 if (fs.existsSync(promptEditorPath) && fs.existsSync(stepEditorPath) && fs.existsSync(variationEditorPath) && fs.existsSync(codeTextareaPath)) {
     const promptEditorContent = fs.readFileSync(promptEditorPath, 'utf-8');
@@ -137,7 +137,7 @@ console.log('========================================\n');
 
 const allChecks = [
     fs.existsSync(bundlePath),
-    fs.statSync(bundlePath).size >= 670000,
+    fs.statSync(bundlePath).size >= 250000 && fs.statSync(bundlePath).size <= 350000,
     fs.readFileSync(adminPath, 'utf-8').includes('?v='),
     hasConversionCode,
     hasVariationSaveSyncInBundle,

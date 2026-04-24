@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-A vanilla JavaScript prompt management tool with zero dependencies and no build process. Users can store, customize, and copy reusable AI prompts with variable substitution using `{{variable}}` syntax.
+A vanilla JavaScript prompt management tool with a committed local Web Component bundle and no runtime build step. Users can store, customize, and copy reusable AI prompts with variable substitution using `{{variable}}` syntax.
 
 ## Communication Preferences
 
@@ -31,208 +31,56 @@ python3 -m http.server 8000  # Then open http://localhost:8000
 node server.js  # Then open http://localhost:3001/admin.html
 ```
 
-No build process required for either mode. Admin requires Node.js server for API endpoints.
+No build process is required to run either mode. Admin requires Node.js server for API endpoints. Run `npm run build:components` only after editing `components/ui/`.
 
-## Design System Integration
+## Local Design System
 
-**CRITICAL: This project uses a shared design system (m3-design-v2). Before making ANY styling changes, read this section.**
-
-### Default Change Locus
-
-**All component and styling changes must be made in the shared design system repo (`m3-design-v2`) so updates propagate to all consuming projects.**
-
-- Do **not** implement local overrides unless explicitly requested
-- If a local override is unavoidable, call it out and confirm before proceeding
-- First verify whether a component is sourced from the design system and update it there
-- For `wy-*` components, first check whether the visible UI is rendered inside shadow DOM; if it is, fix styling in `m3-design-v2` via component styles, CSS custom properties, or exposed parts rather than page-level selectors in this repo
+This project is now self-contained. The former shared design-system sources were snapshotted into this repository and are maintained here.
 
 ### Where to Make Style Changes
 
 | Change Type | Where to Edit |
 |-------------|---------------|
-| Colors, typography, spacing, motion, state tokens | `m3-design-v2/src/styles/tokens.css` |
-| Base styles, utility classes, category colors | `m3-design-v2/src/styles/main.css` |
-| Web Components (`wy-toast`, `wy-controls-bar`, etc.) | `m3-design-v2/src/components/` |
-| App layout (`.header-top`, `.controls-bar`) | `prompts-library/styles.css` |
-| App components (`.prompt-card`, `.prompt-modal`) | `prompts-library/styles.css` |
+| Colors, typography, spacing, motion, state tokens | `tokens.css` |
+| Base styles, utility classes, category colors | `tokens.css` |
+| App layout (`.header-top`, `.controls-bar`) | `styles.css` |
+| Public app components (`.prompt-card`, list rows, vault UI) | `styles.css` |
+| Web Components (`wy-toast`, `wy-controls-bar`, admin editor, modals) | `components/ui/*.js` |
 
-### CRITICAL: Audit Local Overrides Before Design System Changes
+### Component Build Flow
 
-**ALWAYS check for local token overrides before making design system changes.**
-
-Token precedence chain (highest to lowest):
-1. Consuming project `tokens.css` (this file)
-2. Design system `m3-design-v2/src/styles/tokens.css`
-3. Component defaults in `m3-design-v2/src/components/*.js`
-
-**Before making design system changes, audit for overrides:**
+The app still runs without a build step because `web-components.js` is committed. When editing files in `components/ui/`, regenerate that bundle before testing:
 
 ```bash
-# Check this project's tokens.css for component-specific overrides
-grep -n "wy-filter-chip\|wy-controls\|wy-modal\|wy-button" tokens.css
-
-# If found, determine if they should be:
-# ✅ KEPT: App-specific theming (e.g., category colors)
-# ❌ REMOVED: Workarounds for design system bugs (now fixed)
+npm run build:components
 ```
 
-**Red flags (indicates local override should be removed):**
-- Hardcoded colors (e.g., `#E8F5E9`) instead of tokens
-- Comments like "Override for..." or "Fix for..."
-- Values that contradict design system intent
-- Duplicate tokens already in design system
+`components/index.js` loads the committed local bundle for the public and private pages. `admin.html` imports the same local bundle directly.
 
-**When local overrides ARE appropriate:**
-- App-specific theming that shouldn't propagate to other projects
-- Layout configuration (padding, max-width, gaps)
-- Context-specific adjustments documented with rationale
+### Bundle Completeness Check
 
-**When local overrides are FORBIDDEN:**
-- Colors, borders, shadows (use design system tokens)
-- Component structural layout (use custom properties, not ::part())
-- Workarounds for design system bugs (fix the design system instead)
+Every `wy-*` tag used by `index.html`, `private.html`, `admin.html`, or their scripts must be registered from `components/ui/index.js`. When adding or removing components, update `components/ui/index.js`, run `npm run build:components`, and verify `customElements.get('wy-component-name')` resolves in the browser.
 
-### CRITICAL: Never Use ::part() for Structural Layout
+### Styling Rules
 
-**Using ::part() to override component structural layout is FORBIDDEN.**
+- Prefer the canonical tokens already defined in `tokens.css`: `--paper`, `--paper-deep`, `--paper-edge`, `--ink`, `--ink-mute`, `--ink-soft`, `--white`, `--ok`, and `--err`.
+- Legacy `--md-sys-*` aliases still resolve and are used by existing components for compatibility.
+- Local app-specific layout custom properties are appropriate in `styles.css`.
+- Avoid `::part()` for structural layout. Prefer component custom properties or edit the component source in `components/ui/`.
+- Dark mode is not supported. Do not add `prefers-color-scheme: dark` blocks.
 
-If you find yourself writing `::part()` selectors for padding, gaps, max-width, or responsive behavior, **STOP IMMEDIATELY**. This indicates the design system component needs refactoring, not local overrides.
+### External Assets
 
-**Anti-Pattern (FORBIDDEN):**
-```css
-/* ❌ NEVER DO THIS */
-.controls-bar::part(controls-container) {
-    padding-left: 32px;          /* ❌ Structural layout override */
-    gap: 16px;                   /* ❌ Structural layout override */
-    max-width: none;             /* ❌ Structural layout override */
-}
-```
-
-**Correct Approach:**
-1. **Add CSS custom properties** to the component in `m3-design-v2`
-2. **Set custom property values** in consuming project
-3. **Never use ::part()** for layout
-
-```css
-/* ✅ CORRECT - Configure via custom properties */
-.controls-bar {
-    --wy-controls-padding-desktop: 32px;
-    --wy-controls-container-gap: var(--spacing-md);
-    --wy-controls-container-max-width: none;
-    --wy-controls-container-padding-desktop: 8px 8px;
-    --wy-controls-container-bg: #ACAAA0;
-    --wy-controls-container-margin-inline: 8px;
-    --wy-controls-container-radius: 100px;
-}
-```
-
-**If you see ::part() overrides in this codebase:** They are legacy anti-patterns that should be refactored. Do not add more.
-
-### CRITICAL: web-components.js is a Bundled Copy
-
-**NEVER edit web-components.js directly in prompt-library.**
-
-This file is a bundled copy from `m3-design-v2/dist/web-components.js`. Any direct edits will be overwritten the next time the design system is deployed.
-
-**To fix web component bugs:**
-1. Edit source components in `m3-design-v2/src/components/`
-2. Run `m3-design-v2/scripts/deploy.sh "description"`
-3. Changes automatically propagate to prompt-library and all consuming projects
-
-**Exception:** Quick local testing only - but changes must be ported to design system source before pushing.
-
-### Bundle completeness check
-
-This project loads the design system via a single bundle. Every `wy-*` tag used here must be imported in `m3-design-v2/src/web-components.js`. When changing design-system loading or adding `wy-*` usage, verify the component is in the bundle entry to avoid unregistered-element breakage.
-
-### CDN Import Details
-
-**CSS tokens** (via `tokens.css`):
-```css
-/* Update ?v= timestamp after design system changes to force browser cache refresh */
-@import url('https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/tokens.css?v=YYYYMMDD-HHMM');
-@import url('https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/main.css?v=YYYYMMDD-HHMM');
-```
-
-**Web Components** (via `components/index.js`):
-```javascript
-// Uses commit hash pinning for reliability (auto-updated by deploy.sh)
-import 'https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@<commit>/dist/web-components.js';
-```
-
-### Import Policy
-
-**Web components use commit hash pinning** (`@abc1234`) for reliability. The `m3-design-v2/scripts/deploy.sh` script automatically updates this hash after each deployment.
-
-CSS tokens still use `@main` (less frequently updated, cache issues less critical).
-
-**Loader topology matters:**
-- Public site (`index.html` -> `components/index.js`) should keep using the pinned CDN bundle.
-- Admin (`admin.html`) should keep using the explicit local `web-components.js?v=...` import.
-- Do **not** switch public to a bare local `../web-components.js` import without a versioned URL and fresh verification. That caused a modal regression because the browser could reuse a stale local bundle even while other components still looked upgraded.
-
-### CDN Cache Issues
-
-If design system changes don't appear, see [docs/cdn-troubleshooting.md](docs/cdn-troubleshooting.md) for purge commands and verification steps.
-
-### CRITICAL: Cache-Busting for Design System Changes
-
-**ALWAYS check and update cache-busting parameters in `tokens.css` after design system changes.**
-
-When design system tokens or styles change in `m3-design-v2`:
-
-1. **Update cache-busting parameters** in `tokens.css` (lines 14, 17):
-   ```css
-   @import url('...tokens.css?v=YYYYMMDD-HHMM');
-   @import url('...main.css?v=YYYYMMDD-HHMM');
-   ```
-
-2. **Update to current timestamp** (e.g., `?v=20260203-2044`)
-
-3. **Why this matters:**
-   - Web components use commit hash pinning (auto-updated by deploy.sh)
-   - CSS tokens use `@main` which is CDN-cached
-   - Without cache-busting, browsers load stale CSS even after CDN purge
-   - This causes wrong colors, borders, spacing despite correct component code
-   - For admin's local bundle, `web-components.js` also needs an explicit `?v=` bump when the bundled JS changes
-
-4. **Verification:**
-   After updating cache-busting and hard refresh (Cmd+Shift+R), use `getComputedStyle()` to verify tokens resolve to correct values.
-
-### Available Design Tokens
-
-The design system was migrated to **"The Nineteenth"** aesthetic (April 2026). Prefer the new canonical token names; legacy `--md-sys-*` aliases still resolve but are deprecated for new code.
-
-**Canonical color tokens (use these):**
-- `--paper` (#FFFAF5) — primary background
-- `--paper-deep` (#F4EFEB) — card surfaces
-- `--paper-edge` (#E8E2DA) — borders, hairlines
-- `--ink` (#282828) — text, primary actions
-- `--ink-mute` (#868685) — secondary copy
-- `--ink-soft` (#B8B3AC) — captions, disabled
-- `--white` (#FFFFFF) — form inputs only
-- `--ok` / `--err` — success / error states (sparingly)
-
-**Typography:** `--ff-serif` (Playfair Display), `--ff-sans` (Inter), `--ff-mono`
-
-**Spacing — 4px grid:** `--s-1` (4px) through `--s-10` (128px)
-
-**Shape:** `--radius-0` (0, default), `--radius-1` (2px), `--radius-pill` (999px, chips only)
-
-**Motion:** `--ease`, `--ease-in-out`, `--dur-1` (150ms) through `--dur-4` (800ms)
-
-**State opacity:** `--md-sys-state-hover-opacity` (0.08), `--md-sys-state-focus-opacity` (0.12)
-
-**Dark mode:** Not supported. Do not add `prefers-color-scheme: dark` blocks.
+Google Fonts and Material Symbols are still loaded externally. Treat those as font assets, not as the removed shared design system. If offline-capable styling becomes a goal, vendor or replace fonts in a separate pass.
 
 ## Architecture Overview
 
 ### Core Principles
 
-1. **Vanilla JavaScript only** - No frameworks, no build tools, no npm dependencies
+1. **Vanilla JavaScript runtime** - Static pages plus a committed local Web Component bundle
 2. **Session-only edits** - Template modifications don't persist across page reloads
 3. **Single-user context** - No authentication, database, or server-side logic
-4. **Design system first** - Use shared tokens; avoid local overrides
+4. **Local design system first** - Use `tokens.css` and `components/ui/`; avoid scattered overrides
 
 ### File Structure
 
@@ -244,10 +92,11 @@ The design system was migrated to **"The Nineteenth"** aesthetic (April 2026). P
 ├── admin.js         # Admin orchestration logic
 ├── admin.css        # Admin page layout
 ├── server.js        # Express server with API endpoints
-├── tokens.css       # Design system imports + legacy compatibility mappings
+├── tokens.css       # Local tokens, base styles, and compatibility mappings
 ├── styles.css       # Public site component styles
 ├── prompts.json     # Prompt data source (writable via admin API)
-└── web-components.js # Local design system bundle (with save fix)
+├── components/ui/   # Local Web Component source
+└── web-components.js # Generated local Web Component bundle
 ```
 
 ### State Management
@@ -317,10 +166,10 @@ First variation is default. User input preserved when switching. Variables share
 
 ## CSS Quality Standards
 
-**Design System First:**
-- Check if design system provides what you need before adding CSS
-- Prefer `--md-sys-*` tokens over legacy `--color-*` variables
-- Add reusable tokens to design system, not locally
+**Local Tokens First:**
+- Check `tokens.css` before adding new CSS variables
+- Prefer canonical tokens like `--paper`, `--ink`, and `--s-*` for new styles
+- Keep reusable component styling in `components/ui/`, not page-level overrides
 
 **Rules:**
 - **NEVER use `!important`** - resolve specificity conflicts properly
@@ -336,36 +185,6 @@ First variation is default. User input preserved when switching. Variables share
 
 Auto-deploys to Vercel on push to `main`.
 
-**CRITICAL CDN Cache Management:** After pushing changes to m3-design-v2, always wait 2-3 minutes before purging jsDelivr CDN (purges are throttled to max 10/hour per file), and if throttled, temporarily pin consuming projects to the commit hash (e.g., `@abc1234`) with a TODO to revert to `@main` within 24 hours, rather than repeatedly purging which will fail.
-
-```bash
-git add . && git commit -m "Description
-
-Co-Authored-By: Claude <noreply@anthropic.com>" && git push
-```
-
-**One branch at a time**: Only one non-main branch should exist at any time. At the start of a conversation, check `git branch` and alert the user if more than one non-main branch exists so stale branches can be cleaned up before proceeding.
-
-### Design System Deployment
-
-**All design system changes should be deployed via the automated script in m3-design-v2:**
-
-```bash
-cd ../m3-design-v2
-./scripts/deploy.sh "Description of changes"
-./scripts/verify-deployment.sh
-```
-
-This automatically:
-- Builds and commits design system changes
-- Copies bundle to `prompt-library/web-components.js`
-- Updates `admin.html` cache-busting parameter
-- Updates `components/index.js` commit hash
-- Commits prompt-library changes
-
-**After deployment:** Push prompt-library changes and hard refresh browser (`Cmd+Shift+R`).
-
-**Troubleshooting:** See [docs/cdn-troubleshooting.md](docs/cdn-troubleshooting.md)
 
 ## Admin System
 
@@ -390,7 +209,7 @@ This project includes a local-only admin interface for editing prompts visually.
 - Live preview panel
 
 **Architecture:**
-- Web Components from m3-design-v2 (local bundle with save fix)
+- Local Web Components from `components/ui/` bundled into `web-components.js`
 - Express server with 6 API endpoints
 - Sidebar navigation with URL hash routing
 - Changes write to `prompts.json` immediately
@@ -404,7 +223,6 @@ See [docs/admin-system-plan.md](docs/admin-system-plan.md) for complete API refe
 | [README.md](README.md) | Project overview, architecture, data model |
 | [docs/admin-system-plan.md](docs/admin-system-plan.md) | Admin API reference and components |
 | [docs/prompt-authoring.md](docs/prompt-authoring.md) | Prompt writing guidelines |
-| [docs/cdn-troubleshooting.md](docs/cdn-troubleshooting.md) | CDN cache purging and verification |
 | [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) | Documentation standards |
 | [docs/ARCHIVE.md](docs/ARCHIVE.md) | Historical implementation notes |
 | [skills/visual-qa/SKILL.md](skills/visual-qa/SKILL.md) | Screenshot testing after CSS changes |

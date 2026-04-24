@@ -11,23 +11,23 @@ admin.html          # Page shell
 admin.js            # Orchestration (state, event handlers, sidebar)
 admin.css           # Layout (280px sidebar + main grid)
 server.js           # Express server with API endpoints
-web-components.js   # Local design system bundle (DO NOT use CDN for admin; keep ?v= cache-busted)
+components/ui/      # Local Web Component source
+web-components.js   # Generated local Web Component bundle
 private-prompts.source.json  # Local plaintext private prompts (gitignored)
 private-prompts.enc.json     # Deployed encrypted private vault payload
 private-passcode.txt         # Local passcode file used for vault encryption (gitignored)
 ```
 
-### Web Components (from m3-design-v2, Lit 3.x)
+### Web Components (local, Lit 3.x)
 
 | Component | Purpose |
 |-----------|---------|
 | `wy-prompt-editor` | Main editor (5 sections: Basic Info, Visuals, Variables, Template, Visibility) |
 | `wy-image-upload` | Drag-drop image upload with preview |
-| `wy-icon-picker` | Material Symbols grid selector |
 | `wy-variable-editor` | Variable list CRUD with conditional visibility |
 | `wy-code-textarea` | Template editor with variable chip insertion |
 | `wy-step-editor` | Multi-step prompt step cards with reordering |
-| `wy-toggle-field` | Toggle with label/description |
+| `wy-option-toggle` | Toggle with label/description |
 | `wy-form-field` | Input wrapper |
 | `wy-dropdown` | Category selector |
 | `wy-toast` | Notifications |
@@ -91,12 +91,12 @@ Changing the passcode does not modify prompt content. It only re-encrypts the ex
 
 | Symptom | Fix |
 |---------|-----|
-| Editor doesn't appear | Check `admin.html` imports local `web-components.js?v=...` (not CDN) |
-| Save does nothing | Verify using local bundle with save fix |
+| Editor doesn't appear | Check `admin.html` imports local `web-components.js?v=...` and run `npm run build:components` if component source changed |
+| Save does nothing | Verify the generated local bundle is current |
 | Private save warns that vault was not updated | Add `private-passcode.txt` or `PRIVATE_PROMPTS_PASSPHRASE`, then save again or run `npm run encrypt:private` |
 | Image upload fails | Ensure `public/images/` directory exists |
 | Archived prompt still visible | Verify `app.js` has `filter(p => !p.archived)` |
 
-## Design System Source
+## Component Source
 
-Components built with Lit 3.x from `m3-design-v2`. Admin uses a local, cache-busted copy (`web-components.js?v=...`). Public uses the pinned CDN bundle via `components/index.js`. Do not collapse these into a single bare local import without verifying modal registration and multi-step form submission.
+Components are maintained in `components/ui/` and bundled into `web-components.js` with `npm run build:components`. Public/private pages load the bundle through `components/index.js`; admin imports the same local bundle directly. After changing component source, rebuild and verify modal registration plus multi-step form submission.

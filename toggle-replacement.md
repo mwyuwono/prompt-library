@@ -134,17 +134,17 @@ The `value` in detail is always the string from `options[checked ? 1 : 0]`.
 
 ## Implementation Location
 
-**File to create:** `m3-design-v2/src/components/wy-option-toggle.js`
+**File to create:** `components/ui/wy-option-toggle.js`
 
-**File to remove:** `m3-design-v2/src/components/wy-toggle-field.js` (after all consuming sites are migrated)
+**File to remove:** `components/ui/wy-toggle-field.js` (after all consuming sites are migrated)
 
-**Bundle:** Run `m3-design-v2/scripts/deploy.sh "Replace wy-toggle-field with wy-option-toggle"` after implementation.
+**Bundle:** Run `npm run build:components` after implementation.
 
 ---
 
 ## Migration: prompt-library Updates
 
-After deploying the new component from m3-design-v2:
+After rebuilding the local component bundle:
 
 ### 1. `app.js` — rendering (`getVariableHTML`, ~line 992)
 

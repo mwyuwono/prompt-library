@@ -1,28 +1,1079 @@
 /**
- * Design System Import
- * Source: https://github.com/mwyuwono/m3-design-v2
+ * prompts-library design tokens and base styles.
  *
- * This file imports the shared design tokens from the m3-design-v2 design system.
- * All token changes should be made in the design system repository, not here.
- *
- * After changes to m3-design-v2, purge the CDN cache:
- * curl -s "https://purge.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/tokens.css"
- * curl -s "https://purge.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/main.css"
+ * This file is self-contained: shared design-system CSS has been snapshotted
+ * into this repository so Claude Design and future local edits can work here.
  */
 
-/* Design System Tokens (colors, typography, spacing, shapes, motion) */
-@import url('https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/tokens.css?v=20260421-0001');
+/* ==========================================================================
+   WY DESIGN SYSTEM — TOKEN FOUNDATIONS
+   "The Nineteenth" aesthetic. Serif-heavy, cream paper, 1px rules.
+   ========================================================================== */
 
-/* Design System Utilities (base styles, button classes, text utilities) */
-@import url('https://cdn.jsdelivr.net/gh/mwyuwono/m3-design-v2@main/src/styles/main.css?v=20260421-0001');
-
-/* ========================================
-   PROJECT-SPECIFIC EXTENSIONS
-   Only add tokens here that are unique to prompts-library
-   and not suitable for the shared design system.
-   ======================================== */
+/* --------------------------------------------------------------------------
+   FONTS
+   Playfair Display (Google Fonts, OFL) is the primary serif.
+   FONT NOTE: Replace with BradfordLL @font-face blocks once license confirmed
+   for web/CDN distribution. Inter replaces DM Sans as the UI sans.
+   -------------------------------------------------------------------------- */
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@400;500;600&display=swap");
 
 :root {
+  /* ---------- COLOR — RAW TOKENS ---------- */
+  --paper:         #FFFAF5;
+  --paper-deep:    #F4EFEB;
+  --paper-edge:    #E8E2DA;
+
+  --ink:           #282828;
+  --ink-deep:      #303030;
+  --ink-mute:      #868685;
+  --ink-soft:      #B8B3AC;
+
+  --white:         #FFFFFF;
+
+  --ok:            #28C101;
+  --err:           #FF0101;
+
+  /* ---------- SEMANTIC SURFACE ROLES ---------- */
+  --bg:            var(--paper);
+  --bg-alt:        var(--paper-deep);
+  --fg:            var(--ink);
+  --fg-muted:      var(--ink-mute);
+  --fg-soft:       var(--ink-soft);
+  --rule:          var(--ink);
+  --rule-soft:     var(--paper-edge);
+
+  /* ---------- TYPE — FAMILIES ---------- */
+  /* FONT NOTE: prefix with "BradfordLL", once licensed: */
+  /* --ff-serif: "BradfordLL", "Playfair Display", "Baskerville", "Libre Caslon Text", Georgia, serif; */
+  --ff-serif:      "Playfair Display", "Baskerville", "Libre Caslon Text", Georgia, serif;
+  --ff-sans:       "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --ff-mono:       ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* ---------- TYPE — SCALE (fluid) ---------- */
+  --fs-display-xl: clamp(3.5rem, 6vw, 6.25rem);
+  --fs-display-l:  clamp(2.75rem, 4.5vw, 4.5rem);
+  --fs-display-m:  clamp(2rem, 3vw, 3rem);
+  --fs-display-s:  clamp(1.5rem, 2vw, 2rem);
+  --fs-body-l:     1.25rem;
+  --fs-body:       1rem;
+  --fs-body-s:     0.875rem;
+  --fs-ui:         0.875rem;
+  --fs-ui-xs:      0.75rem;
+
+  /* ---------- TYPE — LEADING ---------- */
+  --lh-tight:      1.02;
+  --lh-snug:       1.2;
+  --lh-normal:     1.55;
+  --lh-loose:      1.75;
+
+  /* ---------- TYPE — TRACKING ---------- */
+  --tr-display:   -0.015em;
+  --tr-body:       0;
+  --tr-eyebrow:    0.18em;
+
+  /* ---------- SPACING — 4px base ---------- */
+  --s-1:  4px;
+  --s-2:  8px;
+  --s-3:  12px;
+  --s-4:  16px;
+  --s-5:  24px;
+  --s-6:  32px;
+  --s-7:  48px;
+  --s-8:  64px;
+  --s-9:  96px;
+  --s-10: 128px;
+
+  /* ---------- LAYOUT ---------- */
+  --outer-gutter: 20px;
+  --inner-gutter: 20px;
+  --max-w:        1280px;
+  --max-w-wide:   1440px;
+
+  /* ---------- LINES & EDGES ---------- */
+  --hair:         1px;
+  --radius-0:     0;
+  --radius-1:     2px;
+  --radius-pill:  999px;
+
+  /* ---------- SHADOWS ---------- */
+  --shadow-modal: 0 12px 40px rgba(40, 40, 40, 0.08);
+
+  /* ---------- MOTION ---------- */
+  --ease:         cubic-bezier(0.2, 0.6, 0.2, 1);
+  --ease-in-out:  cubic-bezier(0.6, 0, 0.4, 1);
+  --dur-1:        150ms;
+  --dur-2:        350ms;
+  --dur-3:        500ms;
+  --dur-4:        800ms;
+
+  /* ==========================================================================
+     LEGACY ALIASES
+     Map old --md-sys-* and --font-* names to new tokens so existing components
+     continue to resolve correctly. Remove each alias as components are updated.
+     ========================================================================== */
+
+  /* --- Color aliases --- */
+  --md-sys-color-background:               var(--paper);
+  --md-sys-color-on-background:            var(--ink);
+  --md-sys-color-surface:                  var(--paper-deep);
+  --md-sys-color-on-surface:               var(--ink);
+  --md-sys-color-surface-variant:          var(--paper-edge);
+  --md-sys-color-on-surface-variant:       var(--ink-mute);
+  --md-sys-color-surface-container-lowest: var(--white);
+  --md-sys-color-surface-container-low:    var(--paper);
+  --md-sys-color-surface-container:        var(--paper-deep);
+  --md-sys-color-surface-container-high:   var(--paper-edge);
+  --md-sys-color-surface-container-highest:var(--paper-edge);
+  --md-sys-color-primary:                  var(--ink);
+  --md-sys-color-on-primary:               var(--paper);
+  --md-sys-color-primary-container:        var(--paper-deep);
+  --md-sys-color-on-primary-container:     var(--ink);
+  --md-sys-color-primary-tint-10:          color-mix(in srgb, var(--ink) 10%, transparent);
+  --md-sys-color-secondary:                var(--ink-mute);
+  --md-sys-color-on-secondary:             var(--paper);
+  --md-sys-color-secondary-container:      var(--paper-edge);
+  --md-sys-color-on-secondary-container:   var(--ink);
+  --md-sys-color-inverse-surface:          var(--ink);
+  --md-sys-color-inverse-on-surface:       var(--paper);
+  --md-sys-color-outline:                  var(--paper-edge);
+  --md-sys-color-outline-variant:          var(--paper-edge);
+  --md-sys-color-border-variant:           var(--paper-edge);
+  --md-sys-color-text-main:                var(--ink);
+  --md-sys-color-text-muted:               var(--ink-mute);
+  --md-sys-color-text-heading:             var(--ink);
+  --md-sys-color-error:                    var(--err);
+  --md-sys-color-shadow:                   var(--ink);
+
+  /* --- Font family aliases --- */
+  --font-display:  var(--ff-serif);
+  --font-serif:    var(--ff-serif);
+  --font-sans:     var(--ff-sans);
+  --font-body:     var(--ff-sans);
+
+  /* --- Typography scale aliases (kept verbatim, families updated via --font-* above) --- */
+  --md-sys-typescale-display-large-font:     var(--ff-serif);
+  --md-sys-typescale-display-medium-font:    var(--ff-serif);
+  --md-sys-typescale-display-small-font:     var(--ff-serif);
+  --md-sys-typescale-headline-large-font:    var(--ff-serif);
+  --md-sys-typescale-headline-medium-font:   var(--ff-serif);
+  --md-sys-typescale-headline-small-font:    var(--ff-serif);
+  --md-sys-typescale-title-large-font:       var(--ff-serif);
+  --md-sys-typescale-title-medium-font:      var(--ff-sans);
+  --md-sys-typescale-title-small-font:       var(--ff-sans);
+  --md-sys-typescale-body-large-font:        var(--ff-sans);
+  --md-sys-typescale-body-medium-font:       var(--ff-sans);
+  --md-sys-typescale-body-small-font:        var(--ff-sans);
+  --md-sys-typescale-label-large-font:       var(--ff-sans);
+  --md-sys-typescale-label-medium-font:      var(--ff-sans);
+  --md-sys-typescale-label-small-font:       var(--ff-sans);
+
+  /* --- Typography size/weight aliases (values unchanged) --- */
+  --md-sys-typescale-display-large-size:       4.5rem;
+  --md-sys-typescale-display-large-line-height: 1.1;
+  --md-sys-typescale-display-large-letter-spacing: -0.02em;
+  --md-sys-typescale-display-large-weight:     600;
+  --md-sys-typescale-display-medium-size:      3.5rem;
+  --md-sys-typescale-display-medium-line-height: 1.1;
+  --md-sys-typescale-display-medium-weight:    600;
+  --md-sys-typescale-display-small-size:       2.5rem;
+  --md-sys-typescale-display-small-line-height: 1.2;
+  --md-sys-typescale-display-small-weight:     600;
+  --md-sys-typescale-headline-large-size:      2rem;
+  --md-sys-typescale-headline-large-weight:    600;
+  --md-sys-typescale-headline-medium-size:     1.75rem;
+  --md-sys-typescale-headline-medium-weight:   600;
+  --md-sys-typescale-headline-small-size:      1.5rem;
+  --md-sys-typescale-headline-small-weight:    600;
+  --md-sys-typescale-title-large-size:         1.25rem;
+  --md-sys-typescale-title-large-weight:       600;
+  --md-sys-typescale-title-medium-size:        1.125rem;
+  --md-sys-typescale-title-medium-weight:      500;
+  --md-sys-typescale-title-medium-letter-spacing: 0.015em;
+  --md-sys-typescale-title-small-size:         1rem;
+  --md-sys-typescale-title-small-weight:       500;
+  --md-sys-typescale-title-small-letter-spacing: 0.01em;
+  --md-sys-typescale-body-large-size:          1.125rem;
+  --md-sys-typescale-body-large-line-height:   1.6;
+  --md-sys-typescale-body-large-weight:        400;
+  --md-sys-typescale-body-medium-size:         1rem;
+  --md-sys-typescale-body-medium-line-height:  1.6;
+  --md-sys-typescale-body-medium-weight:       400;
+  --md-sys-typescale-body-small-size:          0.875rem;
+  --md-sys-typescale-body-small-line-height:   1.6;
+  --md-sys-typescale-body-small-weight:        400;
+  --md-sys-typescale-label-large-size:         0.875rem;
+  --md-sys-typescale-label-large-weight:       500;
+  --md-sys-typescale-label-large-letter-spacing: 0.15em;
+  --md-sys-typescale-label-large-text-transform: uppercase;
+  --md-sys-typescale-label-medium-size:        0.75rem;
+  --md-sys-typescale-label-medium-weight:      400;
+
+  /* --- Spacing aliases (legacy --spacing-* names) --- */
+  --spacing-layout: var(--s-10);
+  --spacing-gap:    var(--s-8);
+  --spacing-xxs:    var(--s-1);
+  --spacing-xs:     var(--s-1);
+  --spacing-sm:     var(--s-2);
+  --spacing-md:     var(--s-4);
+  --spacing-lg:     var(--s-5);
+  --spacing-xl:     var(--s-6);
+  --spacing-2xl:    var(--s-7);
+  --spacing-3xl:    var(--s-8);
+
+  /* --- Shape aliases --- */
+  --md-sys-shape-corner-full:        var(--radius-pill);
+  --md-sys-shape-corner-large:       var(--radius-1);
+  --md-sys-shape-corner-medium:      var(--radius-1);
+  --md-sys-shape-corner-small:       var(--radius-0);
+  --md-sys-shape-corner-xs:          var(--radius-0);
+
+  /* --- Motion aliases --- */
+  --md-sys-motion-easing-standard:              var(--ease);
+  --md-sys-motion-easing-emphasized:            var(--ease);
+  --md-sys-motion-easing-emphasized-decelerate: var(--ease);
+  --md-sys-motion-easing-emphasized-accelerate: var(--ease-in-out);
+  --md-sys-motion-easing-legacy:                var(--ease);
+  --md-sys-motion-easing-spring:                var(--ease);
+  --md-sys-motion-duration-short1:  var(--dur-1);
+  --md-sys-motion-duration-short2:  var(--dur-1);
+  --md-sys-motion-duration-short3:  var(--dur-1);
+  --md-sys-motion-duration-short4:  var(--dur-1);
+  --md-sys-motion-duration-medium1: var(--dur-2);
+  --md-sys-motion-duration-medium2: var(--dur-2);
+  --md-sys-motion-duration-medium3: var(--dur-2);
+  --md-sys-motion-duration-medium4: var(--dur-2);
+  --md-sys-motion-duration-long1:   var(--dur-3);
+  --md-sys-motion-duration-long2:   var(--dur-3);
+  --md-sys-motion-duration-long3:   var(--dur-3);
+  --md-sys-motion-duration-long4:   var(--dur-3);
+
+  /* --- State aliases (opacity values unchanged) --- */
+  --md-sys-state-hover-opacity:              0.08;
+  --md-sys-state-focus-opacity:              0.12;
+  --md-sys-state-pressed-opacity:            0.12;
+  --md-sys-state-dragged-opacity:            0.16;
+  --md-sys-state-disabled-opacity:           0.38;
+  --md-sys-state-disabled-container-opacity: 0.12;
+
+  /* ==========================================================================
+     COMPONENT TOKENS
+     Updated to use new palette. --wy-* names kept for component compatibility.
+     ========================================================================== */
+
+  /* Controls bar */
+  --wy-controls-bar-bg:            color-mix(in srgb, var(--ink) 6%, var(--paper));
+  --wy-controls-bar-fg:            var(--paper);
+  --wy-controls-search-bg:         var(--white);
+  --wy-controls-search-bg-focus:   var(--white);
+  --wy-controls-toggle-bg:         var(--paper-edge);
+  --wy-controls-chip-text:         color-mix(in srgb, var(--paper) 60%, transparent);
+  --wy-controls-chip-text-hover:   var(--paper);
+  --wy-controls-chip-border:       color-mix(in srgb, var(--paper) 20%, transparent);
+  --wy-controls-chip-border-hover: color-mix(in srgb, var(--paper) 40%, transparent);
+  --wy-controls-chip-hover-bg:     color-mix(in srgb, var(--paper) 5%, transparent);
+  --wy-controls-chip-focus:        color-mix(in srgb, var(--paper) 50%, transparent);
+  --wy-controls-chip-active-bg:    var(--paper);
+  --wy-controls-chip-active-fg:    var(--ink);
+  --wy-controls-chip-shadow:       none;
+
+  /* Filter chip */
+  --wy-filter-chip-bg:             var(--white);
+  --wy-filter-chip-text:           var(--ink);
+  --wy-filter-chip-text-hover:     var(--ink);
+  --wy-filter-chip-border:         transparent;
+  --wy-filter-chip-border-hover:   transparent;
+  --wy-filter-chip-focus:          var(--ink);
+  --wy-filter-chip-active-bg:      var(--ink);
+  --wy-filter-chip-active-fg:      var(--paper);
+  --wy-filter-chip-font-weight:    500;
+  --wy-filter-chip-shadow:         none;
+  --wy-filter-chip-font-family:    var(--ff-sans);
+  --wy-filter-chip-font-size:      var(--fs-ui-xs);
+  --wy-filter-chip-font-weight-active: 600;
+  --wy-filter-chip-font-style:     normal;
+  --wy-filter-chip-padding:        5px 13px;
+  --wy-filter-chip-min-height:     28px;
+  --wy-filter-chip-hover-bg:       color-mix(in srgb, var(--ink) 8%, transparent);
+
+  /* Button system */
+  --wy-button-primary-bg:          var(--ink);
+  --wy-button-primary-fg:          var(--paper);
+  --wy-button-primary-hover-bg:    var(--ink-deep);
+  --wy-button-primary-shadow-hover: 0 10px 25px -5px rgba(40, 40, 40, 0.2);
+  --wy-button-secondary-bg:        var(--paper-deep);
+  --wy-button-secondary-fg:        var(--ink);
+  --wy-button-secondary-hover-bg:  var(--paper-edge);
+  --wy-button-outlined-bg:         transparent;
+  --wy-button-outlined-fg:         var(--ink);
+  --wy-button-outlined-border:     var(--paper-edge);
+  --wy-button-outlined-hover-bg:   color-mix(in srgb, var(--paper-deep) 30%, transparent);
+  --wy-button-text-fg:             var(--ink);
+  --wy-button-text-fg-muted:       var(--ink-mute);
+  --wy-button-text-hover-bg:       color-mix(in srgb, var(--ink) 5%, transparent);
+  --wy-button-tracking-architectural: 0.1em;
+  --wy-button-font-weight:         500;
+
+  /* Icon button */
+  --wy-icon-button-filled-bg:       var(--ink);
+  --wy-icon-button-filled-fg:       var(--paper);
+  --wy-icon-button-filled-shadow:   none;
+  --wy-icon-button-outlined-bg:     var(--paper);
+  --wy-icon-button-outlined-fg:     var(--ink);
+  --wy-icon-button-outlined-border: var(--paper-edge);
+
+  /* Utility tag */
+  --wy-utility-tag-bg:         color-mix(in srgb, var(--ink) 5%, transparent);
+  --wy-utility-tag-fg:         var(--ink);
+  --wy-utility-tag-border:     var(--paper-edge);
+  --wy-utility-tag-add-border: color-mix(in srgb, var(--ink) 20%, transparent);
+  --wy-utility-tag-add-fg:     var(--ink-mute);
+
+  /* Links modal */
+  --wy-links-modal-title-color:    var(--ink);
+  --wy-links-modal-header-color:   var(--ink);
+  --wy-links-modal-chip-text-color: var(--ink-mute);
+  --wy-links-modal-close-color:    var(--ink-soft);
+  --wy-links-modal-chip-border:    var(--paper-edge);
+
+  /* Dropdown */
+  --wy-dropdown-label-color:       var(--ink-mute);
+  --wy-dropdown-text-color:        var(--ink);
+  --wy-dropdown-icon-color:        var(--ink-mute);
+  --wy-dropdown-bg:                var(--paper-deep);
+  --wy-dropdown-border:            var(--paper-edge);
+  --wy-dropdown-border-hover:      var(--paper-edge);
+  --wy-dropdown-menu-bg:           var(--paper-edge);
+  --wy-dropdown-item-hover-bg:     var(--paper-edge);
+
+  /* Info panel */
+  --wy-info-panel-bg:          var(--paper);
+  --wy-info-panel-border:      var(--paper-edge);
+  --wy-info-panel-text-color:  var(--ink-mute);
+
+  /* Library header */
+  --wy-status-success-color:            var(--ok);
+  --wy-library-header-scrolled-bg:      rgba(255, 250, 245, 0.85);
+  --wy-library-header-scrolled-blur:    14px;
+
+  /* Toast */
+  --wy-toast-success-color: var(--ok);
+  --wy-toast-error-color:   var(--err);
+  --wy-toast-warning-color: var(--ink-mute);
+  --wy-toast-info-color:    var(--ink-mute);
+
+  /* Category tokens (simplified — no longer color-coded) */
+  --wy-color-productivity:           var(--ink-mute);
+  --wy-color-productivity-container: var(--paper-deep);
+  --wy-color-on-productivity-container: var(--ink);
+  --wy-color-expertise:              var(--ink-mute);
+  --wy-color-expertise-container:    var(--paper-deep);
+  --wy-color-on-expertise-container: var(--ink);
+  --wy-color-travel:                 var(--ink-mute);
+  --wy-color-travel-container:       var(--paper-deep);
+  --wy-color-on-travel-container:    var(--ink);
+}
+
+/* Responsive layout gutters */
+@media (min-width: 900px) {
+  :root { --outer-gutter: 32px; }
+}
+@media (min-width: 1367px) {
+  :root { --outer-gutter: 40px; --inner-gutter: 40px; }
+}
+
+/* Local base styles and utilities */
+/* Global Reset & Base Styles */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--paper);
+    color: var(--ink);
+    font-family: var(--ff-sans);
+    -webkit-font-smoothing: antialiased;
+    line-height: var(--lh-normal);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--ff-serif);
+    font-weight: 500;
+    margin-top: 0;
+    color: var(--ink);
+    letter-spacing: var(--tr-display);
+    line-height: var(--lh-snug);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+    background: var(--paper-edge);
+    border-radius: var(--radius-0);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--ink-soft); }
+
+/* Text Utilities */
+.label-overline {
+    font-family: var(--ff-sans);
+    font-size: var(--fs-ui-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--tr-eyebrow);
+    color: var(--ink-mute);
+}
+
+.text-muted { color: var(--ink-mute); }
+
+.italic-serif {
+    font-family: var(--ff-serif);
+    font-style: italic;
+}
+
+/* Material Web Component Global Adjustments */
+:root {
+    --md-elevated-card-container-color: var(--paper-deep);
+    --md-sys-elevation-level: 0;
+
+    --md-filled-button-label-text-font: var(--ff-sans);
+    --md-filled-button-label-text-weight: 500;
+    --md-filled-button-label-text-tracking: 0.05em;
+
+    /* Flat shape */
+    --md-filled-button-container-shape: var(--radius-0);
+    --md-outlined-button-container-shape: var(--radius-0);
+    --md-text-button-container-shape: var(--radius-0);
+
+    --md-filled-button-label-text-transform: uppercase;
+    --md-outlined-button-label-text-transform: uppercase;
+    --md-text-button-label-text-transform: uppercase;
+
+    --md-filled-button-container-color: var(--ink);
+    --md-outlined-button-outline-color: var(--paper-edge);
+    --md-outlined-button-label-text-color: var(--ink);
+    --md-text-button-label-text-color: var(--ink);
+
+    --md-icon-button-icon-color: var(--ink);
+    --md-icon-button-state-layer-color: var(--ink);
+}
+
+md-icon-button[selected] {
+    --md-icon-button-selected-icon-color: var(--ink);
+}
+
+/* ========================================
+   BUTTON UTILITIES
+   ======================================== */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--s-2);
+
+    padding: 0.625rem 1.5rem;
+    min-height: 2.5rem;
+
+    border-radius: var(--radius-0);
+    border: none;
+    background-color: transparent;
+
+    font-family: var(--ff-sans);
+    font-size: var(--fs-ui);
+    font-weight: 500;
+    letter-spacing: var(--tr-eyebrow);
+    text-transform: uppercase;
+
+    cursor: pointer;
+    transition: all var(--dur-1) var(--ease);
+
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity var(--dur-1) var(--ease);
+    pointer-events: none;
+}
+
+.btn-primary {
+    background-color: var(--ink);
+    color: var(--paper);
+}
+
+.btn-primary:hover {
+    background-color: var(--ink-deep);
+}
+
+.btn-primary:active {
+    background-color: var(--ink);
+}
+
+.btn-primary:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+}
+
+.btn-secondary {
+    background-color: var(--paper-deep);
+    color: var(--ink);
+    border: 1px solid var(--paper-edge);
+}
+
+.btn-secondary:hover {
+    background-color: var(--paper-edge);
+}
+
+.btn-secondary:active {
+    background-color: var(--paper-edge);
+}
+
+.btn-secondary:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+}
+
+.btn-outlined {
+    background-color: transparent;
+    border: 1px solid var(--paper-edge);
+    color: var(--ink);
+}
+
+.btn-outlined::before { background-color: var(--ink); }
+.btn-outlined:hover::before { opacity: 0.06; }
+.btn-outlined:focus-visible::before { opacity: 0.1; }
+.btn-outlined:active::before { opacity: 0.1; }
+
+.btn-outlined:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+}
+
+.btn-text {
+    background-color: transparent;
+    color: var(--ink);
+    padding: 0.625rem 0.75rem;
+}
+
+.btn-text::before { background-color: var(--ink); }
+.btn-text:hover::before { opacity: 0.06; }
+.btn-text:focus-visible::before { opacity: 0.1; }
+.btn-text:active::before { opacity: 0.1; }
+
+.btn-text:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+}
+
+.btn-sm {
+    padding: 0.5rem 1.25rem;
+    min-height: 2rem;
+    font-size: var(--fs-ui-xs);
+}
+
+.btn-sm .material-symbols-outlined { font-size: 18px; }
+
+.btn-link {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    font-family: var(--ff-sans);
+    font-size: var(--fs-ui);
+    font-weight: 500;
+    color: var(--ink-mute);
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-decoration-color: var(--paper-edge);
+    text-underline-offset: 4px;
+    text-transform: none;
+    letter-spacing: normal;
+    cursor: pointer;
+    transition: color var(--dur-1) var(--ease), text-decoration-color var(--dur-1) var(--ease);
+}
+
+.btn-link:hover {
+    color: var(--ink);
+    text-decoration-color: var(--ink);
+}
+
+/* ========================================
+   MODAL COMPONENT SYSTEM
+   ======================================== */
+
+.wy-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--dur-2) var(--ease), visibility var(--dur-2) var(--ease);
+}
+
+.wy-modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.wy-modal-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(40, 40, 40, 0.12);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    cursor: pointer;
+}
+
+.wy-modal-content {
+    position: relative;
+    background: var(--paper);
+    border-radius: var(--radius-0);
+    max-width: 56rem;
+    width: 100%;
+    max-height: 95vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: var(--shadow-modal);
+    border: 1px solid var(--paper-edge);
+    transform: scale(0.97) translateY(16px);
+    opacity: 0;
+    transition: transform var(--dur-2) var(--ease), opacity var(--dur-2) var(--ease);
+}
+
+.wy-modal.show .wy-modal-content {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+.wy-modal-header {
+    padding: 2rem 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.wy-modal-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.wy-modal-header-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex: 1;
+}
+
+.wy-modal-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-left: 1rem;
+}
+
+.wy-modal-title {
+    font-family: var(--ff-serif);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 500;
+    line-height: var(--lh-snug);
+    letter-spacing: var(--tr-display);
+    color: var(--ink);
+    margin: 0;
+}
+
+.wy-modal-description {
+    font-family: var(--ff-sans);
+    font-size: var(--fs-body);
+    font-weight: 400;
+    line-height: var(--lh-normal);
+    color: var(--ink-mute);
+    margin: 0;
+    max-width: 36rem;
+}
+
+.wy-modal-close {
+    background: none;
+    border: none;
+    color: var(--ink-soft);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: var(--radius-0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color var(--dur-1) var(--ease);
+}
+
+.wy-modal-close:hover { color: var(--ink); }
+
+.wy-badge {
+    display: inline-block;
+    background-color: var(--paper-edge);
+    color: var(--ink);
+    font-family: var(--ff-sans);
+    font-size: var(--fs-ui-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--tr-eyebrow);
+    padding: 0.25rem 0.625rem;
+    border-radius: var(--radius-0);
+}
+
+.wy-modal-tabs {
+    display: flex;
+    gap: 2rem;
+    padding: 0 2rem;
+    border-bottom: 1px solid var(--paper-edge);
+}
+
+.wy-modal-tab {
+    background: none;
+    border: none;
+    padding: 0.75rem 0;
+    font-family: var(--ff-sans);
+    font-size: var(--fs-ui);
+    font-weight: 500;
+    letter-spacing: 0;
+    color: var(--ink-mute);
+    cursor: pointer;
+    border-bottom: 1px solid transparent;
+    margin-bottom: -1px;
+    transition: color var(--dur-1) var(--ease), border-color var(--dur-1) var(--ease);
+}
+
+.wy-modal-tab:hover { color: var(--ink); }
+
+.wy-modal-tab.active {
+    color: var(--ink);
+    border-bottom-color: var(--ink);
+}
+
+.wy-modal-body {
+    padding: 2rem;
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.wy-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.wy-label {
+    font-family: var(--ff-sans);
+    font-size: var(--fs-ui-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--tr-eyebrow);
+    color: var(--ink-mute);
+}
+
+.wy-input,
+.wy-textarea {
+    width: 100%;
+    background-color: var(--white);
+    border: 1px solid var(--paper-edge);
+    border-radius: var(--radius-0);
+    padding: 0.75rem 1rem;
+    font-family: var(--ff-sans);
+    font-size: var(--fs-body);
+    color: var(--ink);
+    transition: border-color var(--dur-1) var(--ease);
+}
+
+.wy-input::placeholder,
+.wy-textarea::placeholder {
+    color: var(--ink-soft);
+}
+
+.wy-input:focus,
+.wy-textarea:focus {
+    outline: none;
+    border-color: var(--ink);
+    box-shadow: 0 0 0 1px var(--ink);
+}
+
+.wy-textarea {
+    resize: vertical;
+    min-height: 8rem;
+}
+
+.wy-textarea-hint {
+    position: absolute;
+    bottom: 0.75rem;
+    right: 0.75rem;
+    font-size: var(--fs-ui-xs);
+    color: var(--ink-soft);
+    pointer-events: none;
+}
+
+.wy-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1rem 2rem 2rem;
+    background-color: var(--paper);
+    border-top: 1px solid var(--paper-edge);
+}
+
+.wy-link-button {
+    background: none;
+    border: none;
+    font-family: var(--ff-sans);
+    font-size: var(--fs-ui);
+    font-weight: 500;
+    color: var(--ink-mute);
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-decoration-color: var(--paper-edge);
+    text-underline-offset: 4px;
+    transition: color var(--dur-1) var(--ease), text-decoration-color var(--dur-1) var(--ease);
+}
+
+.wy-link-button:hover {
+    color: var(--ink);
+    text-decoration-color: var(--ink);
+}
+
+.wy-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--s-2);
+    background-color: var(--ink);
+    color: var(--paper);
+    font-family: var(--ff-sans);
+    font-size: var(--fs-ui);
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: var(--radius-0);
+    cursor: pointer;
+    transition: background-color var(--dur-1) var(--ease);
+}
+
+.wy-icon-btn:hover { background-color: var(--ink-deep); }
+.wy-icon-btn:active { opacity: 0.9; }
+
+/* ========================================
+   TOAST / SNACKBAR
+   ======================================== */
+
+.wy-toast {
+    position: fixed;
+    top: var(--s-6);
+    right: var(--s-6);
+
+    background-color: var(--ink);
+    color: var(--paper);
+
+    padding: 0.875rem 1rem;
+    border-radius: var(--radius-0);
+
+    opacity: 0;
+    transform: translateY(-12px);
+    transition: all var(--dur-2) var(--ease);
+
+    pointer-events: none;
+
+    font-family: var(--ff-sans);
+    font-size: var(--fs-ui);
+    font-weight: 400;
+    line-height: var(--lh-normal);
+
+    z-index: 4000;
+    min-width: 180px;
+}
+
+.wy-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* ========================================
+   TABS COMPONENT
+   ======================================== */
+
+.wy-tabs { margin-bottom: var(--s-5); }
+
+.wy-tabs-header {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-end;
+    border-bottom: 1px solid var(--paper-edge);
+    position: relative;
+    padding: 0 2rem;
+}
+
+.wy-tab {
+    padding: 0.75rem 0;
+    min-height: 2.5rem;
+    background: none;
+    border: none;
+    border-bottom: 1px solid transparent;
+    margin-bottom: -1px;
+    font-family: var(--ff-sans);
+    font-size: var(--fs-ui);
+    font-weight: 500;
+    letter-spacing: 0;
+    color: var(--ink-mute);
+    cursor: pointer;
+    transition: all var(--dur-1) var(--ease);
+    position: relative;
+    overflow: hidden;
+}
+
+.wy-tab:hover { color: var(--ink); }
+
+.wy-tab.active {
+    color: var(--ink);
+    border-bottom-color: var(--ink);
+}
+
+.wy-tabs-content { position: relative; }
+.wy-tab-pane { display: none; }
+.wy-tab-pane.active { display: block; }
+
+/* ========================================
+   TOGGLE SWITCH
+   ======================================== */
+
+.wy-toggle-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+}
+
+.wy-toggle-label {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+    cursor: pointer;
+    user-select: none;
+}
+
+.wy-toggle-input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.wy-toggle-slider {
+    position: relative;
+    width: 48px;
+    height: 28px;
+    background-color: var(--paper-edge);
+    border: 1px solid var(--paper-edge);
+    border-radius: var(--radius-pill);
+    transition: all var(--dur-2) var(--ease);
+    flex-shrink: 0;
+}
+
+.wy-toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 3px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--white);
+    border-radius: var(--radius-pill);
+    transition: all var(--dur-2) var(--ease);
+}
+
+.wy-toggle-input:checked + .wy-toggle-slider {
+    background-color: var(--ink);
+    border-color: var(--ink);
+}
+
+.wy-toggle-input:checked + .wy-toggle-slider::before {
+    left: calc(100% - 23px);
+}
+
+.wy-toggle-input:active + .wy-toggle-slider::before {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.wy-toggle-input:focus-visible + .wy-toggle-slider {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+}
+
+.wy-toggle-text {
+    font-family: var(--ff-sans);
+    font-size: var(--fs-ui);
+    font-weight: 500;
+    color: var(--ink);
+}
+
+/* ========================================
+   EMPTY STATE
+   ======================================== */
+
+.wy-empty-state {
+    text-align: center;
+    padding: var(--s-8);
+    color: var(--ink-mute);
+    font-family: var(--ff-sans);
+    font-size: var(--fs-body-l);
+    font-weight: 400;
+    line-height: var(--lh-normal);
+}
+
+.wy-empty-state-icon {
+    font-size: 3rem;
+    margin-bottom: var(--s-4);
+    opacity: 0.4;
+}
+
+.wy-empty-state-title {
+    font-family: var(--ff-serif);
+    font-size: var(--fs-display-s);
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: var(--s-2);
+    letter-spacing: var(--tr-display);
+}
+
+.wy-empty-state-description {
+    max-width: 32rem;
+    margin: 0 auto;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .wy-modal-header { padding: 1.5rem 1.5rem 1rem; }
+    .wy-modal-tabs { padding: 0 1.5rem; gap: 1.5rem; }
+    .wy-modal-body { padding: 1.5rem; }
+    .wy-modal-footer {
+        padding: 1rem 1.5rem 1.5rem;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .wy-modal-footer .wy-icon-btn { width: 100%; justify-content: center; }
+}
+
+/* ========================================:root {
   color-scheme: light only;
 
   /* Legacy app-level mappings — kept for backward compatibility with styles.css */

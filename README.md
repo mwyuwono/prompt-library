@@ -1,6 +1,6 @@
 # Prompt Library
 
-A vanilla JavaScript prompt management tool with zero dependencies and no build process. Users can store, customize, and copy reusable AI prompts with variable substitution using `{{variable}}` syntax.
+A vanilla JavaScript prompt management tool with a committed local Web Component bundle and no runtime build step. Users can store, customize, and copy reusable AI prompts with variable substitution using `{{variable}}` syntax.
 
 **Live:** https://oct-19-prompts-rebuild-nbpz1n873-weaver-yuwono.vercel.app
 **Production:** https://p.weaver-yuwono.com
@@ -17,27 +17,28 @@ node server.js
 open http://localhost:3001/admin.html
 ```
 
-No build process required. Static file hosting needed for `fetch('prompts.json')` to work.
+No build process required to run the app. Static file hosting needed for `fetch('prompts.json')` to work.
 
 ## Architecture
 
-**Stack:** HTML/CSS/JS only. No frameworks, bundlers, or npm dependencies (public site).
+**Stack:** HTML/CSS/JS runtime with a committed local Web Component bundle.
 
-**Design system:** Shared `m3-design-v2` via CDN (CSS tokens). Web components are split intentionally: public uses the pinned CDN bundle through `components/index.js`, while admin uses the local cache-busted `web-components.js`.
+**Design system:** Self-contained local tokens and Web Components. Source lives in `tokens.css` and `components/ui/`; the generated browser bundle is committed as `web-components.js`.
 
 ```
 /
 ├── index.html          # Public site
 ├── app.js              # PromptLibrary class
 ├── styles.css          # Public site styles
-├── tokens.css          # Design system imports + local overrides
+├── tokens.css          # Local tokens, base styles, compatibility mappings
 ├── prompts.json        # Prompt data (flat array)
 ├── admin.html          # Admin interface
 ├── admin.js            # Admin orchestration
 ├── admin.css           # Admin layout
 ├── server.js           # Express server (admin API)
-├── web-components.js   # Local admin bundle copy (DO NOT edit directly)
-├── components/index.js # Public component loader (pinned CDN bundle)
+├── components/ui/      # Local Web Component source
+├── web-components.js   # Generated local Web Component bundle
+├── components/index.js # Public/private component loader
 └── public/images/      # Prompt thumbnails
 ```
 
@@ -141,15 +142,16 @@ Deploy workflow:
 - Public edits: deploy `prompts.json` and any referenced images
 - Private edits: deploy `private-prompts.enc.json` and any referenced images
 
-## Design System
+## Local Design System
 
-This project consumes the shared `m3-design-v2` design system. See [CLAUDE.md](CLAUDE.md) for detailed integration rules.
+This project owns its component and styling system locally. See [CLAUDE.md](CLAUDE.md) for detailed integration rules.
 
 **Key rules:**
-- All styling changes go in `m3-design-v2` unless app-specific
-- Never edit `web-components.js` directly (it's a bundled copy)
-- Never use `::part()` for structural layout
-- Use design tokens, not hardcoded values
+- Edit tokens and base utilities in `tokens.css`
+- Edit Web Component source in `components/ui/`
+- Run `npm run build:components` after changing `components/ui/`
+- Avoid `::part()` for structural layout; prefer component source or custom properties
+- Use local design tokens, not hardcoded values
 
 ## Deployment
 
@@ -159,10 +161,9 @@ Auto-deploys to Vercel on push to `main`. For manual: `vercel --prod`.
 
 | Document | Purpose |
 |----------|---------|
-| [CLAUDE.md](CLAUDE.md) | AI coding assistant instructions (design system rules, CSS standards) |
+| [CLAUDE.md](CLAUDE.md) | AI coding assistant instructions (local design system rules, CSS standards) |
 | [docs/admin-system-plan.md](docs/admin-system-plan.md) | Admin interface API and components |
 | [docs/prompt-authoring.md](docs/prompt-authoring.md) | Guidelines for writing prompts |
-| [docs/cdn-troubleshooting.md](docs/cdn-troubleshooting.md) | CDN cache management |
 | [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) | Documentation standards |
 | [docs/ARCHIVE.md](docs/ARCHIVE.md) | Historical implementation notes |
 | [skills/](skills/) | Agent Skills for AI-assisted development |

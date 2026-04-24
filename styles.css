@@ -1,29 +1,26 @@
 /* ========================================
    PROMPTS LIBRARY - Application Styles
 
-   Design tokens are imported via tokens.css from:
-   https://github.com/mwyuwono/m3-design-v2
-
    This file contains ONLY application-specific styles.
    For token changes (colors, typography, spacing),
-   update the design system instead.
+   update tokens.css.
    ======================================== */
 
 /* App-Specific Tokens
  * 
- * Only tokens that are truly app-specific and not suitable for the design system.
- * All spacing, typography, motion, and state tokens should come from the design system.
+ * Only tokens that are truly app-specific.
+ * Shared spacing, typography, motion, and state tokens live in tokens.css.
  */
 
 :root {
-    /* App-specific spacing (now using design system tokens) */
-    --space-xs: var(--spacing-xs);    /* 4px - from design system */
-    --space-sm: var(--spacing-sm);    /* 8px - from design system */
-    --space-md: var(--spacing-md);    /* 16px - from design system */
-    --space-lg: var(--spacing-lg);    /* 24px - from design system */
-    --space-xl: var(--spacing-xl);    /* 32px - from design system */
-    --space-2xl: var(--spacing-2xl);  /* 48px - from design system */
-    --space-3xl: var(--spacing-3xl);  /* 64px - from design system */
+    /* App-specific spacing aliases backed by local tokens */
+    --space-xs: var(--spacing-xs);    /* 4px */
+    --space-sm: var(--spacing-sm);    /* 8px */
+    --space-md: var(--spacing-md);    /* 16px */
+    --space-lg: var(--spacing-lg);    /* 24px */
+    --space-xl: var(--spacing-xl);    /* 32px */
+    --space-2xl: var(--spacing-2xl);  /* 48px */
+    --space-3xl: var(--spacing-3xl);  /* 64px */
 
     /* Typography scale (app-specific responsive clamp values) */
     --text-xs: clamp(0.75rem, 0.7rem + 0.15vw, 0.813rem);
@@ -62,12 +59,12 @@
     --tracking-wider: 0.05em;
     --tracking-widest: 0.1em;
 
-    /* Border radius (using design system tokens) */
-    --radius-sm: var(--md-sys-shape-corner-small);   /* 8px - from design system */
+    /* Border radius aliases backed by local tokens */
+    --radius-sm: var(--md-sys-shape-corner-small);   /* 8px */
     --radius-md: 0.75rem;                            /* 12px - app-specific, not in design system */
-    --radius-lg: var(--md-sys-shape-corner-medium);  /* 16px - from design system */
-    --radius-xl: var(--md-sys-shape-corner-large);   /* 32px - from design system */
-    --radius-full: var(--md-sys-shape-corner-full);  /* 9999px - from design system */
+    --radius-lg: var(--md-sys-shape-corner-medium);  /* 16px */
+    --radius-xl: var(--md-sys-shape-corner-large);   /* 32px */
+    --radius-full: var(--md-sys-shape-corner-full);  /* 9999px */
 
     /* Shadow system (app-specific) */
     --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.05);
@@ -75,13 +72,10 @@
     --shadow-large: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.08);
 
-    /* Motion and state tokens now come from design system.
-     * All --md-sys-motion-* and --md-sys-state-* tokens are defined in
-     * m3-design-v2/src/styles/tokens.css and imported via tokens.css
-     */
+    /* Motion and state tokens are defined in tokens.css. */
 }
 
-/* Reset (box-sizing not in design system base) */
+/* Reset */
 * {
     margin: 0;
     padding: 0;
@@ -93,7 +87,7 @@ body {
     height: 100%;
 }
 
-/* App body overrides (design system provides base body styles) */
+/* App body overrides */
 body {
     background-color: var(--color-emphasis-background);
     color: var(--color-text-primary);
@@ -868,7 +862,7 @@ body.modal-open {
     transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-legacy);
 }
 
-/* Controls Bar - Design system component host */
+/* Controls Bar - local component host */
 .controls-bar {
     display: block;
     width: var(--wy-controls-bar-normal-width, 100%);
@@ -1603,7 +1597,7 @@ body.modal-open {
 }
 
 /*
- * Button styles are provided by the design system (m3-design-v2/main.css)
+ * Button styles are provided by local base styles and wy-button.
  * Only app-specific contextual rules are defined here
  */
 
@@ -1734,7 +1728,7 @@ body.modal-open {
     }
 }
 
-/* Note: Text-link style buttons now use .btn-link from design system */
+/* Note: Text-link style buttons use the local .btn-link utility. */
 
 .shortcut-list {
     display: flex;

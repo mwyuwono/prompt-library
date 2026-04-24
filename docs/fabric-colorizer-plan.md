@@ -187,7 +187,7 @@ The colorizer pages follow the same pattern as `fabric-palette/palette.html`:
 - Tailwind CSS CDN (same plugins: `forms`, `container-queries`)
 - Google Fonts: Inter + Playfair Display + Material Symbols
 - Inline `<style>` block for custom animations/effects not covered by Tailwind
-- No m3-design-v2 token imports (palette page doesn't use them; match that pattern for consistency)
+- No root `tokens.css` imports (palette page doesn't use them; match that pattern for consistency)
 
 ---
 

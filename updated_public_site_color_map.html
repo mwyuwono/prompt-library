@@ -2,8 +2,7 @@
 
 Edit the `New Color` column, or replace a `Current Color` value inline if that is easier for you.
 
-Design-system-backed rows are intentionally left as tokens or source expressions instead of flattened hex values. Some
-updates may need to be implemented in `m3-design-v2` instead of this repo.
+Local-design-system-backed rows are intentionally left as tokens or source expressions instead of flattened hex values. Updates belong in `tokens.css`, `styles.css`, or `components/ui/`.
 
 ## Global Tokens And Semantic Mappings
 
@@ -12,9 +11,9 @@ updates may need to be implemented in `m3-design-v2` instead of this repo.
 | Component | Selector / Token | Property | Current Color | New Color | Notes |
 | --- | --- | --- | --- | --- | --- |
 | Page background | `--color-page-background` | background token | `var(--md-sys-color-background)` | `#FCFBF6` | App
-semantic mapping to design system |
+semantic mapping to local tokens |
 | Card surface | `--color-card-surface` | surface token | `var(--md-sys-color-surface-container-lowest)` | `#FFFFFF` |
-App semantic mapping to design system |
+App semantic mapping to local tokens |
 | Dark card surface | `--color-card-dark` | surface token | `var(--md-sys-color-primary)` | `#315522` | App semantic
 mapping to design system |
 | Primary text | `--color-text-primary` | text token | `var(--md-sys-color-text-main)` | `#000000` | App semantic
@@ -52,19 +51,19 @@ mapping still used in public styles |
 
 | Component | Selector / Token | Property | Current Color | New Color | Notes |
 | --- | --- | --- | --- | --- | --- |
-| Design system primary | `--md-sys-color-primary` | primary | design-system token | `#315522` | Shared token, not
+| Design system primary | `--md-sys-color-primary` | primary | local token | `#315522` | Shared token, not
 locally defined in light mode |
-| Design system on-primary | `--md-sys-color-on-primary` | on-primary text | design-system token | `#FCFBF6` | Shared
+| Design system on-primary | `--md-sys-color-on-primary` | on-primary text | local token | `#FCFBF6` | Shared
 token, used by buttons and featured states |
-| Design system secondary | `--md-sys-color-secondary` | secondary | design-system token | `#A0860D` | Shared token,
+| Design system secondary | `--md-sys-color-secondary` | secondary | local token | `#A0860D` | Shared token,
 used by accent states |
-| Design system background | `--md-sys-color-background` | background | design-system token | `#FCFBF6` | Shared token,
+| Design system background | `--md-sys-color-background` | background | local token | `#FCFBF6` | Shared token,
 used for page/list backgrounds |
-| Design system surface container | `--md-sys-color-surface-container` | surface | design-system token | `#FFFFFF` |
+| Design system surface container | `--md-sys-color-surface-container` | surface | local token | `#FFFFFF` |
 Shared token, used by `body` |
-| Design system text main | `--md-sys-color-text-main` | text | design-system token | `#000000` | Shared token via app
+| Design system text main | `--md-sys-color-text-main` | text | local token | `#000000` | Shared token via app
 mappings |
-| Design system text muted | `--md-sys-color-text-muted` | text | design-system token | `#315522` | Shared token via app
+| Design system text muted | `--md-sys-color-text-muted` | text | local token | `#315522` | Shared token via app
 mappings |
 
 ### Global Surface Details
@@ -128,5 +127,5 @@ Local state color |
 
 - New colors are based on the Flamingo Estate brand identity: Merino (`#FCFBF6`), Estate Green (`#315522`), and Buttered
 Rum (`#A0860D`).
-- Rows marked as design-system-backed may need implementation in `m3-design-v2`.
+- Rows marked as local-design-system-backed may need implementation in `tokens.css`, `styles.css`, or `components/ui/`.
 - Most prompt-card, prompt-list, quick-link, and textarea colors are local to this repo.

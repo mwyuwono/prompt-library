@@ -2,7 +2,7 @@
 
 Edit the `New Color` column, or replace a `Current Color` value inline if that is easier for you.
 
-Design-system-backed rows are intentionally left as tokens or source expressions instead of flattened hex values. Some updates may need to be implemented in `m3-design-v2` instead of this repo.
+Local-design-system-backed rows are intentionally left as tokens or source expressions instead of flattened hex values. Implement updates in `tokens.css`, `styles.css`, or `components/ui/` as appropriate.
 
 ## Global Tokens And Semantic Mappings
 
@@ -10,14 +10,14 @@ Design-system-backed rows are intentionally left as tokens or source expressions
 
 | Component | Selector / Token | Property | Current Color | New Color | Notes |
 | --- | --- | --- | --- | --- | --- |
-| Page background | `--color-page-background` | background token | `var(--md-sys-color-background)` |  | App semantic mapping to design system |
-| Card surface | `--color-card-surface` | surface token | `var(--md-sys-color-surface-container-lowest)` |  | App semantic mapping to design system |
-| Dark card surface | `--color-card-dark` | surface token | `var(--md-sys-color-primary)` |  | App semantic mapping to design system |
-| Primary text | `--color-text-primary` | text token | `var(--md-sys-color-text-main)` |  | App semantic mapping to design system |
-| Secondary text | `--color-text-secondary` | text token | `var(--md-sys-color-text-muted)` |  | App semantic mapping to design system |
-| Contrast text | `--color-text-contrast` | text token | `var(--md-sys-color-on-primary)` |  | App semantic mapping to design system |
-| Primary brand | `--color-primary` | brand token | `var(--md-sys-color-primary)` |  | App semantic mapping to design system |
-| Accent / action | `--color-action-primary` | action token | `var(--md-sys-color-secondary)` |  | App semantic mapping to design system |
+| Page background | `--color-page-background` | background token | `var(--md-sys-color-background)` |  | App semantic mapping to local tokens |
+| Card surface | `--color-card-surface` | surface token | `var(--md-sys-color-surface-container-lowest)` |  | App semantic mapping to local tokens |
+| Dark card surface | `--color-card-dark` | surface token | `var(--md-sys-color-primary)` |  | App semantic mapping to local tokens |
+| Primary text | `--color-text-primary` | text token | `var(--md-sys-color-text-main)` |  | App semantic mapping to local tokens |
+| Secondary text | `--color-text-secondary` | text token | `var(--md-sys-color-text-muted)` |  | App semantic mapping to local tokens |
+| Contrast text | `--color-text-contrast` | text token | `var(--md-sys-color-on-primary)` |  | App semantic mapping to local tokens |
+| Primary brand | `--color-primary` | brand token | `var(--md-sys-color-primary)` |  | App semantic mapping to local tokens |
+| Accent / action | `--color-action-primary` | action token | `var(--md-sys-color-secondary)` |  | App semantic mapping to local tokens |
 | Accent / action hover | `--color-action-primary-hover` | action hover token | `#7A6E62` |  | Local hardcoded value |
 | Emphasis background | `--color-emphasis-background` | surface accent token | `color-mix(in srgb, var(--md-sys-color-secondary) 10%, transparent)` |  | Local derived token |
 | Surface hover | `--color-surface-hover` | hover token | `color-mix(in srgb, var(--md-sys-color-text-muted) 10%, transparent)` |  | Local derived token |
@@ -33,16 +33,16 @@ Design-system-backed rows are intentionally left as tokens or source expressions
 
 | Component | Selector / Token | Property | Current Color | New Color | Notes |
 | --- | --- | --- | --- | --- | --- |
-| Design system primary | `--md-sys-color-primary` | primary | design-system token |  | Shared token, not locally defined in light mode |
-| Design system on-primary | `--md-sys-color-on-primary` | on-primary text | design-system token |  | Shared token, used by buttons and featured states |
-| Design system secondary | `--md-sys-color-secondary` | secondary | design-system token |  | Shared token, used by accent states |
-| Design system background | `--md-sys-color-background` | background | design-system token |  | Shared token, used for page/list backgrounds |
-| Design system surface container | `--md-sys-color-surface-container` | surface | design-system token |  | Shared token, used by `body` |
-| Design system surface container low | `--md-sys-color-surface-container-low` | surface | design-system token |  | Shared token, used indirectly |
-| Design system surface container high | `--md-sys-color-surface-container-high` | surface | design-system token |  | Shared token, used by category badges |
-| Design system outline variant | `--md-sys-color-outline-variant` | border | design-system token |  | Shared token, used by inputs and editor states |
-| Design system text main | `--md-sys-color-text-main` | text | design-system token |  | Shared token via app mappings |
-| Design system text muted | `--md-sys-color-text-muted` | text | design-system token |  | Shared token via app mappings |
+| Design system primary | `--md-sys-color-primary` | primary | local token |  | Shared token, not locally defined in light mode |
+| Design system on-primary | `--md-sys-color-on-primary` | on-primary text | local token |  | Shared token, used by buttons and featured states |
+| Design system secondary | `--md-sys-color-secondary` | secondary | local token |  | Shared token, used by accent states |
+| Design system background | `--md-sys-color-background` | background | local token |  | Shared token, used for page/list backgrounds |
+| Design system surface container | `--md-sys-color-surface-container` | surface | local token |  | Shared token, used by `body` |
+| Design system surface container low | `--md-sys-color-surface-container-low` | surface | local token |  | Shared token, used indirectly |
+| Design system surface container high | `--md-sys-color-surface-container-high` | surface | local token |  | Shared token, used by category badges |
+| Design system outline variant | `--md-sys-color-outline-variant` | border | local token |  | Shared token, used by inputs and editor states |
+| Design system text main | `--md-sys-color-text-main` | text | local token |  | Shared token via app mappings |
+| Design system text muted | `--md-sys-color-text-muted` | text | local token |  | Shared token via app mappings |
 
 ### Global Surface Details
 
@@ -260,18 +260,18 @@ Design-system-backed rows are intentionally left as tokens or source expressions
 
 | Component | Selector / Token | Property | Current Color | New Color | Notes |
 | --- | --- | --- | --- | --- | --- |
-| Controls bar | `.controls-bar` / `--wy-controls-container-bg` | container background | `#ACAAA0` |  | Local host sets the app-specific controls container background via design-system custom property |
+| Controls bar | `.controls-bar` / `--wy-controls-container-bg` | container background | `#ACAAA0` |  | Local host sets the app-specific controls container background via local component custom property |
 
 ### Components With No Local Public Color Overrides In This Repo
 
 | Component | Selector / Token | Property | Current Color | New Color | Notes |
 | --- | --- | --- | --- | --- | --- |
-| Prompt modal | `wy-prompt-modal#promptModal` | color source | design system component styles |  | No local public color overrides found |
-| Links modal | `wy-links-modal#linksModal` | color source | design system component styles |  | Mobile override changes spacing only |
-| Keyboard shortcuts modal | `wy-modal#shortcutsModal` | color source | design system component styles |  | No local public color overrides found |
+| Prompt modal | `wy-prompt-modal#promptModal` | color source | local component styles |  | No local public color overrides found |
+| Links modal | `wy-links-modal#linksModal` | color source | local component styles |  | Mobile override changes spacing only |
+| Keyboard shortcuts modal | `wy-modal#shortcutsModal` | color source | local component styles |  | No local public color overrides found |
 
 ## Implementation Notes For Later
 
-- Rows marked as design-system-backed may need implementation in `m3-design-v2`.
+- Rows marked as local-design-system-backed may need implementation in `tokens.css`, `styles.css`, or `components/ui/`.
 - Most prompt-card, prompt-list, quick-link, and textarea colors are local to this repo.
 - `--tag-bg` is referenced by `.variable-count-badge` in [`styles.css`](/Users/mwy/Library/Mobile%20Documents/com~apple~CloudDocs/Projects/prompts-library/styles.css) but its source is not defined in the local files reviewed; confirm its runtime source before implementation.

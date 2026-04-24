@@ -6,7 +6,7 @@
     <meta name="color-scheme" content="light">
     <title>Prompt Editor - Admin</title>
 
-    <!-- Design System CSS -->
+    <!-- Local design tokens and base styles -->
     <link rel="stylesheet" href="tokens.css?v=20260319-1532">
     
     <!-- Fonts -->
@@ -59,10 +59,9 @@
     <!-- Toast Notifications -->
     <wy-toast id="toast"></wy-toast>
 
-    <!-- Design System Web Components -->
+    <!-- Local Web Components -->
     <script type="module">
-        // Admin uses an explicit cache-busted local bundle to avoid stale relative imports.
-        import './web-components.js?v=20260415-1847';
+        import './web-components.js?v=20260424-local';
     </script>
 
     <!-- Admin Logic -->
