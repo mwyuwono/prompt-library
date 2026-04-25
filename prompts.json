@@ -218,8 +218,8 @@
   },
   {
     "id": "accommodations-finder",
-    "title": "Luxury Accommodations Finder",
-    "description": "Enter a location and any special requirements — it finds boutique and luxury accommodations covered in quality travel press, with links, descriptions, and why each fits your requirements.",
+    "title": "Accommodations Finder",
+    "description": "Enter a location and any special requirements — it finds high end accommodations covered in quality travel press, with links, descriptions, and why each fits your requirements.",
     "category": "Travel & Shopping",
     "icon": "hotel",
     "template": "Location: {{location}}\nSpecial requirements: {{special_requirements}}\n‍\n\nContext: I'm seeking exceptional accommodations in or around a specified 'Location' that meet the 'Special requirements' above. My search aims to go beyond customer reviews; I want to consider analysis from quality publications and sources such as newspapers, travel magazines, blogs, and other reputable cultural publications.\n\nInstructions: As an AI model, you are to simulate a comprehensive web search using your extensive training data. Your task involves the following steps:\n\n1. Identify 10 credible publications relevant to the 'Location', referred to as 'Sources'.\n\nDesired format:\n\n**Sources:**\n1. [Insert name of Source 1] - [Source location]\n2. [Insert name of Source 2] - [Source location]\n3. ...\n\nLeave a blank line after this section.\n\n2. Simulate a search through these sources for excellent hotels, inns, or other luxury accommodations. Combine this data with customer reviews and any other publicly available information. Analyze the frequency of press mentions, the overall sentiment, and the reviews.\n\nConsider accommodations that meet the following requirements, as well as the 'Special requirements' provided above:\n\nBoutique\nIndependently owned\nMembers of high-quality hotel groups such as Relais and Chateaux\nHighly praised\nFrequently mentioned in the press\nHave few negative reviews\nExclude any that:\n\nAre considered economy accommodations\nHave average customer reviews of 3.5 stars or less\n3. Compile a comprehensive list of highly-regarded accommodations that meet the 'Special requirements'. Divide the list into 'Hotels' and 'Other accommodations' categories.‍\n\nDesired format:\n\n# Hotels\n\n**[Insert name of Hotel 1]** - [Hotel city], [Hotel state]\n- Requirement: [Insert the rationale for why this result meets the 'Special requirements']\n- Mentioned in: [Insert the name of source(s) where the hotel was mentioned]\n- Description: [Insert a summary of the coverage of this hotel]\n  [Insert website]\n**[Insert name of Hotel 2]** - [Hotel city], [Hotel state]\n- Requirement: [Insert the rationale for why this result meets the 'Special requirements']\n- Mentioned in: [Insert the name of source(s) where the hotel was mentioned]\n- Description: [Insert a summary of the coverage of this hotel]\n  [Insert website]\n...\n# Other accommodations\n\n**[Insert name of other accommodation]** - **Type:**: [type of accommodation]\n[accommodation city], [accommodation state]\n- Requirement: [Insert the rationale for why this result meets the 'Special requirements']\n- Mentioned in: [Insert the name of source(s) where the accommodation was mentioned]\n- Description: [Insert a summary of the coverage of this accommodation]\n[Insert website]\n...\nInclude as many options as are relevant for the selected location. In your output, please use Markup syntax for improved readability.",
@@ -237,7 +237,8 @@
         "value": ""
       }
     ],
-    "featured": false
+    "featured": false,
+    "slug": "accommodations-finder"
   },
   {
     "id": "work-email-reply",
@@ -742,7 +743,8 @@
       }
     ],
     "featured": false,
-    "slug": "art-iconography"
+    "slug": "art-iconography",
+    "image": "public/images/1777081334228.png"
   },
   {
     "id": "art-critique",
