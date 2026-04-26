@@ -33,6 +33,14 @@ node server.js  # Then open http://localhost:3001/admin.html
 
 No build process is required to run either mode. Admin requires Node.js server for API endpoints. Run `npm run build:components` only after editing `components/ui/`.
 
+**Robert Brown Fabric Collection:**
+```bash
+cd rb-fabric-collection
+npm run dev  # Then open http://127.0.0.1:5173/ and /admin
+```
+
+This is a separate React/Vite site deployed by its own Vercel project to https://rb.weaver-yuwono.com. Its local admin saves to `rb-fabric-collection/src/data/content.json` and uploaded images under `rb-fabric-collection/public/fabrics/`; commit and push those changes to publish. Production must not expose `/admin` or include admin bundle strings. The local macOS launcher lives at `rb-fabric-collection/Robert Brown Lookbook.app`; source is `rb-fabric-collection/launchers/Robert Brown Lookbook Launcher.applescript`.
+
 ## Local Design System
 
 This project is now self-contained. The former shared design-system sources were snapshotted into this repository and are maintained here.
@@ -96,7 +104,8 @@ Google Fonts and Material Symbols are still loaded externally. Treat those as fo
 ├── styles.css       # Public site component styles
 ├── prompts.json     # Prompt data source (writable via admin API)
 ├── components/ui/   # Local Web Component source
-└── web-components.js # Generated local Web Component bundle
+├── web-components.js # Generated local Web Component bundle
+└── rb-fabric-collection/ # Separate Vite site for rb.weaver-yuwono.com
 ```
 
 ### State Management

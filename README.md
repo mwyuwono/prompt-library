@@ -39,7 +39,8 @@ No build process required to run the app. Static file hosting needed for `fetch(
 ├── components/ui/      # Local Web Component source
 ├── web-components.js   # Generated local Web Component bundle
 ├── components/index.js # Public/private component loader
-└── public/images/      # Prompt thumbnails
+├── public/images/      # Prompt thumbnails
+└── rb-fabric-collection/ # Separate Vite site for rb.weaver-yuwono.com
 ```
 
 ## Data Model
@@ -156,6 +157,23 @@ This project owns its component and styling system locally. See [CLAUDE.md](CLAU
 ## Deployment
 
 Auto-deploys to Vercel on push to `main`. For manual: `vercel --prod`.
+
+## Robert Brown Fabric Collection
+
+`rb-fabric-collection/` is a separate React/Vite site in this repo, deployed by its own Vercel project to https://rb.weaver-yuwono.com. The project root in Vercel is `rb-fabric-collection`, not the repo root.
+
+Local workflow:
+
+```bash
+cd rb-fabric-collection
+npm run dev
+open http://127.0.0.1:5173/
+open http://127.0.0.1:5173/admin
+```
+
+The fabric admin is local-only. It loads/saves checked-in content through the Vite dev-server API: `src/data/content.json` for text/visibility and `public/fabrics/` for images. After editing, click **Save**, then commit and push to publish. Production blocks `/admin`, and the production bundle should not contain admin code.
+
+There is also a local macOS launcher at `rb-fabric-collection/Robert Brown Lookbook.app` with editable source in `rb-fabric-collection/launchers/Robert Brown Lookbook Launcher.applescript`. The launcher scans ports `5173-5180` for the RB dev server and opens both public/admin pages.
 
 ## Documentation
 
