@@ -19,6 +19,38 @@
   },
   "fabrics": [
     {
+      "id": "fabric-1777234492922",
+      "eyebrow": "FABRIC 01 · HAND-BLOCKED LINEN",
+      "title": "smooth sailing",
+      "description": "Describe the textile, its hand, pattern language, and intended mood.",
+      "specs": {
+        "colorway": "Colorway on natural flax",
+        "width": "54\" width",
+        "repeat": "Repeat: 27\" h x 27\" w"
+      },
+      "images": {
+        "primary": {
+          "src": "/fabrics/uploads/1777234647430-2fd429c2-17a2-4034-8856-d64b69efb6c6.jpg",
+          "alt": "",
+          "visible": true
+        },
+        "secondary": {
+          "src": "/fabrics/uploads/1777234924511-pomelli-photoshoot-image-1-1-0426.png",
+          "alt": "",
+          "visible": true
+        },
+        "tertiary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        }
+      },
+      "visible": {
+        "title": true,
+        "description": false
+      }
+    },
+    {
       "id": "coming-apart",
       "eyebrow": "FABRIC 01 · HAND-BLOCKED LINEN",
       "title": "Fall of Rome",
@@ -30,17 +62,17 @@
       },
       "images": {
         "primary": {
-          "src": "/fabrics/uploads/1777232582242-chatgpt-image-apr-26-2026-11-07-01-am.png",
+          "src": "/fabrics/uploads/1777234443943-1e99db34-cf10-4ce8-9a6b-f01b0ea5b174.png",
           "alt": "Wide crop of fragmented neutral linen pattern with charcoal forms",
           "visible": true
         },
         "secondary": {
-          "src": "/fabrics/uploads/1777233120178-abb6498c-4043-4de1-b2a0-361df5a0ac9c.png",
+          "src": "/fabrics/uploads/1777234371124-chatgpt-image-apr-26-2026-11-07-01-am.png",
           "alt": "Close textile detail showing broken motif marks on woven linen",
           "visible": true
         },
         "tertiary": {
-          "src": "/fabrics/uploads/1777226243555-original-illustrated-pattern.jpeg",
+          "src": "",
           "alt": "Interior vignette with neutral upholstery and abstract textile accents",
           "visible": true
         }

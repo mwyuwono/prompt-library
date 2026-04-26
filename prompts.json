@@ -1059,6 +1059,13 @@
         "variables": []
       },
       {
+        "id": "draped-linen-closeup",
+        "name": "Draped Linen Close-Up",
+        "description": "A close-up of the attached fabric draped in soft folds, emphasizing the high-quality linen texture and sumptuous weight.\n\nSubmit an image of a fabric pattern along with this prompt.",
+        "template": "Role & Context: You are a specialized, high-fidelity AI rendering engine for luxury textile photography. Your objective is to create a photorealistic close-up image of the fabric design shown in the attached pattern, draped naturally to reveal its material character. The aesthetic must be tactile, editorial, and quietly luxurious — in the spirit of a swatch shot for a high-end fabric house like Pierre Frey, de Le Cuona, or Holland & Sherry.\n\nDynamic Input: The core textile design (pattern, colors, and material type) is provided as an image attachment. Render the fabric draped, not flat — the goal is to communicate hand, weight, and weave alongside the printed/woven pattern.\n\nComposition: Draped Linen Close-Up\n\n• Subject: A close-up photograph of a generous panel of the fabric from the attached image, draped in loose, gravity-driven folds. The fabric should fall in soft, sumptuous cascades — a few deep parallel folds running diagonally through the frame, with secondary smaller pleats and a relaxed pooled gather at the lower edge. The drape must read as substantial and weighty: medium-to-heavyweight linen with believable mass, holding its folds with quiet authority rather than crumpling or appearing stiff. The pattern should follow the contours of the folds naturally, distorting slightly across curves and disappearing into the depths of the deepest pleats.\n\n• Material Character (critical): The render must explicitly communicate that this is a high-quality natural linen substrate. Show the irregular slubs of the woven linen ground, the visible warp and weft, the slight tonal variation in the undyed fibers, and the matte, fibrous, slightly nubby surface quality. Where the pattern is printed or woven on top, show the way the ink or yarn settles into the textured ground — never plasticky, never flat. Catch a few stray surface fibers along the folds to reinforce the natural-fiber quality.\n\n• Setting: A simple, neutral studio backdrop — soft warm white or bone seamless paper, completely uncluttered, with no props or other surfaces in frame. The fabric fills most of the composition.\n\n• Light: Soft, directional natural-style daylight from the upper left, raking gently across the folds. The raking light is essential: it must sculpt the folds, deepen the shadows in the valleys, and pick out the texture of the slubs and weave on the highlighted ridges. Highlights are diffuse and warm; shadows are soft, dimensional, never harsh or black.\n\n• Camera: Tight close-up, shot on medium format with a normal-to-short telephoto macro lens. Shallow-to-moderate depth of field — the nearest folds and weave are tack sharp, with the deeper folds falling into a gentle, atmospheric softness. Frame the fabric at a slight three-quarter angle so the folds read with depth rather than as flat verticals.\n\nRefinement: The image must feel bespoke, tactile, and reverent of the material — the kind of swatch image that makes a designer want to reach through the screen and touch the cloth. No props, no hands, no hangers, no text, no watermarks.",
+        "variables": []
+      },
+      {
         "id": "dynamic-drapery",
         "name": "Dynamic Drapery",
         "description": "Floor-to-ceiling drapery in the attached fabric, hanging in a sunlit minimalist living room.\n\nSubmit an image of a fabric pattern along with this prompt.",
@@ -1169,7 +1176,7 @@
   },
   {
     "id": "untitled-prompt-1777229419608",
-    "title": "Extend Image",
+    "title": "Extend Image Crop",
     "description": "Performs an additive crop (e.g., extends the composition) of a fabric swatch.",
     "category": "Fabric",
     "template": "Aspect ratio: {{aspect}}\n\nExtend the composition of the attached fabric swatch to meet the aspect ratio. Seamlessly continue the existing patterns, colors, and textures into the new space. The expansion must strictly respect the original design language, ensuring the transition is undetectable and that there is no perceptible change to the artistic style or material quality of the fabric. The result must be a high resolution, professional quality image that is ready for print in a high end magazine. ",
@@ -1185,7 +1192,7 @@
         ]
       }
     ],
-    "slug": "extend-image",
+    "slug": "extend-image-crop",
     "icon": "aspect_ratio",
     "image": "public/images/1777229893811.jpg"
   }
