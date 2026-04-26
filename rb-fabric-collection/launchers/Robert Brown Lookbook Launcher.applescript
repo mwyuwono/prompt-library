@@ -1,4 +1,4 @@
-set projectDir to "/Users/mwy/Library/Mobile Documents/com~apple~CloudDocs/Projects/RB/fabric-collection-site"
+set projectDir to "/Users/mwy/Library/Mobile Documents/com~apple~CloudDocs/Projects/prompts-library/rb-fabric-collection"
 set publicUrl to "http://127.0.0.1:5173/"
 set adminUrl to "http://127.0.0.1:5173/admin"
 
