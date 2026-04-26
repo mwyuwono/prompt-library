@@ -1,0 +1,257 @@
+.admin-shell {
+  display: grid;
+  grid-template-columns: minmax(360px, 440px) minmax(0, 1fr);
+  min-height: 100svh;
+  background: #eee6d7;
+}
+
+.admin-panel {
+  height: 100svh;
+  overflow: auto;
+  padding: 28px;
+  color: #25231f;
+  background: #f8f3ea;
+  border-right: 1px solid rgba(52, 48, 40, 0.18);
+}
+
+.admin-panel-header,
+.admin-section-title-row,
+.admin-image-heading,
+.admin-sku-actions,
+.admin-toolbar,
+.admin-image-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-panel-header,
+.admin-section-title-row {
+  justify-content: space-between;
+}
+
+.admin-eyebrow {
+  margin: 0 0 6px;
+  color: #7b7468;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.admin-panel h1,
+.admin-panel h2 {
+  margin: 0;
+  color: #25231f;
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 1;
+}
+
+.admin-panel h1 {
+  font-size: 2.2rem;
+}
+
+.admin-panel h2 {
+  font-size: 1.6rem;
+}
+
+.admin-preview-link,
+.admin-panel button,
+.admin-upload-button {
+  min-height: 34px;
+  border: 1px solid rgba(52, 48, 40, 0.22);
+  border-radius: 0;
+  padding: 8px 12px;
+  color: #25231f;
+  background: #f2eadc;
+  font: 600 0.78rem/1 var(--font-body);
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.admin-panel button:hover,
+.admin-preview-link:hover,
+.admin-upload-button:hover {
+  background: #e7dccb;
+}
+
+.admin-panel button:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
+
+.admin-toolbar {
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.admin-status {
+  margin: 12px 0 0;
+  color: #777064;
+  font-size: 0.8rem;
+}
+
+.admin-section {
+  display: grid;
+  gap: 16px;
+  margin-top: 32px;
+  padding-top: 28px;
+  border-top: 1px solid rgba(52, 48, 40, 0.14);
+}
+
+.admin-field {
+  display: grid;
+  gap: 7px;
+  color: #5d564b;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.admin-field input,
+.admin-field textarea {
+  width: 100%;
+  border: 1px solid rgba(52, 48, 40, 0.18);
+  border-radius: 0;
+  padding: 10px 11px;
+  color: #25231f;
+  background: #fffaf1;
+  font: 400 0.9rem/1.5 var(--font-body);
+}
+
+.admin-field textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+.admin-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #5d564b;
+  font-size: 0.82rem;
+}
+
+.admin-toggle input {
+  width: 16px;
+  height: 16px;
+  accent-color: #25231f;
+}
+
+.admin-image-editor,
+.admin-sku-editor {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  background: rgba(238, 230, 215, 0.56);
+}
+
+.admin-image-heading {
+  justify-content: space-between;
+  color: #25231f;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.admin-image-thumb,
+.admin-image-empty {
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  object-fit: cover;
+  background: #e1d6c4;
+}
+
+.admin-image-empty {
+  display: grid;
+  place-items: center;
+  color: #7b7468;
+  font-size: 0.82rem;
+}
+
+.admin-image-actions,
+.admin-sku-actions {
+  flex-wrap: wrap;
+}
+
+.admin-upload-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.admin-upload-button input,
+.admin-file-input {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.admin-sku-editor {
+  background: rgba(255, 250, 241, 0.78);
+  border: 1px solid rgba(52, 48, 40, 0.12);
+}
+
+.admin-sku-editor summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #25231f;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.admin-sku-order {
+  color: #857d71;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+}
+
+.admin-preview {
+  height: 100svh;
+  overflow: auto;
+  background: var(--paper);
+}
+
+.admin-preview-frame {
+  min-width: 0;
+  padding-bottom: 70px;
+}
+
+@media (max-width: 980px) {
+  .admin-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-panel,
+  .admin-preview {
+    height: auto;
+    min-height: auto;
+    overflow: visible;
+  }
+
+  .admin-panel {
+    border-right: 0;
+    border-bottom: 1px solid rgba(52, 48, 40, 0.18);
+  }
+}
+
+@media (max-width: 560px) {
+  .admin-panel {
+    padding: 22px 16px;
+  }
+
+  .admin-panel-header,
+  .admin-section-title-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

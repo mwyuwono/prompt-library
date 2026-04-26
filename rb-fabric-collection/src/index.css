@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500&display=swap');
+
+:root {
+  --paper: #f3ebdc;
+  --paper-deep: #e6dac6;
+  --ink: #25231f;
+  --muted: #696257;
+  --rule: rgba(52, 48, 40, 0.18);
+  --rule-strong: rgba(52, 48, 40, 0.58);
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: Inter, Optima, 'Segoe UI', sans-serif;
+
+  color: var(--ink);
+  background: var(--paper);
+  font-family: var(--font-body);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+}
+
+img {
+  max-width: 100%;
+}
+
+::selection {
+  color: var(--paper);
+  background: var(--ink);
+}
