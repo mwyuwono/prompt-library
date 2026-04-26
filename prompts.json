@@ -1122,5 +1122,16 @@
         "variables": []
       }
     ]
+  },
+  {
+    "id": "textile-block-print-render",
+    "title": "Linen Block Print Render",
+    "description": "Upload an image of your pattern — it renders the design as a luxury hand block printed Belgian linen fabric sample, photographed in the editorial style of a premium textile house like Schumacher or Pierre Frey.",
+    "category": "Art",
+    "icon": "texture",
+    "template": "Render this pattern as a luxury hand block printed linen fabric sample photographed for a premium textile house such as Schumacher or Pierre Frey. Use 3:4 aspect ratio and ensure the pattern is full bleed.\n\nPreserve the motif layout exactly.\n\nGround fabric:\nFine Belgian linen in warm oat-parchment tone, refined natural flax weave, subtle irregular slubs, matte finish, elegant expensive textile quality.\n\nPrint:\nDeep carbon black pigment hand block printed onto linen, slightly absorbed into fibers, minor pressure variation, selective edge softness, occasional crisp carved edges, subtle tonal variation, authentic artisan print transfer.\n\nPhotography:\nHigh-end studio flat lay fabric memo sample, soft directional daylight from left, delicate shadows revealing weave depth, medium-format camera sharpness, realistic textile macro detail, premium editorial styling.\n\nImportant:\nNo fake digital noise, no repeating synthetic texture, no overlay effect, no plastic sheen, no exaggerated roughness, no muddy blur.",
+    "variables": [],
+    "featured": false,
+    "slug": "linen-block-print-render"
   }
 ]
