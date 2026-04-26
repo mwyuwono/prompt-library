@@ -23,13 +23,18 @@ export type HeroContent = {
 
 export type FabricSkuContent = {
   id: string
+  eyebrow: string
   title: string
   description: string
+  specs: {
+    colorway: string
+    width: string
+    repeat: string
+  }
   images: {
-    header: ImageSlot
-    lifestyle: ImageSlot
-    detail: ImageSlot
-    application: ImageSlot
+    primary: ImageSlot
+    secondary: ImageSlot
+    tertiary: ImageSlot
   }
   visible: {
     title: boolean

@@ -22,6 +22,11 @@ function App() {
   return (
     <main className="site-shell">
       <Hero hero={defaultContent.hero} />
+      <div className="section-divider" aria-hidden="true">
+        <span className="divider-line" />
+        <span className="divider-glyph">✤</span>
+        <span className="divider-line" />
+      </div>
 
       <div className="collection-sections" aria-label="Fabric collection">
         {defaultContent.fabrics.map((fabric) => (

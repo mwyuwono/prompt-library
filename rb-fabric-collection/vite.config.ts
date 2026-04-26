@@ -68,15 +68,25 @@ function validateContent(value: unknown) {
     if (
       !isObject(fabric) ||
       typeof fabric.id !== 'string' ||
+      typeof fabric.eyebrow !== 'string' ||
       typeof fabric.title !== 'string' ||
       typeof fabric.description !== 'string' ||
+      !isObject(fabric.specs) ||
       !isObject(fabric.images) ||
       !isObject(fabric.visible)
     ) {
       return false
     }
 
-    return ['header', 'lifestyle', 'detail', 'application'].every((key) =>
+    if (
+      typeof fabric.specs.colorway !== 'string' ||
+      typeof fabric.specs.width !== 'string' ||
+      typeof fabric.specs.repeat !== 'string'
+    ) {
+      return false
+    }
+
+    return ['primary', 'secondary', 'tertiary'].every((key) =>
       isImageSlot((fabric.images as JsonBody)[key]),
     )
   })

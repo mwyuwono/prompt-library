@@ -5,7 +5,7 @@
     "subtitle": "Mémoire du Sol",
     "description": "Modernist forms pressed into raw linen: fractured, softened, and made tactile through fiber, ink, and hand.",
     "image": {
-      "src": "/fabrics/collection-hero.jpg",
+      "src": "/fabrics/uploads/1777226721565-generated-image-april-26-2026-2-04pm.jpg",
       "alt": "Close textile crop in warm neutral tones with woven surface texture",
       "visible": true
     },
@@ -20,89 +20,28 @@
   "fabrics": [
     {
       "id": "coming-apart",
-      "title": "Coming Apart",
-      "description": "An elegant disarray of forms, embodying the beauty in the breakdown of traditional motifs. Printed on artisanal linen, the fragmented pattern speaks to both deconstruction and reassembly, offering a complex yet serene tactile experience.",
+      "eyebrow": "FABRIC 01 · HAND-BLOCKED LINEN",
+      "title": "Fall of Rome",
+      "description": "An elegant disarray of classical forms, embodying the mildly subversive beauty of Roman excess.",
+      "specs": {
+        "colorway": "Carbon on natural flax",
+        "width": "54\" width",
+        "repeat": "Repeat: 27\" h x 27\" w"
+      },
       "images": {
-        "header": {
-          "src": "/fabrics/coming-apart-header.jpg",
+        "primary": {
+          "src": "/fabrics/uploads/1777232582242-chatgpt-image-apr-26-2026-11-07-01-am.png",
           "alt": "Wide crop of fragmented neutral linen pattern with charcoal forms",
           "visible": true
         },
-        "lifestyle": {
-          "src": "/fabrics/coming-apart-lifestyle.jpg",
-          "alt": "Draped linen fabric arranged beside a carved timber chair",
-          "visible": true
-        },
-        "detail": {
-          "src": "/fabrics/coming-apart-detail.jpg",
+        "secondary": {
+          "src": "/fabrics/uploads/1777233120178-abb6498c-4043-4de1-b2a0-361df5a0ac9c.png",
           "alt": "Close textile detail showing broken motif marks on woven linen",
           "visible": true
         },
-        "application": {
-          "src": "/fabrics/coming-apart-application.jpg",
+        "tertiary": {
+          "src": "/fabrics/uploads/1777226243555-original-illustrated-pattern.jpeg",
           "alt": "Interior vignette with neutral upholstery and abstract textile accents",
-          "visible": true
-        }
-      },
-      "visible": {
-        "title": true,
-        "description": true
-      }
-    },
-    {
-      "id": "quiet-strata",
-      "title": "Quiet Strata",
-      "description": "Layered mineral bands move softly across a dry linen ground, balancing architectural rhythm with the irregularity of hand-rendered pigment. The pattern is restrained, dimensional, and quietly atmospheric.",
-      "images": {
-        "header": {
-          "src": "/fabrics/quiet-strata-header.jpg",
-          "alt": "Wide crop of layered taupe textile bands on natural linen",
-          "visible": true
-        },
-        "lifestyle": {
-          "src": "/fabrics/quiet-strata-lifestyle.jpg",
-          "alt": "Folded fabric lengths styled on a plaster bench in soft light",
-          "visible": true
-        },
-        "detail": {
-          "src": "/fabrics/quiet-strata-detail.jpg",
-          "alt": "Close-up of subtle striated weave and mineral toned markings",
-          "visible": true
-        },
-        "application": {
-          "src": "/fabrics/quiet-strata-application.jpg",
-          "alt": "Calm sitting room with tonal drapery and tailored upholstery",
-          "visible": true
-        }
-      },
-      "visible": {
-        "title": true,
-        "description": true
-      }
-    },
-    {
-      "id": "woven-relic",
-      "title": "Woven Relic",
-      "description": "A study in softened antiquity, Woven Relic translates archival fragments into a spare contemporary textile. Weathered charcoal, bone, and clay tones create a composed pattern with a collected, timeworn presence.",
-      "images": {
-        "header": {
-          "src": "/fabrics/woven-relic-header.jpg",
-          "alt": "Wide crop of weathered archival textile motifs in charcoal and clay",
-          "visible": true
-        },
-        "lifestyle": {
-          "src": "/fabrics/woven-relic-lifestyle.jpg",
-          "alt": "Editorial fabric lengths layered over an antique console",
-          "visible": true
-        },
-        "detail": {
-          "src": "/fabrics/woven-relic-detail.jpg",
-          "alt": "Close woven surface with softened clay and charcoal motif edges",
-          "visible": true
-        },
-        "application": {
-          "src": "/fabrics/woven-relic-application.jpg",
-          "alt": "Refined interior with textured pillows and heritage fabric pattern",
           "visible": true
         }
       },

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { ChangeEvent } from 'react'
 import { FabricSku } from './FabricSku'
 import { Hero } from './Hero'
@@ -16,6 +16,7 @@ const CONTENT_API = '/api/fabric-content'
 const IMAGE_API = '/api/fabric-images'
 
 type ImageKey = keyof FabricSkuContent['images']
+type SpecsKey = keyof FabricSkuContent['specs']
 
 const cloneContent = (content: LookbookContent): LookbookContent =>
   JSON.parse(JSON.stringify(content)) as LookbookContent
@@ -25,6 +26,13 @@ const normalizeImage = (image: Partial<ImageSlot> | undefined, fallback: ImageSl
   alt: typeof image?.alt === 'string' ? image.alt : fallback.alt,
   visible: typeof image?.visible === 'boolean' ? image.visible : fallback.visible,
 })
+
+const normalizeSkuImage = (
+  images: Record<string, Partial<ImageSlot> | undefined>,
+  key: ImageKey,
+  legacyKey: string,
+  fallback: ImageSlot,
+) => normalizeImage(images[key] ?? images[legacyKey], fallback)
 
 const normalizeContent = (content: Partial<LookbookContent>): LookbookContent => {
   const fallback = cloneContent(defaultContent)
@@ -68,28 +76,55 @@ const normalizeContent = (content: Partial<LookbookContent>): LookbookContent =>
     fabrics: Array.isArray(content.fabrics)
       ? content.fabrics.map((fabric, index) => {
           const fabricFallback = fallback.fabrics[index] ?? createBlankSku()
+          const images = fabric.images ?? {}
 
           return {
             id:
               typeof fabric.id === 'string' && fabric.id
                 ? fabric.id
                 : `fabric-${Date.now()}-${index}`,
+            eyebrow:
+              typeof fabric.eyebrow === 'string'
+                ? fabric.eyebrow
+                : fabricFallback.eyebrow,
             title:
               typeof fabric.title === 'string' ? fabric.title : fabricFallback.title,
             description:
               typeof fabric.description === 'string'
                 ? fabric.description
                 : fabricFallback.description,
+            specs: {
+              colorway:
+                typeof fabric.specs?.colorway === 'string'
+                  ? fabric.specs.colorway
+                  : fabricFallback.specs.colorway,
+              width:
+                typeof fabric.specs?.width === 'string'
+                  ? fabric.specs.width
+                  : fabricFallback.specs.width,
+              repeat:
+                typeof fabric.specs?.repeat === 'string'
+                  ? fabric.specs.repeat
+                  : fabricFallback.specs.repeat,
+            },
             images: {
-              header: normalizeImage(fabric.images?.header, fabricFallback.images.header),
-              lifestyle: normalizeImage(
-                fabric.images?.lifestyle,
-                fabricFallback.images.lifestyle,
+              primary: normalizeSkuImage(
+                images,
+                'primary',
+                'header',
+                fabricFallback.images.primary,
               ),
-              detail: normalizeImage(fabric.images?.detail, fabricFallback.images.detail),
-              application: normalizeImage(
-                fabric.images?.application,
-                fabricFallback.images.application,
+              secondary: normalizeSkuImage(
+                images,
+                'secondary',
+                'detail',
+                fabricFallback.images.secondary,
+              ),
+              tertiary: normalizeSkuImage(
+                images,
+                'tertiary',
+                'application',
+                fabricFallback.images.tertiary,
               ),
             },
             visible: {
@@ -116,13 +151,18 @@ const createBlankImage = (): ImageSlot => ({
 
 const createBlankSku = (): FabricSkuContent => ({
   id: `fabric-${Date.now()}`,
+  eyebrow: 'FABRIC 01 · HAND-BLOCKED LINEN',
   title: 'New Fabric',
   description: 'Describe the textile, its hand, pattern language, and intended mood.',
+  specs: {
+    colorway: 'Colorway on natural flax',
+    width: '54" width',
+    repeat: 'Repeat: 27" h x 27" w',
+  },
   images: {
-    header: createBlankImage(),
-    lifestyle: createBlankImage(),
-    detail: createBlankImage(),
-    application: createBlankImage(),
+    primary: createBlankImage(),
+    secondary: createBlankImage(),
+    tertiary: createBlankImage(),
   },
   visible: {
     title: true,
@@ -187,20 +227,14 @@ async function uploadImage(file: File) {
   return payload.path
 }
 
-function downloadJson(content: LookbookContent) {
-  const blob = new Blob([JSON.stringify(content, null, 2)], {
-    type: 'application/json',
-  })
-  const url = URL.createObjectURL(blob)
-  const link = document.createElement('a')
-  link.href = url
-  link.download = 'robert-brown-lookbook-draft.json'
-  link.click()
-  URL.revokeObjectURL(url)
-}
-
 function imageLabel(key: ImageKey) {
-  return key === 'application' ? 'Application' : key[0].toUpperCase() + key.slice(1)
+  const labels: Record<ImageKey, string> = {
+    primary: 'Primary',
+    secondary: 'Secondary',
+    tertiary: 'Tertiary',
+  }
+
+  return labels[key]
 }
 
 export function AdminPage() {
@@ -212,7 +246,6 @@ export function AdminPage() {
   )
   const [status, setStatus] = useState('Loading saved content...')
   const [isSaving, setIsSaving] = useState(false)
-  const importInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(content))
@@ -366,24 +399,6 @@ export function AdminPage() {
     }
   }
 
-  const handleImport = async (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-
-    if (!file) {
-      return
-    }
-
-    try {
-      const imported = JSON.parse(await file.text()) as Partial<LookbookContent>
-      setContent(normalizeContent(imported))
-      setStatus('Imported JSON draft')
-    } catch {
-      setStatus('Import failed: choose a valid lookbook JSON file')
-    }
-
-    event.target.value = ''
-  }
-
   const handleSave = async () => {
     setIsSaving(true)
     setStatus('Saving...')
@@ -418,12 +433,6 @@ export function AdminPage() {
           <button type="button" onClick={handleSave} disabled={isSaving}>
             {isSaving ? 'Saving...' : 'Save'}
           </button>
-          <button type="button" onClick={() => downloadJson(content)}>
-            Export JSON
-          </button>
-          <button type="button" onClick={() => importInputRef.current?.click()}>
-            Import JSON
-          </button>
           <button
             type="button"
             onClick={() => {
@@ -434,13 +443,6 @@ export function AdminPage() {
           >
             Reset
           </button>
-          <input
-            ref={importInputRef}
-            className="admin-file-input"
-            type="file"
-            accept="application/json"
-            onChange={handleImport}
-          />
         </div>
         <p className="admin-status">{status}</p>
 
@@ -580,6 +582,11 @@ export function AdminPage() {
         <div className="admin-preview-frame">
           <div className="site-shell">
             <Hero hero={content.hero} />
+            <div className="section-divider" aria-hidden="true">
+              <span className="divider-line" />
+              <span className="divider-glyph">✤</span>
+              <span className="divider-line" />
+            </div>
             <div className="collection-sections" aria-label="Fabric collection">
               {content.fabrics.map((fabric) => (
                 <FabricSku key={fabric.id} fabric={fabric} />
@@ -728,6 +735,11 @@ function SkuEditor({
         </button>
       </div>
       <Field
+        label="Eyebrow"
+        value={fabric.eyebrow}
+        onChange={(value) => onUpdate((current) => ({ ...current, eyebrow: value }))}
+      />
+      <Field
         label="Title"
         value={fabric.title}
         onChange={(value) => onUpdate((current) => ({ ...current, title: value }))}
@@ -760,6 +772,21 @@ function SkuEditor({
           }))
         }
       />
+      <div className="admin-spec-grid">
+        {(Object.keys(fabric.specs) as SpecsKey[]).map((specKey) => (
+          <Field
+            key={specKey}
+            label={`Specs: ${specKey}`}
+            value={fabric.specs[specKey]}
+            onChange={(value) =>
+              onUpdate((current) => ({
+                ...current,
+                specs: { ...current.specs, [specKey]: value },
+              }))
+            }
+          />
+        ))}
+      </div>
       {(Object.keys(fabric.images) as ImageKey[]).map((imageKey) => (
         <ImageEditor
           key={imageKey}

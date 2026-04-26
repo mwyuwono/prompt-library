@@ -7,6 +7,8 @@
   --muted: #696257;
   --rule: rgba(52, 48, 40, 0.18);
   --rule-strong: rgba(52, 48, 40, 0.58);
+  --rule-warm: rgba(100, 82, 58, 0.35);
+  --ornament: #a89473;
   --font-display: 'Cormorant Garamond', Georgia, serif;
   --font-body: Inter, Optima, 'Segoe UI', sans-serif;
 
@@ -30,6 +32,7 @@ html {
 body {
   min-width: 320px;
   margin: 0;
+  background: var(--paper);
 }
 
 img {
