@@ -1095,5 +1095,32 @@
     "slug": "room-repainter",
     "image": "public/images/1777069870101.png",
     "icon": "format_paint"
+  },
+  {
+    "id": "untitled-prompt-1777155220701",
+    "title": "Fabric Style Alignment",
+    "description": "Adapt a new fabric design to the aesthetic DNA of an existing design to drive cohesion across an entire collection. \n\nSubmit with this prompt:\nImage 1: Draft design\nImage 2: Style reference",
+    "category": "Fabric",
+    "template": "Image 1 is a design draft for a fabric pattern. Image 2 is an existing design from the same collection that serves as the visual anchor for the desired art style.\nObjective: Align the draft pattern (Image 1) to the aesthetic of the existing design (Image 2) while maintaining the original layout and structural intent of the draft.\nFocus Areas for Cohesion:\n• Linework & Texture: Adjust the stroke weight, taper, and graininess to match the reference.\n• Color Profile: Harmonize the palette, ensuring the saturation and value contrast reflect Image 2.\n• Level of Detail: Simplify or enhance the complexity of the motifs to ensure they feel like they were drawn by the same hand.\nCarefully consider what elements need to change to achieve this cohesion, then generate the updated design. ",
+    "variables": [],
+    "image": "public/images/1777155391460.jpg",
+    "slug": "fabric-style-alignment",
+    "icon": "compare_arrows",
+    "variations": [
+      {
+        "id": "variation-1",
+        "name": "Preserve Shapes",
+        "description": "This variant allows style changes but avoids structural changes to shapes and pattern. \n\nSubmit 2 images with this prompt:\nImage 1 - The draft design\nImage 2 - The style reference",
+        "template": "Image 1 is a design draft for a fabric pattern. Image 2 is an existing design from the same collection that serves as the visual anchor for the desired art style.\nObjective: Align the draft pattern (Image 1) to the aesthetic of the existing design (Image 2) while maintaining the original layout and structural intent of the draft.\nFocus Areas for Cohesion:\n• Linework & Texture: Adjust the stroke weight, taper, and graininess to match the reference.\n• Color Profile: Harmonize the palette, ensuring the saturation and value contrast reflect Image 2.\n• Level of Detail: Simplify or enhance the complexity of the motifs to ensure they feel like they were drawn by the same hand.\nCarefully consider what elements need to change to achieve this cohesion, then generate the updated design. ",
+        "variables": []
+      },
+      {
+        "id": "Style + Structure Changes",
+        "name": "Variation 2",
+        "description": "This variant is more permissive, allowing changes to both pattern style and structure. \n\nSubmit 2 images with this prompt:\nImage 1 - The draft design\nImage 2 - The style reference",
+        "template": "Image 1 is a structural blueprint for a fabric pattern. Image 2 is the stylistic anchor.\n\nObjective: Re-interpret the motifs and composition of Image 1 through the 'formal language' and structural logic of Image 2. The final result should look like a native piece of the Image 2 collection, using Image 1 only as a guide for placement and concept.\n\nStructural Adaptation (Priority):\n\nFormal Morphology: Do not copy the shapes in Image 1 literally. Instead, reshape the silhouettes, curves, and angles to match the 'hand' of Image 2. (e.g., if Image 2 is organic and fluid, soften any rigid structures from Image 1).\n\nSpatial Rhythm: Adjust the spacing and 'breathing room' between elements to reflect the density and negative space found in Image 2.\n\nWeight & Balance: Re-proportion the elements so the visual weight of the motifs aligns with the reference style.\n\nAesthetic Cohesion:\n\nLinework & Texture: Mimic the specific stroke weight, taper, and tactile graininess of Image 2.\n\nColor & Value: Harmonize the palette and contrast levels to ensure a seamless match with the reference.\n\nLevel of Abstraction: Simplify or complicate the details of the motifs to match the artistic 'shorthand' used by the original artist in Image 2.\n\nFinal Instruction: Prioritize stylistic authenticity over literal structural fidelity to the draft. Generate the image.",
+        "variables": []
+      }
+    ]
   }
 ]
