@@ -8,11 +8,13 @@ export type ImageSlot = {
 
 export type HeroContent = {
   title: string
+  metadata: string
   subtitle: string
   description: string
   image: ImageSlot
   visible: {
     title: boolean
+    metadata: boolean
     subtitle: boolean
     description: boolean
     rule: boolean

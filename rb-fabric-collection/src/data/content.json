@@ -1,8 +1,9 @@
 {
   "hero": {
     "title": "ROBERT BROWN",
+    "metadata": "Collection I • Hand-Blocked Linen Studies",
     "subtitle": "Mémoire du Sol",
-    "description": "Modernist structure meets organic materiality. A study in texture, deconstruction, and the tactile beauty of raw linen.",
+    "description": "Modernist forms pressed into raw linen: fractured, softened, and made tactile through fiber, ink, and hand.",
     "image": {
       "src": "/fabrics/collection-hero.jpg",
       "alt": "Close textile crop in warm neutral tones with woven surface texture",
@@ -10,9 +11,10 @@
     },
     "visible": {
       "title": true,
+      "metadata": true,
       "subtitle": true,
       "description": true,
-      "rule": true
+      "rule": false
     }
   },
   "fabrics": [

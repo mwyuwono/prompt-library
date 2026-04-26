@@ -10,6 +10,9 @@ export function Hero({ hero }: HeroProps) {
       <div className="hero-kicker">
         {hero.visible.title && <h1 className="site-title">{hero.title}</h1>}
         {hero.visible.rule && <span className="title-rule" aria-hidden="true" />}
+        {hero.visible.metadata && hero.metadata && (
+          <p className="collection-meta">{hero.metadata}</p>
+        )}
         {hero.visible.subtitle && (
           <p className="collection-title">{hero.subtitle}</p>
         )}

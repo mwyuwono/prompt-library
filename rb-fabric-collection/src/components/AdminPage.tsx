@@ -33,6 +33,8 @@ const normalizeContent = (content: Partial<LookbookContent>): LookbookContent =>
   return {
     hero: {
       title: typeof hero.title === 'string' ? hero.title : fallback.hero.title,
+      metadata:
+        typeof hero.metadata === 'string' ? hero.metadata : fallback.hero.metadata,
       subtitle:
         typeof hero.subtitle === 'string' ? hero.subtitle : fallback.hero.subtitle,
       description:
@@ -45,6 +47,10 @@ const normalizeContent = (content: Partial<LookbookContent>): LookbookContent =>
           typeof hero.visible?.title === 'boolean'
             ? hero.visible.title
             : fallback.hero.visible.title,
+        metadata:
+          typeof hero.visible?.metadata === 'boolean'
+            ? hero.visible.metadata
+            : fallback.hero.visible.metadata,
         subtitle:
           typeof hero.visible?.subtitle === 'boolean'
             ? hero.visible.subtitle
@@ -462,6 +468,21 @@ export function AdminPage() {
               updateHero((hero) => ({
                 ...hero,
                 visible: { ...hero.visible, rule: checked },
+              }))
+            }
+          />
+          <Field
+            label="Metadata"
+            value={content.hero.metadata}
+            onChange={(value) => updateHero((hero) => ({ ...hero, metadata: value }))}
+          />
+          <VisibilityToggle
+            label="Show metadata"
+            checked={content.hero.visible.metadata}
+            onChange={(checked) =>
+              updateHero((hero) => ({
+                ...hero,
+                visible: { ...hero.visible, metadata: checked },
               }))
             }
           />
