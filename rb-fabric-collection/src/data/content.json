@@ -31,7 +31,7 @@
       "backgroundColor": "",
       "images": {
         "primary": {
-          "src": "/fabrics/uploads/1777234647430-2fd429c2-17a2-4034-8856-d64b69efb6c6.jpg",
+          "src": "/fabrics/uploads/1777263521170-generated-image-april-27-2026-12-16am.jpg",
           "alt": "",
           "visible": true
         },
@@ -46,7 +46,7 @@
           "visible": true
         },
         "quaternary": {
-          "src": "",
+          "src": "/fabrics/uploads/1777264107340-generated-image-april-27-2026-12-28am.jpg",
           "alt": "",
           "visible": true
         },
@@ -189,12 +189,12 @@
           "visible": false
         },
         "quaternary": {
-          "src": "/fabrics/uploads/1777257837620-generated-image-april-26-2026-10-43pm.jpg",
+          "src": "/fabrics/uploads/1777262800989-generated-image-april-27-2026-12-06am.jpg",
           "alt": "",
           "visible": true
         },
         "quinary": {
-          "src": "",
+          "src": "/fabrics/uploads/1777262534650-generated-image-april-26-2026-10-43pm.jpg",
           "alt": "",
           "visible": true
         },
@@ -258,19 +258,19 @@
       }
     },
     {
-      "id": "fabric-1777247976292",
+      "id": "fabric-1777259036475",
       "eyebrow": "FABRIC 01 · HAND-BLOCKED LINEN",
-      "title": "Undertow",
-      "description": "A bold print evoking liquid movement and shifting sands ",
+      "title": "Hieroglyph",
+      "description": "Modernist style encoded in a timeless geometric structure",
       "specs": {
-        "colorway": "Ink blue on natural flax",
+        "colorway": "Lamp black  on natural flax",
         "width": "54\" width",
         "repeat": "Repeat: 27\" h x 27\" w"
       },
       "backgroundColor": "",
       "images": {
         "primary": {
-          "src": "/fabrics/uploads/1777248568908-vertical-stripe.png",
+          "src": "/fabrics/uploads/1777259052335-c90fa254-5773-4f75-a0bd-28102008b110.png",
           "alt": "",
           "visible": true
         },
@@ -280,7 +280,7 @@
           "visible": true
         },
         "tertiary": {
-          "src": "/fabrics/uploads/1777251365474-generated-image-april-26-2026-8-41pm.jpg",
+          "src": "",
           "alt": "",
           "visible": true
         },
@@ -306,24 +306,168 @@
       }
     },
     {
-      "id": "fabric-1777259036475",
+      "id": "fabric-1777247976292",
       "eyebrow": "FABRIC 01 · HAND-BLOCKED LINEN",
-      "title": "Hieroglyph",
-      "description": "Modernist style encoded in a timeless geometric structure",
+      "title": "Undertow",
+      "description": "A bold print evoking liquid movement and shifting sands ",
       "specs": {
-        "colorway": "Lamp black  on natural flax",
+        "colorway": "Ink blue on natural flax",
         "width": "54\" width",
         "repeat": "Repeat: 27\" h x 27\" w"
       },
       "backgroundColor": "",
       "images": {
         "primary": {
-          "src": "/fabrics/uploads/1777259052335-c90fa254-5773-4f75-a0bd-28102008b110.png",
+          "src": "/fabrics/uploads/1777260090331-generated-image-april-26-2026-8-41pm.jpg",
           "alt": "",
           "visible": true
         },
         "secondary": {
+          "src": "/fabrics/uploads/1777260096351-chatgpt-image-apr-26-2026-11-19-27-pm.png",
+          "alt": "",
+          "visible": true
+        },
+        "tertiary": {
           "src": "",
+          "alt": "",
+          "visible": true
+        },
+        "quaternary": {
+          "src": "/fabrics/uploads/1777263102278-undertow.jpg",
+          "alt": "",
+          "visible": true
+        },
+        "quinary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        },
+        "senary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        }
+      },
+      "visible": {
+        "title": true,
+        "description": true
+      }
+    },
+    {
+      "id": "fabric-1777259193656",
+      "eyebrow": "FABRIC 01 · HAND-BLOCKED LINEN",
+      "title": "Catacomb",
+      "description": "An ancient maze, abstracted",
+      "specs": {
+        "colorway": "Colorway on natural flax",
+        "width": "54\" width",
+        "repeat": "Repeat: 27\" h x 27\" w"
+      },
+      "backgroundColor": "",
+      "images": {
+        "primary": {
+          "src": "/fabrics/uploads/1777260867579-generated-image-april-26-2026-11-33pm.jpg",
+          "alt": "",
+          "visible": true
+        },
+        "secondary": {
+          "src": "/fabrics/uploads/1777260881958-59b71c65-1598-4fea-a784-16592a974522.png",
+          "alt": "",
+          "visible": true
+        },
+        "tertiary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        },
+        "quaternary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        },
+        "quinary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        },
+        "senary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        }
+      },
+      "visible": {
+        "title": true,
+        "description": true
+      }
+    },
+    {
+      "id": "fabric-1777261024742",
+      "eyebrow": "FABRIC 01 · HAND-BLOCKED LINEN",
+      "title": "Carved In Stone",
+      "description": "Sandstone, actually. Structured geometry erodes into seductively smooth form.",
+      "specs": {
+        "colorway": "Dead salmon on natural flax",
+        "width": "54\" width",
+        "repeat": "Repeat: 27\" h x 27\" w"
+      },
+      "backgroundColor": "",
+      "images": {
+        "primary": {
+          "src": "/fabrics/uploads/1777261050233-9d767809-8f8d-4361-8714-36467057987c.png",
+          "alt": "",
+          "visible": true
+        },
+        "secondary": {
+          "src": "/fabrics/uploads/1777261183752-22d8c825-3735-402e-a5f6-514079f6036b.png",
+          "alt": "",
+          "visible": true
+        },
+        "tertiary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        },
+        "quaternary": {
+          "src": "/fabrics/uploads/1777261502492-2dbb77ae-d66d-4eae-950d-95b890eddc77.png",
+          "alt": "",
+          "visible": true
+        },
+        "quinary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        },
+        "senary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        }
+      },
+      "visible": {
+        "title": true,
+        "description": true
+      }
+    },
+    {
+      "id": "fabric-1777261340404",
+      "eyebrow": "FABRIC 01 · HAND-BLOCKED LINEN",
+      "title": "Aeterna",
+      "description": "Enduringly classic. Earthy botanical forms, artfully deconstructed and printed on a textured linen ground.",
+      "specs": {
+        "colorway": "Black blood on natural flax",
+        "width": "54\" width",
+        "repeat": "Repeat: 27\" h x 27\" w"
+      },
+      "backgroundColor": "",
+      "images": {
+        "primary": {
+          "src": "/fabrics/uploads/1777261352270-31bc6f51-6544-4129-8e7a-b8a9a95eecae.png",
+          "alt": "",
+          "visible": true
+        },
+        "secondary": {
+          "src": "/fabrics/uploads/1777262147093-pomelli-photoshoot-image-9-16-0426.png",
           "alt": "",
           "visible": true
         },
