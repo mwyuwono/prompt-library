@@ -7252,7 +7252,8 @@ var WyPromptModal = class extends i4 {
         this.variations.length > 0 ? this.variations[this.activeVariationIndex].template : this.template
       );
     }
-    navigator.clipboard.writeText(textToCopy);
+    const blob = new Blob([textToCopy], { type: "text/plain" });
+    navigator.clipboard.write([new ClipboardItem({ "text/plain": blob })]);
     this.dispatchEvent(new CustomEvent("copy", {
       detail: { text: textToCopy },
       bubbles: true,
