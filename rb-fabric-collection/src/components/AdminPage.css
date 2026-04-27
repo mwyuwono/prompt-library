@@ -58,7 +58,8 @@
 
 .admin-preview-link,
 .admin-panel button,
-.admin-upload-button {
+.admin-upload-button,
+.admin-sku-jump select {
   min-height: 34px;
   border: 1px solid rgba(52, 48, 40, 0.22);
   border-radius: 0;
@@ -117,7 +118,8 @@
 }
 
 .admin-field input,
-.admin-field textarea {
+.admin-field textarea,
+.admin-sku-jump select {
   width: 100%;
   border: 1px solid rgba(52, 48, 40, 0.18);
   border-radius: 0;
@@ -130,6 +132,26 @@
 .admin-field textarea {
   min-height: 96px;
   resize: vertical;
+}
+
+.admin-sku-jump {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #5d564b;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.admin-sku-jump select {
+  width: min(180px, 46vw);
+  padding: 8px 30px 8px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1;
+  text-transform: none;
 }
 
 .admin-toggle {
@@ -186,6 +208,24 @@
 .admin-spec-grid {
   display: grid;
   gap: 12px;
+}
+
+.admin-background-field {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 34px auto;
+  align-items: end;
+  gap: 10px;
+}
+
+.admin-color-swatch {
+  display: block;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(52, 48, 40, 0.22);
+  background:
+    linear-gradient(135deg, rgba(52, 48, 40, 0.12) 25%, transparent 25%) 0 0 /
+      10px 10px,
+    #e6dac6;
 }
 
 .admin-upload-button {
@@ -270,5 +310,13 @@
   .admin-section-title-row {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .admin-background-field {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .admin-color-swatch {
+    display: none;
   }
 }

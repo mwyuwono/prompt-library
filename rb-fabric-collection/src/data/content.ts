@@ -6,6 +6,43 @@ export type ImageSlot = {
   visible: boolean
 }
 
+export const SKU_IMAGE_KEYS = [
+  'primary',
+  'secondary',
+  'tertiary',
+  'quaternary',
+  'quinary',
+  'senary',
+] as const
+
+export type SkuImageKey = (typeof SKU_IMAGE_KEYS)[number]
+
+export const normalizeHexColor = (value: string | undefined) => {
+  const trimmed = value?.trim()
+
+  if (!trimmed) {
+    return undefined
+  }
+
+  const withHash = trimmed.startsWith('#') ? trimmed : `#${trimmed}`
+
+  if (/^#[0-9a-fA-F]{3}$/.test(withHash)) {
+    return withHash
+      .slice(1)
+      .split('')
+      .map((character) => character + character)
+      .join('')
+      .replace(/^/, '#')
+      .toLowerCase()
+  }
+
+  if (/^#[0-9a-fA-F]{6}$/.test(withHash)) {
+    return withHash.toLowerCase()
+  }
+
+  return undefined
+}
+
 export type HeroContent = {
   title: string
   metadata: string
@@ -31,11 +68,8 @@ export type FabricSkuContent = {
     width: string
     repeat: string
   }
-  images: {
-    primary: ImageSlot
-    secondary: ImageSlot
-    tertiary: ImageSlot
-  }
+  backgroundColor?: string
+  images: Record<SkuImageKey, ImageSlot>
   visible: {
     title: boolean
     description: boolean

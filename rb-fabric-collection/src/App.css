@@ -124,7 +124,7 @@
 
 .sku-eyebrow {
   margin: 0 0 18px;
-  color: var(--ink);
+  color: #000;
   font-family: var(--font-display);
   font-size: 0.72rem;
   font-weight: 500;
@@ -135,7 +135,7 @@
 
 .sku-title {
   margin: 0 0 20px;
-  color: var(--ink);
+  color: #000;
   font-family: var(--font-display);
   font-size: clamp(2rem, 4vw, 2.75rem);
   font-weight: 400;
@@ -147,7 +147,7 @@
 .sku-description {
   max-width: 360px;
   margin: 0 0 22px;
-  color: var(--muted);
+  color: #000;
   font-size: 0.82rem;
   line-height: 1.65;
 }
@@ -156,7 +156,7 @@
   margin: 0;
   border-top: 1px solid var(--rule);
   padding-top: 14px;
-  color: var(--muted);
+  color: #000;
   font-size: 0.75rem;
   line-height: 1.5;
 }
@@ -165,10 +165,17 @@
   margin: 0 8px;
 }
 
+.sku-image-rows {
+  --sku-image-gap: 24px;
+
+  display: grid;
+  gap: var(--sku-image-gap);
+  margin-top: 28px;
+}
+
 .sku-image-grid {
   display: grid;
-  gap: 24px;
-  margin-top: 28px;
+  gap: var(--sku-image-gap);
 }
 
 .sku-image-grid-1 {
@@ -198,13 +205,19 @@
 
   .sku-image-grid {
     grid-template-columns: 1fr;
-    gap: 18px;
+  }
+
+  .sku-image-rows {
+    --sku-image-gap: 18px;
   }
 
   .sku-image,
   .sku-image-primary,
   .sku-image-secondary,
-  .sku-image-tertiary {
+  .sku-image-tertiary,
+  .sku-image-quaternary,
+  .sku-image-quinary,
+  .sku-image-senary {
     height: auto;
     aspect-ratio: 4 / 3;
   }

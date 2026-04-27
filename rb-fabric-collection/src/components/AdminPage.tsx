@@ -1,21 +1,27 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { ChangeEvent } from 'react'
 import { FabricSku } from './FabricSku'
 import { Hero } from './Hero'
-import { defaultContent } from '../data/content'
+import {
+  SKU_IMAGE_KEYS,
+  defaultContent,
+  normalizeHexColor,
+} from '../data/content'
 import './AdminPage.css'
 import type {
   FabricSkuContent,
   HeroContent,
   ImageSlot,
   LookbookContent,
+  SkuImageKey,
 } from '../data/content'
 
 const STORAGE_KEY = 'robert-brown-lookbook-draft'
+const ADMIN_SCROLL_KEY = 'robert-brown-lookbook-admin-scroll'
 const CONTENT_API = '/api/fabric-content'
 const IMAGE_API = '/api/fabric-images'
 
-type ImageKey = keyof FabricSkuContent['images']
+type ImageKey = SkuImageKey
 type SpecsKey = keyof FabricSkuContent['specs']
 
 const cloneContent = (content: LookbookContent): LookbookContent =>
@@ -33,6 +39,17 @@ const normalizeSkuImage = (
   legacyKey: string,
   fallback: ImageSlot,
 ) => normalizeImage(images[key] ?? images[legacyKey], fallback)
+
+const createBlankImage = (): ImageSlot => ({
+  src: '',
+  alt: '',
+  visible: true,
+})
+
+const fallbackImage = (
+  images: Partial<Record<ImageKey, ImageSlot>>,
+  key: ImageKey,
+) => images[key] ?? createBlankImage()
 
 const normalizeContent = (content: Partial<LookbookContent>): LookbookContent => {
   const fallback = cloneContent(defaultContent)
@@ -107,24 +124,46 @@ const normalizeContent = (content: Partial<LookbookContent>): LookbookContent =>
                   ? fabric.specs.repeat
                   : fabricFallback.specs.repeat,
             },
+            backgroundColor:
+              typeof fabric.backgroundColor === 'string'
+                ? fabric.backgroundColor
+                : fabricFallback.backgroundColor,
             images: {
               primary: normalizeSkuImage(
                 images,
                 'primary',
                 'header',
-                fabricFallback.images.primary,
+                fallbackImage(fabricFallback.images, 'primary'),
               ),
               secondary: normalizeSkuImage(
                 images,
                 'secondary',
                 'detail',
-                fabricFallback.images.secondary,
+                fallbackImage(fabricFallback.images, 'secondary'),
               ),
               tertiary: normalizeSkuImage(
                 images,
                 'tertiary',
                 'application',
-                fabricFallback.images.tertiary,
+                fallbackImage(fabricFallback.images, 'tertiary'),
+              ),
+              quaternary: normalizeSkuImage(
+                images,
+                'quaternary',
+                'fourth',
+                fallbackImage(fabricFallback.images, 'quaternary'),
+              ),
+              quinary: normalizeSkuImage(
+                images,
+                'quinary',
+                'fifth',
+                fallbackImage(fabricFallback.images, 'quinary'),
+              ),
+              senary: normalizeSkuImage(
+                images,
+                'senary',
+                'sixth',
+                fallbackImage(fabricFallback.images, 'senary'),
               ),
             },
             visible: {
@@ -143,12 +182,6 @@ const normalizeContent = (content: Partial<LookbookContent>): LookbookContent =>
   }
 }
 
-const createBlankImage = (): ImageSlot => ({
-  src: '',
-  alt: '',
-  visible: true,
-})
-
 const createBlankSku = (): FabricSkuContent => ({
   id: `fabric-${Date.now()}`,
   eyebrow: 'FABRIC 01 · HAND-BLOCKED LINEN',
@@ -159,10 +192,14 @@ const createBlankSku = (): FabricSkuContent => ({
     width: '54" width',
     repeat: 'Repeat: 27" h x 27" w',
   },
+  backgroundColor: '',
   images: {
     primary: createBlankImage(),
     secondary: createBlankImage(),
     tertiary: createBlankImage(),
+    quaternary: createBlankImage(),
+    quinary: createBlankImage(),
+    senary: createBlankImage(),
   },
   visible: {
     title: true,
@@ -232,24 +269,43 @@ function imageLabel(key: ImageKey) {
     primary: 'Primary',
     secondary: 'Secondary',
     tertiary: 'Tertiary',
+    quaternary: 'Image 4',
+    quinary: 'Image 5',
+    senary: 'Image 6',
   }
 
   return labels[key]
 }
 
+const skuEditorId = (fabric: FabricSkuContent) =>
+  `sku-editor-${fabric.id.replace(/[^a-zA-Z0-9_-]/g, '-')}`
+
 export function AdminPage() {
   const [content, setContent] = useState<LookbookContent>(() =>
-    cloneContent(defaultContent),
+    normalizeContent(defaultContent),
   )
   const [savedContent, setSavedContent] = useState<LookbookContent>(() =>
-    cloneContent(defaultContent),
+    normalizeContent(defaultContent),
   )
   const [status, setStatus] = useState('Loading saved content...')
   const [isSaving, setIsSaving] = useState(false)
+  const adminPanelRef = useRef<HTMLElement | null>(null)
+  const skuEditorRefs = useRef<Record<string, HTMLDetailsElement | null>>({})
 
   useEffect(() => {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(content))
   }, [content])
+
+  useEffect(() => {
+    const storedScroll = window.sessionStorage.getItem(ADMIN_SCROLL_KEY)
+    const panel = adminPanelRef.current
+
+    if (!panel || !storedScroll) {
+      return
+    }
+
+    panel.scrollTop = Number(storedScroll) || 0
+  }, [])
 
   useEffect(() => {
     let cancelled = false
@@ -289,6 +345,31 @@ export function AdminPage() {
   }, [])
 
   const skuCount = useMemo(() => content.fabrics.length, [content.fabrics.length])
+
+  const saveAdminScroll = () => {
+    const scrollTop = adminPanelRef.current?.scrollTop ?? 0
+    window.sessionStorage.setItem(ADMIN_SCROLL_KEY, String(scrollTop))
+    return scrollTop
+  }
+
+  const restoreAdminScroll = (scrollTop: number) => {
+    window.requestAnimationFrame(() => {
+      if (adminPanelRef.current) {
+        adminPanelRef.current.scrollTop = scrollTop
+      }
+    })
+  }
+
+  const scrollToSku = (fabricId: string) => {
+    const editor = skuEditorRefs.current[fabricId]
+
+    if (!editor) {
+      return
+    }
+
+    editor.open = true
+    editor.scrollIntoView({ block: 'start', behavior: 'smooth' })
+  }
 
   const updateHero = (updater: (hero: HeroContent) => HeroContent) => {
     setContent((current) => ({ ...current, hero: updater(current.hero) }))
@@ -400,6 +481,7 @@ export function AdminPage() {
   }
 
   const handleSave = async () => {
+    const scrollTop = saveAdminScroll()
     setIsSaving(true)
     setStatus('Saving...')
 
@@ -408,6 +490,7 @@ export function AdminPage() {
       setContent(saved)
       setSavedContent(saved)
       window.localStorage.removeItem(STORAGE_KEY)
+      restoreAdminScroll(scrollTop)
       setStatus('Saved to src/data/content.json')
     } catch {
       setStatus('Save failed')
@@ -418,7 +501,12 @@ export function AdminPage() {
 
   return (
     <main className="admin-shell">
-      <aside className="admin-panel" aria-label="Lookbook admin controls">
+      <aside
+        ref={adminPanelRef}
+        className="admin-panel"
+        aria-label="Lookbook admin controls"
+        onScroll={saveAdminScroll}
+      >
         <div className="admin-panel-header">
           <div>
             <p className="admin-eyebrow">Local Admin</p>
@@ -443,6 +531,25 @@ export function AdminPage() {
           >
             Reset
           </button>
+          <label className="admin-sku-jump">
+            <span>SKU</span>
+            <select
+              value=""
+              onChange={(event) => {
+                scrollToSku(event.target.value)
+                event.target.value = ''
+              }}
+            >
+              <option value="" disabled>
+                Jump to SKU
+              </option>
+              {content.fabrics.map((fabric, index) => (
+                <option key={fabric.id} value={fabric.id}>
+                  {fabric.title || `SKU ${index + 1}`}
+                </option>
+              ))}
+            </select>
+          </label>
         </div>
         <p className="admin-status">{status}</p>
 
@@ -573,6 +680,10 @@ export function AdminPage() {
               onRemove={removeSku}
               onUpdate={(updater) => updateSku(index, updater)}
               onImageUpload={handleSkuImageUpload}
+              editorId={skuEditorId(fabric)}
+              editorRef={(element) => {
+                skuEditorRefs.current[fabric.id] = element
+              }}
             />
           ))}
         </section>
@@ -603,22 +714,74 @@ function Field({
   label,
   value,
   multiline,
+  placeholder,
+  onBlur,
   onChange,
 }: {
   label: string
   value: string
   multiline?: boolean
+  placeholder?: string
+  onBlur?: () => void
   onChange: (value: string) => void
 }) {
   return (
     <label className="admin-field">
       <span>{label}</span>
       {multiline ? (
-        <textarea value={value} onChange={(event) => onChange(event.target.value)} />
+        <textarea
+          value={value}
+          placeholder={placeholder}
+          onBlur={onBlur}
+          onChange={(event) => onChange(event.target.value)}
+        />
       ) : (
-        <input value={value} onChange={(event) => onChange(event.target.value)} />
+        <input
+          value={value}
+          placeholder={placeholder}
+          onBlur={onBlur}
+          onChange={(event) => onChange(event.target.value)}
+        />
       )}
     </label>
+  )
+}
+
+function BackgroundColorField({
+  value,
+  onChange,
+  onReset,
+}: {
+  value: string
+  onChange: (value: string) => void
+  onReset: () => void
+}) {
+  const previewColor = normalizeHexColor(value)
+
+  return (
+    <div className="admin-background-field">
+      <Field
+        label="Panel background"
+        value={value}
+        placeholder="#efe6d7"
+        onChange={onChange}
+        onBlur={() => {
+          const normalized = normalizeHexColor(value)
+
+          if (normalized) {
+            onChange(normalized)
+          }
+        }}
+      />
+      <span
+        className="admin-color-swatch"
+        style={previewColor ? { backgroundColor: previewColor } : undefined}
+        aria-hidden="true"
+      />
+      <button type="button" onClick={onReset}>
+        Reset
+      </button>
+    </div>
   )
 }
 
@@ -696,6 +859,8 @@ function SkuEditor({
   onRemove,
   onUpdate,
   onImageUpload,
+  editorId,
+  editorRef,
 }: {
   fabric: FabricSkuContent
   index: number
@@ -709,9 +874,16 @@ function SkuEditor({
     index: number,
     imageKey: ImageKey,
   ) => void
+  editorId: string
+  editorRef: (element: HTMLDetailsElement | null) => void
 }) {
   return (
-    <details className="admin-sku-editor" open={index === 0}>
+    <details
+      ref={editorRef}
+      id={editorId}
+      className="admin-sku-editor"
+      open={index === 0}
+    >
       <summary>
         <span>{fabric.title || 'Untitled Fabric'}</span>
         <span className="admin-sku-order">#{index + 1}</span>
@@ -743,6 +915,13 @@ function SkuEditor({
         label="Title"
         value={fabric.title}
         onChange={(value) => onUpdate((current) => ({ ...current, title: value }))}
+      />
+      <BackgroundColorField
+        value={fabric.backgroundColor ?? ''}
+        onChange={(value) =>
+          onUpdate((current) => ({ ...current, backgroundColor: value }))
+        }
+        onReset={() => onUpdate((current) => ({ ...current, backgroundColor: '' }))}
       />
       <VisibilityToggle
         label="Show title"
@@ -787,7 +966,7 @@ function SkuEditor({
           />
         ))}
       </div>
-      {(Object.keys(fabric.images) as ImageKey[]).map((imageKey) => (
+      {SKU_IMAGE_KEYS.map((imageKey) => (
         <ImageEditor
           key={imageKey}
           label={`${imageLabel(imageKey)} image`}

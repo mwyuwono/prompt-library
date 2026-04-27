@@ -5,7 +5,7 @@
     "subtitle": "Mémoire du Sol",
     "description": "Modernist forms pressed into raw linen: fractured, softened, and made tactile through fiber, ink, and hand.",
     "image": {
-      "src": "/fabrics/uploads/1777226721565-generated-image-april-26-2026-2-04pm.jpg",
+      "src": "/fabrics/uploads/1777247900782-generated-image-april-26-2026-2-04pm.jpg",
       "alt": "Close textile crop in warm neutral tones with woven surface texture",
       "visible": true
     },
@@ -21,13 +21,14 @@
     {
       "id": "fabric-1777234492922",
       "eyebrow": "FABRIC 01 · HAND-BLOCKED LINEN",
-      "title": "smooth sailing",
+      "title": "Deep Water",
       "description": "Describe the textile, its hand, pattern language, and intended mood.",
       "specs": {
         "colorway": "Colorway on natural flax",
         "width": "54\" width",
         "repeat": "Repeat: 27\" h x 27\" w"
       },
+      "backgroundColor": "#c2a693",
       "images": {
         "primary": {
           "src": "/fabrics/uploads/1777234647430-2fd429c2-17a2-4034-8856-d64b69efb6c6.jpg",
@@ -35,11 +36,26 @@
           "visible": true
         },
         "secondary": {
-          "src": "/fabrics/uploads/1777234924511-pomelli-photoshoot-image-1-1-0426.png",
+          "src": "/fabrics/uploads/1777245655795-a30d2706-173a-4a71-b96b-0ae325264294-png.png",
           "alt": "",
           "visible": true
         },
         "tertiary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        },
+        "quaternary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        },
+        "quinary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        },
+        "senary": {
           "src": "",
           "alt": "",
           "visible": true
@@ -48,6 +64,53 @@
       "visible": {
         "title": true,
         "description": false
+      }
+    },
+    {
+      "id": "fabric-1777235710463",
+      "eyebrow": "FABRIC 01 · HAND-BLOCKED LINEN",
+      "title": "Palmyra",
+      "description": "Cinnabar + Charoal",
+      "specs": {
+        "colorway": "Colorway on natural flax",
+        "width": "54\" width",
+        "repeat": "Repeat: 27\" h x 27\" w"
+      },
+      "images": {
+        "primary": {
+          "src": "/fabrics/uploads/1777235782936-a5893158-19ad-4e97-a06a-9078faed7e42.jpg",
+          "alt": "",
+          "visible": true
+        },
+        "secondary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        },
+        "tertiary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        },
+        "quaternary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        },
+        "quinary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        },
+        "senary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        }
+      },
+      "visible": {
+        "title": true,
+        "description": true
       }
     },
     {
@@ -60,20 +123,84 @@
         "width": "54\" width",
         "repeat": "Repeat: 27\" h x 27\" w"
       },
+      "backgroundColor": "#a99c91",
       "images": {
         "primary": {
-          "src": "/fabrics/uploads/1777234443943-1e99db34-cf10-4ce8-9a6b-f01b0ea5b174.png",
+          "src": "/fabrics/uploads/1777236922743-fall-of-rome-chair.jpg",
           "alt": "Wide crop of fragmented neutral linen pattern with charcoal forms",
           "visible": true
         },
         "secondary": {
-          "src": "/fabrics/uploads/1777234371124-chatgpt-image-apr-26-2026-11-07-01-am.png",
+          "src": "/fabrics/uploads/1777236929602-chatgpt-image-apr-26-2026-11-07-01-am.png",
           "alt": "Close textile detail showing broken motif marks on woven linen",
           "visible": true
         },
         "tertiary": {
           "src": "",
           "alt": "Interior vignette with neutral upholstery and abstract textile accents",
+          "visible": true
+        },
+        "quaternary": {
+          "src": "/fabrics/uploads/1777247243792-1b6b72a3-3c1b-4881-8f3b-2ef6e565b6bd.jpg",
+          "alt": "",
+          "visible": false
+        },
+        "quinary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        },
+        "senary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        }
+      },
+      "visible": {
+        "title": true,
+        "description": true
+      }
+    },
+    {
+      "id": "fabric-1777247976292",
+      "eyebrow": "FABRIC 01 · HAND-BLOCKED LINEN",
+      "title": "Undertow",
+      "description": "A bold print evoking liquid movement and shifting sands ",
+      "specs": {
+        "colorway": "Ink blue on natural flax",
+        "width": "54\" width",
+        "repeat": "Repeat: 27\" h x 27\" w"
+      },
+      "backgroundColor": "",
+      "images": {
+        "primary": {
+          "src": "/fabrics/uploads/1777248568908-vertical-stripe.png",
+          "alt": "",
+          "visible": true
+        },
+        "secondary": {
+          "src": "/fabrics/uploads/1777251356482-pomelli-photoshoot-image-4-5-0426-4.png",
+          "alt": "",
+          "visible": true
+        },
+        "tertiary": {
+          "src": "/fabrics/uploads/1777251365474-generated-image-april-26-2026-8-41pm.jpg",
+          "alt": "",
+          "visible": true
+        },
+        "quaternary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        },
+        "quinary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        },
+        "senary": {
+          "src": "",
+          "alt": "",
           "visible": true
         }
       },
