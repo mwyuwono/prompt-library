@@ -162,29 +162,29 @@
       }
     },
     {
-      "id": "fabric-1777247976292",
+      "id": "fabric-1777254587683",
       "eyebrow": "FABRIC 01 · HAND-BLOCKED LINEN",
-      "title": "Undertow",
-      "description": "A bold print evoking liquid movement and shifting sands ",
+      "title": "New Fabric",
+      "description": "Describe the textile, its hand, pattern language, and intended mood.",
       "specs": {
-        "colorway": "Ink blue on natural flax",
+        "colorway": "Colorway on natural flax",
         "width": "54\" width",
         "repeat": "Repeat: 27\" h x 27\" w"
       },
       "backgroundColor": "",
       "images": {
         "primary": {
-          "src": "/fabrics/uploads/1777248568908-vertical-stripe.png",
+          "src": "/fabrics/uploads/1777255168221-zoomed-rb-room-2.jpg",
           "alt": "",
           "visible": true
         },
         "secondary": {
-          "src": "/fabrics/uploads/1777251356482-pomelli-photoshoot-image-4-5-0426-4.png",
+          "src": "/fabrics/uploads/1777256685249-7dc79004-f5ac-46e3-b0ab-4a3d8097661d.png",
           "alt": "",
           "visible": true
         },
         "tertiary": {
-          "src": "/fabrics/uploads/1777251365474-generated-image-april-26-2026-8-41pm.jpg",
+          "src": "/fabrics/uploads/1777256693173-pomelli-photoshoot-image-1-1-0426-1.png",
           "alt": "",
           "visible": true
         },
@@ -210,29 +210,29 @@
       }
     },
     {
-      "id": "fabric-1777254587683",
+      "id": "fabric-1777247976292",
       "eyebrow": "FABRIC 01 · HAND-BLOCKED LINEN",
-      "title": "New Fabric",
-      "description": "Describe the textile, its hand, pattern language, and intended mood.",
+      "title": "Undertow",
+      "description": "A bold print evoking liquid movement and shifting sands ",
       "specs": {
-        "colorway": "Colorway on natural flax",
+        "colorway": "Ink blue on natural flax",
         "width": "54\" width",
         "repeat": "Repeat: 27\" h x 27\" w"
       },
       "backgroundColor": "",
       "images": {
         "primary": {
-          "src": "/fabrics/uploads/1777255168221-zoomed-rb-room-2.jpg",
+          "src": "/fabrics/uploads/1777248568908-vertical-stripe.png",
           "alt": "",
           "visible": true
         },
         "secondary": {
-          "src": "/fabrics/uploads/1777254634955-967e3a6c-35bb-40b8-a235-353bc7e877ee.png",
+          "src": "/fabrics/uploads/1777251356482-pomelli-photoshoot-image-4-5-0426-4.png",
           "alt": "",
           "visible": true
         },
         "tertiary": {
-          "src": "",
+          "src": "/fabrics/uploads/1777251365474-generated-image-april-26-2026-8-41pm.jpg",
           "alt": "",
           "visible": true
         },
