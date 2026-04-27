@@ -1146,7 +1146,7 @@ export class WyPromptModal extends LitElement {
     let compiled = template;
     Object.keys(this._values || {}).forEach(key => {
       const regex = new RegExp(`{{${key}}}`, 'g');
-      compiled = compiled.replace(regex, this._values[key] || `[${key}]`);
+      compiled = compiled.replace(regex, this._values[key] ?? '');
     });
     return compiled;
   }
