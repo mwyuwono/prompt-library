@@ -1179,7 +1179,8 @@ export class WyPromptModal extends LitElement {
       );
     }
     
-    navigator.clipboard.writeText(textToCopy);
+    const blob = new Blob([textToCopy], { type: 'text/plain' });
+    navigator.clipboard.write([new ClipboardItem({ 'text/plain': blob })]);
     this.dispatchEvent(new CustomEvent('copy', {
       detail: { text: textToCopy },
       bubbles: true,
