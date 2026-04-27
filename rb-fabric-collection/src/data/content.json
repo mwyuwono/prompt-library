@@ -20,11 +20,11 @@
   "fabrics": [
     {
       "id": "fabric-1777234492922",
-      "eyebrow": "FABRIC 01 · HAND-BLOCKED LINEN",
+      "eyebrow": "FABRIC 01 · INDIGO LINEN",
       "title": "Deep Water",
-      "description": "Describe the textile, its hand, pattern language, and intended mood.",
+      "description": "A saturated study in tidal movement, with layered blue forms that drift across the linen like shadowed water.",
       "specs": {
-        "colorway": "Colorway on natural flax",
+        "colorway": "Indigo and mineral blue on natural flax",
         "width": "54\" width",
         "repeat": "Repeat: 27\" h x 27\" w"
       },
@@ -32,12 +32,12 @@
       "images": {
         "primary": {
           "src": "/fabrics/uploads/1777263521170-generated-image-april-27-2026-12-16am.jpg",
-          "alt": "",
+          "alt": "Deep Water linen shown in an upholstered room vignette",
           "visible": true
         },
         "secondary": {
           "src": "/fabrics/uploads/1777245655795-a30d2706-173a-4a71-b96b-0ae325264294-png.png",
-          "alt": "",
+          "alt": "Close crop of indigo abstract forms printed on linen",
           "visible": true
         },
         "tertiary": {
@@ -47,7 +47,7 @@
         },
         "quaternary": {
           "src": "/fabrics/uploads/1777264107340-generated-image-april-27-2026-12-28am.jpg",
-          "alt": "",
+          "alt": "Deep Water fabric applied to a tailored interior setting",
           "visible": true
         },
         "quinary": {
@@ -63,23 +63,23 @@
       },
       "visible": {
         "title": true,
-        "description": false
+        "description": true
       }
     },
     {
       "id": "fabric-1777235710463",
-      "eyebrow": "FABRIC 01 · HAND-BLOCKED LINEN",
+      "eyebrow": "FABRIC 02 · CINNABAR LINEN",
       "title": "Palmyra",
-      "description": "Cinnabar + Charoal",
+      "description": "Cinnabar and charcoal marks assemble into an architectural rhythm, sun-warmed and timeworn.",
       "specs": {
-        "colorway": "Colorway on natural flax",
+        "colorway": "Cinnabar and charcoal on natural flax",
         "width": "54\" width",
         "repeat": "Repeat: 27\" h x 27\" w"
       },
       "images": {
         "primary": {
           "src": "/fabrics/uploads/1777235782936-a5893158-19ad-4e97-a06a-9078faed7e42.jpg",
-          "alt": "",
+          "alt": "Palmyra linen with cinnabar and charcoal block-printed forms",
           "visible": true
         },
         "secondary": {
@@ -115,9 +115,9 @@
     },
     {
       "id": "coming-apart",
-      "eyebrow": "FABRIC 01 · HAND-BLOCKED LINEN",
+      "eyebrow": "FABRIC 03 · CARBON LINEN",
       "title": "Fall of Rome",
-      "description": "An elegant disarray of classical forms, embodying the mildly subversive beauty of Roman excess.",
+      "description": "An elegant disarray of classical forms, balancing Roman excess with the quiet discipline of a carbon print.",
       "specs": {
         "colorway": "Carbon on natural flax",
         "width": "54\" width",
@@ -142,7 +142,7 @@
         },
         "quaternary": {
           "src": "/fabrics/uploads/1777247243792-1b6b72a3-3c1b-4881-8f3b-2ef6e565b6bd.jpg",
-          "alt": "",
+          "alt": "Fall of Rome upholstery view with fragmented classical pattern",
           "visible": false
         },
         "quinary": {
@@ -163,9 +163,9 @@
     },
     {
       "id": "fabric-1777254587683",
-      "eyebrow": "FABRIC 01 · HAND-BLOCKED LINEN",
+      "eyebrow": "FABRIC 04 · BLACK INK LINEN",
       "title": "Amphora",
-      "description": "Oversize geometric forms printed on a neutral ground",
+      "description": "Oversized vessel-like geometry lands on a neutral ground with the weight and clarity of black ink.",
       "specs": {
         "colorway": "Black ink on natural flax",
         "width": "54\" width",
@@ -175,12 +175,12 @@
       "images": {
         "primary": {
           "src": "/fabrics/uploads/1777255168221-zoomed-rb-room-2.jpg",
-          "alt": "",
+          "alt": "Amphora linen used in a neutral room setting",
           "visible": true
         },
         "secondary": {
           "src": "/fabrics/uploads/1777256685249-7dc79004-f5ac-46e3-b0ab-4a3d8097661d.png",
-          "alt": "",
+          "alt": "Close crop of Amphora black ink geometric pattern",
           "visible": true
         },
         "tertiary": {
@@ -190,12 +190,12 @@
         },
         "quaternary": {
           "src": "/fabrics/uploads/1777262800989-generated-image-april-27-2026-12-06am.jpg",
-          "alt": "",
+          "alt": "Amphora textile shown as tailored upholstery",
           "visible": true
         },
         "quinary": {
           "src": "/fabrics/uploads/1777262534650-generated-image-april-26-2026-10-43pm.jpg",
-          "alt": "",
+          "alt": "Detail view of Amphora pattern on woven flax",
           "visible": true
         },
         "senary": {
@@ -211,9 +211,9 @@
     },
     {
       "id": "fabric-1777258294819",
-      "eyebrow": "FABRIC 01 · HAND-BLOCKED LINEN",
+      "eyebrow": "FABRIC 05 · BOTANICAL LINEN",
       "title": "Aventine",
-      "description": "A botanical print that blends organic naturalism with classical structure",
+      "description": "A botanical print that blends organic naturalism with classical structure and a softly colored hand.",
       "specs": {
         "colorway": "Goldenrod, pink dust and jewel green on milk flax",
         "width": "54\" width",
@@ -223,17 +223,17 @@
       "images": {
         "primary": {
           "src": "/fabrics/uploads/1777258450200-cropped-rb.jpg",
-          "alt": "",
+          "alt": "Aventine botanical linen in a composed interior crop",
           "visible": true
         },
         "secondary": {
           "src": "/fabrics/uploads/1777258346264-256e9482-b2a6-4292-b063-c8fb264e75be.png",
-          "alt": "",
+          "alt": "Close view of Aventine botanical print in goldenrod and green",
           "visible": true
         },
         "tertiary": {
           "src": "/fabrics/uploads/1777258357814-chair-vignette.jpg",
-          "alt": "",
+          "alt": "Chair vignette upholstered with Aventine botanical linen",
           "visible": true
         },
         "quaternary": {
@@ -259,11 +259,11 @@
     },
     {
       "id": "fabric-1777259036475",
-      "eyebrow": "FABRIC 01 · HAND-BLOCKED LINEN",
+      "eyebrow": "FABRIC 06 · LAMP BLACK LINEN",
       "title": "Hieroglyph",
-      "description": "Modernist style encoded in a timeless geometric structure",
+      "description": "Modernist symbols are encoded into a timeless geometric structure, crisp against the tooth of flax.",
       "specs": {
-        "colorway": "Lamp black  on natural flax",
+        "colorway": "Lamp black on natural flax",
         "width": "54\" width",
         "repeat": "Repeat: 27\" h x 27\" w"
       },
@@ -271,7 +271,7 @@
       "images": {
         "primary": {
           "src": "/fabrics/uploads/1777259052335-c90fa254-5773-4f75-a0bd-28102008b110.png",
-          "alt": "",
+          "alt": "Hieroglyph linen with lamp black geometric symbols",
           "visible": true
         },
         "secondary": {
@@ -307,9 +307,9 @@
     },
     {
       "id": "fabric-1777247976292",
-      "eyebrow": "FABRIC 01 · HAND-BLOCKED LINEN",
+      "eyebrow": "FABRIC 07 · INK BLUE LINEN",
       "title": "Undertow",
-      "description": "A bold print evoking liquid movement and shifting sands ",
+      "description": "A bold print of liquid movement and shifting sand, pulled into an inky, wave-like cadence.",
       "specs": {
         "colorway": "Ink blue on natural flax",
         "width": "54\" width",
@@ -319,12 +319,12 @@
       "images": {
         "primary": {
           "src": "/fabrics/uploads/1777260090331-generated-image-april-26-2026-8-41pm.jpg",
-          "alt": "",
+          "alt": "Undertow linen shown in an ink blue upholstered room",
           "visible": true
         },
         "secondary": {
           "src": "/fabrics/uploads/1777260096351-chatgpt-image-apr-26-2026-11-19-27-pm.png",
-          "alt": "",
+          "alt": "Close detail of Undertow's flowing ink blue pattern",
           "visible": true
         },
         "tertiary": {
@@ -334,7 +334,7 @@
         },
         "quaternary": {
           "src": "/fabrics/uploads/1777263102278-undertow.jpg",
-          "alt": "",
+          "alt": "Undertow pattern wrapped across a chair form",
           "visible": true
         },
         "quinary": {
@@ -355,11 +355,11 @@
     },
     {
       "id": "fabric-1777259193656",
-      "eyebrow": "FABRIC 01 · HAND-BLOCKED LINEN",
+      "eyebrow": "FABRIC 08 · LABYRINTH LINEN",
       "title": "Catacomb",
-      "description": "An ancient maze, abstracted",
+      "description": "An ancient maze, abstracted into an irregular lattice that feels excavated rather than drawn.",
       "specs": {
-        "colorway": "Colorway on natural flax",
+        "colorway": "Warm carbon on natural flax",
         "width": "54\" width",
         "repeat": "Repeat: 27\" h x 27\" w"
       },
@@ -367,12 +367,12 @@
       "images": {
         "primary": {
           "src": "/fabrics/uploads/1777260867579-generated-image-april-26-2026-11-33pm.jpg",
-          "alt": "",
+          "alt": "Catacomb linen with abstract maze pattern in a room setting",
           "visible": true
         },
         "secondary": {
           "src": "/fabrics/uploads/1777260881958-59b71c65-1598-4fea-a784-16592a974522.png",
-          "alt": "",
+          "alt": "Close crop of Catacomb labyrinth pattern on natural flax",
           "visible": true
         },
         "tertiary": {
@@ -403,11 +403,11 @@
     },
     {
       "id": "fabric-1777261024742",
-      "eyebrow": "FABRIC 01 · HAND-BLOCKED LINEN",
+      "eyebrow": "FABRIC 09 · TERRACOTTA LINEN",
       "title": "Carved In Stone",
-      "description": "Sandstone, actually. Structured geometry erodes into seductively smooth form.",
+      "description": "Structured geometry erodes into smooth terracotta forms, like a carved surface softened by time.",
       "specs": {
-        "colorway": "Dead salmon on natural flax",
+        "colorway": "Faded terracotta on natural flax",
         "width": "54\" width",
         "repeat": "Repeat: 27\" h x 27\" w"
       },
@@ -415,12 +415,12 @@
       "images": {
         "primary": {
           "src": "/fabrics/uploads/1777261050233-9d767809-8f8d-4361-8714-36467057987c.png",
-          "alt": "",
+          "alt": "Carved In Stone terracotta linen pattern on natural flax",
           "visible": true
         },
         "secondary": {
           "src": "/fabrics/uploads/1777261183752-22d8c825-3735-402e-a5f6-514079f6036b.png",
-          "alt": "",
+          "alt": "Close view of softened geometric terracotta forms",
           "visible": true
         },
         "tertiary": {
@@ -430,7 +430,7 @@
         },
         "quaternary": {
           "src": "/fabrics/uploads/1777261502492-2dbb77ae-d66d-4eae-950d-95b890eddc77.png",
-          "alt": "",
+          "alt": "Carved In Stone fabric shown in an upholstered application",
           "visible": true
         },
         "quinary": {
@@ -451,11 +451,11 @@
     },
     {
       "id": "fabric-1777261340404",
-      "eyebrow": "FABRIC 01 · HAND-BLOCKED LINEN",
+      "eyebrow": "FABRIC 10 · OXIDE BOTANICAL LINEN",
       "title": "Aeterna",
-      "description": "Enduringly classic. Earthy botanical forms, artfully deconstructed and printed on a textured linen ground.",
+      "description": "Earthy botanical forms are artfully deconstructed and printed on a textured linen ground with enduring poise.",
       "specs": {
-        "colorway": "Black blood on natural flax",
+        "colorway": "Oxide black on natural flax",
         "width": "54\" width",
         "repeat": "Repeat: 27\" h x 27\" w"
       },
@@ -463,12 +463,12 @@
       "images": {
         "primary": {
           "src": "/fabrics/uploads/1777261352270-31bc6f51-6544-4129-8e7a-b8a9a95eecae.png",
-          "alt": "",
+          "alt": "Aeterna oxide botanical linen pattern on natural flax",
           "visible": true
         },
         "secondary": {
           "src": "/fabrics/uploads/1777262147093-pomelli-photoshoot-image-9-16-0426.png",
-          "alt": "",
+          "alt": "Aeterna fabric shown in an upholstered interior application",
           "visible": true
         },
         "tertiary": {

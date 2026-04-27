@@ -184,11 +184,11 @@ const normalizeContent = (content: Partial<LookbookContent>): LookbookContent =>
 
 const createBlankSku = (): FabricSkuContent => ({
   id: `fabric-${Date.now()}`,
-  eyebrow: 'FABRIC 01 · HAND-BLOCKED LINEN',
+  eyebrow: 'FABRIC 00 · LINEN STUDY',
   title: 'New Fabric',
-  description: 'Describe the textile, its hand, pattern language, and intended mood.',
+  description: 'A hand-printed linen study with a clear pattern language, tactile ground, and considered interior mood.',
   specs: {
-    colorway: 'Colorway on natural flax',
+    colorway: 'Custom colorway on natural flax',
     width: '54" width',
     repeat: 'Repeat: 27" h x 27" w',
   },
