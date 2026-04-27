@@ -95,7 +95,7 @@
         "quaternary": {
           "src": "/fabrics/uploads/1777297712309-pink-cinnabar.jpg",
           "alt": "",
-          "visible": true
+          "visible": false
         },
         "quinary": {
           "src": "",
