@@ -208,6 +208,54 @@
         "title": true,
         "description": true
       }
+    },
+    {
+      "id": "fabric-1777254587683",
+      "eyebrow": "FABRIC 01 · HAND-BLOCKED LINEN",
+      "title": "New Fabric",
+      "description": "Describe the textile, its hand, pattern language, and intended mood.",
+      "specs": {
+        "colorway": "Colorway on natural flax",
+        "width": "54\" width",
+        "repeat": "Repeat: 27\" h x 27\" w"
+      },
+      "backgroundColor": "",
+      "images": {
+        "primary": {
+          "src": "/fabrics/uploads/1777255168221-zoomed-rb-room-2.jpg",
+          "alt": "",
+          "visible": true
+        },
+        "secondary": {
+          "src": "/fabrics/uploads/1777254634955-967e3a6c-35bb-40b8-a235-353bc7e877ee.png",
+          "alt": "",
+          "visible": true
+        },
+        "tertiary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        },
+        "quaternary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        },
+        "quinary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        },
+        "senary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        }
+      },
+      "visible": {
+        "title": true,
+        "description": true
+      }
     }
   ]
 }
