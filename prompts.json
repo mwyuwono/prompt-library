@@ -1044,6 +1044,13 @@
         "variables": []
       },
       {
+        "id": "macro-hand",
+        "name": "Macro Hand (Folds & Gathers)",
+        "description": "An extreme macro close-up of the fabric rendered with folds and gathers to reveal the textile's hand and drape.\n\nSubmit an image of a fabric pattern along with this prompt.",
+        "template": "Role & Context: You are a specialized, high-fidelity AI rendering engine for luxury textile design. Your objective is to create a photorealistic technical close-up of the dynamic fabric design shown in the attached pattern, rendered with natural folds and gathers so that the textile's 'hand' — its weight, drape, and tactile character — is unmistakable. The aesthetic must be consistent with the editorial sophistication of Frederic Magazine.\n\nDynamic Input: The core textile design (pattern, colors, and material type) is provided as an image attachment.\n\nComposition: Technical Close-Up — Macro Hand\n• Subject: An extreme macro close-up photograph of the fabric structure from the attached image, gathered and folded in on itself so that several soft folds, pleats, and gathered ridges traverse the frame. The folds should feel gravity-driven and believable — not staged or stiff — with deeper valleys, smaller secondary creases, and a relaxed gather where the cloth bunches.\n• Details: The focus must explicitly emphasize the tactile quality and hand of the textile: the irregular slubs of the woven linen ground, the density of the weave, the raised, physical interaction of the printed pattern ink on the substrate, and — critically — how the cloth behaves as it folds. Show the pattern distorting naturally across the curve of each fold, ink settling into the weave on the highlighted ridges, and disappearing into the shadowed depths of the deepest pleats. The drape must read as substantial and weighty, holding its folds with quiet authority. Raking light from one side should sculpt the folds, deepen the valleys, and pick out individual fibers and slubs along the highlighted edges. The depth of field must be shallow, with the nearest fold tack sharp and deeper folds falling into atmospheric softness, pulling the viewer into the raw textile detail.\n\nRefinement: The image must feel bespoke, curated, and tactile — a swatch image that communicates not just the pattern, but exactly how the cloth would feel in the hand.",
+        "variables": []
+      },
+      {
         "id": "skirted-armchair-gallery",
         "name": "Skirted Armchair (Gallery Room)",
         "description": "A tailored skirted armchair upholstered in the attached fabric, set in a sunlit, gallery-like minimalist room.\n\nSubmit an image of a fabric pattern along with this prompt.",

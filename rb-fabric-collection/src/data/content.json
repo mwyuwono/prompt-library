@@ -28,7 +28,7 @@
         "width": "54\" width",
         "repeat": "Repeat: 27\" h x 27\" w"
       },
-      "backgroundColor": "#c2a693",
+      "backgroundColor": "",
       "images": {
         "primary": {
           "src": "/fabrics/uploads/1777234647430-2fd429c2-17a2-4034-8856-d64b69efb6c6.jpg",
@@ -123,7 +123,7 @@
         "width": "54\" width",
         "repeat": "Repeat: 27\" h x 27\" w"
       },
-      "backgroundColor": "#a99c91",
+      "backgroundColor": "",
       "images": {
         "primary": {
           "src": "/fabrics/uploads/1777236922743-fall-of-rome-chair.jpg",
@@ -164,10 +164,10 @@
     {
       "id": "fabric-1777254587683",
       "eyebrow": "FABRIC 01 · HAND-BLOCKED LINEN",
-      "title": "New Fabric",
-      "description": "Describe the textile, its hand, pattern language, and intended mood.",
+      "title": "Amphora",
+      "description": "Oversize geometric forms printed on a neutral ground",
       "specs": {
-        "colorway": "Colorway on natural flax",
+        "colorway": "Black ink on natural flax",
         "width": "54\" width",
         "repeat": "Repeat: 27\" h x 27\" w"
       },
@@ -184,7 +184,55 @@
           "visible": true
         },
         "tertiary": {
-          "src": "/fabrics/uploads/1777256693173-pomelli-photoshoot-image-1-1-0426-1.png",
+          "src": "",
+          "alt": "",
+          "visible": false
+        },
+        "quaternary": {
+          "src": "/fabrics/uploads/1777257837620-generated-image-april-26-2026-10-43pm.jpg",
+          "alt": "",
+          "visible": true
+        },
+        "quinary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        },
+        "senary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        }
+      },
+      "visible": {
+        "title": true,
+        "description": true
+      }
+    },
+    {
+      "id": "fabric-1777258294819",
+      "eyebrow": "FABRIC 01 · HAND-BLOCKED LINEN",
+      "title": "Aventine",
+      "description": "A botanical print that blends organic naturalism with classical structure",
+      "specs": {
+        "colorway": "Goldenrod, pink dust and jewel green on milk flax",
+        "width": "54\" width",
+        "repeat": "Repeat: 27\" h x 27\" w"
+      },
+      "backgroundColor": "",
+      "images": {
+        "primary": {
+          "src": "/fabrics/uploads/1777258450200-cropped-rb.jpg",
+          "alt": "",
+          "visible": true
+        },
+        "secondary": {
+          "src": "/fabrics/uploads/1777258346264-256e9482-b2a6-4292-b063-c8fb264e75be.png",
+          "alt": "",
+          "visible": true
+        },
+        "tertiary": {
+          "src": "/fabrics/uploads/1777258357814-chair-vignette.jpg",
           "alt": "",
           "visible": true
         },
@@ -227,12 +275,60 @@
           "visible": true
         },
         "secondary": {
-          "src": "/fabrics/uploads/1777251356482-pomelli-photoshoot-image-4-5-0426-4.png",
+          "src": "",
           "alt": "",
           "visible": true
         },
         "tertiary": {
           "src": "/fabrics/uploads/1777251365474-generated-image-april-26-2026-8-41pm.jpg",
+          "alt": "",
+          "visible": true
+        },
+        "quaternary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        },
+        "quinary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        },
+        "senary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        }
+      },
+      "visible": {
+        "title": true,
+        "description": true
+      }
+    },
+    {
+      "id": "fabric-1777259036475",
+      "eyebrow": "FABRIC 01 · HAND-BLOCKED LINEN",
+      "title": "Hieroglyph",
+      "description": "Modernist style encoded in a timeless geometric structure",
+      "specs": {
+        "colorway": "Lamp black  on natural flax",
+        "width": "54\" width",
+        "repeat": "Repeat: 27\" h x 27\" w"
+      },
+      "backgroundColor": "",
+      "images": {
+        "primary": {
+          "src": "/fabrics/uploads/1777259052335-c90fa254-5773-4f75-a0bd-28102008b110.png",
+          "alt": "",
+          "visible": true
+        },
+        "secondary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        },
+        "tertiary": {
+          "src": "",
           "alt": "",
           "visible": true
         },
