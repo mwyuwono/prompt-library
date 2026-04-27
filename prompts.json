@@ -812,6 +812,46 @@
     "slug": "fabric-colorways"
   },
   {
+    "id": "pattern-effects",
+    "title": "Pattern Effects",
+    "description": "Upload a fabric pattern to apply a textile effect.",
+    "category": "Fabric",
+    "icon": "texture",
+    "variables": [],
+    "variations": [
+      {
+        "id": "warp-striations",
+        "name": "Warp Striations",
+        "description": "Ikat style color bleed",
+        "template": "Apply vertical warp-direction striations to the uploaded fabric pattern. Preserve the original pattern, scale, composition, and colors, but make the color boundaries feel woven rather than digitally sharp. Add fine vertical dye feathering, thread-level capillary wicking, and slight ikat-like blur where colors meet, so adjacent tones softly bleed together along the warp threads. Maintain visible textile texture, woven slubs, uneven pigment density, and natural abrash variation. The result should feel like hand-dyed or hand-printed fabric with organic vertical color migration, not a flat digital graphic.",
+        "variables": []
+      },
+      {
+        "id": "block-print",
+        "name": "Hand Block-Print",
+        "description": "Reinterprets the pattern as a hand block-printed textile",
+        "template": "Reinterpret the uploaded fabric pattern as a hand block-printed textile. Preserve the original motifs, scale, composition, layout, and color palette, but render every shape as if it were stamped by a carved wooden block onto woven cloth. Introduce the authentic imperfections of hand printing: slight registration drift between color layers, subtle double-impressions and skipped areas where the block lifted unevenly, denser ink build-up along motif edges with lighter pooling toward the centers, and occasional fine pinholes or grain marks transferred from the block face. Let the dye sit on top of a visible woven ground so the cloth's weft and warp show faintly through the lighter passages. Keep edges crisp but never mechanical — small wobbles, broken outlines, and tiny ink bleeds into adjacent threads should make the repeat feel handmade. The result should read as an artisanal block-printed textile, not a flat digital graphic or a screen-printed reproduction.",
+        "variables": []
+      },
+      {
+        "id": "sun-faded-vintage",
+        "name": "Sun-Faded Vintage",
+        "description": "Ages the pattern to a well-loved heirloom textile.",
+        "template": "Age the uploaded fabric pattern as if it were a well-loved heirloom textile that has lived in sunlight and gentle use for decades. Preserve the original motifs, scale, composition, layout, and overall color relationships, but soften the palette as if subtly bleached by years of UV exposure: warm tones drift toward dusty ochre and faded rose, cool tones drift toward muted slate and washed indigo, deep darks lift slightly, and high-chroma colors lose a measured amount of saturation while staying harmonious. Introduce natural abrash — uneven, drifting bands of tonal variation across the cloth that suggest dye-lot shifts and uneven exposure. Add quiet signs of long use: very subtle abrasion at motif edges, faint pigment loss along where folds or creases would naturally fall, occasional almost-imperceptible spotting, and a soft overall patina. Keep the woven ground visible, with slubs, irregular thread density, and a slightly relaxed hand. The result should feel like a treasured vintage textile photographed in soft natural light — gracefully aged, never dirty, distressed, or artificially filtered.",
+        "variables": []
+      },
+      {
+        "id": "embroidered-relief",
+        "name": "Embroidered Relief",
+        "description": "Translates the flat pattern into a dimensional embroidered textile.",
+        "template": "Translate the uploaded fabric pattern into a dimensional embroidered textile rendered on a woven linen or cotton ground. Preserve the original motifs, scale, composition, layout, and color palette, but reconstruct every shape as if it were worked in thread by hand. Each color area should read as a deliberate stitch field with a coherent stitch direction — satin stitch for smooth filled shapes, long-and-short stitch for graduated areas, chain or stem stitch following the contour of any linear elements, and small French knots or seed stitches where fine detail would naturally cluster. Threads should sit physically on top of the ground cloth with believable relief: subtle cast shadows beneath stitched areas, tiny highlights along individual thread strands, slight unevenness in thread tension, and the soft sheen of mercerized cotton or silk floss where appropriate. Allow the woven ground to show clearly between motifs, including its weave structure and texture. Introduce the honest imperfections of hand needlework — minor irregularities in stitch length, occasional thread crossings, slight puckering of the ground around denser stitched areas — without making the work look damaged. The result should read as a refined hand-embroidered textile photographed in raking light, not as a flat digital graphic with a texture overlay.",
+        "variables": []
+      }
+    ],
+    "featured": false,
+    "slug": "pattern-effects"
+  },
+  {
     "id": "fabric-imagery",
     "title": "Fabric Imagery",
     "description": "Describe a story or myth — it suggests twenty physical objects that can become fabric motifs, then offers to write an image prompt for generating a pattern swatch.",
