@@ -496,6 +496,54 @@
         "title": true,
         "description": true
       }
+    },
+    {
+      "id": "fabric-1777299421895",
+      "eyebrow": "FABRIC 00 · LINEN STUDY",
+      "title": "Hadrian's Wall",
+      "description": "A hand-printed linen study with a clear pattern language, tactile ground, and considered interior mood.",
+      "specs": {
+        "colorway": "Custom colorway on natural flax",
+        "width": "54\" width",
+        "repeat": "Repeat: 27\" h x 27\" w"
+      },
+      "backgroundColor": "",
+      "images": {
+        "primary": {
+          "src": "/fabrics/uploads/1777299452557-chatgpt-image-apr-27-2026-10-12-18-am.png",
+          "alt": "",
+          "visible": true
+        },
+        "secondary": {
+          "src": "/fabrics/uploads/1777302483071-chatgpt-image-apr-27-2026-09-59-13-am.png",
+          "alt": "",
+          "visible": true
+        },
+        "tertiary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        },
+        "quaternary": {
+          "src": "/fabrics/uploads/1777302739386-chatgpt-image-apr-27-2026-11-12-07-am.png",
+          "alt": "",
+          "visible": true
+        },
+        "quinary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        },
+        "senary": {
+          "src": "",
+          "alt": "",
+          "visible": true
+        }
+      },
+      "visible": {
+        "title": true,
+        "description": true
+      }
     }
   ]
 }
