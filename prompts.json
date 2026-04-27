@@ -821,9 +821,16 @@
     "variations": [
       {
         "id": "warp-striations",
-        "name": "Warp Striations",
+        "name": "Vertical Striations",
         "description": "Ikat style color bleed",
         "template": "Apply vertical warp-direction striations to the uploaded fabric pattern. Preserve the original pattern, scale, composition, and colors, but make the color boundaries feel woven rather than digitally sharp. Add fine vertical dye feathering, thread-level capillary wicking, and slight ikat-like blur where colors meet, so adjacent tones softly bleed together along the warp threads. Maintain visible textile texture, woven slubs, uneven pigment density, and natural abrash variation. The result should feel like hand-dyed or hand-printed fabric with organic vertical color migration, not a flat digital graphic.",
+        "variables": []
+      },
+      {
+        "id": "horizontal-ikat",
+        "name": "Horizontal Striations",
+        "description": "Apply horizontal warp-direction striations",
+        "template": "Apply horizontal warp-direction striations to the uploaded fabric pattern. Preserve the original pattern, scale, composition, and colors, but make the color boundaries feel woven rather than digitally sharp. Add fine horizontal dye feathering, thread-level capillary wicking, and slight ikat-like blur where colors meet, so adjacent tones softly bleed together along the warp threads. Maintain visible textile texture, woven slubs, uneven pigment density, and natural abrash variation. The result should feel like hand-dyed or hand-printed fabric with organic horizontal color migration, not a flat digital graphic.",
         "variables": []
       },
       {
