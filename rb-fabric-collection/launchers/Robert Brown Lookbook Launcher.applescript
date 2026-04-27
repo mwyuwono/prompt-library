@@ -13,7 +13,10 @@ mkdir -p \"$LOG_DIR\" \"$STATE_DIR\"
 
 is_lookbook() {
   local port=\"$1\"
-  curl -fsS --max-time 2 \"http://127.0.0.1:$port/api/fabric-content\" 2>/dev/null | grep -q 'Robert Brown'
+  local content
+  content=$(curl -fsS --max-time 2 \"http://127.0.0.1:$port/api/fabric-content\" 2>/dev/null) || return 1
+  printf '%s' \"$content\" | grep -q '\"hero\"' || return 1
+  printf '%s' \"$content\" | grep -q '\"fabrics\"' || return 1
 }
 
 for port in $(seq \"$PORT_START\" \"$PORT_END\"); do
