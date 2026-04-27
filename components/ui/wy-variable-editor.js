@@ -194,8 +194,7 @@ export class WyVariableEditor extends LitElement {
                 name: '',
                 label: '',
                 placeholder: '',
-                inputType: 'text',
-                options: ['', '']
+                inputType: 'text'
             }
         ];
         this._emitChange();
