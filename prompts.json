@@ -609,6 +609,13 @@
         "template": "Transform this uploaded reference image into a high-fidelity, magazine-quality photograph suitable for a luxury publication.\n\nCritical Execution: Upscale and reconstruct. Treat the input as a spatial reference only. If the input is low-resolution, degraded, or blurry, synthesize new, sharp, high-definition textures to replace pixelated areas. Restore clarity to fine details, ensuring every element has the crispness consistent with an 8K full-frame DSLR capture.\n\nTechnical Requirements: Emulate a 24mm tilt-shift lens capture for perfect vertical alignment and sophisticated perspective without distortion.\n\nLighting & Depth: Implement a natural lighting scheme using soft, diffused indirect sunlight. Prioritize 'Global Illumination' to create authentic micro-shadows in corners and crevices. The image must feature high dynamic range (HDR) with realistic highlight roll-off and deep shadow detail.\n\nMateriality: Uphold the materiality of the original scene. Ensure tactile quality: wood grain must show subtle pores, fabrics visible weaves, and stone natural matte or polished reflections.\n\nAesthetic Filter: Avoid any 'plastic,' hyper-smooth, or overly-processed AI artifacts. Maintain a slight, natural film grain. The final output must be indistinguishable from a physical photograph.\n\nOptional user notes (may be blank; if blank, ignore this field): {{additional_notes}}"
       },
       {
+        "id": "upscale-2",
+        "name": "Photo Upscale 2",
+        "description": "An alternative photo upscaler option",
+        "template": "Upscale and enhance the provided image while preserving the original composition, camera angle, proportions, room layout, furniture placement, fabric pattern, lighting direction, and overall design intent.\n\nThe goal is to make the image read as a high-end editorial photograph suitable for an interiors magazine such as Architectural Digest, Frederic Magazine, The World of Interiors, or a luxury advertising campaign.\n\nIncrease resolution, sharpness, and image fidelity while maintaining a natural photographic look. Recover and add plausible missing material texture where the source image is soft, low-resolution, or compressed. Remove digital artifacts, smearing, over-smoothing, compression noise, and unnatural AI blur.\n\nKeep the image grounded, quiet, sophisticated, and photorealistic.",
+        "variables": []
+      },
+      {
         "id": "tina-barney",
         "name": "Tina Barney Style Photo",
         "description": "Upload any photo. The model reinterprets it with Tina Barney's large-format aesthetic: naturalistic color, painterly palette, dimensional skin tones, and quiet psychological presence. Choose this for portraiture and interior scenes.",
@@ -631,13 +638,6 @@
         "name": "Photographic Rendering",
         "description": "Convert a provided image mockup into a photorealistic rendering",
         "template": "Convert the provided composite mockup into a photorealistic architectural rendering suitable for a high-end design portfolio.\n\nCore Directives:\n\nStructural Fidelity: This design represents my intentions, I just want you to refine it. Do not add or subtract elements unless requested. Ensure existing elements are perfectly integrated as any part of the provided image may have been pasted in from elsewhere and may not be consistent with perspective, lighting, scale, etc. \n\nPerspective & Geometry: Automatically correct any lens distortion, \"keystoning,\" or skewed angles. Ensure all vertical lines are perfectly parallel to the frame edges (Standard Architectural 2-Point Perspective).\n\nMateriality & Texture: Uphold the texture and materiality but increase fidelity so the image is consistent with a professional quality DSLR. \n\nLighting & Atmosphere: Implement a sophisticated natural lighting scheme. \n\nPhotographic Quality: Emulate a full-frame DSLR capture using a wide-angle tilt-shift lens. The final output must be indistinguishable from a physical photograph, featuring natural micro-shadows and high dynamic range (HDR) without looking \"plastic\" or over-processed.",
-        "variables": []
-      },
-      {
-        "id": "upscale-2",
-        "name": "Photo Upscale 2",
-        "description": "An alternative photo upscaler option",
-        "template": "Upscale and enhance the provided image while preserving the original composition, camera angle, proportions, room layout, furniture placement, fabric pattern, lighting direction, and overall design intent.\n\nThe goal is to make the image read as a high-end editorial photograph suitable for an interiors magazine such as Architectural Digest, Frederic Magazine, The World of Interiors, or a luxury advertising campaign.\n\nIncrease resolution, sharpness, and image fidelity while maintaining a natural photographic look. Recover and add plausible missing material texture where the source image is soft, low-resolution, or compressed. Remove digital artifacts, smearing, over-smoothing, compression noise, and unnatural AI blur.\n\nKeep the image grounded, quiet, sophisticated, and photorealistic.",
         "variables": []
       }
     ],
