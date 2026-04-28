@@ -1183,31 +1183,19 @@
         "name": "WALLS",
         "label": "Wall color",
         "placeholder": "(e.g., 'a dusty dark green' or 'Farrow & Ball Dead Salmon')",
-        "inputType": "text",
-        "options": [
-          "",
-          ""
-        ]
+        "inputType": "text"
       },
       {
         "name": "TRIM",
         "label": "Trim color",
         "placeholder": "",
-        "inputType": "text",
-        "options": [
-          "",
-          ""
-        ]
+        "inputType": "text"
       },
       {
         "name": "CEILING",
         "label": "Ceiling color",
         "placeholder": "",
-        "inputType": "text",
-        "options": [
-          "",
-          ""
-        ]
+        "inputType": "text"
       }
     ],
     "slug": "room-repainter",

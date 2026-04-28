@@ -1146,7 +1146,7 @@ export class WyPromptModal extends LitElement {
     let compiled = template;
     Object.keys(this._values || {}).forEach(key => {
       const regex = new RegExp(`{{${key}}}`, 'g');
-      compiled = compiled.replace(regex, this._values[key] || `[${key}]`);
+      compiled = compiled.replace(regex, this._values[key] ?? '');
     });
     return compiled;
   }
@@ -1179,7 +1179,8 @@ export class WyPromptModal extends LitElement {
       );
     }
     
-    navigator.clipboard.writeText(textToCopy);
+    const blob = new Blob([textToCopy], { type: 'text/plain' });
+    navigator.clipboard.write([new ClipboardItem({ 'text/plain': blob })]);
     this.dispatchEvent(new CustomEvent('copy', {
       detail: { text: textToCopy },
       bubbles: true,

@@ -4510,8 +4510,7 @@ var WyVariableEditor = class extends i4 {
         name: "",
         label: "",
         placeholder: "",
-        inputType: "text",
-        options: ["", ""]
+        inputType: "text"
       }
     ];
     this._emitChange();
@@ -7229,7 +7228,7 @@ var WyPromptModal = class extends i4 {
     let compiled = template;
     Object.keys(this._values || {}).forEach((key) => {
       const regex = new RegExp(`{{${key}}}`, "g");
-      compiled = compiled.replace(regex, this._values[key] || `[${key}]`);
+      compiled = compiled.replace(regex, this._values[key] ?? "");
     });
     return compiled;
   }
@@ -7253,7 +7252,8 @@ var WyPromptModal = class extends i4 {
         this.variations.length > 0 ? this.variations[this.activeVariationIndex].template : this.template
       );
     }
-    navigator.clipboard.writeText(textToCopy);
+    const blob = new Blob([textToCopy], { type: "text/plain" });
+    navigator.clipboard.write([new ClipboardItem({ "text/plain": blob })]);
     this.dispatchEvent(new CustomEvent("copy", {
       detail: { text: textToCopy },
       bubbles: true,

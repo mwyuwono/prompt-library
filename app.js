@@ -1651,7 +1651,8 @@ Server will start on http://localhost:3001`;
         const compiledPrompt = this.compilePrompt(prompt);
 
         try {
-            await navigator.clipboard.writeText(compiledPrompt);
+            const blob = new Blob([compiledPrompt], { type: 'text/plain' });
+            await navigator.clipboard.write([new ClipboardItem({ 'text/plain': blob })]);
 
             // Track usage
             prompt.lastUsed = Date.now();
