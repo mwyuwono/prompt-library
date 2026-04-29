@@ -446,7 +446,6 @@ export class WyPromptEditor extends LitElement {
     _handleSave() {
         if (this._editedPrompt?.variations?.length > 0) {
             this._syncVariationTemplatesForSave();
-            delete this._editedPrompt.image;
         } else if (this._promptMode === 'multi') {
             this._syncStepTemplatesForSave(
                 this.shadowRoot.querySelectorAll('wy-step-editor'),
@@ -476,7 +475,7 @@ export class WyPromptEditor extends LitElement {
 
     _getPreviewImage() {
         if (this._editedPrompt?.variations?.length > 0) {
-            return this._editedPrompt.variations[0]?.image || '';
+            return this._editedPrompt.image || this._editedPrompt.variations[0]?.image || '';
         }
 
         return this._editedPrompt?.image || '';
@@ -827,14 +826,12 @@ export class WyPromptEditor extends LitElement {
                             .options="${categoryOptions}"
                             @change="${(e) => this._handleFieldChange('category', e.detail.value)}"
                         ></wy-dropdown>
-                        ${this._editedPrompt.variations && this._editedPrompt.variations.length > 0 ? html`` : html`
-                            <wy-image-upload
-                                label="Background Image"
-                                .value="${this._editedPrompt.image || ''}"
-                                @change="${this._handleImageChange}"
-                                @remove="${this._handleImageRemove}"
-                            ></wy-image-upload>
-                        `}
+                        <wy-image-upload
+                            label="Prompt Image"
+                            .value="${this._editedPrompt.image || ''}"
+                            @change="${this._handleImageChange}"
+                            @remove="${this._handleImageRemove}"
+                        ></wy-image-upload>
                     </div>
 
                     <!-- Section 3: Content Structure -->

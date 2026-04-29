@@ -46,9 +46,10 @@ Standard prompts can use a prompt-level image:
 { "image": "public/images/example.jpg" }
 ```
 
-Prompts with variations should put images on each variation:
+Prompts with variations can use a prompt-level image as an explicit card thumbnail, and can also put images on each variation:
 ```json
 {
+  "image": "public/images/prompt-thumbnail.jpg",
   "variations": [
     { "id": "v1", "name": "Variant 1", "image": "public/images/example.jpg", "template": "..." },
     { "id": "v2", "name": "Variant 2", "image": "public/images/example-2.jpg", "template": "..." }
@@ -56,7 +57,7 @@ Prompts with variations should put images on each variation:
 }
 ```
 
-The first variation image is used as the overall prompt thumbnail in list and grid views. When the prompt is open, the selected variation's image is shown; variations without an image simply omit that image area.
+The prompt-level image is used as the overall prompt thumbnail in list and grid views. If a multi-variation prompt does not have a prompt-level image, the first variation image is used as the default thumbnail. When the prompt is open, the selected variation's image is shown; variations without an image simply omit that image area.
 
 ## Supported Input Types
 

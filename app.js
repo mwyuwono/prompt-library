@@ -1125,11 +1125,12 @@ Server will start on http://localhost:3001`;
 
     /**
      * Get the thumbnail image for a prompt card.
-     * Multi-variation prompts use the first variation image as their overall image.
+     * Multi-variation prompts use the prompt image when set,
+     * then fall back to the first variation image as their overall image.
      */
     getPromptImage(prompt) {
         if (prompt.variations && prompt.variations.length > 0) {
-            return prompt.variations[0]?.image || '';
+            return prompt.image || prompt.variations[0]?.image || '';
         }
 
         return prompt.image || '';

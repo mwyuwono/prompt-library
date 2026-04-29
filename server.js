@@ -230,10 +230,6 @@ app.put('/api/prompts/:id', (req, res) => {
             variables: req.body.variables || prompts[index].variables || []
         };
 
-        if (updatedPrompt.variations?.length > 0 && !Object.prototype.hasOwnProperty.call(req.body, 'image')) {
-            delete updatedPrompt.image;
-        }
-        
         prompts[index] = updatedPrompt;
         
         if (!writePrompts(dataset, prompts)) {
