@@ -39,6 +39,25 @@ Use `{{variable}}` syntax. Manual placeholders like `[Describe...]` won't be rep
 
 The app checks variation-level first, then falls back to prompt-level.
 
+## Prompt Images
+
+Standard prompts can use a prompt-level image:
+```json
+{ "image": "public/images/example.jpg" }
+```
+
+Prompts with variations should put images on each variation:
+```json
+{
+  "variations": [
+    { "id": "v1", "name": "Variant 1", "image": "public/images/example.jpg", "template": "..." },
+    { "id": "v2", "name": "Variant 2", "image": "public/images/example-2.jpg", "template": "..." }
+  ]
+}
+```
+
+The first variation image is used as the overall prompt thumbnail in list and grid views. When the prompt is open, the selected variation's image is shown; variations without an image simply omit that image area.
+
 ## Supported Input Types
 
 | Type | Config |

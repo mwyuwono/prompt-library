@@ -7,6 +7,7 @@ export class WyPromptModal extends LitElement {
     title: { type: String },
     category: { type: String },
     description: { type: String },
+    image: { type: String },
     template: { type: String },
     variables: { type: Array },
     variations: { type: Array },
@@ -24,6 +25,7 @@ export class WyPromptModal extends LitElement {
     this.title = '';
     this.category = '';
     this.description = '';
+    this.image = '';
     this.template = '';
     this.variables = [];
     this.variations = [];
@@ -370,6 +372,19 @@ export class WyPromptModal extends LitElement {
         flex-shrink: 0; /* Tabs stay fixed, don't shrink */
     }
 
+    .reference-image {
+        margin: var(--spacing-lg, 24px) var(--spacing-xl, 32px) 0;
+        flex-shrink: 0;
+    }
+
+    .reference-image img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        object-fit: cover;
+        border: 1px solid var(--paper-edge, #DDD6C8);
+    }
+
     .tabs-container wy-tabs {
         flex: 1;
     }
@@ -704,6 +719,7 @@ export class WyPromptModal extends LitElement {
       .header-main { flex-direction: column; align-items: flex-start; gap: var(--spacing-md, 16px); }
       .title-group h2 { font-size: 1.75rem; }
       .tabs-container { padding: 0; } /* wy-tabs handles its own mobile padding */
+      .reference-image { margin: 0 var(--spacing-md, 16px) var(--spacing-md, 16px); }
       .body { padding: var(--spacing-md, 16px); }
       
       /* Tighter button spacing on mobile */
@@ -954,6 +970,12 @@ export class WyPromptModal extends LitElement {
               </div>
             ` : ''}
         </header>
+
+        ${this.image ? html`
+          <div class="reference-image">
+            <img src="${this.image}" alt="${this.title}">
+          </div>
+        ` : ''}
 
         ${this.mode === 'locked' && this.variables.length > 0 && !(this.steps && this.steps.length > 0) ? html`
           <div class="tabs-container">

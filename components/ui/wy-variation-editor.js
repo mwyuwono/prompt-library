@@ -474,6 +474,24 @@ export class WyVariationEditor extends LitElement {
         this._handleFieldChange(variationIndex, 'template', e.detail.value);
     }
 
+    _handleImageChange(variationIndex, e) {
+        const { file } = e.detail;
+        this.dispatchEvent(new CustomEvent('image-upload', {
+            detail: { file, target: 'variation', variationIndex, variationId: this.variations[variationIndex]?.id },
+            bubbles: true,
+            composed: true
+        }));
+    }
+
+    _handleImageRemove(variationIndex) {
+        this._handleFieldChange(variationIndex, 'image', '');
+        this.dispatchEvent(new CustomEvent('image-remove', {
+            detail: { target: 'variation', variationIndex, variationId: this.variations[variationIndex]?.id },
+            bubbles: true,
+            composed: true
+        }));
+    }
+
     _handleMoveUp(index) {
         if (index === 0) return;
         const updatedVariations = [...this.variations];
@@ -520,6 +538,7 @@ export class WyVariationEditor extends LitElement {
                 id: `variation-${newNumber}`,
                 name: `Variation ${newNumber}`,
                 description: '',
+                image: '',
                 template: '',
                 variables: []
             }
@@ -599,6 +618,15 @@ export class WyVariationEditor extends LitElement {
                                     @click="${(e) => e.stopPropagation()}"
                                 ></textarea>
                             </wy-form-field>
+
+                            <div @click="${(e) => e.stopPropagation()}">
+                                <wy-image-upload
+                                    label="Variation Image"
+                                    .value="${variation.image || ''}"
+                                    @change="${(e) => this._handleImageChange(index, e)}"
+                                    @remove="${() => this._handleImageRemove(index)}"
+                                ></wy-image-upload>
+                            </div>
 
                             <!-- Mode Toggle -->
                             <div class="mode-toggle" @click="${(e) => e.stopPropagation()}">

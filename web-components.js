@@ -4893,6 +4893,22 @@ var WyVariationEditor = class extends i4 {
   _handleTemplateChange(variationIndex, e9) {
     this._handleFieldChange(variationIndex, "template", e9.detail.value);
   }
+  _handleImageChange(variationIndex, e9) {
+    const { file } = e9.detail;
+    this.dispatchEvent(new CustomEvent("image-upload", {
+      detail: { file, target: "variation", variationIndex, variationId: this.variations[variationIndex]?.id },
+      bubbles: true,
+      composed: true
+    }));
+  }
+  _handleImageRemove(variationIndex) {
+    this._handleFieldChange(variationIndex, "image", "");
+    this.dispatchEvent(new CustomEvent("image-remove", {
+      detail: { target: "variation", variationIndex, variationId: this.variations[variationIndex]?.id },
+      bubbles: true,
+      composed: true
+    }));
+  }
   _handleMoveUp(index) {
     if (index === 0) return;
     const updatedVariations = [...this.variations];
@@ -4932,6 +4948,7 @@ This action cannot be undone.`;
         id: `variation-${newNumber}`,
         name: `Variation ${newNumber}`,
         description: "",
+        image: "",
         template: "",
         variables: []
       }
@@ -5007,6 +5024,15 @@ This action cannot be undone.`;
                                     @click="${(e9) => e9.stopPropagation()}"
                                 ></textarea>
                             </wy-form-field>
+
+                            <div @click="${(e9) => e9.stopPropagation()}">
+                                <wy-image-upload
+                                    label="Variation Image"
+                                    .value="${variation.image || ""}"
+                                    @change="${(e9) => this._handleImageChange(index, e9)}"
+                                    @remove="${() => this._handleImageRemove(index)}"
+                                ></wy-image-upload>
+                            </div>
 
                             <!-- Mode Toggle -->
                             <div class="mode-toggle" @click="${(e9) => e9.stopPropagation()}">
@@ -5587,10 +5613,36 @@ var WyPromptEditor = class extends i4 {
       composed: true
     }));
   }
+  _getPreviewImage() {
+    if (this._editedPrompt?.variations?.length > 0) {
+      return this._editedPrompt.variations[0]?.image || "";
+    }
+    return this._editedPrompt?.image || "";
+  }
+  setImageValue({ target = "prompt", variationIndex = null, variationId = null } = {}, imagePath = "") {
+    if (!this._editedPrompt) return;
+    const resolvedVariationIndex = variationId ? this._editedPrompt.variations?.findIndex((variation) => variation.id === variationId) : variationIndex;
+    if (target === "variation" && Number.isInteger(resolvedVariationIndex) && this._editedPrompt.variations?.[resolvedVariationIndex]) {
+      const variations = [...this._editedPrompt.variations];
+      variations[resolvedVariationIndex] = {
+        ...variations[resolvedVariationIndex],
+        image: imagePath
+      };
+      this._editedPrompt = {
+        ...this._editedPrompt,
+        variations
+      };
+      return;
+    }
+    this._editedPrompt = {
+      ...this._editedPrompt,
+      image: imagePath
+    };
+  }
   _handleImageChange(e9) {
     const { file } = e9.detail;
     this.dispatchEvent(new CustomEvent("image-upload", {
-      detail: { file, promptId: this._editedPrompt?.id },
+      detail: { file, promptId: this._editedPrompt?.id, target: "prompt" },
       bubbles: true,
       composed: true
     }));
@@ -5598,7 +5650,25 @@ var WyPromptEditor = class extends i4 {
   _handleImageRemove() {
     this._handleFieldChange("image", "");
     this.dispatchEvent(new CustomEvent("image-remove", {
-      detail: { promptId: this._editedPrompt?.id },
+      detail: { promptId: this._editedPrompt?.id, target: "prompt" },
+      bubbles: true,
+      composed: true
+    }));
+  }
+  _handleVariationImageChange(e9) {
+    e9.stopPropagation();
+    const { file, target, variationIndex, variationId } = e9.detail;
+    this.dispatchEvent(new CustomEvent("image-upload", {
+      detail: { file, promptId: this._editedPrompt?.id, target, variationIndex, variationId },
+      bubbles: true,
+      composed: true
+    }));
+  }
+  _handleVariationImageRemove(e9) {
+    e9.stopPropagation();
+    const { target, variationIndex, variationId } = e9.detail;
+    this.dispatchEvent(new CustomEvent("image-remove", {
+      detail: { promptId: this._editedPrompt?.id, target, variationIndex, variationId },
       bubbles: true,
       composed: true
     }));
@@ -5642,7 +5712,8 @@ var WyPromptEditor = class extends i4 {
     const variation = {
       id: "variation-1",
       name: "Default",
-      description: ""
+      description: "",
+      image: this._editedPrompt.image || ""
     };
     if (this._promptMode === "single") {
       variation.template = this._editedPrompt.template || "";
@@ -5654,6 +5725,7 @@ var WyPromptEditor = class extends i4 {
     this._editedPrompt.variations = [variation];
     delete this._editedPrompt.template;
     delete this._editedPrompt.steps;
+    delete this._editedPrompt.image;
     this._promptMode = "single";
     this.requestUpdate();
   }
@@ -5678,6 +5750,7 @@ var WyPromptEditor = class extends i4 {
       this._promptMode = "single";
     }
     this._editedPrompt.variables = [...firstVariation.variables || []];
+    this._editedPrompt.image = firstVariation.image || "";
     delete this._editedPrompt.variations;
     this.requestUpdate();
   }
@@ -5835,12 +5908,14 @@ var WyPromptEditor = class extends i4 {
                             .options="${categoryOptions}"
                             @change="${(e9) => this._handleFieldChange("category", e9.detail.value)}"
                         ></wy-dropdown>
-                        <wy-image-upload
-                            label="Background Image"
-                            .value="${this._editedPrompt.image || ""}"
-                            @change="${this._handleImageChange}"
-                            @remove="${this._handleImageRemove}"
-                        ></wy-image-upload>
+                        ${this._editedPrompt.variations && this._editedPrompt.variations.length > 0 ? b2`` : b2`
+                            <wy-image-upload
+                                label="Background Image"
+                                .value="${this._editedPrompt.image || ""}"
+                                @change="${this._handleImageChange}"
+                                @remove="${this._handleImageRemove}"
+                            ></wy-image-upload>
+                        `}
                     </div>
 
                     <!-- Section 3: Content Structure -->
@@ -5866,6 +5941,8 @@ var WyPromptEditor = class extends i4 {
                             <wy-variation-editor
                                 .variations="${this._editedPrompt.variations}"
                                 @change="${(e9) => this._handleFieldChange("variations", e9.detail.variations)}"
+                                @image-upload="${this._handleVariationImageChange}"
+                                @image-remove="${this._handleVariationImageRemove}"
                             ></wy-variation-editor>
                         </div>
                     ` : b2`
@@ -6002,8 +6079,8 @@ var WyPromptEditor = class extends i4 {
                         <span class="preview-status">Updating</span>
                     </div>
                     <div class="preview-card">
-                        ${this._editedPrompt.image ? b2`
-                            <img src="${this._editedPrompt.image}" alt="Preview" class="preview-image">
+                        ${this._getPreviewImage() ? b2`
+                            <img src="${this._getPreviewImage()}" alt="Preview" class="preview-image">
                         ` : this._editedPrompt.icon ? b2`
                             <div class="preview-icon">
                                 <span class="material-symbols-outlined">${this._editedPrompt.icon}</span>
@@ -6794,6 +6871,7 @@ var WyPromptModal = class extends i4 {
     this.title = "";
     this.category = "";
     this.description = "";
+    this.image = "";
     this.template = "";
     this.variables = [];
     this.variations = [];
@@ -7060,6 +7138,12 @@ var WyPromptModal = class extends i4 {
             ` : ""}
         </header>
 
+        ${this.image ? b2`
+          <div class="reference-image">
+            <img src="${this.image}" alt="${this.title}">
+          </div>
+        ` : ""}
+
         ${this.mode === "locked" && this.variables.length > 0 && !(this.steps && this.steps.length > 0) ? b2`
           <div class="tabs-container">
               <wy-tabs active-tab="${this.activeTab}" @tab-change="${(e9) => this.activeTab = e9.detail.tab}">
@@ -7301,6 +7385,7 @@ __publicField(WyPromptModal, "properties", {
   title: { type: String },
   category: { type: String },
   description: { type: String },
+  image: { type: String },
   template: { type: String },
   variables: { type: Array },
   variations: { type: Array },
@@ -7594,6 +7679,19 @@ __publicField(WyPromptModal, "styles", i`
         align-items: center;
         gap: var(--spacing-xl, 32px);
         flex-shrink: 0; /* Tabs stay fixed, don't shrink */
+    }
+
+    .reference-image {
+        margin: var(--spacing-lg, 24px) var(--spacing-xl, 32px) 0;
+        flex-shrink: 0;
+    }
+
+    .reference-image img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        object-fit: cover;
+        border: 1px solid var(--paper-edge, #DDD6C8);
     }
 
     .tabs-container wy-tabs {
@@ -7930,6 +8028,7 @@ __publicField(WyPromptModal, "styles", i`
       .header-main { flex-direction: column; align-items: flex-start; gap: var(--spacing-md, 16px); }
       .title-group h2 { font-size: 1.75rem; }
       .tabs-container { padding: 0; } /* wy-tabs handles its own mobile padding */
+      .reference-image { margin: 0 var(--spacing-md, 16px) var(--spacing-md, 16px); }
       .body { padding: var(--spacing-md, 16px); }
       
       /* Tighter button spacing on mobile */

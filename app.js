@@ -873,8 +873,10 @@ Server will start on http://localhost:3001`;
         const item = document.createElement('div');
         item.className = 'prompt-list-item';
         item.dataset.index = index;
+        const promptImage = this.getPromptImage(prompt);
+
         // Add data-has-image for font switching
-        if (prompt.image) {
+        if (promptImage) {
             item.dataset.hasImage = 'true';
             item.classList.add('has-image');
         }
@@ -931,8 +933,10 @@ Server will start on http://localhost:3001`;
         card.dataset.category = prompt.category; // Add category for color coding
         card.dataset.locked = prompt.locked !== false;
 
+        const promptImage = this.getPromptImage(prompt);
+
         // Handle variants based on prompt data
-        if (prompt.image) {
+        if (promptImage) {
             card.dataset.hasImage = 'true';
             card.classList.add('has-image');
         } else if (prompt.featured) {
@@ -1031,12 +1035,14 @@ Server will start on http://localhost:3001`;
     getCardSummaryHTML(prompt) {
         const hiddenClass = this.showDetails ? '' : 'hidden';
 
+        const promptImage = this.getPromptImage(prompt);
+
         // Image Thumbnail
-        const imageHTML = prompt.image ? `<div class="card-thumbnail"><img src="${prompt.image}" alt="${prompt.title}"></div>` : '';
+        const imageHTML = promptImage ? `<div class="card-thumbnail"><img src="${promptImage}" alt="${prompt.title}"></div>` : '';
 
         // Icon section for non-image cards
         let iconHTML = '';
-        if (!prompt.image) {
+        if (!promptImage) {
             // For featured prompts, show heart icon in circular container
             if (prompt.featured) {
                 iconHTML = `
@@ -1056,12 +1062,12 @@ Server will start on http://localhost:3001`;
 
         // Tag/Badge section (Category badge for non-image cards only, unless featured)
         // When featured, don't show category badge (heart icon replaces it)
-        const badgeHTML = !prompt.image && !prompt.featured && prompt.category ? `
+        const badgeHTML = !promptImage && !prompt.featured && prompt.category ? `
             <div class="card-badge">${this.escapeHTML(prompt.category).toUpperCase()}</div>
         ` : '';
 
         // Header row for non-image cards (contains icon and badge)
-        const headerRowHTML = !prompt.image ? `
+        const headerRowHTML = !promptImage ? `
             <div class="card-header-row">
                 ${iconHTML}
                 ${badgeHTML}
@@ -1115,6 +1121,26 @@ Server will start on http://localhost:3001`;
 
         const activeId = prompt.activeVariationId || prompt.variations[0].id;
         return prompt.variations.find(v => v.id === activeId);
+    }
+
+    /**
+     * Get the thumbnail image for a prompt card.
+     * Multi-variation prompts use the first variation image as their overall image.
+     */
+    getPromptImage(prompt) {
+        if (prompt.variations && prompt.variations.length > 0) {
+            return prompt.variations[0]?.image || prompt.image || '';
+        }
+
+        return prompt.image || '';
+    }
+
+    /**
+     * Get the image for the currently active variation.
+     */
+    getActiveVariationImage(prompt) {
+        const activeVariation = this.getActiveVariation(prompt);
+        return activeVariation?.image || '';
     }
 
     /**
@@ -1176,6 +1202,7 @@ Server will start on http://localhost:3001`;
                 prompt.activeVariationId = variation.id;
                 // Always update variables using helper that handles fallback logic
                 this.promptModal.variables = this.getActiveVariables(prompt);
+                this.promptModal.image = this.getActiveVariationImage(prompt);
                 // Update URL hash to reflect new variation
                 this.updateUrlHash(prompt.id, variation.id);
             }
@@ -1286,6 +1313,7 @@ Server will start on http://localhost:3001`;
                 category: prompt.category,
                 description: prompt.description || '',
                 template: this.getActiveTemplate(prompt),
+                image: this.getActiveVariationImage(prompt),
                 variables: variables,
                 variations: prompt.variations || [],
                 activeVariationIndex: variationIndex >= 0 ? variationIndex : 0,
@@ -1452,6 +1480,7 @@ Server will start on http://localhost:3001`;
             // Indices
             activeVariationIndex: 0,
             activeStepIndex: 0,
+            image: '',
             
             // UI state
             mode: 'locked',
@@ -1529,6 +1558,7 @@ Server will start on http://localhost:3001`;
                 category: prompt.category,
                 description: prompt.description || '',
                 template: this.getActiveTemplate(prompt),
+                image: this.getActiveVariationImage(prompt),
                 variables: this.getActiveVariables(prompt),
                 variations: prompt.variations || [],
                 mode: prompt.locked !== false ? 'locked' : 'edit',

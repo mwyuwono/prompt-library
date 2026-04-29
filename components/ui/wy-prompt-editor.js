@@ -473,10 +473,44 @@ export class WyPromptEditor extends LitElement {
         }));
     }
 
+    _getPreviewImage() {
+        if (this._editedPrompt?.variations?.length > 0) {
+            return this._editedPrompt.variations[0]?.image || '';
+        }
+
+        return this._editedPrompt?.image || '';
+    }
+
+    setImageValue({ target = 'prompt', variationIndex = null, variationId = null } = {}, imagePath = '') {
+        if (!this._editedPrompt) return;
+
+        const resolvedVariationIndex = variationId
+            ? this._editedPrompt.variations?.findIndex(variation => variation.id === variationId)
+            : variationIndex;
+
+        if (target === 'variation' && Number.isInteger(resolvedVariationIndex) && this._editedPrompt.variations?.[resolvedVariationIndex]) {
+            const variations = [...this._editedPrompt.variations];
+            variations[resolvedVariationIndex] = {
+                ...variations[resolvedVariationIndex],
+                image: imagePath
+            };
+            this._editedPrompt = {
+                ...this._editedPrompt,
+                variations
+            };
+            return;
+        }
+
+        this._editedPrompt = {
+            ...this._editedPrompt,
+            image: imagePath
+        };
+    }
+
     _handleImageChange(e) {
         const { file } = e.detail;
         this.dispatchEvent(new CustomEvent('image-upload', {
-            detail: { file, promptId: this._editedPrompt?.id },
+            detail: { file, promptId: this._editedPrompt?.id, target: 'prompt' },
             bubbles: true,
             composed: true
         }));
@@ -485,7 +519,27 @@ export class WyPromptEditor extends LitElement {
     _handleImageRemove() {
         this._handleFieldChange('image', '');
         this.dispatchEvent(new CustomEvent('image-remove', {
-            detail: { promptId: this._editedPrompt?.id },
+            detail: { promptId: this._editedPrompt?.id, target: 'prompt' },
+            bubbles: true,
+            composed: true
+        }));
+    }
+
+    _handleVariationImageChange(e) {
+        e.stopPropagation();
+        const { file, target, variationIndex, variationId } = e.detail;
+        this.dispatchEvent(new CustomEvent('image-upload', {
+            detail: { file, promptId: this._editedPrompt?.id, target, variationIndex, variationId },
+            bubbles: true,
+            composed: true
+        }));
+    }
+
+    _handleVariationImageRemove(e) {
+        e.stopPropagation();
+        const { target, variationIndex, variationId } = e.detail;
+        this.dispatchEvent(new CustomEvent('image-remove', {
+            detail: { promptId: this._editedPrompt?.id, target, variationIndex, variationId },
             bubbles: true,
             composed: true
         }));
@@ -544,7 +598,8 @@ export class WyPromptEditor extends LitElement {
         const variation = {
             id: 'variation-1',
             name: 'Default',
-            description: ''
+            description: '',
+            image: this._editedPrompt.image || ''
         };
 
         if (this._promptMode === 'single') {
@@ -560,6 +615,7 @@ export class WyPromptEditor extends LitElement {
         this._editedPrompt.variations = [variation];
         delete this._editedPrompt.template;
         delete this._editedPrompt.steps;
+        delete this._editedPrompt.image;
         this._promptMode = 'single'; // Reset mode
         this.requestUpdate();
     }
@@ -595,6 +651,7 @@ export class WyPromptEditor extends LitElement {
         }
 
         this._editedPrompt.variables = [...(firstVariation.variables || [])];
+        this._editedPrompt.image = firstVariation.image || '';
         delete this._editedPrompt.variations;
         this.requestUpdate();
     }
@@ -764,12 +821,14 @@ export class WyPromptEditor extends LitElement {
                             .options="${categoryOptions}"
                             @change="${(e) => this._handleFieldChange('category', e.detail.value)}"
                         ></wy-dropdown>
-                        <wy-image-upload
-                            label="Background Image"
-                            .value="${this._editedPrompt.image || ''}"
-                            @change="${this._handleImageChange}"
-                            @remove="${this._handleImageRemove}"
-                        ></wy-image-upload>
+                        ${this._editedPrompt.variations && this._editedPrompt.variations.length > 0 ? html`` : html`
+                            <wy-image-upload
+                                label="Background Image"
+                                .value="${this._editedPrompt.image || ''}"
+                                @change="${this._handleImageChange}"
+                                @remove="${this._handleImageRemove}"
+                            ></wy-image-upload>
+                        `}
                     </div>
 
                     <!-- Section 3: Content Structure -->
@@ -795,6 +854,8 @@ export class WyPromptEditor extends LitElement {
                             <wy-variation-editor
                                 .variations="${this._editedPrompt.variations}"
                                 @change="${(e) => this._handleFieldChange('variations', e.detail.variations)}"
+                                @image-upload="${this._handleVariationImageChange}"
+                                @image-remove="${this._handleVariationImageRemove}"
                             ></wy-variation-editor>
                         </div>
                     ` : html`
@@ -931,8 +992,8 @@ export class WyPromptEditor extends LitElement {
                         <span class="preview-status">Updating</span>
                     </div>
                     <div class="preview-card">
-                        ${this._editedPrompt.image ? html`
-                            <img src="${this._editedPrompt.image}" alt="Preview" class="preview-image">
+                        ${this._getPreviewImage() ? html`
+                            <img src="${this._getPreviewImage()}" alt="Preview" class="preview-image">
                         ` : this._editedPrompt.icon ? html`
                             <div class="preview-icon">
                                 <span class="material-symbols-outlined">${this._editedPrompt.icon}</span>

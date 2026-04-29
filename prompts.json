@@ -440,7 +440,8 @@
         "name": "Front Elevation",
         "description": "Upload a building photo — the model produces a precise orthographic front elevation with ruled ink lines and watercolor washes, with a human scale figure at the entrance. Choose this for a clean, technically correct architectural drawing.",
         "variables": [],
-        "template": "Turn this image into A 19th-century American architectural rendering in the style of Alexander Jackson Davis depicted as a precise front elevation orthographic drawing with no vanishing point. The artwork should utilize strict ruled ink lines overlaid with translucent watercolor washes in warm cream and pale yellow stone tones. Include a smooth graded wash sky fading from blue to white, deep calculated cast shadows to simulate depth within recesses, and high-contrast dark windows that maintain the window pattern of the reference. Any metal accents should be finished with verdigris green . Add a human scale figure at the entrance to establish scale, and faint greyed-out flanking structures to frame the subject."
+        "template": "Turn this image into A 19th-century American architectural rendering in the style of Alexander Jackson Davis depicted as a precise front elevation orthographic drawing with no vanishing point. The artwork should utilize strict ruled ink lines overlaid with translucent watercolor washes in warm cream and pale yellow stone tones. Include a smooth graded wash sky fading from blue to white, deep calculated cast shadows to simulate depth within recesses, and high-contrast dark windows that maintain the window pattern of the reference. Any metal accents should be finished with verdigris green . Add a human scale figure at the entrance to establish scale, and faint greyed-out flanking structures to frame the subject.",
+        "image": "public/images/1775762712924.jpg"
       },
       {
         "id": "elevation-and-plan",
@@ -458,7 +459,6 @@
       }
     ],
     "featured": false,
-    "image": "public/images/1775762712924.jpg",
     "slug": "architectural-rendering"
   },
   {
@@ -536,7 +536,8 @@
         "id": "oil-painting",
         "name": "Oil Painting Guide",
         "description": "Upload a reference image. You get a session-by-session oil painting guide: stylistic diagnosis, palette recommendations, layering order, and edge control — written for audio. Ask for a 'Visual Stage Benchmark' at any step to see what your painting should look like at that phase.",
-        "template": "Act as a Master Fine Arts Instructor specializing in Classical Realism and Technical Art History. Analyze the uploaded reference image to provide a Stylistic Diagnosis—identifying if the work requires Classical Glazing, Alla Prima, Tonalism, or Impasto—and explain how this style dictates the physical handling of the paint. Provide a comprehensive, session-by-session guide designed for audio playback, written exclusively in dense, professional paragraphs without lists or tables.\nStructure the audio guide into chronological chapters: The Foundation (Imprimatura and linear construction), The Underlayer (specific instructions for a Grisaille, Verdaccio, or Ebauche based on the diagnosis), The Development (building mid-tones and transitions), and The Finishing Touches (scumbling, glazing, and highlights). For each chapter, define the required 'Value' range and a specific limited palette (e.g., the Zorn Palette) with precise ratios for mixing skin tones.\nDetail the chemical progression of mediums: define exactly when to use odorless mineral spirits versus refined linseed oil, and how to adjust the 'viscosity' and 'tack' of the paint to prevent lifting. Include instructions on 'Edge Control,' identifying where to maintain hard, soft, or 'lost' edges. Provide specific guidance on using calipers for anatomical verification against the printed reference, focusing on landmarks like the orbital sockets and the base of the columella.\nVisual Benchmark Protocol: After each chapter description, explicitly remind me that I can ask for a 'Visual Stage Benchmark.' If I request a visualization of a specific stage, you must generate an image that accurately simulates how the original reference image would appear at that technical phase (e.g., a monochromatic version for a Grisaille, or a simplified, large-shape block-in for an Ebauche). These generated images must strictly adhere to the composition and lighting of the reference while reflecting the technical limitations of that specific stage of the painting process.\nMaintain a rigorous, instructional tone, omitting all pleasantries and filler. At the very end of the response, include a brief closing statement (outside of the audio-format paragraphs) reminding me that I can ask for 'Detailed Instructions for Step X' to get specific brushwork techniques, or 'Visualize Stage X' to see the technical benchmark for my current progress."
+        "template": "Act as a Master Fine Arts Instructor specializing in Classical Realism and Technical Art History. Analyze the uploaded reference image to provide a Stylistic Diagnosis—identifying if the work requires Classical Glazing, Alla Prima, Tonalism, or Impasto—and explain how this style dictates the physical handling of the paint. Provide a comprehensive, session-by-session guide designed for audio playback, written exclusively in dense, professional paragraphs without lists or tables.\nStructure the audio guide into chronological chapters: The Foundation (Imprimatura and linear construction), The Underlayer (specific instructions for a Grisaille, Verdaccio, or Ebauche based on the diagnosis), The Development (building mid-tones and transitions), and The Finishing Touches (scumbling, glazing, and highlights). For each chapter, define the required 'Value' range and a specific limited palette (e.g., the Zorn Palette) with precise ratios for mixing skin tones.\nDetail the chemical progression of mediums: define exactly when to use odorless mineral spirits versus refined linseed oil, and how to adjust the 'viscosity' and 'tack' of the paint to prevent lifting. Include instructions on 'Edge Control,' identifying where to maintain hard, soft, or 'lost' edges. Provide specific guidance on using calipers for anatomical verification against the printed reference, focusing on landmarks like the orbital sockets and the base of the columella.\nVisual Benchmark Protocol: After each chapter description, explicitly remind me that I can ask for a 'Visual Stage Benchmark.' If I request a visualization of a specific stage, you must generate an image that accurately simulates how the original reference image would appear at that technical phase (e.g., a monochromatic version for a Grisaille, or a simplified, large-shape block-in for an Ebauche). These generated images must strictly adhere to the composition and lighting of the reference while reflecting the technical limitations of that specific stage of the painting process.\nMaintain a rigorous, instructional tone, omitting all pleasantries and filler. At the very end of the response, include a brief closing statement (outside of the audio-format paragraphs) reminding me that I can ask for 'Detailed Instructions for Step X' to get specific brushwork techniques, or 'Visualize Stage X' to see the technical benchmark for my current progress.",
+        "image": "public/images/1775763393344.jpg"
       },
       {
         "id": "watercolor",
@@ -575,7 +576,6 @@
       }
     ],
     "featured": false,
-    "image": "public/images/1775763393344.jpg",
     "slug": "artist-guide",
     "variables": []
   },
@@ -600,7 +600,8 @@
         "id": "archival-studio",
         "name": "Archival Studio Catalog",
         "description": "Upload a photo of any object. The model corrects perspective, replaces the background with a clean studio neutral, and balances lighting — while preserving every scratch, chip, and patina detail. Choose this to create archival-quality catalog photos of antiques or collectibles.",
-        "template": "Role: Act as a professional archival photographer and digital conservator.\n\nTask: Transform the attached reference image into a high-end, studio-quality photograph.\n\nTechnical Corrections:\n\nPerspective & Geometry: Correct all lens distortion and keystoning. Ensure all architectural lines are perfectly vertical and horizontal. Align the camera angle to be perfectly square (orthographic) to the subject.\n\nLighting: Replace uneven lighting, harsh shadows, or phone-flash glare with balanced, diffused studio \"clamshell\" lighting. Ensure even illumination across the entire frame with neutral white balance.\n\nOptics: Remove digital noise and chromatic aberration. Ensure edge-to-edge sharpness as if shot with a prime macro lens at $f/8$ on a full-frame sensor.\n\nSubject Integrity (Crucial):\n\nPreservation: Do NOT \"beautify\" or \"repair\" the subject. Maintain every nuance of the original texture, including scratches, chips, fabric pills, patina, or weathered edges. The subject must remain an exact 1:1 replica of the input's physical state.\n\nMateriality: Enhance the tactile quality of the materials (e.g., the weave of the fabric, the glaze of the ceramic, the grain of the paper) without altering their form.\n\nFinal Output: A clean, professional product catalog shot against a neutral, non-distracting studio background. High dynamic range, 8k resolution, photorealistic.\n\nOptional user notes (may be blank; if blank, ignore this field): {{additional_notes}}"
+        "template": "Role: Act as a professional archival photographer and digital conservator.\n\nTask: Transform the attached reference image into a high-end, studio-quality photograph.\n\nTechnical Corrections:\n\nPerspective & Geometry: Correct all lens distortion and keystoning. Ensure all architectural lines are perfectly vertical and horizontal. Align the camera angle to be perfectly square (orthographic) to the subject.\n\nLighting: Replace uneven lighting, harsh shadows, or phone-flash glare with balanced, diffused studio \"clamshell\" lighting. Ensure even illumination across the entire frame with neutral white balance.\n\nOptics: Remove digital noise and chromatic aberration. Ensure edge-to-edge sharpness as if shot with a prime macro lens at $f/8$ on a full-frame sensor.\n\nSubject Integrity (Crucial):\n\nPreservation: Do NOT \"beautify\" or \"repair\" the subject. Maintain every nuance of the original texture, including scratches, chips, fabric pills, patina, or weathered edges. The subject must remain an exact 1:1 replica of the input's physical state.\n\nMateriality: Enhance the tactile quality of the materials (e.g., the weave of the fabric, the glaze of the ceramic, the grain of the paper) without altering their form.\n\nFinal Output: A clean, professional product catalog shot against a neutral, non-distracting studio background. High dynamic range, 8k resolution, photorealistic.\n\nOptional user notes (may be blank; if blank, ignore this field): {{additional_notes}}",
+        "image": "public/images/1775760727338.jpg"
       },
       {
         "id": "upscale1",
@@ -643,8 +644,7 @@
     ],
     "featured": false,
     "slug": "restyle-photograph",
-    "template": "",
-    "image": "public/images/1775760727338.jpg"
+    "template": ""
   },
   {
     "id": "component-adaptation",
@@ -1209,7 +1209,6 @@
     "category": "Fabric",
     "template": "Image 1 is a design draft for a fabric pattern. Image 2 is an existing design from the same collection that serves as the visual anchor for the desired art style.\nObjective: Align the draft pattern (Image 1) to the aesthetic of the existing design (Image 2) while maintaining the original layout and structural intent of the draft.\nFocus Areas for Cohesion:\n• Linework & Texture: Adjust the stroke weight, taper, and graininess to match the reference.\n• Color Profile: Harmonize the palette, ensuring the saturation and value contrast reflect Image 2.\n• Level of Detail: Simplify or enhance the complexity of the motifs to ensure they feel like they were drawn by the same hand.\nCarefully consider what elements need to change to achieve this cohesion, then generate the updated design. ",
     "variables": [],
-    "image": "public/images/1777155391460.jpg",
     "slug": "fabric-style-alignment",
     "icon": "compare_arrows",
     "variations": [
@@ -1218,7 +1217,8 @@
         "name": "Preserve Shapes",
         "description": "This variant allows style changes but avoids structural changes to shapes and pattern. \n\nSubmit 2 images with this prompt:\nImage 1 - The draft design\nImage 2 - The style reference",
         "template": "Image 1 is a design draft for a fabric pattern. Image 2 is an existing design from the same collection that serves as the visual anchor for the desired art style.\nObjective: Align the draft pattern (Image 1) to the aesthetic of the existing design (Image 2) while maintaining the original layout and structural intent of the draft.\nFocus Areas for Cohesion:\n• Linework & Texture: Adjust the stroke weight, taper, and graininess to match the reference.\n• Color Profile: Harmonize the palette, ensuring the saturation and value contrast reflect Image 2.\n• Level of Detail: Simplify or enhance the complexity of the motifs to ensure they feel like they were drawn by the same hand.\nCarefully consider what elements need to change to achieve this cohesion, then generate the updated design. ",
-        "variables": []
+        "variables": [],
+        "image": "public/images/1777155391460.jpg"
       },
       {
         "id": "style-and-structure",

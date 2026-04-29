@@ -216,6 +216,69 @@ async function deleteImage(filename) {
     }
 }
 
+function getVariationByTarget(prompt, { variationId = null, variationIndex = null } = {}) {
+    if (!prompt?.variations?.length) return null;
+
+    if (variationId) {
+        const variation = prompt.variations.find(item => item.id === variationId);
+        if (variation) return variation;
+    }
+
+    if (Number.isInteger(variationIndex)) {
+        return prompt.variations[variationIndex] || null;
+    }
+
+    return null;
+}
+
+function getPromptImagePath(prompt, { target = 'prompt', variationId = null, variationIndex = null } = {}) {
+    if (!prompt) return '';
+
+    if (target === 'variation') {
+        return getVariationByTarget(prompt, { variationId, variationIndex })?.image || '';
+    }
+
+    return prompt.image || '';
+}
+
+function setPromptImagePath(prompt, { target = 'prompt', variationId = null, variationIndex = null } = {}, imagePath = '') {
+    if (!prompt) return;
+
+    if (target === 'variation') {
+        const variation = getVariationByTarget(prompt, { variationId, variationIndex });
+        if (variation) {
+            variation.image = imagePath;
+        }
+        return;
+    }
+
+    prompt.image = imagePath;
+}
+
+function getAllImagePaths(prompt) {
+    const imagePaths = [];
+
+    if (prompt?.image) {
+        imagePaths.push(prompt.image);
+    }
+
+    if (prompt?.variations?.length) {
+        prompt.variations.forEach(variation => {
+            if (variation.image) {
+                imagePaths.push(variation.image);
+            }
+        });
+    }
+
+    return imagePaths;
+}
+
+function isImageReferenced(imagePath) {
+    if (!imagePath) return false;
+
+    return prompts.some(prompt => getAllImagePaths(prompt).includes(imagePath));
+}
+
 /**
  * Setup event listeners
  */
@@ -273,15 +336,20 @@ function setupEventListeners() {
     // Image upload event
     editor.addEventListener('image-upload', async (e) => {
         try {
-            const { file, promptId } = e.detail;
+            const { file, promptId, target = 'prompt', variationIndex = null, variationId = null } = e.detail;
             const result = await uploadImage(file);
             
             if (result.success) {
                 // Update editor with new image path
                 const currentPrompt = prompts.find(p => p.id === promptId);
                 if (currentPrompt) {
-                    currentPrompt.image = result.path;
-                    editor.prompt = { ...currentPrompt };
+                    const imageTarget = { target, variationIndex, variationId };
+                    setPromptImagePath(currentPrompt, imageTarget, result.path);
+                    if (typeof editor.setImageValue === 'function') {
+                        editor.setImageValue(imageTarget, result.path);
+                    } else {
+                        editor.prompt = JSON.parse(JSON.stringify(currentPrompt));
+                    }
                 }
                 showToast('Image uploaded successfully', 'success');
             }
@@ -294,15 +362,24 @@ function setupEventListeners() {
     // Image remove event
     editor.addEventListener('image-remove', async (e) => {
         try {
-            const { promptId } = e.detail;
+            const { promptId, target = 'prompt', variationIndex = null, variationId = null } = e.detail;
             const currentPrompt = prompts.find(p => p.id === promptId);
+            const imageTarget = { target, variationIndex, variationId };
+            const imagePath = getPromptImagePath(currentPrompt, imageTarget);
             
-            if (currentPrompt && currentPrompt.image) {
-                const filename = currentPrompt.image.split('/').pop();
-                await deleteImage(filename);
-                
-                currentPrompt.image = '';
-                editor.prompt = { ...currentPrompt };
+            if (currentPrompt && imagePath) {
+                setPromptImagePath(currentPrompt, imageTarget, '');
+                if (typeof editor.setImageValue === 'function') {
+                    editor.setImageValue(imageTarget, '');
+                } else {
+                    editor.prompt = JSON.parse(JSON.stringify(currentPrompt));
+                }
+
+                if (!isImageReferenced(imagePath)) {
+                    const filename = imagePath.split('/').pop();
+                    await deleteImage(filename);
+                }
+
                 showToast('Image removed successfully', 'success');
             }
         } catch (err) {
