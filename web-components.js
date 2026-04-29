@@ -7144,12 +7144,6 @@ var WyPromptModal = class extends i4 {
             ` : ""}
         </header>
 
-        ${this.image ? b2`
-          <div class="reference-image">
-            <img src="${this.image}" alt="${this.title}">
-          </div>
-        ` : ""}
-
         ${this.mode === "locked" && this.variables.length > 0 && !(this.steps && this.steps.length > 0) ? b2`
           <div class="tabs-container">
               <wy-tabs active-tab="${this.activeTab}" @tab-change="${(e9) => this.activeTab = e9.detail.tab}">
@@ -7163,6 +7157,12 @@ var WyPromptModal = class extends i4 {
         ` : ""}
 
         <div class="content">
+          ${this.image ? b2`
+            <div class="reference-image">
+              <img src="${this.image}" alt="${this.title}">
+            </div>
+          ` : ""}
+
           ${this.mode === "locked" ? b2`
             ${this.steps && this.steps.length > 0 ? b2`
               <!-- Multi-step mode -->
@@ -7755,6 +7755,7 @@ __publicField(WyPromptModal, "styles", i`
     /* CONTENT */
     .content {
       flex: 1;
+      min-height: 0;
       overflow-y: auto;
       display: flex;
       flex-direction: column;

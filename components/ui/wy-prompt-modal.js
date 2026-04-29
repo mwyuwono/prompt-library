@@ -440,6 +440,7 @@ export class WyPromptModal extends LitElement {
     /* CONTENT */
     .content {
       flex: 1;
+      min-height: 0;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
@@ -971,12 +972,6 @@ export class WyPromptModal extends LitElement {
             ` : ''}
         </header>
 
-        ${this.image ? html`
-          <div class="reference-image">
-            <img src="${this.image}" alt="${this.title}">
-          </div>
-        ` : ''}
-
         ${this.mode === 'locked' && this.variables.length > 0 && !(this.steps && this.steps.length > 0) ? html`
           <div class="tabs-container">
               <wy-tabs active-tab="${this.activeTab}" @tab-change="${e => this.activeTab = e.detail.tab}">
@@ -990,6 +985,12 @@ export class WyPromptModal extends LitElement {
         ` : ''}
 
         <div class="content">
+          ${this.image ? html`
+            <div class="reference-image">
+              <img src="${this.image}" alt="${this.title}">
+            </div>
+          ` : ''}
+
           ${this.mode === 'locked' ? html`
             ${this.steps && this.steps.length > 0 ? html`
               <!-- Multi-step mode -->
