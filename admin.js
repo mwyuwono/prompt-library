@@ -249,10 +249,11 @@ function setPromptImagePath(prompt, { target = 'prompt', variationId = null, var
         if (variation) {
             variation.image = imagePath;
         }
-        return;
+        return Boolean(variation);
     }
 
     prompt.image = imagePath;
+    return true;
 }
 
 function getAllImagePaths(prompt) {
@@ -344,7 +345,11 @@ function setupEventListeners() {
                 const currentPrompt = prompts.find(p => p.id === promptId);
                 if (currentPrompt) {
                     const imageTarget = { target, variationIndex, variationId };
-                    setPromptImagePath(currentPrompt, imageTarget, result.path);
+                    const imageWasSet = setPromptImagePath(currentPrompt, imageTarget, result.path);
+                    if (!imageWasSet) {
+                        throw new Error('Variation image target was not found');
+                    }
+
                     if (typeof editor.setImageValue === 'function') {
                         editor.setImageValue(imageTarget, result.path);
                     } else {
@@ -368,7 +373,11 @@ function setupEventListeners() {
             const imagePath = getPromptImagePath(currentPrompt, imageTarget);
             
             if (currentPrompt && imagePath) {
-                setPromptImagePath(currentPrompt, imageTarget, '');
+                const imageWasCleared = setPromptImagePath(currentPrompt, imageTarget, '');
+                if (!imageWasCleared) {
+                    throw new Error('Variation image target was not found');
+                }
+
                 if (typeof editor.setImageValue === 'function') {
                     editor.setImageValue(imageTarget, '');
                 } else {

@@ -446,6 +446,7 @@ export class WyPromptEditor extends LitElement {
     _handleSave() {
         if (this._editedPrompt?.variations?.length > 0) {
             this._syncVariationTemplatesForSave();
+            delete this._editedPrompt.image;
         } else if (this._promptMode === 'multi') {
             this._syncStepTemplatesForSave(
                 this.shadowRoot.querySelectorAll('wy-step-editor'),
@@ -543,6 +544,11 @@ export class WyPromptEditor extends LitElement {
             bubbles: true,
             composed: true
         }));
+    }
+
+    _handleVariationsChange(e) {
+        if (!e.detail?.variations) return;
+        this._handleFieldChange('variations', e.detail.variations);
     }
 
     _handleModeChange(event, newMode) {
@@ -853,7 +859,7 @@ export class WyPromptEditor extends LitElement {
                             </div>
                             <wy-variation-editor
                                 .variations="${this._editedPrompt.variations}"
-                                @change="${(e) => this._handleFieldChange('variations', e.detail.variations)}"
+                                @change="${this._handleVariationsChange}"
                                 @image-upload="${this._handleVariationImageChange}"
                                 @image-remove="${this._handleVariationImageRemove}"
                             ></wy-variation-editor>

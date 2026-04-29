@@ -229,6 +229,10 @@ app.put('/api/prompts/:id', (req, res) => {
             // Ensure variables structure is preserved
             variables: req.body.variables || prompts[index].variables || []
         };
+
+        if (updatedPrompt.variations?.length > 0 && !Object.prototype.hasOwnProperty.call(req.body, 'image')) {
+            delete updatedPrompt.image;
+        }
         
         prompts[index] = updatedPrompt;
         

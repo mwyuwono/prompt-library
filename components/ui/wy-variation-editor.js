@@ -475,6 +475,7 @@ export class WyVariationEditor extends LitElement {
     }
 
     _handleImageChange(variationIndex, e) {
+        e.stopPropagation();
         const { file } = e.detail;
         this.dispatchEvent(new CustomEvent('image-upload', {
             detail: { file, target: 'variation', variationIndex, variationId: this.variations[variationIndex]?.id },

@@ -4894,6 +4894,7 @@ var WyVariationEditor = class extends i4 {
     this._handleFieldChange(variationIndex, "template", e9.detail.value);
   }
   _handleImageChange(variationIndex, e9) {
+    e9.stopPropagation();
     const { file } = e9.detail;
     this.dispatchEvent(new CustomEvent("image-upload", {
       detail: { file, target: "variation", variationIndex, variationId: this.variations[variationIndex]?.id },
@@ -5591,6 +5592,7 @@ var WyPromptEditor = class extends i4 {
   _handleSave() {
     if (this._editedPrompt?.variations?.length > 0) {
       this._syncVariationTemplatesForSave();
+      delete this._editedPrompt.image;
     } else if (this._promptMode === "multi") {
       this._syncStepTemplatesForSave(
         this.shadowRoot.querySelectorAll("wy-step-editor"),
@@ -5672,6 +5674,10 @@ var WyPromptEditor = class extends i4 {
       bubbles: true,
       composed: true
     }));
+  }
+  _handleVariationsChange(e9) {
+    if (!e9.detail?.variations) return;
+    this._handleFieldChange("variations", e9.detail.variations);
   }
   _handleModeChange(event, newMode) {
     if (newMode === this._promptMode) return;
@@ -5940,7 +5946,7 @@ var WyPromptEditor = class extends i4 {
                             </div>
                             <wy-variation-editor
                                 .variations="${this._editedPrompt.variations}"
-                                @change="${(e9) => this._handleFieldChange("variations", e9.detail.variations)}"
+                                @change="${this._handleVariationsChange}"
                                 @image-upload="${this._handleVariationImageChange}"
                                 @image-remove="${this._handleVariationImageRemove}"
                             ></wy-variation-editor>

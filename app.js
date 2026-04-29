@@ -1129,7 +1129,7 @@ Server will start on http://localhost:3001`;
      */
     getPromptImage(prompt) {
         if (prompt.variations && prompt.variations.length > 0) {
-            return prompt.variations[0]?.image || prompt.image || '';
+            return prompt.variations[0]?.image || '';
         }
 
         return prompt.image || '';

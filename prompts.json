@@ -1138,8 +1138,17 @@
         "description": "Floor-to-ceiling drapery in the attached fabric, hanging in a sunlit minimalist living room.\n\nSubmit an image of a fabric pattern along with this prompt.",
         "template": "Create a photorealistic image featuring the fabric design shown in the attached pattern. The aesthetic must be consistent with the editorial sophistication of Frederic Magazine and the bold, textural, curated style of Rose Uniake or Kelly Wearstler.\n\nDynamic Input: The core textile design (pattern, colors, and material type) is provided as an image attachment.\n\nComposition: Minimalist Environment — Dynamic Drapery\n• Subject: A high-resolution image showing the fabric from the attached image applied as full-length, floor-to-ceiling flowing draperies.\n• Setting: Hanging gracefully next to a tall window in a high-end, Italian villa. While the atmosphere is moody, light coming through the window window highlights the texture and creating elegant, soft folds in the drapery. The environment is minimalist and refined, focusing on the grace and flow of the fabric.\n\nConsistency & Refinement: Ensure the color palette used for secondary interior elements (e.g., wall colors, trim) is refined and directly derived from or complements the palette in the attached fabric pattern. The image must feel bespoke, curated, and tactile.",
         "variables": []
+      },
+      {
+        "id": "draped-wall",
+        "name": "Art Mounted on Draped Wall",
+        "description": "Generates a modernist artwork hung from a draped wall",
+        "image": "",
+        "template": "Create a photorealistic editorial interior image of a formal wall covered in dramatic gathered fabric drapery.\n\nThe uploaded fabric image is the controlling visual reference for the textile. Reproduce that fabric faithfully across the drapery: same motif library, drawing style, line weight, spacing, scale, colors, ground tone, weave, texture, and material character. Preserve the recognizable individual motifs from the uploaded textile — do not substitute generic florals, abstract marks, invented objects, recolored elements, or loosely similar toile. The fabric should look like the uploaded textile physically draped in the room.\n\nThe drapery is suspended from two round brass rosette pins near the upper edge of the wall. The pins are the highest fabric points; no fabric, valance, cornice, canopy, or upper band appears above them. Only wall or ceiling may be visible above the pin line.\n\nFrom each pin, the fabric gathers tightly and falls in radial pleats. Between the pins, create a shallow soft swag below the pin line. Below, the fabric drops in long dense vertical folds with deep shadows, highlighted ridges, and natural tension. The uploaded pattern must bend, compress, stretch, shadow, and partially disappear into folds while remaining recognizably the same textile.\n\nCenter a modest portrait-oriented artwork below the pins in a simple thin black frame. The art is a quiet modernist abstraction with near-black geometric forms on a warm off-white ground, harmonized to the fabric.\n\nPlace the wall in a contemporary, sophisticated architectural interior: restrained modern-classic detailing, plaster or limewashed walls, natural stone or dark waxed wood flooring, curated but minimal styling. Lighting and photographic quality should feel like The World of Interiors: natural directional light, soft shadows, tactile surfaces, realistic lens behavior, editorial stillness.",
+        "variables": []
       }
-    ]
+    ],
+    "image": "public/images/1777438226608.png"
   },
   {
     "id": "untitled-prompt-1777067726397",
