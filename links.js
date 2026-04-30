@@ -230,5 +230,5 @@ class LinksManager {
 
 // Initialize the links manager when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    new LinksManager();
+    window.linksManager = new LinksManager();
 });

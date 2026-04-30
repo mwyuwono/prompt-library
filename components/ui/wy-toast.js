@@ -55,15 +55,17 @@ export class WyToast extends LitElement {
     :host {
       display: block;
       position: fixed;
-      bottom: 32px;
+      bottom: calc(32px + env(safe-area-inset-bottom, 0px));
       left: 50%;
-      transform: translateX(-50%) translateY(calc(100% + 32px)) scale(0.96);
+      transform: translateX(-50%) translateY(16px) scale(0.96);
+      transform-origin: 50% 100%;
       z-index: 3000;
       pointer-events: none;
       transition:
         transform 380ms cubic-bezier(0.34, 1.56, 0.64, 1),
-        opacity 220ms ease;
+        opacity 220ms cubic-bezier(0.2, 0.6, 0.2, 1);
       opacity: 0;
+      will-change: transform, opacity;
     }
 
     :host([show]) {
@@ -72,9 +74,9 @@ export class WyToast extends LitElement {
       pointer-events: auto;
     }
 
-    @supports not (backdrop-filter: blur(1px)) {
+    @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
       .toast-container {
-        background: rgba(26, 26, 26, 0.92);
+        background-color: rgba(26, 26, 26, 0.92);
       }
     }
 
@@ -89,21 +91,22 @@ export class WyToast extends LitElement {
     }
 
     .toast-container {
-      background: rgba(26, 26, 26, 0.62);
+      background-color: rgba(26, 26, 26, 0.62);
       backdrop-filter: blur(20px) saturate(140%);
       -webkit-backdrop-filter: blur(20px) saturate(140%);
       color: rgba(247, 244, 238, 0.96);
-      padding: 12px 20px;
-      border-radius: 0;
+      padding: 14px 20px;
+      border-radius: 8px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       box-shadow:
-        0 0 0 1px rgba(247, 244, 238, 0.12),
-        inset 0 1px 0 rgba(247, 244, 238, 0.08),
-        0 4px 16px rgba(0, 0, 0, 0.32),
-        0 1px 4px rgba(0, 0, 0, 0.24);
-      max-width: calc(100vw - 32px);
+        inset 0 1px 0 rgba(247, 244, 238, 0.10),
+        0 18px 48px -12px rgba(13, 13, 13, 0.45),
+        0 6px 16px -6px rgba(13, 13, 13, 0.28);
+      outline: 1px solid rgba(247, 244, 238, 0.12);
+      outline-offset: -1px;
+      max-width: min(420px, calc(100vw - 32px));
     }
 
     .toast-container.has-actions {
@@ -152,11 +155,12 @@ export class WyToast extends LitElement {
     }
 
     .message {
-      font-family: 'Inter', var(--font-body, sans-serif);
-      font-size: 0.8125rem;
+      font-family: var(--ff-sans, var(--font-body, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif));
+      font-size: 14px;
       font-weight: 500;
       line-height: 1.4;
-      color: rgba(247, 244, 238, 0.96);
+      letter-spacing: 0.005em;
+      color: #FFFFFF;
     }
 
     .toast-container.has-actions .icon.variant-success {

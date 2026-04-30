@@ -14,6 +14,7 @@ import './wy-button.js';
 import './wy-filter-chip.js';
 import './wy-controls-bar.js';
 import './wy-toast.js';
+import './wy-copy-confirm.js';
 import './wy-modal.js';
 import './wy-tabs.js';
 import './wy-form-field.js';

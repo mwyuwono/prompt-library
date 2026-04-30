@@ -20,6 +20,7 @@ class PromptLibrary {
         this.controlsBar = document.getElementById('controlsBar');
         this.emptyState = document.getElementById('emptyState');
         this.toast = document.getElementById('toast');
+        this.copyConfirm = document.getElementById('copyConfirm');
         this.paletteLink = document.getElementById('paletteLink');
         this.headerTop = document.querySelector('.header-top');
         this.headerLogoGroup = document.querySelector('.header-logo-group');
@@ -1229,8 +1230,8 @@ Server will start on http://localhost:3001`;
         this.promptModal.addEventListener('close', () => this.closePromptModal());
 
         this.promptModal.addEventListener('copy', (e) => {
-            // Copy is handled by the component, then we offer quick launch links.
-            this.showCopyToast();
+            // Copy is handled by the component; this replaces the old copy toast.
+            this.showCopyConfirm();
         });
 
         this.promptModal.addEventListener('download', (e) => {
@@ -1743,7 +1744,7 @@ Server will start on http://localhost:3001`;
                 useCount: prompt.useCount
             });
 
-            this.showCopyToast();
+            this.showCopyConfirm();
         } catch (error) {
             console.error('Failed to copy:', error);
             // Fallback for older browsers
@@ -1835,7 +1836,7 @@ Server will start on http://localhost:3001`;
 
         try {
             document.execCommand('copy');
-            this.showCopyToast();
+            this.showCopyConfirm();
         } catch (error) {
             console.error('Fallback copy failed:', error);
             this.showToast('Copy failed');
@@ -1856,15 +1857,27 @@ Server will start on http://localhost:3001`;
         this.toast.show = true;
     }
 
-    showCopyToast() {
-        this.showToast('Copied!', {
-            duration: 6000,
-            dismissible: true,
-            actions: [
-                { label: 'Gemini', href: 'https://gemini.google.com/app' },
-                { label: 'ChatGPT', href: 'https://chatgpt.com/' }
-            ]
-        });
+    showCopyConfirm() {
+        if (!this.copyConfirm) {
+            this.showToast('Copied!');
+            return;
+        }
+
+        const fallbackLinks = [
+            { name: 'ChatGPT', url: 'https://chat.openai.com' },
+            { name: 'Gemini', url: 'https://gemini.google.com' },
+            { name: 'Claude', url: 'https://www.claude.com' }
+        ];
+        const linksData = window.linksManager?.links || [];
+        const models = linksData.find(category => category?.category === 'Models');
+        const links = Array.isArray(models?.links) && models.links.length
+            ? models.links.slice(0, 3).map(link => ({ name: link.name, url: link.url }))
+            : fallbackLinks;
+
+        this.copyConfirm.links = links;
+        this.copyConfirm.title = 'Copied!';
+        this.copyConfirm.duration = 4000;
+        this.copyConfirm.show = true;
     }
 
     /**
