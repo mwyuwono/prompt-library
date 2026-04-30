@@ -75,24 +75,13 @@ export class WyCopyConfirm extends LitElement {
     }
 
     .container {
-      background-color: rgba(230, 177, 145, 0.9);
-      -webkit-backdrop-filter: blur(20px) saturate(140%);
-      backdrop-filter: blur(20px) saturate(140%);
+      background-color: var(--accent-terracotta, #C18A4D);
       color: var(--ink, #1A1A1A);
       padding: 16px;
       border-radius: 8px;
       box-shadow:
-        inset 0 1px 0 rgba(247, 244, 238, 0.28),
         0 18px 48px -12px rgba(13, 13, 13, 0.45),
         0 6px 16px -6px rgba(13, 13, 13, 0.28);
-      outline: 1px solid color-mix(in srgb, var(--ink, #1A1A1A) 16%, transparent);
-      outline-offset: -1px;
-    }
-
-    @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-      .container {
-        background-color: rgb(230, 177, 145);
-      }
     }
 
     .header {
