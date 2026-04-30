@@ -7,6 +7,7 @@ export class WyPromptModal extends LitElement {
     title: { type: String },
     category: { type: String },
     description: { type: String },
+    instructions: { type: String },
     image: { type: String },
     template: { type: String },
     variables: { type: Array },
@@ -25,6 +26,7 @@ export class WyPromptModal extends LitElement {
     this.title = '';
     this.category = '';
     this.description = '';
+    this.instructions = '';
     this.image = '';
     this.template = '';
     this.variables = [];
@@ -508,6 +510,37 @@ export class WyPromptModal extends LitElement {
         --wy-info-panel-font-size: var(--md-sys-typescale-body-small-size, 0.875rem);
     }
 
+    .prompt-instructions-panel {
+        margin-top: 16px;
+        --wy-info-panel-bg: transparent;
+        --wy-info-panel-padding: 0;
+        --wy-info-panel-font-size: var(--md-sys-typescale-body-small-size, 0.875rem);
+    }
+
+    .prompt-instructions-heading {
+        margin: 0 0 var(--spacing-xxs, 4px);
+        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-size: var(--md-sys-typescale-label-medium-size, 0.75rem);
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--md-sys-color-on-surface-variant);
+    }
+
+    .prompt-instructions-copy {
+        margin: 0;
+    }
+
+    .prompt-instructions-copy ol,
+    .prompt-instructions-copy ul {
+        margin: 2px 0 0;
+        padding-left: 1.4em;
+    }
+
+    .prompt-instructions-copy li + li {
+        margin-top: 2px;
+    }
+
     .variation-description-heading {
         margin: 0 0 var(--spacing-xxs, 4px);
         font-family: var(--font-sans, 'DM Sans', sans-serif);
@@ -877,7 +910,7 @@ export class WyPromptModal extends LitElement {
     if (!text) return '';
     const escapeHTML = (str) => str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     const processInline = (str) => escapeHTML(str).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    if (!/^(\d+\.|-|\*) /m.test(text)) return escapeHTML(text);
+    if (!/^(\d+\.|-|\*) /m.test(text)) return processInline(text);
     const lines = text.split('\n');
     const parts = [];
     let listItems = null;
@@ -899,6 +932,21 @@ export class WyPromptModal extends LitElement {
     });
     flushList();
     return parts.join('');
+  }
+
+  _renderPromptIntro() {
+    return html`
+      <div class="title-group">
+          <h2 @click="${this._toggleDescription}">${this.title}</h2>
+          <div class="description-text ${this.descriptionExpanded ? 'expanded' : ''}">${unsafeHTML(this._renderDescriptionMarkdown(this.description))}</div>
+          ${this.instructions ? html`
+            <wy-info-panel class="prompt-instructions-panel">
+              <p class="prompt-instructions-heading">Instructions</p>
+              <div class="prompt-instructions-copy">${unsafeHTML(this._renderDescriptionMarkdown(this.instructions))}</div>
+            </wy-info-panel>
+          ` : ''}
+      </div>
+    `;
   }
 
   // Render multi-step body content
@@ -1011,10 +1059,7 @@ export class WyPromptModal extends LitElement {
             
             ${!(this.steps && this.steps.length > 0) ? html`
               <div class="header-main">
-                  <div class="title-group">
-                      <h2 @click="${this._toggleDescription}">${this.title}</h2>
-                      <div class="description-text ${this.descriptionExpanded ? 'expanded' : ''}">${unsafeHTML(this._renderDescriptionMarkdown(this.description))}</div>
-                  </div>
+                  ${this._renderPromptIntro()}
                   
                   ${this.mode === 'locked' ? html`` : ''}
               </div>
@@ -1044,10 +1089,7 @@ export class WyPromptModal extends LitElement {
             ${this.steps && this.steps.length > 0 ? html`
               <!-- Multi-step mode -->
               <div class="header-main">
-                  <div class="title-group">
-                      <h2 @click="${this._toggleDescription}">${this.title}</h2>
-                      <div class="description-text ${this.descriptionExpanded ? 'expanded' : ''}">${unsafeHTML(this._renderDescriptionMarkdown(this.description))}</div>
-                  </div>
+                  ${this._renderPromptIntro()}
               </div>
               <div class="body">
                 ${this._renderMultiStepBody()}
@@ -1250,7 +1292,7 @@ export class WyPromptModal extends LitElement {
     this.dispatchEvent(new CustomEvent('close', { bubbles: true, composed: true }));
   }
 
-  _handleCopy() {
+  async _handleCopy() {
     let textToCopy;
     
     if (this.steps && this.steps.length > 0) {
@@ -1266,18 +1308,54 @@ export class WyPromptModal extends LitElement {
       );
     }
     
-    const blob = new Blob([textToCopy], { type: 'text/plain' });
-    navigator.clipboard.write([new ClipboardItem({ 'text/plain': blob })]);
-    this.dispatchEvent(new CustomEvent('copy', {
-      detail: { text: textToCopy },
-      bubbles: true,
-      composed: true
-    }));
-    this.dispatchEvent(new CustomEvent('toast', {
-      detail: { message: 'Copied to clipboard!' },
-      bubbles: true,
-      composed: true
-    }));
+    const copied = await this._writeTextToClipboard(textToCopy);
+    if (copied) {
+      this.dispatchEvent(new CustomEvent('copy', {
+        detail: { text: textToCopy },
+        bubbles: true,
+        composed: true
+      }));
+    } else {
+      this.dispatchEvent(new CustomEvent('toast', {
+        detail: { message: 'Copy failed', options: { variant: 'error' } },
+        bubbles: true,
+        composed: true
+      }));
+    }
+  }
+
+  async _writeTextToClipboard(text) {
+    try {
+      if (navigator.clipboard?.write && typeof ClipboardItem !== 'undefined') {
+        const blob = new Blob([text], { type: 'text/plain' });
+        await navigator.clipboard.write([new ClipboardItem({ 'text/plain': blob })]);
+        return true;
+      }
+
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+    } catch (error) {
+      console.warn('Clipboard API copy failed, trying fallback:', error);
+    }
+
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+
+    try {
+      return document.execCommand('copy');
+    } catch (error) {
+      console.warn('Fallback copy failed:', error);
+      return false;
+    } finally {
+      document.body.removeChild(textarea);
+    }
   }
 
   _handleSave() {

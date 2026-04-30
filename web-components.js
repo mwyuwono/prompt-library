@@ -2769,6 +2769,8 @@ var WyToast = class extends i4 {
     this.show = false;
     this.duration = 3e3;
     this.variant = "success";
+    this.actions = [];
+    this.dismissible = false;
     this._timer = null;
   }
   /**
@@ -2791,15 +2793,31 @@ var WyToast = class extends i4 {
       <div class="toast-container">
         <span class="icon variant-${this.variant}">${this._icon}</span>
         <span class="message">${this.message}</span>
+        ${this.actions?.length ? b2`
+          <div class="actions">
+            ${this.actions.map((action) => b2`
+              <a class="action" href="${action.href}" target="_blank" rel="noopener noreferrer">${action.label}</a>
+            `)}
+          </div>
+        ` : ""}
+        ${this.dismissible ? b2`
+          <button class="dismiss" type="button" @click="${this._dismiss}" aria-label="Dismiss notification">
+            <span class="icon">close</span>
+          </button>
+        ` : ""}
       </div>
     `;
+  }
+  _dismiss() {
+    if (this._timer) clearTimeout(this._timer);
+    this.show = false;
+    this.dispatchEvent(new CustomEvent("dismiss", { bubbles: true, composed: true }));
   }
   updated(changedProperties) {
     if (changedProperties.has("show") && this.show) {
       if (this._timer) clearTimeout(this._timer);
       this._timer = setTimeout(() => {
-        this.show = false;
-        this.dispatchEvent(new CustomEvent("dismiss", { bubbles: true, composed: true }));
+        this._dismiss();
       }, this.duration);
     }
   }
@@ -2808,7 +2826,9 @@ __publicField(WyToast, "properties", {
   message: { type: String },
   show: { type: Boolean, reflect: true },
   duration: { type: Number },
-  variant: { type: String }
+  variant: { type: String },
+  actions: { type: Array },
+  dismissible: { type: Boolean }
 });
 __publicField(WyToast, "styles", i`
     :host {
@@ -2838,6 +2858,7 @@ __publicField(WyToast, "styles", i`
       align-items: center;
       gap: 12px;
       box-shadow: var(--shadow-modal);
+      max-width: calc(100vw - 32px);
     }
 
     .icon {
@@ -2879,6 +2900,70 @@ __publicField(WyToast, "styles", i`
       font-family: var(--font-body);
       font-size: 0.875rem;
       font-weight: 500;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      padding: 0 16px;
+      border-radius: var(--radius-pill, 999px);
+      background-color: var(--md-sys-color-inverse-on-surface);
+      color: var(--md-sys-color-inverse-surface);
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 700;
+      line-height: 1;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .dismiss {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: 0;
+      border-radius: var(--radius-pill, 999px);
+      background: transparent;
+      color: currentColor;
+      cursor: pointer;
+      font: inherit;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dismiss .icon {
+      font-size: 20px;
+    }
+
+    .action:focus-visible,
+    .dismiss:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 2px;
+    }
+
+    @media (max-width: 480px) {
+      .toast-container {
+        width: min(100%, 480px);
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 16px;
+      }
+
+      .actions {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+      }
     }
   `);
 customElements.define("wy-toast", WyToast);
@@ -5901,6 +5986,15 @@ var WyPromptEditor = class extends i4 {
                                 ?disabled="${this.readonly}"
                             ></textarea>
                         </wy-form-field>
+                        <wy-form-field label="Instructions" id="instructions" description="Usage notes shown in the prompt modal and only on expanded prompt cards">
+                            <textarea
+                                id="instructions"
+                                rows="4"
+                                .value="${this._editedPrompt.instructions || ""}"
+                                @input="${(e9) => this._handleFieldChange("instructions", e9.target.value)}"
+                                ?disabled="${this.readonly}"
+                            ></textarea>
+                        </wy-form-field>
                     </div>
 
                     <!-- Section 2: Visuals & Metadata -->
@@ -6103,6 +6197,9 @@ var WyPromptEditor = class extends i4 {
                         ` : ""}
                         <h3 class="preview-title-text">${this._editedPrompt.title || "Untitled Prompt"}</h3>
                         <p class="preview-description">${this._editedPrompt.description || "No description provided."}</p>
+                        ${this._editedPrompt.instructions ? b2`
+                            <p class="preview-description"><strong>Instructions:</strong> ${this._editedPrompt.instructions}</p>
+                        ` : ""}
                     </div>
                 </div>
             </div>
@@ -6883,6 +6980,7 @@ var WyPromptModal = class extends i4 {
     this.title = "";
     this.category = "";
     this.description = "";
+    this.instructions = "";
     this.image = "";
     this.template = "";
     this.variables = [];
@@ -7002,7 +7100,7 @@ var WyPromptModal = class extends i4 {
     if (!text) return "";
     const escapeHTML = (str) => str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     const processInline = (str) => escapeHTML(str).replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
-    if (!/^(\d+\.|-|\*) /m.test(text)) return escapeHTML(text);
+    if (!/^(\d+\.|-|\*) /m.test(text)) return processInline(text);
     const lines = text.split("\n");
     const parts = [];
     let listItems = null;
@@ -7041,6 +7139,20 @@ var WyPromptModal = class extends i4 {
     });
     flushList();
     return parts.join("");
+  }
+  _renderPromptIntro() {
+    return b2`
+      <div class="title-group">
+          <h2 @click="${this._toggleDescription}">${this.title}</h2>
+          <div class="description-text ${this.descriptionExpanded ? "expanded" : ""}">${o7(this._renderDescriptionMarkdown(this.description))}</div>
+          ${this.instructions ? b2`
+            <wy-info-panel class="prompt-instructions-panel">
+              <p class="prompt-instructions-heading">Instructions</p>
+              <div class="prompt-instructions-copy">${o7(this._renderDescriptionMarkdown(this.instructions))}</div>
+            </wy-info-panel>
+          ` : ""}
+      </div>
+    `;
   }
   // Render multi-step body content
   _renderMultiStepBody() {
@@ -7140,10 +7252,7 @@ var WyPromptModal = class extends i4 {
             
             ${!(this.steps && this.steps.length > 0) ? b2`
               <div class="header-main">
-                  <div class="title-group">
-                      <h2 @click="${this._toggleDescription}">${this.title}</h2>
-                      <div class="description-text ${this.descriptionExpanded ? "expanded" : ""}">${o7(this._renderDescriptionMarkdown(this.description))}</div>
-                  </div>
+                  ${this._renderPromptIntro()}
                   
                   ${this.mode === "locked" ? b2`` : ""}
               </div>
@@ -7173,10 +7282,7 @@ var WyPromptModal = class extends i4 {
             ${this.steps && this.steps.length > 0 ? b2`
               <!-- Multi-step mode -->
               <div class="header-main">
-                  <div class="title-group">
-                      <h2 @click="${this._toggleDescription}">${this.title}</h2>
-                      <div class="description-text ${this.descriptionExpanded ? "expanded" : ""}">${o7(this._renderDescriptionMarkdown(this.description))}</div>
-                  </div>
+                  ${this._renderPromptIntro()}
               </div>
               <div class="body">
                 ${this._renderMultiStepBody()}
@@ -7351,7 +7457,7 @@ var WyPromptModal = class extends i4 {
     this.open = false;
     this.dispatchEvent(new CustomEvent("close", { bubbles: true, composed: true }));
   }
-  _handleCopy() {
+  async _handleCopy() {
     let textToCopy;
     if (this.steps && this.steps.length > 0) {
       const step = this.steps[this.activeStepIndex];
@@ -7361,18 +7467,50 @@ var WyPromptModal = class extends i4 {
         this.variations.length > 0 ? this.variations[this.activeVariationIndex].template : this.template
       );
     }
-    const blob = new Blob([textToCopy], { type: "text/plain" });
-    navigator.clipboard.write([new ClipboardItem({ "text/plain": blob })]);
-    this.dispatchEvent(new CustomEvent("copy", {
-      detail: { text: textToCopy },
-      bubbles: true,
-      composed: true
-    }));
-    this.dispatchEvent(new CustomEvent("toast", {
-      detail: { message: "Copied to clipboard!" },
-      bubbles: true,
-      composed: true
-    }));
+    const copied = await this._writeTextToClipboard(textToCopy);
+    if (copied) {
+      this.dispatchEvent(new CustomEvent("copy", {
+        detail: { text: textToCopy },
+        bubbles: true,
+        composed: true
+      }));
+    } else {
+      this.dispatchEvent(new CustomEvent("toast", {
+        detail: { message: "Copy failed", options: { variant: "error" } },
+        bubbles: true,
+        composed: true
+      }));
+    }
+  }
+  async _writeTextToClipboard(text) {
+    try {
+      if (navigator.clipboard?.write && typeof ClipboardItem !== "undefined") {
+        const blob = new Blob([text], { type: "text/plain" });
+        await navigator.clipboard.write([new ClipboardItem({ "text/plain": blob })]);
+        return true;
+      }
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+    } catch (error) {
+      console.warn("Clipboard API copy failed, trying fallback:", error);
+    }
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.setAttribute("readonly", "");
+    textarea.style.position = "fixed";
+    textarea.style.opacity = "0";
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+      return document.execCommand("copy");
+    } catch (error) {
+      console.warn("Fallback copy failed:", error);
+      return false;
+    } finally {
+      document.body.removeChild(textarea);
+    }
   }
   _handleSave() {
     this.mode = "locked";
@@ -7410,6 +7548,7 @@ __publicField(WyPromptModal, "properties", {
   title: { type: String },
   category: { type: String },
   description: { type: String },
+  instructions: { type: String },
   image: { type: String },
   template: { type: String },
   variables: { type: Array },
@@ -7840,6 +7979,37 @@ __publicField(WyPromptModal, "styles", i`
         --wy-info-panel-bg: transparent;
         --wy-info-panel-padding: 0;
         --wy-info-panel-font-size: var(--md-sys-typescale-body-small-size, 0.875rem);
+    }
+
+    .prompt-instructions-panel {
+        margin-top: 16px;
+        --wy-info-panel-bg: transparent;
+        --wy-info-panel-padding: 0;
+        --wy-info-panel-font-size: var(--md-sys-typescale-body-small-size, 0.875rem);
+    }
+
+    .prompt-instructions-heading {
+        margin: 0 0 var(--spacing-xxs, 4px);
+        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-size: var(--md-sys-typescale-label-medium-size, 0.75rem);
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--md-sys-color-on-surface-variant);
+    }
+
+    .prompt-instructions-copy {
+        margin: 0;
+    }
+
+    .prompt-instructions-copy ol,
+    .prompt-instructions-copy ul {
+        margin: 2px 0 0;
+        padding-left: 1.4em;
+    }
+
+    .prompt-instructions-copy li + li {
+        margin-top: 2px;
     }
 
     .variation-description-heading {

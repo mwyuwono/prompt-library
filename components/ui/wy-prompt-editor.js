@@ -805,6 +805,15 @@ export class WyPromptEditor extends LitElement {
                                 ?disabled="${this.readonly}"
                             ></textarea>
                         </wy-form-field>
+                        <wy-form-field label="Instructions" id="instructions" description="Usage notes shown in the prompt modal and only on expanded prompt cards">
+                            <textarea
+                                id="instructions"
+                                rows="4"
+                                .value="${this._editedPrompt.instructions || ''}"
+                                @input="${(e) => this._handleFieldChange('instructions', e.target.value)}"
+                                ?disabled="${this.readonly}"
+                            ></textarea>
+                        </wy-form-field>
                     </div>
 
                     <!-- Section 2: Visuals & Metadata -->
@@ -1007,6 +1016,9 @@ export class WyPromptEditor extends LitElement {
                         ` : ''}
                         <h3 class="preview-title-text">${this._editedPrompt.title || 'Untitled Prompt'}</h3>
                         <p class="preview-description">${this._editedPrompt.description || 'No description provided.'}</p>
+                        ${this._editedPrompt.instructions ? html`
+                            <p class="preview-description"><strong>Instructions:</strong> ${this._editedPrompt.instructions}</p>
+                        ` : ''}
                     </div>
                 </div>
             </div>

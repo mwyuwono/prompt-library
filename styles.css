@@ -593,7 +593,44 @@ body.modal-open {
 .card-description li + li,
 .prompt-list-item-description li + li { margin-top: var(--space-xs); }
 
-.card-description.hidden {
+.card-instructions,
+.prompt-list-item-instructions {
+    margin-top: var(--space-sm);
+    font-family: var(--ff-sans);
+    color: var(--ink-mute);
+    max-width: 60ch;
+    will-change: height, opacity;
+    height: auto;
+    overflow: hidden;
+    transition: height var(--dur-2) var(--ease),
+                opacity var(--dur-2) var(--ease);
+}
+
+.instructions-heading {
+    margin: 0 0 var(--space-xs);
+    font-size: var(--fs-ui-xs);
+    font-weight: 700;
+    letter-spacing: var(--tr-eyebrow);
+    text-transform: uppercase;
+    color: var(--ink);
+}
+
+.instructions-copy {
+    font-size: var(--fs-body-s);
+    line-height: var(--lh-normal);
+}
+
+.instructions-copy ol,
+.instructions-copy ul {
+    margin: var(--space-xs) 0 0;
+    padding-left: 1.25em;
+}
+
+.instructions-copy li + li { margin-top: var(--space-xs); }
+
+.card-description.hidden,
+.card-instructions.hidden,
+.prompt-list-item-instructions.hidden {
     display: none; height: 0; opacity: 0; margin: 0; pointer-events: none;
 }
 
@@ -865,6 +902,18 @@ mark {
     .card-actions      { flex-direction: column; }
     .card-actions .btn { width: 100%; }
 
+    .card-description,
+    .prompt-list-item-description,
+    .card-description.hidden,
+    .prompt-list-item-description.hidden {
+        display: block; height: auto; opacity: 1; margin-top: var(--space-xs); pointer-events: auto;
+    }
+
+    .card-instructions.hidden,
+    .prompt-list-item-instructions.hidden {
+        display: none; height: 0; opacity: 0; margin: 0; pointer-events: none;
+    }
+
     .toast { top: var(--space-lg); right: var(--space-md); left: var(--space-md); text-align: center; }
 }
 
@@ -889,12 +938,18 @@ mark {
         padding: 0.625rem 1.25rem; min-height: 48px; touch-action: manipulation;
     }
 
-    .card-description.hidden,
-    .prompt-list-item-description.hidden {
+    .card-instructions.hidden,
+    .prompt-list-item-instructions.hidden {
         display: none; height: 0; opacity: 0; margin: 0; pointer-events: none;
     }
+    .card-description,
+    .prompt-list-item-description,
+    .card-description.hidden,
+    .prompt-list-item-description.hidden,
     .card-description:not(.hidden),
-    .prompt-list-item-description:not(.hidden) {
+    .prompt-list-item-description:not(.hidden),
+    .card-instructions:not(.hidden),
+    .prompt-list-item-instructions:not(.hidden) {
         display: block; height: auto; opacity: 1;
     }
 

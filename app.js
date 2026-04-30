@@ -482,7 +482,12 @@ Server will start on http://localhost:3001`;
             const searchLower = this.searchTerm;
 
             const matchesSearch = !searchLower ||
-                prompt.title.toLowerCase().includes(searchLower);
+                [
+                    prompt.title,
+                    prompt.description,
+                    prompt.instructions,
+                    prompt.category
+                ].some(value => (value || '').toLowerCase().includes(searchLower));
 
             if (isSearchActive) {
                 return matchesSearch;
@@ -517,10 +522,25 @@ Server will start on http://localhost:3001`;
      * Update card details visibility based on toggle state
      */
     updateCardDetailsVisibility() {
-        const descriptions = document.querySelectorAll('.card-description, .prompt-list-item-description');
+        const descriptions = document.querySelectorAll(
+            '.card-description, .prompt-list-item-description, .card-instructions, .prompt-list-item-instructions'
+        );
         const variableCounts = document.querySelectorAll('.variable-count-badge');
 
+        const keepMobileDescriptionVisible = this.shouldKeepDescriptionsVisibleOnMobile();
+
         descriptions.forEach(desc => {
+            const isPromptDescription =
+                desc.classList.contains('card-description') ||
+                desc.classList.contains('prompt-list-item-description');
+
+            if (keepMobileDescriptionVisible && isPromptDescription) {
+                desc.classList.remove('hidden');
+                desc.style.height = '';
+                desc.style.opacity = '';
+                return;
+            }
+
             this.animateDetailVisibility(desc, this.showDetails);
         });
 
@@ -533,6 +553,12 @@ Server will start on http://localhost:3001`;
         });
 
         this.scheduleMasonryLayout();
+    }
+
+    shouldKeepDescriptionsVisibleOnMobile() {
+        return typeof window !== 'undefined' &&
+            typeof window.matchMedia === 'function' &&
+            window.matchMedia('(max-width: 768px)').matches;
     }
 
     /**
@@ -879,6 +905,7 @@ Server will start on http://localhost:3001`;
 
         const variableCount = prompt.variables?.length || 0;
         const hiddenClass = this.showDetails ? '' : 'hidden';
+        const descriptionHiddenClass = this.shouldKeepDescriptionsVisibleOnMobile() ? '' : hiddenClass;
 
         const imageHTML = promptImage ? `
             <div class="prompt-list-item-thumbnail">
@@ -892,7 +919,8 @@ Server will start on http://localhost:3001`;
                 <div class="prompt-list-item-header">
                     <h3 class="prompt-list-item-title">${this.highlightText(prompt.title, this.searchTerm)}</h3>
                 </div>
-                <div class="prompt-list-item-description ${hiddenClass}">${this.renderDescription(prompt.description)}</div>
+                <div class="prompt-list-item-description ${descriptionHiddenClass}">${this.renderDescription(prompt.description)}</div>
+                ${this.getInstructionsHTML(prompt.instructions, 'prompt-list-item-instructions', hiddenClass)}
             </div>
             <div class="prompt-list-item-meta">
                 <span class="variable-count-badge ${hiddenClass}">${variableCount > 0 ? `${variableCount} variable${variableCount > 1 ? 's' : ''}` : 'No variables'}</span>
@@ -968,6 +996,7 @@ Server will start on http://localhost:3001`;
         const title = 'Fabric Colorizer';
         const description = 'Recolor any fabric design with AI-powered palette suggestions';
         const hiddenClass = this.showDetails ? '' : 'hidden';
+        const descriptionHiddenClass = this.shouldKeepDescriptionsVisibleOnMobile() ? '' : hiddenClass;
 
         if (viewMode === 'list') {
             const item = document.createElement('div');
@@ -980,7 +1009,7 @@ Server will start on http://localhost:3001`;
                     <div class="prompt-list-item-header">
                         <h3 class="prompt-list-item-title">${this.escapeHTML(title)}</h3>
                     </div>
-                    <p class="prompt-list-item-description ${hiddenClass}">${this.escapeHTML(description)}</p>
+                    <p class="prompt-list-item-description ${descriptionHiddenClass}">${this.escapeHTML(description)}</p>
                 </div>
                 <div class="prompt-list-item-meta">
                     <span class="variable-count-badge ${hiddenClass}">Interactive tool</span>
@@ -1011,7 +1040,7 @@ Server will start on http://localhost:3001`;
                         <div class="card-badge">FABRIC</div>
                     </div>
                     <h3 class="card-title">${this.escapeHTML(title)}</h3>
-                    <p class="card-description ${hiddenClass}">${this.escapeHTML(description)}</p>
+                    <p class="card-description ${descriptionHiddenClass}">${this.escapeHTML(description)}</p>
                 </div>
                 <div class="card-footer">
                     <div class="card-arrow-button">
@@ -1035,6 +1064,7 @@ Server will start on http://localhost:3001`;
      */
     getCardSummaryHTML(prompt) {
         const hiddenClass = this.showDetails ? '' : 'hidden';
+        const descriptionHiddenClass = this.shouldKeepDescriptionsVisibleOnMobile() ? '' : hiddenClass;
 
         const promptImage = this.getPromptImage(prompt);
 
@@ -1081,13 +1111,27 @@ Server will start on http://localhost:3001`;
                 <div>
                     ${headerRowHTML}
                     <h3 class="card-title">${this.highlightText(prompt.title, this.searchTerm)}</h3>
-                    <div class="card-description ${hiddenClass}">${this.renderDescription(prompt.description)}</div>
+                    <div class="card-description ${descriptionHiddenClass}">${this.renderDescription(prompt.description)}</div>
+                    ${this.getInstructionsHTML(prompt.instructions, 'card-instructions', hiddenClass)}
                 </div>
                 <div class="card-footer">
                     <div class="card-arrow-button">
                         <span class="material-symbols-outlined">arrow_forward</span>
                     </div>
                 </div>
+            </div>
+        `;
+    }
+
+    getInstructionsHTML(instructions, className, hiddenClass = '') {
+        if (!instructions) {
+            return '';
+        }
+
+        return `
+            <div class="${className} ${hiddenClass}">
+                <p class="instructions-heading">Instructions</p>
+                <div class="instructions-copy">${this.renderDescription(instructions)}</div>
             </div>
         `;
     }
@@ -1187,8 +1231,8 @@ Server will start on http://localhost:3001`;
         this.promptModal.addEventListener('close', () => this.closePromptModal());
 
         this.promptModal.addEventListener('copy', (e) => {
-            // Copy is handled by the component, just show toast
-            this.showToast('Copied to clipboard!');
+            // Copy is handled by the component, then we offer quick launch links.
+            this.showCopyToast();
         });
 
         this.promptModal.addEventListener('download', (e) => {
@@ -1257,7 +1301,7 @@ Server will start on http://localhost:3001`;
         });
 
         this.promptModal.addEventListener('toast', (e) => {
-            this.showToast(e.detail.message);
+            this.showToast(e.detail.message, e.detail.options);
         });
     }
 
@@ -1299,6 +1343,7 @@ Server will start on http://localhost:3001`;
                 title: prompt.title,
                 category: prompt.category,
                 description: prompt.description || '',
+                instructions: prompt.instructions || '',
                 steps: prompt.steps,
                 activeStepIndex: savedStepIndex || 0,
                 open: true
@@ -1317,6 +1362,7 @@ Server will start on http://localhost:3001`;
                 title: prompt.title,
                 category: prompt.category,
                 description: prompt.description || '',
+                instructions: prompt.instructions || '',
                 template: this.getActiveTemplate(prompt),
                 image: this.getActiveVariationImage(prompt),
                 variables: variables,
@@ -1477,6 +1523,7 @@ Server will start on http://localhost:3001`;
             title: '',
             category: '',
             description: '',
+            instructions: '',
             template: '',
             variables: [],
             variations: [],
@@ -1562,6 +1609,7 @@ Server will start on http://localhost:3001`;
                 title: prompt.title,
                 category: prompt.category,
                 description: prompt.description || '',
+                instructions: prompt.instructions || '',
                 template: this.getActiveTemplate(prompt),
                 image: this.getActiveVariationImage(prompt),
                 variables: this.getActiveVariables(prompt),
@@ -1697,15 +1745,7 @@ Server will start on http://localhost:3001`;
                 useCount: prompt.useCount
             });
 
-            this.showToast('Copied!');
-
-            // Auto-open AI Tools modal
-            setTimeout(() => {
-                const aiToolsButton = document.getElementById('openLinksModal');
-                if (aiToolsButton) {
-                    aiToolsButton.click();
-                }
-            }, 500); // Small delay to let the toast appear first
+            this.showCopyToast();
         } catch (error) {
             console.error('Failed to copy:', error);
             // Fallback for older browsers
@@ -1797,7 +1837,7 @@ Server will start on http://localhost:3001`;
 
         try {
             document.execCommand('copy');
-            this.showToast('Copied!');
+            this.showCopyToast();
         } catch (error) {
             console.error('Fallback copy failed:', error);
             this.showToast('Copy failed');
@@ -1809,10 +1849,24 @@ Server will start on http://localhost:3001`;
     /**
      * Show toast notification (using wy-toast Web Component from design system)
      */
-    showToast(message) {
+    showToast(message, options = {}) {
         this.toast.message = message;
-        this.toast.duration = 2000; // 2 seconds (design system default is 3000ms)
+        this.toast.variant = options.variant || 'success';
+        this.toast.actions = options.actions || [];
+        this.toast.dismissible = Boolean(options.dismissible);
+        this.toast.duration = options.duration ?? 2000; // 2 seconds (design system default is 3000ms)
         this.toast.show = true;
+    }
+
+    showCopyToast() {
+        this.showToast('Copied!', {
+            duration: 6000,
+            dismissible: true,
+            actions: [
+                { label: 'Gemini', href: 'https://gemini.google.com/app' },
+                { label: 'ChatGPT', href: 'https://chatgpt.com/' }
+            ]
+        });
     }
 
     /**

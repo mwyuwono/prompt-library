@@ -9,6 +9,8 @@ import { LitElement, html, css } from 'lit';
  * @prop {Boolean} show - Controls visibility (reflects to attribute)
  * @prop {Number} duration - Auto-dismiss duration in ms (default: 3000)
  * @prop {String} variant - Toast variant: 'success' | 'error' | 'warning' | 'info' (default: 'success')
+ * @prop {Array} actions - Optional action links: [{ label, href }]
+ * @prop {Boolean} dismissible - Whether to show a dismiss button
  *
  * @fires dismiss - Fired when toast is dismissed (auto or manual)
  *
@@ -21,7 +23,9 @@ export class WyToast extends LitElement {
         message: { type: String },
         show: { type: Boolean, reflect: true },
         duration: { type: Number },
-        variant: { type: String }
+        variant: { type: String },
+        actions: { type: Array },
+        dismissible: { type: Boolean }
     };
 
     constructor() {
@@ -30,6 +34,8 @@ export class WyToast extends LitElement {
         this.show = false;
         this.duration = 3000;
         this.variant = 'success';
+        this.actions = [];
+        this.dismissible = false;
         this._timer = null;
     }
 
@@ -73,6 +79,7 @@ export class WyToast extends LitElement {
       align-items: center;
       gap: 12px;
       box-shadow: var(--shadow-modal);
+      max-width: calc(100vw - 32px);
     }
 
     .icon {
@@ -115,6 +122,70 @@ export class WyToast extends LitElement {
       font-size: 0.875rem;
       font-weight: 500;
     }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      padding: 0 16px;
+      border-radius: var(--radius-pill, 999px);
+      background-color: var(--md-sys-color-inverse-on-surface);
+      color: var(--md-sys-color-inverse-surface);
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 700;
+      line-height: 1;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .dismiss {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: 0;
+      border-radius: var(--radius-pill, 999px);
+      background: transparent;
+      color: currentColor;
+      cursor: pointer;
+      font: inherit;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dismiss .icon {
+      font-size: 20px;
+    }
+
+    .action:focus-visible,
+    .dismiss:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 2px;
+    }
+
+    @media (max-width: 480px) {
+      .toast-container {
+        width: min(100%, 480px);
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 16px;
+      }
+
+      .actions {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+      }
+    }
   `;
 
     render() {
@@ -122,16 +193,33 @@ export class WyToast extends LitElement {
       <div class="toast-container">
         <span class="icon variant-${this.variant}">${this._icon}</span>
         <span class="message">${this.message}</span>
+        ${this.actions?.length ? html`
+          <div class="actions">
+            ${this.actions.map(action => html`
+              <a class="action" href="${action.href}" target="_blank" rel="noopener noreferrer">${action.label}</a>
+            `)}
+          </div>
+        ` : ''}
+        ${this.dismissible ? html`
+          <button class="dismiss" type="button" @click="${this._dismiss}" aria-label="Dismiss notification">
+            <span class="icon">close</span>
+          </button>
+        ` : ''}
       </div>
     `;
+    }
+
+    _dismiss() {
+        if (this._timer) clearTimeout(this._timer);
+        this.show = false;
+        this.dispatchEvent(new CustomEvent('dismiss', { bubbles: true, composed: true }));
     }
 
     updated(changedProperties) {
         if (changedProperties.has('show') && this.show) {
             if (this._timer) clearTimeout(this._timer);
             this._timer = setTimeout(() => {
-                this.show = false;
-                this.dispatchEvent(new CustomEvent('dismiss', { bubbles: true, composed: true }));
+                this._dismiss();
             }, this.duration);
         }
     }

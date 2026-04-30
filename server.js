@@ -151,6 +151,7 @@ function createPromptShell({ title = 'Untitled Prompt', category = 'Productivity
         id: `${slugBase}-${Date.now()}`,
         title,
         description: '',
+        instructions: '',
         category,
         template: '',
         variables: []

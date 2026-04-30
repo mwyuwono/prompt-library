@@ -166,7 +166,7 @@
   {
     "id": "antiques-expert",
     "title": "Antiques Expert Analysis",
-    "description": "Analyzes an uploaded antique photo to identify the piece, assess condition and authenticity, and flag visible restoration or forgery concerns.\n\nSelect a variant for the desired analysis workflow.",
+    "description": "Analyzes an uploaded antique photo to identify the piece, assess condition and authenticity, and flag visible restoration or forgery concerns.",
     "category": "Expertise",
     "icon": "chair",
     "variables": [],
@@ -197,7 +197,8 @@
       }
     ],
     "featured": false,
-    "slug": "antiques-expert-analysis"
+    "slug": "antiques-expert-analysis",
+    "instructions": "Select a variant for the desired analysis workflow."
   },
   {
     "id": "restaurant-finder",
@@ -323,7 +324,7 @@
   {
     "id": "character-portrait",
     "title": "Portrait Prompt Builder",
-    "description": "Builds portrait-generation prompts from uploaded subject photos by extracting a Visual Anchor for likeness and applying a selected style direction.\n\nSelect a variant for the source images and likeness workflow.",
+    "description": "Builds portrait-generation prompts from uploaded subject photos by extracting a Visual Anchor for likeness and applying a selected style direction.",
     "category": "Art",
     "image": "",
     "variables": [],
@@ -387,7 +388,8 @@
     "featured": false,
     "slug": "portrait-creator",
     "icon": "face_right",
-    "template": ""
+    "template": "",
+    "instructions": "Select a variant for the source images and likeness workflow."
   },
   {
     "id": "academic-figure-study-prefix",
@@ -430,7 +432,7 @@
   {
     "id": "architectural-rendering",
     "title": "Architectural Rendering",
-    "description": "Converts an uploaded building image into a 19th-century architectural illustration.\n\nSelect a variant for the desired drawing style or presentation format.",
+    "description": "Converts an uploaded building image into a 19th-century architectural illustration.",
     "category": "Art",
     "icon": "architecture",
     "variables": [],
@@ -469,12 +471,13 @@
       }
     ],
     "featured": false,
-    "slug": "architectural-rendering"
+    "slug": "architectural-rendering",
+    "instructions": "Select a variant for the desired drawing style or presentation format."
   },
   {
     "id": "prompt-builder",
     "title": "Prompt Builder Assistant",
-    "description": "Turns a rough prompt idea into a complete, ready-to-use prompt after targeted clarifying questions.\n\nSelect a variant for general prompting or image-generation prompting.",
+    "description": "Turns a rough prompt idea into a complete, ready-to-use prompt after targeted clarifying questions.",
     "category": "Productivity",
     "icon": "construction",
     "variables": [
@@ -499,12 +502,13 @@
         "template": "Prompt: {{initial_idea}}\n\nRole & Objective:\nYou are an expert Image Prompt Engineer. Your sole purpose is to help me craft, critique, and iteratively refine highly detailed prompts for image generation.\n\nThe Workflow:\n\nDrafting: You will provide an initial image prompt based on my instructions.\n\nEvaluation: I will generate the image in a separate chat and upload it here.\n\nCritique: You will analyze the generated image against the original intent, identifying areas where the AI followed instructions and where it fell short (e.g., lighting, composition, subject accuracy).\n\nIteration: You will provide a refined \"Version 2.0\" prompt to correct those issues.\n\nStrict Constraints:\n\nNo Generation: You are strictly forbidden from attempting to render or generate images yourself. You are the architect, not the builder.\n\nProcedural Reminder: At the end of every response, you must include a brief disclaimer: \"Reminder: Please generate the image in a separate chat and return here with the result for critique.\"\n\nAcknowledgement:\nIf you understand these instructions and are ready to begin, confirm by stating that your role is exclusively to help me craft and refine prompts iteratively, and that you will never generate images yourself."
       }
     ],
-    "featured": false
+    "featured": false,
+    "instructions": "Select a variant for general prompting or image-generation prompting."
   },
   {
     "id": "academic-drawing",
     "title": "Academic Drawing",
-    "description": "Creates a 19th-century academic figure study in the tradition of Bargue and Gerome from an uploaded image or written subject description.\n\nSelect a variant based on the input type.",
+    "description": "Creates a 19th-century academic figure study in the tradition of Bargue and Gerome from an uploaded image or written subject description.",
     "category": "Art",
     "icon": "brush",
     "variables": [],
@@ -533,12 +537,13 @@
     ],
     "featured": false,
     "slug": "academic-drawing",
-    "archived": true
+    "archived": true,
+    "instructions": "Select a variant based on the input type."
   },
   {
     "id": "artist-guide",
     "title": "Artist Guide",
-    "description": "Creates a step-by-step reproduction guide from a reference image, tailored to the selected medium and supported by optional visual benchmarks.\n\nSelect a variant for the medium or study type.",
+    "description": "Creates a step-by-step reproduction guide from a reference image, tailored to the selected medium and supported by optional visual benchmarks.",
     "category": "Art",
     "icon": "palette",
     "variations": [
@@ -587,12 +592,13 @@
     ],
     "featured": false,
     "slug": "artist-guide",
-    "variables": []
+    "variables": [],
+    "instructions": "Select a variant for the medium or study type."
   },
   {
     "id": "restyle-image",
     "title": "Photography",
-    "description": "Transforms an uploaded photo into a selected fine-art, editorial, archival, or architectural photography style.\n\nSelect a variant for the desired photographic treatment.",
+    "description": "Transforms an uploaded photo into a selected fine-art, editorial, archival, or architectural photography style.",
     "category": "Art",
     "icon": "camera_alt",
     "variables": [
@@ -654,7 +660,8 @@
     ],
     "featured": false,
     "slug": "restyle-photograph",
-    "template": ""
+    "template": "",
+    "instructions": "Select a variant for the desired photographic treatment."
   },
   {
     "id": "component-adaptation",
@@ -772,7 +779,7 @@
   {
     "id": "art-critique",
     "title": "Artwork Critique",
-    "description": "Critiques uploaded artwork with focused, structured feedback on the highest-impact changes to improve the work.\n\nSelect a variant for reference matching or general technique and style critique.",
+    "description": "Critiques uploaded artwork with focused, structured feedback on the highest-impact changes to improve the work.",
     "category": "Art",
     "icon": "palette",
     "variables": [],
@@ -791,12 +798,13 @@
       }
     ],
     "featured": false,
-    "slug": "artwork-critique"
+    "slug": "artwork-critique",
+    "instructions": "Select a variant for reference matching or general technique and style critique."
   },
   {
     "id": "fabric-colorways",
     "title": "Fabric Colorways",
-    "description": "Creates fabric colorways from an uploaded design using either a palette reference image or a written style direction.\n\nSelect a variant for the colorway method.",
+    "description": "Creates fabric colorways from an uploaded design using either a palette reference image or a written style direction.",
     "category": "Fabric",
     "icon": "palette",
     "variables": [],
@@ -826,12 +834,13 @@
       }
     ],
     "featured": false,
-    "slug": "fabric-colorways"
+    "slug": "fabric-colorways",
+    "instructions": "Select a variant for the colorway method."
   },
   {
     "id": "pattern-effects",
     "title": "Pattern Effects",
-    "description": "Applies textile effects to an uploaded fabric pattern while preserving the underlying design.\n\nSelect a variant for the desired effect.",
+    "description": "Applies textile effects to an uploaded fabric pattern while preserving the underlying design.",
     "category": "Fabric",
     "icon": "texture",
     "variables": [],
@@ -873,7 +882,8 @@
       }
     ],
     "featured": false,
-    "slug": "pattern-effects"
+    "slug": "pattern-effects",
+    "instructions": "Select a variant for the desired effect."
   },
   {
     "id": "fabric-imagery",
@@ -969,13 +979,14 @@
   {
     "id": "fabric-restyle-match",
     "title": "Rendering: Exact Style Match",
-    "description": "Restyles a design mockup to match the ink colors, fabric, and texture of an inspiration rendering.\n\nSubmit the inspiration rendering first, then the design mockup.",
+    "description": "Restyles a design mockup to match the ink colors, fabric, and texture of an inspiration rendering.",
     "category": "Fabric",
     "icon": "style",
     "variables": [],
     "template": "The attached image is a fabric rendering that I like. I'm going to upload a fabric design mockup in my next message, and I want you to maintain the design of my mockup but match it to this rendering style, ink colors, fabric color, and texture. Tell me when you're ready for the image I want you to restyle.",
     "featured": false,
-    "slug": "rendering-exact-style-match"
+    "slug": "rendering-exact-style-match",
+    "instructions": "Submit the inspiration rendering first, then the design mockup."
   },
   {
     "id": "gemma-chunk-processor",
@@ -1086,7 +1097,7 @@
   {
     "id": "untitled-prompt-1777067341288",
     "title": "Fabric Application Mockups",
-    "description": "Generates fabric application mockups from an uploaded pattern, showing the design in selected interior, upholstery, drapery, or textile-detail contexts.\n\nSubmit an image of a fabric pattern with this prompt.",
+    "description": "Generates fabric application mockups from an uploaded pattern, showing the design in selected interior, upholstery, drapery, or textile-detail contexts.",
     "category": "Fabric",
     "template": "Role & Context: You are a specialized, high-fidelity AI rendering engine for luxury textile design and interior curation. Your objective is to create a photorealistic image featuring the dynamic fabric design shown in the attached pattern. The aesthetic must be consistent with the editorial sophistication of Frederic Magazine and the bold, textural, curated style of Kelly Wearstler.\n\nDynamic Input: The core textile design (pattern, colors, and material type) is provided as an image attachment.\n\nComposition: High-End Editorial Interior — Curated Upholstery\n• Subject: A high-fidelity photograph of a curated, vintage-style armchair (e.g., a sculptural 1940s club chair) fully upholstered in the exact fabric pattern from the attached image.\n• Setting: A sophisticated Kelly Wearstler-inspired Manhattan townhouse library. The environment should be rich in texture: featuring textural plaster walls, a rare marble console, and perhaps a brass sculptural object. The lighting must be refined, dimensional, and dramatic.\n\nConsistency & Refinement: Ensure the color palette used for secondary interior elements (e.g., wall colors, marble, trim) is refined and directly derived from or complements the palette in the attached fabric pattern. The image must feel bespoke, curated, and tactile.",
     "variables": [],
@@ -1158,7 +1169,8 @@
         "template": "Create a photorealistic editorial interior image of a formal wall covered in dramatic gathered fabric drapery.\n\nThe uploaded fabric image is the controlling visual reference for the textile. Reproduce that fabric faithfully across the drapery: same motif library, drawing style, line weight, spacing, scale, colors, ground tone, weave, texture, and material character. Preserve the recognizable individual motifs from the uploaded textile — do not substitute generic florals, abstract marks, invented objects, recolored elements, or loosely similar toile. The fabric should look like the uploaded textile physically draped in the room.\n\nThe drapery is suspended from two round brass rosette pins near the upper edge of the wall. The pins are the highest fabric points; no fabric, valance, cornice, canopy, or upper band appears above them. Only wall or ceiling may be visible above the pin line.\n\nFrom each pin, the fabric gathers tightly and falls in radial pleats. Between the pins, create a shallow soft swag below the pin line. Below, the fabric drops in long dense vertical folds with deep shadows, highlighted ridges, and natural tension. The uploaded pattern must bend, compress, stretch, shadow, and partially disappear into folds while remaining recognizably the same textile.\n\nCenter a modest portrait-oriented artwork below the pins in a simple thin black frame. The art is a quiet modernist abstraction with near-black geometric forms on a warm off-white ground, harmonized to the fabric.\n\nPlace the wall in a contemporary, sophisticated architectural interior: restrained modern-classic detailing, plaster or limewashed walls, natural stone or dark waxed wood flooring, curated but minimal styling. Lighting and photographic quality should feel like The World of Interiors: natural directional light, soft shadows, tactile surfaces, realistic lens behavior, editorial stillness.",
         "variables": []
       }
-    ]
+    ],
+    "instructions": "Submit an image of a fabric pattern with this prompt."
   },
   {
     "id": "untitled-prompt-1777067726397",
@@ -1194,7 +1206,7 @@
   {
     "id": "untitled-prompt-1777069256245",
     "title": "Room Repainter",
-    "description": "Visualizes a room repainted in specified colors from an uploaded room image.\n\nSubmit the room image and the desired paint colors.",
+    "description": "Visualizes a room repainted in specified colors from an uploaded room image.",
     "category": "Art",
     "template": "Task:\nI am providing a photo of an existing room. Generate a highly realistic visualization of the same room repainted with my specified colors while preserving the architecture, layout, proportions, furniture placement, finishes, and camera perspective of the original image.\n\nUser Inputs:\n- Wall Paint Color: {{WALLS}}\n- Trim / Molding / Baseboard / Door Paint Color: {{TRIM}}\n- Ceiling Color: {{CEILING}}\n\nColor Accuracy Rules:\n- If the user names a paint brand and color (for example: Benjamin Moore, Farrow & Ball, Sherwin-Williams, Behr, etc.), identify and match the exact real-world shade before generating.\n- Use the official manufacturer reference whenever possible (hex, RGB, or equivalent digital approximation).\n- Maintain realistic paint behavior under the room’s lighting conditions.\n- If the requested color is ambiguous, infer the most likely authentic shade associated with that brand name.\n\nImage Generation Instructions:\n- Repaint only the specified surfaces:\n  - Walls = Wall Paint Color\n  - Trim, moldings, casings, doors, built-ins, baseboards = Trim Paint Color\n- Preserve all original room geometry and details.\n- Keep furniture, décor, windows, flooring, rugs, artwork, fixtures, and objects unchanged unless repainting logically affects reflected light.\n- Maintain natural shadows, reflections, depth, and texture.\n- Respect material differences (wood trim, plaster walls, glossy trim, matte walls, etc.).\n- Produce a realistic result consistent with professional architectural photography.\n\nQuality Standard:\n- High-resolution output.\n- Crisp detail and accurate edges where paint meets trim, ceilings, floors, and fixtures.\n- Balanced exposure and natural lighting.\n- Sophisticated, believable color rendering.\n- No visible text overlays, labels, watermarks, or prompt text.\n- No generic “AI-generated” artifacts or surreal distortions.\n- No unnecessary redesign of the room.\n\nStylistic Goal:\nCreate a polished, aspirational result that helps the user confidently evaluate the repaint decision.\n\nAfter Generating the First Image:\nImmediately suggest one strong next-step visualization the user is likely to find useful based on the room and request. Examples:\n- Same room in morning daylight\n- Same room at warm evening lamplight\n- Alternate trim color options\n- Higher-contrast version\n- Historic / traditional styling interpretation\n- Modernized styling interpretation\n- Adjacent connected room coordinated with this palette\n\nThen ask a concise follow-up question offering to generate it.",
     "variables": [
@@ -1219,12 +1231,13 @@
     ],
     "slug": "room-repainter",
     "image": "public/images/1777069870101.png",
-    "icon": "format_paint"
+    "icon": "format_paint",
+    "instructions": "Submit the room image and the desired paint colors."
   },
   {
     "id": "untitled-prompt-1777155220701",
     "title": "Fabric Style Alignment",
-    "description": "Adapts a draft fabric design to the aesthetic DNA of a style reference so it fits cohesively within a collection.\n\nSubmit with this prompt:\nImage 1: Draft design\nImage 2: Style reference",
+    "description": "Adapts a draft fabric design to the aesthetic DNA of a style reference so it fits cohesively within a collection.",
     "category": "Fabric",
     "template": "Image 1 is a design draft for a fabric pattern. Image 2 is an existing design from the same collection that serves as the visual anchor for the desired art style.\nObjective: Align the draft pattern (Image 1) to the aesthetic of the existing design (Image 2) while maintaining the original layout and structural intent of the draft.\nFocus Areas for Cohesion:\n• Linework & Texture: Adjust the stroke weight, taper, and graininess to match the reference.\n• Color Profile: Harmonize the palette, ensuring the saturation and value contrast reflect Image 2.\n• Level of Detail: Simplify or enhance the complexity of the motifs to ensure they feel like they were drawn by the same hand.\nCarefully consider what elements need to change to achieve this cohesion, then generate the updated design. ",
     "variables": [],
@@ -1246,7 +1259,8 @@
         "template": "Image 1 is a structural blueprint for a fabric pattern. Image 2 is the stylistic anchor.\n\nObjective: Re-interpret the motifs and composition of Image 1 through the 'formal language' and structural logic of Image 2. The final result should look like a native piece of the Image 2 collection, using Image 1 only as a guide for placement and concept.\n\nStructural Adaptation (Priority):\n\nFormal Morphology: Do not copy the shapes in Image 1 literally. Instead, reshape the silhouettes, curves, and angles to match the 'hand' of Image 2. (e.g., if Image 2 is organic and fluid, soften any rigid structures from Image 1).\n\nSpatial Rhythm: Adjust the spacing and 'breathing room' between elements to reflect the density and negative space found in Image 2.\n\nWeight & Balance: Re-proportion the elements so the visual weight of the motifs aligns with the reference style.\n\nAesthetic Cohesion:\n\nLinework & Texture: Mimic the specific stroke weight, taper, line quality, and tactile graininess of Image 2.\n\nColor & Value: Harmonize the palette and contrast levels to be cohesive with the reference.\n\nLevel of Abstraction: Simplify or complicate the details of the motifs to match the artistic 'shorthand' used by the original artist in Image 2.\n\nFinal Instruction: Prioritize stylistic authenticity over literal structural fidelity to the draft. Generate the image. ",
         "variables": []
       }
-    ]
+    ],
+    "instructions": "Submit with this prompt:\nImage 1: Draft design\nImage 2: Style reference"
   },
   {
     "id": "untitled-prompt-1777229419608",
