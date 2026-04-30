@@ -55,30 +55,54 @@ export class WyToast extends LitElement {
     :host {
       display: block;
       position: fixed;
-      bottom: 24px;
+      bottom: 32px;
       left: 50%;
-      transform: translateX(-50%) translateY(100px);
+      transform: translateX(-50%) translateY(calc(100% + 32px)) scale(0.96);
       z-index: 3000;
       pointer-events: none;
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s;
+      transition:
+        transform 380ms cubic-bezier(0.34, 1.56, 0.64, 1),
+        opacity 220ms ease;
       opacity: 0;
     }
 
     :host([show]) {
-      transform: translateX(-50%) translateY(0);
+      transform: translateX(-50%) translateY(0) scale(1);
       opacity: 1;
       pointer-events: auto;
     }
 
+    @supports not (backdrop-filter: blur(1px)) {
+      .toast-container {
+        background: rgba(26, 26, 26, 0.92);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      :host {
+        transition: opacity 180ms ease;
+        transform: translateX(-50%) translateY(0) scale(1);
+      }
+      :host([show]) {
+        opacity: 1;
+      }
+    }
+
     .toast-container {
-      background-color: var(--md-sys-color-inverse-surface);
-      color: var(--md-sys-color-inverse-on-surface);
-      padding: 12px 24px;
+      background: rgba(26, 26, 26, 0.62);
+      backdrop-filter: blur(20px) saturate(140%);
+      -webkit-backdrop-filter: blur(20px) saturate(140%);
+      color: rgba(247, 244, 238, 0.96);
+      padding: 12px 20px;
       border-radius: 0;
       display: flex;
       align-items: center;
-      gap: 12px;
-      box-shadow: var(--shadow-modal);
+      gap: 10px;
+      box-shadow:
+        0 0 0 1px rgba(247, 244, 238, 0.12),
+        inset 0 1px 0 rgba(247, 244, 238, 0.08),
+        0 4px 16px rgba(0, 0, 0, 0.32),
+        0 1px 4px rgba(0, 0, 0, 0.24);
       max-width: calc(100vw - 32px);
     }
 
@@ -90,12 +114,11 @@ export class WyToast extends LitElement {
       align-items: start;
       gap: 16px 12px;
       padding: 16px;
-      border-radius: 0;
     }
 
     .icon {
       font-family: 'Material Symbols Outlined';
-      font-size: 20px;
+      font-size: 18px;
       font-weight: normal;
       font-style: normal;
       line-height: 1;
@@ -109,29 +132,31 @@ export class WyToast extends LitElement {
       -moz-osx-font-smoothing: grayscale;
       text-rendering: optimizeLegibility;
       font-feature-settings: 'liga';
+      flex-shrink: 0;
     }
 
-    /* Variant-specific icon colors */
     .icon.variant-success {
-      color: var(--wy-toast-success-color, var(--md-sys-color-primary));
-    }
-
-    .icon.variant-error {
-      color: var(--wy-toast-error-color, #FF0101);
-    }
-
-    .icon.variant-warning {
-      color: var(--wy-toast-warning-color, var(--md-sys-color-secondary));
+      color: rgba(247, 244, 238, 0.72);
     }
 
     .icon.variant-info {
-      color: var(--wy-toast-info-color, var(--md-sys-color-secondary));
+      color: rgba(247, 244, 238, 0.72);
+    }
+
+    .icon.variant-error {
+      color: #E89B7E;
+    }
+
+    .icon.variant-warning {
+      color: #D9C28A;
     }
 
     .message {
-      font-family: var(--font-body);
-      font-size: 0.875rem;
+      font-family: 'Inter', var(--font-body, sans-serif);
+      font-size: 0.8125rem;
       font-weight: 500;
+      line-height: 1.4;
+      color: rgba(247, 244, 238, 0.96);
     }
 
     .toast-container.has-actions .icon.variant-success {
@@ -141,10 +166,9 @@ export class WyToast extends LitElement {
     .toast-container.has-actions .message {
       grid-column: 1;
       grid-row: 1;
-      color: var(--white);
-      font-size: var(--fs-body, 1rem);
+      font-size: 0.875rem;
       font-weight: 500;
-      line-height: var(--lh-snug, 1.2);
+      line-height: 1.3;
     }
 
     .actions {
@@ -167,47 +191,55 @@ export class WyToast extends LitElement {
       align-items: center;
       justify-content: center;
       min-height: 36px;
-      padding: 0 16px;
-      border-radius: var(--radius-pill, 999px);
-      background-color: var(--md-sys-color-inverse-on-surface);
-      color: var(--md-sys-color-inverse-surface);
-      font-family: var(--font-body);
-      font-size: 0.875rem;
-      font-weight: 700;
+      padding: 0 14px;
+      border-radius: 0;
+      background: rgba(247, 244, 238, 0.12);
+      color: rgba(247, 244, 238, 0.96);
+      font-family: 'Inter', var(--font-body, sans-serif);
+      font-size: 0.8125rem;
+      font-weight: 600;
       line-height: 1;
       text-decoration: none;
       white-space: nowrap;
+      border: 1px solid rgba(247, 244, 238, 0.16);
     }
 
     .toast-container.has-actions .action {
-      min-height: 44px;
-      padding: 0 16px;
-      border-radius: var(--radius-pill, 999px);
-      background-color: var(--white);
-      color: var(--ink);
-      font-size: var(--fs-ui, 0.875rem);
-      font-weight: 500;
+      min-height: 40px;
+      padding: 0 14px;
+      font-size: 0.8125rem;
+      font-weight: 600;
       min-width: 0;
     }
 
+    .action:focus-visible {
+      outline: 2px solid rgba(247, 244, 238, 0.72);
+      outline-offset: 2px;
+    }
+
     .dismiss {
-      width: 32px;
-      height: 32px;
+      width: 28px;
+      height: 28px;
       padding: 0;
       border: 0;
-      border-radius: var(--radius-pill, 999px);
+      border-radius: 0;
       background: transparent;
-      color: currentColor;
+      color: rgba(247, 244, 238, 0.6);
       cursor: pointer;
       font: inherit;
       line-height: 1;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .dismiss:hover {
+      color: rgba(247, 244, 238, 0.96);
     }
 
     .dismiss .icon {
-      font-size: 20px;
+      font-size: 18px;
     }
 
     .toast-container.has-actions .dismiss {
@@ -215,28 +247,22 @@ export class WyToast extends LitElement {
       grid-row: 1;
       align-self: start;
       justify-self: end;
-      width: 32px;
-      height: 32px;
-      color: var(--white);
-      transform: translate(8px, -8px);
+      width: 28px;
+      height: 28px;
+      transform: translate(4px, -4px);
     }
 
-    .toast-container.has-actions .dismiss .icon {
-      font-size: 20px;
-    }
-
-    .action:focus-visible,
     .dismiss:focus-visible {
-      outline: 2px solid currentColor;
+      outline: 2px solid rgba(247, 244, 238, 0.72);
       outline-offset: 2px;
     }
 
     @media (max-width: 480px) {
       .toast-container {
-        width: min(100%, 480px);
+        width: calc(100vw - 32px);
         flex-wrap: wrap;
         justify-content: center;
-        padding: 16px;
+        padding: 14px 16px;
       }
 
       .actions {
@@ -246,17 +272,16 @@ export class WyToast extends LitElement {
       }
 
       .toast-container.has-actions {
-        width: calc(100vw - 24px);
+        width: calc(100vw - 32px);
         grid-template-columns: 1fr auto;
         gap: 16px 12px;
         padding: 16px;
-        border-radius: 0;
         justify-content: initial;
       }
 
       .toast-container.has-actions .actions {
         grid-template-columns: 1fr;
-        gap: 14px;
+        gap: 10px;
       }
 
       .toast-container.has-actions .action {
@@ -264,13 +289,9 @@ export class WyToast extends LitElement {
       }
 
       .toast-container.has-actions .dismiss {
-        width: 32px;
-        height: 32px;
-        transform: translate(8px, -8px);
-      }
-
-      .toast-container.has-actions .dismiss .icon {
-        font-size: 20px;
+        width: 28px;
+        height: 28px;
+        transform: translate(4px, -4px);
       }
     }
   `;

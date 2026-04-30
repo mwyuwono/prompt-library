@@ -4,6 +4,6 @@
  * Loads the committed local bundle generated from components/ui.
  */
 
-import '../web-components.js?v=20260430-mobile';
+import '../web-components.js?v=20260430-toast';
 
 console.log('[Components] prompts-library local web components registered');
