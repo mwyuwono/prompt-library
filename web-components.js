@@ -3179,13 +3179,13 @@ __publicField(WyCopyConfirm, "styles", i`
     :host {
       display: block;
       position: fixed;
-      left: 16px;
-      right: 16px;
+      left: 50%;
+      width: min(80vw, 420px);
       bottom: calc(32px + env(safe-area-inset-bottom, 0px));
       z-index: 3000;
       pointer-events: none;
       opacity: 0;
-      transform: translateY(16px) scale(0.98);
+      transform: translateX(-50%) translateY(16px) scale(0.98);
       transform-origin: 50% 100%;
       transition:
         transform 380ms cubic-bezier(0.34, 1.56, 0.64, 1),
@@ -3195,41 +3195,34 @@ __publicField(WyCopyConfirm, "styles", i`
 
     :host([show]) {
       opacity: 1;
-      transform: translateY(0) scale(1);
+      transform: translateX(-50%) translateY(0) scale(1);
       pointer-events: auto;
     }
 
     @media (min-width: 640px) {
       :host {
-        left: 50%;
-        right: auto;
-        width: min(420px, calc(100vw - 32px));
-        transform: translateX(-50%) translateY(16px) scale(0.98);
-      }
-
-      :host([show]) {
-        transform: translateX(-50%) translateY(0) scale(1);
+        width: min(80vw, 420px);
       }
     }
 
     .container {
-      background-color: rgba(26, 26, 26, 0.62);
+      background-color: rgba(230, 177, 145, 0.9);
       -webkit-backdrop-filter: blur(20px) saturate(140%);
       backdrop-filter: blur(20px) saturate(140%);
-      color: var(--paper, #F7F4EE);
+      color: var(--ink, #1A1A1A);
       padding: 16px;
       border-radius: 8px;
       box-shadow:
-        inset 0 1px 0 rgba(247, 244, 238, 0.10),
+        inset 0 1px 0 rgba(247, 244, 238, 0.28),
         0 18px 48px -12px rgba(13, 13, 13, 0.45),
         0 6px 16px -6px rgba(13, 13, 13, 0.28);
-      outline: 1px solid rgba(247, 244, 238, 0.12);
+      outline: 1px solid color-mix(in srgb, var(--ink, #1A1A1A) 16%, transparent);
       outline-offset: -1px;
     }
 
     @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
       .container {
-        background-color: rgba(26, 26, 26, 0.92);
+        background-color: rgb(230, 177, 145);
       }
     }
 
@@ -3243,7 +3236,7 @@ __publicField(WyCopyConfirm, "styles", i`
 
     .title {
       margin: 0;
-      color: #FFFFFF;
+      color: var(--ink, #1A1A1A);
       font-family: var(--ff-sans, var(--font-body, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif));
       font-size: 18px;
       font-weight: 600;
@@ -3258,7 +3251,7 @@ __publicField(WyCopyConfirm, "styles", i`
       border: 0;
       border-radius: 4px;
       background: transparent;
-      color: #FFFFFF;
+      color: var(--ink, #1A1A1A);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -3268,12 +3261,12 @@ __publicField(WyCopyConfirm, "styles", i`
     }
 
     .close:hover {
-      background-color: rgba(247, 244, 238, 0.08);
+      background-color: color-mix(in srgb, var(--ink, #1A1A1A) 8%, transparent);
     }
 
     .close:focus-visible,
     .chip:focus-visible {
-      outline: 2px solid rgba(247, 244, 238, 0.64);
+      outline: 2px solid color-mix(in srgb, var(--ink, #1A1A1A) 62%, transparent);
       outline-offset: 2px;
     }
 
@@ -3306,10 +3299,10 @@ __publicField(WyCopyConfirm, "styles", i`
       padding: 14px 18px;
       border: 0;
       border-radius: 999px;
-      background-color: #000000;
-      color: rgba(247, 244, 238, 0.96);
+      background-color: color-mix(in srgb, var(--paper, #F7F4EE) 58%, transparent);
+      color: var(--ink, #1A1A1A);
       font-family: var(--ff-sans, var(--font-body, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif));
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 500;
       line-height: 1.2;
       letter-spacing: 0.04em;
@@ -3321,7 +3314,7 @@ __publicField(WyCopyConfirm, "styles", i`
     }
 
     .chip:hover {
-      background-color: #1A1A1A;
+      background-color: color-mix(in srgb, var(--paper, #F7F4EE) 72%, transparent);
     }
 
     .chip:active {
@@ -3331,13 +3324,7 @@ __publicField(WyCopyConfirm, "styles", i`
     @media (prefers-reduced-motion: reduce) {
       :host {
         transition: opacity 200ms linear;
-        transform: translateY(0) scale(1);
-      }
-
-      @media (min-width: 640px) {
-        :host {
-          transform: translateX(-50%) translateY(0) scale(1);
-        }
+        transform: translateX(-50%) translateY(0) scale(1);
       }
     }
   `);
