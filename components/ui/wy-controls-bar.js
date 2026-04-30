@@ -655,6 +655,7 @@ export class WyControlsBar extends LitElement {
         background: transparent;
         color: transparent;
         border-radius: var(--wy-controls-radius, 999px);
+        font-size: 16px;
         cursor: pointer;
         transition:
           width 250ms cubic-bezier(0.2, 0, 0, 1),
@@ -921,10 +922,18 @@ export class WyControlsBar extends LitElement {
         this.shadowRoot?.querySelector('.search-input')?.focus();
     }
 
-    _closeMobileSearch() {
-        this.searchValue = '';
+    dismissSearch({ clear = false } = {}) {
+        const searchInput = this.shadowRoot?.querySelector('.search-input');
+        if (clear) {
+            this.searchValue = '';
+            this._notifyChange();
+        }
         this._mobileSearchOpen = false;
-        this._notifyChange();
+        searchInput?.blur();
+    }
+
+    _closeMobileSearch() {
+        this.dismissSearch({ clear: true });
     }
 
     _setViewMode(mode) {

@@ -437,6 +437,15 @@ Server will start on http://localhost:3001`;
         return this.controlsBar?.shadowRoot?.querySelector('.search-input');
     }
 
+    dismissSearchForSelection() {
+        if (typeof this.controlsBar?.dismissSearch === 'function') {
+            this.controlsBar.dismissSearch();
+            return;
+        }
+
+        this.getControlsSearchInput()?.blur();
+    }
+
     isSearchActive() {
         return Boolean(this.searchTerm && this.searchTerm.trim());
     }
@@ -472,24 +481,8 @@ Server will start on http://localhost:3001`;
         this.filteredPrompts = this.prompts.filter(prompt => {
             const searchLower = this.searchTerm;
 
-            // Check if search term matches title, description, or category
-            let matchesSearch = !searchLower ||
-                prompt.title.toLowerCase().includes(searchLower) ||
-                prompt.description.toLowerCase().includes(searchLower) ||
-                prompt.category.toLowerCase().includes(searchLower);
-
-            // Also check template content (handle both single template and variations)
-            if (!matchesSearch && searchLower) {
-                if (prompt.template) {
-                    matchesSearch = prompt.template.toLowerCase().includes(searchLower);
-                }
-                // Search within all variation templates
-                if (!matchesSearch && prompt.variations) {
-                    matchesSearch = prompt.variations.some(v =>
-                        v.template && v.template.toLowerCase().includes(searchLower)
-                    );
-                }
-            }
+            const matchesSearch = !searchLower ||
+                prompt.title.toLowerCase().includes(searchLower);
 
             if (isSearchActive) {
                 return matchesSearch;
@@ -899,7 +892,7 @@ Server will start on http://localhost:3001`;
                 <div class="prompt-list-item-header">
                     <h3 class="prompt-list-item-title">${this.highlightText(prompt.title, this.searchTerm)}</h3>
                 </div>
-                <div class="prompt-list-item-description ${hiddenClass}">${this.renderDescription(prompt.description, this.searchTerm)}</div>
+                <div class="prompt-list-item-description ${hiddenClass}">${this.renderDescription(prompt.description)}</div>
             </div>
             <div class="prompt-list-item-meta">
                 <span class="variable-count-badge ${hiddenClass}">${variableCount > 0 ? `${variableCount} variable${variableCount > 1 ? 's' : ''}` : 'No variables'}</span>
@@ -917,6 +910,7 @@ Server will start on http://localhost:3001`;
      */
     attachListItemEventListeners(item, index) {
         const openModal = () => {
+            this.dismissSearchForSelection();
             this.openPromptModal(index);
         };
 
@@ -1087,7 +1081,7 @@ Server will start on http://localhost:3001`;
                 <div>
                     ${headerRowHTML}
                     <h3 class="card-title">${this.highlightText(prompt.title, this.searchTerm)}</h3>
-                    <div class="card-description ${hiddenClass}">${this.renderDescription(prompt.description, this.searchTerm)}</div>
+                    <div class="card-description ${hiddenClass}">${this.renderDescription(prompt.description)}</div>
                 </div>
                 <div class="card-footer">
                     <div class="card-arrow-button">
@@ -1155,7 +1149,10 @@ Server will start on http://localhost:3001`;
      * Attach event listeners to card elements
      */
     attachCardEventListeners(card, index) {
-        const openPrompt = () => this.openPromptModal(index);
+        const openPrompt = () => {
+            this.dismissSearchForSelection();
+            this.openPromptModal(index);
+        };
 
         card.addEventListener('click', (event) => {
             event.preventDefault();
