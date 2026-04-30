@@ -3206,8 +3206,8 @@ __publicField(WyCopyConfirm, "styles", i`
     }
 
     .container {
-      background-color: var(--accent-terracotta, #C18A4D);
-      color: var(--ink, #1A1A1A);
+      background-color: var(--ink, #1A1A1A);
+      color: var(--paper, #F7F4EE);
       padding: 16px;
       border-radius: 8px;
       box-shadow:
@@ -3225,7 +3225,7 @@ __publicField(WyCopyConfirm, "styles", i`
 
     .title {
       margin: 0;
-      color: var(--ink, #1A1A1A);
+      color: var(--paper, #F7F4EE);
       font-family: var(--ff-sans, var(--font-body, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif));
       font-size: 18px;
       font-weight: 600;
@@ -3240,7 +3240,7 @@ __publicField(WyCopyConfirm, "styles", i`
       border: 0;
       border-radius: 4px;
       background: transparent;
-      color: var(--ink, #1A1A1A);
+      color: var(--paper, #F7F4EE);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -3250,12 +3250,12 @@ __publicField(WyCopyConfirm, "styles", i`
     }
 
     .close:hover {
-      background-color: color-mix(in srgb, var(--ink, #1A1A1A) 8%, transparent);
+      background-color: color-mix(in srgb, var(--paper, #F7F4EE) 10%, transparent);
     }
 
     .close:focus-visible,
     .chip:focus-visible {
-      outline: 2px solid color-mix(in srgb, var(--ink, #1A1A1A) 62%, transparent);
+      outline: 2px solid color-mix(in srgb, var(--paper, #F7F4EE) 62%, transparent);
       outline-offset: 2px;
     }
 
