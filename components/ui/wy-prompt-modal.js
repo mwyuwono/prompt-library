@@ -457,12 +457,48 @@ export class WyPromptModal extends LitElement {
         display: flex;
         flex-direction: column;
         gap: var(--spacing-md, 16px);
-        background-color: var(--md-sys-color-surface-container-high);
-        border-radius: var(--md-sys-shape-corner-medium, 12px);
+        background-color: var(--md-sys-color-surface-container-low);
+        border: 1px solid var(--paper-edge, #DDD6C8);
+        border-radius: var(--md-sys-shape-corner-medium, 0);
     }
 
     .variation-selector-container wy-dropdown {
         width: 100%;
+    }
+
+    .variation-select-native {
+        appearance: none;
+        -webkit-appearance: none;
+        width: 100%;
+        min-height: 56px;
+        padding: 0 calc(var(--spacing-xl, 32px) + 20px) 0 var(--spacing-lg, 24px);
+        border: 1px solid var(--paper-edge, #DDD6C8);
+        border-radius: 0;
+        background-color: var(--md-sys-color-surface-container-lowest, #FDFBF7);
+        color: var(--md-sys-color-on-surface, #1D1B20);
+        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-size: 0.9375rem;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    .variation-select-wrap {
+        position: relative;
+    }
+
+    .variation-select-wrap .material-symbols-outlined {
+        position: absolute;
+        right: var(--spacing-md, 16px);
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--md-sys-color-on-surface-variant, #49454E);
+        pointer-events: none;
+        font-size: 22px;
+    }
+
+    .variation-select-native:focus-visible {
+        outline: 3px solid var(--wy-prompt-modal-focus-ring, color-mix(in srgb, var(--md-sys-color-primary) 18%, transparent));
+        outline-offset: 2px;
     }
 
     .variation-description-panel {
@@ -717,10 +753,23 @@ export class WyPromptModal extends LitElement {
         border-radius: 0;
       }
       .header { padding: var(--spacing-lg, 24px) var(--spacing-md, 16px) var(--spacing-md, 16px); }
-      .header-main { flex-direction: column; align-items: flex-start; gap: var(--spacing-md, 16px); }
+      .header-top { align-items: flex-start; }
+      .header-main { flex-direction: column; align-items: flex-start; gap: var(--spacing-sm, 8px); margin-bottom: var(--spacing-sm, 8px); }
+      .header-actions-left { flex-wrap: wrap; }
+      .labeled-btn { min-width: 0; }
+      .labeled-btn.primary { padding-right: 12px; }
       .title-group h2 { font-size: 1.75rem; }
       .tabs-container { padding: 0; } /* wy-tabs handles its own mobile padding */
-      .reference-image { margin: 0 var(--spacing-md, 16px) var(--spacing-md, 16px); }
+      .reference-image { margin: 0 var(--spacing-md, 16px) var(--spacing-sm, 8px); }
+      .reference-image img { aspect-ratio: 4 / 3; max-height: 260px; }
+      .variation-selector-container {
+        margin: var(--spacing-sm, 8px) var(--spacing-md, 16px) 0;
+        padding: var(--spacing-sm, 12px);
+        gap: var(--spacing-sm, 8px);
+      }
+      .variation-description-heading {
+        font-size: 0.6875rem;
+      }
       .body { padding: var(--spacing-md, 16px); }
       
       /* Tighter button spacing on mobile */
@@ -1007,13 +1056,20 @@ export class WyPromptModal extends LitElement {
               <!-- Standard mode -->
               ${this.variations.length > 1 ? html`
                 <div class="variation-selector-container">
-                  <wy-dropdown
-                    label="STYLE"
-                    .value="${activeVariation?.id || ''}"
-                    .options="${this.variations.map(v => ({ value: v.id, label: v.name }))}"
-                    variant="subtle"
-                    @change="${this._handleVariationDropdownChange}"
-                  ></wy-dropdown>
+                  <label class="variation-description-heading" for="variation-select">Style</label>
+                  <div class="variation-select-wrap">
+                    <select
+                      id="variation-select"
+                      class="variation-select-native"
+                      .value="${activeVariation?.id || ''}"
+                      @change="${this._handleVariationSelectChange}"
+                    >
+                      ${this.variations.map(variation => html`
+                        <option value="${variation.id}">${variation.name}</option>
+                      `)}
+                    </select>
+                    <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
+                  </div>
                   ${activeVariation?.description ? html`
                     <wy-info-panel class="variation-description-panel">
                       <p class="variation-description-heading">Variant: ${activeVariation.name}</p>
@@ -1149,6 +1205,14 @@ export class WyPromptModal extends LitElement {
 
   _handleVariationDropdownChange(e) {
     const selectedId = e.detail.value;
+    this._setVariationById(selectedId);
+  }
+
+  _handleVariationSelectChange(e) {
+    this._setVariationById(e.target.value);
+  }
+
+  _setVariationById(selectedId) {
     const index = this.variations.findIndex(v => v.id === selectedId);
     if (index !== -1) {
       this.activeVariationIndex = index;

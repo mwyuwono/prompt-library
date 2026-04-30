@@ -48,8 +48,8 @@ export class WyDropdown extends LitElement {
             --wy-dropdown-label-color: #71717A;
             --wy-dropdown-text-color: #52525B;
             --wy-dropdown-icon-color: #52525B;
-            --wy-dropdown-bg: var(--md-sys-color-surface, #F5F2EA);
-            --wy-dropdown-border: #E5E7EB;
+            --wy-dropdown-bg: var(--md-sys-color-surface-container-lowest, #FDFBF7);
+            --wy-dropdown-border: var(--md-sys-color-outline-variant, #D7D3C8);
             --wy-dropdown-border-hover: var(--md-sys-color-outline-variant, #D7D3C8);
             --wy-dropdown-menu-bg: var(--md-sys-color-surface-container-high, #EBE5DE);
             --wy-dropdown-item-hover-bg: var(--md-sys-color-surface-container-high, #EBE5DE);
@@ -58,6 +58,7 @@ export class WyDropdown extends LitElement {
         /* Subtle variant - lighter backgrounds for modal integration */
         :host([variant="subtle"]) {
             --wy-dropdown-bg: var(--md-sys-color-surface-container-low, #FDFBF7);  /* Button bg - lighter than modal */
+            --wy-dropdown-border: var(--md-sys-color-outline-variant, #D7D3C8);
             --wy-dropdown-menu-bg: var(--md-sys-color-surface-container-low, #FDFBF7);  /* Menu bg */
             --wy-dropdown-item-hover-bg: var(--md-sys-color-surface-container, #F5F2EA);  /* Item hover */
         }
@@ -108,8 +109,8 @@ export class WyDropdown extends LitElement {
             justify-content: space-between;
             padding: var(--spacing-md, 16px) var(--spacing-lg, 24px);
             background-color: var(--wy-dropdown-bg);
-            border: 1px solid transparent;
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
+            border: 1px solid var(--wy-dropdown-border);
+            border-radius: var(--md-sys-shape-corner-medium, 12px);
             cursor: pointer;
             transition: border-color var(--md-sys-motion-duration-short4, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
             text-align: left;

@@ -231,6 +231,23 @@ wy-button:not(:defined) {
 .prompt-list-item:hover   { opacity: 0.6; }
 .prompt-list-item:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
 
+.prompt-list-item-thumbnail {
+    width: clamp(88px, 16vw, 148px);
+    aspect-ratio: 4 / 3;
+    flex: 0 0 auto;
+    overflow: hidden;
+    align-self: flex-start;
+    background-color: var(--paper-deep);
+    border: var(--hair) solid var(--paper-edge);
+}
+.prompt-list-item-thumbnail img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.92);
+}
+
 .prompt-list-item-content {
     flex: 1; display: flex; flex-direction: column;
     gap: var(--space-xs); min-width: 0;
@@ -809,7 +826,12 @@ mark {
     .btn-filters-text  { display: none; }
     .header-actions    { gap: var(--space-sm); }
 
-    .card-thumbnail    { display: none; }
+    .card-thumbnail {
+        display: block;
+        aspect-ratio: 4 / 3;
+        margin-bottom: var(--space-md);
+        max-height: 240px;
+    }
 
     .controls-bar {
         position: relative; z-index: 100;
@@ -822,8 +844,23 @@ mark {
 
     .search-hint  { display: none; }
     .prompt-grid  { grid-template-columns: 1fr; padding: 0 16px var(--s-7); }
-    .prompt-card  { padding: var(--space-xl) 0; height: auto; }
+    .prompt-card  { padding: var(--space-lg) 0; height: auto; }
     .prompt-list  { padding: var(--space-sm) 16px var(--s-7); }
+    .prompt-list-item {
+        display: grid;
+        grid-template-columns: minmax(88px, 34%) 1fr;
+        gap: var(--space-md);
+        padding: var(--space-md) 0;
+    }
+    .prompt-list-item:not(.has-image) {
+        display: flex;
+    }
+    .prompt-list-item-thumbnail {
+        width: 100%;
+        min-width: 0;
+        max-height: 132px;
+    }
+    .prompt-list-item-meta { display: none; }
 
     .card-actions      { flex-direction: column; }
     .card-actions .btn { width: 100%; }
@@ -838,7 +875,15 @@ mark {
 
     .card-content  { padding: 0; }
     .card-category { font-size: var(--fs-ui-xs); padding: 0; }
-    .card-title    { font-size: 1.5rem; }
+    .card-title,
+    .prompt-list-item-title { font-size: 1.5rem; }
+    .prompt-list-item {
+        grid-template-columns: minmax(80px, 36%) 1fr;
+        gap: var(--space-sm);
+    }
+    .prompt-list-item-thumbnail {
+        max-height: 116px;
+    }
 
     .btn {
         padding: 0.625rem 1.25rem; min-height: 48px; touch-action: manipulation;

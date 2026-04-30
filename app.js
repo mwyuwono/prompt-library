@@ -887,7 +887,14 @@ Server will start on http://localhost:3001`;
         const variableCount = prompt.variables?.length || 0;
         const hiddenClass = this.showDetails ? '' : 'hidden';
 
+        const imageHTML = promptImage ? `
+            <div class="prompt-list-item-thumbnail">
+                <img src="${promptImage}" alt="${this.escapeHTML(prompt.title)}">
+            </div>
+        ` : '';
+
         item.innerHTML = `
+            ${imageHTML}
             <div class="prompt-list-item-content">
                 <div class="prompt-list-item-header">
                     <h3 class="prompt-list-item-title">${this.highlightText(prompt.title, this.searchTerm)}</h3>
@@ -1141,7 +1148,7 @@ Server will start on http://localhost:3001`;
      */
     getActiveVariationImage(prompt) {
         const activeVariation = this.getActiveVariation(prompt);
-        return activeVariation?.image || '';
+        return activeVariation?.image || prompt.image || prompt.variations?.[0]?.image || '';
     }
 
     /**
