@@ -83,14 +83,14 @@ export class WyToast extends LitElement {
     }
 
     .toast-container.has-actions {
-      width: min(742px, calc(100vw - 32px));
+      width: min(420px, calc(100vw - 32px));
       box-sizing: border-box;
       display: grid;
       grid-template-columns: 1fr auto;
       align-items: start;
-      gap: 33px 24px;
-      padding: 44px 34px 42px;
-      border-radius: 26px;
+      gap: 16px 12px;
+      padding: 16px;
+      border-radius: 0;
     }
 
     .icon {
@@ -142,9 +142,9 @@ export class WyToast extends LitElement {
       grid-column: 1;
       grid-row: 1;
       color: var(--white);
-      font-size: clamp(2.5rem, 7vw, 3.25rem);
+      font-size: var(--fs-body, 1rem);
       font-weight: 500;
-      line-height: 1.1;
+      line-height: var(--lh-snug, 1.2);
     }
 
     .actions {
@@ -157,8 +157,8 @@ export class WyToast extends LitElement {
       grid-column: 1 / -1;
       grid-row: 2;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1.18fr);
-      gap: 28px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
       width: 100%;
     }
 
@@ -180,12 +180,12 @@ export class WyToast extends LitElement {
     }
 
     .toast-container.has-actions .action {
-      min-height: clamp(72px, 12vw, 100px);
-      padding: 0 36px;
+      min-height: 44px;
+      padding: 0 16px;
       border-radius: var(--radius-pill, 999px);
       background-color: var(--white);
       color: var(--ink);
-      font-size: clamp(2rem, 6vw, 3rem);
+      font-size: var(--fs-ui, 0.875rem);
       font-weight: 500;
       min-width: 0;
     }
@@ -215,14 +215,14 @@ export class WyToast extends LitElement {
       grid-row: 1;
       align-self: start;
       justify-self: end;
-      width: 64px;
-      height: 64px;
+      width: 32px;
+      height: 32px;
       color: var(--white);
-      transform: translate(8px, -2px);
+      transform: translate(8px, -8px);
     }
 
     .toast-container.has-actions .dismiss .icon {
-      font-size: 52px;
+      font-size: 20px;
     }
 
     .action:focus-visible,
@@ -248,9 +248,9 @@ export class WyToast extends LitElement {
       .toast-container.has-actions {
         width: calc(100vw - 24px);
         grid-template-columns: 1fr auto;
-        gap: 32px 16px;
-        padding: 28px 20px 24px;
-        border-radius: 22px;
+        gap: 16px 12px;
+        padding: 16px;
+        border-radius: 0;
         justify-content: initial;
       }
 
@@ -260,17 +260,17 @@ export class WyToast extends LitElement {
       }
 
       .toast-container.has-actions .action {
-        min-height: 68px;
+        min-height: 44px;
       }
 
       .toast-container.has-actions .dismiss {
-        width: 52px;
-        height: 52px;
-        transform: translate(6px, -2px);
+        width: 32px;
+        height: 32px;
+        transform: translate(8px, -8px);
       }
 
       .toast-container.has-actions .dismiss .icon {
-        font-size: 44px;
+        font-size: 20px;
       }
     }
   `;

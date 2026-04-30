@@ -920,7 +920,6 @@ Server will start on http://localhost:3001`;
                     <h3 class="prompt-list-item-title">${this.highlightText(prompt.title, this.searchTerm)}</h3>
                 </div>
                 <div class="prompt-list-item-description ${descriptionHiddenClass}">${this.renderDescription(prompt.description)}</div>
-                ${this.getInstructionsHTML(prompt.instructions, 'prompt-list-item-instructions', hiddenClass)}
             </div>
             <div class="prompt-list-item-meta">
                 <span class="variable-count-badge ${hiddenClass}">${variableCount > 0 ? `${variableCount} variable${variableCount > 1 ? 's' : ''}` : 'No variables'}</span>
@@ -1112,7 +1111,6 @@ Server will start on http://localhost:3001`;
                     ${headerRowHTML}
                     <h3 class="card-title">${this.highlightText(prompt.title, this.searchTerm)}</h3>
                     <div class="card-description ${descriptionHiddenClass}">${this.renderDescription(prompt.description)}</div>
-                    ${this.getInstructionsHTML(prompt.instructions, 'card-instructions', hiddenClass)}
                 </div>
                 <div class="card-footer">
                     <div class="card-arrow-button">
