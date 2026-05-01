@@ -2216,10 +2216,11 @@ __publicField(WyControlsBar, "styles", i`
       width: var(--wy-controls-floating-width, auto);
       max-width: var(--wy-controls-floating-max-width, min(900px, calc(100% - 32px)));
       background: var(--paper, #F7F4EE);
-      border: 1px solid var(--paper-edge, #DDD6C8);
-      border-radius: var(--wy-controls-radius, 999px);
-      padding: var(--s-2, 8px) var(--s-5, 24px);
-      box-shadow: 0 12px 40px rgba(26, 26, 26, 0.08);
+      border: 0;
+      border-bottom: 1px solid var(--paper-edge, #DDD6C8);
+      border-radius: 0;
+      padding: var(--wy-controls-padding-scrolled, var(--s-2, 8px) var(--s-5, 24px));
+      box-shadow: none;
       transition:
         top 300ms cubic-bezier(0.2, 0, 0, 1),
         transform 300ms cubic-bezier(0.2, 0, 0, 1),
@@ -3279,6 +3280,17 @@ __publicField(WyCopyConfirm, "styles", i`
       gap: 10px;
     }
 
+    @media (min-width: 640px) {
+      .chips {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+
+      .chip {
+        flex: 1 1 0;
+      }
+    }
+
     .chip {
       display: flex;
       align-items: center;
@@ -3288,7 +3300,7 @@ __publicField(WyCopyConfirm, "styles", i`
       padding: 14px 18px;
       border: 0;
       border-radius: 999px;
-      background-color: color-mix(in srgb, var(--paper, #F7F4EE) 58%, transparent);
+      background-color: var(--paper, #F7F4EE);
       color: var(--ink, #1A1A1A);
       font-family: var(--ff-sans, var(--font-body, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif));
       font-size: 16px;
@@ -3303,7 +3315,7 @@ __publicField(WyCopyConfirm, "styles", i`
     }
 
     .chip:hover {
-      background-color: color-mix(in srgb, var(--paper, #F7F4EE) 72%, transparent);
+      background-color: var(--paper-deep, #EEE8DD);
     }
 
     .chip:active {

@@ -121,7 +121,7 @@ class PromptLibrary {
         }
 
         const headerRect = this.headerTop.getBoundingClientRect();
-        const edgeGap = window.matchMedia('(max-width: 900px)').matches ? 12 : 20;
+        const edgeGap = 0;
         const viewportWidth = document.documentElement.clientWidth || window.innerWidth;
         const controlsHeight = this.controlsBar.offsetHeight || 60;
         const top = Math.max(edgeGap, headerRect.top + ((headerRect.height - controlsHeight) / 2));

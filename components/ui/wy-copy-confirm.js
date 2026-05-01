@@ -148,6 +148,17 @@ export class WyCopyConfirm extends LitElement {
       gap: 10px;
     }
 
+    @media (min-width: 640px) {
+      .chips {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+
+      .chip {
+        flex: 1 1 0;
+      }
+    }
+
     .chip {
       display: flex;
       align-items: center;
@@ -157,7 +168,7 @@ export class WyCopyConfirm extends LitElement {
       padding: 14px 18px;
       border: 0;
       border-radius: 999px;
-      background-color: color-mix(in srgb, var(--paper, #F7F4EE) 58%, transparent);
+      background-color: var(--paper, #F7F4EE);
       color: var(--ink, #1A1A1A);
       font-family: var(--ff-sans, var(--font-body, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif));
       font-size: 16px;
@@ -172,7 +183,7 @@ export class WyCopyConfirm extends LitElement {
     }
 
     .chip:hover {
-      background-color: color-mix(in srgb, var(--paper, #F7F4EE) 72%, transparent);
+      background-color: var(--paper-deep, #EEE8DD);
     }
 
     .chip:active {

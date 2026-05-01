@@ -246,10 +246,11 @@ export class WyControlsBar extends LitElement {
       width: var(--wy-controls-floating-width, auto);
       max-width: var(--wy-controls-floating-max-width, min(900px, calc(100% - 32px)));
       background: var(--paper, #F7F4EE);
-      border: 1px solid var(--paper-edge, #DDD6C8);
-      border-radius: var(--wy-controls-radius, 999px);
-      padding: var(--s-2, 8px) var(--s-5, 24px);
-      box-shadow: 0 12px 40px rgba(26, 26, 26, 0.08);
+      border: 0;
+      border-bottom: 1px solid var(--paper-edge, #DDD6C8);
+      border-radius: 0;
+      padding: var(--wy-controls-padding-scrolled, var(--s-2, 8px) var(--s-5, 24px));
+      box-shadow: none;
       transition:
         top 300ms cubic-bezier(0.2, 0, 0, 1),
         transform 300ms cubic-bezier(0.2, 0, 0, 1),

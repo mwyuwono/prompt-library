@@ -364,7 +364,7 @@ body.modal-open {
     --wy-controls-category-max-width-scrolled: 100%;
     --wy-controls-radius: var(--radius-pill);
 }
-.controls-bar[data-scrolled] { border-radius: var(--radius-pill); }
+.controls-bar[data-scrolled] { border-bottom-color: var(--paper-edge); }
 @media (min-width: 769px) { .controls-bar { --wy-controls-container-padding-desktop: 0; } }
 
 .prompt-card, .prompt-list-item, .category-section {
