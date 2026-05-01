@@ -2217,7 +2217,6 @@ __publicField(WyControlsBar, "styles", i`
       max-width: var(--wy-controls-floating-max-width, min(900px, calc(100% - 32px)));
       background: var(--paper, #F7F4EE);
       border: 0;
-      border-bottom: 1px solid var(--paper-edge, #DDD6C8);
       border-radius: 0;
       padding: var(--wy-controls-padding-scrolled, var(--s-2, 8px) var(--s-5, 24px));
       box-shadow: none;
