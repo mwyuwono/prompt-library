@@ -757,7 +757,7 @@ Server will start on http://localhost:3001`;
 
         cards.forEach(card => {
             card.style.gridRowEnd = '';
-            const cardHeight = card.scrollHeight || card.getBoundingClientRect().height;
+            const cardHeight = this.getMasonryCardContentHeight(card);
             const rowSpan = Math.ceil((cardHeight + rowGap) / (rowHeight + rowGap));
             card.style.gridRowEnd = `span ${Math.max(1, rowSpan)}`;
         });
@@ -781,6 +781,22 @@ Server will start on http://localhost:3001`;
             card.dataset.masonryColumn = cardLeft > firstColumnLeft + 1 ? '2' : '1';
             card.dataset.masonryTop = String(Math.abs(card.offsetTop - topEdge) <= 1);
         });
+    }
+
+    getMasonryCardContentHeight(card) {
+        const style = window.getComputedStyle(card);
+        const paddingTop = parseFloat(style.paddingTop) || 0;
+        const paddingBottom = parseFloat(style.paddingBottom) || 0;
+        const childrenHeight = Array.from(card.children).reduce((height, child) => {
+            const childStyle = window.getComputedStyle(child);
+            if (childStyle.position === 'absolute') return height;
+            const box = child.getBoundingClientRect();
+            const marginTop = parseFloat(childStyle.marginTop) || 0;
+            const marginBottom = parseFloat(childStyle.marginBottom) || 0;
+            return height + box.height + marginTop + marginBottom;
+        }, 0);
+
+        return Math.max(card.scrollHeight, paddingTop + childrenHeight + paddingBottom);
     }
 
     clearMasonryLayout() {
