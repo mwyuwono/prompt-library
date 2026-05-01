@@ -367,7 +367,6 @@ export class WyPromptModal extends LitElement {
     /* TABS */
     .tabs-container {
         padding: 0 var(--spacing-xl, 32px);
-        border-bottom: 1px solid var(--md-sys-color-outline-variant);
         display: flex;
         align-items: center;
         gap: var(--spacing-xl, 32px);

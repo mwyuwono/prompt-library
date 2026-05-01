@@ -177,7 +177,6 @@ wy-button:not(:defined) {
     column-gap: 0;
     row-gap: 0;
     padding: 0 var(--outer-gutter) var(--s-9);
-    border-top: var(--hair) solid var(--rule);
     opacity: 0;
     transition: opacity var(--dur-2) var(--ease);
 }
@@ -347,7 +346,6 @@ body.modal-open {
     box-sizing: border-box;
     background-color: var(--paper);
     border-top: none;
-    border-bottom: var(--hair) solid var(--rule);
     border-radius: 0;
     --wy-controls-bar-bg: var(--ink);
     --wy-controls-bar-fg: var(--paper);
@@ -364,7 +362,6 @@ body.modal-open {
     --wy-controls-category-max-width-scrolled: 100%;
     --wy-controls-radius: var(--radius-pill);
 }
-.controls-bar[data-scrolled] { border-bottom-color: var(--paper-edge); }
 @media (min-width: 769px) { .controls-bar { --wy-controls-container-padding-desktop: 0; } }
 
 .prompt-card, .prompt-list-item, .category-section {
