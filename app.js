@@ -757,7 +757,7 @@ Server will start on http://localhost:3001`;
 
         cards.forEach(card => {
             card.style.gridRowEnd = '';
-            const cardHeight = card.getBoundingClientRect().height;
+            const cardHeight = card.scrollHeight || card.getBoundingClientRect().height;
             const rowSpan = Math.ceil((cardHeight + rowGap) / (rowHeight + rowGap));
             card.style.gridRowEnd = `span ${Math.max(1, rowSpan)}`;
         });

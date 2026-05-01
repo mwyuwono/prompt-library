@@ -2200,8 +2200,8 @@ __publicField(WyControlsBar, "styles", i`
     :host::after {
       content: '';
       position: absolute;
-      left: var(--s-7, 32px);
-      right: var(--s-7, 32px);
+      left: var(--wy-controls-rule-inset, var(--s-7, 32px));
+      right: var(--wy-controls-rule-inset, var(--s-7, 32px));
       bottom: 0;
       height: 1px;
       background: var(--paper-edge, #E8E2DA);
