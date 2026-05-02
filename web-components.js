@@ -1857,6 +1857,14 @@ var WyControlsBar = class extends i4 {
     clearTimeout(this._returnTimer);
     this._removeScrollListener();
   }
+  _bindChipsTrackScroll() {
+    const track = this.shadowRoot?.querySelector(".chips-track");
+    if (!track || this._boundChipsTrack === track) return;
+    this._boundChipsTrack = track;
+    track.addEventListener("scroll", () => {
+      track.classList.toggle("is-chips-scrolled", track.scrollLeft > 0);
+    }, { passive: true });
+  }
   _handleViewportChange() {
     this._handleScroll();
     this._syncScrolledHostSurface();
@@ -2006,6 +2014,7 @@ var WyControlsBar = class extends i4 {
         this.removeAttribute("data-mobile-search");
       }
     }
+    this._bindChipsTrackScroll();
   }
   render() {
     this._syncStateAttributes();
@@ -2487,6 +2496,11 @@ __publicField(WyControlsBar, "styles", i`
       -webkit-overflow-scrolling: touch;
       -webkit-mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
       mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
+    }
+
+    .chips-track.is-chips-scrolled {
+      -webkit-mask-image: linear-gradient(to right, transparent 0, black 28px, black calc(100% - 28px), transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0, black 28px, black calc(100% - 28px), transparent 100%);
     }
 
     .chips-track::-webkit-scrollbar {
