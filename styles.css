@@ -184,6 +184,12 @@ wy-button:not(:defined) {
 @media (min-width: 900px) { .prompt-grid { grid-template-columns: 1fr 1fr; } }
 .prompt-grid > * { min-width: 0; }
 
+.masonry-filler {
+    background: var(--paper);
+    min-height: 0;
+    pointer-events: none;
+}
+
 /* ============================== LIST VIEW ============================== */
 
 .prompt-list {

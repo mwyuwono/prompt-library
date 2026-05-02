@@ -744,6 +744,7 @@ Server will start on http://localhost:3001`;
         }
 
         const isSingleColumn = window.matchMedia('(max-width: 899px)').matches;
+        this.clearMasonryFillers();
         const cards = Array.from(this.promptGrid.querySelectorAll('.prompt-card'));
 
         if (isSingleColumn || cards.length === 0) {
@@ -764,6 +765,7 @@ Server will start on http://localhost:3001`;
 
         requestAnimationFrame(() => {
             this.updateMasonryCardRules(cards);
+            this.syncMasonryFillers(cards, rowHeight, rowGap);
         });
     }
 
@@ -799,6 +801,55 @@ Server will start on http://localhost:3001`;
         return Math.max(card.scrollHeight, paddingTop + childrenHeight + paddingBottom);
     }
 
+    syncMasonryFillers(cards, rowHeight, rowGap) {
+        if (!this.promptGrid || cards.length === 0) {
+            return;
+        }
+
+        this.clearMasonryFillers();
+
+        const columns = { 1: [], 2: [] };
+        cards.forEach(card => {
+            const column = card.dataset.masonryColumn;
+            if (column === '1' || column === '2') {
+                columns[column].push(card);
+            }
+        });
+
+        if (!columns[1].length || !columns[2].length) {
+            return;
+        }
+
+        const topEdge = Math.min(...cards.map(card => card.getBoundingClientRect().top));
+        const rowUnit = rowHeight + rowGap;
+        const getColumnEndLine = (columnCards) => {
+            const bottom = Math.max(...columnCards.map(card => card.getBoundingClientRect().bottom));
+            return Math.round((bottom - topEdge + rowGap) / rowUnit) + 1;
+        };
+
+        const firstEndLine = getColumnEndLine(columns[1]);
+        const secondEndLine = getColumnEndLine(columns[2]);
+        const lineDelta = Math.abs(firstEndLine - secondEndLine);
+
+        if (lineDelta <= 1) {
+            return;
+        }
+
+        const fillerColumn = firstEndLine < secondEndLine ? 1 : 2;
+        const fillerStart = Math.min(firstEndLine, secondEndLine);
+        const fillerEnd = Math.max(firstEndLine, secondEndLine);
+        const filler = document.createElement('div');
+        filler.className = 'masonry-filler';
+        filler.setAttribute('aria-hidden', 'true');
+        filler.style.gridColumn = String(fillerColumn);
+        filler.style.gridRow = `${fillerStart} / ${fillerEnd}`;
+        this.promptGrid.appendChild(filler);
+    }
+
+    clearMasonryFillers() {
+        this.promptGrid?.querySelectorAll('.masonry-filler').forEach(filler => filler.remove());
+    }
+
     clearMasonryLayout() {
         if (this.masonryFrame) {
             cancelAnimationFrame(this.masonryFrame);
@@ -809,6 +860,7 @@ Server will start on http://localhost:3001`;
             return;
         }
 
+        this.clearMasonryFillers();
         this.promptGrid.querySelectorAll('.prompt-card').forEach(card => {
             card.style.gridRowEnd = '';
             delete card.dataset.masonryColumn;
