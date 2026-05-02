@@ -33,7 +33,7 @@ export class WyControlsBar extends LitElement {
         this._scrollEnterThreshold = 64;
         this._scrollExitThreshold = 12;
         this._minScrollableDistance = 96;
-        this._returnDuration = 300;
+        this._returnDuration = 160;
         this._scrollFrame = 0;
         this._returnTimer = 0;
     }
@@ -198,7 +198,7 @@ export class WyControlsBar extends LitElement {
             this.style.setProperty(
                 'transform',
                 this.scrollState === 'returning'
-                    ? 'var(--wy-controls-floating-return-transform, translateX(-50%) translateY(-8px) scale(0.98))'
+                    ? 'var(--wy-controls-floating-return-transform, translateX(-50%) translateY(-4px) scale(0.995))'
                     : 'var(--wy-controls-floating-transform, translateX(-50%))'
             );
         } else {
@@ -232,6 +232,8 @@ export class WyControlsBar extends LitElement {
       --wy-controls-floating-z-index: 100;
       --wy-controls-floating-width: auto;
       --wy-controls-floating-max-width: min(900px, calc(100% - 32px));
+      --wy-controls-return-duration: var(--dur-1, 150ms);
+      --wy-controls-return-opacity-duration: 140ms;
       --wy-controls-radius: var(--radius-pill, 999px);
     }
 
@@ -272,9 +274,15 @@ export class WyControlsBar extends LitElement {
     }
 
     :host([data-scroll-state="returning"]) {
-      opacity: 0;
-      transform: var(--wy-controls-floating-return-transform, translateX(-50%) translateY(-8px) scale(0.98));
+      opacity: 0.08;
+      transform: var(--wy-controls-floating-return-transform, translateX(-50%) translateY(-4px) scale(0.995));
       box-shadow: none;
+      transition:
+        top var(--wy-controls-return-duration, 150ms) cubic-bezier(0.2, 0, 0, 1),
+        transform var(--wy-controls-return-duration, 150ms) cubic-bezier(0.2, 0, 0, 1),
+        padding var(--wy-controls-return-duration, 150ms) cubic-bezier(0.2, 0, 0, 1),
+        box-shadow var(--wy-controls-return-duration, 150ms) cubic-bezier(0.2, 0, 0, 1),
+        opacity var(--wy-controls-return-opacity-duration, 140ms) cubic-bezier(0.2, 0, 0, 1);
     }
 
     /* ---- Controls container ---- */

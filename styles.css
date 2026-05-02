@@ -160,7 +160,7 @@ wy-button:not(:defined) {
     overflow-y: auto;
     z-index: 1;
     background: var(--paper);
-    transition: margin-top var(--dur-2) var(--ease);
+    transition: margin-top var(--dur-1) var(--ease);
 }
 .controls-bar[data-scrolled] ~ .prompt-area {
     margin-top: calc(-1 * var(--wy-controls-bar-height, 64px));

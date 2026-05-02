@@ -132,7 +132,7 @@ class PromptLibrary {
         this.controlsBar.style.setProperty('--wy-controls-floating-width', `calc(100vw - ${edgeGap * 2}px)`);
         this.controlsBar.style.setProperty('--wy-controls-floating-max-width', `${maxWidth}px`);
         this.controlsBar.style.setProperty('--wy-controls-floating-transform', 'none');
-        this.controlsBar.style.setProperty('--wy-controls-floating-return-transform', 'translateY(-8px) scale(0.98)');
+        this.controlsBar.style.setProperty('--wy-controls-floating-return-transform', 'translateY(-4px) scale(0.995)');
         this.controlsBar.style.setProperty('--wy-controls-floating-z-index', '1001');
     }
 
