@@ -791,6 +791,12 @@
         "template": "I am uploading two images: [Image 1] is my artwork, and [Image 2] is the reference I am trying to emulate.\n\nAct as a professional art instructor. Your goal is to help me bridge the gap between my work and the reference. Please provide a side-by-side technical analysis focusing on:\n\nProportions & Placement: Are there any anatomical or spatial shifts?\n\nValue & Contrast: Am I capturing the same range of highlights and shadows?\n\nColor Accuracy: How close are my hues and saturation to the original?\n\nEdges & Brushwork: Have I missed any sharp or soft transitions that define the reference?\n\nPlease be specific and prioritize the top 3 most impactful changes I can make right now to make my work look more like the reference."
       },
       {
+        "id": "structure-construction",
+        "name": "Structure & Construction",
+        "description": "Compares the underlying construction of your artwork against a reference, ignoring color, lighting, and texture.\n\nSubmit your artwork as Image 1 and the reference as Image 2.",
+        "template": "I am uploading two images: [Image 1] is my artwork, and [Image 2] is the reference I am trying to emulate.\n\nAct as a professional art instructor specializing in draftsmanship and construction. Your goal is to help me bridge the gap between the underlying structure of my work and the reference. Ignore color, lighting, and texture for this analysis. Please provide a side-by-side technical critique focusing on:\n\nAnatomy & Proportions: Are the internal landmarks (bones, muscle groups, or joints) aligned correctly? Compare the relative lengths and widths of the forms.\n\nGesture & Line of Action: Does my work capture the same energy and flow as the reference? Analyze the 'weight' and balance of the pose or subject.\n\nPerspective & Solid Form: Am I thinking in 3D? Compare how the objects/limbs recede in space and whether the foreshortening matches the reference.\n\nComposition & Silhouette: Analyze the 'big shapes' and negative space. Is the placement on the canvas creating the same visual impact or focal point?\n\nPlease be specific and prioritize the top 3 most impactful structural corrections I can make to the underlying sketch to better align my work with the reference."
+      },
+      {
         "id": "technique-style",
         "name": "Technique & Style",
         "description": "Critiques an original artwork for composition, value, technique, and mood, then assigns one targeted improvement exercise.\n\nSubmit an uploaded image of your artwork with this prompt.",
@@ -799,7 +805,7 @@
     ],
     "featured": false,
     "slug": "artwork-critique",
-    "instructions": "Select a variant for reference matching or general technique and style critique."
+    "instructions": "Select a variant for reference matching, structural construction, or general technique and style critique."
   },
   {
     "id": "fabric-colorways",
