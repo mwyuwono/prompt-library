@@ -445,22 +445,6 @@
             resize: vertical;
         }
 
-        .demo-list-row {
-            display: grid;
-            grid-template-columns: 120px minmax(0, 1fr) auto;
-            gap: var(--s-4);
-            align-items: center;
-            padding: var(--s-4) 0;
-            border-top: var(--hair) solid var(--paper-edge);
-        }
-
-        .demo-thumb {
-            aspect-ratio: 4 / 3;
-            background:
-                linear-gradient(135deg, rgba(193, 138, 77, 0.72), rgba(125, 142, 57, 0.62)),
-                var(--paper-deep);
-        }
-
         .full-row {
             grid-column: 1 / -1;
         }
@@ -540,8 +524,7 @@
             }
 
             .token-list li,
-            .rule-list li,
-            .demo-list-row {
+            .rule-list li {
                 grid-template-columns: 1fr;
             }
 
@@ -646,10 +629,16 @@
                     <div class="swatch" style="--token-bg: var(--paper-deep);"><strong>Paper Deep</strong><span>--paper-deep #EEE8DD</span></div>
                     <div class="swatch" style="--token-bg: var(--paper-edge);"><strong>Paper Edge</strong><span>--paper-edge #DDD6C8</span></div>
                     <div class="swatch" style="--token-bg: var(--ink); --token-fg: var(--paper);"><strong>Ink</strong><span>--ink #1A1A1A</span></div>
+                    <div class="swatch" style="--token-bg: var(--ink-deep); --token-fg: var(--paper);"><strong>Ink Deep</strong><span>--ink-deep #0D0D0D</span></div>
                     <div class="swatch" style="--token-bg: var(--ink-mute); --token-fg: var(--paper);"><strong>Ink Mute</strong><span>--ink-mute #6B6B6A</span></div>
+                    <div class="swatch" style="--token-bg: var(--ink-soft);"><strong>Ink Soft</strong><span>--ink-soft #A8A49C</span></div>
+                    <div class="swatch" style="--token-bg: var(--white);"><strong>White</strong><span>--white #FFFFFF</span></div>
                     <div class="swatch" style="--token-bg: var(--accent-terracotta);"><strong>Terracotta</strong><span>--accent-terracotta</span></div>
+                    <div class="swatch" style="--token-bg: var(--accent-rust); --token-fg: var(--paper);"><strong>Rust</strong><span>--accent-rust</span></div>
                     <div class="swatch" style="--token-bg: var(--accent-sage); --token-fg: var(--paper);"><strong>Sage</strong><span>--accent-sage</span></div>
                     <div class="swatch" style="--token-bg: var(--accent-dusty-rose); --token-fg: var(--paper);"><strong>Dusty Rose</strong><span>--accent-dusty-rose</span></div>
+                    <div class="swatch" style="--token-bg: var(--ok);"><strong>OK</strong><span>--ok #28C101</span></div>
+                    <div class="swatch" style="--token-bg: var(--err); --token-fg: var(--paper);"><strong>Error</strong><span>--err #FF0101</span></div>
                 </div>
                 <div class="grid two" style="margin-top: var(--s-5);">
                     <div class="panel">
@@ -688,15 +677,32 @@
                         <div class="type-sample"><p class="panel-title"><code>--fs-display-xl</code></p><div class="t-display-xl">A useful prompt, clearly held.</div></div>
                         <div class="type-sample"><p class="panel-title"><code>--fs-display-m</code></p><div class="t-display-m">Reusable systems should feel calm.</div></div>
                         <div class="type-sample"><p class="panel-title"><code>--fs-body</code></p><p class="t-body">Body text uses Inter, normal tracking, and generous line height for long prompt descriptions.</p></div>
+                        <div class="type-sample">
+                            <p class="panel-title">Font size tokens</p>
+                            <ul class="token-list">
+                                <li><code>--fs-display-xxl</code><span>Largest editorial display.</span></li>
+                                <li><code>--fs-display-l</code><span>Large section and hero display.</span></li>
+                                <li><code>--fs-display-s</code><span>Compact serif headings.</span></li>
+                                <li><code>--fs-body-l</code><span>Large body copy.</span></li>
+                                <li><code>--fs-body-s</code><span>Dense supporting copy.</span></li>
+                                <li><code>--fs-ui</code><span>Default controls and metadata.</span></li>
+                                <li><code>--fs-ui-xs</code><span>Small labels and compact metadata.</span></li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="panel">
                         <p class="panel-title">Token families</p>
                         <ul class="token-list">
                             <li><code>--ff-serif</code><span>Lora, Playfair Display, Baskerville, Georgia, serif.</span></li>
-                            <li><code>--ff-sans</code><span>Inter, system UI, Helvetica Neue, Arial, sans-serif.</span></li>
+                            <li><code>--ff-sans</code><span>Inter, -apple-system, BlinkMacSystemFont, Helvetica Neue, Arial, sans-serif.</span></li>
                             <li><code>--ff-mono</code><span>ui-monospace, SF Mono, Menlo, monospace.</span></li>
+                            <li><code>--tr-display</code><span>Tight display tracking.</span></li>
+                            <li><code>--tr-body</code><span>Normal body tracking.</span></li>
                             <li><code>--tr-eyebrow</code><span>Uppercase UI labels and compact metadata.</span></li>
+                            <li><code>--lh-tight</code><span>Tightest display line height.</span></li>
+                            <li><code>--lh-snug</code><span>Compact headings and card titles.</span></li>
                             <li><code>--lh-normal</code><span>Default reading line height.</span></li>
+                            <li><code>--lh-loose</code><span>Generous long-form reading line height.</span></li>
                         </ul>
                     </div>
                 </div>
@@ -722,6 +728,8 @@
                             <div class="scale-row"><code>--s-6</code><span class="scale-bar" style="--bar-width: 32px;"></span><span>32px</span></div>
                             <div class="scale-row"><code>--s-7</code><span class="scale-bar" style="--bar-width: 48px;"></span><span>48px</span></div>
                             <div class="scale-row"><code>--s-8</code><span class="scale-bar" style="--bar-width: 64px;"></span><span>64px</span></div>
+                            <div class="scale-row"><code>--s-9</code><span class="scale-bar" style="--bar-width: 96px;"></span><span>96px</span></div>
+                            <div class="scale-row"><code>--s-10</code><span class="scale-bar" style="--bar-width: 128px;"></span><span>128px</span></div>
                         </div>
                     </div>
                     <div class="panel">
@@ -754,6 +762,7 @@
                             <li><code>--dur-3</code><span>500ms: larger overlay movement.</span></li>
                             <li><code>--dur-4</code><span>800ms: rare, expressive motion.</span></li>
                             <li><code>--ease</code><span>Default cubic-bezier for most transitions.</span></li>
+                            <li><code>--ease-in-out</code><span>Emphasized in-out curve for larger movement.</span></li>
                         </ul>
                     </div>
                     <div class="panel">
@@ -807,11 +816,14 @@
                         <div class="header-top" style="position: static; padding: var(--s-4) 0; border-bottom-color: var(--ink);">
                             <div class="header-logo-group">
                                 <img src="public/images/prompts-logo.svg" alt="Prompts Library Logo" class="header-logo-image">
-                                <span class="header-logo-text">Prompts</span>
+                                <div class="header-logo-text">Prompts</div>
                             </div>
-                            <div class="quick-links">
-                                <a class="quick-link-btn" href="#layout">Library</a>
-                                <a class="quick-link-btn" href="#portable">Portable</a>
+                            <div class="header-actions">
+                                <div class="quick-links">
+                                    <a class="quick-link-btn" href="https://aistudio.google.com" target="_blank" rel="noopener noreferrer">AI Studio</a>
+                                    <a class="quick-link-btn" href="https://gemini.google.com" target="_blank" rel="noopener noreferrer">Gemini</a>
+                                </div>
+                                <wy-button variant="primary" size="small" icon="tune" icon-position="leading">Filters</wy-button>
                             </div>
                         </div>
                     </div>
@@ -854,21 +866,32 @@
                     </div>
                     <div class="panel">
                         <p class="panel-title">List row</p>
-                        <div class="demo-list-row">
-                            <div class="demo-thumb" aria-hidden="true"></div>
-                            <div>
-                                <h3 style="margin-bottom: var(--s-2);">Prompt Engineer</h3>
-                                <p class="text-muted">A scan-friendly row with thumbnail, title, category and forward action.</p>
+                        <div class="category-items">
+                            <div class="prompt-list-item has-image" data-has-image="true" role="button" tabindex="0" aria-label="Open prompt Room Repainter">
+                                <div class="prompt-list-item-thumbnail">
+                                    <img src="public/images/1777069870101.png" alt="Room Repainter">
+                                </div>
+                                <div class="prompt-list-item-content">
+                                    <div class="prompt-list-item-header">
+                                        <h3 class="prompt-list-item-title">Room Repainter</h3>
+                                    </div>
+                                    <div class="prompt-list-item-description">Visualize a room repainted in specified colors while preserving architecture, furniture, and lighting.</div>
+                                </div>
+                                <div class="prompt-list-item-meta">
+                                    <span class="variable-count-badge">3 variables</span>
+                                </div>
                             </div>
-                            <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
-                        </div>
-                        <div class="demo-list-row">
-                            <div class="demo-thumb" aria-hidden="true"></div>
-                            <div>
-                                <h3 style="margin-bottom: var(--s-2);">Design Critic</h3>
-                                <p class="text-muted">Rows use hairlines and restrained hover instead of decorative cards.</p>
+                            <div class="prompt-list-item" role="button" tabindex="0" aria-label="Open prompt Editorial Design Critic">
+                                <div class="prompt-list-item-content">
+                                    <div class="prompt-list-item-header">
+                                        <h3 class="prompt-list-item-title">Editorial Design Critic</h3>
+                                    </div>
+                                    <div class="prompt-list-item-description">Rows use the deployed list item structure, hairlines, metadata, and restrained hover behavior.</div>
+                                </div>
+                                <div class="prompt-list-item-meta">
+                                    <span class="variable-count-badge">2 variables</span>
+                                </div>
                             </div>
-                            <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
                         </div>
                     </div>
                 </div>
@@ -897,8 +920,8 @@
                         <h3>wy-filter-chip</h3>
                         <div class="component-demo">
                             <wy-filter-chip label="All" count="24" active></wy-filter-chip>
-                            <wy-filter-chip label="Creative" count="8"></wy-filter-chip>
-                            <wy-filter-chip label="Ops" count="6" variant="soft"></wy-filter-chip>
+                            <wy-filter-chip label="Art" count="12"></wy-filter-chip>
+                            <wy-filter-chip label="Expertise" count="6" variant="soft"></wy-filter-chip>
                         </div>
                     </div>
                     <div class="component-panel">
@@ -1025,7 +1048,7 @@
             id: 'style-guide-demo',
             title: 'Editorial Design Critic',
             description: 'Review a UI with the Prompt Library style system and return concrete design notes.',
-            category: 'Design',
+            category: 'Expertise',
             icon: 'auto_fix_high',
             image: '',
             template: 'Review {{surface}} for visual hierarchy, spacing, typography, and interaction states.',
@@ -1052,9 +1075,19 @@
         };
 
         const sampleLinks = [
-            { label: 'Prompt Library', url: 'index.html', category: 'Local' },
-            { label: 'Admin', url: 'admin.html', category: 'Local' },
-            { label: 'Style Guide v3', url: 'style-guide-v3.html', category: 'Design' }
+            {
+                category: 'Local',
+                links: [
+                    { name: 'Prompt Library', url: 'index.html' },
+                    { name: 'Admin', url: 'admin.html' }
+                ]
+            },
+            {
+                category: 'Design',
+                links: [
+                    { name: 'Style Guide v3', url: 'style-guide-v3.html' }
+                ]
+            }
         ];
 
         function setWhenDefined(name, callback) {
@@ -1092,11 +1125,11 @@
             const dropdown = document.getElementById('guideDropdown');
             if (!dropdown) return;
             dropdown.options = [
-                { value: 'design', label: 'Design' },
-                { value: 'creative', label: 'Creative' },
-                { value: 'ops', label: 'Operations' }
+                { value: 'art', label: 'Art' },
+                { value: 'expertise', label: 'Expertise' },
+                { value: 'fabric', label: 'Fabric' }
             ];
-            dropdown.value = 'design';
+            dropdown.value = 'expertise';
         });
 
         setWhenDefined('wy-code-textarea', () => {
@@ -1125,7 +1158,7 @@
             const editor = document.getElementById('guidePromptEditor');
             if (!editor) return;
             editor.prompt = samplePrompt;
-            editor.categories = ['Design', 'Creative', 'Operations'];
+            editor.categories = ['Art', 'Expertise', 'Fabric', 'Productivity', 'Travel & Shopping', 'Writing'];
         });
 
         setWhenDefined('wy-links-modal', () => {
@@ -1151,7 +1184,7 @@
         document.getElementById('showCopyConfirm')?.addEventListener('click', () => {
             const confirm = document.getElementById('guideCopyConfirm');
             confirm.title = 'Copied';
-            confirm.message = 'The prompt text is ready to paste.';
+            confirm.links = sampleLinks.flatMap((group) => group.links).slice(0, 3);
             confirm.show = true;
         });
 
