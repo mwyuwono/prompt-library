@@ -620,6 +620,20 @@ export class WyVariationEditor extends LitElement {
                                 ></textarea>
                             </wy-form-field>
 
+                            <!-- Variation Instructions -->
+                            <wy-form-field
+                                label="Instructions"
+                                description="Optional usage notes shown with this variant. Supports lightweight Markdown such as **bold** and lists."
+                            >
+                                <textarea
+                                    rows="4"
+                                    .value="${variation.instructions || ''}"
+                                    @input="${(e) => this._handleFieldChange(index, 'instructions', e.target.value)}"
+                                    placeholder="e.g., Upload with this variant:&#10;1. Your artwork&#10;2. The reference image"
+                                    @click="${(e) => e.stopPropagation()}"
+                                ></textarea>
+                            </wy-form-field>
+
                             <div @click="${(e) => e.stopPropagation()}">
                                 <wy-image-upload
                                     label="Variation Image"

@@ -5504,6 +5504,20 @@ This action cannot be undone.`;
                                 ></textarea>
                             </wy-form-field>
 
+                            <!-- Variation Instructions -->
+                            <wy-form-field
+                                label="Instructions"
+                                description="Optional usage notes shown with this variant. Supports lightweight Markdown such as **bold** and lists."
+                            >
+                                <textarea
+                                    rows="4"
+                                    .value="${variation.instructions || ""}"
+                                    @input="${(e9) => this._handleFieldChange(index, "instructions", e9.target.value)}"
+                                    placeholder="e.g., Upload with this variant:&#10;1. Your artwork&#10;2. The reference image"
+                                    @click="${(e9) => e9.stopPropagation()}"
+                                ></textarea>
+                            </wy-form-field>
+
                             <div @click="${(e9) => e9.stopPropagation()}">
                                 <wy-image-upload
                                     label="Variation Image"
@@ -6311,6 +6325,15 @@ var WyPromptEditor = class extends i4 {
     const variableNames = (this._editedPrompt.variables || []).map((v2) => v2.name);
     return b2`
             <div class="editor-layout">
+                <div class="actions">
+                    <button class="button button-secondary" @click="${this._handleCancel}">
+                        Discard
+                    </button>
+                    <button class="button button-primary" @click="${this._handleSave}">
+                        Save
+                    </button>
+                </div>
+
                 <!-- Left Column: Form -->
                 <div class="editor-form">
                     <!-- Header -->
@@ -6555,15 +6578,6 @@ var WyPromptEditor = class extends i4 {
 
                 <!-- Right Column: Preview -->
                 <div class="editor-preview">
-                    <div class="actions">
-                        <button class="button button-secondary" @click="${this._handleCancel}">
-                            Discard
-                        </button>
-                        <button class="button button-primary" @click="${this._handleSave}">
-                            Save
-                        </button>
-                    </div>
-                    
                     <div class="preview-header">
                         <h3 class="preview-title">Live Preview</h3>
                         <span class="preview-status">Updating</span>
@@ -6614,9 +6628,12 @@ __publicField(WyPromptEditor, "styles", i`
             display: grid;
             grid-template-columns: 58% 42%;
             gap: var(--spacing-2xl, 48px);
+            align-items: start;
         }
 
         .editor-form {
+            grid-column: 1;
+            grid-row: 1 / span 3;
             display: flex;
             flex-direction: column;
             gap: var(--spacing-lg, 24px);
@@ -6686,9 +6703,19 @@ __publicField(WyPromptEditor, "styles", i`
         }
 
         .actions {
+            grid-column: 2;
+            grid-row: 1;
             display: flex;
+            justify-content: flex-end;
             gap: var(--spacing-sm, 8px);
             margin: 0 0 var(--spacing-md, 16px) 0;
+            position: sticky;
+            top: var(--spacing-lg, 24px);
+            z-index: 5;
+            padding: var(--spacing-sm, 8px);
+            background-color: var(--md-sys-color-background, #FDFBF7);
+            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
+            border-radius: var(--md-sys-shape-corner-medium, 16px);
         }
 
         .button {
@@ -6737,8 +6764,10 @@ __publicField(WyPromptEditor, "styles", i`
         }
 
         .editor-preview {
+            grid-column: 2;
+            grid-row: 2;
             position: sticky;
-            top: var(--spacing-lg, 24px);
+            top: calc(var(--spacing-lg, 24px) + 58px);
             height: fit-content;
         }
 
@@ -6916,9 +6945,26 @@ __publicField(WyPromptEditor, "styles", i`
         @media (max-width: 1200px) {
             .editor-layout {
                 grid-template-columns: 1fr;
+                gap: var(--spacing-lg, 24px);
+            }
+
+            .actions {
+                grid-column: 1;
+                grid-row: 1;
+                top: 0;
+                margin-bottom: 0;
+                border-radius: var(--md-sys-shape-corner-small, 8px);
+            }
+
+            .editor-form {
+                grid-column: 1;
+                grid-row: 2;
+                padding-right: 0;
             }
 
             .editor-preview {
+                grid-column: 1;
+                grid-row: 3;
                 position: static;
             }
         }

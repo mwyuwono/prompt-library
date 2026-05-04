@@ -61,9 +61,12 @@ export class WyPromptEditor extends LitElement {
             display: grid;
             grid-template-columns: 58% 42%;
             gap: var(--spacing-2xl, 48px);
+            align-items: start;
         }
 
         .editor-form {
+            grid-column: 1;
+            grid-row: 1 / span 3;
             display: flex;
             flex-direction: column;
             gap: var(--spacing-lg, 24px);
@@ -133,9 +136,19 @@ export class WyPromptEditor extends LitElement {
         }
 
         .actions {
+            grid-column: 2;
+            grid-row: 1;
             display: flex;
+            justify-content: flex-end;
             gap: var(--spacing-sm, 8px);
             margin: 0 0 var(--spacing-md, 16px) 0;
+            position: sticky;
+            top: var(--spacing-lg, 24px);
+            z-index: 5;
+            padding: var(--spacing-sm, 8px);
+            background-color: var(--md-sys-color-background, #FDFBF7);
+            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
+            border-radius: var(--md-sys-shape-corner-medium, 16px);
         }
 
         .button {
@@ -184,8 +197,10 @@ export class WyPromptEditor extends LitElement {
         }
 
         .editor-preview {
+            grid-column: 2;
+            grid-row: 2;
             position: sticky;
-            top: var(--spacing-lg, 24px);
+            top: calc(var(--spacing-lg, 24px) + 58px);
             height: fit-content;
         }
 
@@ -363,9 +378,26 @@ export class WyPromptEditor extends LitElement {
         @media (max-width: 1200px) {
             .editor-layout {
                 grid-template-columns: 1fr;
+                gap: var(--spacing-lg, 24px);
+            }
+
+            .actions {
+                grid-column: 1;
+                grid-row: 1;
+                top: 0;
+                margin-bottom: 0;
+                border-radius: var(--md-sys-shape-corner-small, 8px);
+            }
+
+            .editor-form {
+                grid-column: 1;
+                grid-row: 2;
+                padding-right: 0;
             }
 
             .editor-preview {
+                grid-column: 1;
+                grid-row: 3;
                 position: static;
             }
         }
@@ -749,6 +781,15 @@ export class WyPromptEditor extends LitElement {
 
         return html`
             <div class="editor-layout">
+                <div class="actions">
+                    <button class="button button-secondary" @click="${this._handleCancel}">
+                        Discard
+                    </button>
+                    <button class="button button-primary" @click="${this._handleSave}">
+                        Save
+                    </button>
+                </div>
+
                 <!-- Left Column: Form -->
                 <div class="editor-form">
                     <!-- Header -->
@@ -990,15 +1031,6 @@ export class WyPromptEditor extends LitElement {
 
                 <!-- Right Column: Preview -->
                 <div class="editor-preview">
-                    <div class="actions">
-                        <button class="button button-secondary" @click="${this._handleCancel}">
-                            Discard
-                        </button>
-                        <button class="button button-primary" @click="${this._handleSave}">
-                            Save
-                        </button>
-                    </div>
-                    
                     <div class="preview-header">
                         <h3 class="preview-title">Live Preview</h3>
                         <span class="preview-status">Updating</span>
