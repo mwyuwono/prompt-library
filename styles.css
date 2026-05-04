@@ -320,19 +320,9 @@ wy-button:not(:defined) {
 @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
 
 .view-grid .prompt-card {
-    opacity: 0; transform: translateY(6px);
-    animation: cardAppear 0.4s var(--ease) forwards;
+    opacity: 1;
+    transform: none;
 }
-.view-grid .prompt-card:nth-child(1){animation-delay:0.02s}
-.view-grid .prompt-card:nth-child(2){animation-delay:0.05s}
-.view-grid .prompt-card:nth-child(3){animation-delay:0.08s}
-.view-grid .prompt-card:nth-child(4){animation-delay:0.11s}
-.view-grid .prompt-card:nth-child(5){animation-delay:0.14s}
-.view-grid .prompt-card:nth-child(6){animation-delay:0.17s}
-.view-grid .prompt-card:nth-child(7){animation-delay:0.20s}
-.view-grid .prompt-card:nth-child(8){animation-delay:0.23s}
-.view-grid .prompt-card:nth-child(9){animation-delay:0.26s}
-@keyframes cardAppear { to { opacity: 1; transform: translateY(0); } }
 
 .empty-state {
     position: absolute; top: 50%; left: 50%;

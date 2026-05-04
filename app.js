@@ -700,19 +700,22 @@ Server will start on http://localhost:3001`;
             this.emptyState.classList.add('hidden');
         }
 
+        const fragment = document.createDocumentFragment();
+
         // Prepend colorizer card when Fabric category is active
         if (isFabricCategoryMode) {
-            this.promptGrid.appendChild(this.createColorizerCard());
+            fragment.appendChild(this.createColorizerCard());
         }
 
         // Render each prompt card
         this.filteredPrompts.forEach((prompt, index) => {
             const card = this.createPromptCard(prompt, index);
-            this.promptGrid.appendChild(card);
+            fragment.appendChild(card);
         });
 
+        this.promptGrid.appendChild(fragment);
         this.bindMasonryImageUpdates();
-        this.scheduleMasonryLayout();
+        this.layoutMasonryGrid();
     }
 
     /**
