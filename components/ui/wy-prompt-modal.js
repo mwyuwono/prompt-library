@@ -1111,10 +1111,16 @@ export class WyPromptModal extends LitElement {
                     </select>
                     <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
                   </div>
-                  ${activeVariation?.description ? html`
+                  ${activeVariation?.description || activeVariation?.instructions ? html`
                     <wy-info-panel class="variation-description-panel">
                       <p class="variation-description-heading">Variant: ${activeVariation.name}</p>
-                      <p class="variation-description-copy">${activeVariation.description}</p>
+                      ${activeVariation?.description ? html`
+                        <div class="variation-description-copy">${unsafeHTML(this._renderDescriptionMarkdown(activeVariation.description))}</div>
+                      ` : ''}
+                      ${activeVariation?.instructions ? html`
+                        <p class="variation-description-heading">Instructions</p>
+                        <div class="variation-description-copy">${unsafeHTML(this._renderDescriptionMarkdown(activeVariation.instructions))}</div>
+                      ` : ''}
                     </wy-info-panel>
                   ` : ''}
                 </div>

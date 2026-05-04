@@ -7689,10 +7689,16 @@ var WyPromptModal = class extends i4 {
                     </select>
                     <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
                   </div>
-                  ${activeVariation?.description ? b2`
+                  ${activeVariation?.description || activeVariation?.instructions ? b2`
                     <wy-info-panel class="variation-description-panel">
                       <p class="variation-description-heading">Variant: ${activeVariation.name}</p>
-                      <p class="variation-description-copy">${activeVariation.description}</p>
+                      ${activeVariation?.description ? b2`
+                        <div class="variation-description-copy">${o7(this._renderDescriptionMarkdown(activeVariation.description))}</div>
+                      ` : ""}
+                      ${activeVariation?.instructions ? b2`
+                        <p class="variation-description-heading">Instructions</p>
+                        <div class="variation-description-copy">${o7(this._renderDescriptionMarkdown(activeVariation.instructions))}</div>
+                      ` : ""}
                     </wy-info-panel>
                   ` : ""}
                 </div>
