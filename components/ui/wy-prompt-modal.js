@@ -454,10 +454,10 @@ export class WyPromptModal extends LitElement {
 
     .variation-selector-container {
         margin: var(--spacing-xl, 32px) var(--spacing-xl, 32px) 0;
-        padding: var(--spacing-md, 16px);
+        padding: var(--spacing-lg, 24px);
         display: flex;
         flex-direction: column;
-        gap: var(--spacing-md, 16px);
+        gap: var(--spacing-lg, 24px);
         background-color: var(--md-sys-color-surface-container-low);
         border: 1px solid var(--paper-edge, #DDD6C8);
         border-radius: var(--md-sys-shape-corner-medium, 0);
@@ -509,6 +509,12 @@ export class WyPromptModal extends LitElement {
         --wy-info-panel-font-size: var(--md-sys-typescale-body-small-size, 0.875rem);
     }
 
+    .variation-meta-section + .variation-meta-section {
+        margin-top: var(--spacing-md, 16px);
+        padding-top: var(--spacing-md, 16px);
+        border-top: 1px solid var(--paper-edge, #DDD6C8);
+    }
+
     .prompt-instructions-panel {
         margin-top: 16px;
         --wy-info-panel-bg: transparent;
@@ -519,11 +525,11 @@ export class WyPromptModal extends LitElement {
     .prompt-instructions-heading {
         margin: 0 0 var(--spacing-xxs, 4px);
         font-family: var(--font-sans, 'DM Sans', sans-serif);
-        font-size: var(--md-sys-typescale-label-medium-size, 0.75rem);
-        font-weight: 700;
-        letter-spacing: 0.08em;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.14em;
         text-transform: uppercase;
-        color: var(--md-sys-color-on-surface-variant);
+        color: var(--ink-soft, #A8A49C);
     }
 
     .prompt-instructions-copy {
@@ -543,15 +549,28 @@ export class WyPromptModal extends LitElement {
     .variation-description-heading {
         margin: 0 0 var(--spacing-xxs, 4px);
         font-family: var(--font-sans, 'DM Sans', sans-serif);
-        font-size: var(--md-sys-typescale-label-medium-size, 0.75rem);
-        font-weight: 700;
-        letter-spacing: 0.08em;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.14em;
         text-transform: uppercase;
-        color: var(--md-sys-color-on-surface-variant);
+        color: var(--ink-soft, #A8A49C);
+    }
+
+    .variation-name {
+        margin: 0 0 var(--spacing-sm, 8px);
+        font-family: var(--ff-serif, 'Lora', serif);
+        font-size: 1.125rem;
+        font-weight: 500;
+        line-height: 1.25;
+        color: var(--md-sys-color-text-heading);
+        letter-spacing: 0;
     }
 
     .variation-description-copy {
         margin: 0;
+        font-size: 0.9375rem;
+        line-height: 1.6;
+        color: var(--md-sys-color-text-muted);
     }
 
     /* Legacy selector styles (kept for backwards compatibility) */
@@ -1113,13 +1132,18 @@ export class WyPromptModal extends LitElement {
                   </div>
                   ${activeVariation?.description || activeVariation?.instructions ? html`
                     <wy-info-panel class="variation-description-panel">
-                      <p class="variation-description-heading">Variant: ${activeVariation.name}</p>
-                      ${activeVariation?.description ? html`
-                        <div class="variation-description-copy">${unsafeHTML(this._renderDescriptionMarkdown(activeVariation.description))}</div>
-                      ` : ''}
+                      <div class="variation-meta-section">
+                        <p class="variation-description-heading">Variant</p>
+                        <p class="variation-name">${activeVariation.name}</p>
+                        ${activeVariation?.description ? html`
+                          <div class="variation-description-copy">${unsafeHTML(this._renderDescriptionMarkdown(activeVariation.description))}</div>
+                        ` : ''}
+                      </div>
                       ${activeVariation?.instructions ? html`
-                        <p class="variation-description-heading">Instructions</p>
-                        <div class="variation-description-copy">${unsafeHTML(this._renderDescriptionMarkdown(activeVariation.instructions))}</div>
+                        <div class="variation-meta-section">
+                          <p class="variation-description-heading">Instructions</p>
+                          <div class="variation-description-copy">${unsafeHTML(this._renderDescriptionMarkdown(activeVariation.instructions))}</div>
+                        </div>
                       ` : ''}
                     </wy-info-panel>
                   ` : ''}
