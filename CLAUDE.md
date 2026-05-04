@@ -45,6 +45,12 @@ This is a separate React/Vite site deployed by its own Vercel project to https:/
 
 This project is now self-contained. The former shared design-system sources were snapshotted into this repository and are maintained here.
 
+### Canonical Style Guide
+
+When the user says "my style guide", "the style guide", or "design system reference" in this repository, they mean `style-guide-v3.html`. Treat `style-guide.html` and `style-guide-v2.html` as deprecated redirect stubs only.
+
+Use `style-guide-v3.html` as the single visual reference for tokens, typography, spacing, motion, app layout, public prompt components, and local `wy-*` web components. The Prompt Library logo asset is `public/images/prompts-logo.svg`; reuse that path for brand mark examples unless the user provides a different logo.
+
 ### Where to Make Style Changes
 
 | Change Type | Where to Edit |

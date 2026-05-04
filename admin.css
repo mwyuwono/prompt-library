@@ -90,6 +90,13 @@
     line-height: 1.5;
 }
 
+.sidebar-links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-xs, 4px);
+}
+
 .view-public-link {
     display: inline-flex;
     align-items: center;

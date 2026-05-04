@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Library Style Guide v3</title>
+    <link rel="stylesheet" href="tokens.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <script type="module" src="web-components.js"></script>
+    <style>
+        :root {
+            --guide-sidebar: 280px;
+            --guide-section-pad: clamp(var(--s-5), 4vw, var(--s-8));
+            --guide-panel: color-mix(in srgb, var(--paper) 88%, var(--white));
+            --guide-code: color-mix(in srgb, var(--paper-deep) 72%, var(--white));
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: var(--s-6);
+        }
+
+        body {
+            min-height: 100%;
+            background: var(--paper);
+        }
+
+        .guide-shell {
+            display: grid;
+            grid-template-columns: var(--guide-sidebar) minmax(0, 1fr);
+            min-height: 100vh;
+        }
+
+        .guide-sidebar {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            padding: var(--s-6);
+            border-right: var(--hair) solid var(--paper-edge);
+            background: var(--paper);
+            overflow-y: auto;
+        }
+
+        .guide-mark {
+            display: flex;
+            align-items: center;
+            gap: var(--s-3);
+            margin-bottom: var(--s-6);
+            color: var(--ink);
+        }
+
+        .guide-mark-icon {
+            display: grid;
+            place-items: center;
+            width: 36px;
+            height: 36px;
+            border: var(--hair) solid var(--ink);
+            border-radius: 50%;
+            font-family: var(--ff-serif);
+            font-style: italic;
+        }
+
+        .guide-logo-image {
+            display: block;
+            width: 36px;
+            height: 36px;
+            object-fit: contain;
+        }
+
+        .guide-mark-title {
+            font-family: var(--ff-serif);
+            font-size: 1.15rem;
+            font-style: italic;
+            line-height: var(--lh-snug);
+        }
+
+        .guide-version {
+            display: block;
+            margin-top: 2px;
+            font-family: var(--ff-sans);
+            font-size: var(--fs-ui-xs);
+            font-style: normal;
+            letter-spacing: var(--tr-eyebrow);
+            text-transform: uppercase;
+            color: var(--ink-mute);
+        }
+
+        .guide-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .guide-nav a {
+            padding: 8px 0;
+            border-bottom: var(--hair) solid transparent;
+            font-family: var(--ff-sans);
+            font-size: var(--fs-ui-xs);
+            font-weight: 500;
+            letter-spacing: var(--tr-eyebrow);
+            text-transform: uppercase;
+            color: var(--ink-mute);
+        }
+
+        .guide-nav a:hover,
+        .guide-nav a:focus-visible {
+            color: var(--ink);
+            opacity: 1;
+            border-bottom-color: var(--ink);
+            outline: none;
+        }
+
+        .guide-main {
+            min-width: 0;
+            overflow-x: hidden;
+        }
+
+        .mobile-nav {
+            display: none;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            gap: var(--s-3);
+            padding: var(--s-3) var(--s-4);
+            border-bottom: var(--hair) solid var(--paper-edge);
+            background: rgba(247, 244, 238, 0.92);
+            backdrop-filter: blur(14px);
+            overflow-x: auto;
+        }
+
+        .mobile-nav a {
+            flex: 0 0 auto;
+            font-family: var(--ff-sans);
+            font-size: var(--fs-ui-xs);
+            font-weight: 500;
+            letter-spacing: var(--tr-eyebrow);
+            text-transform: uppercase;
+            color: var(--ink-mute);
+        }
+
+        .guide-hero,
+        .guide-section {
+            padding: var(--guide-section-pad);
+            border-bottom: var(--hair) solid var(--paper-edge);
+        }
+
+        .guide-hero {
+            min-height: 76vh;
+            display: grid;
+            align-content: center;
+            grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+            gap: var(--s-8);
+        }
+
+        .eyebrow {
+            margin-bottom: var(--s-4);
+            font-family: var(--ff-sans);
+            font-size: var(--fs-ui-xs);
+            font-weight: 500;
+            letter-spacing: var(--tr-eyebrow);
+            text-transform: uppercase;
+            color: var(--ink-mute);
+        }
+
+        h1 {
+            margin: 0 0 var(--s-5);
+            max-width: 9ch;
+            font-size: var(--fs-display-xl);
+            line-height: var(--lh-tight);
+        }
+
+        .hero-copy {
+            max-width: 52rem;
+            font-size: var(--fs-body-l);
+            line-height: var(--lh-loose);
+            color: var(--ink-mute);
+        }
+
+        .hero-proof {
+            align-self: center;
+            display: grid;
+            gap: var(--hair);
+            border: var(--hair) solid var(--ink);
+            background: var(--ink);
+        }
+
+        .proof-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: var(--s-4);
+            padding: var(--s-4);
+            background: var(--paper);
+        }
+
+        .proof-label {
+            font-family: var(--ff-sans);
+            font-size: var(--fs-ui-xs);
+            letter-spacing: var(--tr-eyebrow);
+            text-transform: uppercase;
+            color: var(--ink-mute);
+        }
+
+        .proof-value {
+            font-family: var(--ff-mono);
+            font-size: var(--fs-body-s);
+            color: var(--ink);
+        }
+
+        .section-header {
+            display: grid;
+            grid-template-columns: minmax(0, 0.7fr) minmax(280px, 1fr);
+            gap: var(--s-7);
+            margin-bottom: var(--s-6);
+        }
+
+        .section-kicker {
+            font-family: var(--ff-sans);
+            font-size: var(--fs-ui-xs);
+            font-weight: 500;
+            letter-spacing: var(--tr-eyebrow);
+            text-transform: uppercase;
+            color: var(--accent-terracotta);
+        }
+
+        h2 {
+            margin: var(--s-2) 0 0;
+            font-size: var(--fs-display-m);
+        }
+
+        h3 {
+            margin: 0 0 var(--s-4);
+            font-size: var(--fs-display-s);
+        }
+
+        .section-intro {
+            margin: 0;
+            color: var(--ink-mute);
+            line-height: var(--lh-loose);
+        }
+
+        .grid {
+            display: grid;
+            gap: var(--hair);
+            border: var(--hair) solid var(--paper-edge);
+            background: var(--paper-edge);
+        }
+
+        .grid.two {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .grid.three {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .panel,
+        .component-panel {
+            min-width: 0;
+            padding: var(--s-5);
+            background: var(--guide-panel);
+        }
+
+        .panel-title {
+            margin-bottom: var(--s-3);
+            font-family: var(--ff-sans);
+            font-size: var(--fs-ui-xs);
+            font-weight: 500;
+            letter-spacing: var(--tr-eyebrow);
+            text-transform: uppercase;
+            color: var(--ink-mute);
+        }
+
+        .asset-preview {
+            display: grid;
+            grid-template-columns: 96px minmax(0, 1fr);
+            gap: var(--s-4);
+            align-items: center;
+        }
+
+        .asset-logo-frame {
+            display: grid;
+            place-items: center;
+            width: 96px;
+            height: 96px;
+            border: var(--hair) solid var(--paper-edge);
+            background: var(--paper);
+        }
+
+        .asset-logo-frame img {
+            display: block;
+            width: 64px;
+            height: auto;
+        }
+
+        .token-list {
+            display: grid;
+            gap: var(--s-2);
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .token-list li,
+        .rule-list li {
+            display: grid;
+            grid-template-columns: minmax(150px, 0.7fr) minmax(0, 1fr);
+            gap: var(--s-4);
+            align-items: baseline;
+            padding: var(--s-2) 0;
+            border-top: var(--hair) solid var(--paper-edge);
+        }
+
+        .token-list li:first-child,
+        .rule-list li:first-child {
+            border-top: 0;
+        }
+
+        code {
+            padding: 2px 5px;
+            background: var(--guide-code);
+            border: var(--hair) solid var(--paper-edge);
+            border-radius: var(--radius-1);
+            font-family: var(--ff-mono);
+            font-size: 0.88em;
+        }
+
+        .swatch-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: var(--hair);
+            border: var(--hair) solid var(--paper-edge);
+            background: var(--paper-edge);
+        }
+
+        .swatch {
+            min-height: 160px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: var(--s-4);
+            background: var(--token-bg);
+            color: var(--token-fg, var(--ink));
+        }
+
+        .swatch span {
+            font-family: var(--ff-mono);
+            font-size: var(--fs-ui-xs);
+        }
+
+        .type-stack {
+            display: grid;
+            gap: var(--s-5);
+        }
+
+        .type-sample {
+            padding-bottom: var(--s-5);
+            border-bottom: var(--hair) solid var(--paper-edge);
+        }
+
+        .type-sample:last-child {
+            padding-bottom: 0;
+            border-bottom: 0;
+        }
+
+        .scale-bars {
+            display: grid;
+            gap: var(--s-3);
+        }
+
+        .scale-row {
+            display: grid;
+            grid-template-columns: 96px minmax(0, 1fr) 64px;
+            gap: var(--s-4);
+            align-items: center;
+            font-family: var(--ff-mono);
+            font-size: var(--fs-ui-xs);
+        }
+
+        .scale-bar {
+            height: 18px;
+            width: var(--bar-width);
+            max-width: 100%;
+            background: var(--accent-terracotta);
+        }
+
+        .motion-card {
+            position: relative;
+            min-height: 80px;
+            overflow: hidden;
+            background: var(--paper-deep);
+        }
+
+        .motion-card::after {
+            content: "";
+            position: absolute;
+            top: 26px;
+            left: var(--s-4);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--ink);
+            animation: guide-motion var(--dur-4) var(--ease) infinite alternate;
+        }
+
+        @keyframes guide-motion {
+            to { transform: translateX(140px); }
+        }
+
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: var(--hair);
+            border: var(--hair) solid var(--paper-edge);
+            background: var(--paper-edge);
+        }
+
+        .component-demo {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--s-3);
+            align-items: center;
+        }
+
+        .component-demo.stack {
+            display: grid;
+            align-items: stretch;
+        }
+
+        .demo-input,
+        .demo-textarea,
+        .demo-select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px 16px;
+            border: var(--hair) solid var(--paper-edge);
+            background: var(--white);
+            color: var(--ink);
+            font: inherit;
+        }
+
+        .demo-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .demo-list-row {
+            display: grid;
+            grid-template-columns: 120px minmax(0, 1fr) auto;
+            gap: var(--s-4);
+            align-items: center;
+            padding: var(--s-4) 0;
+            border-top: var(--hair) solid var(--paper-edge);
+        }
+
+        .demo-thumb {
+            aspect-ratio: 4 / 3;
+            background:
+                linear-gradient(135deg, rgba(193, 138, 77, 0.72), rgba(125, 142, 57, 0.62)),
+                var(--paper-deep);
+        }
+
+        .full-row {
+            grid-column: 1 / -1;
+        }
+
+        .guide-controls-demo {
+            display: block;
+            min-height: 92px;
+        }
+
+        .portable-note {
+            display: grid;
+            gap: var(--s-4);
+            padding: var(--s-5);
+            border: var(--hair) solid var(--ink);
+            background: var(--paper);
+        }
+
+        pre {
+            overflow-x: auto;
+            margin: 0;
+            padding: var(--s-4);
+            background: var(--ink);
+            color: var(--paper);
+            font-family: var(--ff-mono);
+            font-size: var(--fs-body-s);
+            line-height: var(--lh-normal);
+        }
+
+        pre code {
+            display: block;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            color: inherit;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .deprecated-note {
+            color: var(--ink-mute);
+        }
+
+        @media (max-width: 1100px) {
+            .guide-shell {
+                grid-template-columns: 1fr;
+            }
+
+            .guide-sidebar {
+                display: none;
+            }
+
+            .mobile-nav {
+                display: flex;
+            }
+
+            .guide-hero,
+            .section-header,
+            .grid.two,
+            .grid.three,
+            .component-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .guide-hero {
+                min-height: auto;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .guide-hero,
+            .guide-section {
+                padding: var(--s-5) var(--s-4);
+            }
+
+            .swatch-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .token-list li,
+            .rule-list li,
+            .demo-list-row {
+                grid-template-columns: 1fr;
+            }
+
+            .asset-preview {
+                grid-template-columns: 1fr;
+            }
+
+            .scale-row {
+                grid-template-columns: 74px minmax(0, 1fr) 52px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="guide-shell">
+        <aside class="guide-sidebar" aria-label="Style guide navigation">
+            <a class="guide-mark" href="#top" aria-label="Prompt Library Style Guide home">
+                <img src="public/images/prompts-logo.svg" alt="" class="guide-logo-image">
+                <span class="guide-mark-title">Prompt Library <span class="guide-version">Style Guide v3</span></span>
+            </a>
+            <nav class="guide-nav">
+                <a href="#identity">Identity</a>
+                <a href="#tokens">Tokens</a>
+                <a href="#typography">Typography</a>
+                <a href="#spacing">Spacing</a>
+                <a href="#motion">Motion</a>
+                <a href="#rules">State Rules</a>
+                <a href="#layout">App Layout</a>
+                <a href="#public-components">Public Components</a>
+                <a href="#web-components">Web Components</a>
+                <a href="#portable">Portable Usage</a>
+            </nav>
+        </aside>
+
+        <main id="top" class="guide-main">
+            <nav class="mobile-nav" aria-label="Mobile style guide navigation">
+                <a href="#identity">Identity</a>
+                <a href="#tokens">Tokens</a>
+                <a href="#typography">Type</a>
+                <a href="#layout">Layout</a>
+                <a href="#web-components">Components</a>
+                <a href="#portable">Portable</a>
+            </nav>
+
+            <header class="guide-hero">
+                <div>
+                    <p class="eyebrow">Canonical design system</p>
+                    <h1>Prompt Library Style Guide</h1>
+                    <p class="hero-copy">One living reference for the current local design system: tokens, layout patterns, public prompt UI, and the committed <code>wy-*</code> web components. This page replaces the overlapping v1/v2 guides and uses the same files as the app.</p>
+                </div>
+                <div class="hero-proof" aria-label="Current source files">
+                    <div class="proof-row"><span class="proof-label">Tokens</span><span class="proof-value">tokens.css</span></div>
+                    <div class="proof-row"><span class="proof-label">App styles</span><span class="proof-value">styles.css</span></div>
+                    <div class="proof-row"><span class="proof-label">Components</span><span class="proof-value">web-components.js</span></div>
+                    <div class="proof-row"><span class="proof-label">Mode</span><span class="proof-value">Light only</span></div>
+                </div>
+            </header>
+
+            <section id="identity" class="guide-section">
+                <div class="section-header">
+                    <div>
+                        <span class="section-kicker">01</span>
+                        <h2>Identity</h2>
+                    </div>
+                    <p class="section-intro">The current system is editorial, warm, and quiet: serif-led hierarchy, off-white paper, black hairlines, restrained terracotta accents, pill controls, and minimal shadow.</p>
+                </div>
+                <div class="grid three">
+                    <div class="panel">
+                        <p class="panel-title">Logo asset</p>
+                        <div class="asset-preview">
+                            <div class="asset-logo-frame">
+                                <img src="public/images/prompts-logo.svg" alt="Prompts Library logo">
+                            </div>
+                            <div>
+                                <p>Use the existing SVG logo anywhere the Prompt Library brand mark is needed.</p>
+                                <p><code>public/images/prompts-logo.svg</code></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <p class="panel-title">Voice</p>
+                        <p>Plain utility with an editorial finish. Labels are compact and uppercase; headings carry the personality.</p>
+                    </div>
+                    <div class="panel">
+                        <p class="panel-title">Structure</p>
+                        <p>Use full-width bands, hairline dividers, and dense but legible grids. Avoid decorative nested cards.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tokens" class="guide-section">
+                <div class="section-header">
+                    <div>
+                        <span class="section-kicker">02</span>
+                        <h2>Tokens</h2>
+                    </div>
+                    <p class="section-intro">Use canonical tokens first. Legacy <code>--md-sys-*</code> and <code>--color-*</code> aliases exist for compatibility, but new work should prefer the concise local names.</p>
+                </div>
+                <div class="swatch-grid">
+                    <div class="swatch" style="--token-bg: var(--paper);"><strong>Paper</strong><span>--paper #F7F4EE</span></div>
+                    <div class="swatch" style="--token-bg: var(--paper-deep);"><strong>Paper Deep</strong><span>--paper-deep #EEE8DD</span></div>
+                    <div class="swatch" style="--token-bg: var(--paper-edge);"><strong>Paper Edge</strong><span>--paper-edge #DDD6C8</span></div>
+                    <div class="swatch" style="--token-bg: var(--ink); --token-fg: var(--paper);"><strong>Ink</strong><span>--ink #1A1A1A</span></div>
+                    <div class="swatch" style="--token-bg: var(--ink-mute); --token-fg: var(--paper);"><strong>Ink Mute</strong><span>--ink-mute #6B6B6A</span></div>
+                    <div class="swatch" style="--token-bg: var(--accent-terracotta);"><strong>Terracotta</strong><span>--accent-terracotta</span></div>
+                    <div class="swatch" style="--token-bg: var(--accent-sage); --token-fg: var(--paper);"><strong>Sage</strong><span>--accent-sage</span></div>
+                    <div class="swatch" style="--token-bg: var(--accent-dusty-rose); --token-fg: var(--paper);"><strong>Dusty Rose</strong><span>--accent-dusty-rose</span></div>
+                </div>
+                <div class="grid two" style="margin-top: var(--s-5);">
+                    <div class="panel">
+                        <p class="panel-title">Core semantic roles</p>
+                        <ul class="token-list">
+                            <li><code>--bg</code><span>Page background, mapped to <code>--paper</code>.</span></li>
+                            <li><code>--fg</code><span>Primary text, mapped to <code>--ink</code>.</span></li>
+                            <li><code>--rule</code><span>Strong hairline divider, mapped to <code>--ink</code>.</span></li>
+                            <li><code>--rule-soft</code><span>Subtle dividers, mapped to <code>--paper-edge</code>.</span></li>
+                            <li><code>--accent</code><span>Default accent, mapped to <code>--accent-terracotta</code>.</span></li>
+                        </ul>
+                    </div>
+                    <div class="panel">
+                        <p class="panel-title">Component tokens</p>
+                        <ul class="token-list">
+                            <li><code>--wy-controls-*</code><span>Controls bar surface, chips, search, floating geometry.</span></li>
+                            <li><code>--wy-button-*</code><span>Button variants, radius, color, tracking, hover layers.</span></li>
+                            <li><code>--wy-filter-chip-*</code><span>Category chip surface, active state, padding, type.</span></li>
+                            <li><code>--wy-toast-*</code><span>Status colors for toast variants.</span></li>
+                            <li><code>--wy-dropdown-*</code><span>Dropdown label, menu, hover, border colors.</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="typography" class="guide-section">
+                <div class="section-header">
+                    <div>
+                        <span class="section-kicker">03</span>
+                        <h2>Typography</h2>
+                    </div>
+                    <p class="section-intro">Serif display type carries hierarchy and warmth. Sans-serif text is used for body, navigation, controls, forms, and metadata.</p>
+                </div>
+                <div class="grid two">
+                    <div class="panel type-stack">
+                        <div class="type-sample"><p class="panel-title"><code>--fs-display-xl</code></p><div class="t-display-xl">A useful prompt, clearly held.</div></div>
+                        <div class="type-sample"><p class="panel-title"><code>--fs-display-m</code></p><div class="t-display-m">Reusable systems should feel calm.</div></div>
+                        <div class="type-sample"><p class="panel-title"><code>--fs-body</code></p><p class="t-body">Body text uses Inter, normal tracking, and generous line height for long prompt descriptions.</p></div>
+                    </div>
+                    <div class="panel">
+                        <p class="panel-title">Token families</p>
+                        <ul class="token-list">
+                            <li><code>--ff-serif</code><span>Lora, Playfair Display, Baskerville, Georgia, serif.</span></li>
+                            <li><code>--ff-sans</code><span>Inter, system UI, Helvetica Neue, Arial, sans-serif.</span></li>
+                            <li><code>--ff-mono</code><span>ui-monospace, SF Mono, Menlo, monospace.</span></li>
+                            <li><code>--tr-eyebrow</code><span>Uppercase UI labels and compact metadata.</span></li>
+                            <li><code>--lh-normal</code><span>Default reading line height.</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="spacing" class="guide-section">
+                <div class="section-header">
+                    <div>
+                        <span class="section-kicker">04</span>
+                        <h2>Spacing And Radius</h2>
+                    </div>
+                    <p class="section-intro">Spacing uses a 4px base scale. The system is mostly square-edged, with pills reserved for controls and tiny radius for subtle framing.</p>
+                </div>
+                <div class="grid two">
+                    <div class="panel">
+                        <p class="panel-title">Spacing scale</p>
+                        <div class="scale-bars">
+                            <div class="scale-row"><code>--s-1</code><span class="scale-bar" style="--bar-width: 4px;"></span><span>4px</span></div>
+                            <div class="scale-row"><code>--s-2</code><span class="scale-bar" style="--bar-width: 8px;"></span><span>8px</span></div>
+                            <div class="scale-row"><code>--s-3</code><span class="scale-bar" style="--bar-width: 12px;"></span><span>12px</span></div>
+                            <div class="scale-row"><code>--s-4</code><span class="scale-bar" style="--bar-width: 16px;"></span><span>16px</span></div>
+                            <div class="scale-row"><code>--s-5</code><span class="scale-bar" style="--bar-width: 24px;"></span><span>24px</span></div>
+                            <div class="scale-row"><code>--s-6</code><span class="scale-bar" style="--bar-width: 32px;"></span><span>32px</span></div>
+                            <div class="scale-row"><code>--s-7</code><span class="scale-bar" style="--bar-width: 48px;"></span><span>48px</span></div>
+                            <div class="scale-row"><code>--s-8</code><span class="scale-bar" style="--bar-width: 64px;"></span><span>64px</span></div>
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <p class="panel-title">Radius and lines</p>
+                        <ul class="token-list">
+                            <li><code>--hair</code><span>1px dividers and borders.</span></li>
+                            <li><code>--radius-0</code><span>Default structural edge.</span></li>
+                            <li><code>--radius-1</code><span>2px micro radius for small code-like surfaces.</span></li>
+                            <li><code>--radius-pill</code><span>Buttons, chips, segmented toggles, compact controls.</span></li>
+                            <li><code>--shadow-modal</code><span>Only for true floating overlays.</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="motion" class="guide-section">
+                <div class="section-header">
+                    <div>
+                        <span class="section-kicker">05</span>
+                        <h2>Motion</h2>
+                    </div>
+                    <p class="section-intro">Motion is short and functional. Use duration and easing tokens rather than magic numbers, and respect reduced motion for decorative movement.</p>
+                </div>
+                <div class="grid two">
+                    <div class="panel">
+                        <p class="panel-title">Timing tokens</p>
+                        <ul class="token-list">
+                            <li><code>--dur-1</code><span>150ms: hover and compact state changes.</span></li>
+                            <li><code>--dur-2</code><span>350ms: view fades and panel transitions.</span></li>
+                            <li><code>--dur-3</code><span>500ms: larger overlay movement.</span></li>
+                            <li><code>--dur-4</code><span>800ms: rare, expressive motion.</span></li>
+                            <li><code>--ease</code><span>Default cubic-bezier for most transitions.</span></li>
+                        </ul>
+                    </div>
+                    <div class="panel">
+                        <p class="panel-title">Motion sample</p>
+                        <div class="motion-card" aria-label="Motion sample using duration and easing tokens"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="rules" class="guide-section">
+                <div class="section-header">
+                    <div>
+                        <span class="section-kicker">06</span>
+                        <h2>State Rules</h2>
+                    </div>
+                    <p class="section-intro">These rules keep the system maintainable as it moves between this repo and other projects.</p>
+                </div>
+                <div class="grid two">
+                    <div class="panel">
+                        <p class="panel-title">Do</p>
+                        <ul class="rule-list">
+                            <li><code>Tokens first</code><span>Check <code>tokens.css</code> before adding new variables.</span></li>
+                            <li><code>:focus-visible</code><span>Every interactive element needs a visible keyboard state.</span></li>
+                            <li><code>State layers</code><span>Prefer pseudo-element opacity layers for hover/press states.</span></li>
+                            <li><code>AA contrast</code><span>Keep text readable on paper and ink surfaces.</span></li>
+                        </ul>
+                    </div>
+                    <div class="panel">
+                        <p class="panel-title">Avoid</p>
+                        <ul class="rule-list">
+                            <li><code>!important</code><span>Resolve specificity or move styling to the component source.</span></li>
+                            <li><code>Hardcoded color</code><span>Use canonical tokens unless documenting an exact token value.</span></li>
+                            <li><code>Dark mode</code><span>This system is <code>color-scheme: light only</code>.</span></li>
+                            <li><code>::part layout</code><span>Prefer component custom properties or edit <code>components/ui/</code>.</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="layout" class="guide-section">
+                <div class="section-header">
+                    <div>
+                        <span class="section-kicker">07</span>
+                        <h2>App Layout</h2>
+                    </div>
+                    <p class="section-intro">The public app uses a sticky masthead, floating controls, and list/grid prompt views. App-specific layout variables live in <code>styles.css</code>.</p>
+                </div>
+                <div class="grid two">
+                    <div class="panel">
+                        <p class="panel-title">Masthead pattern</p>
+                        <div class="header-top" style="position: static; padding: var(--s-4) 0; border-bottom-color: var(--ink);">
+                            <div class="header-logo-group">
+                                <img src="public/images/prompts-logo.svg" alt="Prompts Library Logo" class="header-logo-image">
+                                <span class="header-logo-text">Prompts</span>
+                            </div>
+                            <div class="quick-links">
+                                <a class="quick-link-btn" href="#layout">Library</a>
+                                <a class="quick-link-btn" href="#portable">Portable</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <p class="panel-title">ControlsBar</p>
+                        <div class="guide-controls-demo">
+                            <wy-controls-bar id="guideControlsBar" class="controls-bar" hide-view-toggle hide-details-toggle></wy-controls-bar>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="public-components" class="guide-section">
+                <div class="section-header">
+                    <div>
+                        <span class="section-kicker">08</span>
+                        <h2>Public Prompt Components</h2>
+                    </div>
+                    <p class="section-intro">These examples document the app-facing surfaces from <code>styles.css</code>: prompt cards, list rows, category metadata, and action affordances.</p>
+                </div>
+                <div class="grid two">
+                    <div class="panel">
+                        <p class="panel-title">Prompt card</p>
+                        <article class="prompt-card has-image" data-category="Art" data-has-image="true" data-locked="true" role="button" tabindex="0" aria-label="Open prompt Room Repainter">
+                            <div class="card-thumbnail">
+                                <img src="public/images/1777069870101.png" alt="Room Repainter">
+                            </div>
+                            <div class="card-content">
+                                <div>
+                                    <h3 class="card-title">Room Repainter</h3>
+                                    <div class="card-description">Visualize a room repainted in specified colors while preserving architecture, furniture, and lighting.</div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="card-arrow-button">
+                                        <span class="material-symbols-outlined">arrow_forward</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    <div class="panel">
+                        <p class="panel-title">List row</p>
+                        <div class="demo-list-row">
+                            <div class="demo-thumb" aria-hidden="true"></div>
+                            <div>
+                                <h3 style="margin-bottom: var(--s-2);">Prompt Engineer</h3>
+                                <p class="text-muted">A scan-friendly row with thumbnail, title, category and forward action.</p>
+                            </div>
+                            <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+                        </div>
+                        <div class="demo-list-row">
+                            <div class="demo-thumb" aria-hidden="true"></div>
+                            <div>
+                                <h3 style="margin-bottom: var(--s-2);">Design Critic</h3>
+                                <p class="text-muted">Rows use hairlines and restrained hover instead of decorative cards.</p>
+                            </div>
+                            <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="web-components" class="guide-section">
+                <div class="section-header">
+                    <div>
+                        <span class="section-kicker">09</span>
+                        <h2>Web Components</h2>
+                    </div>
+                    <p class="section-intro">The committed bundle registers every local component from <code>components/ui/index.js</code>. These demos use real <code>wy-*</code> tags from <code>web-components.js</code>.</p>
+                </div>
+
+                <div class="component-grid">
+                    <div class="component-panel">
+                        <h3>wy-button</h3>
+                        <div class="component-demo">
+                            <wy-button icon="arrow_forward">Primary</wy-button>
+                            <wy-button variant="secondary" icon="tune">Secondary</wy-button>
+                            <wy-button variant="outlined">Outlined</wy-button>
+                            <wy-button variant="text">Text</wy-button>
+                        </div>
+                    </div>
+                    <div class="component-panel">
+                        <h3>wy-filter-chip</h3>
+                        <div class="component-demo">
+                            <wy-filter-chip label="All" count="24" active></wy-filter-chip>
+                            <wy-filter-chip label="Creative" count="8"></wy-filter-chip>
+                            <wy-filter-chip label="Ops" count="6" variant="soft"></wy-filter-chip>
+                        </div>
+                    </div>
+                    <div class="component-panel">
+                        <h3>wy-tabs</h3>
+                        <wy-tabs active-tab="preview">
+                            <button role="tab" data-tab="preview" class="tab-item active">Preview</button>
+                            <button role="tab" data-tab="template" class="tab-item">Template</button>
+                            <button role="tab" data-tab="notes" class="tab-item">Notes</button>
+                        </wy-tabs>
+                    </div>
+                    <div class="component-panel">
+                        <h3>wy-option-toggle</h3>
+                        <wy-option-toggle id="guideSegmented" label="View" value="list"></wy-option-toggle>
+                    </div>
+                    <div class="component-panel">
+                        <h3>wy-form-field</h3>
+                        <wy-form-field label="Prompt Title" id="guide-title" description="Slotted inputs inherit field styling." required>
+                            <input id="guide-title" class="demo-input" value="Editorial Prompt">
+                        </wy-form-field>
+                    </div>
+                    <div class="component-panel">
+                        <h3>wy-dropdown</h3>
+                        <wy-dropdown id="guideDropdown" label="Category"></wy-dropdown>
+                    </div>
+                    <div class="component-panel">
+                        <h3>wy-info-panel</h3>
+                        <wy-info-panel>This prompt uses variation-specific variables and falls back to prompt-level variables when needed.</wy-info-panel>
+                    </div>
+                    <div class="component-panel">
+                        <h3>wy-code-textarea</h3>
+                        <wy-code-textarea id="guideCodeTextarea"></wy-code-textarea>
+                    </div>
+                    <div class="component-panel">
+                        <h3>wy-variable-editor</h3>
+                        <wy-variable-editor id="guideVariableEditor"></wy-variable-editor>
+                    </div>
+                    <div class="component-panel">
+                        <h3>wy-image-upload</h3>
+                        <wy-image-upload label="Prompt Image" value="" accept="image/*"></wy-image-upload>
+                    </div>
+                    <div class="component-panel full-row">
+                        <h3>wy-controls-bar</h3>
+                        <div class="guide-controls-demo">
+                            <wy-controls-bar id="guideControlsBarFull" class="controls-bar" hide-view-toggle hide-details-toggle></wy-controls-bar>
+                        </div>
+                    </div>
+                    <div class="component-panel">
+                        <h3>wy-toast</h3>
+                        <div class="component-demo">
+                            <wy-button id="showSuccessToast" size="small" icon="check">Success</wy-button>
+                            <wy-button id="showInfoToast" size="small" variant="secondary" icon="info">Info</wy-button>
+                            <wy-button id="showErrorToast" size="small" variant="outlined" icon="error">Error</wy-button>
+                        </div>
+                    </div>
+                    <div class="component-panel">
+                        <h3>wy-copy-confirm</h3>
+                        <div class="component-demo">
+                            <wy-button id="showCopyConfirm" size="small" icon="content_copy">Show Copy Confirm</wy-button>
+                        </div>
+                    </div>
+                    <div class="component-panel">
+                        <h3>wy-modal</h3>
+                        <div class="component-demo">
+                            <wy-button id="openGuideModal" size="small" icon="open_in_new">Open Modal</wy-button>
+                        </div>
+                    </div>
+                    <div class="component-panel">
+                        <h3>wy-links-modal</h3>
+                        <div class="component-demo">
+                            <wy-button id="openGuideLinksModal" size="small" icon="link">Open Links Modal</wy-button>
+                        </div>
+                    </div>
+                    <div class="component-panel">
+                        <h3>wy-prompt-modal and Variation Selector</h3>
+                        <p class="text-muted" style="margin-bottom: var(--s-4);">The prompt modal contains the current native variation selector, description panel, tabs, variable fields, and copy actions.</p>
+                        <wy-button id="openGuidePromptModal" size="small" icon="open_in_new">Open Prompt Modal</wy-button>
+                    </div>
+                    <div class="component-panel">
+                        <h3>wy-prompt-editor</h3>
+                        <p class="text-muted" style="margin-bottom: var(--s-4);">Admin editor shell, variation mode, variables, template, steps, visibility, and live preview.</p>
+                        <wy-button id="openGuideEditorModal" size="small" icon="edit">Open Editor Demo</wy-button>
+                    </div>
+                    <div class="component-panel full-row">
+                        <h3>wy-variation-editor, wy-step-editor</h3>
+                        <wy-variation-editor id="guideVariationEditor"></wy-variation-editor>
+                    </div>
+                </div>
+            </section>
+
+            <section id="portable" class="guide-section">
+                <div class="section-header">
+                    <div>
+                        <span class="section-kicker">10</span>
+                        <h2>Portable Usage</h2>
+                    </div>
+                    <p class="section-intro">For another project, copy the local design-system files as a small bundle. Keep tokens canonical and replace app-specific styles only when the target project needs different layout.</p>
+                </div>
+                <div class="portable-note">
+                    <h3>Minimum portable bundle</h3>
+                    <pre><code>&lt;link rel="stylesheet" href="tokens.css"&gt;
+&lt;link rel="stylesheet" href="styles.css"&gt; &lt;!-- optional app layout/styles --&gt;
+&lt;script type="module" src="web-components.js"&gt;&lt;/script&gt;</code></pre>
+                    <p>Include Google Fonts and Material Symbols when using the current typography and icon system. If offline support becomes a requirement, vendor those assets in a separate pass.</p>
+                    <p class="deprecated-note">Deprecated files: <code>style-guide.html</code> and <code>style-guide-v2.html</code> now point here to avoid design-system drift.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <wy-toast id="guideToast"></wy-toast>
+    <wy-copy-confirm id="guideCopyConfirm"></wy-copy-confirm>
+    <wy-modal id="guideModal" heading="Design System Modal" max-width="520px">
+        <p>This modal uses the committed <code>wy-modal</code> component and the current token surface.</p>
+        <wy-button id="closeGuideModal" slot="footer" size="small">Close</wy-button>
+    </wy-modal>
+    <wy-links-modal id="guideLinksModal" title="Design References"></wy-links-modal>
+    <wy-prompt-modal id="guidePromptModal"></wy-prompt-modal>
+    <wy-modal id="guideEditorModal" heading="Prompt Editor Demo" max-width="1040px">
+        <wy-prompt-editor id="guidePromptEditor"></wy-prompt-editor>
+    </wy-modal>
+
+    <script type="module">
+        const samplePrompt = {
+            id: 'style-guide-demo',
+            title: 'Editorial Design Critic',
+            description: 'Review a UI with the Prompt Library style system and return concrete design notes.',
+            category: 'Design',
+            icon: 'auto_fix_high',
+            image: '',
+            template: 'Review {{surface}} for visual hierarchy, spacing, typography, and interaction states.',
+            variables: [
+                { name: 'surface', label: 'Surface', placeholder: 'Paste a page, screenshot notes, or component description', inputType: 'textarea', rows: 4 },
+                { name: 'strictness', label: 'Strictness', placeholder: 'Gentle but specific' }
+            ],
+            variations: [
+                {
+                    id: 'quick-read',
+                    name: 'Quick Read',
+                    description: 'A concise critique for fast iteration.',
+                    instructions: 'Return the top five improvements, ordered by impact.',
+                    template: 'Quickly review {{surface}} and list the five highest-impact improvements.'
+                },
+                {
+                    id: 'deep-critique',
+                    name: 'Deep Critique',
+                    description: 'A fuller pass across tokens, layout, type, motion, and accessibility.',
+                    instructions: 'Include concrete before/after recommendations.',
+                    template: 'Deeply critique {{surface}} using the Prompt Library design system. Cover hierarchy, spacing, type, states, and accessibility.'
+                }
+            ]
+        };
+
+        const sampleLinks = [
+            { label: 'Prompt Library', url: 'index.html', category: 'Local' },
+            { label: 'Admin', url: 'admin.html', category: 'Local' },
+            { label: 'Style Guide v3', url: 'style-guide-v3.html', category: 'Design' }
+        ];
+
+        function setWhenDefined(name, callback) {
+            customElements.whenDefined(name).then(callback).catch(() => {});
+        }
+
+        setWhenDefined('wy-controls-bar', () => {
+            [document.getElementById('guideControlsBar'), document.getElementById('guideControlsBarFull')].forEach((bar) => {
+                if (!bar) return;
+                bar.categories = [
+                    'Art',
+                    'Expertise',
+                    'Fabric',
+                    'Productivity',
+                    'Travel & Shopping',
+                    'Writing'
+                ];
+                bar.activeCategory = 'all';
+                bar.searchValue = '';
+                bar.viewMode = 'grid';
+                bar.showDetails = false;
+                bar.showFeaturedOnly = false;
+            });
+        });
+
+        setWhenDefined('wy-option-toggle', () => {
+            const toggle = document.getElementById('guideSegmented');
+            if (!toggle) return;
+            toggle.options = ['list', 'grid'];
+            toggle.labels = ['List', 'Grid'];
+            toggle.value = 'list';
+        });
+
+        setWhenDefined('wy-dropdown', () => {
+            const dropdown = document.getElementById('guideDropdown');
+            if (!dropdown) return;
+            dropdown.options = [
+                { value: 'design', label: 'Design' },
+                { value: 'creative', label: 'Creative' },
+                { value: 'ops', label: 'Operations' }
+            ];
+            dropdown.value = 'design';
+        });
+
+        setWhenDefined('wy-code-textarea', () => {
+            const textarea = document.getElementById('guideCodeTextarea');
+            if (!textarea) return;
+            textarea.value = samplePrompt.template;
+            textarea.label = 'Template';
+        });
+
+        setWhenDefined('wy-variable-editor', () => {
+            const editor = document.getElementById('guideVariableEditor');
+            if (!editor) return;
+            editor.variables = samplePrompt.variables;
+        });
+
+        setWhenDefined('wy-variation-editor', () => {
+            const editor = document.getElementById('guideVariationEditor');
+            if (!editor) return;
+            editor.variations = samplePrompt.variations.map((variation) => ({
+                ...variation,
+                variables: samplePrompt.variables
+            }));
+        });
+
+        setWhenDefined('wy-prompt-editor', () => {
+            const editor = document.getElementById('guidePromptEditor');
+            if (!editor) return;
+            editor.prompt = samplePrompt;
+            editor.categories = ['Design', 'Creative', 'Operations'];
+        });
+
+        setWhenDefined('wy-links-modal', () => {
+            const modal = document.getElementById('guideLinksModal');
+            if (!modal) return;
+            modal.links = sampleLinks;
+        });
+
+        setWhenDefined('wy-toast', () => {
+            const toast = document.getElementById('guideToast');
+            const showToast = (message, variant) => {
+                toast.message = message;
+                toast.variant = variant;
+                toast.duration = 2400;
+                toast.dismissible = variant !== 'success';
+                toast.show = true;
+            };
+            document.getElementById('showSuccessToast')?.addEventListener('click', () => showToast('Style guide saved as canonical.', 'success'));
+            document.getElementById('showInfoToast')?.addEventListener('click', () => showToast('Tokens come from tokens.css.', 'info'));
+            document.getElementById('showErrorToast')?.addEventListener('click', () => showToast('Use tokens instead of hardcoded colors.', 'error'));
+        });
+
+        document.getElementById('showCopyConfirm')?.addEventListener('click', () => {
+            const confirm = document.getElementById('guideCopyConfirm');
+            confirm.title = 'Copied';
+            confirm.message = 'The prompt text is ready to paste.';
+            confirm.show = true;
+        });
+
+        document.getElementById('openGuideModal')?.addEventListener('click', () => {
+            document.getElementById('guideModal').open = true;
+        });
+        document.getElementById('closeGuideModal')?.addEventListener('click', () => {
+            document.getElementById('guideModal').open = false;
+        });
+        document.getElementById('openGuideLinksModal')?.addEventListener('click', () => {
+            const modal = document.getElementById('guideLinksModal');
+            if (typeof modal.show === 'function') modal.show();
+            else modal.open = true;
+        });
+        document.getElementById('openGuidePromptModal')?.addEventListener('click', () => {
+            const modal = document.getElementById('guidePromptModal');
+            Object.assign(modal, {
+                open: true,
+                title: samplePrompt.title,
+                description: samplePrompt.description,
+                category: samplePrompt.category,
+                template: samplePrompt.template,
+                variables: samplePrompt.variables,
+                variations: samplePrompt.variations,
+                activeVariationIndex: 0
+            });
+        });
+        document.getElementById('openGuideEditorModal')?.addEventListener('click', () => {
+            document.getElementById('guideEditorModal').open = true;
+        });
+    </script>
+</body>
+
+</html>
