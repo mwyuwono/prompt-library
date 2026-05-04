@@ -35,6 +35,7 @@
       {
         "name": "mask_instructions",
         "label": "Masked Image",
+        "description": "Use when you are uploading a mask and want edits constrained to masked areas.",
         "inputType": "toggle",
         "labels": [
           "Off",
@@ -53,6 +54,7 @@
       {
         "name": "ko_imari_palette",
         "label": "Ko-Imari Palette",
+        "description": "Use when the generated figures should follow the vessel’s porcelain palette and linework.",
         "inputType": "toggle",
         "labels": [
           "Off",

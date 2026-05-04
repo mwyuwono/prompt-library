@@ -4200,7 +4200,9 @@ var WyOptionToggle = class extends i4 {
     if (Array.isArray(this.valueDescriptions) && this.valueDescriptions.length === 2 && this.valueDescriptions[index]) {
       return this.valueDescriptions[index];
     }
-    return this._getSelectedValue();
+    const selectedValue = this._getSelectedValue();
+    if (selectedValue) return selectedValue;
+    return "No additional prompt instruction will be added.";
   }
   _getA11yLabel() {
     return this.ariaLabel || this.label || "Option toggle";
@@ -4261,28 +4263,33 @@ var WyOptionToggle = class extends i4 {
     const hasValidOptions = this._hasValidOptions();
     const selectedIndex = this._getSelectedIndex();
     const ariaLabel = this._getA11yLabel();
-    const showSelectedValueText = this.showSelectedValueText && this._getSelectedValue();
+    const showSelectedValueText = this.showSelectedValueText && hasValidOptions;
     return b2`
-            ${this.label ? b2`<p class="label">${this.label}</p>` : ""}
-            ${this.description ? b2`<p class="description">${this.description}</p>` : ""}
             ${this.variant === "switch" ? b2`
                 <div class="switch-row">
-                    <span class="switch-indicator ${!this.checked ? "active" : ""}">${this._getDisplayLabel(0)}</span>
-                    <button
-                        type="button"
-                        class="switch-button ${this.checked ? "checked" : ""}"
-                        role="switch"
-                        aria-checked="${this.checked}"
-                        aria-label="${ariaLabel}"
-                        ?disabled="${this.disabled || !hasValidOptions}"
-                        @click="${() => this._select(this.checked ? 0 : 1)}"
-                        @keydown="${(event) => this._handleSwitchKeyDown(event)}"
-                    >
-                        <span class="switch-thumb"></span>
-                    </button>
-                    <span class="switch-indicator ${this.checked ? "active" : ""}">${this._getDisplayLabel(1)}</span>
+                    <div class="switch-copy">
+                        ${this.label ? b2`<p class="label">${this.label}</p>` : ""}
+                        ${this.description ? b2`<p class="description">${this.description}</p>` : ""}
+                    </div>
+                    <div class="switch-control">
+                        <span class="switch-state">${this._getDisplayLabel(selectedIndex)}</span>
+                        <button
+                            type="button"
+                            class="switch-button ${this.checked ? "checked" : ""}"
+                            role="switch"
+                            aria-checked="${this.checked}"
+                            aria-label="${ariaLabel}"
+                            ?disabled="${this.disabled || !hasValidOptions}"
+                            @click="${() => this._select(this.checked ? 0 : 1)}"
+                            @keydown="${(event) => this._handleSwitchKeyDown(event)}"
+                        >
+                            <span class="switch-thumb"></span>
+                        </button>
+                    </div>
                 </div>
             ` : b2`
+                ${this.label ? b2`<p class="label">${this.label}</p>` : ""}
+                ${this.description ? b2`<p class="description">${this.description}</p>` : ""}
                 <div class="group" role="group" aria-label="${ariaLabel}">
                     ${[0, 1].map((index) => b2`
                         <button
@@ -4410,26 +4417,44 @@ __publicField(WyOptionToggle, "styles", i`
         }
 
         .switch-row {
-            display: flex;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
             align-items: center;
             gap: var(--spacing-md, 16px);
-            min-height: 34px;
+            min-height: 38px;
         }
 
-        .switch-indicator {
+        .switch-copy {
+            min-width: 0;
+        }
+
+        .switch-copy .label {
+            margin-bottom: var(--spacing-xs, 4px);
+        }
+
+        .switch-copy .description {
+            margin-bottom: 0;
+        }
+
+        .switch-control {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm, 8px);
+            justify-self: end;
+        }
+
+        .switch-state {
+            min-width: 2.5rem;
+            text-align: right;
             font-family: var(--font-body, 'DM Sans', sans-serif);
             font-size: 0.625rem;
             font-weight: 700;
             line-height: 1.1;
             letter-spacing: 0.15em;
             text-transform: uppercase;
-            color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 40%, transparent);
+            color: var(--md-sys-color-primary, #282828);
             transition: color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
             user-select: none;
-        }
-
-        .switch-indicator.active {
-            color: var(--md-sys-color-primary, #282828);
         }
 
         .switch-button {
@@ -4437,8 +4462,9 @@ __publicField(WyOptionToggle, "styles", i`
             overflow: hidden;
             border: 0;
             padding: 0;
-            width: 64px;
-            height: 34px;
+            flex: 0 0 auto;
+            width: 52px;
+            height: 30px;
             border-radius: var(--md-sys-shape-corner-full, 9999px);
             background: var(--wy-option-toggle-off-bg, #E8E4D8);
             cursor: pointer;
@@ -4446,8 +4472,8 @@ __publicField(WyOptionToggle, "styles", i`
         }
 
         :host([size='compact']) .switch-button {
-            width: 40px;
-            height: 22px;
+            width: 52px;
+            height: 30px;
         }
 
         .switch-button.checked {
@@ -4477,30 +4503,30 @@ __publicField(WyOptionToggle, "styles", i`
             position: absolute;
             top: 3px;
             left: 3px;
-            width: 28px;
-            height: 28px;
+            width: 24px;
+            height: 24px;
             border-radius: var(--md-sys-shape-corner-full, 9999px);
             background: var(--md-sys-color-primary, #282828);
             transition: transform var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
         }
 
         :host([size='compact']) .switch-thumb {
-            top: 2px;
-            left: 2px;
-            width: 18px;
-            height: 18px;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
         }
 
         .switch-button.checked .switch-thumb {
-            transform: translateX(30px);
+            transform: translateX(22px);
             background: var(--md-sys-color-surface, #F5F2EA);
         }
 
         :host([size='compact']) .switch-button.checked .switch-thumb {
-            transform: translateX(18px);
+            transform: translateX(22px);
         }
 
-        :host([size='compact']) .switch-indicator {
+        :host([size='compact']) .switch-state {
             font-size: 0.5625rem;
             letter-spacing: 0.12em;
         }
@@ -4528,6 +4554,21 @@ __publicField(WyOptionToggle, "styles", i`
         :host([disabled]) .switch-button {
             cursor: not-allowed;
             background: var(--wy-option-toggle-disabled-bg, #D1CDC0);
+        }
+
+        @media (max-width: 520px) {
+            .switch-row {
+                grid-template-columns: 1fr;
+                align-items: start;
+            }
+
+            .switch-control {
+                justify-self: start;
+            }
+
+            .switch-state {
+                text-align: left;
+            }
         }
     `);
 customElements.define("wy-option-toggle", WyOptionToggle);
@@ -7778,6 +7819,14 @@ var WyPromptModal = class extends i4 {
       </div>
     `;
   }
+  _getToggleDescription(variable, options) {
+    if (variable.description) return variable.description;
+    if (!Array.isArray(options) || options.length < 2 || options[0] !== "" || !options[1]) return "";
+    const enabledText = String(options[1]).trim();
+    const firstSentenceMatch = enabledText.match(/^.*?[.!?](?:\s|$)/);
+    const firstSentence = firstSentenceMatch ? firstSentenceMatch[0].trim() : enabledText;
+    return firstSentence.length > 140 ? `${firstSentence.slice(0, 137).trim()}...` : firstSentence;
+  }
   _renderVariable(v2) {
     const inputType = v2.inputType || v2.type || "text";
     if (inputType === "toggle") {
@@ -7787,10 +7836,12 @@ var WyPromptModal = class extends i4 {
       const size = v2.size || "default";
       const currentValue = this._values[v2.name];
       const toggleValue = currentValue !== void 0 && currentValue !== null ? currentValue : options[0];
+      const toggleDescription = this._getToggleDescription(v2, options);
       return b2`
         <div class="form-group">
           <wy-option-toggle
             .label="${v2.label || ""}"
+            .description="${toggleDescription}"
             .options="${options}"
             .labels="${labels}"
             .valueDescriptions="${valueDescriptions}"

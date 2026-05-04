@@ -1174,6 +1174,18 @@ export class WyPromptModal extends LitElement {
     `;
   }
 
+  _getToggleDescription(variable, options) {
+    if (variable.description) return variable.description;
+    if (!Array.isArray(options) || options.length < 2 || options[0] !== '' || !options[1]) return '';
+
+    const enabledText = String(options[1]).trim();
+    const firstSentenceMatch = enabledText.match(/^.*?[.!?](?:\s|$)/);
+    const firstSentence = firstSentenceMatch ? firstSentenceMatch[0].trim() : enabledText;
+    return firstSentence.length > 140
+      ? `${firstSentence.slice(0, 137).trim()}...`
+      : firstSentence;
+  }
+
   _renderVariable(v) {
     // Support both 'type' and 'inputType' for compatibility
     const inputType = v.inputType || v.type || 'text';
@@ -1193,11 +1205,13 @@ export class WyPromptModal extends LitElement {
       const toggleValue = currentValue !== undefined && currentValue !== null
         ? currentValue
         : options[0];
+      const toggleDescription = this._getToggleDescription(v, options);
 
       return html`
         <div class="form-group">
           <wy-option-toggle
             .label="${v.label || ''}"
+            .description="${toggleDescription}"
             .options="${options}"
             .labels="${labels}"
             .valueDescriptions="${valueDescriptions}"
