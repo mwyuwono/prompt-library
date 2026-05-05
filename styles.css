@@ -390,6 +390,11 @@ body.modal-open {
     overflow: visible;
 }
 
+.prompt-card:not(.has-image):not([data-has-image="true"]) {
+    padding-top: var(--space-xl);
+    padding-bottom: var(--space-xl);
+}
+
 @media (min-width: 900px) {
     .prompt-card:nth-child(even) {
         padding-left: calc(var(--inner-gutter) + var(--s-6));
