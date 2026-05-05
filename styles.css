@@ -448,7 +448,7 @@ body.modal-open {
     align-items: center;
     justify-content: space-between;
     gap: var(--space-md);
-    margin-bottom: var(--space-xs);
+    margin-bottom: var(--space-sm);
 }
 .prompt-card.has-image .card-header,
 .prompt-card[data-has-image="true"] .card-header {
@@ -511,7 +511,7 @@ body.modal-open {
     font-weight: 500;
     line-height: var(--line-height-card-title);
     letter-spacing: var(--tr-display);
-    margin-bottom: 0;
+    margin-bottom: 12px;
     color: var(--ink);
 }
 
