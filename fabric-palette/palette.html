@@ -6,31 +6,29 @@
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
   <title>Palette: Robert Brown</title>
+  <link rel="stylesheet" href="../tokens.css" />
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&amp;display=swap"
     rel="stylesheet" />
   <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;display=swap"
-    rel="stylesheet" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&amp;family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;display=swap"
     rel="stylesheet" />
   <link
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
     rel="stylesheet" />
   <script id="tailwind-config">
     tailwind.config = {
-      darkMode: "class",
       theme: {
         extend: {
           colors: {
-            "primary": "#a5745b",
-            "background-light": "#f6f6f8",
-            "background-dark": "#101622",
+            "primary": "#C18A4D",
+            "background-light": "#F7F4EE",
+            "ink": "#1A1A1A",
+            "ink-mute": "#6B6B6A",
           },
           fontFamily: {
             "display": ["Inter", "sans-serif"],
-            "serif": ["Playfair Display", "serif"]
+            "serif": ["Lora", "Playfair Display", "Baskerville", "Georgia", "serif"]
           },
           borderRadius: {
             "DEFAULT": "0.25rem",
@@ -43,8 +41,10 @@
     }
   </script>
   <style>
-    .material-symbols-outlined {
-      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    body {
+      color-scheme: light only;
+      color: var(--ink);
+      background-color: var(--paper);
     }
 
     .swatch-card:hover .copy-overlay,
@@ -60,7 +60,8 @@
       margin-left: auto;
       margin-right: auto;
       transform: translateY(-8px);
-      transition: opacity 200ms ease, transform 200ms ease;
+      transition: opacity var(--dur-1, 150ms) var(--ease, cubic-bezier(0.2, 0.6, 0.2, 1)),
+                  transform var(--dur-1, 150ms) var(--ease, cubic-bezier(0.2, 0.6, 0.2, 1));
       -webkit-backdrop-filter: blur(12px);
       backdrop-filter: blur(12px);
       background: rgba(17, 24, 39, 0.25);
@@ -74,7 +75,7 @@
 
     .swatch-secondary-chips-container {
       opacity: 0;
-      transition: opacity 150ms ease;
+      transition: opacity var(--dur-1, 150ms) var(--ease, cubic-bezier(0.2, 0.6, 0.2, 1));
       pointer-events: none;
     }
 
@@ -88,7 +89,8 @@
       width: 32px;
       height: 32px;
       border-radius: 9999px;
-      transition: transform 150ms ease, box-shadow 150ms ease;
+      transition: transform var(--dur-1, 150ms) var(--ease, cubic-bezier(0.2, 0.6, 0.2, 1)),
+                  box-shadow var(--dur-1, 150ms) var(--ease, cubic-bezier(0.2, 0.6, 0.2, 1));
     }
 
     .swatch-secondary-chip:hover,
@@ -100,7 +102,7 @@
   </style>
 </head>
 
-<body class="bg-background-light dark:bg-background-dark font-display text-[#0d121b] transition-colors duration-300">
+<body class="bg-background-light font-display transition-colors duration-[350ms]">
   <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
     <div class="layout-container flex h-full grow flex-col">
       <!-- Navigation Header -->
@@ -108,10 +110,10 @@
       <main class="flex-1 px-6 md:px-20 lg:px-40 py-12">
         <!-- Hero Section -->
         <div class="max-w-4xl mb-12">
-          <h1 class="text-[#0d121b] dark:text-white text-5xl leading-tight tracking-tight mb-2 font-serif font-bold">
+          <h1 class="text-5xl leading-tight tracking-tight mb-2 font-serif font-bold">
             Color Palette
           </h1>
-          <p class="text-[#0d121b] dark:text-white text-lg max-w-2xl"><span class="font-serif italic text-xl">Robert Brown Fabric
+          <p class="text-lg max-w-2xl"><span class="font-serif italic text-xl">Robert Brown Fabric
               Collection</span>
           </p>
         </div>
@@ -124,7 +126,7 @@
               id="search-input"
               placeholder="Search colors…"
               autocomplete="off"
-              class="w-full pl-12 pr-10 py-3 rounded-xl border border-primary/20 bg-white dark:bg-background-dark text-[#0d121b] dark:text-white placeholder-[#0d121b]/40 dark:placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-primary/30 text-sm transition-all"
+              class="w-full pl-12 pr-10 py-3 rounded-xl border border-primary/20 bg-white text-ink placeholder-ink/40 focus:outline-none focus:ring-2 focus:ring-primary/30 text-sm transition-all"
             >
             <button
               id="search-clear"
@@ -137,7 +139,7 @@
           <!-- Dropdown — max-height 40vh on mobile so it never fills the screen -->
           <div
             id="search-dropdown"
-            class="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-background-dark rounded-xl border border-primary/20 shadow-xl z-50 overflow-y-auto hidden"
+            class="absolute top-full left-0 right-0 mt-1 bg-white rounded-xl border border-primary/20 shadow-xl z-50 overflow-y-auto hidden"
             style="max-height: 40vh;"
           >
             <div id="search-results" class="p-2"></div>
@@ -147,19 +149,19 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="palette-grid"></div>
         <!-- Copied Notification (Toast) -->
         <div
-          class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] opacity-0 pointer-events-none transition-all duration-500 transform translate-y-4 max-w-[95vw] w-max"
+          class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] opacity-0 pointer-events-none transition-all duration-[500ms] transform translate-y-4 max-w-[95vw] w-max"
           id="toast">
           <div
-            class="flex items-center gap-4 rounded-xl border border-primary/20 bg-white dark:bg-background-dark p-4 shadow-2xl">
+            class="flex items-center gap-4 rounded-xl border border-primary/20 bg-white p-4 shadow-2xl">
             <div class="bg-primary/10 text-primary p-2 rounded-lg">
               <span class="material-symbols-outlined">check_circle</span>
             </div>
             <div class="flex flex-col pr-8">
-              <p class="text-[#0d121b] dark:text-white text-sm font-bold leading-tight tracking-tight">Copied to
+              <p class="text-sm font-bold leading-tight tracking-tight">Copied to
                 Clipboard</p>
-              <p class="text-[#4c669a] text-xs font-normal leading-normal">The HEX code has been saved.</p>
+              <p class="text-ink-mute text-xs font-normal leading-normal">The HEX code has been saved.</p>
             </div>
-            <button class="text-[#4c669a] hover:text-[#0d121b]"
+            <button class="text-ink-mute hover:text-ink"
               onclick="this.parentElement.parentElement.classList.add('opacity-0')">
               <span class="material-symbols-outlined text-xl">close</span>
             </button>
@@ -442,7 +444,7 @@
     function renderSearchResults(results) {
       if (!searchResults) return;
       if (results.length === 0) {
-        searchResults.innerHTML = '<p class="px-4 py-3 text-sm text-[#0d121b]/50 dark:text-white/50">No colors found</p>';
+        searchResults.innerHTML = '<p class="px-4 py-3 text-sm text-ink/50">No colors found</p>';
         return;
       }
       searchResults.innerHTML = results.map(s => {
@@ -457,8 +459,8 @@
           >
             <span class="w-8 h-8 rounded-full flex-shrink-0 shadow-sm border border-black/10" style="background-color:${escapeHtml(hex)};"></span>
             <span class="flex flex-col min-w-0">
-              <span class="text-sm font-medium text-[#0d121b] dark:text-white truncate">${escapeHtml(name)}</span>
-              <span class="text-xs text-[#0d121b]/50 dark:text-white/50 truncate">${escapeHtml(brand)} · ${escapeHtml(hex)}</span>
+              <span class="text-sm font-medium text-ink truncate">${escapeHtml(name)}</span>
+              <span class="text-xs text-ink/50 truncate">${escapeHtml(brand)} · ${escapeHtml(hex)}</span>
             </span>
           </button>`;
       }).join('');
@@ -506,7 +508,7 @@
         const card = document.getElementById(`swatch-${btn.dataset.swatchId}`);
         if (card) {
           card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          card.style.outline = '3px solid #a5745b';
+          card.style.outline = '3px solid #C18A4D';
           card.style.outlineOffset = '4px';
           card.style.borderRadius = '0.75rem';
           setTimeout(() => { card.style.outline = ''; card.style.outlineOffset = ''; }, 2000);
