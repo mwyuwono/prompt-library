@@ -1126,20 +1126,16 @@
     "variables": [
       {
         "name": "source_context",
-        "label": "Source",
-        "description": "Choose whether the SVG should be based on an uploaded image or an item already discussed in the current chat.",
+        "label": "Input Mode",
+        "description": "Choose whether the SVG should follow an attached reference image or the item already described in the chat.",
         "inputType": "toggle",
         "labels": [
-          "Uploaded Image",
-          "Discussed Item"
+          "Image",
+          "Chat"
         ],
         "options": [
           "the uploaded reference",
           "the item discussed"
-        ],
-        "optionDescriptions": [
-          "Use this when you are attaching a reference image.",
-          "Use this when the item has already been described in the chat."
         ],
         "value": "the uploaded reference"
       }
