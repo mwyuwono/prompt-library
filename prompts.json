@@ -1117,6 +1117,37 @@
     "image": "public/images/1776263511993.jpg"
   },
   {
+    "id": "svg-plotter-drawing",
+    "title": "SVG Plotter Drawing",
+    "description": "Creates a simplified SVG drawing from an uploaded reference or discussed item, optimized for pen plotting with clean centerline strokes.",
+    "category": "Art",
+    "icon": "polyline",
+    "template": "Create an SVG drawing of {{source_context}}.\n\nPrioritize proportional clarity, symmetry, and logical construction over exact tracing. Build the drawing as a rational schematic representation that is faithful to the reference or described subject even when simplified.\n\nUse true SVG vector primitives only, such as path, line, polyline, polygon, circle, ellipse, and rect. Do not use raster images, embedded bitmaps, filters, masks, gradients, shadows, textures, CSS effects, or external assets.\n\nReduce complex ornament into clean schematic forms. Include only the major architectural, structural, and form-defining elements. Avoid attempting a faithful decorative trace; focus instead on a correct, legible, well-proportioned representation.\n\nBecause this SVG will be plotted with a pen plotter, use no fills. Use centerline stroke paths only. Keep strokes clean, continuous, and plotter-friendly, with sensible path economy and no dense hatching or decorative noise.\n\nReturn only the complete SVG code.",
+    "variables": [
+      {
+        "name": "source_context",
+        "label": "Source",
+        "description": "Choose whether the SVG should be based on an uploaded image or an item already discussed in the current chat.",
+        "inputType": "toggle",
+        "labels": [
+          "Uploaded Image",
+          "Discussed Item"
+        ],
+        "options": [
+          "the uploaded reference",
+          "the item discussed"
+        ],
+        "optionDescriptions": [
+          "Use this when you are attaching a reference image.",
+          "Use this when the item has already been described in the chat."
+        ],
+        "value": "the uploaded reference"
+      }
+    ],
+    "slug": "svg-plotter-drawing",
+    "featured": false
+  },
+  {
     "id": "untitled-prompt-1777067341288",
     "title": "Fabric Application Mockups",
     "description": "Generates fabric application mockups from an uploaded pattern, showing the design in selected interior, upholstery, drapery, or textile-detail contexts.",
