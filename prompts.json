@@ -149,6 +149,26 @@
     "featured": false
   },
   {
+    "id": "mochi-cloze-flashcards",
+    "title": "Mochi Cloze Flashcards",
+    "description": "Converts pasted notes, terms, or study material into concise Mochi-ready cloze-deletion flashcards with nested clozes and markdown separators.",
+    "category": "Expertise",
+    "icon": "style",
+    "template": "Material to convert:\n{{material_to_convert}}\n\nPrompt:\n\nAct as an expert flashcard creator for the Mochi app. Convert the material above into concise, high-density cloze-deletion flashcards.\n\nFollow these formatting rules strictly:\n1. Output Only: Return only the finished flashcards. Do not include an introduction, explanation, labels, notes, commentary, questions, summaries, or closing text. The output must be ready to copy directly into Mochi without edits.\n2. Card Structure: Start the card with the main term enclosed in double curly brackets, followed by a space, an em-dash (—), a space, and the definition. Do NOT use a colon after the main term, as it breaks Mochi's cloze engine.\n   Syntax: {{Main Term}} — Concise definition sentence.\n3. Conciseness: Strip out conversational filler and passive verbs. Keep definitions telegraphic, punchy, and focused entirely on core technical facts.\n4. Nested Cloze Deletions: Identify key secondary jargon, sub-elements, or specific related terms within the definition, and enclose them in double curly brackets {{like this}} so Mochi hides them during study.\n5. Separation: Separate each flashcard with a standard markdown horizontal rule (---) on its own line.",
+    "variables": [
+      {
+        "name": "material_to_convert",
+        "label": "Material to Convert",
+        "placeholder": "Paste text, terms, or notes to convert into Mochi cloze flashcards",
+        "value": "",
+        "inputType": "textarea",
+        "rows": 10
+      }
+    ],
+    "featured": false,
+    "slug": "mochi-cloze-flashcards"
+  },
+  {
     "id": "product-research",
     "title": "Premium Product Finder",
     "description": "Finds heirloom-quality versions of a described product, prioritizing natural materials, artisan makers, heritage brands, direct links, and prices.",
