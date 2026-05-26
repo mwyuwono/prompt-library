@@ -536,6 +536,14 @@
         "variables": []
       },
       {
+        "id": "classical-wash-elevation-drafting",
+        "name": "Classical Wash Elevation Drafting",
+        "description": "Generates a hand-rendered 18th-century orthographic facade elevation on aged paper with fine ink, graphite, and transparent wash.",
+        "template": "1. Core instruction - Generate a hand-rendered 18th-century architectural elevation of the input building.\n2. Composition - Centrally isolate the building facade within an expansive, empty field of aged paper, contained by a single, precise dark ink border line.\n3. Viewpoint / projection - Orthographic frontal elevation.\n4. Rendering medium - Extremely fine ink and graphite lines with transparent watercolor or dilute ink washes on paper.\n5. Linework - Precisely fine, consistent weight black or dark-grey ink lines defining all architectural forms and details.\n6. Color palette - Aged, creamy paper-white substrate. Cool grey-brown washes for major panels, openings, or shaded areas. Small, highly localized, precise accents of muted sage green for specific, intricate ornaments.\n7. Light, shadow, and value - Defined entirely by subtle value gradations in the transparent washes, creating volume and depth without harsh shadows; form is articulated by tonal value.\n8. Atmosphere / substrate / finish - Aged, creamy, slightly textured paper with subtle historical wear like faint stains, presenting as a clean, professional plate from a historical treatise.\n9. Architectural handling - High fidelity to the source building's major proportions, facade rhythm, openings, and architectural details, rendered with precise, clean articulation.\n10. Style name - Classical Wash Elevation Drafting.",
+        "variables": [],
+        "instructions": "Upload a building image with this prompt."
+      },
+      {
         "id": "parlante",
         "name": "Architecture Parlante Plate",
         "description": "Visionary 18th-century architectural drawing, lavis technique, and formal plate presentation.",
