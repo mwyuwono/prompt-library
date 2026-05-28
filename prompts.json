@@ -1387,7 +1387,8 @@
       }
     ],
     "slug": "hero-image-generator",
-    "icon": "image"
+    "icon": "image",
+    "archived": true
   },
   {
     "id": "hero-image-generator-assisted",
