@@ -569,16 +569,32 @@
   },
   {
     "id": "engraving-conversion",
-    "title": "Engraving Conversion",
-    "description": "Converts an uploaded image into a precise antiquarian technical engraving with fine graphite-gray linework, aged warm paper, and an archival plate-like sensibility.",
+    "title": "Antiquarian Image Conversion",
+    "description": "Converts an uploaded image into a refined antiquarian plate style, with variants for technical engraving and blue-and-white watercolor study.",
     "category": "Art",
     "icon": "history_edu",
     "featured": false,
     "slug": "engraving-conversion",
-    "instructions": "Upload an image with this prompt. Optionally upload a Style Reference image to align the engraving style more closely.",
-    "template": "Convert the provided image to a precise antiquarian technical engraving style: thin graphite-gray ink lines on aged warm paper, restrained monochrome palette, formal measured composition, and an archival plate-like sensibility.\n\nUse delicate ruled linework, hairline contours, sparse crosshatching or parallel hatching for tonal structure, and subtle paper grain or age patina. Preserve a disciplined, observational quality with high geometric control, minimal painterly gesture, and a quiet scholarly mood.\n\nLighting should feel flat, diffuse, and document-like rather than dramatic. The overall vibe should be restrained, historical, analytical, and contemplative, as if taken from an 18th- or early-19th-century architectural, scientific, or design treatise.\n\nAvoid modern digital gloss, photorealism, saturated color, heavy shadows, and expressive brushwork.\n\nIn your response, remind the user they can upload a Style Reference image to align the styles more closely.",
+    "instructions": "Upload an image with this prompt, then select the conversion style. Optionally upload a Style Reference image to align the style more closely.",
+    "template": "",
     "variables": [],
-    "image": "public/images/1779936094867.jpg"
+    "image": "public/images/1779936094867.jpg",
+    "variations": [
+      {
+        "id": "technical-engraving",
+        "name": "Technical Engraving",
+        "description": "Converts an uploaded image into a precise antiquarian technical engraving with thin graphite-gray lines, restrained monochrome tone, and aged paper.",
+        "template": "Convert the provided image to a precise antiquarian technical engraving style: thin graphite-gray ink lines on aged warm paper, restrained monochrome palette, formal measured composition, and an archival plate-like sensibility.\n\nUse delicate ruled linework, hairline contours, sparse crosshatching or parallel hatching for tonal structure, and subtle paper grain or age patina. Preserve a disciplined, observational quality with high geometric control, minimal painterly gesture, and a quiet scholarly mood.\n\nLighting should feel flat, diffuse, and document-like rather than dramatic. The overall vibe should be restrained, historical, analytical, and contemplative, as if taken from an 18th- or early-19th-century architectural, scientific, or design treatise.\n\nAvoid modern digital gloss, photorealism, saturated color, heavy shadows, and expressive brushwork.\n\nIn your response, remind the user they can upload a Style Reference image to align the styles more closely.",
+        "variables": []
+      },
+      {
+        "id": "blue-white-watercolor",
+        "name": "Blue-and-White Watercolor",
+        "description": "Converts an uploaded image into a refined antiquarian blue-and-white watercolor sketch with porcelain-like indigo pigment on aged warm ivory paper.",
+        "template": "Convert the provided image to a refined antiquarian blue-and-white watercolor sketch on aged warm ivory paper. Preserve the subject's core silhouette, proportions, and essential identity, but present it as a quiet archival object study rather than a dramatic illustration. Fix the perspective so the primary form reads as measured, stable, and architecturally coherent.\n\nUse delicate graphite construction lines and fine blue-black indigo ink contours, with richer blue-and-white porcelain-style coloration. Keep the palette disciplined but more visibly blue than muted: deep Prussian blue, inky cobalt, smoky Delft blue, faded indigo, graphite gray, and warm ivory paper. The blue should read like historic underglaze porcelain pigment: dark, slightly granular, irregular, and concentrated in decorative passages, edge contours, interior shadow pockets, recesses, and material-defining details.\n\nBuild tone through fine stippling, broken hatching, dry ink accumulation, and selective blue pigment density. Use stronger blue contrast in the most important ornamental areas and shadowed recesses, while allowing lighter graphite and pale blue-gray lines to remain visible in construction marks, secondary studies, and measurement guides. The result should feel archival and restrained: the subject should contain clear, legible blue inks and darker indigo accents against the warm paper.\n\nCompose the image as a spacious 18th-century decorative arts, architectural, or scientific pattern-book plate, with generous untouched negative space, subtle engraving plate margins, faint ruling lines, light registration marks, and small handwritten measurement annotations. Where useful, include a secondary ghosted outline, simplified profile, elevation fragment, or unfinished construction sketch beside the primary rendered subject to suggest comparative study, scale, or pattern development.\n\nThe rendering should combine observational precision with human irregularity: slightly uneven line weight, imperfect symmetry, faint pencil traces, tiny ink breaks, subtle blue-gray pooling, paper grain, and light foxing. Lighting should be flat, diffuse, and document-like, with minimal cast shadow and no theatrical contrast. The mood should be analytical, reserved, scholarly, fragile, and sophisticated.\n\nColor direction: prioritize visible historic blue pigment over pale wash.\n\nAvoid overly muted blue, cyan, bright synthetic blue, pastel tinting, modern digital polish, photorealistic depth, thick outlines, dense background detail, centered poster-like composition, and over-rendering.",
+        "variables": []
+      }
+    ]
   },
   {
     "id": "prompt-builder",
