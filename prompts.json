@@ -1197,15 +1197,48 @@
   },
   {
     "id": "minimalist-line-drawing",
-    "title": "Minimalist Line Drawing",
-    "description": "Converts an uploaded image into a clean black-and-white line drawing with vector-style outlines and no shading for plotting or hand tracing.",
+    "title": "Line Drawing",
+    "description": "Optimizes an image for vector tracing.",
     "category": "Art",
     "icon": "edit",
     "template": "Convert the attached image into a minimalist black and white line drawing. Use clean, continuous black outlines on a solid white background. No shading, no gradients, and no textures; only pure vector-style mono-lines suitable for pen plotting and tracing.",
     "variables": [],
-    "slug": "minimalist-line-drawing",
+    "slug": "line-drawing",
     "featured": false,
-    "image": "public/images/1776263511993.jpg"
+    "image": "public/images/1776263511993.jpg",
+    "variations": [
+      {
+        "id": "minimalist-line-drawing",
+        "name": "Minimalist Line Drawing",
+        "description": "",
+        "image": "public/images/1776263511993.jpg",
+        "template": "Convert the attached image into a minimalist black and white line drawing. Use clean, continuous black outlines on a solid white background. No shading, no gradients, and no textures; only pure vector-style mono-lines suitable for pen plotting and tracing.",
+        "variables": []
+      },
+      {
+        "id": "variation-2",
+        "name": "Mid-Fidelity Line Drawing",
+        "description": "A line drawing with a bit more fidelity than the 'minimalist' variant",
+        "image": "",
+        "template": "Convert the attached image into a black and white line drawing. Use clean, continuous black outlines on a solid white background. No shading, no gradients; only vector-style mono-lines suitable for pen plotting or tracing.",
+        "variables": []
+      },
+      {
+        "id": "detailed-vector",
+        "name": "Detailed Vector Drawing",
+        "description": "Specify the max number of colors. ",
+        "image": "",
+        "template": "Generate a simplified illustration based on the subject matter and composition of the attached image, optimized specifically for conversion to a vector graphic. Present the subject on a clean, solid white background. The output must utilize a strict maximum of {{colors}} distinct, flat colors, with absolutely no gradients, filters, or textures. The AI must preserve the core identity and essential characteristics of the original subject while actively simplifying and smoothing intricate details to create clean, defined shapes for efficient tracing. Non-essential tiny elements may be merged or abstracted, but crucial recognizable features (such as key facial features, pupils in eyes, specific legible text, or iconic forms) must be retained and simplified, rather than eliminated. The overall rendering style should adapt based on the original upload, aiming for a clean graphic representation.",
+        "variables": [
+          {
+            "name": "colors",
+            "label": "Color Count",
+            "placeholder": "Max number of colors allowed",
+            "inputType": "text"
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "svg-plotter-drawing",
