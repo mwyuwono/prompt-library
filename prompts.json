@@ -1279,6 +1279,14 @@
         "variables": []
       },
       {
+        "id": "detailed-lines",
+        "name": "Detailed Line Drawing",
+        "description": "",
+        "image": "",
+        "template": "Convert the attached image into a black and white centerline stroke drawing that could be feasibly reproduced on a pen plotter. Use clean, continuous black outlines on a solid white background. Discard details that a pen plotter cannot reproduce such as shading and gradients, but ensure important lines are delineated in the output. For example, a line may be needed to delineate a major anatomical contour.  anatomical features must be clearly delineated in the output so they are not lost. For example, a human face should retain indications of major facial contours, important details such as eyes, cheek contours, lips, etc. ",
+        "variables": []
+      },
+      {
         "id": "detailed-vector",
         "name": "Detailed Vector Drawing",
         "description": "Specify the max number of colors. ",
