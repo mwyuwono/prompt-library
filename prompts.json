@@ -554,6 +554,14 @@
         "image": "public/images/1779823310179.jpg"
       },
       {
+        "id": "antiquarian-watercolor-plate",
+        "name": "Antiquarian Watercolor Plate",
+        "description": "Converts an uploaded image into a refined antiquarian architectural watercolor plate on aged warm ivory paper.",
+        "template": "Convert the provided image to a refined antiquarian architectural watercolor plate on aged warm ivory paper, with the measured elegance of an 18th- or early-19th-century decorative arts, architectural, or archaeological survey drawing. Preserve the subject’s essential silhouette, proportions, and identifying structure, but translate it into a formal, centered, scholarly composition with precise geometry, quiet symmetry, and controlled perspective.\n\nUse delicate graphite underdrawing, fine gray-brown ink contours, subtle ruled construction lines, and transparent watercolor washes. The palette should be historically restrained but visibly colored: warm ivory paper, faded rose-pink ground, pale stone gray, soft charcoal, muted sage green, dusty olive, oxidized blue-green, pale terracotta, warm beige, and small accents of deeper mineral blue, russet, and umber. Color should feel thin, matte, mineral, and time-softened rather than digitally saturated.\n\nBuild the rendering through fine linework, pale washes, light hatching, stippled detail, and small decorative passages. Keep the highest detail in ornament, edges, recesses, panels, and material-defining features, while leaving broad areas calm and lightly washed. Include subtle paper grain, faint age staining, minor foxing, registration marks, plate margins, and lightly visible measurement or construction guides where appropriate.\n\nLighting should be flat, diffuse, and document-like, with shallow depth, minimal cast shadow, and no theatrical contrast. The mood should be analytical, archival, elegant, and quietly ceremonial: an object or structure recorded for study, preservation, and connoisseurship rather than dramatized illustration. Avoid photorealism, heavy outlines, modern gloss, intense contrast, expressive brushwork, cluttered composition, and contemporary graphic effects.",
+        "variables": [],
+        "instructions": "Upload an architectural image with this prompt."
+      },
+      {
         "id": "parlante",
         "name": "Architecture Parlante Plate",
         "description": "Visionary 18th-century architectural drawing, lavis technique, and formal plate presentation.",
