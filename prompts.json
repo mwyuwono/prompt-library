@@ -568,6 +568,18 @@
     "image": "public/images/1779820520582.jpg"
   },
   {
+    "id": "engraving-conversion",
+    "title": "Engraving Conversion",
+    "description": "Converts an uploaded image into a precise antiquarian technical engraving with fine graphite-gray linework, aged warm paper, and an archival plate-like sensibility.",
+    "category": "Art",
+    "icon": "history_edu",
+    "featured": false,
+    "slug": "engraving-conversion",
+    "instructions": "Upload an image with this prompt. Optionally upload a Style Reference image to align the engraving style more closely.",
+    "template": "Convert the provided image to a precise antiquarian technical engraving style: thin graphite-gray ink lines on aged warm paper, restrained monochrome palette, formal measured composition, and an archival plate-like sensibility.\n\nUse delicate ruled linework, hairline contours, sparse crosshatching or parallel hatching for tonal structure, and subtle paper grain or age patina. Preserve a disciplined, observational quality with high geometric control, minimal painterly gesture, and a quiet scholarly mood.\n\nLighting should feel flat, diffuse, and document-like rather than dramatic. The overall vibe should be restrained, historical, analytical, and contemplative, as if taken from an 18th- or early-19th-century architectural, scientific, or design treatise.\n\nAvoid modern digital gloss, photorealism, saturated color, heavy shadows, and expressive brushwork.\n\nIn your response, remind the user they can upload a Style Reference image to align the styles more closely.",
+    "variables": []
+  },
+  {
     "id": "prompt-builder",
     "title": "Prompt Builder Assistant",
     "description": "Turns a rough prompt idea into a complete, ready-to-use prompt after targeted clarifying questions.",
