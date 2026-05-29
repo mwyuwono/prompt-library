@@ -569,6 +569,36 @@
         "image": "public/images/1779750250914.jpg",
         "template": "Maintain the building's architectural details. Render the building as an 18th-century visionary architectural plate in the tradition of Boullée, Ledoux, and Lequeu: rigorous measured linework, symbolic architecture parlante, and layered sepia-gray lavis washes that model wood, stone, plaster, slate, earth, shadow, and atmosphere with cartographic precision on aged off-white parchment. ",
         "variables": []
+      },
+      {
+        "id": "historic-panoramic-mural",
+        "name": "Historic Panoramic Mural",
+        "description": "Creates a wide early-American historic mural streetscape from an uploaded building image, with a toggle for straight-on elevation or perspective view.",
+        "template": "Use the uploaded building image as the central subject in a wide panoramic historic mural.\n\nPreserve the building's real architecture: massing, proportions, roofline, windows, doors, shutters, chimneys, porch elements, trim, materials, and distinctive details. Do not add, remove, or redesign architectural features. Adjust only scale, perspective, lighting, and painterly simplification.\n\nViewpoint: {{view_perspective}}\n\nComposition: broad horizontal streetscape; building centered or slightly off-center; viewed from across a quiet street. Include sidewalk and street at bottom, low walls, iron railings, gates, faint neighboring buildings, and large mature trees framing both sides. Trees should have broad dark-green canopies, heavy trunks, layered foliage, and partial overlap with sky/building for depth. Human presence minimal or absent.\n\nStyle: refined early-American / neoclassical decorative architectural mural; hand-painted watercolor, gouache; powdery, atmospheric, slightly aged; calm architectural precision softened into a scenic wall panel. Clean but softened edges, restrained linework, simplified planar forms, no photorealism.\n\nPalette: warm ivory, limestone cream, pale gray, soft beige, ochre, blue-gray, sage, olive, deep forest green, black-green foliage shadows, weathered brown trunks, faint blue-green haze. Controlled contrast, quiet tonal harmony.\n\nLighting: soft diffused daylight, hazy sky, gentle atmospheric recession. Deepest values only in tree canopies, window interiors, gates, under-eaves, and small cast shadows. Building remains legible but integrated into the atmosphere.\n\nOutput should feel like a seamless historic panoramic mural of an early 19th-century American civic or domestic streetscape: elegant, restrained, atmospheric, hand-painted, and timeless.\n\nAvoid: photorealism, collage/pasted look, sharp digital rendering, saturated color, glossy surfaces, dramatic lighting, heavy texture, exaggerated perspective, fantasy architecture, invented architectural details, over-crisp detail.",
+        "variables": [
+          {
+            "name": "view_perspective",
+            "label": "View Perspective",
+            "description": "Choose whether the building is rendered as a centered straight-on elevation or a more dimensional perspective view.",
+            "inputType": "toggle",
+            "labels": [
+              "Elevation",
+              "Perspective"
+            ],
+            "options": [
+              "Centered elevation view: render the building straight-on, front-facing, and near-orthographic, with upright verticals, level horizontals, minimal depth distortion, and a calm symmetrical mural presence.",
+              "Three-dimensional perspective view: render the building in a restrained natural perspective, front-facing or near-front-facing from across the street, showing modest side depth and spatial recession while avoiding exaggerated perspective."
+            ],
+            "optionDescriptions": [
+              "Straight-on centered elevation view.",
+              "Restrained dimensional view with modest perspective depth."
+            ],
+            "value": "Centered elevation view: render the building straight-on, front-facing, and near-orthographic, with upright verticals, level horizontals, minimal depth distortion, and a calm symmetrical mural presence.",
+            "size": "compact"
+          }
+        ],
+        "instructions": "Upload a building image with this prompt, then choose the desired view perspective.",
+        "image": "public/images/1779820520582.jpg"
       }
     ],
     "featured": false,
