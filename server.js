@@ -5,13 +5,22 @@ import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 import { fileURLToPath } from 'url';
+import os from 'os';
+import { execFile } from 'child_process';
+import { promisify } from 'util';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const execFileAsync = promisify(execFile);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 const PBKDF2_ITERATIONS = 250000;
+const DEFAULT_REMOTE_URL = 'https://github.com/mwyuwono/prompt-library.git';
+const DEFAULT_BRANCH = 'main';
+const REMOTE_NAME = 'origin';
+const GIT_TIMEOUT_MS = 30000;
+let gitAskPassPath = null;
 
 // Middleware
 app.use(cors());
@@ -156,6 +165,257 @@ function createPromptShell({ title = 'Untitled Prompt', category = 'Productivity
         template: '',
         variables: []
     };
+}
+
+function getGitAskPassPath() {
+    if (gitAskPassPath && fs.existsSync(gitAskPassPath)) {
+        return gitAskPassPath;
+    }
+
+    gitAskPassPath = path.join(os.tmpdir(), `prompts-library-git-askpass-${process.pid}.sh`);
+    const script = [
+        '#!/bin/sh',
+        'case "$1" in',
+        '  *Username*) printf "%s\\n" "x-access-token" ;;',
+        '  *) printf "%s\\n" "$GITHUB_TOKEN" ;;',
+        'esac',
+        ''
+    ].join('\n');
+    fs.writeFileSync(gitAskPassPath, script, { mode: 0o700 });
+    return gitAskPassPath;
+}
+
+function isHttpsGitHubRemote(remoteUrl) {
+    return /^https:\/\/github\.com\//i.test(remoteUrl || '');
+}
+
+function sanitizeGitError(error) {
+    return String(error?.stderr || error?.stdout || error?.message || error || '')
+        .replaceAll(process.env.GITHUB_TOKEN || '__NO_TOKEN__', '[redacted]')
+        .trim();
+}
+
+async function runGit(args, { useAuth = false, timeout = GIT_TIMEOUT_MS } = {}) {
+    const env = {
+        ...process.env,
+        GIT_TERMINAL_PROMPT: '0'
+    };
+
+    if (!useAuth) {
+        delete env.GITHUB_TOKEN;
+    }
+
+    if (useAuth && process.env.GITHUB_TOKEN) {
+        env.GIT_ASKPASS = getGitAskPassPath();
+    }
+
+    try {
+        const result = await execFileAsync('git', args, {
+            cwd: __dirname,
+            env,
+            timeout,
+            maxBuffer: 1024 * 1024
+        });
+
+        return {
+            stdout: result.stdout.trim(),
+            stderr: result.stderr.trim()
+        };
+    } catch (error) {
+        const sanitized = sanitizeGitError(error);
+        const wrapped = new Error(sanitized || `git ${args.join(' ')} failed`);
+        wrapped.code = error.code;
+        wrapped.signal = error.signal;
+        wrapped.stdout = String(error.stdout || '').trim();
+        wrapped.stderr = sanitized;
+        throw wrapped;
+    }
+}
+
+async function tryGit(args, options) {
+    try {
+        return await runGit(args, options);
+    } catch (error) {
+        return null;
+    }
+}
+
+function parseAheadBehind(output) {
+    const [ahead = '0', behind = '0'] = String(output || '').trim().split(/\s+/);
+    return {
+        ahead: Number.parseInt(ahead, 10) || 0,
+        behind: Number.parseInt(behind, 10) || 0
+    };
+}
+
+function parsePorcelain(output) {
+    return String(output || '')
+        .split('\n')
+        .map(line => line.trimEnd())
+        .filter(Boolean);
+}
+
+async function getBackupStatus({ fetchRemote = true } = {}) {
+    const warnings = [];
+    const status = {
+        branch: DEFAULT_BRANCH,
+        upstream: null,
+        remoteName: REMOTE_NAME,
+        remoteUrl: null,
+        defaultRemoteUrl: DEFAULT_REMOTE_URL,
+        hasRemote: false,
+        lastBackupTime: null,
+        lastBackupCommit: null,
+        changedFiles: [],
+        hasWorkingTreeChanges: false,
+        ahead: 0,
+        behind: 0,
+        auth: {
+            ok: true,
+            required: false,
+            configured: false,
+            message: 'Authentication is not required for this remote.'
+        },
+        warnings,
+        statusKey: 'in-sync',
+        statusLabel: 'In sync',
+        canBackup: true,
+        canPull: false,
+        message: ''
+    };
+
+    const branchResult = await tryGit(['branch', '--show-current']);
+    status.branch = branchResult?.stdout || DEFAULT_BRANCH;
+
+    const remoteResult = await tryGit(['remote', 'get-url', REMOTE_NAME]);
+    status.remoteUrl = remoteResult?.stdout || null;
+    status.hasRemote = Boolean(status.remoteUrl);
+
+    const changedResult = await tryGit(['status', '--porcelain']);
+    status.changedFiles = parsePorcelain(changedResult?.stdout);
+    status.hasWorkingTreeChanges = status.changedFiles.length > 0;
+
+    const lastBackupResult = await tryGit([
+        'log',
+        '-1',
+        '--grep=^Backup:',
+        '--format=%H%x09%cI%x09%s'
+    ]);
+    if (lastBackupResult?.stdout) {
+        const [hash, time, subject] = lastBackupResult.stdout.split('\t');
+        status.lastBackupCommit = hash || null;
+        status.lastBackupTime = time || null;
+        status.lastBackupSubject = subject || null;
+    }
+
+    if (!status.hasRemote) {
+        status.auth = {
+            ok: false,
+            required: false,
+            configured: false,
+            message: 'No origin remote is configured.'
+        };
+        warnings.push('Add an origin remote before backing up.');
+        status.statusKey = 'missing-remote';
+        status.statusLabel = 'Missing remote';
+        status.canBackup = false;
+        status.message = 'Add a GitHub remote to enable backups.';
+        return status;
+    }
+
+    const httpsGitHub = isHttpsGitHubRemote(status.remoteUrl);
+    status.auth.required = httpsGitHub;
+    status.auth.configured = httpsGitHub ? Boolean(process.env.GITHUB_TOKEN) : true;
+    status.auth.message = httpsGitHub
+        ? 'GITHUB_TOKEN is configured for HTTPS GitHub operations.'
+        : 'This remote does not use HTTPS GitHub token authentication.';
+
+    if (httpsGitHub && !process.env.GITHUB_TOKEN) {
+        status.auth.ok = false;
+        status.auth.message = 'Set GITHUB_TOKEN in the server environment to use this HTTPS GitHub remote.';
+        warnings.push(status.auth.message);
+    }
+
+    if (fetchRemote && status.auth.ok) {
+        try {
+            await runGit(['fetch', REMOTE_NAME, '--prune'], { useAuth: httpsGitHub });
+        } catch (error) {
+            status.auth.ok = false;
+            status.auth.message = sanitizeGitError(error) || 'GitHub authentication failed.';
+            warnings.push(status.auth.message);
+        }
+    }
+
+    const upstreamResult = await tryGit(['rev-parse', '--abbrev-ref', '--symbolic-full-name', '@{u}']);
+    status.upstream = upstreamResult?.stdout || `${REMOTE_NAME}/${status.branch || DEFAULT_BRANCH}`;
+
+    const compareRef = status.upstream || `${REMOTE_NAME}/${status.branch || DEFAULT_BRANCH}`;
+    const aheadBehindResult = await tryGit(['rev-list', '--left-right', '--count', `HEAD...${compareRef}`]);
+    if (aheadBehindResult?.stdout) {
+        const counts = parseAheadBehind(aheadBehindResult.stdout);
+        status.ahead = counts.ahead;
+        status.behind = counts.behind;
+    } else {
+        warnings.push(`Could not compare HEAD with ${compareRef}.`);
+    }
+
+    if (!status.auth.ok) {
+        status.statusKey = 'auth-required';
+        status.statusLabel = 'Authentication required';
+        status.canBackup = false;
+    } else if (status.behind > 0) {
+        status.statusKey = 'needs-pull';
+        status.statusLabel = 'Needs pull';
+        status.canBackup = false;
+    } else if (status.hasWorkingTreeChanges || status.ahead > 0) {
+        status.statusKey = 'changes-pending';
+        status.statusLabel = 'Changes pending';
+        status.canBackup = true;
+    } else {
+        status.statusKey = 'in-sync';
+        status.statusLabel = 'In sync';
+        status.canBackup = true;
+    }
+
+    status.canPull = status.hasRemote && status.auth.ok && status.behind > 0;
+    status.message = warnings[0] || status.statusLabel;
+    return status;
+}
+
+async function ensureBackupAllowed() {
+    const status = await getBackupStatus({ fetchRemote: true });
+
+    if (!status.hasRemote) {
+        const error = new Error('Add an origin remote before backing up.');
+        error.statusCode = 400;
+        error.backupStatus = status;
+        throw error;
+    }
+
+    if (!status.auth.ok) {
+        const error = new Error(status.auth.message || 'GitHub authentication is required.');
+        error.statusCode = 401;
+        error.backupStatus = status;
+        throw error;
+    }
+
+    if (status.behind > 0) {
+        const error = new Error('Pull remote changes before backing up.');
+        error.statusCode = 409;
+        error.backupStatus = status;
+        throw error;
+    }
+
+    return status;
+}
+
+function sendGitError(res, error, fallbackMessage = 'Git operation failed') {
+    const statusCode = error.statusCode || 500;
+    res.status(statusCode).json({
+        success: false,
+        error: error.message || fallbackMessage,
+        status: error.backupStatus || null
+    });
 }
 
 // API Routes
@@ -317,6 +577,161 @@ app.post('/api/prompts/:id/archive', (req, res) => {
         });
     } catch (error) {
         res.status(500).json({ error: 'Failed to toggle archive' });
+    }
+});
+
+/**
+ * GET /api/backup/status
+ * Returns local Git/GitHub backup readiness.
+ */
+app.get('/api/backup/status', async (req, res) => {
+    try {
+        const status = await getBackupStatus({ fetchRemote: true });
+        res.json({ success: true, status });
+    } catch (error) {
+        console.error('Error reading backup status:', error);
+        sendGitError(res, error, 'Failed to read backup status');
+    }
+});
+
+/**
+ * POST /api/backup/run
+ * Stages all changes, creates a timestamped backup commit when needed, and pushes.
+ */
+app.post('/api/backup/run', async (req, res) => {
+    try {
+        const statusBeforeBackup = await ensureBackupAllowed();
+        const useAuth = isHttpsGitHubRemote(statusBeforeBackup.remoteUrl);
+
+        if (!statusBeforeBackup.hasWorkingTreeChanges && statusBeforeBackup.ahead === 0) {
+            return res.json({
+                success: true,
+                message: 'Already in sync. No backup commit was needed.',
+                status: statusBeforeBackup
+            });
+        }
+
+        let commitCreated = false;
+        let commitMessage = null;
+
+        if (statusBeforeBackup.hasWorkingTreeChanges) {
+            await runGit(['add', '-A']);
+
+            const stagedResult = await runGit(['diff', '--cached', '--name-only']);
+            if (stagedResult.stdout) {
+                const timestamp = new Date().toISOString();
+                commitMessage = `Backup: ${timestamp}`;
+                await runGit(['commit', '-m', commitMessage]);
+                commitCreated = true;
+            }
+        }
+
+        await runGit(['push', REMOTE_NAME, statusBeforeBackup.branch || DEFAULT_BRANCH], { useAuth });
+
+        const status = await getBackupStatus({ fetchRemote: true });
+        res.json({
+            success: true,
+            message: commitCreated
+                ? `Backup pushed with commit "${commitMessage}".`
+                : 'Local commits pushed to GitHub.',
+            commitCreated,
+            commitMessage,
+            status
+        });
+    } catch (error) {
+        console.error('Error running backup:', error);
+        sendGitError(res, error, 'Backup failed');
+    }
+});
+
+/**
+ * POST /api/backup/pull
+ * Pulls remote changes with normal merge behavior.
+ */
+app.post('/api/backup/pull', async (req, res) => {
+    try {
+        const statusBeforePull = await getBackupStatus({ fetchRemote: true });
+        const useAuth = isHttpsGitHubRemote(statusBeforePull.remoteUrl);
+
+        if (!statusBeforePull.hasRemote) {
+            const error = new Error('Add an origin remote before pulling.');
+            error.statusCode = 400;
+            error.backupStatus = statusBeforePull;
+            throw error;
+        }
+
+        if (!statusBeforePull.auth.ok) {
+            const error = new Error(statusBeforePull.auth.message || 'GitHub authentication is required.');
+            error.statusCode = 401;
+            error.backupStatus = statusBeforePull;
+            throw error;
+        }
+
+        const branch = statusBeforePull.branch || DEFAULT_BRANCH;
+        await runGit(['pull', REMOTE_NAME, branch], { useAuth });
+
+        const status = await getBackupStatus({ fetchRemote: true });
+        res.json({
+            success: true,
+            message: 'Pulled remote changes from GitHub.',
+            status
+        });
+    } catch (error) {
+        console.error('Error pulling backup remote:', error);
+        sendGitError(res, error, 'Pull failed');
+    }
+});
+
+/**
+ * PUT /api/backup/remote
+ * Adds or updates the origin remote URL.
+ */
+app.put('/api/backup/remote', async (req, res) => {
+    try {
+        const remoteUrl = String(req.body?.remoteUrl || DEFAULT_REMOTE_URL).trim();
+        if (!remoteUrl) {
+            return res.status(400).json({ success: false, error: 'Remote URL is required.' });
+        }
+
+        const existingRemote = await tryGit(['remote', 'get-url', REMOTE_NAME]);
+        if (existingRemote?.stdout) {
+            await runGit(['remote', 'set-url', REMOTE_NAME, remoteUrl]);
+        } else {
+            await runGit(['remote', 'add', REMOTE_NAME, remoteUrl]);
+        }
+
+        const status = await getBackupStatus({ fetchRemote: false });
+        res.json({
+            success: true,
+            message: 'Origin remote saved.',
+            status
+        });
+    } catch (error) {
+        console.error('Error saving backup remote:', error);
+        sendGitError(res, error, 'Failed to save remote');
+    }
+});
+
+/**
+ * DELETE /api/backup/remote
+ * Removes the origin remote.
+ */
+app.delete('/api/backup/remote', async (req, res) => {
+    try {
+        const existingRemote = await tryGit(['remote', 'get-url', REMOTE_NAME]);
+        if (existingRemote?.stdout) {
+            await runGit(['remote', 'remove', REMOTE_NAME]);
+        }
+
+        const status = await getBackupStatus({ fetchRemote: false });
+        res.json({
+            success: true,
+            message: 'Origin remote removed.',
+            status
+        });
+    } catch (error) {
+        console.error('Error removing backup remote:', error);
+        sendGitError(res, error, 'Failed to remove remote');
     }
 });
 

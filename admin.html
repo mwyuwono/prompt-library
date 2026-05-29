@@ -30,6 +30,10 @@
                 <button id="privateDatasetButton" class="dataset-button" type="button" data-dataset="private">Private</button>
             </div>
             <p id="datasetStatus" class="dataset-status">Editing public prompts in <code>prompts.json</code>.</p>
+            <button id="backupStatusButton" class="backup-status-button status-loading" type="button" aria-haspopup="dialog">
+                <span class="material-symbols-outlined" aria-hidden="true">sync</span>
+                <span id="backupStatusLabel">Checking backup…</span>
+            </button>
             <div class="sidebar-links">
                 <a href="/index.html" class="view-public-link" target="_blank">
                     <span class="material-symbols-outlined">open_in_new</span>
@@ -61,6 +65,84 @@
             <p>Choose a prompt from the list to begin editing</p>
         </div>
     </main>
+
+    <div id="backupModal" class="backup-modal-backdrop" role="presentation" hidden>
+        <section class="backup-modal" role="dialog" aria-modal="true" aria-labelledby="backupModalTitle">
+            <header class="backup-modal-header">
+                <div>
+                    <p class="backup-modal-kicker">GitHub backup</p>
+                    <h2 id="backupModalTitle">Repository status</h2>
+                </div>
+                <button id="backupModalClose" class="backup-icon-button" type="button" aria-label="Close backup status">
+                    <span class="material-symbols-outlined" aria-hidden="true">close</span>
+                </button>
+            </header>
+
+            <div id="backupModalNotice" class="backup-modal-notice" hidden></div>
+
+            <dl class="backup-status-grid">
+                <div>
+                    <dt>Status</dt>
+                    <dd id="backupModalStatus">Checking…</dd>
+                </div>
+                <div>
+                    <dt>Branch</dt>
+                    <dd id="backupModalBranch">-</dd>
+                </div>
+                <div>
+                    <dt>Last backup</dt>
+                    <dd id="backupModalLastBackup">No backup commits yet</dd>
+                </div>
+                <div>
+                    <dt>Remote</dt>
+                    <dd id="backupModalRemote">No origin remote</dd>
+                </div>
+                <div>
+                    <dt>Local changes</dt>
+                    <dd id="backupModalChanges">-</dd>
+                </div>
+                <div>
+                    <dt>GitHub status</dt>
+                    <dd id="backupModalAheadBehind">-</dd>
+                </div>
+            </dl>
+
+            <div id="backupWarnings" class="backup-warnings" hidden></div>
+
+            <label class="backup-remote-field" for="backupRemoteInput">
+                <span>Origin remote URL</span>
+                <input
+                    id="backupRemoteInput"
+                    type="text"
+                    autocomplete="off"
+                    placeholder="git@github.com:username/repo.git or https://github.com/username/repo.git"
+                >
+            </label>
+
+            <footer class="backup-modal-actions">
+                <button id="backupRefreshButton" class="backup-action-button secondary" type="button">
+                    <span class="material-symbols-outlined" aria-hidden="true">refresh</span>
+                    Refresh
+                </button>
+                <button id="backupRemoveRemoteButton" class="backup-action-button secondary danger" type="button">
+                    <span class="material-symbols-outlined" aria-hidden="true">link_off</span>
+                    Remove remote
+                </button>
+                <button id="backupSaveRemoteButton" class="backup-action-button secondary" type="button">
+                    <span class="material-symbols-outlined" aria-hidden="true">link</span>
+                    Save remote
+                </button>
+                <button id="backupPullButton" class="backup-action-button secondary" type="button" hidden>
+                    <span class="material-symbols-outlined" aria-hidden="true">download</span>
+                    Pull
+                </button>
+                <button id="backupNowButton" class="backup-action-button primary" type="button">
+                    <span class="material-symbols-outlined" aria-hidden="true">backup</span>
+                    Backup now
+                </button>
+            </footer>
+        </section>
+    </div>
 
     <!-- Toast Notifications -->
     <wy-toast id="toast"></wy-toast>

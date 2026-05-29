@@ -7,6 +7,9 @@ let currentPromptId = null;
 let sidebarSearch = '';
 let currentDataset = 'public';
 let privateVaultReady = false;
+let backupStatus = null;
+let backupBusy = false;
+let startupPullPromptShown = false;
 
 // DOM Elements
 const editor = document.getElementById('editor');
@@ -20,6 +23,24 @@ const privateDatasetButton = document.getElementById('privateDatasetButton');
 const datasetStatus = document.getElementById('datasetStatus');
 const sidebarTitle = document.getElementById('sidebarTitle');
 const newPromptButton = document.getElementById('newPromptButton');
+const backupStatusButton = document.getElementById('backupStatusButton');
+const backupStatusLabel = document.getElementById('backupStatusLabel');
+const backupModal = document.getElementById('backupModal');
+const backupModalClose = document.getElementById('backupModalClose');
+const backupModalNotice = document.getElementById('backupModalNotice');
+const backupModalStatus = document.getElementById('backupModalStatus');
+const backupModalBranch = document.getElementById('backupModalBranch');
+const backupModalLastBackup = document.getElementById('backupModalLastBackup');
+const backupModalRemote = document.getElementById('backupModalRemote');
+const backupModalChanges = document.getElementById('backupModalChanges');
+const backupModalAheadBehind = document.getElementById('backupModalAheadBehind');
+const backupWarnings = document.getElementById('backupWarnings');
+const backupRemoteInput = document.getElementById('backupRemoteInput');
+const backupRefreshButton = document.getElementById('backupRefreshButton');
+const backupRemoveRemoteButton = document.getElementById('backupRemoveRemoteButton');
+const backupSaveRemoteButton = document.getElementById('backupSaveRemoteButton');
+const backupPullButton = document.getElementById('backupPullButton');
+const backupNowButton = document.getElementById('backupNowButton');
 
 /**
  * Initialize admin interface
@@ -40,6 +61,8 @@ async function init() {
     } else {
         showEmptyState();
     }
+
+    await refreshBackupStatus({ showStartupPrompt: true });
 }
 
 /**
@@ -294,6 +317,7 @@ function setupEventListeners() {
             renderPromptList();
             loadPrompt(result.prompt.id);
             showSaveResult(result, 'Prompt created');
+            refreshBackupStatus();
         } catch (error) {
             showToast('Error creating prompt', 'error');
         }
@@ -319,6 +343,8 @@ function setupEventListeners() {
             if (currentPromptId) {
                 loadPrompt(currentPromptId);
             }
+
+            refreshBackupStatus();
         } catch (err) {
             console.error('Save error:', err);
             showToast('Error saving prompt', 'error');
@@ -357,6 +383,7 @@ function setupEventListeners() {
                     }
                 }
                 showToast('Image uploaded successfully', 'success');
+                refreshBackupStatus();
             }
         } catch (err) {
             console.error('Upload error:', err);
@@ -390,6 +417,7 @@ function setupEventListeners() {
                 }
 
                 showToast('Image removed successfully', 'success');
+                refreshBackupStatus();
             }
         } catch (err) {
             console.error('Delete error:', err);
@@ -406,6 +434,24 @@ function setupEventListeners() {
             showEmptyState();
         }
     });
+
+    backupStatusButton.addEventListener('click', () => openBackupModal());
+    backupModalClose.addEventListener('click', () => closeBackupModal());
+    backupModal.addEventListener('click', (event) => {
+        if (event.target === backupModal) {
+            closeBackupModal();
+        }
+    });
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && !backupModal.hidden) {
+            closeBackupModal();
+        }
+    });
+    backupRefreshButton.addEventListener('click', () => refreshBackupStatus({ showToastOnSuccess: true }));
+    backupSaveRemoteButton.addEventListener('click', saveBackupRemote);
+    backupRemoveRemoteButton.addEventListener('click', removeBackupRemote);
+    backupPullButton.addEventListener('click', pullBackupRemote);
+    backupNowButton.addEventListener('click', runBackupNow);
 }
 
 async function switchDataset(dataset) {
@@ -517,6 +563,233 @@ function showSaveResult(result, successMessage) {
     }
 
     showToast(result.encryption.message || `${successMessage}, but encrypted vault was not updated`, 'warning');
+}
+
+async function fetchBackupStatus() {
+    const response = await fetch('/api/backup/status');
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+        const error = new Error(data.error || 'Failed to load backup status');
+        error.status = data.status || null;
+        throw error;
+    }
+
+    return data.status;
+}
+
+async function refreshBackupStatus({ showStartupPrompt = false, showToastOnSuccess = false } = {}) {
+    try {
+        setBackupBusy(true);
+        backupStatus = await fetchBackupStatus();
+        renderBackupStatus();
+
+        if (showToastOnSuccess) {
+            showToast('Backup status refreshed', 'success');
+        }
+
+        if (showStartupPrompt && !startupPullPromptShown && backupStatus?.statusKey === 'needs-pull') {
+            startupPullPromptShown = true;
+            openBackupModal('GitHub has newer commits. Pull before backing up.');
+        }
+    } catch (error) {
+        console.error('Backup status error:', error);
+        backupStatus = error.status || {
+            statusKey: 'auth-required',
+            statusLabel: 'Authentication required',
+            warnings: [error.message],
+            canBackup: false,
+            canPull: false
+        };
+        renderBackupStatus();
+    } finally {
+        setBackupBusy(false);
+    }
+}
+
+function renderBackupStatus() {
+    const status = backupStatus || {
+        statusKey: 'loading',
+        statusLabel: 'Checking backup…',
+        warnings: []
+    };
+    const iconByStatus = {
+        'in-sync': 'cloud_done',
+        'changes-pending': 'cloud_upload',
+        'needs-pull': 'cloud_download',
+        'missing-remote': 'link_off',
+        'auth-required': 'lock',
+        loading: 'sync'
+    };
+
+    backupStatusLabel.textContent = status.statusLabel || 'Checking backup…';
+    backupStatusButton.className = `backup-status-button status-${status.statusKey || 'loading'}`;
+    backupStatusButton.querySelector('.material-symbols-outlined').textContent = iconByStatus[status.statusKey] || 'sync';
+
+    backupModalStatus.textContent = status.statusLabel || '-';
+    backupModalBranch.textContent = status.branch || 'main';
+    backupModalLastBackup.textContent = formatBackupTime(status.lastBackupTime);
+    backupModalRemote.textContent = status.remoteUrl || 'No origin remote';
+    backupModalChanges.textContent = status.hasWorkingTreeChanges
+        ? `${status.changedFiles?.length || 0} file${status.changedFiles?.length === 1 ? '' : 's'} changed`
+        : 'No working tree changes';
+    backupModalAheadBehind.textContent = `${status.ahead || 0} ahead, ${status.behind || 0} behind`;
+    backupRemoteInput.value = status.remoteUrl || status.defaultRemoteUrl || 'https://github.com/mwyuwono/prompt-library.git';
+
+    renderBackupWarnings(status.warnings || []);
+
+    backupPullButton.hidden = !status.canPull;
+    backupNowButton.disabled = backupBusy || !status.canBackup;
+    backupRemoveRemoteButton.disabled = backupBusy || !status.hasRemote;
+    backupSaveRemoteButton.disabled = backupBusy;
+    backupRefreshButton.disabled = backupBusy;
+    backupPullButton.disabled = backupBusy || !status.canPull;
+}
+
+function renderBackupWarnings(warnings) {
+    backupWarnings.replaceChildren();
+    backupWarnings.hidden = warnings.length === 0;
+
+    warnings.forEach(warning => {
+        const item = document.createElement('p');
+        item.textContent = warning;
+        backupWarnings.appendChild(item);
+    });
+}
+
+function formatBackupTime(value) {
+    if (!value) return 'No backup commits yet';
+
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return value;
+
+    return date.toLocaleString(undefined, {
+        dateStyle: 'medium',
+        timeStyle: 'short'
+    });
+}
+
+function openBackupModal(notice = '') {
+    if (notice) {
+        backupModalNotice.textContent = notice;
+        backupModalNotice.hidden = false;
+    } else {
+        backupModalNotice.textContent = '';
+        backupModalNotice.hidden = true;
+    }
+
+    backupModal.hidden = false;
+    backupStatusButton.setAttribute('aria-expanded', 'true');
+    backupNowButton.focus();
+}
+
+function closeBackupModal() {
+    backupModal.hidden = true;
+    backupStatusButton.setAttribute('aria-expanded', 'false');
+    backupStatusButton.focus();
+}
+
+function setBackupBusy(isBusy) {
+    backupBusy = isBusy;
+    document.body.classList.toggle('backup-busy', isBusy);
+
+    if (backupStatus) {
+        renderBackupStatus();
+    }
+}
+
+async function postBackupAction(url, options = {}) {
+    const response = await fetch(url, options);
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+        const error = new Error(data.error || 'Backup action failed');
+        error.status = data.status || null;
+        throw error;
+    }
+
+    return data;
+}
+
+async function runBackupNow() {
+    try {
+        setBackupBusy(true);
+        const data = await postBackupAction('/api/backup/run', { method: 'POST' });
+        backupStatus = data.status;
+        renderBackupStatus();
+        showToast(data.message || 'Backup complete', 'success');
+    } catch (error) {
+        console.error('Backup failed:', error);
+        if (error.status) {
+            backupStatus = error.status;
+            renderBackupStatus();
+        }
+        showToast(error.message || 'Backup failed', 'error');
+    } finally {
+        setBackupBusy(false);
+    }
+}
+
+async function pullBackupRemote() {
+    try {
+        setBackupBusy(true);
+        const data = await postBackupAction('/api/backup/pull', { method: 'POST' });
+        backupStatus = data.status;
+        renderBackupStatus();
+        showToast(data.message || 'Pull complete', 'success');
+    } catch (error) {
+        console.error('Pull failed:', error);
+        if (error.status) {
+            backupStatus = error.status;
+            renderBackupStatus();
+        }
+        showToast(error.message || 'Pull failed', 'error');
+    } finally {
+        setBackupBusy(false);
+    }
+}
+
+async function saveBackupRemote() {
+    try {
+        setBackupBusy(true);
+        const data = await postBackupAction('/api/backup/remote', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ remoteUrl: backupRemoteInput.value.trim() })
+        });
+        backupStatus = data.status;
+        renderBackupStatus();
+        await refreshBackupStatus();
+        showToast(data.message || 'Remote saved', 'success');
+    } catch (error) {
+        console.error('Remote save failed:', error);
+        if (error.status) {
+            backupStatus = error.status;
+            renderBackupStatus();
+        }
+        showToast(error.message || 'Failed to save remote', 'error');
+    } finally {
+        setBackupBusy(false);
+    }
+}
+
+async function removeBackupRemote() {
+    try {
+        setBackupBusy(true);
+        const data = await postBackupAction('/api/backup/remote', { method: 'DELETE' });
+        backupStatus = data.status;
+        renderBackupStatus();
+        showToast(data.message || 'Remote removed', 'success');
+    } catch (error) {
+        console.error('Remote remove failed:', error);
+        if (error.status) {
+            backupStatus = error.status;
+            renderBackupStatus();
+        }
+        showToast(error.message || 'Failed to remove remote', 'error');
+    } finally {
+        setBackupBusy(false);
+    }
 }
 
 function getDatasetFromUrl() {
