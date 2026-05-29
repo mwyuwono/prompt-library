@@ -6050,11 +6050,22 @@ var WyPromptEditor = class extends i4 {
     super();
     this.prompt = null;
     this.categories = [];
+    this.heroImageStatus = null;
     this.readonly = false;
     this._editedPrompt = null;
     this._promptMode = "single";
     this._expandedSteps = [];
     this._showGitInfo = false;
+    this._heroProvider = "google";
+    this._heroQuality = "draft";
+    this._heroPrompt = "";
+    this._heroPromptDirty = false;
+    this._heroPreview = "";
+    this._heroPreviewMimeType = "";
+    this._heroPreviewMetadata = null;
+    this._heroBusy = false;
+    this._heroMessage = "";
+    this._heroError = "";
   }
   updated(changedProperties) {
     if (changedProperties.has("prompt") && this.prompt) {
@@ -6065,10 +6076,88 @@ var WyPromptEditor = class extends i4 {
       this._promptMode = this._editedPrompt.steps && this._editedPrompt.steps.length > 0 ? "multi" : "single";
       this._expandedSteps = this._promptMode === "multi" ? [0] : [];
       this._showGitInfo = false;
+      this._resetHeroImageState();
+    }
+    if (changedProperties.has("heroImageStatus") && this.heroImageStatus) {
+      this._heroProvider = this._getDefaultHeroProvider();
     }
   }
   _generateSlug(title) {
     return title.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+  }
+  _getDefaultHeroProvider() {
+    const providers = this.heroImageStatus?.providers || {};
+    if (providers.google?.configured) return "google";
+    if (providers.openai?.configured) return "openai";
+    return this._heroProvider || "google";
+  }
+  _resetHeroImageState() {
+    this._heroProvider = this._getDefaultHeroProvider();
+    this._heroQuality = "draft";
+    this._heroPrompt = this._buildHeroImagePrompt();
+    this._heroPromptDirty = false;
+    this._heroPreview = "";
+    this._heroPreviewMimeType = "";
+    this._heroPreviewMetadata = null;
+    this._heroBusy = false;
+    this._heroMessage = "";
+    this._heroError = "";
+  }
+  _getPromptTemplateSummary(prompt) {
+    if (prompt.variations?.length) {
+      return prompt.variations.map((variation, index) => {
+        const body = variation.steps?.length ? variation.steps.map((step) => `${step.name || step.id || "Step"}:
+${step.template || ""}`).join("\n\n") : variation.template || "";
+        return [
+          `Variation ${index + 1}: ${variation.name || variation.id || "Untitled"}`,
+          variation.description ? `Description: ${variation.description}` : "",
+          body
+        ].filter(Boolean).join("\n");
+      }).join("\n\n---\n\n");
+    }
+    if (prompt.steps?.length) {
+      return prompt.steps.map((step) => `${step.name || step.id || "Step"}:
+${step.template || ""}`).join("\n\n");
+    }
+    return prompt.template || "";
+  }
+  _buildHeroImagePrompt() {
+    if (!this._editedPrompt) return "";
+    const prompt = this._editedPrompt;
+    const subjectPrompt = [
+      `Title: ${prompt.title || "Untitled Prompt"}`,
+      prompt.category ? `Category: ${prompt.category}` : "",
+      prompt.description ? `Description: ${prompt.description}` : "",
+      prompt.instructions ? `Instructions: ${prompt.instructions}` : "",
+      `Prompt content:
+${this._getPromptTemplateSummary(prompt) || "No prompt content yet."}`
+    ].filter(Boolean).join("\n\n");
+    return `You are helping me design a hero image for a reusable prompt in my prompt library.
+
+I will paste the full subject prompt below. Read it closely and infer what the prompt does, who it is for, what outcome it helps create, and what kind of visual metaphor would make that functionality immediately understandable on a prompt-library website.
+
+Subject prompt:
+${subjectPrompt}
+
+Your task:
+Once you understand the subject prompt, generate the hero image to illustrate the functionality and user benefit of the subject prompt, not merely decorate its topic.
+
+Design approach:
+- Identify the core action, transformation, or decision the subject prompt enables.
+- Choose one strong visual concept that communicates that function clearly and elegantly while maintaining the user's high-end editorial aesthetic. Prefer natural colors and materials over flashy graphics or simulated technology.
+- Prefer concrete editorial scenes, refined object compositions, workspace vignettes, crafted materials, before/after tension, or symbolic arrangements that feel natural and premium.
+- Avoid generic AI imagery, glowing robot brains, floating chat bubbles, obvious interface mockups, or literal screenshots unless the subject prompt explicitly requires them.
+- Avoid visible text, labels, UI elements, diagrams, captions, watermarks, or decorative typography unless essential to the subject prompt.
+- Keep the image suitable as a 16:9 website hero: clean focal point, generous negative space, strong crop, legible at card size, and not too busy. Focus on the action of the subject prompt and exclude unrelated elements.
+- The user is inspired by the work of Bruce Weber, Jean-Jacques Lequeu, Sally Mann, James Dakin, Tina Barney, Cy Twombly, Edward Hopper.
+
+Required output:
+Return only the finished hero image. Do not include analysis, headings, options, or explanation.
+
+The style requirements: minimalist, editorial and refined. Photography should only be used if relevant and should be in the style of a high end publication like World of Interiors Magazine or Kinfolk magazine. If photography is not required, prefer graphics that feel both minimalist and classic--imagine a Sir Jon Soane drawing on a solid backdrop or an architectural rendering by Charles Bullfinch.
+- Output requirements: 16:9 aspect ratio, high-resolution, clean composition for a website hero, no visible prompt text, no labels, no watermarks, no overly literal AI imagery unless the use case explicitly calls for it.
+
+Generate the image exactly as a polished 16:9 website hero image.`;
   }
   _handleFieldChange(field, value) {
     if (!this._editedPrompt) return;
@@ -6078,6 +6167,9 @@ var WyPromptEditor = class extends i4 {
     };
     if (field === "title") {
       this._editedPrompt.slug = this._generateSlug(value);
+    }
+    if (!this._heroPromptDirty) {
+      this._heroPrompt = this._buildHeroImagePrompt();
     }
     this.requestUpdate();
   }
@@ -6188,6 +6280,96 @@ var WyPromptEditor = class extends i4 {
       bubbles: true,
       composed: true
     }));
+  }
+  _handleHeroProviderChange(e9) {
+    this._heroProvider = e9.target.value;
+    this._heroError = "";
+  }
+  _handleHeroQualityChange(e9) {
+    this._heroQuality = e9.target.value;
+    this._heroError = "";
+  }
+  _handleHeroPromptInput(e9) {
+    this._heroPrompt = e9.target.value;
+    this._heroPromptDirty = true;
+    this._heroError = "";
+  }
+  _handleResetHeroPrompt() {
+    this._heroPrompt = this._buildHeroImagePrompt();
+    this._heroPromptDirty = false;
+    this._heroMessage = "Prompt reset from current editor fields.";
+    this._heroError = "";
+  }
+  _handleGenerateHeroImage() {
+    if (!this._heroPrompt.trim()) {
+      this._heroError = "Add prompt text before generating.";
+      return;
+    }
+    const providerStatus = this.heroImageStatus?.providers?.[this._heroProvider];
+    if (!providerStatus?.configured) {
+      this._heroError = this._heroProvider === "openai" ? "OPENAI_API_KEY is not configured on the Admin server." : "GEMINI_API_KEY is not configured on the Admin server.";
+      return;
+    }
+    this._heroBusy = true;
+    this._heroError = "";
+    this._heroMessage = "Generating preview...";
+    this.dispatchEvent(new CustomEvent("hero-image-generate", {
+      detail: {
+        provider: this._heroProvider,
+        quality: this._heroQuality,
+        prompt: this._heroPrompt
+      },
+      bubbles: true,
+      composed: true
+    }));
+  }
+  setHeroImagePreview({ image = "", mimeType = "image/png", metadata = null } = {}) {
+    this._heroPreview = image;
+    this._heroPreviewMimeType = mimeType;
+    this._heroPreviewMetadata = metadata;
+    this._heroBusy = false;
+    this._heroError = "";
+    this._heroMessage = image ? "Preview generated. Accept it to attach it as this prompt image." : "";
+  }
+  setHeroImageError(message) {
+    this._heroBusy = false;
+    this._heroError = message || "Hero image generation failed.";
+    this._heroMessage = "";
+  }
+  _handleUseHeroImage() {
+    if (!this._heroPreview) {
+      this._heroError = "Generate a preview before attaching it.";
+      return;
+    }
+    this._heroBusy = true;
+    this._heroError = "";
+    this._heroMessage = "Saving generated image...";
+    this.dispatchEvent(new CustomEvent("hero-image-use", {
+      detail: {
+        promptId: this._editedPrompt?.id,
+        image: this._heroPreview,
+        mimeType: this._heroPreviewMimeType,
+        metadata: this._heroPreviewMetadata
+      },
+      bubbles: true,
+      composed: true
+    }));
+  }
+  setHeroImageAccepted(imagePath) {
+    this.setImageValue({ target: "prompt" }, imagePath);
+    this._heroBusy = false;
+    this._heroError = "";
+    this._heroMessage = "Generated image attached. Save the prompt to keep this change.";
+    this._heroPreview = "";
+    this._heroPreviewMimeType = "";
+    this._heroPreviewMetadata = null;
+  }
+  _handleClearHeroPreview() {
+    this._heroPreview = "";
+    this._heroPreviewMimeType = "";
+    this._heroPreviewMetadata = null;
+    this._heroMessage = "";
+    this._heroError = "";
   }
   _handleVariationImageChange(e9) {
     e9.stopPropagation();
@@ -6358,6 +6540,116 @@ var WyPromptEditor = class extends i4 {
     this._expandedSteps.push(this._editedPrompt.steps.length - 1);
     this.requestUpdate();
   }
+  _renderHeroImageGenerator() {
+    const providers = this.heroImageStatus?.providers || {};
+    const providerOptions = [
+      { value: "google", label: "Google Nano Banana 2", configured: Boolean(providers.google?.configured) },
+      { value: "openai", label: "OpenAI GPT Image", configured: Boolean(providers.openai?.configured) }
+    ];
+    const hasConfiguredProvider = providerOptions.some((option) => option.configured);
+    const selectedProviderConfigured = providerOptions.find((option) => option.value === this._heroProvider)?.configured;
+    const previewUrl = this._heroPreview ? `data:${this._heroPreviewMimeType || "image/png"};base64,${this._heroPreview}` : "";
+    return b2`
+            <div class="hero-generator">
+                <div class="hero-generator-header">
+                    <div>
+                        <h3 class="hero-generator-title">Generate Hero Image</h3>
+                        <p class="hero-provider-status">
+                            ${hasConfiguredProvider ? "Preview first, then attach the version you like." : "Configure GEMINI_API_KEY or OPENAI_API_KEY before generating."}
+                        </p>
+                    </div>
+                    <button
+                        class="button button-ghost button-small"
+                        type="button"
+                        @click="${this._handleResetHeroPrompt}"
+                        ?disabled="${this._heroBusy}"
+                    >
+                        <span class="material-symbols-outlined">refresh</span>
+                        Reset Prompt
+                    </button>
+                </div>
+
+                <div class="hero-controls">
+                    <label class="hero-control-label">
+                        Provider
+                        <select
+                            .value="${this._heroProvider}"
+                            @change="${this._handleHeroProviderChange}"
+                            ?disabled="${this._heroBusy}"
+                        >
+                            ${providerOptions.map((option) => b2`
+                                <option value="${option.value}">
+                                    ${option.label}${option.configured ? "" : " (not configured)"}
+                                </option>
+                            `)}
+                        </select>
+                    </label>
+                    <label class="hero-control-label">
+                        Quality
+                        <select
+                            .value="${this._heroQuality}"
+                            @change="${this._handleHeroQualityChange}"
+                            ?disabled="${this._heroBusy}"
+                        >
+                            <option value="draft">Draft</option>
+                            <option value="standard">Standard</option>
+                            <option value="final">Final</option>
+                        </select>
+                    </label>
+                </div>
+
+                <label class="hero-control-label">
+                    Image prompt
+                    <textarea
+                        class="hero-prompt-textarea"
+                        .value="${this._heroPrompt}"
+                        @input="${this._handleHeroPromptInput}"
+                        ?disabled="${this._heroBusy}"
+                    ></textarea>
+                </label>
+
+                <div class="hero-actions">
+                    <button
+                        class="button button-primary"
+                        type="button"
+                        @click="${this._handleGenerateHeroImage}"
+                        ?disabled="${this._heroBusy || !selectedProviderConfigured}"
+                    >
+                        ${this._heroPreview ? "Regenerate Preview" : "Generate Preview"}
+                    </button>
+                    ${this._heroPreview ? b2`
+                        <button
+                            class="button button-secondary"
+                            type="button"
+                            @click="${this._handleClearHeroPreview}"
+                            ?disabled="${this._heroBusy}"
+                        >
+                            Clear Preview
+                        </button>
+                    ` : ""}
+                </div>
+
+                ${this._heroError ? b2`<p class="hero-error-message">${this._heroError}</p>` : ""}
+                ${this._heroMessage ? b2`<p class="hero-status-message">${this._heroMessage}</p>` : ""}
+
+                ${previewUrl ? b2`
+                    <div class="hero-preview-shell">
+                        <img class="hero-preview-image" src="${previewUrl}" alt="Generated hero preview">
+                        <div class="hero-preview-actions">
+                            <button
+                                class="button button-primary"
+                                type="button"
+                                @click="${this._handleUseHeroImage}"
+                                ?disabled="${this._heroBusy}"
+                            >
+                                Use as Hero
+                            </button>
+                        </div>
+                    </div>
+                ` : ""}
+            </div>
+        `;
+  }
   render() {
     if (!this._editedPrompt) {
       return b2`<div>No prompt loaded</div>`;
@@ -6470,6 +6762,7 @@ var WyPromptEditor = class extends i4 {
                             @change="${this._handleImageChange}"
                             @remove="${this._handleImageRemove}"
                         ></wy-image-upload>
+                        ${this._renderHeroImageGenerator()}
                     </div>
 
                     <!-- Section 3: Content Structure -->
@@ -6648,11 +6941,22 @@ var WyPromptEditor = class extends i4 {
 __publicField(WyPromptEditor, "properties", {
   prompt: { type: Object },
   categories: { type: Array },
+  heroImageStatus: { type: Object },
   readonly: { type: Boolean },
   _editedPrompt: { type: Object, state: true },
   _promptMode: { type: String, state: true },
   _expandedSteps: { type: Array, state: true },
-  _showGitInfo: { type: Boolean, state: true }
+  _showGitInfo: { type: Boolean, state: true },
+  _heroProvider: { type: String, state: true },
+  _heroQuality: { type: String, state: true },
+  _heroPrompt: { type: String, state: true },
+  _heroPromptDirty: { type: Boolean, state: true },
+  _heroPreview: { type: String, state: true },
+  _heroPreviewMimeType: { type: String, state: true },
+  _heroPreviewMetadata: { type: Object, state: true },
+  _heroBusy: { type: Boolean, state: true },
+  _heroMessage: { type: String, state: true },
+  _heroError: { type: String, state: true }
 });
 __publicField(WyPromptEditor, "styles", i`
         :host {
@@ -6927,6 +7231,115 @@ __publicField(WyPromptEditor, "styles", i`
             margin: 0 0 var(--spacing-md, 16px) 0;
         }
 
+        .hero-generator {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md, 16px);
+            margin-top: var(--spacing-lg, 24px);
+            padding-top: var(--spacing-lg, 24px);
+            border-top: 1px solid var(--md-sys-color-outline-variant, #DDD);
+        }
+
+        .hero-generator-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: var(--spacing-md, 16px);
+        }
+
+        .hero-generator-title {
+            font-family: var(--font-serif, 'Playfair Display', serif);
+            font-size: 1.0625rem;
+            font-weight: 600;
+            color: var(--md-sys-color-on-surface, #121714);
+            margin: 0;
+        }
+
+        .hero-provider-status {
+            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-size: 0.75rem;
+            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+            margin: var(--spacing-xs, 4px) 0 0;
+        }
+
+        .hero-controls {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: var(--spacing-md, 16px);
+        }
+
+        .hero-control-label {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-xs, 4px);
+            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--md-sys-color-on-surface, #121714);
+        }
+
+        .hero-control-label select,
+        .hero-prompt-textarea {
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
+            border-radius: var(--md-sys-shape-corner-small, 8px);
+            background-color: var(--md-sys-color-background, #FDFBF7);
+            color: var(--md-sys-color-on-surface, #121714);
+            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-size: 0.9375rem;
+        }
+
+        .hero-control-label select {
+            min-height: 40px;
+            padding: 0 var(--spacing-sm, 8px);
+        }
+
+        .hero-prompt-textarea {
+            min-height: 220px;
+            padding: var(--spacing-sm, 8px);
+            line-height: 1.45;
+            resize: vertical;
+        }
+
+        .hero-actions,
+        .hero-preview-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-sm, 8px);
+            align-items: center;
+        }
+
+        .hero-preview-shell {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm, 8px);
+        }
+
+        .hero-preview-image {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            border-radius: var(--md-sys-shape-corner-small, 8px);
+            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
+        }
+
+        .hero-status-message,
+        .hero-error-message {
+            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-size: 0.875rem;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        .hero-status-message {
+            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+        }
+
+        .hero-error-message {
+            color: var(--err, #B3261E);
+        }
+
         .add-step-button {
             width: 100%;
             margin-top: var(--spacing-md, 16px);
@@ -7007,6 +7420,10 @@ __publicField(WyPromptEditor, "styles", i`
                 grid-column: 1;
                 grid-row: 3;
                 position: static;
+            }
+
+            .hero-controls {
+                grid-template-columns: 1fr;
             }
         }
     `);

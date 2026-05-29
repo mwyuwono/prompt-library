@@ -21,10 +21,43 @@ const DEFAULT_BRANCH = 'main';
 const REMOTE_NAME = 'origin';
 const GIT_TIMEOUT_MS = 30000;
 let gitAskPassPath = null;
+let cachedGitHubToken = null;
+
+function loadLocalEnvFile(filename) {
+    const envPath = path.join(__dirname, filename);
+    if (!fs.existsSync(envPath)) return;
+
+    const lines = fs.readFileSync(envPath, 'utf8').split(/\r?\n/);
+    lines.forEach(line => {
+        const trimmed = line.trim();
+        if (!trimmed || trimmed.startsWith('#')) return;
+
+        const equalsIndex = trimmed.indexOf('=');
+        if (equalsIndex === -1) return;
+
+        const key = trimmed.slice(0, equalsIndex).trim();
+        let value = trimmed.slice(equalsIndex + 1).trim();
+        if (!key || process.env[key]) return;
+
+        if (
+            (value.startsWith('"') && value.endsWith('"')) ||
+            (value.startsWith("'") && value.endsWith("'"))
+        ) {
+            value = value.slice(1, -1);
+        }
+
+        if (value) {
+            process.env[key] = value;
+        }
+    });
+}
+
+loadLocalEnvFile('.env.local');
+loadLocalEnvFile('.env');
 
 // Middleware
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '15mb' }));
 app.use(express.static('.')); // Serve static files from current directory
 
 // Multer configuration for image uploads
@@ -192,7 +225,35 @@ function isHttpsGitHubRemote(remoteUrl) {
 function sanitizeGitError(error) {
     return String(error?.stderr || error?.stdout || error?.message || error || '')
         .replaceAll(process.env.GITHUB_TOKEN || '__NO_TOKEN__', '[redacted]')
+        .replaceAll(cachedGitHubToken || '__NO_GH_TOKEN__', '[redacted]')
         .trim();
+}
+
+async function getGitHubToken() {
+    if (process.env.GITHUB_TOKEN) {
+        return process.env.GITHUB_TOKEN;
+    }
+
+    if (cachedGitHubToken) {
+        return cachedGitHubToken;
+    }
+
+    try {
+        const result = await execFileAsync('gh', ['auth', 'token'], {
+            cwd: __dirname,
+            env: {
+                ...process.env,
+                GIT_TERMINAL_PROMPT: '0'
+            },
+            timeout: 10000,
+            maxBuffer: 1024 * 1024
+        });
+
+        cachedGitHubToken = result.stdout.trim() || null;
+        return cachedGitHubToken;
+    } catch (error) {
+        return null;
+    }
 }
 
 async function runGit(args, { useAuth = false, timeout = GIT_TIMEOUT_MS } = {}) {
@@ -205,7 +266,11 @@ async function runGit(args, { useAuth = false, timeout = GIT_TIMEOUT_MS } = {}) 
         delete env.GITHUB_TOKEN;
     }
 
-    if (useAuth && process.env.GITHUB_TOKEN) {
+    if (useAuth) {
+        const token = await getGitHubToken();
+        if (token) {
+            env.GITHUB_TOKEN = token;
+        }
         env.GIT_ASKPASS = getGitAskPassPath();
     }
 
@@ -324,15 +389,16 @@ async function getBackupStatus({ fetchRemote = true } = {}) {
     }
 
     const httpsGitHub = isHttpsGitHubRemote(status.remoteUrl);
+    const gitHubToken = httpsGitHub ? await getGitHubToken() : null;
     status.auth.required = httpsGitHub;
-    status.auth.configured = httpsGitHub ? Boolean(process.env.GITHUB_TOKEN) : true;
+    status.auth.configured = httpsGitHub ? Boolean(gitHubToken) : true;
     status.auth.message = httpsGitHub
-        ? 'GITHUB_TOKEN is configured for HTTPS GitHub operations.'
+        ? 'GitHub authentication is configured for HTTPS operations.'
         : 'This remote does not use HTTPS GitHub token authentication.';
 
-    if (httpsGitHub && !process.env.GITHUB_TOKEN) {
+    if (httpsGitHub && !gitHubToken) {
         status.auth.ok = false;
-        status.auth.message = 'Set GITHUB_TOKEN in the server environment to use this HTTPS GitHub remote.';
+        status.auth.message = 'Sign in with GitHub CLI or set GITHUB_TOKEN in the server environment to use this HTTPS GitHub remote.';
         warnings.push(status.auth.message);
     }
 
@@ -416,6 +482,159 @@ function sendGitError(res, error, fallbackMessage = 'Git operation failed') {
         error: error.message || fallbackMessage,
         status: error.backupStatus || null
     });
+}
+
+function getHeroImageProviders() {
+    return {
+        google: {
+            configured: Boolean(process.env.GEMINI_API_KEY),
+            label: 'Google Nano Banana 2',
+            model: 'gemini-3.1-flash-image'
+        },
+        openai: {
+            configured: Boolean(process.env.OPENAI_API_KEY),
+            label: 'OpenAI GPT Image',
+            model: 'gpt-image-2'
+        }
+    };
+}
+
+function getHeroImageSettings(provider, quality = 'draft') {
+    const normalizedQuality = ['draft', 'standard', 'final'].includes(quality) ? quality : 'draft';
+
+    if (provider === 'openai') {
+        return {
+            quality: normalizedQuality === 'final' ? 'high' : normalizedQuality === 'standard' ? 'medium' : 'low',
+            size: normalizedQuality === 'final' ? '2048x1152' : '1536x1024',
+            outputFormat: 'jpeg',
+            outputCompression: normalizedQuality === 'final' ? 92 : 86
+        };
+    }
+
+    return {
+        imageSize: normalizedQuality === 'final' ? '2K' : '1K',
+        aspectRatio: '16:9'
+    };
+}
+
+function getImageExtension(mimeType = '') {
+    const normalized = mimeType.toLowerCase();
+    if (normalized.includes('jpeg') || normalized.includes('jpg')) return '.jpg';
+    if (normalized.includes('webp')) return '.webp';
+    return '.png';
+}
+
+function normalizeBase64Image(imageData, fallbackMimeType = 'image/png') {
+    const match = String(imageData || '').match(/^data:(image\/[a-z0-9.+-]+);base64,(.+)$/i);
+    if (match) {
+        return {
+            mimeType: match[1],
+            base64: match[2]
+        };
+    }
+
+    return {
+        mimeType: fallbackMimeType,
+        base64: String(imageData || '')
+    };
+}
+
+function extractGoogleImage(responseJson) {
+    const parts = responseJson?.candidates?.flatMap(candidate => candidate?.content?.parts || []) || [];
+    const imagePart = parts.find(part => part?.inlineData?.data || part?.inline_data?.data);
+    const inlineData = imagePart?.inlineData || imagePart?.inline_data;
+
+    if (!inlineData?.data) {
+        throw new Error('Google did not return image data.');
+    }
+
+    return {
+        base64: inlineData.data,
+        mimeType: inlineData.mimeType || inlineData.mime_type || 'image/png'
+    };
+}
+
+async function generateGoogleHeroImage(prompt, quality) {
+    const settings = getHeroImageSettings('google', quality);
+    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image:generateContent', {
+        method: 'POST',
+        headers: {
+            'x-goog-api-key': process.env.GEMINI_API_KEY,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            contents: [{
+                parts: [{ text: prompt }]
+            }],
+            generationConfig: {
+                responseModalities: ['TEXT', 'IMAGE'],
+                responseFormat: {
+                    image: {
+                        aspectRatio: settings.aspectRatio,
+                        imageSize: settings.imageSize
+                    }
+                }
+            }
+        })
+    });
+
+    const responseJson = await response.json().catch(() => ({}));
+    if (!response.ok) {
+        throw new Error(responseJson?.error?.message || `Google image generation failed with HTTP ${response.status}`);
+    }
+
+    return {
+        ...extractGoogleImage(responseJson),
+        metadata: {
+            provider: 'google',
+            model: 'gemini-3.1-flash-image',
+            quality,
+            imageSize: settings.imageSize,
+            aspectRatio: settings.aspectRatio
+        }
+    };
+}
+
+async function generateOpenAIHeroImage(prompt, quality) {
+    const settings = getHeroImageSettings('openai', quality);
+    const response = await fetch('https://api.openai.com/v1/images/generations', {
+        method: 'POST',
+        headers: {
+            Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            model: 'gpt-image-2',
+            prompt,
+            size: settings.size,
+            quality: settings.quality,
+            output_format: settings.outputFormat,
+            output_compression: settings.outputCompression
+        })
+    });
+
+    const responseJson = await response.json().catch(() => ({}));
+    if (!response.ok) {
+        throw new Error(responseJson?.error?.message || `OpenAI image generation failed with HTTP ${response.status}`);
+    }
+
+    const image = responseJson?.data?.[0];
+    if (!image?.b64_json) {
+        throw new Error('OpenAI did not return image data.');
+    }
+
+    return {
+        base64: image.b64_json,
+        mimeType: `image/${settings.outputFormat}`,
+        metadata: {
+            provider: 'openai',
+            model: 'gpt-image-2',
+            quality: settings.quality,
+            requestedQuality: quality,
+            size: settings.size,
+            outputFormat: settings.outputFormat
+        }
+    };
 }
 
 // API Routes
@@ -732,6 +951,96 @@ app.delete('/api/backup/remote', async (req, res) => {
     } catch (error) {
         console.error('Error removing backup remote:', error);
         sendGitError(res, error, 'Failed to remove remote');
+    }
+});
+
+/**
+ * GET /api/hero-image/status
+ * Returns configured image generation providers.
+ */
+app.get('/api/hero-image/status', (req, res) => {
+    res.json({
+        success: true,
+        providers: getHeroImageProviders()
+    });
+});
+
+/**
+ * POST /api/hero-image/generate
+ * Generates a temporary hero image preview without saving it.
+ */
+app.post('/api/hero-image/generate', async (req, res) => {
+    try {
+        const provider = req.body?.provider === 'openai' ? 'openai' : 'google';
+        const prompt = String(req.body?.prompt || '').trim();
+        const quality = String(req.body?.quality || 'draft');
+        const providers = getHeroImageProviders();
+
+        if (!prompt) {
+            return res.status(400).json({ success: false, error: 'Prompt text is required.' });
+        }
+
+        if (!providers[provider]?.configured) {
+            return res.status(400).json({
+                success: false,
+                error: provider === 'openai'
+                    ? 'OPENAI_API_KEY is not configured.'
+                    : 'GEMINI_API_KEY is not configured.'
+            });
+        }
+
+        const result = provider === 'openai'
+            ? await generateOpenAIHeroImage(prompt, quality)
+            : await generateGoogleHeroImage(prompt, quality);
+
+        res.json({
+            success: true,
+            image: result.base64,
+            mimeType: result.mimeType,
+            metadata: result.metadata
+        });
+    } catch (error) {
+        console.error('Error generating hero image:', error);
+        res.status(500).json({
+            success: false,
+            error: error.message || 'Failed to generate hero image'
+        });
+    }
+});
+
+/**
+ * POST /api/images/generated
+ * Saves an approved generated image preview to public/images/.
+ */
+app.post('/api/images/generated', (req, res) => {
+    try {
+        const { mimeType, base64 } = normalizeBase64Image(req.body?.image, req.body?.mimeType || 'image/png');
+
+        if (!base64 || !/^[a-z0-9+/=\s]+$/i.test(base64)) {
+            return res.status(400).json({ success: false, error: 'Valid base64 image data is required.' });
+        }
+
+        const buffer = Buffer.from(base64.replace(/\s/g, ''), 'base64');
+        if (!buffer.length || buffer.length > 10 * 1024 * 1024) {
+            return res.status(400).json({ success: false, error: 'Generated image is empty or too large.' });
+        }
+
+        const uploadDir = path.join(__dirname, 'public', 'images');
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+        }
+
+        const filename = `generated-hero-${Date.now()}${getImageExtension(mimeType)}`;
+        const filepath = path.join(uploadDir, filename);
+        fs.writeFileSync(filepath, buffer);
+
+        res.json({
+            success: true,
+            path: `public/images/${filename}`
+        });
+    } catch (error) {
+        console.error('Error saving generated image:', error);
+        res.status(500).json({ success: false, error: error.message || 'Failed to save generated image' });
     }
 });
 

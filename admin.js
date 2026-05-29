@@ -10,6 +10,7 @@ let privateVaultReady = false;
 let backupStatus = null;
 let backupBusy = false;
 let startupPullPromptShown = false;
+let heroImageStatus = null;
 
 // DOM Elements
 const editor = document.getElementById('editor');
@@ -51,6 +52,7 @@ async function init() {
     updateDatasetUI();
     
     await loadPrompts();
+    await loadHeroImageStatus();
     renderPromptList();
     setupEventListeners();
 
@@ -239,6 +241,58 @@ async function deleteImage(filename) {
     }
 }
 
+async function loadHeroImageStatus() {
+    try {
+        const response = await fetch('/api/hero-image/status');
+        if (!response.ok) {
+            throw new Error('Failed to load hero image provider status');
+        }
+
+        heroImageStatus = await response.json();
+        editor.heroImageStatus = heroImageStatus;
+    } catch (error) {
+        console.error('Error loading hero image status:', error);
+        heroImageStatus = {
+            success: false,
+            providers: {
+                google: { configured: false, label: 'Google Nano Banana 2', model: 'gemini-3.1-flash-image' },
+                openai: { configured: false, label: 'OpenAI GPT Image', model: 'gpt-image-2' }
+            }
+        };
+        editor.heroImageStatus = heroImageStatus;
+    }
+}
+
+async function generateHeroImage({ provider, quality, prompt }) {
+    const response = await fetch('/api/hero-image/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ provider, quality, prompt })
+    });
+
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Failed to generate hero image');
+    }
+
+    return data;
+}
+
+async function saveGeneratedImage({ image, mimeType }) {
+    const response = await fetch('/api/images/generated', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image, mimeType })
+    });
+
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Failed to save generated image');
+    }
+
+    return data;
+}
+
 function getVariationByTarget(prompt, { variationId = null, variationIndex = null } = {}) {
     if (!prompt?.variations?.length) return null;
 
@@ -425,6 +479,54 @@ function setupEventListeners() {
         }
     });
 
+    editor.addEventListener('hero-image-generate', async (e) => {
+        try {
+            const result = await generateHeroImage(e.detail);
+            if (typeof editor.setHeroImagePreview === 'function') {
+                editor.setHeroImagePreview({
+                    image: result.image,
+                    mimeType: result.mimeType,
+                    metadata: result.metadata
+                });
+            }
+            showToast('Hero image preview generated', 'success');
+        } catch (err) {
+            console.error('Hero image generation error:', err);
+            if (typeof editor.setHeroImageError === 'function') {
+                editor.setHeroImageError(err.message);
+            }
+            showToast('Error generating hero image', 'error');
+        }
+    });
+
+    editor.addEventListener('hero-image-use', async (e) => {
+        try {
+            const { promptId, image, mimeType } = e.detail;
+            const currentPrompt = prompts.find(p => p.id === promptId);
+            if (!currentPrompt) {
+                throw new Error('Prompt not found');
+            }
+
+            const result = await saveGeneratedImage({ image, mimeType });
+            setPromptImagePath(currentPrompt, { target: 'prompt' }, result.path);
+
+            if (typeof editor.setHeroImageAccepted === 'function') {
+                editor.setHeroImageAccepted(result.path);
+            } else {
+                editor.prompt = JSON.parse(JSON.stringify(currentPrompt));
+            }
+
+            showToast('Generated image attached. Save the prompt to keep it.', 'success');
+            refreshBackupStatus();
+        } catch (err) {
+            console.error('Hero image save error:', err);
+            if (typeof editor.setHeroImageError === 'function') {
+                editor.setHeroImageError(err.message);
+            }
+            showToast('Error attaching generated image', 'error');
+        }
+    });
+
     // Handle browser back/forward
     window.addEventListener('hashchange', () => {
         const hashId = window.location.hash.slice(1);
@@ -527,6 +629,7 @@ function loadPrompt(id) {
     // This is important for "Discard Changes" to work correctly after conversions
     editor.prompt = JSON.parse(JSON.stringify(prompt));
     editor.categories = categories;
+    editor.heroImageStatus = heroImageStatus;
     
     console.log('Prompt set on editor');
     
