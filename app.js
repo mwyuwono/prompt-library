@@ -1256,7 +1256,7 @@ Server will start on http://localhost:3001`;
      */
     getActiveVariationImage(prompt) {
         const activeVariation = this.getActiveVariation(prompt);
-        return activeVariation?.image || prompt.image || prompt.variations?.[0]?.image || '';
+        return activeVariation?.image || '';
     }
 
     /**
@@ -1321,7 +1321,7 @@ Server will start on http://localhost:3001`;
                 prompt.activeVariationId = variation.id;
                 // Always update variables using helper that handles fallback logic
                 this.promptModal.variables = this.getActiveVariables(prompt);
-                this.promptModal.image = this.getActiveVariationImage(prompt);
+                this.promptModal.variationImage = this.getActiveVariationImage(prompt);
                 // Update URL hash to reflect new variation
                 this.updateUrlHash(prompt.id, variation.id);
             }
@@ -1434,10 +1434,13 @@ Server will start on http://localhost:3001`;
                 description: prompt.description || '',
                 instructions: prompt.instructions || '',
                 template: this.getActiveTemplate(prompt),
-                image: this.getActiveVariationImage(prompt),
+                image: prompt.image || '',
+                promptImage: prompt.image || '',
+                variationImage: this.getActiveVariationImage(prompt),
                 variables: variables,
                 variations: prompt.variations || [],
                 activeVariationIndex: variationIndex >= 0 ? variationIndex : 0,
+                variationDetailsExpanded: false,
                 mode: prompt.locked !== false ? 'locked' : 'edit',
                 activeTab: prompt.activeTab || 'variables',
                 open: true
@@ -1603,10 +1606,13 @@ Server will start on http://localhost:3001`;
             activeVariationIndex: 0,
             activeStepIndex: 0,
             image: '',
+            promptImage: '',
+            variationImage: '',
             
             // UI state
             mode: 'locked',
-            activeTab: 'variables'
+            activeTab: 'variables',
+            variationDetailsExpanded: false
             
             // Note: Don't set 'open' here - caller controls modal visibility
         });
@@ -1681,7 +1687,9 @@ Server will start on http://localhost:3001`;
                 description: prompt.description || '',
                 instructions: prompt.instructions || '',
                 template: this.getActiveTemplate(prompt),
-                image: this.getActiveVariationImage(prompt),
+                image: prompt.image || '',
+                promptImage: prompt.image || '',
+                variationImage: this.getActiveVariationImage(prompt),
                 variables: this.getActiveVariables(prompt),
                 variations: prompt.variations || [],
                 mode: prompt.locked !== false ? 'locked' : 'edit',

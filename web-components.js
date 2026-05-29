@@ -7870,6 +7870,8 @@ var WyPromptModal = class extends i4 {
     this.description = "";
     this.instructions = "";
     this.image = "";
+    this.promptImage = "";
+    this.variationImage = "";
     this.template = "";
     this.variables = [];
     this.variations = [];
@@ -7879,6 +7881,7 @@ var WyPromptModal = class extends i4 {
     this.steps = [];
     this.activeStepIndex = 0;
     this.descriptionExpanded = false;
+    this.variationDetailsExpanded = false;
     this._values = {};
   }
   willUpdate(changedProperties) {
@@ -8097,29 +8100,74 @@ var WyPromptModal = class extends i4 {
     if (this.activeTab === "preview") return "preview";
     return this.variables && this.variables.length > 0 ? "variables" : "overview";
   }
-  _getWordCount(template) {
-    if (!template || typeof template !== "string") return 0;
-    const words = template.trim().split(/\s+/).filter(Boolean).length;
-    if (!words) return 0;
-    return words < 100 ? Math.round(words / 5) * 5 : Math.round(words / 10) * 10;
-  }
   _renderOverview(template) {
-    const words = this._getWordCount(template);
     return b2`
       <div class="overview">
-        <span class="overview-eyebrow">What it does</span>
-        ${this.image ? b2`
+        <span class="overview-eyebrow">Prompt Overview</span>
+        ${this.promptImage ? b2`
           <figure class="overview-figure">
-            <img src="${this.image}" alt="${this.title}" loading="lazy">
+            <img src="${this.promptImage}" alt="${this.title}" loading="lazy">
             <figcaption>N&ordm; 01 &mdash; Example output</figcaption>
           </figure>
         ` : ""}
         <div class="overview-lead">${o7(this._renderDescriptionMarkdown(this.description))}</div>
-        <hr class="overview-rule">
-        <dl class="overview-meta">
-          ${this.category ? b2`<div><dt>Category</dt><dd>${this.category}</dd></div>` : ""}
-          ${words ? b2`<div><dt>Length</dt><dd>&asymp; ${words} words</dd></div>` : ""}
-        </dl>
+      </div>
+    `;
+  }
+  _toggleVariationDetails() {
+    this.variationDetailsExpanded = !this.variationDetailsExpanded;
+  }
+  _renderVariationSelector(activeVariation) {
+    if (this.variations.length <= 1) return "";
+    return b2`
+      <div class="variation-selector-container">
+        <label class="variation-description-heading" for="variation-select">Variant</label>
+        <div class="variation-select-wrap">
+          <select
+            id="variation-select"
+            class="variation-select-native"
+            .value="${activeVariation?.id || ""}"
+            @change="${this._handleVariationSelectChange}"
+          >
+            ${this.variations.map((variation) => b2`
+              <option value="${variation.id}">${variation.name}</option>
+            `)}
+          </select>
+          <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
+        </div>
+        ${this.variationImage ? b2`
+          <figure class="variation-image">
+            <img src="${this.variationImage}" alt="${activeVariation?.name || this.title}" loading="lazy">
+          </figure>
+        ` : ""}
+        ${activeVariation?.description || activeVariation?.instructions ? b2`
+          <wy-info-panel class="variation-description-panel">
+            <div class="variation-meta-section">
+              <button
+                class="variation-name"
+                type="button"
+                aria-expanded="${this.variationDetailsExpanded ? "true" : "false"}"
+                @click="${this._toggleVariationDetails}"
+              >
+                <span>${activeVariation.name}</span>
+                <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
+              </button>
+              ${this.variationDetailsExpanded ? b2`
+                <div class="variation-details">
+                  ${activeVariation?.description ? b2`
+                    <div class="variation-description-copy">${o7(this._renderDescriptionMarkdown(activeVariation.description))}</div>
+                  ` : ""}
+                  ${activeVariation?.instructions ? b2`
+                    <div class="variation-meta-section">
+                      <p class="variation-description-heading">Instructions</p>
+                      <div class="variation-description-copy">${o7(this._renderDescriptionMarkdown(activeVariation.instructions))}</div>
+                    </div>
+                  ` : ""}
+                </div>
+              ` : ""}
+            </div>
+          </wy-info-panel>
+        ` : ""}
       </div>
     `;
   }
@@ -8171,27 +8219,7 @@ var WyPromptModal = class extends i4 {
                     </button>
                 </div>
             </div>
-            
-            ${!(this.steps && this.steps.length > 0) ? b2`
-              <div class="header-main">
-                  ${this._renderPromptIntro(!(this.mode === "locked" && !hasVariables))}
-                  
-                  ${this.mode === "locked" ? b2`` : ""}
-              </div>
-            ` : ""}
         </header>
-
-        ${this.mode === "locked" && !(this.steps && this.steps.length > 0) ? b2`
-          <div class="tabs-container">
-              <wy-tabs active-tab="${standardActiveTab}" @tab-change="${(e9) => this.activeTab = e9.detail.tab}">
-                <button class="tab-item ${standardActiveTab === (hasVariables ? "variables" : "overview") ? "active" : ""}" role="tab" data-tab="${hasVariables ? "variables" : "overview"}">${hasVariables ? "Variables" : "Overview"}</button>
-                <button class="tab-item ${standardActiveTab === "preview" ? "active" : ""}" role="tab" data-tab="preview">Full prompt</button>
-              </wy-tabs>
-              ${standardActiveTab === "variables" && this._hasValues() ? b2`
-                <button class="clear-btn" @click="${this._clearAllVariables}">Clear All</button>
-              ` : ""}
-          </div>
-        ` : ""}
 
         <div class="content">
           ${this.mode === "locked" ? b2`
@@ -8205,40 +8233,22 @@ var WyPromptModal = class extends i4 {
               </div>
             ` : b2`
               <!-- Standard mode -->
-              ${this.variations.length > 1 ? b2`
-                <div class="variation-selector-container">
-                  <label class="variation-description-heading" for="variation-select">Style</label>
-                  <div class="variation-select-wrap">
-                    <select
-                      id="variation-select"
-                      class="variation-select-native"
-                      .value="${activeVariation?.id || ""}"
-                      @change="${this._handleVariationSelectChange}"
-                    >
-                      ${this.variations.map((variation) => b2`
-                        <option value="${variation.id}">${variation.name}</option>
-                      `)}
-                    </select>
-                    <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
-                  </div>
-                  ${activeVariation?.description || activeVariation?.instructions ? b2`
-                    <wy-info-panel class="variation-description-panel">
-                      <div class="variation-meta-section">
-                        <p class="variation-description-heading">Variant</p>
-                        <p class="variation-name">${activeVariation.name}</p>
-                        ${activeVariation?.description ? b2`
-                          <div class="variation-description-copy">${o7(this._renderDescriptionMarkdown(activeVariation.description))}</div>
-                        ` : ""}
-                      </div>
-                      ${activeVariation?.instructions ? b2`
-                        <div class="variation-meta-section">
-                          <p class="variation-description-heading">Instructions</p>
-                          <div class="variation-description-copy">${o7(this._renderDescriptionMarkdown(activeVariation.instructions))}</div>
-                        </div>
-                      ` : ""}
-                    </wy-info-panel>
+              <div class="header-main">
+                  ${this._renderPromptIntro(!(this.mode === "locked" && !hasVariables))}
+              </div>
+
+              <div class="tabs-container">
+                  <wy-tabs active-tab="${standardActiveTab}" @tab-change="${(e9) => this.activeTab = e9.detail.tab}">
+                    <button class="tab-item ${standardActiveTab === (hasVariables ? "variables" : "overview") ? "active" : ""}" role="tab" data-tab="${hasVariables ? "variables" : "overview"}">${hasVariables ? "Variables" : "Overview"}</button>
+                    <button class="tab-item ${standardActiveTab === "preview" ? "active" : ""}" role="tab" data-tab="preview">Full prompt</button>
+                  </wy-tabs>
+                  ${standardActiveTab === "variables" && this._hasValues() ? b2`
+                    <button class="clear-btn" @click="${this._clearAllVariables}">Clear All</button>
                   ` : ""}
-                </div>
+              </div>
+
+              ${!(standardActiveTab === "overview" && !hasVariables) ? b2`
+                ${this._renderVariationSelector(activeVariation)}
               ` : ""}
 
               <div class="body">
@@ -8250,10 +8260,14 @@ var WyPromptModal = class extends i4 {
                   </div>
                 ` : b2`
                   ${this._renderOverview(currentTemplate)}
+                  ${this._renderVariationSelector(activeVariation)}
                 `}
               </div>
             `}
           ` : b2`
+            <div class="header-main">
+                ${this._renderPromptIntro()}
+            </div>
             <div class="body">
               <textarea 
                 class="editor-area" 
@@ -8368,6 +8382,7 @@ var WyPromptModal = class extends i4 {
     const index = this.variations.findIndex((v2) => v2.id === selectedId);
     if (index !== -1) {
       this.activeVariationIndex = index;
+      this.variationDetailsExpanded = false;
       this.dispatchEvent(new CustomEvent("variation-change", {
         detail: { index, variation: this.variations[index] },
         bubbles: true,
@@ -8489,6 +8504,8 @@ __publicField(WyPromptModal, "properties", {
   description: { type: String },
   instructions: { type: String },
   image: { type: String },
+  promptImage: { type: String, attribute: "prompt-image" },
+  variationImage: { type: String, attribute: "variation-image" },
   template: { type: String },
   variables: { type: Array },
   variations: { type: Array },
@@ -8501,8 +8518,9 @@ __publicField(WyPromptModal, "properties", {
   // Array of step objects for multi-step prompts
   activeStepIndex: { type: Number, attribute: "active-step-index" },
   // Current step (0-based)
-  descriptionExpanded: { type: Boolean, attribute: "description-expanded" }
+  descriptionExpanded: { type: Boolean, attribute: "description-expanded" },
   // Mobile description toggle
+  variationDetailsExpanded: { type: Boolean, attribute: "variation-details-expanded" }
 });
 __publicField(WyPromptModal, "styles", i`
     /* Required fonts - load in page <head>:
@@ -8576,7 +8594,7 @@ __publicField(WyPromptModal, "styles", i`
 
     /* HEADER STYLES */
     .header {
-      padding: var(--spacing-xl, 32px) var(--spacing-xl, 32px) 0;
+      padding: var(--spacing-xl, 32px) var(--spacing-xl, 32px) var(--spacing-sm, 8px);
       display: flex;
       flex-direction: column;
       gap: var(--spacing-md, 16px);
@@ -8864,6 +8882,10 @@ __publicField(WyPromptModal, "styles", i`
         width: 100%;
     }
 
+    .body > .variation-selector-container {
+        margin: var(--spacing-xl, 32px) 0 0;
+    }
+
     .variation-select-native {
         appearance: none;
         -webkit-appearance: none;
@@ -8904,6 +8926,28 @@ __publicField(WyPromptModal, "styles", i`
         --wy-info-panel-bg: transparent;
         --wy-info-panel-padding: 0;
         --wy-info-panel-font-size: var(--md-sys-typescale-body-small-size, 0.875rem);
+    }
+
+    .variation-image {
+        margin: 0;
+    }
+
+    .variation-image img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 16 / 10;
+        object-fit: cover;
+        border: 1px solid var(--paper-edge, #DDD6C8);
+    }
+
+    .variation-image figcaption {
+        margin: 8px 0 0;
+        color: var(--ink-mute, #6B6B6A);
+        font-family: var(--ff-serif, 'Lora', serif);
+        font-size: 0.8125rem;
+        font-style: italic;
+        line-height: 1.35;
+        text-align: right;
     }
 
     .variation-meta-section + .variation-meta-section {
@@ -8954,13 +8998,42 @@ __publicField(WyPromptModal, "styles", i`
     }
 
     .variation-name {
-        margin: 0 0 var(--spacing-sm, 8px);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--spacing-sm, 8px);
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background: transparent;
+        border: 0;
         font-family: var(--ff-serif, 'Lora', serif);
         font-size: 1.125rem;
         font-weight: 500;
         line-height: 1.25;
         color: var(--md-sys-color-text-heading);
         letter-spacing: 0;
+        text-align: left;
+        cursor: pointer;
+    }
+
+    .variation-name:focus-visible {
+        outline: 3px solid var(--wy-prompt-modal-focus-ring, color-mix(in srgb, var(--md-sys-color-primary) 18%, transparent));
+        outline-offset: 4px;
+    }
+
+    .variation-name .material-symbols-outlined {
+        flex: 0 0 auto;
+        font-size: 20px;
+        transition: transform 0.2s;
+    }
+
+    .variation-name[aria-expanded="true"] .material-symbols-outlined {
+        transform: rotate(180deg);
+    }
+
+    .variation-details {
+        margin-top: var(--spacing-sm, 8px);
     }
 
     .variation-description-copy {
@@ -9118,45 +9191,6 @@ __publicField(WyPromptModal, "styles", i`
       padding-left: 1.25em;
     }
 
-    .overview-rule {
-      clear: both;
-      margin: 24px 0;
-      border: 0;
-      border-top: 1px solid var(--paper-edge, #DDD6C8);
-    }
-
-    .overview-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 18px 40px;
-      margin: 0;
-    }
-
-    .overview-meta > div {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-
-    .overview-meta dt {
-      margin: 0;
-      color: var(--ink-soft, #A8A49C);
-      font-family: var(--font-sans, 'DM Sans', sans-serif);
-      font-size: 0.6875rem;
-      font-weight: 600;
-      letter-spacing: 0.16em;
-      line-height: 1.2;
-      text-transform: uppercase;
-    }
-
-    .overview-meta dd {
-      margin: 0;
-      color: var(--ink, #1A1A1A);
-      font-family: var(--font-sans, 'DM Sans', sans-serif);
-      font-size: 0.9375rem;
-      line-height: 1.4;
-    }
-
     .editor-area {
         width: 100%;
         height: 100%;
@@ -9296,7 +9330,7 @@ __publicField(WyPromptModal, "styles", i`
         max-height: 100%;
         border-radius: 0;
       }
-      .header { padding: var(--spacing-lg, 24px) var(--spacing-md, 16px) var(--spacing-md, 16px); }
+      .header { padding: var(--spacing-lg, 24px) var(--spacing-md, 16px) var(--spacing-sm, 8px); }
       .header-top { align-items: flex-start; }
       .header-main { flex-direction: column; align-items: flex-start; gap: var(--spacing-sm, 8px); margin-bottom: var(--spacing-sm, 8px); }
       .header-actions-left { flex-wrap: wrap; }
@@ -9334,10 +9368,6 @@ __publicField(WyPromptModal, "styles", i`
         font-size: 1.125rem;
       }
 
-      .overview-meta {
-        gap: var(--spacing-md, 16px) var(--spacing-lg, 24px);
-      }
-      
       /* Mobile description toggle */
       .title-group h2 {
         cursor: pointer;
