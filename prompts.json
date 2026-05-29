@@ -1440,7 +1440,7 @@
   },
   {
     "id": "untitled-prompt-1777067726397",
-    "title": "Hero Image Generator",
+    "title": "Hero Image Generator - Old Version",
     "description": "Generates hero images for the prompt library from the provided visual direction.",
     "category": "Art",
     "template": "I am generating a hero image for a prompt in my prompt library. This hero image will be used for a reusable prompt described below. \n\nPrompt description: {{prompt_description}}\n\nGenerate the 16:9 hero image for a prompt library website. \n\nImage Description: {{image_description}}\n\nInterpret the Prompt Description to understand the purpose, audience, and implied use case, then use the Image Description to create a visually compelling hero image that represents that use case.\n\nThe visual style should be minimalist, editorial, refined, and chic — suitable for a high-end digital prompt library. Prioritize elegant composition, restrained detail, sophisticated lighting, and a premium design sensibility.\n\nDo not include text, labels, UI elements, diagrams, captions, watermarks, or decorative typography unless explicitly requested. If text, marks, or diagrams are specifically requested, render them in a restrained editorial style consistent with the site aesthetic.\n\nOutput requirements:\n- Aspect ratio: 16:9\n- High-resolution\n- Clean composition suitable for use as a website hero image\n- No visible prompt text\n- No overly literal “AI” imagery unless the use case explicitly calls for it",
@@ -1466,13 +1466,13 @@
         ]
       }
     ],
-    "slug": "hero-image-generator",
+    "slug": "hero-image-generator---old-version",
     "icon": "image",
     "archived": true
   },
   {
     "id": "hero-image-generator-assisted",
-    "title": "Hero Image Generator - Assisted",
+    "title": "Hero Image Generator",
     "description": "Turns a pasted subject prompt into a refined hero-image brief, then generates the final prompt-library hero image.",
     "category": "Art",
     "variations": [
@@ -1500,7 +1500,7 @@
         "variables": []
       }
     ],
-    "slug": "hero-image-generator-assisted",
+    "slug": "hero-image-generator",
     "icon": "auto_awesome",
     "variables": []
   },
