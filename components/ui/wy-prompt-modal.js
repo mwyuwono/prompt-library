@@ -373,19 +373,6 @@ export class WyPromptModal extends LitElement {
         flex-shrink: 0; /* Tabs stay fixed, don't shrink */
     }
 
-    .reference-image {
-        margin: var(--spacing-lg, 24px) var(--spacing-xl, 32px) 0;
-        flex-shrink: 0;
-    }
-
-    .reference-image img {
-        display: block;
-        width: 100%;
-        aspect-ratio: 16 / 9;
-        object-fit: cover;
-        border: 1px solid var(--paper-edge, #DDD6C8);
-    }
-
     .tabs-container wy-tabs {
         flex: 1;
     }
@@ -664,6 +651,102 @@ export class WyPromptModal extends LitElement {
       border: 1px solid var(--md-sys-color-outline-variant);
     }
 
+    .overview::after {
+      content: '';
+      display: block;
+      clear: both;
+    }
+
+    .overview-eyebrow {
+      display: block;
+      margin-bottom: 14px;
+      color: var(--ink-soft, #A8A49C);
+      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .overview-figure {
+      float: right;
+      width: 206px;
+      margin: 2px 0 14px 28px;
+    }
+
+    .overview-figure img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      border: 1px solid var(--paper-edge, #DDD6C8);
+    }
+
+    .overview-figure figcaption {
+      margin: 8px 0 0;
+      color: var(--ink-mute, #6B6B6A);
+      font-family: var(--ff-serif, 'Lora', serif);
+      font-size: 0.8125rem;
+      font-style: italic;
+      line-height: 1.35;
+      text-align: right;
+    }
+
+    .overview-lead {
+      margin: 0;
+      color: var(--ink, #1A1A1A);
+      font-family: var(--ff-serif, 'Lora', serif);
+      font-size: 1.375rem;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    .overview-lead ol,
+    .overview-lead ul {
+      margin: 4px 0 0;
+      padding-left: 1.25em;
+    }
+
+    .overview-rule {
+      clear: both;
+      margin: 24px 0;
+      border: 0;
+      border-top: 1px solid var(--paper-edge, #DDD6C8);
+    }
+
+    .overview-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px 40px;
+      margin: 0;
+    }
+
+    .overview-meta > div {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .overview-meta dt {
+      margin: 0;
+      color: var(--ink-soft, #A8A49C);
+      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .overview-meta dd {
+      margin: 0;
+      color: var(--ink, #1A1A1A);
+      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      font-size: 0.9375rem;
+      line-height: 1.4;
+    }
+
     .editor-area {
         width: 100%;
         height: 100%;
@@ -811,8 +894,6 @@ export class WyPromptModal extends LitElement {
       .labeled-btn.primary { padding-right: 12px; }
       .title-group h2 { font-size: 1.75rem; }
       .tabs-container { padding: 0; } /* wy-tabs handles its own mobile padding */
-      .reference-image { margin: 0 var(--spacing-md, 16px) var(--spacing-sm, 8px); }
-      .reference-image img { aspect-ratio: 4 / 3; max-height: 260px; }
       .variation-selector-container {
         margin: var(--spacing-sm, 8px) var(--spacing-md, 16px) 0;
         padding: var(--spacing-sm, 12px);
@@ -826,6 +907,25 @@ export class WyPromptModal extends LitElement {
       /* Tighter button spacing on mobile */
       .header-actions-left {
         gap: 4px;
+      }
+
+      .overview-figure {
+        float: none;
+        width: 100%;
+        margin: 0 0 var(--spacing-md, 16px);
+      }
+
+      .overview-figure img {
+        aspect-ratio: 16 / 10;
+        max-height: 220px;
+      }
+
+      .overview-lead {
+        font-size: 1.125rem;
+      }
+
+      .overview-meta {
+        gap: var(--spacing-md, 16px) var(--spacing-lg, 24px);
       }
       
       /* Mobile description toggle */
@@ -952,11 +1052,13 @@ export class WyPromptModal extends LitElement {
     return parts.join('');
   }
 
-  _renderPromptIntro() {
+  _renderPromptIntro(showDescription = true) {
     return html`
       <div class="title-group">
           <h2 @click="${this._toggleDescription}">${this.title}</h2>
-          <div class="description-text ${this.descriptionExpanded ? 'expanded' : ''}">${unsafeHTML(this._renderDescriptionMarkdown(this.description))}</div>
+          ${showDescription ? html`
+            <div class="description-text ${this.descriptionExpanded ? 'expanded' : ''}">${unsafeHTML(this._renderDescriptionMarkdown(this.description))}</div>
+          ` : ''}
           ${this.instructions ? html`
             <wy-info-panel class="prompt-instructions-panel">
               <p class="prompt-instructions-heading">Instructions</p>
@@ -1001,7 +1103,7 @@ export class WyPromptModal extends LitElement {
             class="tab-item ${this.activeTab === 'preview' ? 'active' : ''}"
             data-tab="preview"
             @click="${this._setActiveTab}">
-            Preview
+            Full prompt
           </button>
         </div>
       ` : ''}
@@ -1024,6 +1126,40 @@ export class WyPromptModal extends LitElement {
     `;
   }
 
+  _getActiveStandardTab() {
+    if (this.activeTab === 'preview') return 'preview';
+    return this.variables && this.variables.length > 0 ? 'variables' : 'overview';
+  }
+
+  _getWordCount(template) {
+    if (!template || typeof template !== 'string') return 0;
+    const words = template.trim().split(/\s+/).filter(Boolean).length;
+    if (!words) return 0;
+    return words < 100 ? Math.round(words / 5) * 5 : Math.round(words / 10) * 10;
+  }
+
+  _renderOverview(template) {
+    const words = this._getWordCount(template);
+
+    return html`
+      <div class="overview">
+        <span class="overview-eyebrow">What it does</span>
+        ${this.image ? html`
+          <figure class="overview-figure">
+            <img src="${this.image}" alt="${this.title}" loading="lazy">
+            <figcaption>N&ordm; 01 &mdash; Example output</figcaption>
+          </figure>
+        ` : ''}
+        <div class="overview-lead">${unsafeHTML(this._renderDescriptionMarkdown(this.description))}</div>
+        <hr class="overview-rule">
+        <dl class="overview-meta">
+          ${this.category ? html`<div><dt>Category</dt><dd>${this.category}</dd></div>` : ''}
+          ${words ? html`<div><dt>Length</dt><dd>&asymp; ${words} words</dd></div>` : ''}
+        </dl>
+      </div>
+    `;
+  }
+
   render() {
     const currentTemplate = this.variations.length > 0
       ? this.variations[this.activeVariationIndex].template
@@ -1031,6 +1167,8 @@ export class WyPromptModal extends LitElement {
 
     const compiledPrompt = this._compilePrompt(currentTemplate);
     const activeVariation = this.variations[this.activeVariationIndex];
+    const standardActiveTab = this._getActiveStandardTab();
+    const hasVariables = this.variables.length > 0;
 
     return html`
       <div class="scrim" @click="${this._close}"></div>
@@ -1077,32 +1215,26 @@ export class WyPromptModal extends LitElement {
             
             ${!(this.steps && this.steps.length > 0) ? html`
               <div class="header-main">
-                  ${this._renderPromptIntro()}
+                  ${this._renderPromptIntro(!(this.mode === 'locked' && !hasVariables))}
                   
                   ${this.mode === 'locked' ? html`` : ''}
               </div>
             ` : ''}
         </header>
 
-        ${this.mode === 'locked' && this.variables.length > 0 && !(this.steps && this.steps.length > 0) ? html`
+        ${this.mode === 'locked' && !(this.steps && this.steps.length > 0) ? html`
           <div class="tabs-container">
-              <wy-tabs active-tab="${this.activeTab}" @tab-change="${e => this.activeTab = e.detail.tab}">
-                <button class="tab-item ${this.activeTab === 'variables' ? 'active' : ''}" role="tab" data-tab="variables">Variables</button>
-                <button class="tab-item ${this.activeTab === 'preview' ? 'active' : ''}" role="tab" data-tab="preview">Final Preview</button>
+              <wy-tabs active-tab="${standardActiveTab}" @tab-change="${e => this.activeTab = e.detail.tab}">
+                <button class="tab-item ${standardActiveTab === (hasVariables ? 'variables' : 'overview') ? 'active' : ''}" role="tab" data-tab="${hasVariables ? 'variables' : 'overview'}">${hasVariables ? 'Variables' : 'Overview'}</button>
+                <button class="tab-item ${standardActiveTab === 'preview' ? 'active' : ''}" role="tab" data-tab="preview">Full prompt</button>
               </wy-tabs>
-              ${this.activeTab === 'variables' && this._hasValues() ? html`
+              ${standardActiveTab === 'variables' && this._hasValues() ? html`
                 <button class="clear-btn" @click="${this._clearAllVariables}">Clear All</button>
               ` : ''}
           </div>
         ` : ''}
 
         <div class="content">
-          ${this.image ? html`
-            <div class="reference-image">
-              <img src="${this.image}" alt="${this.title}">
-            </div>
-          ` : ''}
-
           ${this.mode === 'locked' ? html`
             ${this.steps && this.steps.length > 0 ? html`
               <!-- Multi-step mode -->
@@ -1151,12 +1283,14 @@ export class WyPromptModal extends LitElement {
               ` : ''}
 
               <div class="body">
-                ${this.activeTab === 'variables' && this.variables.length > 0 ? html`
+                ${standardActiveTab === 'preview' ? html`
+                  <div class="preview-area">${compiledPrompt}</div>
+                ` : hasVariables ? html`
                   <div class="variables-grid">
                     ${this.variables.map(v => this._renderVariable(v))}
                   </div>
                 ` : html`
-                  <div class="preview-area">${compiledPrompt}</div>
+                  ${this._renderOverview(currentTemplate)}
                 `}
               </div>
             `}
