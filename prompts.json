@@ -610,12 +610,12 @@
   },
   {
     "id": "engraving-conversion",
-    "title": "Image Restyle Study",
+    "title": "Image Restyle",
     "description": "Converts an uploaded image into a refined archival study style, with variants for technical engraving, blue-and-white watercolor, and museum-catalog plate treatments.",
     "category": "Art",
     "icon": "history_edu",
     "featured": false,
-    "slug": "engraving-conversion",
+    "slug": "image-restyle",
     "instructions": "Upload an image with this prompt, then select the conversion style. Optionally upload a Style Reference image to align the style more closely.",
     "template": "",
     "variables": [],
@@ -650,6 +650,14 @@
         "name": "Bargue Lithograph Study",
         "description": "Converts an uploaded image into a monochromatic 19th-century atelier drawing plate inspired by Charles Bargue's Cours de Dessin.",
         "template": "Convert the provided image to an academic lithograph drawing in the style of Charles Bargue's Cours de Dessin. Transform the uploaded image into a monochromatic graphite and charcoal plate on a clean, light-cream paper background.\n\nThe subject must have a highly sculptural, chiseled appearance, emphasizing structural block-ins and sharp, geometric faceting of forms. Utilize precise, clean outlines alongside smooth, calculated tonal shading to define cast shadows and core highlights.\n\nThe final image should look like a classical 19th-century atelier drawing plate, showcasing a pristine balance of hard-edged linear construction and soft, blended tonal gradients.\n\nNo color, clean background, high contrast, fine art study.",
+        "variables": []
+      },
+      {
+        "id": "landscape-oil",
+        "name": "Landscape Oil Painting",
+        "description": "",
+        "image": "public/images/1780170146945.jpg",
+        "template": "Convert the provided image to a classical late 18th-century oil painting aesthetic, reminiscent of the English Romantic portraiture style of John Hoppner. The visual style is defined by a powerful contrast between a highly illuminated, crisply detailed subject and a moody, atmospheric backdrop of a rolling landscape under a tumultuous, stormy sky. The lighting is intensely theatrical and directional, carving out form with bright highlights and deep, rich shadows. The palette relies heavily on earthy tones, muted ochres, deep forest greens, and dark grays, offset by hints of a warm twilight glow along the horizon. The brushwork is painterly yet precise, capturing fine textures on the main subject while becoming looser and more expressive in the environment to create an intense, heroic, and solitary mood. 3:4 aspect ratio",
         "variables": []
       }
     ]
