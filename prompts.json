@@ -1322,8 +1322,8 @@
         "id": "detailed-lines",
         "name": "Detailed Line Drawing",
         "description": "",
-        "image": "",
-        "template": "Convert the attached image into a black and white centerline stroke drawing that could be feasibly reproduced on a pen plotter. Use clean, continuous black outlines on a solid white background. Discard details that a pen plotter cannot reproduce such as shading and gradients, but ensure important lines are delineated in the output. For example, a line may be needed to delineate a major anatomical contour.  anatomical features must be clearly delineated in the output so they are not lost. For example, a human face should retain indications of major facial contours, important details such as eyes, cheek contours, lips, etc. ",
+        "image": "public/images/1780177509431.jpg",
+        "template": "Convert the attached image into a black-and-white pen-plotter-ready contour drawing. Preserve composition, crop, aspect ratio, perspective, placement, and major proportions. Use clean, smooth, continuous, single-weight black contour lines on a solid white background. Prioritize silhouettes, structural boundaries, facial features, anatomical contours, clothing edges, and major background outlines. Remove shading, gradients, hatching, stippling, texture, gray tones, and filled black areas. Simplify complex areas such as hair, eyes, hands, fabric folds, foliage, and background detail into a small number of deliberate continuous contours. Avoid clusters of short parallel strokes, dense micro-lines, tiny isolated marks, broken strokes, and thick filled marks. Optimize for later SVG vectorization and pen plotting.",
         "variables": []
       },
       {
