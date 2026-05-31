@@ -88,6 +88,26 @@
     "image": "public/images/1775766209619.jpg"
   },
   {
+    "id": "targeted-image-edit-prompt",
+    "title": "Targeted Image Edit",
+    "description": "Creates a concise image-generation prompt for targeted edits to an existing reference image while preserving everything else.",
+    "category": "Art",
+    "icon": "edit",
+    "featured": false,
+    "template": "Act as an expert image-generation prompt engineer. Provide a precise, concise image prompt that will be paired with the attached reference image to execute the specific edit described below.\n\nFollow these strict constraints:\n- Zero-Shot Continuity: The prompt must isolate the edit seamlessly, ensuring the rest of the reference image (lighting, style, subject, background) remains entirely unchanged. It is crucial that the requested edit be the only change to the reference image.\n- Format for AI, Not Humans: Write the prompt using descriptive, token-efficient language optimized for an image-generation model. Do not include conversational filler or meta-explanations.\n- No File Names: Refer to the attached image strictly as \"the reference image\" or \"the original image.\"\n- Output Only the Prompt: Do not generate the image yourself. Provide only the text prompt inside a code block. Start with the phrase: \"Help me edit the attached image...\"\n\nEdit to execute:\n{{edit_description}}",
+    "variables": [
+      {
+        "name": "edit_description",
+        "label": "Edit to Execute",
+        "placeholder": "Describe the specific image edit you want to make",
+        "value": "",
+        "inputType": "textarea",
+        "rows": 5
+      }
+    ],
+    "slug": "targeted-image-edit"
+  },
+  {
     "id": "proofreader",
     "title": "Writing Assistant",
     "description": "Restructures pasted text for clarity, flow, and stronger organization while preserving your voice.",
