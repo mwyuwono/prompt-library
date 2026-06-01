@@ -27,12 +27,12 @@ export class WyCodeTextarea extends LitElement {
         }
 
         .label {
-            font-family: var(--font-display, 'Playfair Display', serif);
+            font-family: var(--font-body, 'Inter', sans-serif);
             font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--md-sys-color-text-heading, #121714);
+            letter-spacing: 0.14em;
+            color: var(--md-sys-color-on-surface-variant, #5E6E66);
             margin-bottom: var(--spacing-sm, 8px);
             display: block;
         }
@@ -43,7 +43,7 @@ export class WyCodeTextarea extends LitElement {
             padding: var(--spacing-md, 16px);
             border-radius: var(--md-sys-shape-corner-small, 8px);
             border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            background-color: transparent;
+            background-color: var(--field-bg, transparent);
             font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
             font-size: 0.875rem;
             line-height: 1.5;

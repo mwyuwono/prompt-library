@@ -42,6 +42,9 @@ const backupRemoveRemoteButton = document.getElementById('backupRemoveRemoteButt
 const backupSaveRemoteButton = document.getElementById('backupSaveRemoteButton');
 const backupPullButton = document.getElementById('backupPullButton');
 const backupNowButton = document.getElementById('backupNowButton');
+const sidebarCollapseButton = document.getElementById('sidebarCollapseButton');
+const sidebarRevealButton = document.getElementById('sidebarRevealButton');
+const SIDEBAR_COLLAPSED_KEY = 'promptAdminSidebarCollapsed';
 
 /**
  * Initialize admin interface
@@ -55,6 +58,7 @@ async function init() {
     await loadHeroImageStatus();
     renderPromptList();
     setupEventListeners();
+    restoreSidebarState();
 
     // Load prompt from URL hash or show empty state
     const hashId = window.location.hash.slice(1);
@@ -363,6 +367,8 @@ function isImageReferenced(imagePath) {
 function setupEventListeners() {
     publicDatasetButton.addEventListener('click', () => switchDataset('public'));
     privateDatasetButton.addEventListener('click', () => switchDataset('private'));
+    sidebarCollapseButton?.addEventListener('click', () => setSidebarCollapsed(true));
+    sidebarRevealButton?.addEventListener('click', () => setSidebarCollapsed(false));
 
     newPromptButton.addEventListener('click', async () => {
         try {
@@ -556,6 +562,20 @@ function setupEventListeners() {
     backupNowButton.addEventListener('click', runBackupNow);
 }
 
+function restoreSidebarState() {
+    setSidebarCollapsed(localStorage.getItem(SIDEBAR_COLLAPSED_KEY) === 'true', { persist: false });
+}
+
+function setSidebarCollapsed(collapsed, { persist = true } = {}) {
+    document.body.classList.toggle('sidebar-collapsed', collapsed);
+    sidebarCollapseButton?.setAttribute('aria-expanded', String(!collapsed));
+    sidebarRevealButton?.setAttribute('aria-expanded', String(!collapsed));
+
+    if (persist) {
+        localStorage.setItem(SIDEBAR_COLLAPSED_KEY, String(collapsed));
+    }
+}
+
 async function switchDataset(dataset) {
     if (dataset === currentDataset) return;
 
@@ -592,6 +612,7 @@ function renderPromptList() {
                 <span class="material-symbols-outlined">${iconName}</span>
                 <div class="prompt-item-content">
                     <div class="prompt-item-title">${p.title}</div>
+                    <div class="prompt-item-category">${p.category || 'Uncategorized'}</div>
                 </div>
                 ${archivedBadge}
                 ${privateBadge}

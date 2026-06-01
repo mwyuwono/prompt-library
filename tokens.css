@@ -44,6 +44,11 @@
   --rule-soft:     var(--paper-edge);
 
   --accent:        var(--accent-terracotta);
+  --surface-canvas: #ECE6DA;
+  --surface-1:      var(--paper);
+  --surface-2:      var(--white);
+  --field-bg:       #FBF9F4;
+  --line:           var(--paper-edge);
 
   /* ========================================================================
      TYPOGRAPHY
@@ -100,9 +105,12 @@
   --hair:        1px;
   --radius-0:    0;
   --radius-1:    2px;
+  --radius-2:    10px;
+  --radius-3:    16px;
   --radius-pill: 999px;
 
   --shadow-modal: 0 12px 40px rgba(26, 26, 26, 0.08);
+  --shadow-soft: 0 1px 2px rgba(26, 26, 26, 0.04), 0 6px 18px rgba(26, 26, 26, 0.05);
 
   /* ========================================================================
      MOTION
@@ -242,10 +250,10 @@
   --spacing-3xl:    var(--s-8);
 
   --md-sys-shape-corner-full:   var(--radius-pill);
-  --md-sys-shape-corner-large:  var(--radius-0);
-  --md-sys-shape-corner-medium: var(--radius-0);
-  --md-sys-shape-corner-small:  var(--radius-0);
-  --md-sys-shape-corner-xs:     var(--radius-0);
+  --md-sys-shape-corner-large:  var(--radius-3);
+  --md-sys-shape-corner-medium: var(--radius-2);
+  --md-sys-shape-corner-small:  var(--radius-2);
+  --md-sys-shape-corner-xs:     var(--radius-2);
   --md-sys-shape-corner-pill:   var(--radius-pill);
 
   --md-sys-motion-easing-standard:              var(--ease);

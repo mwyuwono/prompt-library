@@ -25,11 +25,11 @@ export class WyFormField extends LitElement {
     }
 
     label {
-      font-family: var(--font-display);
+      font-family: var(--font-body);
       font-size: 0.75rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.14em;
       color: var(--md-sys-color-on-surface-variant);
     }
 
@@ -59,13 +59,16 @@ export class WyFormField extends LitElement {
       width: 100%;
       box-sizing: border-box;
       padding: 12px 16px;
-      border-radius: 0;
+      border-radius: var(--md-sys-shape-corner-small);
       border: 1px solid var(--md-sys-color-outline-variant);
-      background-color: var(--md-sys-color-surface-container-lowest);
+      background-color: var(--field-bg, var(--md-sys-color-surface-container-lowest));
       font-family: var(--font-body);
       font-size: 1rem;
       color: var(--md-sys-color-on-surface);
-      transition: border-color 0.2s, box-shadow 0.2s;
+      transition:
+        border-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
+        box-shadow var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
+        background-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
     }
 
     ::slotted(input:focus),
@@ -73,7 +76,8 @@ export class WyFormField extends LitElement {
     ::slotted(select:focus) {
       outline: none;
       border-color: var(--md-sys-color-primary);
-      box-shadow: 0 0 0 1px var(--ink);
+      background-color: var(--surface-2, var(--md-sys-color-surface-container-lowest));
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
     }
 
     ::slotted([aria-invalid="true"]) {

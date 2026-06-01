@@ -23,7 +23,15 @@
         <div class="sidebar-header">
             <div class="sidebar-title-row">
                 <h2 id="sidebarTitle">Prompts</h2>
-                <button id="newPromptButton" class="new-prompt-button" type="button">New Prompt</button>
+                <div class="sidebar-actions">
+                    <button id="newPromptButton" class="new-prompt-button" type="button">
+                        <span class="material-symbols-outlined" aria-hidden="true">add</span>
+                        New
+                    </button>
+                    <button id="sidebarCollapseButton" class="sidebar-icon-button" type="button" aria-label="Collapse sidebar">
+                        <span class="material-symbols-outlined" aria-hidden="true">left_panel_close</span>
+                    </button>
+                </div>
             </div>
             <div class="dataset-switch" role="tablist" aria-label="Prompt dataset">
                 <button id="publicDatasetButton" class="dataset-button active" type="button" data-dataset="public">Public</button>
@@ -56,6 +64,10 @@
 
     <!-- Main Editor -->
     <main id="main-content">
+        <button id="sidebarRevealButton" class="sidebar-reveal-button" type="button" aria-label="Show prompts sidebar">
+            <span class="material-symbols-outlined" aria-hidden="true">left_panel_open</span>
+            Prompts
+        </button>
         <div id="editor-container">
             <wy-prompt-editor id="editor"></wy-prompt-editor>
         </div>

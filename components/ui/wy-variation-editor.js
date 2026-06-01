@@ -36,22 +36,25 @@ export class WyVariationEditor extends LitElement {
         }
 
         .variation-card {
-            background-color: var(--md-sys-color-surface-container-low, #F5F2EA);
+            background-color: var(--field-bg, #FBF9F4);
             border-radius: var(--md-sys-shape-corner-medium, 16px);
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
+            border: 1px solid var(--line, var(--md-sys-color-outline-variant, #DDD));
             overflow: hidden;
-            transition: border-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition:
+                border-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
+                box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
         }
 
         .variation-card.expanded {
-            border-color: var(--md-sys-color-primary, #282828);
+            border-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 16%, transparent);
+            box-shadow: var(--shadow-soft, 0 1px 2px rgba(26,26,26,.04), 0 6px 18px rgba(26,26,26,.05));
         }
 
         .variation-header {
             display: flex;
             align-items: center;
             gap: var(--spacing-sm, 8px);
-            padding: var(--spacing-md, 16px);
+            padding: 14px 16px;
             cursor: pointer;
             position: relative;
             overflow: hidden;
@@ -85,7 +88,7 @@ export class WyVariationEditor extends LitElement {
         .variation-title {
             flex: 1;
             font-family: var(--font-serif, 'Playfair Display', serif);
-            font-size: 1.125rem;
+            font-size: 1.0625rem;
             font-weight: 600;
             color: var(--md-sys-color-on-surface, #121714);
             margin: 0;
@@ -95,12 +98,12 @@ export class WyVariationEditor extends LitElement {
             flex-shrink: 0;
             font-family: var(--font-sans, 'DM Sans', sans-serif);
             font-size: 0.6875rem;
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
-            background-color: color-mix(in srgb, var(--md-sys-color-tertiary, #6E5C4D) 15%, transparent);
-            color: var(--md-sys-color-tertiary, #6E5C4D);
+            background-color: color-mix(in srgb, var(--accent-terracotta, #C18A4D) 22%, transparent);
+            color: color-mix(in srgb, var(--accent-rust, #C06F45) 78%, var(--ink, #1A1A1A));
             border-radius: var(--md-sys-shape-corner-full, 9999px);
         }
 
@@ -129,18 +132,19 @@ export class WyVariationEditor extends LitElement {
         }
 
         .variation-fields {
-            padding: 0 var(--spacing-md, 16px) var(--spacing-md, 16px);
+            padding: 4px var(--spacing-md, 16px) var(--spacing-md, 16px);
             display: flex;
             flex-direction: column;
             gap: var(--spacing-lg, 24px);
         }
 
         .mode-toggle {
-            display: flex;
-            gap: var(--spacing-md, 16px);
-            padding: var(--spacing-md, 16px);
-            background-color: color-mix(in srgb, var(--md-sys-color-tertiary, #6E5C4D) 5%, transparent);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
+            display: inline-flex;
+            gap: var(--spacing-xs, 4px);
+            padding: var(--spacing-xs, 4px);
+            background-color: var(--paper-deep, #EEE8DD);
+            border: 1px solid var(--line, var(--md-sys-color-outline-variant, #DDD));
+            border-radius: var(--md-sys-shape-corner-full, 9999px);
         }
 
         .mode-toggle label {
@@ -148,13 +152,24 @@ export class WyVariationEditor extends LitElement {
             align-items: center;
             gap: var(--spacing-xs, 4px);
             font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.9375rem;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+            border-radius: var(--md-sys-shape-corner-full, 9999px);
+            padding: 0.5rem 1.1rem;
             cursor: pointer;
             user-select: none;
         }
 
         .mode-toggle input[type="radio"] {
-            cursor: pointer;
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .mode-toggle label:has(input:checked) {
+            background: var(--md-sys-color-primary, #282828);
+            color: var(--md-sys-color-on-primary, #FFF);
         }
 
         .steps-section {
@@ -172,7 +187,7 @@ export class WyVariationEditor extends LitElement {
             padding: var(--spacing-sm, 8px);
             background: transparent;
             border: 1px dashed var(--md-sys-color-outline-variant, #DDD);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
+            border-radius: var(--md-sys-shape-corner-medium, 10px);
             font-family: var(--font-sans, 'DM Sans', sans-serif);
             font-size: 0.875rem;
             font-weight: 500;
@@ -206,8 +221,8 @@ export class WyVariationEditor extends LitElement {
             display: flex;
             gap: var(--spacing-xs, 4px);
             padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
-            background-color: color-mix(in srgb, var(--md-sys-color-tertiary, #6E5C4D) 5%, transparent);
-            border-top: 1px solid var(--md-sys-color-outline-variant, #DDD);
+            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 3.5%, transparent);
+            border-top: 1px solid var(--line, var(--md-sys-color-outline-variant, #DDD));
         }
 
         .control-button {
@@ -217,10 +232,10 @@ export class WyVariationEditor extends LitElement {
             padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
             background: transparent;
             border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
+            border-radius: var(--md-sys-shape-corner-full, 9999px);
             font-family: var(--font-sans, 'DM Sans', sans-serif);
             font-size: 0.8125rem;
-            font-weight: 500;
+            font-weight: 600;
             color: var(--md-sys-color-on-surface, #121714);
             cursor: pointer;
             position: relative;
@@ -318,9 +333,11 @@ export class WyVariationEditor extends LitElement {
 
         .field-label {
             font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: var(--md-sys-color-on-surface, #121714);
+            font-size: 0.6875rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--md-sys-color-on-surface-variant, #5E6E66);
         }
 
         .field-description {

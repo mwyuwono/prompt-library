@@ -193,7 +193,7 @@ export class WyPromptEditor extends LitElement {
             padding: var(--spacing-sm, 8px);
             background-color: var(--md-sys-color-background, #FDFBF7);
             border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            border-radius: var(--radius-0, 0);
+            border-radius: var(--md-sys-shape-corner-small, 8px);
         }
 
         .button {
@@ -511,6 +511,225 @@ export class WyPromptEditor extends LitElement {
             white-space: nowrap;
         }
 
+        /* Refined admin polish layer */
+        .editor-layout {
+            grid-template-columns: 216px minmax(0, 1fr);
+            grid-template-rows: auto 1fr;
+            gap: 40px;
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 4vw, 56px) 96px;
+        }
+
+        .actions {
+            grid-column: 1 / -1;
+            grid-row: 1;
+            align-items: center;
+            justify-content: flex-end;
+            gap: var(--spacing-sm, 8px);
+            margin: 0 calc(-1 * clamp(20px, 4vw, 56px)) 28px;
+            top: 0;
+            padding: 12px clamp(20px, 4vw, 56px);
+            background: color-mix(in srgb, var(--surface-1, var(--paper, #F7F4EE)) 92%, transparent);
+            backdrop-filter: blur(10px) saturate(120%);
+            -webkit-backdrop-filter: blur(10px) saturate(120%);
+            border: 0;
+            border-bottom: 1px solid var(--line, var(--paper-edge, #DDD6C8));
+            border-radius: 0;
+            box-shadow: 0 6px 18px rgba(26, 26, 26, 0.05);
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--md-sys-shape-corner-full, 9999px);
+            font-family: var(--font-body, 'Inter', sans-serif);
+            font-size: 0.875rem;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            padding: 0.55rem 1.25rem;
+        }
+
+        .button-secondary {
+            border-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 16%, transparent);
+        }
+
+        .editor-nav {
+            grid-column: 1;
+            grid-row: 2;
+            top: 84px;
+            gap: var(--spacing-xs, 4px);
+            padding: 14px 12px;
+            background: var(--surface-1, var(--paper, #F7F4EE));
+            border: 1px solid var(--line, var(--paper-edge, #DDD6C8));
+            border-radius: var(--md-sys-shape-corner-medium, 10px);
+            box-shadow: var(--shadow-soft, 0 1px 2px rgba(26,26,26,.04), 0 6px 18px rgba(26,26,26,.05));
+        }
+
+        .editor-nav-title,
+        .card-title::before {
+            font-family: var(--font-body, 'Inter', sans-serif);
+            font-size: 0.6875rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+        }
+
+        .editor-nav-title {
+            padding: 0 6px 8px;
+            margin: 0;
+        }
+
+        .editor-nav-item {
+            position: relative;
+            min-height: 32px;
+            padding: 7px 10px 7px 14px;
+            border-left: 0;
+            border-radius: 8px;
+            font-family: var(--font-body, 'Inter', sans-serif);
+            font-size: 0.8125rem;
+            font-weight: 500;
+        }
+
+        .editor-nav-item::before {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 50%;
+            width: 3px;
+            height: 0;
+            border-radius: 3px;
+            background: var(--md-sys-color-primary, #282828);
+            transform: translateY(-50%);
+            transition: height var(--md-sys-motion-duration-short2, 150ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+        }
+
+        .editor-nav-item.active {
+            border-left-color: transparent;
+            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 5%, transparent);
+        }
+
+        .editor-nav-item.active::before {
+            height: 16px;
+        }
+
+        .editor-nav-item.subitem {
+            padding-left: 24px;
+            font-size: 0.78rem;
+        }
+
+        .editor-form {
+            grid-column: 2;
+            grid-row: 2;
+        }
+
+        .editor-header {
+            margin-bottom: 2px;
+            padding-bottom: 0;
+        }
+
+        .breadcrumbs {
+            font-family: var(--font-body, 'Inter', sans-serif);
+            font-size: 0.8125rem;
+        }
+
+        h1,
+        .card-title,
+        .hero-generator-title {
+            font-family: var(--font-serif, 'Lora', serif);
+            letter-spacing: -0.015em;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            font-family: var(--font-body, 'Inter', sans-serif);
+            font-size: 0.95rem;
+        }
+
+        .card {
+            background: var(--surface-2, #FFF);
+            border: 1px solid var(--line, var(--paper-edge, #DDD6C8));
+            border-radius: var(--md-sys-shape-corner-large, 16px);
+            padding: 26px 28px;
+            box-shadow: var(--shadow-soft, 0 1px 2px rgba(26,26,26,.04), 0 6px 18px rgba(26,26,26,.05));
+        }
+
+        .card-title {
+            font-size: 1.375rem;
+            margin-bottom: var(--spacing-md, 16px);
+        }
+
+        .card-title::before {
+            content: attr(data-eyebrow);
+            display: block;
+            margin-bottom: 7px;
+        }
+
+        .card-description {
+            font-family: var(--font-body, 'Inter', sans-serif);
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .mode-toggle {
+            display: inline-flex;
+            gap: var(--spacing-xs, 4px);
+            padding: var(--spacing-xs, 4px);
+            width: max-content;
+            max-width: 100%;
+            border: 1px solid var(--line, var(--paper-edge, #DDD6C8));
+            border-radius: var(--md-sys-shape-corner-full, 9999px);
+            background: var(--paper-deep, #EEE8DD);
+        }
+
+        .mode-toggle label {
+            border-radius: var(--md-sys-shape-corner-full, 9999px);
+            padding: 0.5rem 1.1rem;
+            font-family: var(--font-body, 'Inter', sans-serif);
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+        }
+
+        .mode-toggle label:has(input:checked) {
+            background: var(--md-sys-color-primary, #282828);
+            color: var(--md-sys-color-on-primary, #FFF);
+        }
+
+        .mode-toggle input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .info-banner {
+            display: flex;
+            border: 1px solid color-mix(in srgb, var(--accent-sage, #7D8E39) 35%, transparent);
+            border-left-width: 1px;
+            background: color-mix(in srgb, var(--accent-sage, #7D8E39) 12%, var(--surface-2, #FFF));
+            border-radius: var(--md-sys-shape-corner-medium, 10px);
+        }
+
+        .hero-control-label,
+        .card-header-with-action,
+        .hero-provider-status,
+        .hero-status-message,
+        .hero-error-message {
+            font-family: var(--font-body, 'Inter', sans-serif);
+        }
+
+        .hero-control-label select,
+        .hero-prompt-textarea {
+            background: var(--field-bg, #FBF9F4);
+            border-radius: var(--md-sys-shape-corner-small, 10px);
+        }
+
         @media (max-width: 1200px) {
             .editor-layout {
                 grid-template-columns: 1fr;
@@ -522,7 +741,7 @@ export class WyPromptEditor extends LitElement {
                 grid-row: 1;
                 top: 0;
                 margin-bottom: 0;
-                border-radius: var(--md-sys-shape-corner-small, 8px);
+                border-radius: 0;
             }
 
             .editor-nav {
@@ -530,10 +749,10 @@ export class WyPromptEditor extends LitElement {
                 grid-row: 2;
                 top: 64px;
                 z-index: 4;
-                background: var(--md-sys-color-background, #FDFBF7);
+                background: var(--surface-1, var(--paper, #F7F4EE));
                 padding: var(--spacing-sm, 8px);
                 border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-                border-radius: var(--radius-0, 0);
+                border-radius: var(--md-sys-shape-corner-medium, 10px);
             }
 
             .editor-form {
@@ -1443,7 +1662,7 @@ Generate the image exactly as a polished 16:9 website hero image.`;
 
                     <!-- Section 1: Basic Information -->
                     <div class="card" data-section="basic">
-                        <h2 class="card-title">Basic Information</h2>
+                        <h2 class="card-title" data-eyebrow="Section 01">Basic Information</h2>
                         <wy-form-field label="Prompt Title" id="title" required>
                             <input
                                 type="text"
@@ -1493,7 +1712,7 @@ Generate the image exactly as a polished 16:9 website hero image.`;
 
                     <!-- Section 2: Visuals & Metadata -->
                     <div class="card" data-section="visuals">
-                        <h2 class="card-title">Visuals & Metadata</h2>
+                        <h2 class="card-title" data-eyebrow="Section 02">Visuals & Metadata</h2>
                         <wy-form-field label="Icon" id="icon" description="Material Symbol icon name (e.g., 'restaurant', 'code', 'music_note')">
                             <input
                                 type="text"
@@ -1525,7 +1744,7 @@ Generate the image exactly as a polished 16:9 website hero image.`;
                         <div class="card" data-section="variations">
                             <div class="card-header-with-action">
                                 <div>
-                                    <h2 class="card-title">Variations</h2>
+                                    <h2 class="card-title" data-eyebrow="Section 03">Variations</h2>
                                     <p class="card-description">
                                         This prompt has multiple variations. Each variation can be a simple template or multi-step workflow.
                                     </p>
@@ -1551,7 +1770,7 @@ Generate the image exactly as a polished 16:9 website hero image.`;
                         <!-- Standard Mode (No Variations) -->
                         <div class="card" data-section="prompt-type">
                             <div class="card-header-with-action">
-                                <h2 class="card-title">Prompt Type</h2>
+                                <h2 class="card-title" data-eyebrow="Section 03">Prompt Type</h2>
                                 <button 
                                     class="button button-ghost button-small"
                                     @click="${this._convertToVariations}"
@@ -1589,7 +1808,7 @@ Generate the image exactly as a polished 16:9 website hero image.`;
                         ${this._promptMode === 'single' ? html`
                             <!-- Variables -->
                             <div class="card" data-section="variables">
-                                <h2 class="card-title">Variables</h2>
+                                <h2 class="card-title" data-eyebrow="Section 04">Variables</h2>
                                 <wy-variable-editor
                                     .variables="${this._editedPrompt.variables || []}"
                                     @change="${(e) => this._handleFieldChange('variables', e.detail.variables)}"
@@ -1598,7 +1817,7 @@ Generate the image exactly as a polished 16:9 website hero image.`;
 
                             <!-- Template -->
                             <div class="card" data-section="template">
-                                <h2 class="card-title">Template</h2>
+                                <h2 class="card-title" data-eyebrow="Section 05">Template</h2>
                                 <wy-code-textarea
                                     label="Prompt Template"
                                     .value="${this._editedPrompt.template || ''}"
@@ -1613,7 +1832,7 @@ Generate the image exactly as a polished 16:9 website hero image.`;
                         <!-- Multi-Step Content -->
                         ${this._promptMode === 'multi' ? html`
                             <div class="card" data-section="steps">
-                                <h2 class="card-title">Steps</h2>
+                                <h2 class="card-title" data-eyebrow="Section 04">Steps</h2>
                                 <p class="card-description">
                                     Define the sequence of prompts. Users will follow these steps in order.
                                 </p>
@@ -1645,7 +1864,7 @@ Generate the image exactly as a polished 16:9 website hero image.`;
 
                     <!-- Section 5: Visibility -->
                     <div class="card" data-section="visibility">
-                        <h2 class="card-title">Visibility</h2>
+                        <h2 class="card-title" data-eyebrow="Section Final">Visibility</h2>
                         <wy-option-toggle
                             label="Featured"
                             description="Featured prompts are highlighted and sorted to the top of the library"
