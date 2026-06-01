@@ -22,7 +22,8 @@ export class WyPromptEditor extends LitElement {
         _heroError: { type: String, state: true },
         _activeSection: { type: String, state: true },
         _navOpen: { type: Boolean, state: true },
-        _openVariationIndex: { type: Number, state: true }
+        _openVariationIndex: { type: Number, state: true },
+        _isDirty: { type: Boolean, state: true }
     };
 
     constructor() {
@@ -48,6 +49,7 @@ export class WyPromptEditor extends LitElement {
         this._activeSection = 'basic';
         this._navOpen = false;
         this._openVariationIndex = -1;
+        this._isDirty = false;
         this._handleWindowScroll = this._handleWindowScroll.bind(this);
     }
 
@@ -85,6 +87,7 @@ export class WyPromptEditor extends LitElement {
             this._activeSection = 'basic';
             this._navOpen = false;
             this._openVariationIndex = -1;
+            this._isDirty = false;
             this._resetHeroImageState();
         }
 
@@ -525,7 +528,7 @@ export class WyPromptEditor extends LitElement {
             grid-column: 1 / -1;
             grid-row: 1;
             align-items: center;
-            justify-content: flex-end;
+            justify-content: space-between;
             gap: var(--spacing-sm, 8px);
             margin: 0 calc(-1 * clamp(20px, 4vw, 56px)) 28px;
             top: 0;
@@ -537,6 +540,40 @@ export class WyPromptEditor extends LitElement {
             border-bottom: 1px solid var(--line, var(--paper-edge, #DDD6C8));
             border-radius: 0;
             box-shadow: 0 6px 18px rgba(26, 26, 26, 0.05);
+        }
+
+        .toolbar-context {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm, 8px);
+            min-width: 0;
+        }
+
+        .toolbar-title {
+            max-width: min(42vw, 420px);
+            overflow: hidden;
+            color: var(--ink, #1A1A1A);
+            font-family: var(--font-serif, 'Lora', serif);
+            font-size: 0.9375rem;
+            font-weight: 500;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .toolbar-dirty {
+            flex-shrink: 0;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--accent-terracotta, #C18A4D);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-terracotta, #C18A4D) 16%, transparent);
+        }
+
+        .toolbar-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm, 8px);
+            flex-shrink: 0;
         }
 
         .button {
@@ -744,6 +781,10 @@ export class WyPromptEditor extends LitElement {
                 border-radius: 0;
             }
 
+            .toolbar-title {
+                max-width: 46vw;
+            }
+
             .editor-nav {
                 grid-column: 1;
                 grid-row: 2;
@@ -912,7 +953,14 @@ Generate the image exactly as a polished 16:9 website hero image.`;
             this._heroPrompt = this._buildHeroImagePrompt();
         }
 
+        this._markDirty();
         this.requestUpdate();
+    }
+
+    _markDirty() {
+        if (!this._isDirty) {
+            this._isDirty = true;
+        }
     }
 
     _getTextareaValue(codeTextarea) {
@@ -978,6 +1026,7 @@ Generate the image exactly as a polished 16:9 website hero image.`;
         
         // Show git info banner after save
         this._showGitInfo = true;
+        this._isDirty = false;
         
         this.dispatchEvent(new CustomEvent('save', {
             detail: { prompt: this._editedPrompt },
@@ -1019,6 +1068,7 @@ Generate the image exactly as a polished 16:9 website hero image.`;
                 ...this._editedPrompt,
                 variations
             };
+            this._markDirty();
             return;
         }
 
@@ -1026,6 +1076,7 @@ Generate the image exactly as a polished 16:9 website hero image.`;
             ...this._editedPrompt,
             image: imagePath
         };
+        this._markDirty();
     }
 
     _handleImageChange(e) {
@@ -1221,6 +1272,7 @@ Generate the image exactly as a polished 16:9 website hero image.`;
         }
         
         this._promptMode = newMode;
+        this._markDirty();
         this.requestUpdate();
     }
 
@@ -1250,6 +1302,7 @@ Generate the image exactly as a polished 16:9 website hero image.`;
         delete this._editedPrompt.steps;
         delete this._editedPrompt.image;
         this._promptMode = 'single'; // Reset mode
+        this._markDirty();
         this.requestUpdate();
     }
 
@@ -1286,12 +1339,14 @@ Generate the image exactly as a polished 16:9 website hero image.`;
         this._editedPrompt.variables = [...(firstVariation.variables || [])];
         this._editedPrompt.image = firstVariation.image || '';
         delete this._editedPrompt.variations;
+        this._markDirty();
         this.requestUpdate();
     }
 
     _handleStepChange(e) {
         const { index, step } = e.detail;
         this._editedPrompt.steps[index] = step;
+        this._markDirty();
         this.requestUpdate();
     }
 
@@ -1306,6 +1361,7 @@ Generate the image exactly as a polished 16:9 website hero image.`;
         this._expandedSteps = this._expandedSteps
             .map(i => i > index ? i - 1 : i)
             .filter(i => i < this._editedPrompt.steps.length);
+        this._markDirty();
         this.requestUpdate();
     }
 
@@ -1322,6 +1378,7 @@ Generate the image exactly as a polished 16:9 website hero image.`;
             this._expandedSteps = this._expandedSteps.filter(i => i !== index - 1);
             this._expandedSteps.push(index);
         }
+        this._markDirty();
         this.requestUpdate();
     }
 
@@ -1338,6 +1395,7 @@ Generate the image exactly as a polished 16:9 website hero image.`;
             this._expandedSteps = this._expandedSteps.filter(i => i !== index + 1);
             this._expandedSteps.push(index);
         }
+        this._markDirty();
         this.requestUpdate();
     }
 
@@ -1364,6 +1422,7 @@ Generate the image exactly as a polished 16:9 website hero image.`;
         this._editedPrompt.steps.push(newStep);
         // Expand the new step
         this._expandedSteps.push(this._editedPrompt.steps.length - 1);
+        this._markDirty();
         this.requestUpdate();
     }
 
@@ -1633,12 +1692,18 @@ Generate the image exactly as a polished 16:9 website hero image.`;
         return html`
             <div class="editor-layout">
                 <div class="actions">
-                    <button class="button button-secondary" @click="${this._handleCancel}">
-                        Discard
-                    </button>
-                    <button class="button button-primary" @click="${this._handleSave}">
-                        Save
-                    </button>
+                    <div class="toolbar-context">
+                        <span class="toolbar-title">${this._editedPrompt.title || 'Untitled Prompt'}</span>
+                        ${this._isDirty ? html`<span class="toolbar-dirty" title="Unsaved changes"></span>` : ''}
+                    </div>
+                    <div class="toolbar-actions">
+                        <button class="button button-secondary" @click="${this._handleCancel}">
+                            Discard
+                        </button>
+                        <button class="button button-primary" @click="${this._handleSave}">
+                            Save
+                        </button>
+                    </div>
                 </div>
 
                 ${this._renderEditorNav()}

@@ -116,7 +116,7 @@ export class WyImageUpload extends LitElement {
             right: var(--spacing-sm, 8px);
             width: 32px;
             height: 32px;
-            background-color: var(--md-sys-color-error, #FF0101);
+            background-color: var(--md-sys-color-error, #B3261E);
             border: none;
             border-radius: var(--md-sys-shape-corner-full, 9999px);
             cursor: pointer;
@@ -133,7 +133,7 @@ export class WyImageUpload extends LitElement {
         }
 
         .remove-button:hover {
-            background-color: color-mix(in srgb, var(--md-sys-color-error, #FF0101) 90%, black);
+            background-color: color-mix(in srgb, var(--md-sys-color-error, #B3261E) 90%, black);
         }
 
         .remove-button .material-symbols-outlined {
