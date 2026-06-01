@@ -512,8 +512,8 @@ function getHeroImageSettings(provider, quality = 'draft') {
     }
 
     return {
-        imageSize: normalizedQuality === 'final' ? '2K' : '1K',
-        aspectRatio: '16:9'
+        imageSize: normalizedQuality === 'final' ? 'IMAGE_SIZE_TWO_K' : 'IMAGE_SIZE_ONE_K',
+        aspectRatio: 'ASPECT_RATIO_16_9'
     };
 }
 
