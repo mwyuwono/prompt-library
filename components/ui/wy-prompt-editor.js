@@ -1619,7 +1619,6 @@ export class WyPromptEditor extends LitElement {
 
     _renderHeroImageGenerator() {
         const providers = this.heroImageStatus?.providers || {};
-        const masterPromptId = this.heroImageMasterPrompt?.promptId || 'hero-image-generator-assisted';
         const providerOptions = [
             { value: 'google', label: 'Google Nano Banana 2', configured: Boolean(providers.google?.configured) },
             { value: 'openai', label: 'OpenAI GPT Image', configured: Boolean(providers.openai?.configured) }
@@ -1644,8 +1643,8 @@ export class WyPromptEditor extends LitElement {
                     <div class="hero-generator-tools">
                         <a
                             class="button button-ghost button-small"
-                            href="/admin.html?dataset=public#${masterPromptId}"
-                            title="Edit the reusable master prompt used by this generator"
+                            href="/admin-settings.html#hero-image-master-prompt"
+                            title="Edit the persistent master prompt used by this generator"
                         >
                             <span class="material-symbols-outlined">edit</span>
                             Edit Master

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light">
+    <title>Admin Settings - Prompt Library</title>
+
+    <link rel="stylesheet" href="tokens.css?v=20260319-1532">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin-settings.css?v=20260601-hero-settings">
+</head>
+<body class="settings-page">
+    <header class="settings-header">
+        <a class="settings-back-link" href="/admin.html?dataset=public">
+            <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+            Admin
+        </a>
+        <div>
+            <p class="settings-kicker">Prompt Library</p>
+            <h1>Admin Settings</h1>
+        </div>
+    </header>
+
+    <main class="settings-main">
+        <section id="hero-image-master-prompt" class="settings-section">
+            <div class="settings-section-header">
+                <div>
+                    <p class="settings-kicker">Hero images</p>
+                    <h2>Master Prompt</h2>
+                </div>
+                <div class="settings-actions">
+                    <button id="discardButton" class="settings-button settings-button-secondary" type="button" disabled>
+                        Discard
+                    </button>
+                    <button id="saveButton" class="settings-button settings-button-primary" type="button" disabled>
+                        Save
+                    </button>
+                </div>
+            </div>
+
+            <label class="settings-field" for="heroMasterPrompt">
+                <span>Prompt template</span>
+                <textarea id="heroMasterPrompt" spellcheck="false"></textarea>
+            </label>
+
+            <p class="settings-help">Include <code>{{subject_prompt}}</code> where the selected prompt summary should be inserted.</p>
+            <p id="settingsStatus" class="settings-status" role="status" aria-live="polite">Loading settings...</p>
+        </section>
+    </main>
+
+    <script type="module" src="admin-settings.js?v=20260601-hero-settings"></script>
+</body>
+</html>

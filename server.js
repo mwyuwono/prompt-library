@@ -94,6 +94,12 @@ const PUBLIC_PROMPTS_FILE = path.join(__dirname, 'prompts.json');
 const PRIVATE_PROMPTS_SOURCE_FILE = path.join(__dirname, 'private-prompts.source.json');
 const PRIVATE_PROMPTS_ENCRYPTED_FILE = path.join(__dirname, 'private-prompts.enc.json');
 const PRIVATE_PASSPHRASE_FILE = path.join(__dirname, 'private-passcode.txt');
+const ADMIN_SETTINGS_FILE = path.join(__dirname, 'admin-settings.json');
+const DEFAULT_ADMIN_SETTINGS = {
+    heroImage: {
+        masterPrompt: ''
+    }
+};
 
 function getDataset(req) {
     return req.query.dataset === 'private' ? 'private' : 'public';
@@ -130,6 +136,56 @@ function writePrompts(dataset, prompts) {
         console.error(`Error writing ${dataset} prompts:`, error);
         return false;
     }
+}
+
+function normalizeAdminSettings(settings = {}) {
+    return {
+        ...DEFAULT_ADMIN_SETTINGS,
+        ...settings,
+        heroImage: {
+            ...DEFAULT_ADMIN_SETTINGS.heroImage,
+            ...(settings.heroImage || {})
+        }
+    };
+}
+
+function readAdminSettings() {
+    try {
+        if (!fs.existsSync(ADMIN_SETTINGS_FILE)) {
+            return normalizeAdminSettings();
+        }
+
+        const data = fs.readFileSync(ADMIN_SETTINGS_FILE, 'utf8');
+        return normalizeAdminSettings(JSON.parse(data));
+    } catch (error) {
+        console.error('Error reading admin settings:', error);
+        return normalizeAdminSettings();
+    }
+}
+
+function writeAdminSettings(settings) {
+    try {
+        const tempFile = `${ADMIN_SETTINGS_FILE}.tmp`;
+        fs.writeFileSync(tempFile, `${JSON.stringify(normalizeAdminSettings(settings), null, 2)}\n`, 'utf8');
+        fs.renameSync(tempFile, ADMIN_SETTINGS_FILE);
+        return true;
+    } catch (error) {
+        console.error('Error writing admin settings:', error);
+        return false;
+    }
+}
+
+function validateHeroImageMasterPrompt(masterPrompt) {
+    const normalized = String(masterPrompt || '').trim();
+    if (!normalized) {
+        return { ok: false, error: 'Master prompt is required.' };
+    }
+
+    if (!normalized.includes('{{subject_prompt}}')) {
+        return { ok: false, error: 'Master prompt must include {{subject_prompt}}.' };
+    }
+
+    return { ok: true, value: normalized };
 }
 
 function getPrivatePassphrase() {
@@ -500,15 +556,11 @@ function getHeroImageProviders() {
 }
 
 function getHeroImageMasterPrompt() {
-    const prompts = readPrompts('public');
-    const prompt = prompts.find(item => item.id === 'hero-image-generator-assisted');
-    const variation = prompt?.variations?.find(item => item.id === 'hero-design');
+    const settings = readAdminSettings();
 
     return {
-        promptId: prompt?.id || 'hero-image-generator-assisted',
-        variationId: variation?.id || 'hero-design',
-        title: prompt?.title || 'Hero Image Generator',
-        template: variation?.template || ''
+        title: 'Hero Image Master Prompt',
+        template: settings.heroImage.masterPrompt || ''
     };
 }
 
@@ -963,6 +1015,52 @@ app.delete('/api/backup/remote', async (req, res) => {
         console.error('Error removing backup remote:', error);
         sendGitError(res, error, 'Failed to remove remote');
     }
+});
+
+/**
+ * GET /api/admin-settings
+ * Returns local admin settings.
+ */
+app.get('/api/admin-settings', (req, res) => {
+    res.json({
+        success: true,
+        settings: readAdminSettings()
+    });
+});
+
+/**
+ * PUT /api/admin-settings/hero-image
+ * Updates persistent hero image generation settings.
+ */
+app.put('/api/admin-settings/hero-image', (req, res) => {
+    const validation = validateHeroImageMasterPrompt(req.body?.masterPrompt);
+    if (!validation.ok) {
+        return res.status(400).json({
+            success: false,
+            error: validation.error
+        });
+    }
+
+    const settings = readAdminSettings();
+    const updatedSettings = {
+        ...settings,
+        heroImage: {
+            ...settings.heroImage,
+            masterPrompt: validation.value
+        }
+    };
+
+    if (!writeAdminSettings(updatedSettings)) {
+        return res.status(500).json({
+            success: false,
+            error: 'Failed to save admin settings.'
+        });
+    }
+
+    res.json({
+        success: true,
+        settings: updatedSettings
+    });
 });
 
 /**
