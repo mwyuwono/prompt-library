@@ -339,6 +339,28 @@ export class WyVariationEditor extends LitElement {
 
     _handleToggle(index) {
         this._expandedIndex = this._expandedIndex === index ? -1 : index;
+        this._notifyVariationExpand();
+    }
+
+    expandVariation(index) {
+        if (index < 0 || index >= this.variations.length) return;
+        this._expandedIndex = index;
+        this._notifyVariationExpand();
+        this.requestUpdate();
+    }
+
+    getSectionElement(variationIndex, section = 'variation') {
+        const card = this.shadowRoot?.querySelector(`.variation-card[data-variation-index="${variationIndex}"]`);
+        if (!card || section === 'variation') return card;
+        return card.querySelector(`[data-vsection="${section}"]`) || card;
+    }
+
+    _notifyVariationExpand() {
+        this.dispatchEvent(new CustomEvent('variation-expand', {
+            detail: { index: this._expandedIndex },
+            bubbles: true,
+            composed: true
+        }));
     }
 
     _handleFieldChange(index, field, value) {
@@ -567,7 +589,7 @@ export class WyVariationEditor extends LitElement {
         const variableNames = (variation.variables || []).map(v => v.name);
 
         return html`
-            <div class="variation-card ${isExpanded ? 'expanded' : ''}">
+            <div class="variation-card ${isExpanded ? 'expanded' : ''}" data-variation-index="${index}">
                 <!-- Header -->
                 <div class="variation-header" @click="${() => this._handleToggle(index)}">
                     ${this.allowReorder ? html`
@@ -610,7 +632,7 @@ export class WyVariationEditor extends LitElement {
                             </wy-form-field>
 
                             <!-- Variation Description -->
-                            <wy-form-field label="Description">
+                            <wy-form-field label="Description" data-vsection="description">
                                 <textarea
                                     rows="3"
                                     .value="${variation.description || ''}"
@@ -622,6 +644,7 @@ export class WyVariationEditor extends LitElement {
 
                             <!-- Variation Instructions -->
                             <wy-form-field
+                                data-vsection="instructions"
                                 label="Instructions"
                                 description="Optional usage notes shown with this variant. Supports lightweight Markdown such as **bold** and lists."
                             >
@@ -634,7 +657,7 @@ export class WyVariationEditor extends LitElement {
                                 ></textarea>
                             </wy-form-field>
 
-                            <div @click="${(e) => e.stopPropagation()}">
+                            <div data-vsection="image" @click="${(e) => e.stopPropagation()}">
                                 <wy-image-upload
                                     label="Variation Image"
                                     .value="${variation.image || ''}"
@@ -672,7 +695,7 @@ export class WyVariationEditor extends LitElement {
                                 <div class="section-divider"></div>
                                 
                                 <!-- Variables -->
-                                <div class="field-group">
+                                <div class="field-group" data-vsection="variables">
                                     <label class="field-label">Variables</label>
                                     <p class="field-description">
                                         Define input fields for this variation
@@ -685,7 +708,7 @@ export class WyVariationEditor extends LitElement {
                                 </div>
 
                                 <!-- Template -->
-                                <div class="field-group">
+                                <div class="field-group" data-vsection="template">
                                     <label class="field-label">Template</label>
                                     <p class="field-description">
                                         Prompt template for this variation. Use {{variable-name}} for substitutions.
@@ -705,7 +728,7 @@ export class WyVariationEditor extends LitElement {
                                 <!-- Multi-Step Mode -->
                                 <div class="section-divider"></div>
                                 
-                                <div class="field-group">
+                                <div class="field-group" data-vsection="steps">
                                     <label class="field-label">Steps</label>
                                     <p class="field-description">
                                         Define the sequence of prompts for this variation

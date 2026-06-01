@@ -19,7 +19,10 @@ export class WyPromptEditor extends LitElement {
         _heroPreviewMetadata: { type: Object, state: true },
         _heroBusy: { type: Boolean, state: true },
         _heroMessage: { type: String, state: true },
-        _heroError: { type: String, state: true }
+        _heroError: { type: String, state: true },
+        _activeSection: { type: String, state: true },
+        _navOpen: { type: Boolean, state: true },
+        _openVariationIndex: { type: Number, state: true }
     };
 
     constructor() {
@@ -42,6 +45,20 @@ export class WyPromptEditor extends LitElement {
         this._heroBusy = false;
         this._heroMessage = '';
         this._heroError = '';
+        this._activeSection = 'basic';
+        this._navOpen = false;
+        this._openVariationIndex = -1;
+        this._handleWindowScroll = this._handleWindowScroll.bind(this);
+    }
+
+    connectedCallback() {
+        super.connectedCallback();
+        window.addEventListener('scroll', this._handleWindowScroll, { passive: true });
+    }
+
+    disconnectedCallback() {
+        window.removeEventListener('scroll', this._handleWindowScroll);
+        super.disconnectedCallback();
     }
 
     updated(changedProperties) {
@@ -65,6 +82,9 @@ export class WyPromptEditor extends LitElement {
             
             // Reset git info banner when prompt changes (e.g., on cancel/discard)
             this._showGitInfo = false;
+            this._activeSection = 'basic';
+            this._navOpen = false;
+            this._openVariationIndex = -1;
             this._resetHeroImageState();
         }
 
@@ -86,20 +106,18 @@ export class WyPromptEditor extends LitElement {
 
         .editor-layout {
             display: grid;
-            grid-template-columns: 58% 42%;
-            gap: var(--spacing-2xl, 48px);
+            grid-template-columns: minmax(190px, 240px) minmax(0, 1fr);
+            gap: var(--spacing-xl, 32px);
             align-items: start;
         }
 
         .editor-form {
-            grid-column: 1;
-            grid-row: 1 / span 3;
+            grid-column: 2;
+            grid-row: 2;
             display: flex;
             flex-direction: column;
             gap: var(--spacing-lg, 24px);
-            overflow-y: auto;
             height: fit-content;
-            padding-right: var(--spacing-sm, 8px);
         }
 
         .editor-header {
@@ -175,7 +193,7 @@ export class WyPromptEditor extends LitElement {
             padding: var(--spacing-sm, 8px);
             background-color: var(--md-sys-color-background, #FDFBF7);
             border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            border-radius: var(--md-sys-shape-corner-medium, 16px);
+            border-radius: var(--radius-0, 0);
         }
 
         .button {
@@ -223,97 +241,79 @@ export class WyPromptEditor extends LitElement {
             margin: 0 0 var(--spacing-md, 16px) 0;
         }
 
-        .editor-preview {
-            grid-column: 2;
-            grid-row: 2;
+        .editor-nav {
+            grid-column: 1;
+            grid-row: 1 / span 2;
             position: sticky;
-            top: calc(var(--spacing-lg, 24px) + 58px);
-            height: fit-content;
-        }
-
-        .preview-header {
+            top: var(--spacing-lg, 24px);
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--spacing-md, 16px);
+            flex-direction: column;
+            gap: var(--spacing-sm, 8px);
+            padding: var(--spacing-md, 16px) 0;
+            border-top: 1px solid var(--md-sys-color-outline-variant, #DDD);
+            border-bottom: 1px solid var(--md-sys-color-outline-variant, #DDD);
         }
 
-        .preview-title {
-            font-family: var(--font-serif, 'Playfair Display', serif);
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--md-sys-color-on-surface, #121714);
-            margin: 0;
+        .editor-nav-toggle {
+            display: none;
         }
 
-        .preview-status {
-            font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: 0.75rem;
-            color: var(--md-sys-color-primary, #282828);
-            padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 10%, transparent);
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-        }
-
-        .preview-card {
-            background-color: var(--md-sys-color-surface, #F5F2EA);
-            border-radius: var(--md-sys-shape-corner-medium, 16px);
-            padding: var(--spacing-lg, 24px);
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-        }
-
-        .preview-image {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            object-fit: cover;
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-            margin-bottom: var(--spacing-md, 16px);
-        }
-
-        .preview-badge {
-            display: inline-block;
-            font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: 0.75rem;
-            font-weight: 600;
+        .editor-nav-title {
+            margin: 0 0 var(--spacing-xs, 4px);
+            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-size: 0.6875rem;
+            font-weight: 700;
+            letter-spacing: 0.16em;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 10%, transparent);
-            color: var(--md-sys-color-primary, #282828);
-            border-radius: var(--md-sys-shape-corner-xs, 4px);
-            margin-bottom: var(--spacing-sm, 8px);
-        }
-
-        .preview-title-text {
-            font-family: var(--font-serif, 'Playfair Display', serif);
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--md-sys-color-on-surface, #121714);
-            margin: 0 0 var(--spacing-sm, 8px) 0;
-        }
-
-        .preview-description {
-            font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: 0.9375rem;
-            line-height: 1.5;
             color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            margin: 0;
         }
 
-        .preview-icon {
-            width: 48px;
-            height: 48px;
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 10%, transparent);
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
+        .editor-nav-list {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: var(--spacing-md, 16px);
+            flex-direction: column;
+            gap: 2px;
         }
 
-        .preview-icon .material-symbols-outlined {
-            font-size: 24px;
+        .editor-nav-item {
+            width: 100%;
+            min-height: 32px;
+            padding: 6px 8px;
+            border: 0;
+            border-left: 2px solid transparent;
+            background: transparent;
+            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+            cursor: pointer;
+            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-size: 0.875rem;
+            line-height: 1.25;
+            text-align: left;
+            transition:
+                border-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
+                color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
+                background-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+        }
+
+        .editor-nav-item:hover {
+            color: var(--md-sys-color-on-surface, #121714);
+            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 5%, transparent);
+        }
+
+        .editor-nav-item.active {
             color: var(--md-sys-color-primary, #282828);
+            border-left-color: var(--md-sys-color-primary, #282828);
+            font-weight: 600;
+        }
+
+        .editor-nav-item.subitem {
+            min-height: 28px;
+            padding-left: 20px;
+            font-size: 0.8125rem;
+        }
+
+        .editor-nav-item.variant {
+            font-family: var(--font-serif, 'Playfair Display', serif);
+            font-size: 0.9375rem;
+            color: var(--md-sys-color-on-surface, #121714);
         }
 
         .mode-toggle {
@@ -525,16 +525,60 @@ export class WyPromptEditor extends LitElement {
                 border-radius: var(--md-sys-shape-corner-small, 8px);
             }
 
-            .editor-form {
+            .editor-nav {
                 grid-column: 1;
                 grid-row: 2;
-                padding-right: 0;
+                top: 64px;
+                z-index: 4;
+                background: var(--md-sys-color-background, #FDFBF7);
+                padding: var(--spacing-sm, 8px);
+                border: 1px solid var(--md-sys-color-outline-variant, #DDD);
+                border-radius: var(--radius-0, 0);
             }
 
-            .editor-preview {
+            .editor-form {
                 grid-column: 1;
                 grid-row: 3;
-                position: static;
+            }
+
+            .editor-nav-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                min-height: 40px;
+                border: 0;
+                background: transparent;
+                color: var(--md-sys-color-on-surface, #121714);
+                cursor: pointer;
+                font-family: var(--font-sans, 'DM Sans', sans-serif);
+                font-size: 0.875rem;
+                font-weight: 600;
+                text-align: left;
+            }
+
+            .editor-nav-toggle .material-symbols-outlined {
+                transition: transform var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            }
+
+            .editor-nav.open .editor-nav-toggle .material-symbols-outlined {
+                transform: rotate(180deg);
+            }
+
+            .editor-nav-title {
+                display: none;
+            }
+
+            .editor-nav-list {
+                display: none;
+                max-height: min(56vh, 520px);
+                overflow-y: auto;
+                padding-top: var(--spacing-xs, 4px);
+                border-top: 1px solid var(--md-sys-color-outline-variant, #DDD);
+            }
+
+            .editor-nav.open .editor-nav-list {
+                display: flex;
             }
 
             .hero-controls {
@@ -1104,6 +1148,145 @@ Generate the image exactly as a polished 16:9 website hero image.`;
         this.requestUpdate();
     }
 
+    _getNavItems() {
+        if (!this._editedPrompt) return [];
+
+        const items = [
+            { id: 'basic', label: 'Basic Information' },
+            { id: 'visuals', label: 'Visuals & Metadata' }
+        ];
+
+        if (this._editedPrompt.variations?.length) {
+            items.push({ id: 'variations', label: 'Variations' });
+            this._editedPrompt.variations.forEach((variation, index) => {
+                const id = `variation-${index}`;
+                items.push({
+                    id,
+                    label: variation.name || `Variation ${index + 1}`,
+                    type: 'variant',
+                    variationIndex: index
+                });
+
+                if (index === this._openVariationIndex) {
+                    const hasSteps = variation.steps && variation.steps.length > 0;
+                    items.push({ id: `${id}-description`, label: 'Description', type: 'subitem', variationIndex: index, vsection: 'description' });
+                    items.push({ id: `${id}-instructions`, label: 'Instructions', type: 'subitem', variationIndex: index, vsection: 'instructions' });
+                    items.push({ id: `${id}-image`, label: 'Image', type: 'subitem', variationIndex: index, vsection: 'image' });
+                    items.push({ id: `${id}-${hasSteps ? 'steps' : 'variables'}`, label: hasSteps ? 'Steps' : 'Variables', type: 'subitem', variationIndex: index, vsection: hasSteps ? 'steps' : 'variables' });
+                    if (!hasSteps) {
+                        items.push({ id: `${id}-template`, label: 'Template', type: 'subitem', variationIndex: index, vsection: 'template' });
+                    }
+                }
+            });
+        } else {
+            items.push({ id: 'prompt-type', label: 'Prompt Type' });
+            if (this._promptMode === 'single') {
+                items.push({ id: 'variables', label: 'Variables' });
+                items.push({ id: 'template', label: 'Template' });
+            } else {
+                items.push({ id: 'steps', label: 'Steps' });
+            }
+        }
+
+        items.push({ id: 'visibility', label: 'Visibility' });
+        return items;
+    }
+
+    _renderEditorNav() {
+        const items = this._getNavItems();
+        const activeItem = items.find(item => item.id === this._activeSection) || items[0];
+
+        return html`
+            <nav class="editor-nav ${this._navOpen ? 'open' : ''}" aria-label="Prompt editor sections">
+                <button
+                    class="editor-nav-toggle"
+                    type="button"
+                    @click="${() => { this._navOpen = !this._navOpen; }}"
+                    aria-expanded="${this._navOpen ? 'true' : 'false'}"
+                >
+                    <span>${activeItem?.label || 'Jump to section'}</span>
+                    <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
+                </button>
+                <p class="editor-nav-title">Jump to</p>
+                <div class="editor-nav-list">
+                    ${items.map(item => html`
+                        <button
+                            class="editor-nav-item ${item.type || ''} ${this._activeSection === item.id ? 'active' : ''}"
+                            type="button"
+                            title="${item.label}"
+                            @click="${() => this._jumpToNavItem(item)}"
+                        >${item.label}</button>
+                    `)}
+                </div>
+            </nav>
+        `;
+    }
+
+    async _jumpToNavItem(item) {
+        if (!item) return;
+        this._activeSection = item.id;
+        this._navOpen = false;
+
+        if (Number.isInteger(item.variationIndex)) {
+            const variationEditor = this.shadowRoot?.querySelector('wy-variation-editor');
+            variationEditor?.expandVariation(item.variationIndex);
+            this._openVariationIndex = item.variationIndex;
+            await this.updateComplete;
+            await variationEditor?.updateComplete;
+            const target = variationEditor?.getSectionElement(item.variationIndex, item.vsection || 'variation');
+            this._scrollTargetIntoView(target);
+            return;
+        }
+
+        this._scrollTargetIntoView(this.shadowRoot?.querySelector(`[data-section="${item.id}"]`));
+    }
+
+    _scrollTargetIntoView(target) {
+        if (!target) return;
+        target.scrollIntoView({
+            behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+            block: 'start'
+        });
+    }
+
+    _handleVariationExpand(e) {
+        this._openVariationIndex = e.detail?.index ?? -1;
+    }
+
+    _handleWindowScroll() {
+        if (!this._editedPrompt) return;
+        const sections = [...this.shadowRoot.querySelectorAll('[data-section]')]
+            .map(element => ({ id: element.dataset.section, element }));
+        const variationEditor = this.shadowRoot?.querySelector('wy-variation-editor');
+
+        if (variationEditor && this._openVariationIndex >= 0) {
+            ['description', 'instructions', 'image', 'variables', 'template', 'steps'].forEach(section => {
+                const element = variationEditor.getSectionElement?.(this._openVariationIndex, section);
+                if (element && element.dataset?.vsection === section) {
+                    sections.push({
+                        id: `variation-${this._openVariationIndex}-${section}`,
+                        element
+                    });
+                }
+            });
+        }
+
+        let nearest = null;
+        let nearestDistance = Number.POSITIVE_INFINITY;
+
+        sections.forEach(({ id, element }) => {
+            const distance = Math.abs(element.getBoundingClientRect().top - 120);
+            if (distance < nearestDistance) {
+                nearestDistance = distance;
+                nearest = id;
+            }
+        });
+
+        if (nearest && nearest !== this._activeSection) {
+            this._activeSection = nearest;
+        }
+    }
+
     _renderHeroImageGenerator() {
         const providers = this.heroImageStatus?.providers || {};
         const providerOptions = [
@@ -1239,6 +1422,8 @@ Generate the image exactly as a polished 16:9 website hero image.`;
                     </button>
                 </div>
 
+                ${this._renderEditorNav()}
+
                 <!-- Left Column: Form -->
                 <div class="editor-form">
                     <!-- Header -->
@@ -1257,7 +1442,7 @@ Generate the image exactly as a polished 16:9 website hero image.`;
                     ` : ''}
 
                     <!-- Section 1: Basic Information -->
-                    <div class="card">
+                    <div class="card" data-section="basic">
                         <h2 class="card-title">Basic Information</h2>
                         <wy-form-field label="Prompt Title" id="title" required>
                             <input
@@ -1307,7 +1492,7 @@ Generate the image exactly as a polished 16:9 website hero image.`;
                     </div>
 
                     <!-- Section 2: Visuals & Metadata -->
-                    <div class="card">
+                    <div class="card" data-section="visuals">
                         <h2 class="card-title">Visuals & Metadata</h2>
                         <wy-form-field label="Icon" id="icon" description="Material Symbol icon name (e.g., 'restaurant', 'code', 'music_note')">
                             <input
@@ -1337,7 +1522,7 @@ Generate the image exactly as a polished 16:9 website hero image.`;
                     <!-- Section 3: Content Structure -->
                     ${this._editedPrompt.variations && this._editedPrompt.variations.length > 0 ? html`
                         <!-- Variations Mode -->
-                        <div class="card">
+                        <div class="card" data-section="variations">
                             <div class="card-header-with-action">
                                 <div>
                                     <h2 class="card-title">Variations</h2>
@@ -1357,13 +1542,14 @@ Generate the image exactly as a polished 16:9 website hero image.`;
                             <wy-variation-editor
                                 .variations="${this._editedPrompt.variations}"
                                 @change="${this._handleVariationsChange}"
+                                @variation-expand="${this._handleVariationExpand}"
                                 @image-upload="${this._handleVariationImageChange}"
                                 @image-remove="${this._handleVariationImageRemove}"
                             ></wy-variation-editor>
                         </div>
                     ` : html`
                         <!-- Standard Mode (No Variations) -->
-                        <div class="card">
+                        <div class="card" data-section="prompt-type">
                             <div class="card-header-with-action">
                                 <h2 class="card-title">Prompt Type</h2>
                                 <button 
@@ -1402,7 +1588,7 @@ Generate the image exactly as a polished 16:9 website hero image.`;
                         <!-- Single-Step Content -->
                         ${this._promptMode === 'single' ? html`
                             <!-- Variables -->
-                            <div class="card">
+                            <div class="card" data-section="variables">
                                 <h2 class="card-title">Variables</h2>
                                 <wy-variable-editor
                                     .variables="${this._editedPrompt.variables || []}"
@@ -1411,7 +1597,7 @@ Generate the image exactly as a polished 16:9 website hero image.`;
                             </div>
 
                             <!-- Template -->
-                            <div class="card">
+                            <div class="card" data-section="template">
                                 <h2 class="card-title">Template</h2>
                                 <wy-code-textarea
                                     label="Prompt Template"
@@ -1426,7 +1612,7 @@ Generate the image exactly as a polished 16:9 website hero image.`;
 
                         <!-- Multi-Step Content -->
                         ${this._promptMode === 'multi' ? html`
-                            <div class="card">
+                            <div class="card" data-section="steps">
                                 <h2 class="card-title">Steps</h2>
                                 <p class="card-description">
                                     Define the sequence of prompts. Users will follow these steps in order.
@@ -1458,7 +1644,7 @@ Generate the image exactly as a polished 16:9 website hero image.`;
                     `}
 
                     <!-- Section 5: Visibility -->
-                    <div class="card">
+                    <div class="card" data-section="visibility">
                         <h2 class="card-title">Visibility</h2>
                         <wy-option-toggle
                             label="Featured"
@@ -1479,30 +1665,6 @@ Generate the image exactly as a polished 16:9 website hero image.`;
                     </div>
                 </div>
 
-                <!-- Right Column: Preview -->
-                <div class="editor-preview">
-                    <div class="preview-header">
-                        <h3 class="preview-title">Live Preview</h3>
-                        <span class="preview-status">Updating</span>
-                    </div>
-                    <div class="preview-card">
-                        ${this._getPreviewImage() ? html`
-                            <img src="${this._getPreviewImage()}" alt="Preview" class="preview-image">
-                        ` : this._editedPrompt.icon ? html`
-                            <div class="preview-icon">
-                                <span class="material-symbols-outlined">${this._editedPrompt.icon}</span>
-                            </div>
-                        ` : ''}
-                        ${this._editedPrompt.category ? html`
-                            <div class="preview-badge">${this._editedPrompt.category}</div>
-                        ` : ''}
-                        <h3 class="preview-title-text">${this._editedPrompt.title || 'Untitled Prompt'}</h3>
-                        <p class="preview-description">${this._editedPrompt.description || 'No description provided.'}</p>
-                        ${this._editedPrompt.instructions ? html`
-                            <p class="preview-description"><strong>Instructions:</strong> ${this._editedPrompt.instructions}</p>
-                        ` : ''}
-                    </div>
-                </div>
             </div>
         `;
     }
