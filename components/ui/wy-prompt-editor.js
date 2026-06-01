@@ -518,10 +518,10 @@ export class WyPromptEditor extends LitElement {
         .editor-layout {
             grid-template-columns: 216px minmax(0, 1fr);
             grid-template-rows: auto 1fr;
-            gap: 40px;
+            gap: 20px;
             max-width: 1140px;
             margin: 0 auto;
-            padding: 0 clamp(20px, 4vw, 56px) 96px;
+            padding: 0px clamp(20px, 20px, 56px) 96px;
         }
 
         .actions {
@@ -767,6 +767,50 @@ export class WyPromptEditor extends LitElement {
             border-radius: var(--md-sys-shape-corner-small, 10px);
         }
 
+        .visibility-settings {
+            display: grid;
+            gap: var(--spacing-md, 16px);
+        }
+
+        .visibility-setting {
+            display: grid;
+            grid-template-columns: 40px minmax(0, 1fr);
+            gap: var(--spacing-md, 16px);
+            align-items: center;
+            padding: 18px 20px;
+            border: 1px solid var(--line, var(--paper-edge, #DDD6C8));
+            border-radius: var(--md-sys-shape-corner-medium, 10px);
+            background: var(--field-bg, #FBF9F4);
+        }
+
+        .visibility-setting.archive {
+            background: color-mix(in srgb, var(--err, #B3261E) 4%, var(--field-bg, #FBF9F4));
+        }
+
+        .visibility-icon {
+            display: inline-grid;
+            place-items: center;
+            width: 40px;
+            height: 40px;
+            border-radius: var(--md-sys-shape-corner-full, 999px);
+            background: var(--surface-2, #FFF);
+            color: var(--ink, #1A1A1A);
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 10%, transparent);
+        }
+
+        .visibility-setting.archive .visibility-icon {
+            color: var(--err, #B3261E);
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--err, #B3261E) 18%, transparent);
+        }
+
+        .visibility-icon .material-symbols-outlined {
+            font-size: 21px;
+        }
+
+        .visibility-setting wy-option-toggle {
+            --wy-option-toggle-off-bg: var(--paper-deep, #EEE8DD);
+        }
+
         @media (max-width: 1200px) {
             .editor-layout {
                 grid-template-columns: 1fr;
@@ -843,6 +887,11 @@ export class WyPromptEditor extends LitElement {
 
             .hero-controls {
                 grid-template-columns: 1fr;
+            }
+
+            .visibility-setting {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-sm, 8px);
             }
         }
     `;
@@ -1930,22 +1979,38 @@ Generate the image exactly as a polished 16:9 website hero image.`;
                     <!-- Section 5: Visibility -->
                     <div class="card" data-section="visibility">
                         <h2 class="card-title" data-eyebrow="Section Final">Visibility</h2>
-                        <wy-option-toggle
-                            label="Featured"
-                            description="Featured prompts are highlighted and sorted to the top of the library"
-                            .options="${['false', 'true']}"
-                            .labels="${['Off', 'On']}"
-                            .value="${this._editedPrompt.featured ? 'true' : 'false'}"
-                            @change="${(e) => this._handleFieldChange('featured', e.detail.checked)}"
-                        ></wy-option-toggle>
-                        <wy-option-toggle
-                            label="Archive Prompt"
-                            description="Archived prompts are hidden from the public site but remain editable here"
-                            .options="${['false', 'true']}"
-                            .labels="${['Off', 'On']}"
-                            .value="${this._editedPrompt.archived ? 'true' : 'false'}"
-                            @change="${(e) => this._handleFieldChange('archived', e.detail.checked)}"
-                        ></wy-option-toggle>
+                        <div class="visibility-settings">
+                            <div class="visibility-setting">
+                                <span class="visibility-icon" aria-hidden="true">
+                                    <span class="material-symbols-outlined">hotel_class</span>
+                                </span>
+                                <wy-option-toggle
+                                    variant="switch"
+                                    size="compact"
+                                    label="Featured"
+                                    description="Featured prompts are highlighted and sorted to the top of the library."
+                                    .options="${['false', 'true']}"
+                                    .labels="${['Off', 'On']}"
+                                    .value="${this._editedPrompt.featured ? 'true' : 'false'}"
+                                    @change="${(e) => this._handleFieldChange('featured', e.detail.checked)}"
+                                ></wy-option-toggle>
+                            </div>
+                            <div class="visibility-setting archive">
+                                <span class="visibility-icon" aria-hidden="true">
+                                    <span class="material-symbols-outlined">inventory_2</span>
+                                </span>
+                                <wy-option-toggle
+                                    variant="switch"
+                                    size="compact"
+                                    label="Archive Prompt"
+                                    description="Archived prompts are hidden from the public site but remain editable here."
+                                    .options="${['false', 'true']}"
+                                    .labels="${['Off', 'On']}"
+                                    .value="${this._editedPrompt.archived ? 'true' : 'false'}"
+                                    @change="${(e) => this._handleFieldChange('archived', e.detail.checked)}"
+                                ></wy-option-toggle>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
