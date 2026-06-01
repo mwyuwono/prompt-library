@@ -3680,14 +3680,14 @@ __publicField(WyFormField, "styles", i`
       width: 100%;
       box-sizing: border-box;
       padding: 12px 16px;
-      border-radius: var(--md-sys-shape-corner-small);
-      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: var(--radius-2, var(--md-sys-shape-corner-small));
+      border: 0;
       background-color: var(--field-bg, var(--md-sys-color-surface-container-lowest));
       font-family: var(--font-body);
       font-size: 1rem;
       color: var(--md-sys-color-on-surface);
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 7%, transparent);
       transition:
-        border-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
         box-shadow var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
         background-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
     }
@@ -3696,13 +3696,16 @@ __publicField(WyFormField, "styles", i`
     ::slotted(textarea:focus),
     ::slotted(select:focus) {
       outline: none;
-      border-color: var(--md-sys-color-primary);
       background-color: var(--surface-2, var(--md-sys-color-surface-container-lowest));
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
+      box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--md-sys-color-primary) 24%, transparent),
+        0 0 0 3px color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
     }
 
     ::slotted([aria-invalid="true"]) {
-      border-color: var(--err);
+      box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--err) 32%, transparent),
+        0 0 0 3px color-mix(in srgb, var(--err) 8%, transparent);
     }
   `);
 customElements.define("wy-form-field", WyFormField);
@@ -4939,21 +4942,23 @@ __publicField(WyCodeTextarea, "styles", i`
             width: 100%;
             box-sizing: border-box;
             padding: var(--spacing-md, 16px);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
+            border-radius: var(--radius-2, 10px);
+            border: 0;
             background-color: var(--field-bg, transparent);
             font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
             font-size: 0.875rem;
             line-height: 1.5;
             color: var(--md-sys-color-on-surface, #121714);
             resize: vertical;
-            transition: border-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 7%, transparent);
+            transition: box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
         }
 
         textarea:focus {
             outline: none;
-            border-color: var(--md-sys-color-primary, #282828);
-            box-shadow: 0 0 0 3px color-mix(in srgb, var(--md-sys-color-primary, #282828) 10%, transparent);
+            box-shadow:
+                inset 0 0 0 1px color-mix(in srgb, var(--md-sys-color-primary, #282828) 24%, transparent),
+                0 0 0 3px color-mix(in srgb, var(--md-sys-color-primary, #282828) 10%, transparent);
         }
 
         textarea::placeholder {
@@ -4979,13 +4984,14 @@ __publicField(WyCodeTextarea, "styles", i`
             font-size: 0.75rem;
             color: var(--md-sys-color-primary, #282828);
             cursor: pointer;
-            border: 1px solid color-mix(in srgb, var(--md-sys-color-primary, #282828) 30%, transparent);
+            border: 0;
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--md-sys-color-primary, #282828) 18%, transparent);
             transition: all var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
         }
 
         .variable-chip:hover {
             background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 20%, transparent);
-            border-color: var(--md-sys-color-primary, #282828);
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--md-sys-color-primary, #282828) 24%, transparent);
         }
 
         .char-count {
@@ -5767,17 +5773,16 @@ __publicField(WyVariationEditor, "styles", i`
 
         .variation-card {
             background-color: var(--field-bg, #FBF9F4);
-            border-radius: var(--md-sys-shape-corner-medium, 16px);
-            border: 1px solid var(--line, var(--md-sys-color-outline-variant, #DDD));
+            border-radius: var(--radius-2, 10px);
+            border: 0;
             overflow: hidden;
             transition:
-                border-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
                 box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
         }
 
         .variation-card.expanded {
-            border-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 16%, transparent);
-            box-shadow: var(--shadow-soft, 0 1px 2px rgba(26,26,26,.04), 0 6px 18px rgba(26,26,26,.05));
+            box-shadow: 0 8px 22px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
         }
 
         .variation-header {
@@ -5873,7 +5878,7 @@ __publicField(WyVariationEditor, "styles", i`
             gap: var(--spacing-xs, 4px);
             padding: var(--spacing-xs, 4px);
             background-color: var(--paper-deep, #EEE8DD);
-            border: 1px solid var(--line, var(--md-sys-color-outline-variant, #DDD));
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
             border-radius: var(--md-sys-shape-corner-full, 9999px);
         }
 
@@ -5916,8 +5921,9 @@ __publicField(WyVariationEditor, "styles", i`
             gap: var(--spacing-xs, 4px);
             padding: var(--spacing-sm, 8px);
             background: transparent;
-            border: 1px dashed var(--md-sys-color-outline-variant, #DDD);
-            border-radius: var(--md-sys-shape-corner-medium, 10px);
+            border: 0;
+            border-radius: var(--radius-2, 10px);
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 10%, transparent);
             font-family: var(--font-sans, 'DM Sans', sans-serif);
             font-size: 0.875rem;
             font-weight: 500;
@@ -5925,7 +5931,7 @@ __publicField(WyVariationEditor, "styles", i`
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            transition: border-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition: box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
         }
 
         .add-step-button::before {
@@ -5952,7 +5958,7 @@ __publicField(WyVariationEditor, "styles", i`
             gap: var(--spacing-xs, 4px);
             padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
             background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 3.5%, transparent);
-            border-top: 1px solid var(--line, var(--md-sys-color-outline-variant, #DDD));
+            box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
         }
 
         .control-button {
@@ -5960,8 +5966,8 @@ __publicField(WyVariationEditor, "styles", i`
             align-items: center;
             gap: var(--spacing-xs, 4px);
             padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
-            background: transparent;
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
+            background: color-mix(in srgb, var(--ink, #1A1A1A) 4%, transparent);
+            border: 0;
             border-radius: var(--md-sys-shape-corner-full, 9999px);
             font-family: var(--font-sans, 'DM Sans', sans-serif);
             font-size: 0.8125rem;
@@ -5970,7 +5976,6 @@ __publicField(WyVariationEditor, "styles", i`
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            transition: border-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
         }
 
         .control-button::before {
@@ -5999,7 +6004,6 @@ __publicField(WyVariationEditor, "styles", i`
 
         .control-button.delete {
             margin-left: auto;
-            border-color: var(--md-sys-color-error, #BA1A1A);
             color: var(--md-sys-color-error, #BA1A1A);
         }
 
@@ -6019,8 +6023,9 @@ __publicField(WyVariationEditor, "styles", i`
             gap: var(--spacing-xs, 4px);
             padding: var(--spacing-md, 16px);
             background: transparent;
-            border: 2px dashed var(--md-sys-color-outline-variant, #DDD);
-            border-radius: var(--md-sys-shape-corner-medium, 16px);
+            border: 0;
+            border-radius: var(--radius-2, 10px);
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 10%, transparent);
             font-family: var(--font-sans, 'DM Sans', sans-serif);
             font-size: 0.9375rem;
             font-weight: 500;
@@ -7545,8 +7550,8 @@ __publicField(WyPromptEditor, "styles", i`
         }
 
         .button-ghost {
-            background: transparent;
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
+            background: color-mix(in srgb, var(--ink, #1A1A1A) 5%, transparent);
+            border: 0;
             color: var(--md-sys-color-primary, #282828);
             position: relative;
             overflow: hidden;
@@ -7567,7 +7572,7 @@ __publicField(WyPromptEditor, "styles", i`
         }
 
         .button-ghost:hover {
-            border-color: var(--md-sys-color-primary, #282828);
+            color: var(--md-sys-color-primary, #282828);
         }
 
         .button-small {
@@ -7595,32 +7600,32 @@ __publicField(WyPromptEditor, "styles", i`
             align-items: center;
             justify-content: space-between;
             gap: var(--spacing-sm, 8px);
-            margin: 0 calc(-1 * clamp(20px, 4vw, 56px)) 28px;
-            top: 0;
-            padding: 12px clamp(20px, 4vw, 56px);
-            background: color-mix(in srgb, var(--surface-1, var(--paper, #F7F4EE)) 92%, transparent);
+            margin: 12px 0 28px;
+            top: 12px;
+            padding: 10px 12px 10px 18px;
+            background: color-mix(in srgb, var(--surface-2, #FFF) 86%, var(--paper, #F7F4EE));
             backdrop-filter: blur(10px) saturate(120%);
             -webkit-backdrop-filter: blur(10px) saturate(120%);
             border: 0;
-            border-bottom: 1px solid var(--line, var(--paper-edge, #DDD6C8));
-            border-radius: 0;
-            box-shadow: 0 6px 18px rgba(26, 26, 26, 0.05);
+            border-radius: var(--radius-3, 16px);
+            box-shadow: 0 10px 28px color-mix(in srgb, var(--ink, #1A1A1A) 7%, transparent);
         }
 
         .toolbar-context {
             display: flex;
             align-items: center;
-            gap: var(--spacing-sm, 8px);
+            gap: 10px;
             min-width: 0;
         }
 
         .toolbar-title {
-            max-width: min(42vw, 420px);
+            max-width: min(48vw, 520px);
             overflow: hidden;
             color: var(--ink, #1A1A1A);
             font-family: var(--font-serif, 'Lora', serif);
-            font-size: 0.9375rem;
-            font-weight: 500;
+            font-size: 1.0625rem;
+            font-weight: 600;
+            line-height: 1.2;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
@@ -7629,6 +7634,7 @@ __publicField(WyPromptEditor, "styles", i`
             flex-shrink: 0;
             width: 7px;
             height: 7px;
+            margin-top: 1px;
             border-radius: 50%;
             background: var(--accent-terracotta, #C18A4D);
             box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-terracotta, #C18A4D) 16%, transparent);
@@ -7654,7 +7660,8 @@ __publicField(WyPromptEditor, "styles", i`
         }
 
         .button-secondary {
-            border-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 16%, transparent);
+            border: 0;
+            background: color-mix(in srgb, var(--ink, #1A1A1A) 5%, transparent);
         }
 
         .editor-nav {
@@ -7664,9 +7671,9 @@ __publicField(WyPromptEditor, "styles", i`
             gap: var(--spacing-xs, 4px);
             padding: 14px 12px;
             background: var(--surface-1, var(--paper, #F7F4EE));
-            border: 1px solid var(--line, var(--paper-edge, #DDD6C8));
-            border-radius: var(--md-sys-shape-corner-medium, 10px);
-            box-shadow: var(--shadow-soft, 0 1px 2px rgba(26,26,26,.04), 0 6px 18px rgba(26,26,26,.05));
+            border: 0;
+            border-radius: var(--radius-2, 10px);
+            box-shadow: 0 10px 26px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
         }
 
         .editor-nav-title,
@@ -7689,7 +7696,7 @@ __publicField(WyPromptEditor, "styles", i`
             min-height: 32px;
             padding: 7px 10px 7px 14px;
             border-left: 0;
-            border-radius: 8px;
+            border-radius: var(--radius-2, 10px);
             font-family: var(--font-body, 'Inter', sans-serif);
             font-size: 0.8125rem;
             font-weight: 500;
@@ -7698,9 +7705,9 @@ __publicField(WyPromptEditor, "styles", i`
         .editor-nav-item::before {
             content: '';
             position: absolute;
-            left: 5px;
+            left: 6px;
             top: 50%;
-            width: 3px;
+            width: 2px;
             height: 0;
             border-radius: 3px;
             background: var(--md-sys-color-primary, #282828);
@@ -7710,11 +7717,11 @@ __publicField(WyPromptEditor, "styles", i`
 
         .editor-nav-item.active {
             border-left-color: transparent;
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 5%, transparent);
+            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 6%, transparent);
         }
 
         .editor-nav-item.active::before {
-            height: 16px;
+            height: 14px;
         }
 
         .editor-nav-item.subitem {
@@ -7756,10 +7763,10 @@ __publicField(WyPromptEditor, "styles", i`
 
         .card {
             background: var(--surface-2, #FFF);
-            border: 1px solid var(--line, var(--paper-edge, #DDD6C8));
-            border-radius: var(--md-sys-shape-corner-large, 16px);
+            border: 0;
+            border-radius: var(--radius-3, 16px);
             padding: 26px 28px;
-            box-shadow: var(--shadow-soft, 0 1px 2px rgba(26,26,26,.04), 0 6px 18px rgba(26,26,26,.05));
+            box-shadow: 0 12px 32px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
         }
 
         .card-title {
@@ -7785,7 +7792,7 @@ __publicField(WyPromptEditor, "styles", i`
             padding: var(--spacing-xs, 4px);
             width: max-content;
             max-width: 100%;
-            border: 1px solid var(--line, var(--paper-edge, #DDD6C8));
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
             border-radius: var(--md-sys-shape-corner-full, 9999px);
             background: var(--paper-deep, #EEE8DD);
         }
@@ -7812,10 +7819,9 @@ __publicField(WyPromptEditor, "styles", i`
 
         .info-banner {
             display: flex;
-            border: 1px solid color-mix(in srgb, var(--accent-sage, #7D8E39) 35%, transparent);
-            border-left-width: 1px;
+            border: 0;
             background: color-mix(in srgb, var(--accent-sage, #7D8E39) 12%, var(--surface-2, #FFF));
-            border-radius: var(--md-sys-shape-corner-medium, 10px);
+            border-radius: var(--radius-2, 10px);
         }
 
         .hero-control-label,
@@ -7829,7 +7835,9 @@ __publicField(WyPromptEditor, "styles", i`
         .hero-control-label select,
         .hero-prompt-textarea {
             background: var(--field-bg, #FBF9F4);
-            border-radius: var(--md-sys-shape-corner-small, 10px);
+            border: 0;
+            border-radius: var(--radius-2, 10px);
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 7%, transparent);
         }
 
         .visibility-settings {
@@ -7843,9 +7851,10 @@ __publicField(WyPromptEditor, "styles", i`
             gap: var(--spacing-md, 16px);
             align-items: center;
             padding: 18px 20px;
-            border: 1px solid var(--line, var(--paper-edge, #DDD6C8));
-            border-radius: var(--md-sys-shape-corner-medium, 10px);
+            border: 0;
+            border-radius: var(--radius-2, 10px);
             background: var(--field-bg, #FBF9F4);
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
         }
 
         .visibility-setting.archive {
@@ -7860,12 +7869,12 @@ __publicField(WyPromptEditor, "styles", i`
             border-radius: var(--md-sys-shape-corner-full, 999px);
             background: var(--surface-2, #FFF);
             color: var(--ink, #1A1A1A);
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 10%, transparent);
+            box-shadow: 0 4px 12px color-mix(in srgb, var(--ink, #1A1A1A) 7%, transparent);
         }
 
         .visibility-setting.archive .visibility-icon {
             color: var(--err, #B3261E);
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--err, #B3261E) 18%, transparent);
+            box-shadow: 0 4px 12px color-mix(in srgb, var(--err, #B3261E) 10%, transparent);
         }
 
         .visibility-icon .material-symbols-outlined {
@@ -7885,9 +7894,9 @@ __publicField(WyPromptEditor, "styles", i`
             .actions {
                 grid-column: 1;
                 grid-row: 1;
-                top: 0;
-                margin-bottom: 0;
-                border-radius: 0;
+                top: 12px;
+                margin: 8px 0 0;
+                border-radius: var(--radius-3, 16px);
             }
 
             .toolbar-title {
@@ -7901,8 +7910,8 @@ __publicField(WyPromptEditor, "styles", i`
                 z-index: 4;
                 background: var(--surface-1, var(--paper, #F7F4EE));
                 padding: var(--spacing-sm, 8px);
-                border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-                border-radius: var(--md-sys-shape-corner-medium, 10px);
+                border: 0;
+                border-radius: var(--radius-2, 10px);
             }
 
             .editor-form {
@@ -7943,7 +7952,6 @@ __publicField(WyPromptEditor, "styles", i`
                 max-height: min(56vh, 520px);
                 overflow-y: auto;
                 padding-top: var(--spacing-xs, 4px);
-                border-top: 1px solid var(--md-sys-color-outline-variant, #DDD);
             }
 
             .editor-nav.open .editor-nav-list {
@@ -8176,17 +8184,16 @@ __publicField(WyStepEditor, "styles", i`
 
         .step-card {
             background-color: var(--field-bg, #FBF9F4);
-            border-radius: var(--md-sys-shape-corner-medium, 16px);
-            border: 1px solid var(--line, var(--md-sys-color-outline-variant, #DDD));
+            border-radius: var(--radius-2, 10px);
+            border: 0;
             overflow: hidden;
             transition:
-                border-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
                 box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
         }
 
         .step-card.expanded {
-            border-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 16%, transparent);
-            box-shadow: var(--shadow-soft, 0 1px 2px rgba(26,26,26,.04), 0 6px 18px rgba(26,26,26,.05));
+            box-shadow: 0 8px 22px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
         }
 
         .step-header {
@@ -8274,7 +8281,7 @@ __publicField(WyStepEditor, "styles", i`
             gap: var(--spacing-sm, 8px);
             padding: 10px var(--spacing-md, 16px);
             background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 3.5%, transparent);
-            border-top: 1px solid var(--line, var(--md-sys-color-outline-variant, #DDD));
+            box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
         }
 
         .control-button {
@@ -8282,8 +8289,8 @@ __publicField(WyStepEditor, "styles", i`
             align-items: center;
             gap: var(--spacing-xs, 4px);
             padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
-            background: transparent;
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
+            background: color-mix(in srgb, var(--ink, #1A1A1A) 4%, transparent);
+            border: 0;
             border-radius: var(--md-sys-shape-corner-full, 9999px);
             font-family: var(--font-sans, 'DM Sans', sans-serif);
             font-size: 0.8125rem;
@@ -8292,7 +8299,6 @@ __publicField(WyStepEditor, "styles", i`
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            transition: border-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
         }
 
         .control-button::before {
@@ -8321,7 +8327,6 @@ __publicField(WyStepEditor, "styles", i`
 
         .control-button.delete {
             margin-left: auto;
-            border-color: var(--md-sys-color-error, #BA1A1A);
             color: var(--md-sys-color-error, #BA1A1A);
         }
 
@@ -8363,15 +8368,18 @@ __publicField(WyStepEditor, "styles", i`
             font-size: 0.9375rem;
             color: var(--md-sys-color-on-surface, #121714);
             background-color: var(--surface-2, #FFF);
-            border: 1px solid var(--line, var(--md-sys-color-outline-variant, #DDD));
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-            transition: border-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            border: 0;
+            border-radius: var(--radius-2, 10px);
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 7%, transparent);
+            transition: box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
         }
 
         input:focus,
         textarea:focus {
             outline: none;
-            border-color: var(--md-sys-color-primary, #282828);
+            box-shadow:
+                inset 0 0 0 1px color-mix(in srgb, var(--md-sys-color-primary, #282828) 24%, transparent),
+                0 0 0 3px color-mix(in srgb, var(--md-sys-color-primary, #282828) 8%, transparent);
         }
 
         textarea {

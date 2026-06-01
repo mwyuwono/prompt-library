@@ -59,14 +59,14 @@ export class WyFormField extends LitElement {
       width: 100%;
       box-sizing: border-box;
       padding: 12px 16px;
-      border-radius: var(--md-sys-shape-corner-small);
-      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: var(--radius-2, var(--md-sys-shape-corner-small));
+      border: 0;
       background-color: var(--field-bg, var(--md-sys-color-surface-container-lowest));
       font-family: var(--font-body);
       font-size: 1rem;
       color: var(--md-sys-color-on-surface);
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 7%, transparent);
       transition:
-        border-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
         box-shadow var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
         background-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
     }
@@ -75,13 +75,16 @@ export class WyFormField extends LitElement {
     ::slotted(textarea:focus),
     ::slotted(select:focus) {
       outline: none;
-      border-color: var(--md-sys-color-primary);
       background-color: var(--surface-2, var(--md-sys-color-surface-container-lowest));
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
+      box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--md-sys-color-primary) 24%, transparent),
+        0 0 0 3px color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
     }
 
     ::slotted([aria-invalid="true"]) {
-      border-color: var(--err);
+      box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--err) 32%, transparent),
+        0 0 0 3px color-mix(in srgb, var(--err) 8%, transparent);
     }
   `;
 

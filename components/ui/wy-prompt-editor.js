@@ -480,8 +480,8 @@ export class WyPromptEditor extends LitElement {
         }
 
         .button-ghost {
-            background: transparent;
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
+            background: color-mix(in srgb, var(--ink, #1A1A1A) 5%, transparent);
+            border: 0;
             color: var(--md-sys-color-primary, #282828);
             position: relative;
             overflow: hidden;
@@ -502,7 +502,7 @@ export class WyPromptEditor extends LitElement {
         }
 
         .button-ghost:hover {
-            border-color: var(--md-sys-color-primary, #282828);
+            color: var(--md-sys-color-primary, #282828);
         }
 
         .button-small {
@@ -530,32 +530,32 @@ export class WyPromptEditor extends LitElement {
             align-items: center;
             justify-content: space-between;
             gap: var(--spacing-sm, 8px);
-            margin: 0 calc(-1 * clamp(20px, 4vw, 56px)) 28px;
-            top: 0;
-            padding: 12px clamp(20px, 4vw, 56px);
-            background: color-mix(in srgb, var(--surface-1, var(--paper, #F7F4EE)) 92%, transparent);
+            margin: 12px 0 28px;
+            top: 12px;
+            padding: 10px 12px 10px 18px;
+            background: color-mix(in srgb, var(--surface-2, #FFF) 86%, var(--paper, #F7F4EE));
             backdrop-filter: blur(10px) saturate(120%);
             -webkit-backdrop-filter: blur(10px) saturate(120%);
             border: 0;
-            border-bottom: 1px solid var(--line, var(--paper-edge, #DDD6C8));
-            border-radius: 0;
-            box-shadow: 0 6px 18px rgba(26, 26, 26, 0.05);
+            border-radius: var(--radius-3, 16px);
+            box-shadow: 0 10px 28px color-mix(in srgb, var(--ink, #1A1A1A) 7%, transparent);
         }
 
         .toolbar-context {
             display: flex;
             align-items: center;
-            gap: var(--spacing-sm, 8px);
+            gap: 10px;
             min-width: 0;
         }
 
         .toolbar-title {
-            max-width: min(42vw, 420px);
+            max-width: min(48vw, 520px);
             overflow: hidden;
             color: var(--ink, #1A1A1A);
             font-family: var(--font-serif, 'Lora', serif);
-            font-size: 0.9375rem;
-            font-weight: 500;
+            font-size: 1.0625rem;
+            font-weight: 600;
+            line-height: 1.2;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
@@ -564,6 +564,7 @@ export class WyPromptEditor extends LitElement {
             flex-shrink: 0;
             width: 7px;
             height: 7px;
+            margin-top: 1px;
             border-radius: 50%;
             background: var(--accent-terracotta, #C18A4D);
             box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-terracotta, #C18A4D) 16%, transparent);
@@ -589,7 +590,8 @@ export class WyPromptEditor extends LitElement {
         }
 
         .button-secondary {
-            border-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 16%, transparent);
+            border: 0;
+            background: color-mix(in srgb, var(--ink, #1A1A1A) 5%, transparent);
         }
 
         .editor-nav {
@@ -599,9 +601,9 @@ export class WyPromptEditor extends LitElement {
             gap: var(--spacing-xs, 4px);
             padding: 14px 12px;
             background: var(--surface-1, var(--paper, #F7F4EE));
-            border: 1px solid var(--line, var(--paper-edge, #DDD6C8));
-            border-radius: var(--md-sys-shape-corner-medium, 10px);
-            box-shadow: var(--shadow-soft, 0 1px 2px rgba(26,26,26,.04), 0 6px 18px rgba(26,26,26,.05));
+            border: 0;
+            border-radius: var(--radius-2, 10px);
+            box-shadow: 0 10px 26px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
         }
 
         .editor-nav-title,
@@ -624,7 +626,7 @@ export class WyPromptEditor extends LitElement {
             min-height: 32px;
             padding: 7px 10px 7px 14px;
             border-left: 0;
-            border-radius: 8px;
+            border-radius: var(--radius-2, 10px);
             font-family: var(--font-body, 'Inter', sans-serif);
             font-size: 0.8125rem;
             font-weight: 500;
@@ -633,9 +635,9 @@ export class WyPromptEditor extends LitElement {
         .editor-nav-item::before {
             content: '';
             position: absolute;
-            left: 5px;
+            left: 6px;
             top: 50%;
-            width: 3px;
+            width: 2px;
             height: 0;
             border-radius: 3px;
             background: var(--md-sys-color-primary, #282828);
@@ -645,11 +647,11 @@ export class WyPromptEditor extends LitElement {
 
         .editor-nav-item.active {
             border-left-color: transparent;
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 5%, transparent);
+            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 6%, transparent);
         }
 
         .editor-nav-item.active::before {
-            height: 16px;
+            height: 14px;
         }
 
         .editor-nav-item.subitem {
@@ -691,10 +693,10 @@ export class WyPromptEditor extends LitElement {
 
         .card {
             background: var(--surface-2, #FFF);
-            border: 1px solid var(--line, var(--paper-edge, #DDD6C8));
-            border-radius: var(--md-sys-shape-corner-large, 16px);
+            border: 0;
+            border-radius: var(--radius-3, 16px);
             padding: 26px 28px;
-            box-shadow: var(--shadow-soft, 0 1px 2px rgba(26,26,26,.04), 0 6px 18px rgba(26,26,26,.05));
+            box-shadow: 0 12px 32px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
         }
 
         .card-title {
@@ -720,7 +722,7 @@ export class WyPromptEditor extends LitElement {
             padding: var(--spacing-xs, 4px);
             width: max-content;
             max-width: 100%;
-            border: 1px solid var(--line, var(--paper-edge, #DDD6C8));
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
             border-radius: var(--md-sys-shape-corner-full, 9999px);
             background: var(--paper-deep, #EEE8DD);
         }
@@ -747,10 +749,9 @@ export class WyPromptEditor extends LitElement {
 
         .info-banner {
             display: flex;
-            border: 1px solid color-mix(in srgb, var(--accent-sage, #7D8E39) 35%, transparent);
-            border-left-width: 1px;
+            border: 0;
             background: color-mix(in srgb, var(--accent-sage, #7D8E39) 12%, var(--surface-2, #FFF));
-            border-radius: var(--md-sys-shape-corner-medium, 10px);
+            border-radius: var(--radius-2, 10px);
         }
 
         .hero-control-label,
@@ -764,7 +765,9 @@ export class WyPromptEditor extends LitElement {
         .hero-control-label select,
         .hero-prompt-textarea {
             background: var(--field-bg, #FBF9F4);
-            border-radius: var(--md-sys-shape-corner-small, 10px);
+            border: 0;
+            border-radius: var(--radius-2, 10px);
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 7%, transparent);
         }
 
         .visibility-settings {
@@ -778,9 +781,10 @@ export class WyPromptEditor extends LitElement {
             gap: var(--spacing-md, 16px);
             align-items: center;
             padding: 18px 20px;
-            border: 1px solid var(--line, var(--paper-edge, #DDD6C8));
-            border-radius: var(--md-sys-shape-corner-medium, 10px);
+            border: 0;
+            border-radius: var(--radius-2, 10px);
             background: var(--field-bg, #FBF9F4);
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
         }
 
         .visibility-setting.archive {
@@ -795,12 +799,12 @@ export class WyPromptEditor extends LitElement {
             border-radius: var(--md-sys-shape-corner-full, 999px);
             background: var(--surface-2, #FFF);
             color: var(--ink, #1A1A1A);
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 10%, transparent);
+            box-shadow: 0 4px 12px color-mix(in srgb, var(--ink, #1A1A1A) 7%, transparent);
         }
 
         .visibility-setting.archive .visibility-icon {
             color: var(--err, #B3261E);
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--err, #B3261E) 18%, transparent);
+            box-shadow: 0 4px 12px color-mix(in srgb, var(--err, #B3261E) 10%, transparent);
         }
 
         .visibility-icon .material-symbols-outlined {
@@ -820,9 +824,9 @@ export class WyPromptEditor extends LitElement {
             .actions {
                 grid-column: 1;
                 grid-row: 1;
-                top: 0;
-                margin-bottom: 0;
-                border-radius: 0;
+                top: 12px;
+                margin: 8px 0 0;
+                border-radius: var(--radius-3, 16px);
             }
 
             .toolbar-title {
@@ -836,8 +840,8 @@ export class WyPromptEditor extends LitElement {
                 z-index: 4;
                 background: var(--surface-1, var(--paper, #F7F4EE));
                 padding: var(--spacing-sm, 8px);
-                border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-                border-radius: var(--md-sys-shape-corner-medium, 10px);
+                border: 0;
+                border-radius: var(--radius-2, 10px);
             }
 
             .editor-form {
@@ -878,7 +882,6 @@ export class WyPromptEditor extends LitElement {
                 max-height: min(56vh, 520px);
                 overflow-y: auto;
                 padding-top: var(--spacing-xs, 4px);
-                border-top: 1px solid var(--md-sys-color-outline-variant, #DDD);
             }
 
             .editor-nav.open .editor-nav-list {

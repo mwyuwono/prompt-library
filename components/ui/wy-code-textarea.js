@@ -41,21 +41,23 @@ export class WyCodeTextarea extends LitElement {
             width: 100%;
             box-sizing: border-box;
             padding: var(--spacing-md, 16px);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
+            border-radius: var(--radius-2, 10px);
+            border: 0;
             background-color: var(--field-bg, transparent);
             font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
             font-size: 0.875rem;
             line-height: 1.5;
             color: var(--md-sys-color-on-surface, #121714);
             resize: vertical;
-            transition: border-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 7%, transparent);
+            transition: box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
         }
 
         textarea:focus {
             outline: none;
-            border-color: var(--md-sys-color-primary, #282828);
-            box-shadow: 0 0 0 3px color-mix(in srgb, var(--md-sys-color-primary, #282828) 10%, transparent);
+            box-shadow:
+                inset 0 0 0 1px color-mix(in srgb, var(--md-sys-color-primary, #282828) 24%, transparent),
+                0 0 0 3px color-mix(in srgb, var(--md-sys-color-primary, #282828) 10%, transparent);
         }
 
         textarea::placeholder {
@@ -81,13 +83,14 @@ export class WyCodeTextarea extends LitElement {
             font-size: 0.75rem;
             color: var(--md-sys-color-primary, #282828);
             cursor: pointer;
-            border: 1px solid color-mix(in srgb, var(--md-sys-color-primary, #282828) 30%, transparent);
+            border: 0;
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--md-sys-color-primary, #282828) 18%, transparent);
             transition: all var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
         }
 
         .variable-chip:hover {
             background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 20%, transparent);
-            border-color: var(--md-sys-color-primary, #282828);
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--md-sys-color-primary, #282828) 24%, transparent);
         }
 
         .char-count {

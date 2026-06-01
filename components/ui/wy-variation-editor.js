@@ -37,17 +37,16 @@ export class WyVariationEditor extends LitElement {
 
         .variation-card {
             background-color: var(--field-bg, #FBF9F4);
-            border-radius: var(--md-sys-shape-corner-medium, 16px);
-            border: 1px solid var(--line, var(--md-sys-color-outline-variant, #DDD));
+            border-radius: var(--radius-2, 10px);
+            border: 0;
             overflow: hidden;
             transition:
-                border-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
                 box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
         }
 
         .variation-card.expanded {
-            border-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 16%, transparent);
-            box-shadow: var(--shadow-soft, 0 1px 2px rgba(26,26,26,.04), 0 6px 18px rgba(26,26,26,.05));
+            box-shadow: 0 8px 22px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
         }
 
         .variation-header {
@@ -143,7 +142,7 @@ export class WyVariationEditor extends LitElement {
             gap: var(--spacing-xs, 4px);
             padding: var(--spacing-xs, 4px);
             background-color: var(--paper-deep, #EEE8DD);
-            border: 1px solid var(--line, var(--md-sys-color-outline-variant, #DDD));
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
             border-radius: var(--md-sys-shape-corner-full, 9999px);
         }
 
@@ -186,8 +185,9 @@ export class WyVariationEditor extends LitElement {
             gap: var(--spacing-xs, 4px);
             padding: var(--spacing-sm, 8px);
             background: transparent;
-            border: 1px dashed var(--md-sys-color-outline-variant, #DDD);
-            border-radius: var(--md-sys-shape-corner-medium, 10px);
+            border: 0;
+            border-radius: var(--radius-2, 10px);
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 10%, transparent);
             font-family: var(--font-sans, 'DM Sans', sans-serif);
             font-size: 0.875rem;
             font-weight: 500;
@@ -195,7 +195,7 @@ export class WyVariationEditor extends LitElement {
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            transition: border-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition: box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
         }
 
         .add-step-button::before {
@@ -222,7 +222,7 @@ export class WyVariationEditor extends LitElement {
             gap: var(--spacing-xs, 4px);
             padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
             background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 3.5%, transparent);
-            border-top: 1px solid var(--line, var(--md-sys-color-outline-variant, #DDD));
+            box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
         }
 
         .control-button {
@@ -230,8 +230,8 @@ export class WyVariationEditor extends LitElement {
             align-items: center;
             gap: var(--spacing-xs, 4px);
             padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
-            background: transparent;
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
+            background: color-mix(in srgb, var(--ink, #1A1A1A) 4%, transparent);
+            border: 0;
             border-radius: var(--md-sys-shape-corner-full, 9999px);
             font-family: var(--font-sans, 'DM Sans', sans-serif);
             font-size: 0.8125rem;
@@ -240,7 +240,6 @@ export class WyVariationEditor extends LitElement {
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            transition: border-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
         }
 
         .control-button::before {
@@ -269,7 +268,6 @@ export class WyVariationEditor extends LitElement {
 
         .control-button.delete {
             margin-left: auto;
-            border-color: var(--md-sys-color-error, #BA1A1A);
             color: var(--md-sys-color-error, #BA1A1A);
         }
 
@@ -289,8 +287,9 @@ export class WyVariationEditor extends LitElement {
             gap: var(--spacing-xs, 4px);
             padding: var(--spacing-md, 16px);
             background: transparent;
-            border: 2px dashed var(--md-sys-color-outline-variant, #DDD);
-            border-radius: var(--md-sys-shape-corner-medium, 16px);
+            border: 0;
+            border-radius: var(--radius-2, 10px);
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 10%, transparent);
             font-family: var(--font-sans, 'DM Sans', sans-serif);
             font-size: 0.9375rem;
             font-weight: 500;

@@ -105,7 +105,8 @@
         "rows": 5
       }
     ],
-    "slug": "targeted-image-edit"
+    "slug": "targeted-image-edit",
+    "image": "public/images/generated-hero-1780327603658.jpg"
   },
   {
     "id": "proofreader",
