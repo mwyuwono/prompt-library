@@ -285,7 +285,8 @@
       }
     ],
     "featured": false,
-    "slug": "accommodations-finder"
+    "slug": "accommodations-finder",
+    "image": "public/images/1780336941003.jpg"
   },
   {
     "id": "work-email-reply",
@@ -372,7 +373,7 @@
     "title": "Portrait Prompt Builder",
     "description": "Builds portrait-generation prompts from uploaded subject photos by extracting a Visual Anchor for likeness and applying a selected style direction.",
     "category": "Art",
-    "image": "",
+    "image": "public/images/1780337629787.jpg",
     "variables": [],
     "variations": [
       {
