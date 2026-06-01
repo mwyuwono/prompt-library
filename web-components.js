@@ -6097,6 +6097,7 @@ var WyPromptEditor = class extends i4 {
     this.prompt = null;
     this.categories = [];
     this.heroImageStatus = null;
+    this.heroImageMasterPrompt = null;
     this.readonly = false;
     this._editedPrompt = null;
     this._promptMode = "single";
@@ -6143,6 +6144,9 @@ var WyPromptEditor = class extends i4 {
     }
     if (changedProperties.has("heroImageStatus") && this.heroImageStatus) {
       this._heroProvider = this._getDefaultHeroProvider();
+    }
+    if (changedProperties.has("heroImageMasterPrompt") && this._editedPrompt && !this._heroPromptDirty) {
+      this._heroPrompt = this._buildHeroImagePrompt();
     }
   }
   _generateSlug(title) {
@@ -6195,32 +6199,15 @@ ${step.template || ""}`).join("\n\n");
       `Prompt content:
 ${this._getPromptTemplateSummary(prompt) || "No prompt content yet."}`
     ].filter(Boolean).join("\n\n");
-    return `You are helping me design a hero image for a reusable prompt in my prompt library.
-
-I will paste the full subject prompt below. Read it closely and infer what the prompt does, who it is for, what outcome it helps create, and what kind of visual metaphor would make that functionality immediately understandable on a prompt-library website.
-
-Subject prompt:
-${subjectPrompt}
-
-Your task:
-Once you understand the subject prompt, generate the hero image to illustrate the functionality and user benefit of the subject prompt, not merely decorate its topic.
-
-Design approach:
-- Identify the core action, transformation, or decision the subject prompt enables.
-- Choose one strong visual concept that communicates that function clearly and elegantly while maintaining the user's high-end editorial aesthetic. Prefer natural colors and materials over flashy graphics or simulated technology.
-- Prefer concrete editorial scenes, refined object compositions, workspace vignettes, crafted materials, before/after tension, or symbolic arrangements that feel natural and premium.
-- Avoid generic AI imagery, glowing robot brains, floating chat bubbles, obvious interface mockups, or literal screenshots unless the subject prompt explicitly requires them.
-- Avoid visible text, labels, UI elements, diagrams, captions, watermarks, or decorative typography unless essential to the subject prompt.
-- Keep the image suitable as a 16:9 website hero: clean focal point, generous negative space, strong crop, legible at card size, and not too busy. Focus on the action of the subject prompt and exclude unrelated elements.
-- The user is inspired by the work of Bruce Weber, Jean-Jacques Lequeu, Sally Mann, James Dakin, Tina Barney, Cy Twombly, Edward Hopper.
-
-Required output:
-Return only the finished hero image. Do not include analysis, headings, options, or explanation.
-
-The style requirements: minimalist, editorial and refined. Photography should only be used if relevant and should be in the style of a high end publication like World of Interiors Magazine or Kinfolk magazine. If photography is not required, prefer graphics that feel both minimalist and classic--imagine a Sir Jon Soane drawing on a solid backdrop or an architectural rendering by Charles Bullfinch.
-- Output requirements: 16:9 aspect ratio, high-resolution, clean composition for a website hero, no visible prompt text, no labels, no watermarks, no overly literal AI imagery unless the use case explicitly calls for it.
-
-Generate the image exactly as a polished 16:9 website hero image.`;
+    const masterTemplate = this.heroImageMasterPrompt?.template || "";
+    if (masterTemplate.includes("{{subject_prompt}}")) {
+      return masterTemplate.replaceAll("{{subject_prompt}}", subjectPrompt);
+    }
+    return [
+      masterTemplate || "Generate a polished 16:9 website hero image for this prompt library entry.",
+      `Subject prompt:
+${subjectPrompt}`
+    ].join("\n\n");
   }
   _handleFieldChange(field, value) {
     if (!this._editedPrompt) return;
@@ -6745,6 +6732,7 @@ Generate the image exactly as a polished 16:9 website hero image.`;
   }
   _renderHeroImageGenerator() {
     const providers = this.heroImageStatus?.providers || {};
+    const masterPromptId = this.heroImageMasterPrompt?.promptId || "hero-image-generator-assisted";
     const providerOptions = [
       { value: "google", label: "Google Nano Banana 2", configured: Boolean(providers.google?.configured) },
       { value: "openai", label: "OpenAI GPT Image", configured: Boolean(providers.openai?.configured) }
@@ -6761,15 +6749,25 @@ Generate the image exactly as a polished 16:9 website hero image.`;
                             ${hasConfiguredProvider ? "Preview first, then attach the version you like." : "Configure GEMINI_API_KEY or OPENAI_API_KEY before generating."}
                         </p>
                     </div>
-                    <button
-                        class="button button-ghost button-small"
-                        type="button"
-                        @click="${this._handleResetHeroPrompt}"
-                        ?disabled="${this._heroBusy}"
-                    >
-                        <span class="material-symbols-outlined">refresh</span>
-                        Reset Prompt
-                    </button>
+                    <div class="hero-generator-tools">
+                        <a
+                            class="button button-ghost button-small"
+                            href="/admin.html?dataset=public#${masterPromptId}"
+                            title="Edit the reusable master prompt used by this generator"
+                        >
+                            <span class="material-symbols-outlined">edit</span>
+                            Edit Master
+                        </a>
+                        <button
+                            class="button button-ghost button-small"
+                            type="button"
+                            @click="${this._handleResetHeroPrompt}"
+                            ?disabled="${this._heroBusy}"
+                        >
+                            <span class="material-symbols-outlined">refresh</span>
+                            Reset Prompt
+                        </button>
+                    </div>
                 </div>
 
                 <div class="hero-controls">
@@ -7146,6 +7144,7 @@ __publicField(WyPromptEditor, "properties", {
   prompt: { type: Object },
   categories: { type: Array },
   heroImageStatus: { type: Object },
+  heroImageMasterPrompt: { type: Object },
   readonly: { type: Boolean },
   _editedPrompt: { type: Object, state: true },
   _promptMode: { type: String, state: true },
@@ -7278,6 +7277,10 @@ __publicField(WyPromptEditor, "styles", i`
             cursor: pointer;
             border: none;
             transition: all var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+        }
+
+        a.button {
+            text-decoration: none;
         }
 
         .button-secondary {
@@ -7433,6 +7436,13 @@ __publicField(WyPromptEditor, "styles", i`
             align-items: flex-start;
             justify-content: space-between;
             gap: var(--spacing-md, 16px);
+        }
+
+        .hero-generator-tools {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            gap: var(--spacing-xs, 4px);
         }
 
         .hero-generator-title {

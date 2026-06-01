@@ -254,6 +254,7 @@ async function loadHeroImageStatus() {
 
         heroImageStatus = await response.json();
         editor.heroImageStatus = heroImageStatus;
+        editor.heroImageMasterPrompt = heroImageStatus.masterPrompt || null;
     } catch (error) {
         console.error('Error loading hero image status:', error);
         heroImageStatus = {
@@ -261,9 +262,11 @@ async function loadHeroImageStatus() {
             providers: {
                 google: { configured: false, label: 'Google Nano Banana 2', model: 'gemini-3.1-flash-image' },
                 openai: { configured: false, label: 'OpenAI GPT Image', model: 'gpt-image-2' }
-            }
+            },
+            masterPrompt: null
         };
         editor.heroImageStatus = heroImageStatus;
+        editor.heroImageMasterPrompt = null;
     }
 }
 
@@ -397,6 +400,7 @@ function setupEventListeners() {
             
             // Reload prompts and update list
             await loadPrompts();
+            await loadHeroImageStatus();
             renderPromptList();
             
             // Reload current prompt to reflect saved changes
@@ -651,6 +655,7 @@ function loadPrompt(id) {
     editor.prompt = JSON.parse(JSON.stringify(prompt));
     editor.categories = categories;
     editor.heroImageStatus = heroImageStatus;
+    editor.heroImageMasterPrompt = heroImageStatus?.masterPrompt || null;
     
     console.log('Prompt set on editor');
     

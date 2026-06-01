@@ -499,6 +499,19 @@ function getHeroImageProviders() {
     };
 }
 
+function getHeroImageMasterPrompt() {
+    const prompts = readPrompts('public');
+    const prompt = prompts.find(item => item.id === 'hero-image-generator-assisted');
+    const variation = prompt?.variations?.find(item => item.id === 'hero-design');
+
+    return {
+        promptId: prompt?.id || 'hero-image-generator-assisted',
+        variationId: variation?.id || 'hero-design',
+        title: prompt?.title || 'Hero Image Generator',
+        template: variation?.template || ''
+    };
+}
+
 function getHeroImageSettings(provider, quality = 'draft') {
     const normalizedQuality = ['draft', 'standard', 'final'].includes(quality) ? quality : 'draft';
 
@@ -959,7 +972,8 @@ app.delete('/api/backup/remote', async (req, res) => {
 app.get('/api/hero-image/status', (req, res) => {
     res.json({
         success: true,
-        providers: getHeroImageProviders()
+        providers: getHeroImageProviders(),
+        masterPrompt: getHeroImageMasterPrompt()
     });
 });
 
