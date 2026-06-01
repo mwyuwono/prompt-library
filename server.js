@@ -512,8 +512,8 @@ function getHeroImageSettings(provider, quality = 'draft') {
     }
 
     return {
-        imageSize: normalizedQuality === 'final' ? 'IMAGE_SIZE_TWO_K' : 'IMAGE_SIZE_ONE_K',
-        aspectRatio: 'ASPECT_RATIO_16_9'
+        imageSize: normalizedQuality === 'final' ? '2K' : '1K',
+        aspectRatio: '16:9'
     };
 }
 
@@ -567,12 +567,10 @@ async function generateGoogleHeroImage(prompt, quality) {
                 parts: [{ text: prompt }]
             }],
             generationConfig: {
-                responseModalities: ['TEXT', 'IMAGE'],
-                responseFormat: {
-                    image: {
-                        aspectRatio: settings.aspectRatio,
-                        imageSize: settings.imageSize
-                    }
+                responseModalities: ['IMAGE'],
+                imageConfig: {
+                    aspectRatio: settings.aspectRatio,
+                    imageSize: settings.imageSize
                 }
             }
         })
