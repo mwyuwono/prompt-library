@@ -1149,6 +1149,34 @@ export class WyPromptEditor extends LitElement {
         }));
     }
 
+    setReferenceImageValue(index, imagePath) {
+        if (!this._editedPrompt) return;
+        const refs = [...(this._editedPrompt.referenceImages || [])];
+        if (refs[index]) {
+            refs[index] = { ...refs[index], path: imagePath };
+            this._editedPrompt = { ...this._editedPrompt, referenceImages: refs };
+            this._markDirty();
+        }
+    }
+
+    _handleRefImageUpload(e) {
+        const { file, index } = e.detail;
+        this.dispatchEvent(new CustomEvent('reference-image-upload', {
+            detail: { file, promptId: this._editedPrompt?.id, index },
+            bubbles: true,
+            composed: true
+        }));
+    }
+
+    _handleRefImageRemove(e) {
+        const { index, path } = e.detail;
+        this.dispatchEvent(new CustomEvent('reference-image-remove', {
+            detail: { promptId: this._editedPrompt?.id, index, path },
+            bubbles: true,
+            composed: true
+        }));
+    }
+
     _handleHeroProviderChange(e) {
         this._heroProvider = e.target.value;
         this._heroError = '';
@@ -1512,6 +1540,7 @@ export class WyPromptEditor extends LitElement {
             items.push({ id: 'prompt-type', label: 'Prompt Type' });
             if (this._promptMode === 'single') {
                 items.push({ id: 'variables', label: 'Variables' });
+                items.push({ id: 'reference-images', label: 'Reference Images' });
                 items.push({ id: 'template', label: 'Template' });
             } else {
                 items.push({ id: 'steps', label: 'Steps' });
@@ -1942,9 +1971,21 @@ export class WyPromptEditor extends LitElement {
                                 ></wy-variable-editor>
                             </div>
 
+                            <!-- Reference Images -->
+                            <div class="card" data-section="reference-images">
+                                <h2 class="card-title" data-eyebrow="Section 05">Reference Images</h2>
+                                <p class="card-description">Upload images and reference them in your template with {{variable_name}}. Their public URLs are substituted when the prompt is copied.</p>
+                                <wy-reference-image-editor
+                                    .referenceImages="${this._editedPrompt.referenceImages || []}"
+                                    @change="${(e) => this._handleFieldChange('referenceImages', e.detail.referenceImages)}"
+                                    @reference-image-upload="${this._handleRefImageUpload}"
+                                    @reference-image-remove="${this._handleRefImageRemove}"
+                                ></wy-reference-image-editor>
+                            </div>
+
                             <!-- Template -->
                             <div class="card" data-section="template">
-                                <h2 class="card-title" data-eyebrow="Section 05">Template</h2>
+                                <h2 class="card-title" data-eyebrow="Section 06">Template</h2>
                                 <wy-code-textarea
                                     label="Prompt Template"
                                     .value="${this._editedPrompt.template || ''}"

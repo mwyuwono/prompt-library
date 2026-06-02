@@ -355,6 +355,12 @@ function getAllImagePaths(prompt) {
         });
     }
 
+    if (prompt?.referenceImages?.length) {
+        prompt.referenceImages.forEach(ref => {
+            if (ref.path) imagePaths.push(ref.path);
+        });
+    }
+
     return imagePaths;
 }
 
@@ -486,6 +492,54 @@ function setupEventListeners() {
         } catch (err) {
             console.error('Delete error:', err);
             showToast('Error removing image', 'error');
+        }
+    });
+
+    // Reference image upload event
+    editor.addEventListener('reference-image-upload', async (e) => {
+        try {
+            const { file, promptId, index } = e.detail;
+            const result = await uploadImage(file);
+            if (result.success) {
+                const p = prompts.find(p => p.id === promptId);
+                if (p?.referenceImages?.[index]) {
+                    p.referenceImages[index].path = result.path;
+                    if (typeof editor.setReferenceImageValue === 'function') {
+                        editor.setReferenceImageValue(index, result.path);
+                    } else {
+                        editor.prompt = JSON.parse(JSON.stringify(p));
+                    }
+                }
+                showToast('Reference image uploaded', 'success');
+                refreshBackupStatus();
+            }
+        } catch (err) {
+            console.error('Reference image upload error:', err);
+            showToast('Error uploading reference image', 'error');
+        }
+    });
+
+    // Reference image remove event
+    editor.addEventListener('reference-image-remove', async (e) => {
+        try {
+            const { promptId, index, path } = e.detail;
+            const p = prompts.find(p => p.id === promptId);
+            if (p?.referenceImages?.[index]) {
+                p.referenceImages[index].path = '';
+                if (typeof editor.setReferenceImageValue === 'function') {
+                    editor.setReferenceImageValue(index, '');
+                } else {
+                    editor.prompt = JSON.parse(JSON.stringify(p));
+                }
+                if (path && !isImageReferenced(path)) {
+                    await deleteImage(path.split('/').pop());
+                }
+                showToast('Reference image removed', 'success');
+                refreshBackupStatus();
+            }
+        } catch (err) {
+            console.error('Reference image remove error:', err);
+            showToast('Error removing reference image', 'error');
         }
     });
 
