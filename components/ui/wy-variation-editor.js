@@ -552,6 +552,7 @@ export class WyVariationEditor extends LitElement {
     }
 
     _handleRefImageListChange(variationIndex, e) {
+        if (!Array.isArray(e.detail?.referenceImages)) return;
         this._handleFieldChange(variationIndex, 'referenceImages', e.detail.referenceImages);
     }
 

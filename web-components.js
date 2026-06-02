@@ -5343,6 +5343,7 @@ var WyReferenceImageEditor = class extends i4 {
     this._emitChange();
   }
   _handleImageChange(e9, index) {
+    e9.stopPropagation();
     const { file } = e9.detail;
     this.dispatchEvent(new CustomEvent("reference-image-upload", {
       detail: { file, index },
@@ -5758,6 +5759,7 @@ var WyVariationEditor = class extends i4 {
     }));
   }
   _handleRefImageListChange(variationIndex, e9) {
+    if (!Array.isArray(e9.detail?.referenceImages)) return;
     this._handleFieldChange(variationIndex, "referenceImages", e9.detail.referenceImages);
   }
   _handleMoveUp(index) {
@@ -6821,7 +6823,7 @@ ${subjectPrompt}`
     }));
   }
   _handleVariationsChange(e9) {
-    if (!e9.detail?.variations) return;
+    if (!Array.isArray(e9.detail?.variations)) return;
     this._handleFieldChange("variations", e9.detail.variations);
   }
   _handleModeChange(event, newMode) {

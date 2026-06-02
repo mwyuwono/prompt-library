@@ -1338,7 +1338,7 @@ export class WyPromptEditor extends LitElement {
     }
 
     _handleVariationsChange(e) {
-        if (!e.detail?.variations) return;
+        if (!Array.isArray(e.detail?.variations)) return;
         this._handleFieldChange('variations', e.detail.variations);
     }
 

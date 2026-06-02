@@ -197,6 +197,7 @@ export class WyReferenceImageEditor extends LitElement {
     }
 
     _handleImageChange(e, index) {
+        e.stopPropagation();
         const { file } = e.detail;
         this.dispatchEvent(new CustomEvent('reference-image-upload', {
             detail: { file, index },
