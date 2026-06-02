@@ -24,6 +24,7 @@ import './wy-option-toggle.js';
 import './wy-image-upload.js';
 import './wy-code-textarea.js';
 import './wy-variable-editor.js';
+import './wy-reference-image-editor.js';
 import './wy-variation-editor.js';
 import './wy-prompt-editor.js';
 import './wy-step-editor.js';
