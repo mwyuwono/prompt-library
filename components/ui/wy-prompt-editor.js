@@ -1177,6 +1177,39 @@ export class WyPromptEditor extends LitElement {
         }));
     }
 
+    _handleVariationRefImageUpload(e) {
+        e.stopPropagation();
+        const { file, index, variationIndex, variationId } = e.detail;
+        this.dispatchEvent(new CustomEvent('reference-image-upload', {
+            detail: { file, promptId: this._editedPrompt?.id, index, variationIndex, variationId },
+            bubbles: true,
+            composed: true
+        }));
+    }
+
+    _handleVariationRefImageRemove(e) {
+        e.stopPropagation();
+        const { index, path, variationIndex, variationId } = e.detail;
+        this.dispatchEvent(new CustomEvent('reference-image-remove', {
+            detail: { promptId: this._editedPrompt?.id, index, path, variationIndex, variationId },
+            bubbles: true,
+            composed: true
+        }));
+    }
+
+    setVariationReferenceImageValue(variationIndex, refIndex, imagePath) {
+        if (!this._editedPrompt) return;
+        const variations = [...(this._editedPrompt.variations || [])];
+        if (!variations[variationIndex]) return;
+        const refs = [...(variations[variationIndex].referenceImages || [])];
+        if (refs[refIndex]) {
+            refs[refIndex] = { ...refs[refIndex], path: imagePath };
+            variations[variationIndex] = { ...variations[variationIndex], referenceImages: refs };
+            this._editedPrompt = { ...this._editedPrompt, variations };
+            this._markDirty();
+        }
+    }
+
     _handleHeroProviderChange(e) {
         this._heroProvider = e.target.value;
         this._heroError = '';
@@ -1920,6 +1953,8 @@ export class WyPromptEditor extends LitElement {
                                 @variation-expand="${this._handleVariationExpand}"
                                 @image-upload="${this._handleVariationImageChange}"
                                 @image-remove="${this._handleVariationImageRemove}"
+                                @reference-image-upload="${this._handleVariationRefImageUpload}"
+                                @reference-image-remove="${this._handleVariationRefImageRemove}"
                             ></wy-variation-editor>
                         </div>
                     ` : html`

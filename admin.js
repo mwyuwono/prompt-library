@@ -352,6 +352,11 @@ function getAllImagePaths(prompt) {
             if (variation.image) {
                 imagePaths.push(variation.image);
             }
+            if (variation.referenceImages?.length) {
+                variation.referenceImages.forEach(ref => {
+                    if (ref.path) imagePaths.push(ref.path);
+                });
+            }
         });
     }
 
@@ -498,16 +503,34 @@ function setupEventListeners() {
     // Reference image upload event
     editor.addEventListener('reference-image-upload', async (e) => {
         try {
-            const { file, promptId, index } = e.detail;
+            const { file, promptId, index, variationIndex = null, variationId = null } = e.detail;
             const result = await uploadImage(file);
             if (result.success) {
                 const p = prompts.find(p => p.id === promptId);
-                if (p?.referenceImages?.[index]) {
-                    p.referenceImages[index].path = result.path;
-                    if (typeof editor.setReferenceImageValue === 'function') {
-                        editor.setReferenceImageValue(index, result.path);
-                    } else {
-                        editor.prompt = JSON.parse(JSON.stringify(p));
+                if (p) {
+                    if (variationIndex !== null || variationId !== null) {
+                        const variation = getVariationByTarget(p, { variationIndex, variationId });
+                        if (variation) {
+                            if (!variation.referenceImages) variation.referenceImages = [];
+                            if (variation.referenceImages[index]) {
+                                variation.referenceImages[index].path = result.path;
+                            }
+                            const resolvedIndex = variationId
+                                ? p.variations.findIndex(v => v.id === variationId)
+                                : variationIndex;
+                            if (typeof editor.setVariationReferenceImageValue === 'function') {
+                                editor.setVariationReferenceImageValue(resolvedIndex, index, result.path);
+                            } else {
+                                editor.prompt = JSON.parse(JSON.stringify(p));
+                            }
+                        }
+                    } else if (p?.referenceImages?.[index]) {
+                        p.referenceImages[index].path = result.path;
+                        if (typeof editor.setReferenceImageValue === 'function') {
+                            editor.setReferenceImageValue(index, result.path);
+                        } else {
+                            editor.prompt = JSON.parse(JSON.stringify(p));
+                        }
                     }
                 }
                 showToast('Reference image uploaded', 'success');
@@ -522,20 +545,40 @@ function setupEventListeners() {
     // Reference image remove event
     editor.addEventListener('reference-image-remove', async (e) => {
         try {
-            const { promptId, index, path } = e.detail;
+            const { promptId, index, path, variationIndex = null, variationId = null } = e.detail;
             const p = prompts.find(p => p.id === promptId);
-            if (p?.referenceImages?.[index]) {
-                p.referenceImages[index].path = '';
-                if (typeof editor.setReferenceImageValue === 'function') {
-                    editor.setReferenceImageValue(index, '');
-                } else {
-                    editor.prompt = JSON.parse(JSON.stringify(p));
+            if (p) {
+                if (variationIndex !== null || variationId !== null) {
+                    const variation = getVariationByTarget(p, { variationIndex, variationId });
+                    if (variation?.referenceImages?.[index]) {
+                        variation.referenceImages[index].path = '';
+                        const resolvedIndex = variationId
+                            ? p.variations.findIndex(v => v.id === variationId)
+                            : variationIndex;
+                        if (typeof editor.setVariationReferenceImageValue === 'function') {
+                            editor.setVariationReferenceImageValue(resolvedIndex, index, '');
+                        } else {
+                            editor.prompt = JSON.parse(JSON.stringify(p));
+                        }
+                        if (path && !isImageReferenced(path)) {
+                            await deleteImage(path.split('/').pop());
+                        }
+                        showToast('Reference image removed', 'success');
+                        refreshBackupStatus();
+                    }
+                } else if (p?.referenceImages?.[index]) {
+                    p.referenceImages[index].path = '';
+                    if (typeof editor.setReferenceImageValue === 'function') {
+                        editor.setReferenceImageValue(index, '');
+                    } else {
+                        editor.prompt = JSON.parse(JSON.stringify(p));
+                    }
+                    if (path && !isImageReferenced(path)) {
+                        await deleteImage(path.split('/').pop());
+                    }
+                    showToast('Reference image removed', 'success');
+                    refreshBackupStatus();
                 }
-                if (path && !isImageReferenced(path)) {
-                    await deleteImage(path.split('/').pop());
-                }
-                showToast('Reference image removed', 'success');
-                refreshBackupStatus();
             }
         } catch (err) {
             console.error('Reference image remove error:', err);

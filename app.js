@@ -1899,13 +1899,16 @@ Server will start on http://localhost:3001`;
             });
         }
 
-        if (prompt.referenceImages?.length) {
-            prompt.referenceImages.forEach(ref => {
-                if (ref.variable && ref.path) {
-                    const placeholder = `{{${ref.variable}}}`;
-                    const url = `${window.location.origin}/${ref.path}`;
-                    compiled = compiled.split(placeholder).join(url);
-                }
+        const activeVariation = this.getActiveVariation(prompt);
+        const variationRefs = activeVariation?.referenceImages || [];
+        const promptRefs = prompt.referenceImages || [];
+        if (promptRefs.length || variationRefs.length) {
+            // Variation refs take priority over prompt-level refs for same variable
+            const refMap = new Map();
+            promptRefs.forEach(ref => { if (ref.variable && ref.path) refMap.set(ref.variable, ref.path); });
+            variationRefs.forEach(ref => { if (ref.variable && ref.path) refMap.set(ref.variable, ref.path); });
+            refMap.forEach((path, variable) => {
+                compiled = compiled.split(`{{${variable}}}`).join(`${window.location.origin}/${path}`);
             });
         }
 

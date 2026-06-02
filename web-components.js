@@ -5739,6 +5739,27 @@ var WyVariationEditor = class extends i4 {
       composed: true
     }));
   }
+  _handleRefImageChange(variationIndex, e9) {
+    e9.stopPropagation();
+    const { file, index } = e9.detail;
+    this.dispatchEvent(new CustomEvent("reference-image-upload", {
+      detail: { file, index, variationIndex, variationId: this.variations[variationIndex]?.id },
+      bubbles: true,
+      composed: true
+    }));
+  }
+  _handleRefImageRemove(variationIndex, e9) {
+    e9.stopPropagation();
+    const { index, path } = e9.detail;
+    this.dispatchEvent(new CustomEvent("reference-image-remove", {
+      detail: { index, path, variationIndex, variationId: this.variations[variationIndex]?.id },
+      bubbles: true,
+      composed: true
+    }));
+  }
+  _handleRefImageListChange(variationIndex, e9) {
+    this._handleFieldChange(variationIndex, "referenceImages", e9.detail.referenceImages);
+  }
   _handleMoveUp(index) {
     if (index === 0) return;
     const updatedVariations = [...this.variations];
@@ -5780,7 +5801,8 @@ This action cannot be undone.`;
         description: "",
         image: "",
         template: "",
-        variables: []
+        variables: [],
+        referenceImages: []
       }
     ];
     this._notifyChange(updatedVariations);
@@ -5918,6 +5940,20 @@ This action cannot be undone.`;
                                         @change="${(e9) => this._handleVariableChange(index, e9)}"
                                         @click="${(e9) => e9.stopPropagation()}"
                                     ></wy-variable-editor>
+                                </div>
+
+                                <!-- Reference Images -->
+                                <div class="field-group" data-vsection="reference-images" @click="${(e9) => e9.stopPropagation()}">
+                                    <label class="field-label">Reference Images</label>
+                                    <p class="field-description">
+                                        Upload images and reference them with {{variable_name}}. URLs are substituted when the prompt is copied.
+                                    </p>
+                                    <wy-reference-image-editor
+                                        .referenceImages="${variation.referenceImages || []}"
+                                        @change="${(e9) => this._handleRefImageListChange(index, e9)}"
+                                        @reference-image-upload="${(e9) => this._handleRefImageChange(index, e9)}"
+                                        @reference-image-remove="${(e9) => this._handleRefImageRemove(index, e9)}"
+                                    ></wy-reference-image-editor>
                                 </div>
 
                                 <!-- Template -->
@@ -6646,6 +6682,36 @@ ${subjectPrompt}`
       composed: true
     }));
   }
+  _handleVariationRefImageUpload(e9) {
+    e9.stopPropagation();
+    const { file, index, variationIndex, variationId } = e9.detail;
+    this.dispatchEvent(new CustomEvent("reference-image-upload", {
+      detail: { file, promptId: this._editedPrompt?.id, index, variationIndex, variationId },
+      bubbles: true,
+      composed: true
+    }));
+  }
+  _handleVariationRefImageRemove(e9) {
+    e9.stopPropagation();
+    const { index, path, variationIndex, variationId } = e9.detail;
+    this.dispatchEvent(new CustomEvent("reference-image-remove", {
+      detail: { promptId: this._editedPrompt?.id, index, path, variationIndex, variationId },
+      bubbles: true,
+      composed: true
+    }));
+  }
+  setVariationReferenceImageValue(variationIndex, refIndex, imagePath) {
+    if (!this._editedPrompt) return;
+    const variations = [...this._editedPrompt.variations || []];
+    if (!variations[variationIndex]) return;
+    const refs = [...variations[variationIndex].referenceImages || []];
+    if (refs[refIndex]) {
+      refs[refIndex] = { ...refs[refIndex], path: imagePath };
+      variations[variationIndex] = { ...variations[variationIndex], referenceImages: refs };
+      this._editedPrompt = { ...this._editedPrompt, variations };
+      this._markDirty();
+    }
+  }
   _handleHeroProviderChange(e9) {
     this._heroProvider = e9.target.value;
     this._heroError = "";
@@ -7306,6 +7372,8 @@ ${subjectPrompt}`
                                 @variation-expand="${this._handleVariationExpand}"
                                 @image-upload="${this._handleVariationImageChange}"
                                 @image-remove="${this._handleVariationImageRemove}"
+                                @reference-image-upload="${this._handleVariationRefImageUpload}"
+                                @reference-image-remove="${this._handleVariationRefImageRemove}"
                             ></wy-variation-editor>
                         </div>
                     ` : b2`

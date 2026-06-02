@@ -531,6 +531,30 @@ export class WyVariationEditor extends LitElement {
         }));
     }
 
+    _handleRefImageChange(variationIndex, e) {
+        e.stopPropagation();
+        const { file, index } = e.detail;
+        this.dispatchEvent(new CustomEvent('reference-image-upload', {
+            detail: { file, index, variationIndex, variationId: this.variations[variationIndex]?.id },
+            bubbles: true,
+            composed: true
+        }));
+    }
+
+    _handleRefImageRemove(variationIndex, e) {
+        e.stopPropagation();
+        const { index, path } = e.detail;
+        this.dispatchEvent(new CustomEvent('reference-image-remove', {
+            detail: { index, path, variationIndex, variationId: this.variations[variationIndex]?.id },
+            bubbles: true,
+            composed: true
+        }));
+    }
+
+    _handleRefImageListChange(variationIndex, e) {
+        this._handleFieldChange(variationIndex, 'referenceImages', e.detail.referenceImages);
+    }
+
     _handleMoveUp(index) {
         if (index === 0) return;
         const updatedVariations = [...this.variations];
@@ -579,7 +603,8 @@ export class WyVariationEditor extends LitElement {
                 description: '',
                 image: '',
                 template: '',
-                variables: []
+                variables: [],
+                referenceImages: []
             }
         ];
         this._notifyChange(updatedVariations);
@@ -721,6 +746,20 @@ export class WyVariationEditor extends LitElement {
                                         @change="${(e) => this._handleVariableChange(index, e)}"
                                         @click="${(e) => e.stopPropagation()}"
                                     ></wy-variable-editor>
+                                </div>
+
+                                <!-- Reference Images -->
+                                <div class="field-group" data-vsection="reference-images" @click="${(e) => e.stopPropagation()}">
+                                    <label class="field-label">Reference Images</label>
+                                    <p class="field-description">
+                                        Upload images and reference them with {{variable_name}}. URLs are substituted when the prompt is copied.
+                                    </p>
+                                    <wy-reference-image-editor
+                                        .referenceImages="${variation.referenceImages || []}"
+                                        @change="${(e) => this._handleRefImageListChange(index, e)}"
+                                        @reference-image-upload="${(e) => this._handleRefImageChange(index, e)}"
+                                        @reference-image-remove="${(e) => this._handleRefImageRemove(index, e)}"
+                                    ></wy-reference-image-editor>
                                 </div>
 
                                 <!-- Template -->
