@@ -366,7 +366,9 @@
         "value": ""
       }
     ],
-    "featured": false
+    "featured": false,
+    "slug": "webflow-code-helper",
+    "image": "public/images/generated-hero-1780363463573.jpg"
   },
   {
     "id": "character-portrait",
@@ -713,7 +715,9 @@
       }
     ],
     "featured": false,
-    "instructions": "Select a variant for general prompting or image-generation prompting."
+    "instructions": "Select a variant for general prompting or image-generation prompting.",
+    "slug": "prompt-builder-assistant",
+    "image": "public/images/1780365264408.jpg"
   },
   {
     "id": "academic-drawing",
