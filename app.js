@@ -1259,6 +1259,15 @@ Server will start on http://localhost:3001`;
         return activeVariation?.image || '';
     }
 
+    getReferenceImageUrl(path) {
+        if (!path) return '';
+        try {
+            return new URL(path, window.location.origin).href;
+        } catch {
+            return path;
+        }
+    }
+
     /**
      * Attach event listeners to card elements
      */
@@ -1437,6 +1446,7 @@ Server will start on http://localhost:3001`;
                 image: prompt.image || '',
                 promptImage: prompt.image || '',
                 variationImage: this.getActiveVariationImage(prompt),
+                referenceImages: prompt.referenceImages || [],
                 variables: variables,
                 variations: prompt.variations || [],
                 activeVariationIndex: variationIndex >= 0 ? variationIndex : 0,
@@ -1599,6 +1609,7 @@ Server will start on http://localhost:3001`;
             instructions: '',
             template: '',
             variables: [],
+            referenceImages: [],
             variations: [],
             steps: [],
             
@@ -1690,6 +1701,7 @@ Server will start on http://localhost:3001`;
                 image: prompt.image || '',
                 promptImage: prompt.image || '',
                 variationImage: this.getActiveVariationImage(prompt),
+                referenceImages: prompt.referenceImages || [],
                 variables: this.getActiveVariables(prompt),
                 variations: prompt.variations || [],
                 mode: prompt.locked !== false ? 'locked' : 'edit',
@@ -1883,6 +1895,19 @@ Server will start on http://localhost:3001`;
         // Get template from active variation or fallback to single template
         let compiled = this.getActiveTemplate(prompt);
 
+        const activeVariation = this.getActiveVariation(prompt);
+        const variationRefs = activeVariation?.referenceImages || [];
+        const promptRefs = prompt.referenceImages || [];
+        if (promptRefs.length || variationRefs.length) {
+            // Variation refs take priority over prompt-level refs for same variable
+            const refMap = new Map();
+            promptRefs.forEach(ref => { if (ref.variable && ref.path) refMap.set(ref.variable, ref.path); });
+            variationRefs.forEach(ref => { if (ref.variable && ref.path) refMap.set(ref.variable, ref.path); });
+            refMap.forEach((path, variable) => {
+                compiled = compiled.split(`{{${variable}}}`).join(this.getReferenceImageUrl(path));
+            });
+        }
+
         // Get variables for active variation
         const activeVariables = this.getActiveVariables(prompt);
 
@@ -1896,19 +1921,6 @@ Server will start on http://localhost:3001`;
                     const value = variable.value || '';
                     compiled = compiled.split(placeholder).join(value);
                 }
-            });
-        }
-
-        const activeVariation = this.getActiveVariation(prompt);
-        const variationRefs = activeVariation?.referenceImages || [];
-        const promptRefs = prompt.referenceImages || [];
-        if (promptRefs.length || variationRefs.length) {
-            // Variation refs take priority over prompt-level refs for same variable
-            const refMap = new Map();
-            promptRefs.forEach(ref => { if (ref.variable && ref.path) refMap.set(ref.variable, ref.path); });
-            variationRefs.forEach(ref => { if (ref.variable && ref.path) refMap.set(ref.variable, ref.path); });
-            refMap.forEach((path, variable) => {
-                compiled = compiled.split(`{{${variable}}}`).join(`${window.location.origin}/${path}`);
             });
         }
 

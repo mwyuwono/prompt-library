@@ -8820,6 +8820,7 @@ var WyPromptModal = class extends i4 {
     this.variationImage = "";
     this.template = "";
     this.variables = [];
+    this.referenceImages = [];
     this.variations = [];
     this.activeVariationIndex = 0;
     this.mode = "locked";
@@ -9064,57 +9065,103 @@ var WyPromptModal = class extends i4 {
     this.variationDetailsExpanded = !this.variationDetailsExpanded;
   }
   _renderVariationSelector(activeVariation) {
-    if (this.variations.length <= 1) return "";
+    const selector = this.variations.length > 1 ? b2`
+      <label class="variation-description-heading" for="variation-select">Variant</label>
+      <div class="variation-select-wrap">
+        <select
+          id="variation-select"
+          class="variation-select-native"
+          .value="${activeVariation?.id || ""}"
+          @change="${this._handleVariationSelectChange}"
+        >
+          ${this.variations.map((variation) => b2`
+            <option value="${variation.id}">${variation.name}</option>
+          `)}
+        </select>
+        <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
+      </div>
+    ` : "";
+    const variationMeta = activeVariation?.description || activeVariation?.instructions ? b2`
+      <wy-info-panel class="variation-description-panel">
+        <div class="variation-meta-section">
+          <button
+            class="variation-name"
+            type="button"
+            aria-expanded="${this.variationDetailsExpanded ? "true" : "false"}"
+            @click="${this._toggleVariationDetails}"
+          >
+            <span>${activeVariation.name}</span>
+            <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
+          </button>
+          ${this.variationDetailsExpanded ? b2`
+            <div class="variation-details">
+              ${activeVariation?.description ? b2`
+                <div class="variation-description-copy">${o7(this._renderDescriptionMarkdown(activeVariation.description))}</div>
+              ` : ""}
+              ${activeVariation?.instructions ? b2`
+                <div class="variation-meta-section">
+                  <p class="variation-description-heading">Instructions</p>
+                  <div class="variation-description-copy">${o7(this._renderDescriptionMarkdown(activeVariation.instructions))}</div>
+                </div>
+              ` : ""}
+            </div>
+          ` : ""}
+        </div>
+      </wy-info-panel>
+    ` : "";
+    const referenceImages = this._getActiveReferenceImages(activeVariation);
+    if (!selector && !this.variationImage && !variationMeta && referenceImages.length === 0) return "";
     return b2`
       <div class="variation-selector-container">
-        <label class="variation-description-heading" for="variation-select">Variant</label>
-        <div class="variation-select-wrap">
-          <select
-            id="variation-select"
-            class="variation-select-native"
-            .value="${activeVariation?.id || ""}"
-            @change="${this._handleVariationSelectChange}"
-          >
-            ${this.variations.map((variation) => b2`
-              <option value="${variation.id}">${variation.name}</option>
-            `)}
-          </select>
-          <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
-        </div>
+        ${selector}
         ${this.variationImage ? b2`
           <figure class="variation-image">
             <img src="${this.variationImage}" alt="${activeVariation?.name || this.title}" loading="lazy">
           </figure>
         ` : ""}
-        ${activeVariation?.description || activeVariation?.instructions ? b2`
-          <wy-info-panel class="variation-description-panel">
-            <div class="variation-meta-section">
-              <button
-                class="variation-name"
-                type="button"
-                aria-expanded="${this.variationDetailsExpanded ? "true" : "false"}"
-                @click="${this._toggleVariationDetails}"
-              >
-                <span>${activeVariation.name}</span>
-                <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
-              </button>
-              ${this.variationDetailsExpanded ? b2`
-                <div class="variation-details">
-                  ${activeVariation?.description ? b2`
-                    <div class="variation-description-copy">${o7(this._renderDescriptionMarkdown(activeVariation.description))}</div>
-                  ` : ""}
-                  ${activeVariation?.instructions ? b2`
-                    <div class="variation-meta-section">
-                      <p class="variation-description-heading">Instructions</p>
-                      <div class="variation-description-copy">${o7(this._renderDescriptionMarkdown(activeVariation.instructions))}</div>
-                    </div>
-                  ` : ""}
-                </div>
-              ` : ""}
-            </div>
-          </wy-info-panel>
-        ` : ""}
+        ${variationMeta}
+        ${this._renderReferenceImages(referenceImages)}
       </div>
+    `;
+  }
+  _getImageUrl(path) {
+    if (!path) return "";
+    try {
+      return new URL(path, window.location.origin).href;
+    } catch {
+      return path;
+    }
+  }
+  _getReferenceImageMap(activeVariation = this.variations[this.activeVariationIndex]) {
+    const refMap = /* @__PURE__ */ new Map();
+    (this.referenceImages || []).forEach((ref) => {
+      if (ref?.variable && ref?.path) refMap.set(ref.variable, ref);
+    });
+    (activeVariation?.referenceImages || []).forEach((ref) => {
+      if (ref?.variable && ref?.path) refMap.set(ref.variable, ref);
+    });
+    return refMap;
+  }
+  _getActiveReferenceImages(activeVariation = this.variations[this.activeVariationIndex]) {
+    return [...this._getReferenceImageMap(activeVariation).values()];
+  }
+  _renderReferenceImages(referenceImages) {
+    if (!referenceImages.length) return "";
+    return b2`
+      <wy-info-panel class="reference-images-panel">
+        <p class="variation-description-heading">Reference Images</p>
+        <div class="reference-images-grid">
+          ${referenceImages.map((ref) => b2`
+            <figure class="reference-image">
+              <img src="${this._getImageUrl(ref.path)}" alt="${ref.label || ref.variable || "Reference image"}" loading="lazy">
+              <figcaption>
+                ${ref.label || "Reference image"}
+                ${ref.variable ? b2`<span class="reference-variable">{{${ref.variable}}}</span>` : ""}
+              </figcaption>
+            </figure>
+          `)}
+        </div>
+      </wy-info-panel>
     `;
   }
   render() {
@@ -9341,6 +9388,10 @@ var WyPromptModal = class extends i4 {
       return "";
     }
     let compiled = template;
+    const refMap = this._getReferenceImageMap();
+    refMap.forEach((ref, variable) => {
+      compiled = compiled.split(`{{${variable}}}`).join(this._getImageUrl(ref.path));
+    });
     Object.keys(this._values || {}).forEach((key) => {
       const regex = new RegExp(`{{${key}}}`, "g");
       compiled = compiled.replace(regex, this._values[key] ?? "");
@@ -9454,6 +9505,7 @@ __publicField(WyPromptModal, "properties", {
   variationImage: { type: String, attribute: "variation-image" },
   template: { type: String },
   variables: { type: Array },
+  referenceImages: { type: Array },
   variations: { type: Array },
   activeVariationIndex: { type: Number, attribute: "active-variation-index" },
   mode: { type: String },
@@ -9894,6 +9946,48 @@ __publicField(WyPromptModal, "styles", i`
         font-style: italic;
         line-height: 1.35;
         text-align: right;
+    }
+
+    .reference-images-panel {
+        margin: 0;
+        --wy-info-panel-bg: transparent;
+        --wy-info-panel-padding: 0;
+        --wy-info-panel-font-size: var(--md-sys-typescale-body-small-size, 0.875rem);
+    }
+
+    .reference-images-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+        gap: var(--spacing-md, 16px);
+    }
+
+    .reference-image {
+        margin: 0;
+    }
+
+    .reference-image img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 1;
+        object-fit: cover;
+        border: 1px solid var(--paper-edge, #DDD6C8);
+        background: var(--paper, #F7F4EE);
+    }
+
+    .reference-image figcaption {
+        margin: 8px 0 0;
+        color: var(--ink-mute, #6B6B6A);
+        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-size: 0.75rem;
+        line-height: 1.35;
+    }
+
+    .reference-variable {
+        display: block;
+        color: var(--ink-soft, #A8A49C);
+        font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+        font-size: 0.6875rem;
+        overflow-wrap: anywhere;
     }
 
     .variation-meta-section + .variation-meta-section {
