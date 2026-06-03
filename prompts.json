@@ -1589,5 +1589,15 @@
         "variables": []
       }
     ]
+  },
+  {
+    "id": "untitled-prompt-1780450694735",
+    "title": "Miniature Portrait",
+    "description": "",
+    "instructions": "",
+    "category": "Art",
+    "template": "Create a formal historical bust portrait combining the likeness from the character reference and the artistic style from the style reference.\n\nCharacter & Likeness: The portrait must feature the precise facial features, expression, and likeness of the subject shown in the character reference image, seamlessly integrated.\n\nArtistic Style & Medium: Apply the exact 19th-century American Folk Art watercolor and gouache painting technique seen in the style reference. This includes the precise brushwork, the soft tonal washes, the use of desaturated, rich pigments, and the distinct, hand-painted texture. The background must be the same aged, textured cream paper with its specific patina.\n\nComposition & Attire: Replicate the formal, three-quarter bust composition and the exact attire (the dark charcoal-grey frock coat, the white multiple-buttoned waistcoat, and the oversized black silk bow tie stock) from the style reference, but adapted to the character's form. Maintain the neutral lighting and composed, formal expression.",
+    "variables": [],
+    "slug": "miniature-portrait"
   }
 ]
