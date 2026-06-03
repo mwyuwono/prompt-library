@@ -67,12 +67,19 @@ function validatePrompts() {
     console.log("\nChecking template and variable consistency...");
     prompts.forEach((prompt) => {
         const promptVariables = prompt.variables ? prompt.variables.map((variable) => variable.name) : [];
+        const promptReferenceVariables = prompt.referenceImages
+            ? prompt.referenceImages.map((reference) => reference.variable).filter(Boolean)
+            : [];
         const promptTemplateVariables = getTemplateVariables(prompt.template || "");
         const variationTemplateVariables = [];
 
         if (prompt.template) {
             hasErrors =
-                validateMissingVariables(`prompt "${prompt.id}"`, prompt.template, promptVariables) ||
+                validateMissingVariables(
+                    `prompt "${prompt.id}"`,
+                    prompt.template,
+                    [...new Set([...promptVariables, ...promptReferenceVariables])]
+                ) ||
                 hasErrors;
         }
 
@@ -81,7 +88,17 @@ function validatePrompts() {
                 const variationVariables = variation.variables
                     ? variation.variables.map((variable) => variable.name)
                     : [];
-                const availableVariables = [...new Set([...promptVariables, ...variationVariables])];
+                const variationReferenceVariables = variation.referenceImages
+                    ? variation.referenceImages.map((reference) => reference.variable).filter(Boolean)
+                    : [];
+                const availableVariables = [
+                    ...new Set([
+                        ...promptVariables,
+                        ...promptReferenceVariables,
+                        ...variationVariables,
+                        ...variationReferenceVariables,
+                    ]),
+                ];
                 const usedVariables = getTemplateVariables(variation.template || "");
 
                 variationTemplateVariables.push(...usedVariables);
