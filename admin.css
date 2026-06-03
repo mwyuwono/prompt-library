@@ -654,6 +654,33 @@
     overflow-wrap: anywhere;
 }
 
+.backup-status-grid dd.is-off-main {
+    display: inline-block;
+    color: var(--err);
+    font-weight: 700;
+    text-shadow: 0 0 10px color-mix(in srgb, var(--err) 32%, transparent);
+    animation: backupBranchAlertPulse 1800ms var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)) infinite;
+}
+
+@keyframes backupBranchAlertPulse {
+    0%,
+    100% {
+        text-shadow: 0 0 8px color-mix(in srgb, var(--err) 22%, transparent);
+    }
+
+    50% {
+        text-shadow:
+            0 0 12px color-mix(in srgb, var(--err) 40%, transparent),
+            0 0 22px color-mix(in srgb, var(--err) 18%, transparent);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .backup-status-grid dd.is-off-main {
+        animation: none;
+    }
+}
+
 .backup-remote-field {
     display: grid;
     gap: var(--spacing-xs, 4px);

@@ -853,7 +853,9 @@ function renderBackupStatus() {
     backupStatusButton.querySelector('.material-symbols-outlined').textContent = iconByStatus[status.statusKey] || 'sync';
 
     backupModalStatus.textContent = status.statusLabel || '-';
-    backupModalBranch.textContent = status.branch || 'main';
+    const currentBranch = status.branch || 'main';
+    backupModalBranch.textContent = currentBranch;
+    backupModalBranch.classList.toggle('is-off-main', currentBranch !== 'main');
     backupModalLastBackup.textContent = formatBackupTime(status.lastBackupTime);
     backupModalRemote.textContent = status.remoteUrl || 'No origin remote';
     backupModalChanges.textContent = status.hasWorkingTreeChanges
