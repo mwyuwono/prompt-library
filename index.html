@@ -46,6 +46,16 @@
                 </wy-button>
                 <wy-button id="openLinksModal" variant="primary" size="small">AI Tools</wy-button>
                 <wy-button
+                    id="togglePaletteBtn"
+                    variant="primary"
+                    size="small"
+                    icon="palette"
+                    icon-position="leading"
+                    aria-label="Toggle color palettes"
+                >
+                    Palettes
+                </wy-button>
+                <wy-button
                     id="adminButton"
                     variant="outlined"
                     size="small"
@@ -101,6 +111,9 @@
 
         <!-- Links Modal (Web Component) -->
         <wy-links-modal id="linksModal" title="AI Tools"></wy-links-modal>
+
+        <!-- Color Palette Panel (Web Component) -->
+        <wy-color-palette id="colorPalette"></wy-color-palette>
 
         <!-- Keyboard Shortcuts Modal (Web Component) -->
         <wy-modal id="shortcutsModal" heading="Keyboard Shortcuts" max-width="480px"></wy-modal>

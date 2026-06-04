@@ -1,0 +1,46 @@
+[
+  {
+    "paletteId": "p1",
+    "paletteName": "Autumn Forest",
+    "colors": [
+      { "name": "Dark Olive Olive Brown", "hex": "#302C11" },
+      { "name": "Rich Tawny Ochre",       "hex": "#936221" },
+      { "name": "Muted Warm Sand",        "hex": "#C99D66" },
+      { "name": "Deep Russet Terracotta", "hex": "#834622" },
+      { "name": "Antique Gold Bronze",    "hex": "#76621D" }
+    ]
+  },
+  {
+    "paletteId": "p2",
+    "paletteName": "Nordic Dusk",
+    "colors": [
+      { "name": "Deep Slate Blue",    "hex": "#2E3A4E" },
+      { "name": "Steel Harbour Grey", "hex": "#5A6878" },
+      { "name": "Pale Arctic Mist",   "hex": "#B8C4D0" },
+      { "name": "Birch Cream",        "hex": "#E8E0D4" },
+      { "name": "Fjord Teal",         "hex": "#3D7A8A" }
+    ]
+  },
+  {
+    "paletteId": "p3",
+    "paletteName": "Desert Rose",
+    "colors": [
+      { "name": "Terracotta Clay",  "hex": "#C1674A" },
+      { "name": "Dusty Adobe",      "hex": "#D4956A" },
+      { "name": "Warm Sand Dune",   "hex": "#E8C99A" },
+      { "name": "Sage Brush",       "hex": "#8FA68A" },
+      { "name": "Mesa Shadow",      "hex": "#7A4F3A" }
+    ]
+  },
+  {
+    "paletteId": "p4",
+    "paletteName": "Midnight Bloom",
+    "colors": [
+      { "name": "Deep Indigo",      "hex": "#1E1B3A" },
+      { "name": "Violet Dusk",      "hex": "#4A3F7A" },
+      { "name": "Iris Soft",        "hex": "#8B7EC8" },
+      { "name": "Blush Petal",      "hex": "#E8B4C4" },
+      { "name": "Pale Lavender",    "hex": "#D4CFEB" }
+    ]
+  }
+]

@@ -95,6 +95,7 @@ const PRIVATE_PROMPTS_SOURCE_FILE = path.join(__dirname, 'private-prompts.source
 const PRIVATE_PROMPTS_ENCRYPTED_FILE = path.join(__dirname, 'private-prompts.enc.json');
 const PRIVATE_PASSPHRASE_FILE = path.join(__dirname, 'private-passcode.txt');
 const ADMIN_SETTINGS_FILE = path.join(__dirname, 'admin-settings.json');
+const PALETTES_FILE = path.join(__dirname, 'palettes.json');
 const DEFAULT_ADMIN_SETTINGS = {
     heroImage: {
         masterPrompt: ''
@@ -740,6 +741,21 @@ app.get('/api/prompts/:id', (req, res) => {
         res.json({ prompt });
     } catch (error) {
         res.status(500).json({ error: 'Failed to load prompt' });
+    }
+});
+
+/**
+ * GET /api/palettes
+ * Returns all color palettes for admin use.
+ */
+app.get('/api/palettes', (req, res) => {
+    try {
+        const data = fs.existsSync(PALETTES_FILE)
+            ? JSON.parse(fs.readFileSync(PALETTES_FILE, 'utf8'))
+            : [];
+        res.json({ palettes: data });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to load palettes' });
     }
 });
 

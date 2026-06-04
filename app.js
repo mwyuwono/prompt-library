@@ -22,6 +22,7 @@ class PromptLibrary {
         this.toast = document.getElementById('toast');
         this.copyConfirm = document.getElementById('copyConfirm');
         this.paletteLink = document.getElementById('paletteLink');
+        this.colorPalette = document.getElementById('colorPalette');
         this.headerTop = document.querySelector('.header-top');
         this.headerLogoGroup = document.querySelector('.header-logo-group');
         this.headerActions = document.querySelector('.header-actions');
@@ -58,6 +59,20 @@ class PromptLibrary {
         // Handle deep linking via URL hash
         window.addEventListener('hashchange', () => this.handleHashChange());
         this.handleHashChange();
+
+        this.setupPalettePanel();
+    }
+
+    setupPalettePanel() {
+        const btn = document.getElementById('togglePaletteBtn');
+        if (btn && this.colorPalette) {
+            btn.addEventListener('click', () => {
+                this.colorPalette.open = !this.colorPalette.open;
+            });
+            this.colorPalette.addEventListener('palette-toast', (e) => {
+                this.showToast(e.detail.message);
+            });
+        }
     }
 
     setupFloatingControlsHeader() {

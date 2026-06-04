@@ -30,5 +30,6 @@ import './wy-prompt-editor.js';
 import './wy-step-editor.js';
 import './wy-prompt-modal.js';
 import './wy-links-modal.js';
+import './wy-color-palette.js';
 
 console.log('[prompts-library] Local web components registered');
