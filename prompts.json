@@ -109,6 +109,17 @@
     "image": "public/images/generated-hero-1780327603658.jpg"
   },
   {
+    "id": "oil-painting-study-reference",
+    "title": "Oil Painting Study Reference",
+    "description": "Regenerates an attached painting as a realistic, simplified oil-painting study reference with clear value masses and copyable form.",
+    "category": "Art",
+    "icon": "brush",
+    "featured": false,
+    "template": "Regenerate the attached painting as a realistic oil-painting study reference. Render in naturalistic oil paint with controlled painterly brushwork, simplified anatomy, broad value masses, clear planes, soft transitions, and believable form. Generalize fine details so the image remains realistic but easier to copy.",
+    "variables": [],
+    "slug": "oil-painting-study-reference"
+  },
+  {
     "id": "proofreader",
     "title": "Writing Assistant",
     "description": "Restructures pasted text for clarity, flow, and stronger organization while preserving your voice.",
