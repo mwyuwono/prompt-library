@@ -539,39 +539,104 @@ export class WyPromptModal extends LitElement {
         --wy-info-panel-font-size: var(--md-sys-typescale-body-small-size, 0.875rem);
     }
 
-    .reference-images-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
-        gap: var(--spacing-md, 16px);
-    }
-
-    .reference-image {
-        margin: 0;
-    }
-
-    .reference-image img {
-        display: block;
-        width: 100%;
-        aspect-ratio: 1;
-        object-fit: cover;
+    .reference-images-list {
+        display: flex;
+        flex-direction: column;
         border: 1px solid var(--paper-edge, #DDD6C8);
         background: var(--paper, #F7F4EE);
     }
 
-    .reference-image figcaption {
-        margin: 8px 0 0;
+    .reference-image-row {
+        display: grid;
+        grid-template-columns: 64px minmax(0, 1fr) 40px;
+        align-items: center;
+        gap: var(--spacing-sm, 12px);
+        min-height: 80px;
+        padding: var(--spacing-sm, 12px);
+    }
+
+    .reference-image-row + .reference-image-row {
+        border-top: 1px solid var(--paper-edge, #DDD6C8);
+    }
+
+    .reference-image-thumb {
+        display: block;
+        width: 64px;
+        height: 64px;
+        object-fit: cover;
+        border: 1px solid var(--paper-edge, #DDD6C8);
+        background: var(--white, #FFFFFF);
+    }
+
+    .reference-image-meta {
+        min-width: 0;
+    }
+
+    .reference-image-label {
+        color: var(--ink, #1A1A1A);
+        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-size: 0.8125rem;
+        font-weight: 600;
+        line-height: 1.35;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .reference-image-url {
+        display: block;
+        margin-top: 4px;
         color: var(--ink-mute, #6B6B6A);
         font-family: var(--font-sans, 'DM Sans', sans-serif);
         font-size: 0.75rem;
         line-height: 1.35;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     .reference-variable {
-        display: block;
+        display: inline-block;
+        margin-top: 4px;
         color: var(--ink-soft, #A8A49C);
         font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
         font-size: 0.6875rem;
-        overflow-wrap: anywhere;
+        line-height: 1.35;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .reference-image-copy {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        border: 1px solid var(--paper-edge, #DDD6C8);
+        border-radius: 0;
+        background: transparent;
+        color: var(--ink, #1A1A1A);
+        cursor: pointer;
+        transition: background-color var(--dur-1, 150ms) var(--ease, ease),
+          color var(--dur-1, 150ms) var(--ease, ease);
+    }
+
+    .reference-image-copy:hover {
+        background: var(--ink, #1A1A1A);
+        color: var(--paper, #F7F4EE);
+    }
+
+    .reference-image-copy:focus-visible {
+        outline: 3px solid var(--wy-prompt-modal-focus-ring, color-mix(in srgb, var(--md-sys-color-primary) 18%, transparent));
+        outline-offset: 2px;
+    }
+
+    .reference-image-copy .material-symbols-outlined {
+        font-size: 20px;
+        line-height: 1;
     }
 
     .variation-meta-section + .variation-meta-section {
@@ -960,6 +1025,16 @@ export class WyPromptModal extends LitElement {
       .header-actions-left { flex-wrap: wrap; }
       .labeled-btn { min-width: 0; }
       .labeled-btn.primary { padding-right: 12px; }
+      .reference-image-row {
+        grid-template-columns: 56px minmax(0, 1fr) 40px;
+        min-height: 72px;
+        gap: var(--spacing-xs, 8px);
+        padding: var(--spacing-xs, 8px);
+      }
+      .reference-image-thumb {
+        width: 56px;
+        height: 56px;
+      }
       .title-group h2 { font-size: 1.75rem; }
       .tabs-container { padding: 0; } /* wy-tabs handles its own mobile padding */
       .variation-selector-container {
@@ -1309,16 +1384,31 @@ export class WyPromptModal extends LitElement {
     return html`
       <wy-info-panel class="reference-images-panel">
         <p class="variation-description-heading">Reference Images</p>
-        <div class="reference-images-grid">
-          ${referenceImages.map(ref => html`
-            <figure class="reference-image">
-              <img src="${this._getImageUrl(ref.path)}" alt="${ref.label || ref.variable || 'Reference image'}" loading="lazy">
-              <figcaption>
-                ${ref.label || 'Reference image'}
-                ${ref.variable ? html`<span class="reference-variable">{{${ref.variable}}}</span>` : ''}
-              </figcaption>
-            </figure>
-          `)}
+        <div class="reference-images-list">
+          ${referenceImages.map(ref => {
+            const url = this._getImageUrl(ref.path);
+            const label = ref.label || ref.variable || 'Reference image';
+
+            return html`
+              <div class="reference-image-row">
+                <img class="reference-image-thumb" src="${url}" alt="${label}" loading="lazy">
+                <div class="reference-image-meta">
+                  <div class="reference-image-label" title="${label}">${label}</div>
+                  <span class="reference-image-url" title="${url}">${url}</span>
+                  ${ref.variable ? html`<span class="reference-variable" title="{{${ref.variable}}}">{{${ref.variable}}}</span>` : ''}
+                </div>
+                <button
+                  type="button"
+                  class="reference-image-copy"
+                  @click="${() => this._copyReferenceImageUrl(url)}"
+                  aria-label="Copy reference image URL"
+                  title="Copy URL"
+                >
+                  <span class="material-symbols-outlined" aria-hidden="true">content_copy</span>
+                </button>
+              </div>
+            `;
+          })}
         </div>
       </wy-info-panel>
     `;
@@ -1640,6 +1730,18 @@ export class WyPromptModal extends LitElement {
         composed: true
       }));
     }
+  }
+
+  async _copyReferenceImageUrl(url) {
+    const copied = await this._writeTextToClipboard(url);
+    this.dispatchEvent(new CustomEvent('toast', {
+      detail: {
+        message: copied ? 'Reference image URL copied' : 'Copy failed',
+        options: { variant: copied ? 'success' : 'error' }
+      },
+      bubbles: true,
+      composed: true
+    }));
   }
 
   async _writeTextToClipboard(text) {

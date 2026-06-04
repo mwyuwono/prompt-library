@@ -714,9 +714,11 @@
             "label": "Style Reference",
             "path": "public/images/fauvist-post-impressionist-style-reference.png"
           }
-        ]
+        ],
+        "image": "public/images/1780602698474.jpg"
       }
-    ]
+    ],
+    "showPalette": true
   },
   {
     "id": "prompt-builder",
