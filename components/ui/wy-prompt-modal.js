@@ -21,7 +21,8 @@ export class WyPromptModal extends LitElement {
     steps: { type: Array }, // Array of step objects for multi-step prompts
     activeStepIndex: { type: Number, attribute: 'active-step-index' }, // Current step (0-based)
     descriptionExpanded: { type: Boolean, attribute: 'description-expanded' }, // Mobile description toggle
-    variationDetailsExpanded: { type: Boolean, attribute: 'variation-details-expanded' }
+    variationDetailsExpanded: { type: Boolean, attribute: 'variation-details-expanded' },
+    showPalette: { type: Boolean, attribute: 'show-palette' }
   };
 
   constructor() {
@@ -45,6 +46,7 @@ export class WyPromptModal extends LitElement {
     this.activeStepIndex = 0;
     this.descriptionExpanded = false;
     this.variationDetailsExpanded = false;
+    this.showPalette = false;
     this._values = {};
   }
 
@@ -1354,6 +1356,11 @@ export class WyPromptModal extends LitElement {
                         <button class="icon-btn filled" @click="${this._handleDownload}" aria-label="Download" title="Download">
                             <span class="material-symbols-outlined">download</span>
                         </button>
+                        ${this.showPalette ? html`
+                        <button class="icon-btn filled" @click="${this._handlePaletteRequest}" aria-label="Color palette" title="Color Palette">
+                            <span class="material-symbols-outlined">palette</span>
+                        </button>
+                        ` : ''}
                     </div>
                 ` : html`
                     <div class="header-actions-left">
@@ -1703,6 +1710,13 @@ export class WyPromptModal extends LitElement {
 
   _handleCopyLink() {
     this.dispatchEvent(new CustomEvent('copy-link', {
+      bubbles: true,
+      composed: true
+    }));
+  }
+
+  _handlePaletteRequest() {
+    this.dispatchEvent(new CustomEvent('palette-request', {
       bubbles: true,
       composed: true
     }));

@@ -25,6 +25,33 @@
     </header>
 
     <main class="settings-main">
+
+        <section id="palettes-management" class="settings-section">
+            <div class="settings-section-header">
+                <div>
+                    <p class="settings-kicker">Public site</p>
+                    <h2>Color Palettes</h2>
+                </div>
+                <div class="settings-actions">
+                    <button id="palettesDiscardButton" class="settings-button settings-button-secondary" type="button" disabled>
+                        Discard
+                    </button>
+                    <button id="palettesSaveButton" class="settings-button settings-button-primary" type="button" disabled>
+                        Save
+                    </button>
+                </div>
+            </div>
+
+            <div id="paletteList" class="palette-list"></div>
+
+            <button id="addPaletteButton" class="settings-button settings-button-secondary palette-add-btn" type="button">
+                <span class="material-symbols-outlined">add</span>
+                Add Palette
+            </button>
+
+            <p id="palettesStatus" class="settings-status" role="status" aria-live="polite">Loading palettes...</p>
+        </section>
+
         <section id="hero-image-master-prompt" class="settings-section">
             <div class="settings-section-header">
                 <div>

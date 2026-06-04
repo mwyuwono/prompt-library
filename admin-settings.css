@@ -178,6 +178,204 @@ h2 {
     color: var(--ok, #2E7D32);
 }
 
+/* Palette management */
+.settings-main {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg, 24px);
+    padding-bottom: var(--spacing-xl, 32px);
+}
+
+.palette-add-btn {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs, 4px);
+    padding: 0 var(--spacing-md, 16px);
+}
+
+.palette-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md, 16px);
+}
+
+.palette-item {
+    border: 1px solid var(--md-sys-color-outline-variant, #DDD);
+    border-radius: var(--md-sys-shape-corner-small, 8px);
+    background: var(--paper, #FDFBF7);
+    overflow: hidden;
+}
+
+.palette-item-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md, 16px);
+    padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
+    cursor: pointer;
+    user-select: none;
+}
+
+.palette-item-header:hover {
+    background: color-mix(in srgb, var(--ink, #1A1A1A) 4%, transparent);
+}
+
+.palette-name-input {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    background: transparent;
+    font-family: var(--font-body, 'DM Sans', sans-serif);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--md-sys-color-on-surface, #121714);
+    padding: var(--spacing-xs, 4px) 0;
+    cursor: text;
+}
+
+.palette-name-input:focus {
+    outline: none;
+    border-bottom: 2px solid var(--md-sys-color-primary, #282828);
+}
+
+.palette-chips-preview {
+    display: flex;
+    gap: 3px;
+    flex-shrink: 0;
+}
+
+.palette-chip-preview {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    border: 1px solid rgba(0,0,0,0.1);
+    flex-shrink: 0;
+}
+
+.palette-expand-icon {
+    font-size: 20px;
+    color: var(--ink-mute, #5E6E66);
+    transition: transform 150ms ease;
+    flex-shrink: 0;
+}
+
+.palette-item.expanded .palette-expand-icon {
+    transform: rotate(180deg);
+}
+
+.palette-item-body {
+    display: none;
+    flex-direction: column;
+    gap: var(--spacing-sm, 8px);
+    padding: 0 var(--spacing-md, 16px) var(--spacing-md, 16px);
+    border-top: 1px solid var(--md-sys-color-outline-variant, #DDD);
+}
+
+.palette-item.expanded .palette-item-body {
+    display: flex;
+}
+
+.color-rows {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs, 4px);
+}
+
+.color-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm, 8px);
+}
+
+.color-swatch-input {
+    width: 32px;
+    height: 32px;
+    padding: 2px;
+    border: 1px solid var(--md-sys-color-outline-variant, #DDD);
+    border-radius: var(--md-sys-shape-corner-xs, 4px);
+    cursor: pointer;
+    background: none;
+    flex-shrink: 0;
+}
+
+.color-hex-input,
+.color-name-input {
+    height: 32px;
+    padding: 0 var(--spacing-sm, 8px);
+    border: 1px solid var(--md-sys-color-outline-variant, #DDD);
+    border-radius: var(--md-sys-shape-corner-xs, 4px);
+    background: var(--white, #FFFFFF);
+    font-family: var(--font-body, 'DM Sans', sans-serif);
+    font-size: 0.875rem;
+    color: var(--md-sys-color-on-surface, #121714);
+}
+
+.color-hex-input {
+    width: 90px;
+    font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+    flex-shrink: 0;
+}
+
+.color-name-input {
+    flex: 1;
+    min-width: 0;
+}
+
+.color-hex-input:focus,
+.color-name-input:focus {
+    outline: 2px solid var(--md-sys-color-primary, #282828);
+    outline-offset: 1px;
+}
+
+.color-delete-btn,
+.palette-delete-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: var(--md-sys-shape-corner-xs, 4px);
+    background: transparent;
+    color: var(--err, #B3261E);
+    cursor: pointer;
+    flex-shrink: 0;
+    font-size: 18px;
+}
+
+.color-delete-btn:hover,
+.palette-delete-btn:hover {
+    background: color-mix(in srgb, var(--err, #B3261E) 10%, transparent);
+}
+
+.palette-item-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: var(--spacing-xs, 4px);
+    border-top: 1px solid var(--md-sys-color-outline-variant, #DDD);
+}
+
+.add-color-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: 30px;
+    padding: 0 var(--spacing-sm, 8px);
+    border: 1px dashed var(--md-sys-color-outline-variant, #DDD);
+    border-radius: var(--md-sys-shape-corner-xs, 4px);
+    background: transparent;
+    color: var(--ink-mute, #5E6E66);
+    font-family: var(--font-body, 'DM Sans', sans-serif);
+    font-size: 0.8125rem;
+    cursor: pointer;
+}
+
+.add-color-btn:hover {
+    background: color-mix(in srgb, var(--ink, #1A1A1A) 5%, transparent);
+    color: var(--ink, #1A1A1A);
+}
+
 @media (max-width: 760px) {
     .settings-header,
     .settings-main {

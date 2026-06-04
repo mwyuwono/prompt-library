@@ -64,13 +64,17 @@ class PromptLibrary {
     }
 
     setupPalettePanel() {
-        const btn = document.getElementById('togglePaletteBtn');
-        if (btn && this.colorPalette) {
-            btn.addEventListener('click', () => {
-                this.colorPalette.open = !this.colorPalette.open;
-            });
-            this.colorPalette.addEventListener('palette-toast', (e) => {
-                this.showToast(e.detail.message);
+        if (!this.colorPalette) return;
+
+        this.colorPalette.addEventListener('palette-toast', (e) => {
+            this.showToast(e.detail.message);
+        });
+
+        // Open palette from AI Tools modal
+        const linksModal = document.getElementById('linksModal');
+        if (linksModal) {
+            linksModal.addEventListener('palette-open', () => {
+                this.colorPalette.open = true;
             });
         }
     }
@@ -1397,6 +1401,10 @@ Server will start on http://localhost:3001`;
         this.promptModal.addEventListener('toast', (e) => {
             this.showToast(e.detail.message, e.detail.options);
         });
+
+        this.promptModal.addEventListener('palette-request', () => {
+            if (this.colorPalette) this.colorPalette.open = !this.colorPalette.open;
+        });
     }
 
     /**
@@ -1440,6 +1448,7 @@ Server will start on http://localhost:3001`;
                 instructions: prompt.instructions || '',
                 steps: prompt.steps,
                 activeStepIndex: savedStepIndex || 0,
+                showPalette: prompt.showPalette ?? false,
                 open: true
             });
         } else {
@@ -1468,6 +1477,7 @@ Server will start on http://localhost:3001`;
                 variationDetailsExpanded: false,
                 mode: prompt.locked !== false ? 'locked' : 'edit',
                 activeTab: prompt.activeTab || 'variables',
+                showPalette: prompt.showPalette ?? false,
                 open: true
             });
         }
