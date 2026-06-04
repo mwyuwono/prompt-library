@@ -21,7 +21,8 @@ export class WyLinksModal extends LitElement {
   static properties = {
     open: { type: Boolean, reflect: true },
     title: { type: String },
-    links: { type: Array }
+    links: { type: Array },
+    showPaletteEntry: { type: Boolean, attribute: 'show-palette-entry' }
   };
 
   constructor() {
@@ -29,6 +30,7 @@ export class WyLinksModal extends LitElement {
     this.open = false;
     this.title = 'AI Tools';
     this.links = [];
+    this.showPaletteEntry = false;
   }
 
   connectedCallback() {
@@ -378,6 +380,44 @@ export class WyLinksModal extends LitElement {
       outline-offset: 2px;
     }
 
+    /* Palette entry */
+    .palette-entry-section {
+      padding-bottom: var(--spacing-lg, 24px);
+      border-bottom: 1px solid color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
+      margin-bottom: var(--spacing-lg, 24px);
+    }
+
+    .palette-entry-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-sm, 8px);
+      height: 40px;
+      padding: 0 var(--spacing-md, 16px) 0 var(--spacing-sm, 8px);
+      border: 1px solid color-mix(in srgb, var(--md-sys-color-on-surface) 14%, transparent);
+      border-radius: 20px;
+      background: transparent;
+      color: var(--md-sys-color-on-surface, #1A1A1A);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+
+    .palette-entry-btn:hover {
+      background: color-mix(in srgb, var(--md-sys-color-on-surface) 6%, transparent);
+    }
+
+    .palette-entry-btn:focus-visible {
+      outline: 3px solid var(--md-sys-color-primary);
+      outline-offset: 2px;
+    }
+
+    .palette-entry-btn .material-symbols-outlined {
+      font-size: 20px;
+      opacity: 0.7;
+    }
+
   `;
 
   render() {
@@ -398,7 +438,15 @@ export class WyLinksModal extends LitElement {
             </div>
             
             <div class="sections-container">
-              ${!this.links || this.links.length === 0 
+              ${this.showPaletteEntry ? html`
+                <div class="palette-entry-section">
+                  <button class="palette-entry-btn" @click="${this._handlePaletteClick}" aria-label="Open color palettes">
+                    <span class="material-symbols-outlined">palette</span>
+                    Color Palettes
+                  </button>
+                </div>
+              ` : ''}
+              ${!this.links || this.links.length === 0
                 ? html`<p style="color: var(--md-sys-color-on-surface-variant); text-align: center; padding: 2rem;">No links available.</p>`
                 : this.links.map(category => html`
                   <section class="section">
@@ -423,6 +471,14 @@ export class WyLinksModal extends LitElement {
         </div>
       </div>
     `;
+  }
+
+  _handlePaletteClick() {
+    this._handleClose();
+    this.dispatchEvent(new CustomEvent('palette-open', {
+      bubbles: true,
+      composed: true
+    }));
   }
 
   _handleOverlayClick(e) {

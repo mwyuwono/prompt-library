@@ -760,6 +760,25 @@ app.get('/api/palettes', (req, res) => {
 });
 
 /**
+ * PUT /api/palettes
+ * Replaces the entire palettes array (admin save).
+ */
+app.put('/api/palettes', (req, res) => {
+    try {
+        const { palettes } = req.body;
+        if (!Array.isArray(palettes)) {
+            return res.status(400).json({ error: 'palettes must be an array' });
+        }
+        const tempFile = `${PALETTES_FILE}.tmp`;
+        fs.writeFileSync(tempFile, JSON.stringify(palettes, null, 2), 'utf8');
+        fs.renameSync(tempFile, PALETTES_FILE);
+        res.json({ success: true, palettes });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to save palettes' });
+    }
+});
+
+/**
  * PUT /api/prompts/:id
  * Updates a prompt in prompts.json
  */

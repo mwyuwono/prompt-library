@@ -7520,6 +7520,21 @@ ${subjectPrompt}`
                                     @change="${(e9) => this._handleFieldChange("archived", e9.detail.checked)}"
                                 ></wy-option-toggle>
                             </div>
+                            <div class="visibility-setting">
+                                <span class="visibility-icon" aria-hidden="true">
+                                    <span class="material-symbols-outlined">palette</span>
+                                </span>
+                                <wy-option-toggle
+                                    variant="switch"
+                                    size="compact"
+                                    label="Color Palette"
+                                    description="Shows the color palette tool when this prompt is open on the public site."
+                                    .options="${["false", "true"]}"
+                                    .labels="${["Off", "On"]}"
+                                    .value="${this._editedPrompt.showPalette ? "true" : "false"}"
+                                    @change="${(e9) => this._handleFieldChange("showPalette", e9.detail.checked)}"
+                                ></wy-option-toggle>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -8829,6 +8844,7 @@ var WyPromptModal = class extends i4 {
     this.activeStepIndex = 0;
     this.descriptionExpanded = false;
     this.variationDetailsExpanded = false;
+    this.showPalette = false;
     this._values = {};
   }
   willUpdate(changedProperties) {
@@ -9192,6 +9208,11 @@ var WyPromptModal = class extends i4 {
                         <button class="icon-btn filled" @click="${this._handleDownload}" aria-label="Download" title="Download">
                             <span class="material-symbols-outlined">download</span>
                         </button>
+                        ${this.showPalette ? b2`
+                        <button class="icon-btn filled" @click="${this._handlePaletteRequest}" aria-label="Color palette" title="Color Palette">
+                            <span class="material-symbols-outlined">palette</span>
+                        </button>
+                        ` : ""}
                     </div>
                 ` : b2`
                     <div class="header-actions-left">
@@ -9493,6 +9514,12 @@ var WyPromptModal = class extends i4 {
       composed: true
     }));
   }
+  _handlePaletteRequest() {
+    this.dispatchEvent(new CustomEvent("palette-request", {
+      bubbles: true,
+      composed: true
+    }));
+  }
 };
 __publicField(WyPromptModal, "properties", {
   open: { type: Boolean, reflect: true },
@@ -9518,7 +9545,8 @@ __publicField(WyPromptModal, "properties", {
   // Current step (0-based)
   descriptionExpanded: { type: Boolean, attribute: "description-expanded" },
   // Mobile description toggle
-  variationDetailsExpanded: { type: Boolean, attribute: "variation-details-expanded" }
+  variationDetailsExpanded: { type: Boolean, attribute: "variation-details-expanded" },
+  showPalette: { type: Boolean, attribute: "show-palette" }
 });
 __publicField(WyPromptModal, "styles", i`
     /* Required fonts - load in page <head>:
@@ -10441,6 +10469,7 @@ var WyLinksModal = class extends i4 {
     this.open = false;
     this.title = "AI Tools";
     this.links = [];
+    this.showPaletteEntry = false;
   }
   connectedCallback() {
     super.connectedCallback();
@@ -10522,6 +10551,14 @@ var WyLinksModal = class extends i4 {
             </div>
             
             <div class="sections-container">
+              ${this.showPaletteEntry ? b2`
+                <div class="palette-entry-section">
+                  <button class="palette-entry-btn" @click="${this._handlePaletteClick}" aria-label="Open color palettes">
+                    <span class="material-symbols-outlined">palette</span>
+                    Color Palettes
+                  </button>
+                </div>
+              ` : ""}
               ${!this.links || this.links.length === 0 ? b2`<p style="color: var(--md-sys-color-on-surface-variant); text-align: center; padding: 2rem;">No links available.</p>` : this.links.map((category) => b2`
                   <section class="section">
                     <h2 class="section-header">${category.category}</h2>
@@ -10543,6 +10580,13 @@ var WyLinksModal = class extends i4 {
         </div>
       </div>
     `;
+  }
+  _handlePaletteClick() {
+    this._handleClose();
+    this.dispatchEvent(new CustomEvent("palette-open", {
+      bubbles: true,
+      composed: true
+    }));
   }
   _handleOverlayClick(e9) {
     if (e9.target === e9.currentTarget) {
@@ -10577,7 +10621,8 @@ var WyLinksModal = class extends i4 {
 __publicField(WyLinksModal, "properties", {
   open: { type: Boolean, reflect: true },
   title: { type: String },
-  links: { type: Array }
+  links: { type: Array },
+  showPaletteEntry: { type: Boolean, attribute: "show-palette-entry" }
 });
 __publicField(WyLinksModal, "styles", i`
     :host {
@@ -10852,6 +10897,44 @@ __publicField(WyLinksModal, "styles", i`
     .link-chip:focus-visible {
       outline: 3px solid var(--md-sys-color-primary);
       outline-offset: 2px;
+    }
+
+    /* Palette entry */
+    .palette-entry-section {
+      padding-bottom: var(--spacing-lg, 24px);
+      border-bottom: 1px solid color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
+      margin-bottom: var(--spacing-lg, 24px);
+    }
+
+    .palette-entry-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-sm, 8px);
+      height: 40px;
+      padding: 0 var(--spacing-md, 16px) 0 var(--spacing-sm, 8px);
+      border: 1px solid color-mix(in srgb, var(--md-sys-color-on-surface) 14%, transparent);
+      border-radius: 20px;
+      background: transparent;
+      color: var(--md-sys-color-on-surface, #1A1A1A);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+
+    .palette-entry-btn:hover {
+      background: color-mix(in srgb, var(--md-sys-color-on-surface) 6%, transparent);
+    }
+
+    .palette-entry-btn:focus-visible {
+      outline: 3px solid var(--md-sys-color-primary);
+      outline-offset: 2px;
+    }
+
+    .palette-entry-btn .material-symbols-outlined {
+      font-size: 20px;
+      opacity: 0.7;
     }
 
   `);

@@ -2099,6 +2099,21 @@ export class WyPromptEditor extends LitElement {
                                     @change="${(e) => this._handleFieldChange('archived', e.detail.checked)}"
                                 ></wy-option-toggle>
                             </div>
+                            <div class="visibility-setting">
+                                <span class="visibility-icon" aria-hidden="true">
+                                    <span class="material-symbols-outlined">palette</span>
+                                </span>
+                                <wy-option-toggle
+                                    variant="switch"
+                                    size="compact"
+                                    label="Color Palette"
+                                    description="Shows the color palette tool when this prompt is open on the public site."
+                                    .options="${['false', 'true']}"
+                                    .labels="${['Off', 'On']}"
+                                    .value="${this._editedPrompt.showPalette ? 'true' : 'false'}"
+                                    @change="${(e) => this._handleFieldChange('showPalette', e.detail.checked)}"
+                                ></wy-option-toggle>
+                            </div>
                         </div>
                     </div>
                 </div>
