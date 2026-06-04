@@ -1411,9 +1411,9 @@ export class WyPromptModal extends LitElement {
                   <button
                     type="button"
                     class="reference-image-copy"
-                    @click="${() => this._copyReferenceImageUrl(url)}"
+                    @click="${() => this._copyReferenceImageUrl(ref, url, label)}"
                     aria-label="Copy reference image URL"
-                    title="Copy URL"
+                    title="Copy URL and instructions"
                   >
                     <span class="material-symbols-outlined" aria-hidden="true">link</span>
                   </button>
@@ -1753,16 +1753,28 @@ export class WyPromptModal extends LitElement {
     }
   }
 
-  async _copyReferenceImageUrl(url) {
-    const copied = await this._writeTextToClipboard(url);
+  async _copyReferenceImageUrl(ref, url, label = 'Reference image') {
+    const text = this._getReferenceImageCopyText(ref, url, label);
+    const copied = await this._writeTextToClipboard(text);
     this.dispatchEvent(new CustomEvent('toast', {
       detail: {
-        message: copied ? 'Reference image URL copied' : 'Copy failed',
+        message: copied ? 'Reference image copied' : 'Copy failed',
         options: { variant: copied ? 'success' : 'error' }
       },
       bubbles: true,
       composed: true
     }));
+  }
+
+  _getReferenceImageCopyText(ref, url, label = 'Reference image') {
+    const instructions = (ref?.instructions || '').trim();
+    if (!instructions) return url;
+
+    const textWithUrl = instructions.includes('[URL]') || instructions.includes('{{url}}')
+      ? instructions.replaceAll('[URL]', url).replaceAll('{{url}}', url)
+      : `${instructions}\n${url}`;
+
+    return `Reference Image:\n${textWithUrl}`;
   }
 
   async _copyReferenceImageFile(url, label = 'Reference image') {

@@ -5338,7 +5338,7 @@ var WyReferenceImageEditor = class extends i4 {
   _addItem() {
     this.referenceImages = [
       ...this.referenceImages,
-      { variable: "", label: "", path: "" }
+      { variable: "", label: "", path: "", instructions: "" }
     ];
     this._emitChange();
   }
@@ -5400,6 +5400,17 @@ var WyReferenceImageEditor = class extends i4 {
                                     <div class="field" style="grid-column: 1 / -1;">
                                         <span class="placeholder-hint ${ref.variable && this._isValidVariable(ref.variable) ? "has-value" : ""}">
                                             Use ${hint} in your template
+                                        </span>
+                                    </div>
+                                    <div class="field" style="grid-column: 1 / -1;">
+                                        <label class="field-label">Copy Instructions</label>
+                                        <textarea
+                                            .value="${ref.instructions || ""}"
+                                            @input="${(e9) => this._updateItem(index, "instructions", e9.target.value)}"
+                                            placeholder="Follow the composition in the provided reference image, which is available at [URL]"
+                                        ></textarea>
+                                        <span class="placeholder-hint">
+                                            Optional. Use [URL] or {{url}} where the image URL should appear.
                                         </span>
                                     </div>
                                 </div>
@@ -5501,7 +5512,8 @@ __publicField(WyReferenceImageEditor, "styles", i`
             color: var(--md-sys-color-on-surface-variant, #5E6E66);
         }
 
-        input {
+        input,
+        textarea {
             padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
             border: 1px solid var(--md-sys-color-outline-variant, #DDD);
             border-radius: var(--md-sys-shape-corner-xs, 4px);
@@ -5512,7 +5524,14 @@ __publicField(WyReferenceImageEditor, "styles", i`
             transition: border-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
         }
 
-        input:focus {
+        textarea {
+            min-height: 84px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        input:focus,
+        textarea:focus {
             outline: none;
             border-color: var(--md-sys-color-primary, #282828);
         }
@@ -9182,9 +9201,9 @@ var WyPromptModal = class extends i4 {
                   <button
                     type="button"
                     class="reference-image-copy"
-                    @click="${() => this._copyReferenceImageUrl(url)}"
+                    @click="${() => this._copyReferenceImageUrl(ref, url, label)}"
                     aria-label="Copy reference image URL"
-                    title="Copy URL"
+                    title="Copy URL and instructions"
                   >
                     <span class="material-symbols-outlined" aria-hidden="true">link</span>
                   </button>
@@ -9479,16 +9498,25 @@ var WyPromptModal = class extends i4 {
       }));
     }
   }
-  async _copyReferenceImageUrl(url) {
-    const copied = await this._writeTextToClipboard(url);
+  async _copyReferenceImageUrl(ref, url, label = "Reference image") {
+    const text = this._getReferenceImageCopyText(ref, url, label);
+    const copied = await this._writeTextToClipboard(text);
     this.dispatchEvent(new CustomEvent("toast", {
       detail: {
-        message: copied ? "Reference image URL copied" : "Copy failed",
+        message: copied ? "Reference image copied" : "Copy failed",
         options: { variant: copied ? "success" : "error" }
       },
       bubbles: true,
       composed: true
     }));
+  }
+  _getReferenceImageCopyText(ref, url, label = "Reference image") {
+    const instructions = (ref?.instructions || "").trim();
+    if (!instructions) return url;
+    const textWithUrl = instructions.includes("[URL]") || instructions.includes("{{url}}") ? instructions.replaceAll("[URL]", url).replaceAll("{{url}}", url) : `${instructions}
+${url}`;
+    return `Reference Image:
+${textWithUrl}`;
   }
   async _copyReferenceImageFile(url, label = "Reference image") {
     const copied = await this._writeImageToClipboard(url);

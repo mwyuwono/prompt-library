@@ -76,7 +76,8 @@ export class WyReferenceImageEditor extends LitElement {
             color: var(--md-sys-color-on-surface-variant, #5E6E66);
         }
 
-        input {
+        input,
+        textarea {
             padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
             border: 1px solid var(--md-sys-color-outline-variant, #DDD);
             border-radius: var(--md-sys-shape-corner-xs, 4px);
@@ -87,7 +88,14 @@ export class WyReferenceImageEditor extends LitElement {
             transition: border-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
         }
 
-        input:focus {
+        textarea {
+            min-height: 84px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        input:focus,
+        textarea:focus {
             outline: none;
             border-color: var(--md-sys-color-primary, #282828);
         }
@@ -191,7 +199,7 @@ export class WyReferenceImageEditor extends LitElement {
     _addItem() {
         this.referenceImages = [
             ...this.referenceImages,
-            { variable: '', label: '', path: '' }
+            { variable: '', label: '', path: '', instructions: '' }
         ];
         this._emitChange();
     }
@@ -259,6 +267,17 @@ export class WyReferenceImageEditor extends LitElement {
                                     <div class="field" style="grid-column: 1 / -1;">
                                         <span class="placeholder-hint ${ref.variable && this._isValidVariable(ref.variable) ? 'has-value' : ''}">
                                             Use ${hint} in your template
+                                        </span>
+                                    </div>
+                                    <div class="field" style="grid-column: 1 / -1;">
+                                        <label class="field-label">Copy Instructions</label>
+                                        <textarea
+                                            .value="${ref.instructions || ''}"
+                                            @input="${(e) => this._updateItem(index, 'instructions', e.target.value)}"
+                                            placeholder="Follow the composition in the provided reference image, which is available at [URL]"
+                                        ></textarea>
+                                        <span class="placeholder-hint">
+                                            Optional. Use [URL] or {{url}} where the image URL should appear.
                                         </span>
                                     </div>
                                 </div>
