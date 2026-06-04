@@ -548,7 +548,7 @@ export class WyPromptModal extends LitElement {
 
     .reference-image-row {
         display: grid;
-        grid-template-columns: 64px minmax(0, 1fr) 40px;
+        grid-template-columns: 64px minmax(0, 1fr) auto;
         align-items: center;
         gap: var(--spacing-sm, 12px);
         min-height: 80px;
@@ -606,6 +606,12 @@ export class WyPromptModal extends LitElement {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+    }
+
+    .reference-image-actions {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-xs, 8px);
     }
 
     .reference-image-copy {
@@ -1026,7 +1032,7 @@ export class WyPromptModal extends LitElement {
       .labeled-btn { min-width: 0; }
       .labeled-btn.primary { padding-right: 12px; }
       .reference-image-row {
-        grid-template-columns: 56px minmax(0, 1fr) 40px;
+        grid-template-columns: 56px minmax(0, 1fr);
         min-height: 72px;
         gap: var(--spacing-xs, 8px);
         padding: var(--spacing-xs, 8px);
@@ -1034,6 +1040,10 @@ export class WyPromptModal extends LitElement {
       .reference-image-thumb {
         width: 56px;
         height: 56px;
+      }
+      .reference-image-actions {
+        grid-column: 1 / -1;
+        justify-content: flex-end;
       }
       .title-group h2 { font-size: 1.75rem; }
       .tabs-container { padding: 0; } /* wy-tabs handles its own mobile padding */
@@ -1397,15 +1407,26 @@ export class WyPromptModal extends LitElement {
                   <span class="reference-image-url" title="${url}">${url}</span>
                   ${ref.variable ? html`<span class="reference-variable" title="{{${ref.variable}}}">{{${ref.variable}}}</span>` : ''}
                 </div>
-                <button
-                  type="button"
-                  class="reference-image-copy"
-                  @click="${() => this._copyReferenceImageUrl(url)}"
-                  aria-label="Copy reference image URL"
-                  title="Copy URL"
-                >
-                  <span class="material-symbols-outlined" aria-hidden="true">content_copy</span>
-                </button>
+                <div class="reference-image-actions">
+                  <button
+                    type="button"
+                    class="reference-image-copy"
+                    @click="${() => this._copyReferenceImageUrl(url)}"
+                    aria-label="Copy reference image URL"
+                    title="Copy URL"
+                  >
+                    <span class="material-symbols-outlined" aria-hidden="true">link</span>
+                  </button>
+                  <button
+                    type="button"
+                    class="reference-image-copy"
+                    @click="${() => this._copyReferenceImageFile(url, label)}"
+                    aria-label="Copy reference image file"
+                    title="Copy image"
+                  >
+                    <span class="material-symbols-outlined" aria-hidden="true">image</span>
+                  </button>
+                </div>
               </div>
             `;
           })}
@@ -1742,6 +1763,70 @@ export class WyPromptModal extends LitElement {
       bubbles: true,
       composed: true
     }));
+  }
+
+  async _copyReferenceImageFile(url, label = 'Reference image') {
+    const copied = await this._writeImageToClipboard(url);
+    this.dispatchEvent(new CustomEvent('toast', {
+      detail: {
+        message: copied ? `${label} copied as image` : 'Image copy failed',
+        options: { variant: copied ? 'success' : 'error' }
+      },
+      bubbles: true,
+      composed: true
+    }));
+  }
+
+  async _writeImageToClipboard(url) {
+    try {
+      if (!navigator.clipboard?.write || typeof ClipboardItem === 'undefined') {
+        return false;
+      }
+
+      const response = await fetch(url);
+      if (!response.ok) return false;
+
+      const sourceBlob = await response.blob();
+      const pngBlob = sourceBlob.type === 'image/png'
+        ? sourceBlob
+        : await this._convertImageBlobToPng(sourceBlob);
+
+      if (!pngBlob) return false;
+      await navigator.clipboard.write([
+        new ClipboardItem({ 'image/png': pngBlob })
+      ]);
+      return true;
+    } catch (error) {
+      console.warn('Image clipboard copy failed:', error);
+      return false;
+    }
+  }
+
+  async _convertImageBlobToPng(blob) {
+    const objectUrl = URL.createObjectURL(blob);
+    try {
+      const image = await this._loadImage(objectUrl);
+      const canvas = document.createElement('canvas');
+      canvas.width = image.naturalWidth || image.width;
+      canvas.height = image.naturalHeight || image.height;
+
+      const context = canvas.getContext('2d');
+      if (!context || !canvas.width || !canvas.height) return null;
+
+      context.drawImage(image, 0, 0);
+      return await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+    } finally {
+      URL.revokeObjectURL(objectUrl);
+    }
+  }
+
+  _loadImage(src) {
+    return new Promise((resolve, reject) => {
+      const image = new Image();
+      image.onload = () => resolve(image);
+      image.onerror = reject;
+      image.src = src;
+    });
   }
 
   async _writeTextToClipboard(text) {

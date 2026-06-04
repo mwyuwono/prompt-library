@@ -13,7 +13,9 @@ class WyColorPalette extends LitElement {
             display: block;
             position: fixed;
             inset: 0;
-            z-index: 1500;
+            width: 100dvw;
+            height: 100dvh;
+            z-index: var(--wy-color-palette-z-index, 3000);
             pointer-events: none;
             font-family: var(--ff-sans, 'Inter', sans-serif);
         }
@@ -23,7 +25,7 @@ class WyColorPalette extends LitElement {
         }
 
         .scrim {
-            position: absolute;
+            position: fixed;
             inset: 0;
             background: transparent;
             pointer-events: none;
@@ -34,7 +36,7 @@ class WyColorPalette extends LitElement {
         }
 
         .panel {
-            position: absolute;
+            position: fixed;
             top: 0;
             right: 0;
             bottom: 0;
