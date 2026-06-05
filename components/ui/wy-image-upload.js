@@ -6,6 +6,7 @@ export class WyImageUpload extends LitElement {
         accept: { type: String },
         maxSize: { type: Number, attribute: 'max-size' },
         label: { type: String },
+        compact: { type: Boolean },
         _isDragging: { type: Boolean, state: true }
     };
 
@@ -15,6 +16,7 @@ export class WyImageUpload extends LitElement {
         this.accept = 'image/*';
         this.maxSize = 5242880; // 5MB default
         this.label = 'Background Texture';
+        this.compact = false;
         this._isDragging = false;
     }
 
@@ -62,6 +64,12 @@ export class WyImageUpload extends LitElement {
             border-style: solid;
             border-color: var(--md-sys-color-outline-variant, #DDD);
             overflow: hidden;
+        }
+
+        .upload-zone.compact {
+            min-height: 0;
+            padding: var(--spacing-md, 16px);
+            text-align: left;
         }
 
         .icon-container {
@@ -139,6 +147,19 @@ export class WyImageUpload extends LitElement {
         .remove-button .material-symbols-outlined {
             font-size: 18px;
             color: white;
+        }
+
+        .compact-empty {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm, 8px);
+        }
+
+        .compact-empty .icon-container {
+            flex: 0 0 auto;
+            width: 36px;
+            height: 36px;
+            margin: 0;
         }
 
         input[type="file"] {
@@ -225,7 +246,7 @@ export class WyImageUpload extends LitElement {
         return html`
             ${this.label ? html`<div class="label">${this.label}</div>` : ''}
             <div 
-                class="upload-zone ${this._isDragging ? 'dragging' : ''} ${hasImage ? 'has-image' : ''}"
+                class="upload-zone ${this.compact ? 'compact' : ''} ${this._isDragging ? 'dragging' : ''} ${hasImage ? 'has-image' : ''}"
                 @dragover="${this._handleDragOver}"
                 @dragleave="${this._handleDragLeave}"
                 @drop="${this._handleDrop}"
@@ -241,6 +262,16 @@ export class WyImageUpload extends LitElement {
                         >
                             <span class="material-symbols-outlined">close</span>
                         </button>
+                    </div>
+                ` : this.compact ? html`
+                    <div class="compact-empty">
+                        <div class="icon-container">
+                            <span class="material-symbols-outlined">cloud_upload</span>
+                        </div>
+                        <div>
+                            <div class="upload-text">Upload prompt image</div>
+                            <div class="upload-hint">PNG, JPG, GIF up to ${(this.maxSize / 1048576).toFixed(1)}MB</div>
+                        </div>
                     </div>
                 ` : html`
                     <div class="icon-container">

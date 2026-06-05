@@ -21,6 +21,7 @@ export class WyPromptEditor extends LitElement {
         _heroBusy: { type: Boolean, state: true },
         _heroMessage: { type: String, state: true },
         _heroError: { type: String, state: true },
+        _heroGeneratorOpen: { type: Boolean, state: true },
         _activeSection: { type: String, state: true },
         _navOpen: { type: Boolean, state: true },
         _openVariationIndex: { type: Number, state: true },
@@ -48,6 +49,7 @@ export class WyPromptEditor extends LitElement {
         this._heroBusy = false;
         this._heroMessage = '';
         this._heroError = '';
+        this._heroGeneratorOpen = false;
         this._activeSection = 'basic';
         this._navOpen = false;
         this._openVariationIndex = -1;
@@ -359,13 +361,151 @@ export class WyPromptEditor extends LitElement {
             margin: 0 0 var(--spacing-md, 16px) 0;
         }
 
+        .label {
+            font-family: var(--font-display, 'Playfair Display', serif);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--md-sys-color-text-heading, #121714);
+            margin-bottom: var(--spacing-sm, 8px);
+            display: block;
+        }
+
         .hero-generator {
             display: flex;
             flex-direction: column;
+            margin-top: var(--spacing-md, 16px);
+            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
+            border-radius: var(--md-sys-shape-corner-small, 8px);
+            background: color-mix(in srgb, var(--paper, #F7F4EE) 42%, transparent);
+            overflow: hidden;
+        }
+
+        .prompt-image-card {
+            position: relative;
+            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
+            border-radius: var(--md-sys-shape-corner-small, 8px);
+            padding: var(--spacing-sm, 8px);
+        }
+
+        .prompt-image-summary {
+            display: grid;
+            grid-template-columns: 132px minmax(0, 1fr);
+            gap: var(--spacing-sm, 8px);
+            align-items: center;
+            padding-right: 44px;
+            list-style: none;
+            cursor: pointer;
+        }
+
+        .prompt-image-summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .prompt-image-summary:focus-visible {
+            outline: 2px solid var(--md-sys-color-primary, #282828);
+            outline-offset: 3px;
+            border-radius: var(--md-sys-shape-corner-small, 8px);
+        }
+
+        .prompt-image-thumbnail {
+            width: 132px;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            border-radius: var(--md-sys-shape-corner-small, 8px);
+        }
+
+        .prompt-image-copy {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+            font-family: var(--font-body, 'Inter', sans-serif);
+        }
+
+        .prompt-image-title {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--md-sys-color-on-surface, #121714);
+        }
+
+        .prompt-image-hint {
+            font-size: 0.75rem;
+            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+        }
+
+        .prompt-image-expanded {
+            margin-top: var(--spacing-sm, 8px);
+            overflow: hidden;
+            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
+            border-radius: var(--md-sys-shape-corner-small, 8px);
+        }
+
+        .prompt-image-expanded img {
+            display: block;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+        }
+
+        .prompt-image-remove {
+            position: absolute;
+            top: var(--spacing-sm, 8px);
+            right: var(--spacing-sm, 8px);
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            border: 0;
+            border-radius: var(--md-sys-shape-corner-full, 9999px);
+            background-color: var(--md-sys-color-error, #B3261E);
+            color: var(--md-sys-color-on-error, #FFF);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px color-mix(in srgb, var(--ink, #1A1A1A) 24%, transparent);
+        }
+
+        .prompt-image-remove .material-symbols-outlined {
+            font-size: 18px;
+            color: currentColor;
+        }
+
+        .hero-generator-summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             gap: var(--spacing-md, 16px);
-            margin-top: var(--spacing-lg, 24px);
-            padding-top: var(--spacing-lg, 24px);
-            border-top: 1px solid var(--md-sys-color-outline-variant, #DDD);
+            padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
+            list-style: none;
+            cursor: pointer;
+        }
+
+        .hero-generator-summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .hero-generator-summary-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .hero-generator-summary .material-symbols-outlined {
+            transition: transform var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+        }
+
+        .hero-generator[open] .hero-generator-summary .material-symbols-outlined {
+            transform: rotate(180deg);
+        }
+
+        .hero-generator-body {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm, 8px);
+            padding: 0 var(--spacing-md, 16px) var(--spacing-md, 16px);
         }
 
         .hero-generator-header {
@@ -384,7 +524,7 @@ export class WyPromptEditor extends LitElement {
 
         .hero-generator-title {
             font-family: var(--font-serif, 'Playfair Display', serif);
-            font-size: 1.0625rem;
+            font-size: 0.9375rem;
             font-weight: 600;
             color: var(--md-sys-color-on-surface, #121714);
             margin: 0;
@@ -400,7 +540,7 @@ export class WyPromptEditor extends LitElement {
         .hero-controls {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: var(--spacing-md, 16px);
+            gap: var(--spacing-sm, 8px);
         }
 
         .hero-control-label {
@@ -431,7 +571,7 @@ export class WyPromptEditor extends LitElement {
         }
 
         .hero-prompt-textarea {
-            min-height: 220px;
+            min-height: 140px;
             padding: var(--spacing-sm, 8px);
             line-height: 1.45;
             resize: vertical;
@@ -452,7 +592,7 @@ export class WyPromptEditor extends LitElement {
         }
 
         .hero-preview-image {
-            width: 100%;
+            width: min(100%, 360px);
             aspect-ratio: 16 / 9;
             object-fit: cover;
             border-radius: var(--md-sys-shape-corner-small, 8px);
@@ -941,6 +1081,7 @@ export class WyPromptEditor extends LitElement {
         this._heroBusy = false;
         this._heroMessage = '';
         this._heroError = '';
+        this._heroGeneratorOpen = false;
     }
 
     _getPromptTemplateSummary(prompt) {
@@ -1226,6 +1367,10 @@ export class WyPromptEditor extends LitElement {
         this._heroError = '';
     }
 
+    _handleHeroGeneratorToggle(e) {
+        this._heroGeneratorOpen = e.currentTarget.open;
+    }
+
     _handleResetHeroPrompt() {
         this._heroPrompt = this._buildHeroImagePrompt();
         this._heroPromptDirty = false;
@@ -1248,6 +1393,7 @@ export class WyPromptEditor extends LitElement {
         }
 
         this._heroBusy = true;
+        this._heroGeneratorOpen = true;
         this._heroError = '';
         this._heroMessage = 'Generating preview...';
 
@@ -1268,11 +1414,13 @@ export class WyPromptEditor extends LitElement {
         this._heroPreviewMetadata = metadata;
         this._heroBusy = false;
         this._heroError = '';
+        this._heroGeneratorOpen = true;
         this._heroMessage = image ? 'Preview generated. Accept it to attach it as this prompt image.' : '';
     }
 
     setHeroImageError(message) {
         this._heroBusy = false;
+        this._heroGeneratorOpen = true;
         this._heroError = message || 'Hero image generation failed.';
         this._heroMessage = '';
     }
@@ -1304,6 +1452,7 @@ export class WyPromptEditor extends LitElement {
         this._heroBusy = false;
         this._heroError = '';
         this._heroMessage = 'Generated image attached. Save the prompt to keep this change.';
+        this._heroGeneratorOpen = false;
         this._heroPreview = '';
         this._heroPreviewMimeType = '';
         this._heroPreviewMetadata = null;
@@ -1466,7 +1615,7 @@ export class WyPromptEditor extends LitElement {
     _handleStepDelete(e) {
         const { index } = e.detail;
         if (this._editedPrompt.steps.length === 1) {
-            alert('Cannot delete the last step.\n\nConvert to single-step mode instead.');
+            this._notifyToast('Cannot delete the last step. Convert to single-step mode instead.', 'warning');
             return;
         }
         this._editedPrompt.steps.splice(index, 1);
@@ -1476,6 +1625,14 @@ export class WyPromptEditor extends LitElement {
             .filter(i => i < this._editedPrompt.steps.length);
         this._markDirty();
         this.requestUpdate();
+    }
+
+    _notifyToast(message, type = 'info') {
+        this.dispatchEvent(new CustomEvent('toast', {
+            detail: { message, type },
+            bubbles: true,
+            composed: true
+        }));
     }
 
     _handleStepMoveUp(e) {
@@ -1641,6 +1798,48 @@ export class WyPromptEditor extends LitElement {
         });
     }
 
+    _renderPromptImageControl() {
+        const image = this._editedPrompt?.image || '';
+
+        if (!image) {
+            return html`
+                <wy-image-upload
+                    label="Prompt Image"
+                    compact
+                    @change="${this._handleImageChange}"
+                    @remove="${this._handleImageRemove}"
+                ></wy-image-upload>
+            `;
+        }
+
+        return html`
+            <div class="label">Prompt Image</div>
+            <div class="prompt-image-card">
+                <details>
+                    <summary class="prompt-image-summary">
+                        <img class="prompt-image-thumbnail" src="${image}" alt="Prompt hero thumbnail">
+                        <span class="prompt-image-copy">
+                            <span class="prompt-image-title">Hero image attached</span>
+                            <span class="prompt-image-hint">Open to preview larger. Remove it to upload a replacement.</span>
+                        </span>
+                    </summary>
+                    <div class="prompt-image-expanded">
+                        <img src="${image}" alt="Prompt hero preview">
+                    </div>
+                </details>
+                <button
+                    class="prompt-image-remove"
+                    type="button"
+                    @click="${this._handleImageRemove}"
+                    aria-label="Remove image"
+                    title="Remove image"
+                >
+                    <span class="material-symbols-outlined" aria-hidden="true">close</span>
+                </button>
+            </div>
+        `;
+    }
+
     _handleVariationExpand(e) {
         this._openVariationIndex = e.detail?.index ?? -1;
     }
@@ -1692,116 +1891,125 @@ export class WyPromptEditor extends LitElement {
             : '';
 
         return html`
-            <div class="hero-generator">
-                <div class="hero-generator-header">
-                    <div>
-                        <h3 class="hero-generator-title">Generate Hero Image</h3>
-                        <p class="hero-provider-status">
+            <details
+                class="hero-generator"
+                .open="${this._heroGeneratorOpen}"
+                @toggle="${this._handleHeroGeneratorToggle}"
+            >
+                <summary class="hero-generator-summary">
+                    <span class="hero-generator-summary-text">
+                        <span class="hero-generator-title">Generate Hero Image</span>
+                        <span class="hero-provider-status">
                             ${hasConfiguredProvider
-                                ? 'Preview first, then attach the version you like.'
-                                : 'Configure GEMINI_API_KEY or OPENAI_API_KEY before generating.'}
-                        </p>
-                    </div>
-                    <div class="hero-generator-tools">
-                        <a
-                            class="button button-ghost button-small"
-                            href="/admin-settings.html#hero-image-master-prompt"
-                            title="Edit the persistent master prompt used by this generator"
-                        >
-                            <span class="material-symbols-outlined">edit</span>
-                            Edit Master
-                        </a>
-                        <button
-                            class="button button-ghost button-small"
-                            type="button"
-                            @click="${this._handleResetHeroPrompt}"
-                            ?disabled="${this._heroBusy}"
-                        >
-                            <span class="material-symbols-outlined">refresh</span>
-                            Reset Prompt
-                        </button>
-                    </div>
-                </div>
+                                ? 'Preview and attach a generated image.'
+                                : 'Image generation needs an API key.'}
+                        </span>
+                    </span>
+                    <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
+                </summary>
 
-                <div class="hero-controls">
-                    <label class="hero-control-label">
-                        Provider
-                        <select
-                            .value="${this._heroProvider}"
-                            @change="${this._handleHeroProviderChange}"
-                            ?disabled="${this._heroBusy}"
-                        >
-                            ${providerOptions.map(option => html`
-                                <option value="${option.value}">
-                                    ${option.label}${option.configured ? '' : ' (not configured)'}
-                                </option>
-                            `)}
-                        </select>
-                    </label>
-                    <label class="hero-control-label">
-                        Quality
-                        <select
-                            .value="${this._heroQuality}"
-                            @change="${this._handleHeroQualityChange}"
-                            ?disabled="${this._heroBusy}"
-                        >
-                            <option value="draft">Draft</option>
-                            <option value="standard">Standard</option>
-                            <option value="final">Final</option>
-                        </select>
-                    </label>
-                </div>
-
-                <label class="hero-control-label">
-                    Image prompt
-                    <textarea
-                        class="hero-prompt-textarea"
-                        .value="${this._heroPrompt}"
-                        @input="${this._handleHeroPromptInput}"
-                        ?disabled="${this._heroBusy}"
-                    ></textarea>
-                </label>
-
-                <div class="hero-actions">
-                    <button
-                        class="button button-primary"
-                        type="button"
-                        @click="${this._handleGenerateHeroImage}"
-                        ?disabled="${this._heroBusy || !selectedProviderConfigured}"
-                    >
-                        ${this._heroPreview ? 'Regenerate Preview' : 'Generate Preview'}
-                    </button>
-                    ${this._heroPreview ? html`
-                        <button
-                            class="button button-secondary"
-                            type="button"
-                            @click="${this._handleClearHeroPreview}"
-                            ?disabled="${this._heroBusy}"
-                        >
-                            Clear Preview
-                        </button>
-                    ` : ''}
-                </div>
-
-                ${this._heroError ? html`<p class="hero-error-message">${this._heroError}</p>` : ''}
-                ${this._heroMessage ? html`<p class="hero-status-message">${this._heroMessage}</p>` : ''}
-
-                ${previewUrl ? html`
-                    <div class="hero-preview-shell">
-                        <img class="hero-preview-image" src="${previewUrl}" alt="Generated hero preview">
-                        <div class="hero-preview-actions">
+                <div class="hero-generator-body">
+                    <div class="hero-generator-header">
+                        <div class="hero-controls">
+                            <label class="hero-control-label">
+                                Provider
+                                <select
+                                    .value="${this._heroProvider}"
+                                    @change="${this._handleHeroProviderChange}"
+                                    ?disabled="${this._heroBusy}"
+                                >
+                                    ${providerOptions.map(option => html`
+                                        <option value="${option.value}">
+                                            ${option.label}${option.configured ? '' : ' (not configured)'}
+                                        </option>
+                                    `)}
+                                </select>
+                            </label>
+                            <label class="hero-control-label">
+                                Quality
+                                <select
+                                    .value="${this._heroQuality}"
+                                    @change="${this._handleHeroQualityChange}"
+                                    ?disabled="${this._heroBusy}"
+                                >
+                                    <option value="draft">Draft</option>
+                                    <option value="standard">Standard</option>
+                                    <option value="final">Final</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="hero-generator-tools">
+                            <a
+                                class="button button-ghost button-small"
+                                href="/admin-settings.html#hero-image-master-prompt"
+                                title="Edit the persistent master prompt used by this generator"
+                            >
+                                <span class="material-symbols-outlined">edit</span>
+                                Edit Master
+                            </a>
                             <button
-                                class="button button-primary"
+                                class="button button-ghost button-small"
                                 type="button"
-                                @click="${this._handleUseHeroImage}"
+                                @click="${this._handleResetHeroPrompt}"
                                 ?disabled="${this._heroBusy}"
                             >
-                                Use as Hero
+                                <span class="material-symbols-outlined">refresh</span>
+                                Reset Prompt
                             </button>
                         </div>
                     </div>
-                ` : ''}
-            </div>
+
+                    <label class="hero-control-label">
+                        Image prompt
+                        <textarea
+                            class="hero-prompt-textarea"
+                            .value="${this._heroPrompt}"
+                            @input="${this._handleHeroPromptInput}"
+                            ?disabled="${this._heroBusy}"
+                        ></textarea>
+                    </label>
+
+                    <div class="hero-actions">
+                        <button
+                            class="button button-primary"
+                            type="button"
+                            @click="${this._handleGenerateHeroImage}"
+                            ?disabled="${this._heroBusy || !selectedProviderConfigured}"
+                        >
+                            ${this._heroPreview ? 'Regenerate Preview' : 'Generate Preview'}
+                        </button>
+                        ${this._heroPreview ? html`
+                            <button
+                                class="button button-secondary"
+                                type="button"
+                                @click="${this._handleClearHeroPreview}"
+                                ?disabled="${this._heroBusy}"
+                            >
+                                Clear Preview
+                            </button>
+                        ` : ''}
+                    </div>
+
+                    ${this._heroError ? html`<p class="hero-error-message">${this._heroError}</p>` : ''}
+                    ${this._heroMessage ? html`<p class="hero-status-message">${this._heroMessage}</p>` : ''}
+
+                    ${previewUrl ? html`
+                        <div class="hero-preview-shell">
+                            <img class="hero-preview-image" src="${previewUrl}" alt="Generated hero preview">
+                            <div class="hero-preview-actions">
+                                <button
+                                    class="button button-primary"
+                                    type="button"
+                                    @click="${this._handleUseHeroImage}"
+                                    ?disabled="${this._heroBusy}"
+                                >
+                                    Use as Hero
+                                </button>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            </details>
         `;
     }
 
@@ -1918,12 +2126,7 @@ export class WyPromptEditor extends LitElement {
                             .options="${categoryOptions}"
                             @change="${(e) => this._handleFieldChange('category', e.detail.value)}"
                         ></wy-dropdown>
-                        <wy-image-upload
-                            label="Prompt Image"
-                            .value="${this._editedPrompt.image || ''}"
-                            @change="${this._handleImageChange}"
-                            @remove="${this._handleImageRemove}"
-                        ></wy-image-upload>
+                        ${this._renderPromptImageControl()}
                         ${this._renderHeroImageGenerator()}
                     </div>
 

@@ -712,7 +712,8 @@
           {
             "variable": "reference_image",
             "label": "Style Reference",
-            "path": "public/images/fauvist-post-impressionist-style-reference.png"
+            "path": "public/images/fauvist-post-impressionist-style-reference.png",
+            "instructions": "The painting style should be consistent with the style reference at {{url}}."
           }
         ],
         "image": "public/images/1780602698474.jpg"

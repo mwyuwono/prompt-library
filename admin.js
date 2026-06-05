@@ -634,6 +634,13 @@ function setupEventListeners() {
         }
     });
 
+    editor.addEventListener('toast', (e) => {
+        const { message, type = 'info' } = e.detail || {};
+        if (message) {
+            showToast(message, type);
+        }
+    });
+
     // Handle browser back/forward
     window.addEventListener('hashchange', () => {
         const hashId = window.location.hash.slice(1);
@@ -773,12 +780,18 @@ function loadPrompt(id) {
  * Show toast notification
  */
 function showToast(message, type = 'success') {
-    if (toast && typeof toast.show === 'function') {
-        toast.show(message, type);
+    if (toast) {
+        toast.show = false;
+        toast.message = message;
+        toast.variant = type;
+        toast.actions = [];
+        toast.dismissible = type === 'error' || type === 'warning';
+        toast.duration = type === 'error' ? 6000 : 3000;
+        requestAnimationFrame(() => {
+            toast.show = true;
+        });
     } else {
-        // Fallback if toast component not loaded
         console.log(`[${type.toUpperCase()}] ${message}`);
-        alert(message);
     }
 }
 
@@ -1058,7 +1071,15 @@ async function waitForWebComponents() {
     
     if (!customElements.get('wy-prompt-editor')) {
         console.error('Web components failed to load after 5 seconds');
-        alert('Error: Web components failed to load. Please refresh the page.');
+        showToast('Web components failed to load. Please refresh the page.', 'error');
+        if (emptyState) {
+            emptyState.innerHTML = `
+                <span class="material-symbols-outlined">error</span>
+                <h3>Editor failed to load</h3>
+                <p>Please refresh the page.</p>
+            `;
+            emptyState.classList.remove('hidden');
+        }
         return false;
     }
     

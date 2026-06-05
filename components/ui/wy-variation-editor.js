@@ -439,7 +439,7 @@ export class WyVariationEditor extends LitElement {
             variation.steps.splice(stepIndex, 1);
             this._notifyChange(updatedVariations);
         } else {
-            alert('Cannot delete the last step. Convert to template mode instead.');
+            this._notifyToast('Cannot delete the last step. Convert to template mode instead.', 'warning');
         }
     }
 
@@ -574,7 +574,7 @@ export class WyVariationEditor extends LitElement {
 
     _handleDelete(index) {
         if (this.variations.length === 1) {
-            alert('Cannot delete the last variation. Prompts must have at least one variation.');
+            this._notifyToast('Cannot delete the last variation. Prompts must have at least one variation.', 'warning');
             return;
         }
 
@@ -616,6 +616,14 @@ export class WyVariationEditor extends LitElement {
     _notifyChange(updatedVariations) {
         this.dispatchEvent(new CustomEvent('change', {
             detail: { variations: updatedVariations },
+            bubbles: true,
+            composed: true
+        }));
+    }
+
+    _notifyToast(message, type = 'info') {
+        this.dispatchEvent(new CustomEvent('toast', {
+            detail: { message, type },
             bubbles: true,
             composed: true
         }));
