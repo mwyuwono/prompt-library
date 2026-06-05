@@ -584,15 +584,16 @@ export class WyPromptModal extends LitElement {
     }
 
     .reference-image-url {
-        display: block;
+        display: -webkit-box;
         margin-top: 4px;
         color: var(--ink-mute, #6B6B6A);
         font-family: var(--font-sans, 'DM Sans', sans-serif);
         font-size: 0.75rem;
         line-height: 1.35;
         overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        white-space: pre-line;
     }
 
     .reference-variable {
@@ -1398,13 +1399,14 @@ export class WyPromptModal extends LitElement {
           ${referenceImages.map(ref => {
             const url = this._getImageUrl(ref.path);
             const label = ref.label || ref.variable || 'Reference image';
+            const copyText = this._getReferenceImageCopyText(ref, url, label);
 
             return html`
               <div class="reference-image-row">
                 <img class="reference-image-thumb" src="${url}" alt="${label}" loading="lazy">
                 <div class="reference-image-meta">
                   <div class="reference-image-label" title="${label}">${label}</div>
-                  <span class="reference-image-url" title="${url}">${url}</span>
+                  <span class="reference-image-url" title="${copyText}">${copyText}</span>
                   ${ref.variable ? html`<span class="reference-variable" title="{{${ref.variable}}}">{{${ref.variable}}}</span>` : ''}
                 </div>
                 <div class="reference-image-actions">
