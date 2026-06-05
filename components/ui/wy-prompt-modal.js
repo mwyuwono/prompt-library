@@ -619,13 +619,18 @@ export class WyPromptModal extends LitElement {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 40px;
-        height: 40px;
-        padding: 0;
+        gap: var(--spacing-xxs, 4px);
+        min-height: 40px;
+        padding: 0 var(--spacing-sm, 12px);
         border: 1px solid var(--paper-edge, #DDD6C8);
         border-radius: 0;
         background: transparent;
         color: var(--ink, #1A1A1A);
+        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-size: 0.75rem;
+        font-weight: 600;
+        line-height: 1;
+        white-space: nowrap;
         cursor: pointer;
         transition: background-color var(--dur-1, 150ms) var(--ease, ease),
           color var(--dur-1, 150ms) var(--ease, ease);
@@ -1418,6 +1423,7 @@ export class WyPromptModal extends LitElement {
                     title="Copy URL and instructions"
                   >
                     <span class="material-symbols-outlined" aria-hidden="true">link</span>
+                    <span>Copy Text</span>
                   </button>
                   <button
                     type="button"
@@ -1427,6 +1433,7 @@ export class WyPromptModal extends LitElement {
                     title="Copy image"
                   >
                     <span class="material-symbols-outlined" aria-hidden="true">image</span>
+                    <span>Copy Image</span>
                   </button>
                 </div>
               </div>
