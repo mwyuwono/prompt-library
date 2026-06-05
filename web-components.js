@@ -9442,8 +9442,8 @@ var WyPromptModal = class extends i4 {
                     aria-label="Copy reference image URL"
                     title="Copy URL and instructions"
                   >
-                    <span class="material-symbols-outlined" aria-hidden="true">link</span>
-                    <span>Copy Text</span>
+                    <span class="material-symbols-outlined" aria-hidden="true">assignment</span>
+                    <span>Copy Instruction</span>
                   </button>
                   <button
                     type="button"
@@ -10348,11 +10348,11 @@ __publicField(WyPromptModal, "styles", i`
 
     .reference-image-row {
         display: grid;
-        grid-template-columns: 64px minmax(0, 1fr) auto;
+        grid-template-columns: 72px minmax(0, 1fr) auto;
         align-items: center;
-        gap: var(--spacing-sm, 12px);
-        min-height: 80px;
-        padding: var(--spacing-sm, 12px);
+        gap: var(--spacing-md, 16px);
+        min-height: 96px;
+        padding: var(--spacing-md, 16px);
     }
 
     .reference-image-row + .reference-image-row {
@@ -10361,8 +10361,8 @@ __publicField(WyPromptModal, "styles", i`
 
     .reference-image-thumb {
         display: block;
-        width: 64px;
-        height: 64px;
+        width: 72px;
+        height: 72px;
         object-fit: cover;
         border: 1px solid var(--paper-edge, #DDD6C8);
         background: var(--white, #FFFFFF);
@@ -10370,14 +10370,15 @@ __publicField(WyPromptModal, "styles", i`
 
     .reference-image-meta {
         min-width: 0;
+        padding-right: var(--spacing-xs, 8px);
     }
 
     .reference-image-label {
         color: var(--ink, #1A1A1A);
         font-family: var(--font-sans, 'DM Sans', sans-serif);
-        font-size: 0.8125rem;
+        font-size: 0.875rem;
         font-weight: 600;
-        line-height: 1.35;
+        line-height: 1.2;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -10385,11 +10386,11 @@ __publicField(WyPromptModal, "styles", i`
 
     .reference-image-url {
         display: -webkit-box;
-        margin-top: 4px;
+        margin-top: 6px;
         color: var(--ink-mute, #6B6B6A);
         font-family: var(--font-sans, 'DM Sans', sans-serif);
         font-size: 0.75rem;
-        line-height: 1.35;
+        line-height: 1.45;
         overflow: hidden;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
@@ -10398,7 +10399,7 @@ __publicField(WyPromptModal, "styles", i`
 
     .reference-variable {
         display: inline-block;
-        margin-top: 4px;
+        margin-top: 6px;
         color: var(--ink-soft, #A8A49C);
         font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
         font-size: 0.6875rem;
@@ -10412,24 +10413,26 @@ __publicField(WyPromptModal, "styles", i`
     .reference-image-actions {
         display: flex;
         align-items: center;
-        gap: var(--spacing-xs, 8px);
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        gap: 6px;
     }
 
     .reference-image-copy {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: var(--spacing-xxs, 4px);
-        min-height: 40px;
-        padding: 0 var(--spacing-sm, 12px);
+        gap: 6px;
+        min-height: 36px;
+        padding: 0 10px;
         border: 1px solid var(--paper-edge, #DDD6C8);
         border-radius: 0;
         background: transparent;
         color: var(--ink, #1A1A1A);
         font-family: var(--font-sans, 'DM Sans', sans-serif);
-        font-size: 0.75rem;
+        font-size: 0.6875rem;
         font-weight: 600;
-        line-height: 1;
+        line-height: 1.1;
         white-space: nowrap;
         cursor: pointer;
         transition: background-color var(--dur-1, 150ms) var(--ease, ease),
@@ -10447,7 +10450,7 @@ __publicField(WyPromptModal, "styles", i`
     }
 
     .reference-image-copy .material-symbols-outlined {
-        font-size: 20px;
+        font-size: 18px;
         line-height: 1;
     }
 
@@ -10840,16 +10843,19 @@ __publicField(WyPromptModal, "styles", i`
       .reference-image-row {
         grid-template-columns: 56px minmax(0, 1fr);
         min-height: 72px;
-        gap: var(--spacing-xs, 8px);
-        padding: var(--spacing-xs, 8px);
+        gap: var(--spacing-sm, 12px);
+        padding: var(--spacing-sm, 12px);
       }
       .reference-image-thumb {
         width: 56px;
         height: 56px;
       }
+      .reference-image-meta {
+        padding-right: 0;
+      }
       .reference-image-actions {
         grid-column: 1 / -1;
-        justify-content: flex-end;
+        justify-content: flex-start;
       }
       .title-group h2 { font-size: 1.75rem; }
       .tabs-container { padding: 0; } /* wy-tabs handles its own mobile padding */
