@@ -948,7 +948,21 @@ export class WyPromptEditor extends LitElement {
             background: color-mix(in srgb, var(--err, #B3261E) 4%, var(--field-bg, #FBF9F4));
         }
 
-        .visibility-icon {
+        .variation-display-setting {
+            display: grid;
+            grid-template-columns: 40px minmax(0, 1fr);
+            gap: var(--spacing-md, 16px);
+            align-items: center;
+            padding: 18px 20px;
+            margin-bottom: var(--spacing-lg, 24px);
+            border: 0;
+            border-radius: var(--radius-2, 10px);
+            background: var(--field-bg, #FBF9F4);
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
+        }
+
+        .visibility-icon,
+        .variation-display-icon {
             display: inline-grid;
             place-items: center;
             width: 40px;
@@ -964,7 +978,8 @@ export class WyPromptEditor extends LitElement {
             box-shadow: 0 4px 12px color-mix(in srgb, var(--err, #B3261E) 10%, transparent);
         }
 
-        .visibility-icon .material-symbols-outlined {
+        .visibility-icon .material-symbols-outlined,
+        .variation-display-icon .material-symbols-outlined {
             font-size: 21px;
         }
 
@@ -1491,6 +1506,20 @@ export class WyPromptEditor extends LitElement {
         this._handleFieldChange('variations', e.detail.variations);
     }
 
+    _handleVariationSelectorChange(enabled) {
+        if (!this._editedPrompt) return;
+
+        if (enabled) {
+            this._handleFieldChange('variationSelector', 'visual');
+            return;
+        }
+
+        const { variationSelector, ...promptWithoutSelector } = this._editedPrompt;
+        this._editedPrompt = promptWithoutSelector;
+        this._markDirty();
+        this.requestUpdate();
+    }
+
     _handleModeChange(event, newMode) {
         if (newMode === this._promptMode) return;
         
@@ -1601,6 +1630,7 @@ export class WyPromptEditor extends LitElement {
         this._editedPrompt.variables = [...(firstVariation.variables || [])];
         this._editedPrompt.image = firstVariation.image || '';
         delete this._editedPrompt.variations;
+        delete this._editedPrompt.variationSelector;
         this._markDirty();
         this.requestUpdate();
     }
@@ -2149,6 +2179,21 @@ export class WyPromptEditor extends LitElement {
                                     <span class="material-symbols-outlined">undo</span>
                                     Convert to Standard
                                 </button>
+                            </div>
+                            <div class="variation-display-setting">
+                                <span class="variation-display-icon" aria-hidden="true">
+                                    <span class="material-symbols-outlined">grid_view</span>
+                                </span>
+                                <wy-option-toggle
+                                    variant="switch"
+                                    size="compact"
+                                    label="Visual Variant Selector"
+                                    description="Shows image tiles instead of the dropdown selector in the public prompt modal."
+                                    .options="${['dropdown', 'visual']}"
+                                    .labels="${['Off', 'On']}"
+                                    .value="${this._editedPrompt.variationSelector === 'visual' ? 'visual' : 'dropdown'}"
+                                    @change="${(e) => this._handleVariationSelectorChange(e.detail.value === 'visual')}"
+                                ></wy-option-toggle>
                             </div>
                             <wy-variation-editor
                                 .variations="${this._editedPrompt.variations}"

@@ -6892,6 +6892,17 @@ ${subjectPrompt}`
     if (!Array.isArray(e9.detail?.variations)) return;
     this._handleFieldChange("variations", e9.detail.variations);
   }
+  _handleVariationSelectorChange(enabled) {
+    if (!this._editedPrompt) return;
+    if (enabled) {
+      this._handleFieldChange("variationSelector", "visual");
+      return;
+    }
+    const { variationSelector, ...promptWithoutSelector } = this._editedPrompt;
+    this._editedPrompt = promptWithoutSelector;
+    this._markDirty();
+    this.requestUpdate();
+  }
   _handleModeChange(event, newMode) {
     if (newMode === this._promptMode) return;
     const confirmMessage = newMode === "multi" ? "Convert to multi-step prompt?\n\nThis will move your template and variables into a single step." : "Convert to single-step prompt?\n\nThis will use Step 1 as the template and discard other steps.";
@@ -6973,6 +6984,7 @@ ${subjectPrompt}`
     this._editedPrompt.variables = [...firstVariation.variables || []];
     this._editedPrompt.image = firstVariation.image || "";
     delete this._editedPrompt.variations;
+    delete this._editedPrompt.variationSelector;
     this._markDirty();
     this.requestUpdate();
   }
@@ -7483,6 +7495,21 @@ ${subjectPrompt}`
                                     <span class="material-symbols-outlined">undo</span>
                                     Convert to Standard
                                 </button>
+                            </div>
+                            <div class="variation-display-setting">
+                                <span class="variation-display-icon" aria-hidden="true">
+                                    <span class="material-symbols-outlined">grid_view</span>
+                                </span>
+                                <wy-option-toggle
+                                    variant="switch"
+                                    size="compact"
+                                    label="Visual Variant Selector"
+                                    description="Shows image tiles instead of the dropdown selector in the public prompt modal."
+                                    .options="${["dropdown", "visual"]}"
+                                    .labels="${["Off", "On"]}"
+                                    .value="${this._editedPrompt.variationSelector === "visual" ? "visual" : "dropdown"}"
+                                    @change="${(e9) => this._handleVariationSelectorChange(e9.detail.value === "visual")}"
+                                ></wy-option-toggle>
                             </div>
                             <wy-variation-editor
                                 .variations="${this._editedPrompt.variations}"
@@ -8529,7 +8556,21 @@ __publicField(WyPromptEditor, "styles", i`
             background: color-mix(in srgb, var(--err, #B3261E) 4%, var(--field-bg, #FBF9F4));
         }
 
-        .visibility-icon {
+        .variation-display-setting {
+            display: grid;
+            grid-template-columns: 40px minmax(0, 1fr);
+            gap: var(--spacing-md, 16px);
+            align-items: center;
+            padding: 18px 20px;
+            margin-bottom: var(--spacing-lg, 24px);
+            border: 0;
+            border-radius: var(--radius-2, 10px);
+            background: var(--field-bg, #FBF9F4);
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
+        }
+
+        .visibility-icon,
+        .variation-display-icon {
             display: inline-grid;
             place-items: center;
             width: 40px;
@@ -8545,7 +8586,8 @@ __publicField(WyPromptEditor, "styles", i`
             box-shadow: 0 4px 12px color-mix(in srgb, var(--err, #B3261E) 10%, transparent);
         }
 
-        .visibility-icon .material-symbols-outlined {
+        .visibility-icon .material-symbols-outlined,
+        .variation-display-icon .material-symbols-outlined {
             font-size: 21px;
         }
 
@@ -9092,6 +9134,7 @@ var WyPromptModal = class extends i4 {
     this.variables = [];
     this.referenceImages = [];
     this.variations = [];
+    this.variationSelector = "";
     this.activeVariationIndex = 0;
     this.mode = "locked";
     this.activeTab = "variables";
@@ -9336,21 +9379,24 @@ var WyPromptModal = class extends i4 {
     this.variationDetailsExpanded = !this.variationDetailsExpanded;
   }
   _renderVariationSelector(activeVariation) {
+    const useVisualSelector = this.variationSelector === "visual" && this.variations.length > 1;
     const selector = this.variations.length > 1 ? b2`
       <label class="variation-description-heading" for="variation-select">Variant</label>
-      <div class="variation-select-wrap">
-        <select
-          id="variation-select"
-          class="variation-select-native"
-          .value="${activeVariation?.id || ""}"
-          @change="${this._handleVariationSelectChange}"
-        >
-          ${this.variations.map((variation) => b2`
-            <option value="${variation.id}">${variation.name}</option>
-          `)}
-        </select>
-        <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
-      </div>
+      ${useVisualSelector ? this._renderVisualVariationSelector(activeVariation) : b2`
+        <div class="variation-select-wrap">
+          <select
+            id="variation-select"
+            class="variation-select-native"
+            .value="${activeVariation?.id || ""}"
+            @change="${this._handleVariationSelectChange}"
+          >
+            ${this.variations.map((variation) => b2`
+              <option value="${variation.id}">${variation.name}</option>
+            `)}
+          </select>
+          <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
+        </div>
+      `}
     ` : "";
     const variationMeta = activeVariation?.description || activeVariation?.instructions ? b2`
       <wy-info-panel class="variation-description-panel">
@@ -9392,6 +9438,37 @@ var WyPromptModal = class extends i4 {
         ` : ""}
         ${variationMeta}
         ${this._renderReferenceImages(referenceImages)}
+      </div>
+    `;
+  }
+  _renderVisualVariationSelector(activeVariation) {
+    return b2`
+      <div class="visual-variation-grid" role="listbox" aria-label="Variant">
+        ${this.variations.map((variation, index) => {
+      const selected = variation.id === activeVariation?.id;
+      const description = variation.description || variation.instructions || "";
+      return b2`
+            <button
+              type="button"
+              class="visual-variation-tile ${selected ? "selected" : ""}"
+              role="option"
+              aria-selected="${selected ? "true" : "false"}"
+              @click="${() => this._setVariationById(variation.id)}"
+            >
+              ${variation.image ? b2`
+                <img class="visual-variation-media" src="${variation.image}" alt="${variation.name || `Variant ${index + 1}`}" loading="lazy">
+              ` : b2`
+                <span class="visual-variation-text-tile" aria-hidden="true">
+                  <span class="material-symbols-outlined">auto_awesome</span>
+                </span>
+              `}
+              <span class="visual-variation-copy">
+                <span class="visual-variation-name">${variation.name || `Variant ${index + 1}`}</span>
+                ${description ? b2`<span class="visual-variation-description">${description}</span>` : ""}
+              </span>
+            </button>
+          `;
+    })}
       </div>
     `;
   }
@@ -9890,6 +9967,7 @@ __publicField(WyPromptModal, "properties", {
   variables: { type: Array },
   referenceImages: { type: Array },
   variations: { type: Array },
+  variationSelector: { type: String, attribute: "variation-selector" },
   activeVariationIndex: { type: Number, attribute: "active-variation-index" },
   mode: { type: String },
   // 'locked' or 'edit'
@@ -10301,6 +10379,113 @@ __publicField(WyPromptModal, "styles", i`
     .variation-select-native:focus-visible {
         outline: 3px solid var(--wy-prompt-modal-focus-ring, color-mix(in srgb, var(--md-sys-color-primary) 18%, transparent));
         outline-offset: 2px;
+    }
+
+    .visual-variation-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(138px, 1fr));
+        gap: var(--spacing-sm, 12px);
+    }
+
+    .visual-variation-tile {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        min-height: 100%;
+        padding: 0;
+        background: var(--md-sys-color-surface-container-lowest, #FDFBF7);
+        color: var(--md-sys-color-on-surface, #1D1B20);
+        border: 1px solid var(--paper-edge, #DDD6C8);
+        border-radius: 0;
+        cursor: pointer;
+        overflow: hidden;
+        position: relative;
+        text-align: left;
+        transition:
+            border-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
+            box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+    }
+
+    .visual-variation-tile::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: currentColor;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+    }
+
+    .visual-variation-tile:hover::after {
+        opacity: var(--md-sys-state-hover-opacity, 0.08);
+    }
+
+    .visual-variation-tile:focus-visible {
+        outline: 3px solid var(--wy-prompt-modal-focus-ring, color-mix(in srgb, var(--md-sys-color-primary) 18%, transparent));
+        outline-offset: 2px;
+    }
+
+    .visual-variation-tile.selected {
+        border-color: var(--md-sys-color-primary, #282828);
+        box-shadow: inset 0 0 0 1px var(--md-sys-color-primary, #282828);
+    }
+
+    .visual-variation-media {
+        display: block;
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+        background: var(--paper-deep, #EEE8DD);
+        border-bottom: 1px solid var(--paper-edge, #DDD6C8);
+    }
+
+    .visual-variation-text-tile {
+        display: flex;
+        flex: 1;
+        min-height: 104px;
+        align-items: center;
+        justify-content: center;
+        padding: var(--spacing-md, 16px);
+        background:
+            linear-gradient(
+                135deg,
+                color-mix(in srgb, var(--paper-deep, #EEE8DD) 74%, transparent),
+                var(--md-sys-color-surface-container-lowest, #FDFBF7)
+            );
+        border-bottom: 1px solid var(--paper-edge, #DDD6C8);
+    }
+
+    .visual-variation-text-tile .material-symbols-outlined {
+        color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 46%, transparent);
+        font-size: 30px;
+    }
+
+    .visual-variation-copy {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-xs, 4px);
+        padding: var(--spacing-sm, 12px);
+        min-width: 0;
+    }
+
+    .visual-variation-name {
+        color: var(--md-sys-color-on-surface, #1D1B20);
+        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-size: 0.8125rem;
+        font-weight: 700;
+        line-height: 1.25;
+        overflow-wrap: anywhere;
+    }
+
+    .visual-variation-description {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        color: var(--md-sys-color-text-muted);
+        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-size: 0.75rem;
+        line-height: 1.35;
     }
 
     .variation-description-panel {
@@ -10863,6 +11048,15 @@ __publicField(WyPromptModal, "styles", i`
         margin: var(--spacing-sm, 8px) var(--spacing-md, 16px) 0;
         padding: var(--spacing-sm, 12px);
         gap: var(--spacing-sm, 8px);
+      }
+      .visual-variation-grid {
+        grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+      }
+      .visual-variation-text-tile {
+        min-height: 86px;
+      }
+      .visual-variation-copy {
+        padding: var(--spacing-xs, 8px);
       }
       .variation-description-heading {
         font-size: 0.6875rem;
