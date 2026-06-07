@@ -6898,10 +6898,15 @@ ${subjectPrompt}`
       this._handleFieldChange("variationSelector", "visual");
       return;
     }
-    const { variationSelector, ...promptWithoutSelector } = this._editedPrompt;
+    const { variationSelector, variationSelectorTileMode, ...promptWithoutSelector } = this._editedPrompt;
     this._editedPrompt = promptWithoutSelector;
     this._markDirty();
     this.requestUpdate();
+  }
+  _handleVariationTileModeChange(mode) {
+    if (!this._editedPrompt || this._editedPrompt.variationSelector !== "visual") return;
+    const nextMode = mode === "details" ? "details" : "thumbnail";
+    this._handleFieldChange("variationSelectorTileMode", nextMode);
   }
   _handleModeChange(event, newMode) {
     if (newMode === this._promptMode) return;
@@ -6985,6 +6990,7 @@ ${subjectPrompt}`
     this._editedPrompt.image = firstVariation.image || "";
     delete this._editedPrompt.variations;
     delete this._editedPrompt.variationSelector;
+    delete this._editedPrompt.variationSelectorTileMode;
     this._markDirty();
     this.requestUpdate();
   }
@@ -7500,16 +7506,29 @@ ${subjectPrompt}`
                                 <span class="variation-display-icon" aria-hidden="true">
                                     <span class="material-symbols-outlined">grid_view</span>
                                 </span>
-                                <wy-option-toggle
-                                    variant="switch"
-                                    size="compact"
-                                    label="Visual Variant Selector"
-                                    description="Shows image tiles instead of the dropdown selector in the public prompt modal."
-                                    .options="${["dropdown", "visual"]}"
-                                    .labels="${["Off", "On"]}"
-                                    .value="${this._editedPrompt.variationSelector === "visual" ? "visual" : "dropdown"}"
-                                    @change="${(e9) => this._handleVariationSelectorChange(e9.detail.value === "visual")}"
-                                ></wy-option-toggle>
+                                <div class="variation-display-options">
+                                    <wy-option-toggle
+                                        variant="switch"
+                                        size="compact"
+                                        label="Visual Variant Selector"
+                                        description="Shows image tiles instead of the dropdown selector in the public prompt modal."
+                                        .options="${["dropdown", "visual"]}"
+                                        .labels="${["Off", "On"]}"
+                                        .value="${this._editedPrompt.variationSelector === "visual" ? "visual" : "dropdown"}"
+                                        @change="${(e9) => this._handleVariationSelectorChange(e9.detail.value === "visual")}"
+                                    ></wy-option-toggle>
+                                    ${this._editedPrompt.variationSelector === "visual" ? b2`
+                                        <wy-option-toggle
+                                            size="compact"
+                                            label="Tile Content"
+                                            description="Choose whether visual selector thumbnails include variant text."
+                                            .options="${["thumbnail", "details"]}"
+                                            .labels="${["Thumbnail only", "Title + description"]}"
+                                            .value="${this._editedPrompt.variationSelectorTileMode === "details" ? "details" : "thumbnail"}"
+                                            @change="${(e9) => this._handleVariationTileModeChange(e9.detail.value)}"
+                                        ></wy-option-toggle>
+                                    ` : ""}
+                                </div>
                             </div>
                             <wy-variation-editor
                                 .variations="${this._editedPrompt.variations}"
@@ -8569,6 +8588,13 @@ __publicField(WyPromptEditor, "styles", i`
             box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
         }
 
+        .variation-display-options {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md, 16px);
+            min-width: 0;
+        }
+
         .visibility-icon,
         .variation-display-icon {
             display: inline-grid;
@@ -9135,6 +9161,7 @@ var WyPromptModal = class extends i4 {
     this.referenceImages = [];
     this.variations = [];
     this.variationSelector = "";
+    this.variationSelectorTileMode = "thumbnail";
     this.activeVariationIndex = 0;
     this.mode = "locked";
     this.activeTab = "variables";
@@ -9378,8 +9405,14 @@ var WyPromptModal = class extends i4 {
   _toggleVariationDetails() {
     this.variationDetailsExpanded = !this.variationDetailsExpanded;
   }
+  _usesVisualVariationSelector() {
+    return this.variationSelector === "visual" && this.variations.length > 1;
+  }
+  _getVisualTileMode() {
+    return this.variationSelectorTileMode === "details" ? "details" : "thumbnail";
+  }
   _renderVariationSelector(activeVariation) {
-    const useVisualSelector = this.variationSelector === "visual" && this.variations.length > 1;
+    const useVisualSelector = this._usesVisualVariationSelector();
     const selector = this.variations.length > 1 ? b2`
       <label class="variation-description-heading" for="variation-select">Variant</label>
       ${useVisualSelector ? this._renderVisualVariationSelector(activeVariation) : b2`
@@ -9431,6 +9464,14 @@ var WyPromptModal = class extends i4 {
     return b2`
       <div class="variation-selector-container">
         ${selector}
+        ${this._renderSelectedVariationPanel(activeVariation, variationMeta, referenceImages)}
+      </div>
+    `;
+  }
+  _renderSelectedVariationPanel(activeVariation, variationMeta = this._renderVariationMeta(activeVariation), referenceImages = this._getActiveReferenceImages(activeVariation)) {
+    if (!this.variationImage && !variationMeta && referenceImages.length === 0) return "";
+    return b2`
+      <div class="visual-selected-panel">
         ${this.variationImage ? b2`
           <figure class="variation-image">
             <img src="${this.variationImage}" alt="${activeVariation?.name || this.title}" loading="lazy">
@@ -9441,30 +9482,66 @@ var WyPromptModal = class extends i4 {
       </div>
     `;
   }
-  _renderVisualVariationSelector(activeVariation) {
+  _renderVariationMeta(activeVariation) {
+    if (!activeVariation?.description && !activeVariation?.instructions) return "";
     return b2`
-      <div class="visual-variation-grid" role="listbox" aria-label="Variant">
+      <wy-info-panel class="variation-description-panel">
+        <div class="variation-meta-section">
+          <button
+            class="variation-name"
+            type="button"
+            aria-expanded="${this.variationDetailsExpanded ? "true" : "false"}"
+            @click="${this._toggleVariationDetails}"
+          >
+            <span>${activeVariation.name}</span>
+            <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
+          </button>
+          ${this.variationDetailsExpanded ? b2`
+            <div class="variation-details">
+              ${activeVariation?.description ? b2`
+                <div class="variation-description-copy">${o7(this._renderDescriptionMarkdown(activeVariation.description))}</div>
+              ` : ""}
+              ${activeVariation?.instructions ? b2`
+                <div class="variation-meta-section">
+                  <p class="variation-description-heading">Instructions</p>
+                  <div class="variation-description-copy">${o7(this._renderDescriptionMarkdown(activeVariation.instructions))}</div>
+                </div>
+              ` : ""}
+            </div>
+          ` : ""}
+        </div>
+      </wy-info-panel>
+    `;
+  }
+  _renderVisualVariationSelector(activeVariation) {
+    const tileMode = this._getVisualTileMode();
+    const showTileDetails = tileMode === "details";
+    return b2`
+      <div class="visual-variation-grid ${showTileDetails ? "details-mode" : "thumbnail-mode"}" role="listbox" aria-label="Variant">
         ${this.variations.map((variation, index) => {
       const selected = variation.id === activeVariation?.id;
       const description = variation.description || variation.instructions || "";
+      const hasImage = Boolean(variation.image);
+      const name = variation.name || `Variant ${index + 1}`;
       return b2`
             <button
               type="button"
-              class="visual-variation-tile ${selected ? "selected" : ""}"
+              class="visual-variation-tile ${selected ? "selected" : ""} ${showTileDetails ? "details" : "thumbnail-only"} ${hasImage ? "has-image" : "no-image"}"
               role="option"
               aria-selected="${selected ? "true" : "false"}"
+              aria-label="${name}"
               @click="${() => this._setVariationById(variation.id)}"
             >
-              ${variation.image ? b2`
-                <img class="visual-variation-media" src="${variation.image}" alt="${variation.name || `Variant ${index + 1}`}" loading="lazy">
+              ${hasImage ? b2`
+                <img class="visual-variation-media" src="${variation.image}" alt="" loading="lazy">
               ` : b2`
                 <span class="visual-variation-text-tile" aria-hidden="true">
                   <span class="material-symbols-outlined">auto_awesome</span>
                 </span>
               `}
               <span class="visual-variation-copy">
-                <span class="visual-variation-name">${variation.name || `Variant ${index + 1}`}</span>
-                ${description ? b2`<span class="visual-variation-description">${description}</span>` : ""}
+                <span class="visual-variation-name">${name}</span>
+                ${showTileDetails && description ? b2`<span class="visual-variation-description">${description}</span>` : ""}
               </span>
             </button>
           `;
@@ -9540,15 +9617,56 @@ var WyPromptModal = class extends i4 {
       </wy-info-panel>
     `;
   }
+  _renderVisualSelectorLayout(activeVariation, standardActiveTab, hasVariables, compiledPrompt, currentTemplate) {
+    return b2`
+      <div class="visual-selector-layout">
+        <div class="visual-selector-main">
+          <div class="header-main">
+              ${this._renderPromptIntro(!(this.mode === "locked" && !hasVariables))}
+          </div>
+
+          ${this._renderSelectedVariationPanel(activeVariation)}
+
+          <div class="tabs-container">
+              <wy-tabs active-tab="${standardActiveTab}" @tab-change="${(e9) => this.activeTab = e9.detail.tab}">
+                <button class="tab-item ${standardActiveTab === (hasVariables ? "variables" : "overview") ? "active" : ""}" role="tab" data-tab="${hasVariables ? "variables" : "overview"}">${hasVariables ? "Variables" : "Overview"}</button>
+                <button class="tab-item ${standardActiveTab === "preview" ? "active" : ""}" role="tab" data-tab="preview">Full prompt</button>
+              </wy-tabs>
+              ${standardActiveTab === "variables" && this._hasValues() ? b2`
+                <button class="clear-btn" @click="${this._clearAllVariables}">Clear All</button>
+              ` : ""}
+          </div>
+
+          <div class="body">
+            ${standardActiveTab === "preview" ? b2`
+              <div class="preview-area">${compiledPrompt}</div>
+            ` : hasVariables ? b2`
+              <div class="variables-grid">
+                ${this.variables.map((v2) => this._renderVariable(v2))}
+              </div>
+            ` : b2`
+              ${this._renderOverview(currentTemplate)}
+            `}
+          </div>
+        </div>
+
+        <aside class="visual-selector-rail" aria-label="Variants">
+          <p class="variation-description-heading">Variant</p>
+          ${this._renderVisualVariationSelector(activeVariation)}
+        </aside>
+      </div>
+    `;
+  }
   render() {
     const currentTemplate = this.variations.length > 0 ? this.variations[this.activeVariationIndex].template : this.template;
     const compiledPrompt = this._compilePrompt(currentTemplate);
     const activeVariation = this.variations[this.activeVariationIndex];
     const standardActiveTab = this._getActiveStandardTab();
     const hasVariables = this.variables.length > 0;
+    const useVisualSelector = this._usesVisualVariationSelector();
     return b2`
       <div class="scrim" @click="${this._close}"></div>
-      <div class="modal-container">
+      <div class="modal-container ${useVisualSelector ? "visual-selector-modal" : ""}">
         
         <!-- HEADER -->
         <header class="header">
@@ -9607,36 +9725,38 @@ var WyPromptModal = class extends i4 {
               </div>
             ` : b2`
               <!-- Standard mode -->
-              <div class="header-main">
-                  ${this._renderPromptIntro(!(this.mode === "locked" && !hasVariables))}
-              </div>
+              ${useVisualSelector ? this._renderVisualSelectorLayout(activeVariation, standardActiveTab, hasVariables, compiledPrompt, currentTemplate) : b2`
+                <div class="header-main">
+                    ${this._renderPromptIntro(!(this.mode === "locked" && !hasVariables))}
+                </div>
 
-              <div class="tabs-container">
-                  <wy-tabs active-tab="${standardActiveTab}" @tab-change="${(e9) => this.activeTab = e9.detail.tab}">
-                    <button class="tab-item ${standardActiveTab === (hasVariables ? "variables" : "overview") ? "active" : ""}" role="tab" data-tab="${hasVariables ? "variables" : "overview"}">${hasVariables ? "Variables" : "Overview"}</button>
-                    <button class="tab-item ${standardActiveTab === "preview" ? "active" : ""}" role="tab" data-tab="preview">Full prompt</button>
-                  </wy-tabs>
-                  ${standardActiveTab === "variables" && this._hasValues() ? b2`
-                    <button class="clear-btn" @click="${this._clearAllVariables}">Clear All</button>
-                  ` : ""}
-              </div>
+                <div class="tabs-container">
+                    <wy-tabs active-tab="${standardActiveTab}" @tab-change="${(e9) => this.activeTab = e9.detail.tab}">
+                      <button class="tab-item ${standardActiveTab === (hasVariables ? "variables" : "overview") ? "active" : ""}" role="tab" data-tab="${hasVariables ? "variables" : "overview"}">${hasVariables ? "Variables" : "Overview"}</button>
+                      <button class="tab-item ${standardActiveTab === "preview" ? "active" : ""}" role="tab" data-tab="preview">Full prompt</button>
+                    </wy-tabs>
+                    ${standardActiveTab === "variables" && this._hasValues() ? b2`
+                      <button class="clear-btn" @click="${this._clearAllVariables}">Clear All</button>
+                    ` : ""}
+                </div>
 
-              ${!(standardActiveTab === "overview" && !hasVariables) ? b2`
-                ${this._renderVariationSelector(activeVariation)}
-              ` : ""}
-
-              <div class="body">
-                ${standardActiveTab === "preview" ? b2`
-                  <div class="preview-area">${compiledPrompt}</div>
-                ` : hasVariables ? b2`
-                  <div class="variables-grid">
-                    ${this.variables.map((v2) => this._renderVariable(v2))}
-                  </div>
-                ` : b2`
-                  ${this._renderOverview(currentTemplate)}
+                ${!(standardActiveTab === "overview" && !hasVariables) ? b2`
                   ${this._renderVariationSelector(activeVariation)}
-                `}
-              </div>
+                ` : ""}
+
+                <div class="body">
+                  ${standardActiveTab === "preview" ? b2`
+                    <div class="preview-area">${compiledPrompt}</div>
+                  ` : hasVariables ? b2`
+                    <div class="variables-grid">
+                      ${this.variables.map((v2) => this._renderVariable(v2))}
+                    </div>
+                  ` : b2`
+                    ${this._renderOverview(currentTemplate)}
+                    ${this._renderVariationSelector(activeVariation)}
+                  `}
+                </div>
+              `}
             `}
           ` : b2`
             <div class="header-main">
@@ -9968,6 +10088,7 @@ __publicField(WyPromptModal, "properties", {
   referenceImages: { type: Array },
   variations: { type: Array },
   variationSelector: { type: String, attribute: "variation-selector" },
+  variationSelectorTileMode: { type: String, attribute: "variation-selector-tile-mode" },
   activeVariationIndex: { type: Number, attribute: "active-variation-index" },
   mode: { type: String },
   // 'locked' or 'edit'
@@ -10046,6 +10167,11 @@ __publicField(WyPromptModal, "styles", i`
       overflow: hidden; /* Clip content to border-radius */
       border: 1px solid var(--paper-edge, #DDD6C8);
       font-family: var(--ff-sans, 'Inter', sans-serif);
+    }
+
+    .modal-container.visual-selector-modal {
+      width: min(94vw, 1120px);
+      max-width: 1120px;
     }
 
     :host([open]) .modal-container {
@@ -10346,6 +10472,55 @@ __publicField(WyPromptModal, "styles", i`
         margin: var(--spacing-xl, 32px) 0 0;
     }
 
+    .visual-selector-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(220px, 280px);
+        gap: var(--spacing-lg, 24px);
+        padding: 0 var(--spacing-xl, 32px) var(--spacing-xl, 32px);
+        align-items: start;
+    }
+
+    .visual-selector-main {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .visual-selector-main .header-main {
+        margin-bottom: var(--spacing-md, 16px);
+    }
+
+    .visual-selector-main .tabs-container {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .visual-selector-main .body {
+        padding: var(--spacing-lg, 24px) 0 0;
+    }
+
+    .visual-selected-panel {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-lg, 24px);
+        margin-top: var(--spacing-sm, 8px);
+        margin-bottom: var(--spacing-lg, 24px);
+    }
+
+    .visual-selector-rail {
+        position: sticky;
+        top: var(--spacing-md, 16px);
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-sm, 12px);
+        max-height: calc(90vh - 128px);
+        overflow: auto;
+        padding: var(--spacing-md, 16px);
+        background-color: var(--md-sys-color-surface-container-low);
+        border: 1px solid var(--paper-edge, #DDD6C8);
+        border-radius: var(--md-sys-shape-corner-medium, 0);
+    }
+
     .variation-select-native {
         appearance: none;
         -webkit-appearance: none;
@@ -10385,6 +10560,10 @@ __publicField(WyPromptModal, "styles", i`
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(138px, 1fr));
         gap: var(--spacing-sm, 12px);
+    }
+
+    .visual-selector-rail .visual-variation-grid {
+        grid-template-columns: 1fr;
     }
 
     .visual-variation-tile {
@@ -10439,6 +10618,11 @@ __publicField(WyPromptModal, "styles", i`
         border-bottom: 1px solid var(--paper-edge, #DDD6C8);
     }
 
+    .visual-variation-tile.thumbnail-only .visual-variation-media,
+    .visual-variation-tile.thumbnail-only .visual-variation-text-tile {
+        border-bottom: 0;
+    }
+
     .visual-variation-text-tile {
         display: flex;
         flex: 1;
@@ -10486,6 +10670,18 @@ __publicField(WyPromptModal, "styles", i`
         font-family: var(--font-sans, 'DM Sans', sans-serif);
         font-size: 0.75rem;
         line-height: 1.35;
+    }
+
+    .visual-variation-tile.thumbnail-only.has-image .visual-variation-copy {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        white-space: nowrap;
     }
 
     .variation-description-panel {
@@ -11048,6 +11244,25 @@ __publicField(WyPromptModal, "styles", i`
         margin: var(--spacing-sm, 8px) var(--spacing-md, 16px) 0;
         padding: var(--spacing-sm, 12px);
         gap: var(--spacing-sm, 8px);
+      }
+      .visual-selector-layout {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-md, 16px);
+        padding: 0 var(--spacing-md, 16px) var(--spacing-md, 16px);
+      }
+      .visual-selector-rail {
+        position: static;
+        order: -1;
+        max-height: none;
+        overflow: visible;
+        padding: var(--spacing-sm, 12px);
+      }
+      .visual-selector-rail .visual-variation-grid {
+        grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
+      }
+      .visual-selector-main .body {
+        padding-top: var(--spacing-md, 16px);
       }
       .visual-variation-grid {
         grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));

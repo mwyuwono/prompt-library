@@ -1474,6 +1474,7 @@ Server will start on http://localhost:3001`;
                 variables: variables,
                 variations: prompt.variations || [],
                 variationSelector: prompt.variationSelector || '',
+                variationSelectorTileMode: prompt.variationSelectorTileMode || 'thumbnail',
                 activeVariationIndex: variationIndex >= 0 ? variationIndex : 0,
                 variationDetailsExpanded: false,
                 mode: prompt.locked !== false ? 'locked' : 'edit',
@@ -1638,6 +1639,7 @@ Server will start on http://localhost:3001`;
             referenceImages: [],
             variations: [],
             variationSelector: '',
+            variationSelectorTileMode: 'thumbnail',
             steps: [],
             
             // Indices

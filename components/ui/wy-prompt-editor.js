@@ -961,6 +961,13 @@ export class WyPromptEditor extends LitElement {
             box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
         }
 
+        .variation-display-options {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md, 16px);
+            min-width: 0;
+        }
+
         .visibility-icon,
         .variation-display-icon {
             display: inline-grid;
@@ -1514,10 +1521,16 @@ export class WyPromptEditor extends LitElement {
             return;
         }
 
-        const { variationSelector, ...promptWithoutSelector } = this._editedPrompt;
+        const { variationSelector, variationSelectorTileMode, ...promptWithoutSelector } = this._editedPrompt;
         this._editedPrompt = promptWithoutSelector;
         this._markDirty();
         this.requestUpdate();
+    }
+
+    _handleVariationTileModeChange(mode) {
+        if (!this._editedPrompt || this._editedPrompt.variationSelector !== 'visual') return;
+        const nextMode = mode === 'details' ? 'details' : 'thumbnail';
+        this._handleFieldChange('variationSelectorTileMode', nextMode);
     }
 
     _handleModeChange(event, newMode) {
@@ -1631,6 +1644,7 @@ export class WyPromptEditor extends LitElement {
         this._editedPrompt.image = firstVariation.image || '';
         delete this._editedPrompt.variations;
         delete this._editedPrompt.variationSelector;
+        delete this._editedPrompt.variationSelectorTileMode;
         this._markDirty();
         this.requestUpdate();
     }
@@ -2184,16 +2198,29 @@ export class WyPromptEditor extends LitElement {
                                 <span class="variation-display-icon" aria-hidden="true">
                                     <span class="material-symbols-outlined">grid_view</span>
                                 </span>
-                                <wy-option-toggle
-                                    variant="switch"
-                                    size="compact"
-                                    label="Visual Variant Selector"
-                                    description="Shows image tiles instead of the dropdown selector in the public prompt modal."
-                                    .options="${['dropdown', 'visual']}"
-                                    .labels="${['Off', 'On']}"
-                                    .value="${this._editedPrompt.variationSelector === 'visual' ? 'visual' : 'dropdown'}"
-                                    @change="${(e) => this._handleVariationSelectorChange(e.detail.value === 'visual')}"
-                                ></wy-option-toggle>
+                                <div class="variation-display-options">
+                                    <wy-option-toggle
+                                        variant="switch"
+                                        size="compact"
+                                        label="Visual Variant Selector"
+                                        description="Shows image tiles instead of the dropdown selector in the public prompt modal."
+                                        .options="${['dropdown', 'visual']}"
+                                        .labels="${['Off', 'On']}"
+                                        .value="${this._editedPrompt.variationSelector === 'visual' ? 'visual' : 'dropdown'}"
+                                        @change="${(e) => this._handleVariationSelectorChange(e.detail.value === 'visual')}"
+                                    ></wy-option-toggle>
+                                    ${this._editedPrompt.variationSelector === 'visual' ? html`
+                                        <wy-option-toggle
+                                            size="compact"
+                                            label="Tile Content"
+                                            description="Choose whether visual selector thumbnails include variant text."
+                                            .options="${['thumbnail', 'details']}"
+                                            .labels="${['Thumbnail only', 'Title + description']}"
+                                            .value="${this._editedPrompt.variationSelectorTileMode === 'details' ? 'details' : 'thumbnail'}"
+                                            @change="${(e) => this._handleVariationTileModeChange(e.detail.value)}"
+                                        ></wy-option-toggle>
+                                    ` : ''}
+                                </div>
                             </div>
                             <wy-variation-editor
                                 .variations="${this._editedPrompt.variations}"
