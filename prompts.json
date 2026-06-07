@@ -557,6 +557,29 @@
         "instructions": "Upload a building image with this prompt. "
       },
       {
+        "id": "quiet-americana-realist-elevation",
+        "name": "Quiet Americana Realist Elevation",
+        "description": "Converts an uploaded architectural image into a quiet cinematic realist painting with flattened frontal elevation logic, muted archival Americana color, and included Hopper/Wyeth-adjacent style references.\n\nSubmit an uploaded building image with this prompt. The two attached style references are included automatically.",
+        "template": "Use the uploaded building image as the architectural source. Use the included style reference images at {{americana_smokehouse_reference}} and {{americana_house_reference}} for mood, palette, light, brush handling, architectural stillness, and restrained archival Americana atmosphere.\n\nConvert the provided reference image into a quiet, cinematic realist painting with a restrained archival Americana mood, in a style similar to Edward Hopper’s still architectural realism and Andrew Wyeth’s muted tonal discipline.\n\nCompose the scene as a wide, frontal elevation view: architecture and major objects should be seen directly from the front, with minimal perspective convergence, flattened depth, and clear orthographic logic. Use a low, stable horizon and simplified planar surfaces. Place the primary subject near center. Preserve essential identity from the reference, but recompose as needed for flatter depth, calmer symmetry or near-symmetry, broader negative space, and more deliberate staging.\n\nRemove contemporary clutter, including vehicles, wires, incidental people, and other distractions.\n\nRender with matte oil/acrylic handling: controlled brushwork, softened edges, lightly weathered surfaces, subtle scumbling, thin glazes, and selective crisp detail at structural focal points such as edges, openings, thresholds, rooflines, and major transitions. Keep the result representational with mild simplification rather than abstraction.\n\nUse warm late-afternoon stillness: low sun, long soft shadows, gentle atmospheric haze, muted contrast, and quiet heat. Use an aged palette of cream, ochre, faded brick red, olive green, deep umber, blue-gray, dusty white, muted charcoal, and near-black accents. Desaturate greens and blues, soften whites into cream or gray, and make reds sun-worn rather than fresh.\n\nEmphasize stillness, solitude, age, restraint, balance, and suspended time. Avoid glossy realism, over-sharpened detail, saturated color, bright midday light, hard shadows, dramatic fantasy lighting, busy texture, heavy impasto, exaggerated nostalgia, and polished contemporary illustration.",
+        "variables": [],
+        "instructions": "Upload a building image with this prompt. The two archival Americana style references are included automatically.",
+        "referenceImages": [
+          {
+            "variable": "americana_smokehouse_reference",
+            "label": "Smokehouse Style Reference",
+            "path": "public/images/architectural-americana-smokehouse-reference.png",
+            "instructions": "Use this reference for the wide frontal architectural composition, late-afternoon warmth, mature trees, muted brick and cream palette, and still archival Americana mood."
+          },
+          {
+            "variable": "americana_house_reference",
+            "label": "House Style Reference",
+            "path": "public/images/architectural-americana-house-reference.jpeg",
+            "instructions": "Use this reference for softened painterly edges, simplified planar masses, quiet tonal restraint, cream cloud forms, and Wyeth/Hopper-adjacent stillness."
+          }
+        ],
+        "image": "public/images/architectural-americana-smokehouse-reference.png"
+      },
+      {
         "id": "Academic",
         "name": "Beaux-Arts Academic Wash Elevation",
         "description": "Renders the uploaded building as a formal Beaux-Arts academic elevation plate with centered composition, measured linework, controlled mineral washes, and disciplined cast shadows.",
