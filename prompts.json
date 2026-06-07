@@ -664,7 +664,8 @@
     "featured": false,
     "slug": "architectural-rendering",
     "instructions": "Select a variant for the desired drawing style or presentation format.",
-    "image": "public/images/1779820520582.jpg"
+    "image": "public/images/1779820520582.jpg",
+    "variationSelector": "visual"
   },
   {
     "id": "engraving-conversion",
