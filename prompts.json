@@ -382,6 +382,52 @@
     "image": "public/images/generated-hero-1780363463573.jpg"
   },
   {
+    "id": "iron-railing-rendering-workflow",
+    "title": "Iron Railing Rendering Workflow",
+    "description": "Two-step workflow for turning a marked-up railing mockup into a customized image-generation prompt, then a photorealistic historic-district-ready rendering.",
+    "instructions": "Step 1: upload the mockup image with the proposed railing path, rail count, post count, and footing/anchor marks. Step 2: paste the customized prompt from Step 1 and submit it with the same mockup/reference image to generate the rendering.",
+    "category": "Productivity",
+    "icon": "architecture",
+    "featured": false,
+    "slug": "iron-railing-rendering-workflow",
+    "image": "public/images/iron-railing-mockup-example.jpg",
+    "variables": [],
+    "steps": [
+      {
+        "id": "customize-base-prompt",
+        "name": "Customize Prompt From Mockup",
+        "instructions": "Submit the marked-up mockup image. The model should return one finished rendering prompt that precisely describes the railing path and components shown in the mockup.",
+        "template": "You are an expert image-generation prompt engineer specializing in architectural exterior renderings, historic district review, and wrought-iron railing design.\n\nUse the uploaded mockup image as the authoritative source for the proposed railing layout. Bright green marks indicate the intended path, number of rails, number of posts, key joints, and footing/anchor locations.\n\nYour task is to customize the base prompt below so it contains explicit, image-specific instructions consistent with the mockup. The customized prompt will be submitted later with the same mockup/reference image to generate the final rendering.\n\nWhat to extract from the mockup:\n- Count the number of distinct railing runs or segments.\n- Count the number of horizontal, sloped, curved, or lateral rails shown.\n- Count the number of posts, end posts, intermediate posts, and visible joint points.\n- Identify where each post is anchored: top of wall, stair tread, landing, pavement, retaining wall face, existing post, or other visible structure.\n- Identify whether footings are shown as flanges, plates, sockets, bases, or direct embedded posts.\n- Describe the path in plain architectural language: left-to-right, front-to-back, along wall top, down steps, around corner, terminating at existing railing, etc.\n- Preserve any existing railings already present in the photo unless the mockup clearly indicates they should be replaced.\n\nCustomization requirements:\n- Replace generic phrases with specific counts and locations from the mockup.\n- Add a short \"Mockup-Specific Layout\" section near the top of the prompt.\n- The prompt must explicitly prohibit adding extra posts, extra rails, pickets, panels, lower rails, scrollwork, or decorative elements not shown in the mockup.\n- If the mockup indicates a single top rail only, say that it must remain a single rail only.\n- If the mockup indicates ball-and-cap posts or joints, specify ball finials atop cap bases at those locations.\n- If the mockup shows a post or joint as a round dot, interpret it as a ball-and-cap post or joint unless the image clearly suggests otherwise.\n- If part of the mockup is ambiguous, write a conservative instruction that preserves the visible green layout exactly rather than inventing missing structure.\n- Keep the final prompt optimized for an image-generation model, not as commentary to the user.\n\nCustom instruction priority:\n- Apply the user's custom instructions below when customizing the prompt.\n- If any custom instruction conflicts with another aspect of this Step 1 prompt, defer to the custom instruction.\n- If the custom instructions are blank, ignore this section and proceed normally.\n\nUser custom instructions:\n{{custom_instructions}}\n\nOutput requirements:\n- Output only the finished customized prompt in a fenced code block.\n- Do not generate the image.\n- Do not include analysis, caveats, or commentary outside the code block.\n\nBase prompt to customize:\n\nObjective:\nConvert architectural mockups of proposed iron railings into photorealistic, historic-district-ready renderings, perfectly integrating new elements into the existing property.\n\nCore Instruction:\nGenerate a realistic rendering of the property provided in the uploaded reference photo. Replace all bright green mockup lines, which indicate the proposed path of the new iron railings, with finished, photo-realistic architectural ironwork that is historically appropriate and perfectly blended.\n\nCritical Requirements for the New Railing Design:\n- Respect Mockup Layout (Strict Adherence): The new railing structure MUST precisely follow the layout and component count indicated by the green mockup lines. Do not add, remove, or change the number of rails or posts. For example, if the mockup shows a single horizontal top rail, do not render two horizontal rails. The new structure must mimic the indicated green line path and components exactly.\n- Style and Material Match: All rendered railings must be rendered in a matte black, traditional wrought-iron finish.\n- Detailed Component Match (Ball and Cap): The specific design of the new railings must match the ball-and-cap railing style of the existing, observable railings on the property, such as at the stair landings. Render all posts and key joints with ball finials, spherical, atop a cap base.\n- Detailed Joinery: The ball-and-cap style must be applied to all post-tops and to all critical joints where rails meet posts, replicating the existing ironwork's precise detailed finial and joint style.\n\nContext and Integration:\n- Seamless Anchor: The new railings must appear seamlessly anchored to existing infrastructure, such as retaining walls, steps, landings, or paving.\n- Environment Preservation: The entire scene, including existing houses, trees, green lawn, brick path, plants, fences, steps, walls, and existing railings, must be preserved without alteration, except for replacing the bright green mockup marks with the new railing structure.\n- Realistic Textures and Lighting: The ironwork must have heavy, convincing textures with an aged matte finish and must cast realistic, soft shadows consistent with the natural directional sunlight of the scene. The perspective must match the original photo.\n- Complete Integration: Retain all other existing elements of the scene and ensure the new railings blend naturally.",
+        "variables": [
+          {
+            "name": "custom_instructions",
+            "label": "Custom Instructions",
+            "placeholder": "Optional: add project-specific preferences or constraints",
+            "value": "",
+            "inputType": "textarea",
+            "rows": 5
+          }
+        ]
+      },
+      {
+        "id": "generate-rendering",
+        "name": "Generate Final Rendering",
+        "instructions": "Paste the customized prompt from Step 1 into the text field, then submit this step with the same mockup/reference image.",
+        "template": "{{customized_prompt}}\n\nUse the uploaded mockup/reference image and the customized rendering prompt above to generate the final photorealistic rendering.\n\nThe customized prompt is authoritative. Follow its counts, railing path, posts, joints, footing details, anchoring locations, preservation requirements, style requirements, lighting requirements, and prohibitions exactly. Replace the bright green mockup marks with the finished iron railing structure. Do not add any railing component that is not specified by the customized prompt or shown in the green mockup.",
+        "variables": [
+          {
+            "name": "customized_prompt",
+            "label": "Step 1 Output",
+            "placeholder": "Paste the finished prompt generated in Step 1",
+            "value": "",
+            "inputType": "textarea",
+            "rows": 12
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "character-portrait",
     "title": "Portrait Prompt Builder",
     "description": "Builds portrait-generation prompts from uploaded subject photos by extracting a Visual Anchor for likeness and applying a selected style direction.",
