@@ -70,7 +70,23 @@
             {
                 "name": "Perchance",
                 "company": "Perchance",
-                "url": "https://perchance.org"
+                "options": [
+                    {
+                        "name": "Perchance",
+                        "company": "Perchance",
+                        "url": "https://perchance.org/"
+                    },
+                    {
+                        "name": "Preferred model",
+                        "company": "Perchance",
+                        "url": "https://perchance.org/fullbodygenerator"
+                    },
+                    {
+                        "name": "Line drawing capable",
+                        "company": "Perchance",
+                        "url": "https://perchance.org/ai-images-generator"
+                    }
+                ]
             },
             {
                 "name": "Google Stitch",

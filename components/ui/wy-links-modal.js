@@ -22,7 +22,8 @@ export class WyLinksModal extends LitElement {
     open: { type: Boolean, reflect: true },
     title: { type: String },
     links: { type: Array },
-    showPaletteEntry: { type: Boolean, attribute: 'show-palette-entry' }
+    showPaletteEntry: { type: Boolean, attribute: 'show-palette-entry' },
+    openDropdownId: { type: String, state: true }
   };
 
   constructor() {
@@ -31,6 +32,7 @@ export class WyLinksModal extends LitElement {
     this.title = 'AI Tools';
     this.links = [];
     this.showPaletteEntry = false;
+    this.openDropdownId = '';
   }
 
   connectedCallback() {
@@ -69,6 +71,10 @@ export class WyLinksModal extends LitElement {
 
   _handleEscKey(e) {
     if (e.key === 'Escape' && this.open) {
+      if (this.openDropdownId) {
+        this.openDropdownId = '';
+        return;
+      }
       this._handleClose();
     }
   }
@@ -380,6 +386,86 @@ export class WyLinksModal extends LitElement {
       outline-offset: 2px;
     }
 
+    .link-dropdown {
+      position: relative;
+      display: inline-flex;
+    }
+
+    .link-chip--dropdown {
+      gap: var(--spacing-xs, 0.25rem);
+      padding-right: var(--spacing-md, 1rem);
+    }
+
+    .link-chip__label,
+    .link-chip__icon {
+      position: relative;
+      z-index: 1;
+    }
+
+    .link-chip__icon {
+      font-size: 1.25rem;
+      transition: transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+    }
+
+    .link-chip--dropdown[aria-expanded="true"] .link-chip__icon {
+      transform: rotate(180deg);
+    }
+
+    .link-menu {
+      position: absolute;
+      top: calc(100% + var(--spacing-xs, 0.25rem));
+      left: 0;
+      z-index: 20;
+      min-width: 15rem;
+      padding: var(--spacing-xs, 0.25rem);
+      border: 1px solid var(--paper-edge, #DDD6C8);
+      background: var(--paper, #F7F4EE);
+      box-shadow: var(--shadow-modal);
+    }
+
+    .link-menu__item {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 2.75rem;
+      padding: var(--spacing-sm, 0.5rem) var(--spacing-md, 1rem);
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      color: var(--wy-links-modal-chip-text-color, #44403C);
+      cursor: pointer;
+      font-family: var(--ff-sans, 'Inter', sans-serif);
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      line-height: 1.2;
+      text-align: left;
+      text-transform: uppercase;
+      transition: background-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+    }
+
+    .link-menu__item:hover {
+      background: color-mix(in srgb, var(--wy-button-primary-bg, var(--md-sys-color-primary)) 12%, transparent);
+    }
+
+    .link-menu__item:focus-visible {
+      outline: 3px solid var(--md-sys-color-primary);
+      outline-offset: -3px;
+    }
+
+    @media (max-width: 600px) {
+      .link-dropdown {
+        position: static;
+      }
+
+      .link-menu {
+        left: var(--spacing-md, 1rem);
+        right: var(--spacing-md, 1rem);
+        min-width: 0;
+      }
+    }
+
     /* Palette entry */
     .palette-entry-section {
       padding-bottom: var(--spacing-lg, 24px);
@@ -448,20 +534,12 @@ export class WyLinksModal extends LitElement {
               ` : ''}
               ${!this.links || this.links.length === 0
                 ? html`<p style="color: var(--md-sys-color-on-surface-variant); text-align: center; padding: 2rem;">No links available.</p>`
-                : this.links.map(category => html`
+                : this.links.map((category, categoryIndex) => html`
                   <section class="section">
                     <h2 class="section-header">${category.category}</h2>
                     <div class="chips-container">
                       ${category.links && category.links.length > 0 
-                        ? category.links.map(link => html`
-                          <button
-                            class="link-chip"
-                            @click="${(e) => this._handleLinkClick(e, link)}"
-                            aria-label="Open ${link.name}"
-                          >
-                            ${link.name}
-                          </button>
-                        `)
+                        ? category.links.map((link, linkIndex) => this._renderLink(link, `link-${categoryIndex}-${linkIndex}`))
                         : ''}
                     </div>
                   </section>
@@ -488,6 +566,9 @@ export class WyLinksModal extends LitElement {
   }
 
   _handleContainerClick(e) {
+    if (!e.composedPath().some(element => element?.classList?.contains('link-dropdown'))) {
+      this.openDropdownId = '';
+    }
     e.stopPropagation();
   }
 
@@ -508,6 +589,57 @@ export class WyLinksModal extends LitElement {
       bubbles: true,
       composed: true
     }));
+  }
+
+  _renderLink(link, dropdownId) {
+    if (Array.isArray(link.options) && link.options.length > 0) {
+      const isOpen = this.openDropdownId === dropdownId;
+
+      return html`
+        <div class="link-dropdown">
+          <button
+            class="link-chip link-chip--dropdown"
+            @click="${(e) => this._handleDropdownToggle(e, dropdownId)}"
+            aria-label="Open ${link.name} options"
+            aria-haspopup="menu"
+            aria-expanded="${isOpen ? 'true' : 'false'}"
+            aria-controls="link-menu-${dropdownId}"
+          >
+            <span class="link-chip__label">${link.name}</span>
+            <span class="material-symbols-outlined link-chip__icon" aria-hidden="true">expand_more</span>
+          </button>
+          ${isOpen ? html`
+            <div class="link-menu" id="link-menu-${dropdownId}" role="menu">
+              ${link.options.map(option => html`
+                <button
+                  class="link-menu__item"
+                  role="menuitem"
+                  @click="${(e) => this._handleLinkClick(e, option)}"
+                  aria-label="Open ${option.name}"
+                >
+                  ${option.name}
+                </button>
+              `)}
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    return html`
+      <button
+        class="link-chip"
+        @click="${(e) => this._handleLinkClick(e, link)}"
+        aria-label="Open ${link.name}"
+      >
+        ${link.name}
+      </button>
+    `;
+  }
+
+  _handleDropdownToggle(e, dropdownId) {
+    e.stopPropagation();
+    this.openDropdownId = this.openDropdownId === dropdownId ? '' : dropdownId;
   }
 
   show() {

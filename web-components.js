@@ -9346,11 +9346,13 @@ var WyPromptModal = class extends i4 {
       return b2`<div class="empty-message">Step not found</div>`;
     }
     const compiledPrompt = this._compilePrompt(step.template || "");
+    const hasStepVariables = Array.isArray(step.variables) && step.variables.length > 0;
+    const showVariables = hasStepVariables && this.activeTab === "variables";
     return b2`
       ${this._renderStepper()}
       
       <!-- Add tabs for Variables/Preview -->
-      ${step.variables && step.variables.length > 0 ? b2`
+      ${hasStepVariables ? b2`
         <div class="tabs-header">
           <button 
             class="tab-item ${this.activeTab === "variables" ? "active" : ""}"
@@ -9367,15 +9369,17 @@ var WyPromptModal = class extends i4 {
         </div>
       ` : ""}
       
-      <wy-info-panel 
-        class="step-instructions"
-        variant="compact"
-        heading="${step.name}">
-        ${step.instructions}
-      </wy-info-panel>
+      ${step.instructions ? b2`
+        <wy-info-panel
+          class="step-instructions"
+          variant="compact"
+          heading="${step.name}">
+          ${step.instructions}
+        </wy-info-panel>
+      ` : ""}
       
       <!-- Conditionally render variables or preview based on active tab -->
-      ${this.activeTab === "variables" ? b2`
+      ${showVariables ? b2`
         <div class="variables-grid">
           ${step.variables.map((v2) => this._renderVariable(v2))}
         </div>
@@ -9721,6 +9725,7 @@ var WyPromptModal = class extends i4 {
                   ${this._renderPromptIntro()}
               </div>
               <div class="body">
+                ${this._renderVariationSelector(activeVariation)}
                 ${this._renderMultiStepBody()}
               </div>
             ` : b2`
@@ -9876,6 +9881,9 @@ var WyPromptModal = class extends i4 {
     const index = this.variations.findIndex((v2) => v2.id === selectedId);
     if (index !== -1) {
       this.activeVariationIndex = index;
+      this.steps = this.variations[index].steps || [];
+      this.activeStepIndex = 0;
+      this.activeTab = "variables";
       this.variationDetailsExpanded = false;
       this.dispatchEvent(new CustomEvent("variation-change", {
         detail: { index, variation: this.variations[index] },
@@ -11332,6 +11340,7 @@ var WyLinksModal = class extends i4 {
     this.title = "AI Tools";
     this.links = [];
     this.showPaletteEntry = false;
+    this.openDropdownId = "";
   }
   connectedCallback() {
     super.connectedCallback();
@@ -11365,6 +11374,10 @@ var WyLinksModal = class extends i4 {
   }
   _handleEscKey(e9) {
     if (e9.key === "Escape" && this.open) {
+      if (this.openDropdownId) {
+        this.openDropdownId = "";
+        return;
+      }
       this._handleClose();
     }
   }
@@ -11421,19 +11434,11 @@ var WyLinksModal = class extends i4 {
                   </button>
                 </div>
               ` : ""}
-              ${!this.links || this.links.length === 0 ? b2`<p style="color: var(--md-sys-color-on-surface-variant); text-align: center; padding: 2rem;">No links available.</p>` : this.links.map((category) => b2`
+              ${!this.links || this.links.length === 0 ? b2`<p style="color: var(--md-sys-color-on-surface-variant); text-align: center; padding: 2rem;">No links available.</p>` : this.links.map((category, categoryIndex) => b2`
                   <section class="section">
                     <h2 class="section-header">${category.category}</h2>
                     <div class="chips-container">
-                      ${category.links && category.links.length > 0 ? category.links.map((link) => b2`
-                          <button
-                            class="link-chip"
-                            @click="${(e9) => this._handleLinkClick(e9, link)}"
-                            aria-label="Open ${link.name}"
-                          >
-                            ${link.name}
-                          </button>
-                        `) : ""}
+                      ${category.links && category.links.length > 0 ? category.links.map((link, linkIndex) => this._renderLink(link, `link-${categoryIndex}-${linkIndex}`)) : ""}
                     </div>
                   </section>
                 `)}
@@ -11456,6 +11461,9 @@ var WyLinksModal = class extends i4 {
     }
   }
   _handleContainerClick(e9) {
+    if (!e9.composedPath().some((element) => element?.classList?.contains("link-dropdown"))) {
+      this.openDropdownId = "";
+    }
     e9.stopPropagation();
   }
   _handleClose() {
@@ -11473,6 +11481,53 @@ var WyLinksModal = class extends i4 {
       composed: true
     }));
   }
+  _renderLink(link, dropdownId) {
+    if (Array.isArray(link.options) && link.options.length > 0) {
+      const isOpen = this.openDropdownId === dropdownId;
+      return b2`
+        <div class="link-dropdown">
+          <button
+            class="link-chip link-chip--dropdown"
+            @click="${(e9) => this._handleDropdownToggle(e9, dropdownId)}"
+            aria-label="Open ${link.name} options"
+            aria-haspopup="menu"
+            aria-expanded="${isOpen ? "true" : "false"}"
+            aria-controls="link-menu-${dropdownId}"
+          >
+            <span class="link-chip__label">${link.name}</span>
+            <span class="material-symbols-outlined link-chip__icon" aria-hidden="true">expand_more</span>
+          </button>
+          ${isOpen ? b2`
+            <div class="link-menu" id="link-menu-${dropdownId}" role="menu">
+              ${link.options.map((option) => b2`
+                <button
+                  class="link-menu__item"
+                  role="menuitem"
+                  @click="${(e9) => this._handleLinkClick(e9, option)}"
+                  aria-label="Open ${option.name}"
+                >
+                  ${option.name}
+                </button>
+              `)}
+            </div>
+          ` : ""}
+        </div>
+      `;
+    }
+    return b2`
+      <button
+        class="link-chip"
+        @click="${(e9) => this._handleLinkClick(e9, link)}"
+        aria-label="Open ${link.name}"
+      >
+        ${link.name}
+      </button>
+    `;
+  }
+  _handleDropdownToggle(e9, dropdownId) {
+    e9.stopPropagation();
+    this.openDropdownId = this.openDropdownId === dropdownId ? "" : dropdownId;
+  }
   show() {
     this.open = true;
   }
@@ -11484,7 +11539,8 @@ __publicField(WyLinksModal, "properties", {
   open: { type: Boolean, reflect: true },
   title: { type: String },
   links: { type: Array },
-  showPaletteEntry: { type: Boolean, attribute: "show-palette-entry" }
+  showPaletteEntry: { type: Boolean, attribute: "show-palette-entry" },
+  openDropdownId: { type: String, state: true }
 });
 __publicField(WyLinksModal, "styles", i`
     :host {
@@ -11759,6 +11815,86 @@ __publicField(WyLinksModal, "styles", i`
     .link-chip:focus-visible {
       outline: 3px solid var(--md-sys-color-primary);
       outline-offset: 2px;
+    }
+
+    .link-dropdown {
+      position: relative;
+      display: inline-flex;
+    }
+
+    .link-chip--dropdown {
+      gap: var(--spacing-xs, 0.25rem);
+      padding-right: var(--spacing-md, 1rem);
+    }
+
+    .link-chip__label,
+    .link-chip__icon {
+      position: relative;
+      z-index: 1;
+    }
+
+    .link-chip__icon {
+      font-size: 1.25rem;
+      transition: transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+    }
+
+    .link-chip--dropdown[aria-expanded="true"] .link-chip__icon {
+      transform: rotate(180deg);
+    }
+
+    .link-menu {
+      position: absolute;
+      top: calc(100% + var(--spacing-xs, 0.25rem));
+      left: 0;
+      z-index: 20;
+      min-width: 15rem;
+      padding: var(--spacing-xs, 0.25rem);
+      border: 1px solid var(--paper-edge, #DDD6C8);
+      background: var(--paper, #F7F4EE);
+      box-shadow: var(--shadow-modal);
+    }
+
+    .link-menu__item {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 2.75rem;
+      padding: var(--spacing-sm, 0.5rem) var(--spacing-md, 1rem);
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      color: var(--wy-links-modal-chip-text-color, #44403C);
+      cursor: pointer;
+      font-family: var(--ff-sans, 'Inter', sans-serif);
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      line-height: 1.2;
+      text-align: left;
+      text-transform: uppercase;
+      transition: background-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+    }
+
+    .link-menu__item:hover {
+      background: color-mix(in srgb, var(--wy-button-primary-bg, var(--md-sys-color-primary)) 12%, transparent);
+    }
+
+    .link-menu__item:focus-visible {
+      outline: 3px solid var(--md-sys-color-primary);
+      outline-offset: -3px;
+    }
+
+    @media (max-width: 600px) {
+      .link-dropdown {
+        position: static;
+      }
+
+      .link-menu {
+        left: var(--spacing-md, 1rem);
+        right: var(--spacing-md, 1rem);
+        min-width: 0;
+      }
     }
 
     /* Palette entry */

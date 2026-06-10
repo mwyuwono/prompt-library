@@ -1461,12 +1461,14 @@ export class WyPromptModal extends LitElement {
     }
     
     const compiledPrompt = this._compilePrompt(step.template || '');
+    const hasStepVariables = Array.isArray(step.variables) && step.variables.length > 0;
+    const showVariables = hasStepVariables && this.activeTab === 'variables';
     
     return html`
       ${this._renderStepper()}
       
       <!-- Add tabs for Variables/Preview -->
-      ${step.variables && step.variables.length > 0 ? html`
+      ${hasStepVariables ? html`
         <div class="tabs-header">
           <button 
             class="tab-item ${this.activeTab === 'variables' ? 'active' : ''}"
@@ -1483,15 +1485,17 @@ export class WyPromptModal extends LitElement {
         </div>
       ` : ''}
       
-      <wy-info-panel 
-        class="step-instructions"
-        variant="compact"
-        heading="${step.name}">
-        ${step.instructions}
-      </wy-info-panel>
+      ${step.instructions ? html`
+        <wy-info-panel
+          class="step-instructions"
+          variant="compact"
+          heading="${step.name}">
+          ${step.instructions}
+        </wy-info-panel>
+      ` : ''}
       
       <!-- Conditionally render variables or preview based on active tab -->
-      ${this.activeTab === 'variables' ? html`
+      ${showVariables ? html`
         <div class="variables-grid">
           ${step.variables.map(v => this._renderVariable(v))}
         </div>
@@ -1870,6 +1874,7 @@ export class WyPromptModal extends LitElement {
                   ${this._renderPromptIntro()}
               </div>
               <div class="body">
+                ${this._renderVariationSelector(activeVariation)}
                 ${this._renderMultiStepBody()}
               </div>
             ` : html`
@@ -2051,6 +2056,9 @@ export class WyPromptModal extends LitElement {
     const index = this.variations.findIndex(v => v.id === selectedId);
     if (index !== -1) {
       this.activeVariationIndex = index;
+      this.steps = this.variations[index].steps || [];
+      this.activeStepIndex = 0;
+      this.activeTab = 'variables';
       this.variationDetailsExpanded = false;
       this.dispatchEvent(new CustomEvent('variation-change', {
         detail: { index, variation: this.variations[index] },

@@ -1350,6 +1350,10 @@ Server will start on http://localhost:3001`;
                 // Always update variables using helper that handles fallback logic
                 this.promptModal.variables = this.getActiveVariables(prompt);
                 this.promptModal.variationImage = this.getActiveVariationImage(prompt);
+                this.promptModal.template = variation.template || '';
+                this.promptModal.steps = variation.steps || [];
+                this.promptModal.activeStepIndex = 0;
+                this.promptModal.activeTab = 'variables';
                 // Update URL hash to reflect new variation
                 this.updateUrlHash(prompt.id, variation.id);
             }
@@ -1458,6 +1462,7 @@ Server will start on http://localhost:3001`;
 
             // Get the active variables and restore saved values
             const variables = this.getActiveVariables(prompt);
+            const activeVariation = this.getActiveVariation(prompt);
             this.loadVariableValues(prompt.id, variables);
 
             // Set all properties on the web component
@@ -1473,6 +1478,8 @@ Server will start on http://localhost:3001`;
                 referenceImages: prompt.referenceImages || [],
                 variables: variables,
                 variations: prompt.variations || [],
+                steps: activeVariation?.steps || [],
+                activeStepIndex: 0,
                 variationSelector: prompt.variationSelector || '',
                 variationSelectorTileMode: prompt.variationSelectorTileMode || 'thumbnail',
                 activeVariationIndex: variationIndex >= 0 ? variationIndex : 0,
