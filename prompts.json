@@ -186,20 +186,36 @@
     "description": "Converts notes into Mochi-ready flashcards with nested clozes and markdown separators.",
     "category": "Expertise",
     "icon": "style",
-    "template": "Material to convert:\n{{material_to_convert}}\n\nPrompt:\n\nAct as an expert flashcard creator for the Mochi app. Convert the material above into concise, high-density cloze-deletion flashcards.\n\nFollow these formatting rules strictly:\n1. Output Only: Return only the finished flashcards. Do not include an introduction, explanation, labels, notes, commentary, questions, summaries, or closing text. The output must be ready to copy directly into Mochi without edits.\n2. Card Structure: Start the card with the main term enclosed in double curly brackets, followed by a space, an em-dash (—), a space, and the definition. Do NOT use a colon after the main term, as it breaks Mochi's cloze engine.\n   Syntax: {{Main Term}} — Concise definition sentence.\n3. Conciseness: Strip out conversational filler and passive verbs. Keep definitions telegraphic, punchy, and focused entirely on core technical facts.\n4. Nested Cloze Deletions: Identify key secondary jargon, sub-elements, or specific related terms within the definition, and enclose them in double curly brackets {{like this}} so Mochi hides them during study.\n5. Separation: Separate each flashcard with a standard markdown horizontal rule (---) on its own line.",
-    "variables": [
-      {
-        "name": "material_to_convert",
-        "label": "Material to Convert",
-        "placeholder": "Paste text, terms, or notes to convert into Mochi cloze flashcards",
-        "value": "",
-        "inputType": "textarea",
-        "rows": 10
-      }
-    ],
+    "template": "",
+    "variables": [],
     "featured": false,
     "slug": "mochi-flashcard-formatting",
-    "image": "public/images/1779287156117.jpg"
+    "image": "public/images/1779287156117.jpg",
+    "steps": [
+      {
+        "id": "step-1",
+        "name": "Step 1",
+        "instructions": "",
+        "template": "Material to convert:\n{{material_to_convert}}\n\nPrompt:\n\nAct as an expert flashcard creator for the Mochi app. Convert the material above into concise, high-density cloze-deletion flashcards.\n\nFollow these formatting rules strictly:\n1. Output Only: Return only the finished flashcards. Do not include an introduction, explanation, labels, notes, commentary, questions, summaries, or closing text. The output must be ready to copy directly into Mochi without edits.\n2. Card Structure: Start the card with the main term enclosed in double curly brackets, followed by a space, an em-dash (—), a space, and the definition. Do NOT use a colon after the main term, as it breaks Mochi's cloze engine.\n   Syntax: {{Main Term}} — Concise definition sentence.\n3. Conciseness: Strip out conversational filler and passive verbs. Keep definitions telegraphic, punchy, and focused entirely on core technical facts.\n4. Nested Cloze Deletions: Identify key secondary jargon, sub-elements, or specific related terms within the definition, and enclose them in double curly brackets {{like this}} so Mochi hides them during study.\n5. Separation: Separate each flashcard with a standard markdown horizontal rule (---) on its own line.",
+        "variables": [
+          {
+            "name": "material_to_convert",
+            "label": "Material to Convert",
+            "placeholder": "Paste text, terms, or notes to convert into Mochi cloze flashcards",
+            "value": "",
+            "inputType": "textarea",
+            "rows": 10
+          }
+        ]
+      },
+      {
+        "id": "mochi-step-2",
+        "name": "Generate markdown file",
+        "instructions": "",
+        "template": "Provide the cards in a single .MD file.\nSeparate each card with a markdown horizontal rule on its own line:\n\n---\n\nThe file should be saved as `.md` For Mochi markdown import. \n\nWhen you provide the markdown file, please remind me it should be imported as “Multiple cards per .md file,” with `---` entered as the delimiter.",
+        "variables": []
+      }
+    ]
   },
   {
     "id": "product-research",
