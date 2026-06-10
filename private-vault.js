@@ -40,7 +40,7 @@ form?.addEventListener('submit', async (event) => {
         hideFeaturedFilter();
     } catch (error) {
         console.error('Private vault unlock failed:', error);
-        setMessage('Unable to unlock private prompts. Check the passcode and try again.', 'error');
+        setMessage("Unable to unlock private prompts. Hint: Sarah's birthdate.", 'error');
         passcodeInput.select();
     } finally {
         setBusy(false);
