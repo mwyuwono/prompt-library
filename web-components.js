@@ -1826,6 +1826,8 @@ var WyControlsBar = class extends i4 {
     this.searchValue = "";
     this.hideViewToggle = false;
     this.hideDetailsToggle = false;
+    this.showPrivateVaultLink = false;
+    this.privateVaultHref = "./private.html";
     this.showFeaturedOnly = false;
     this.chipVariant = "";
     this.isScrolled = false;
@@ -2084,6 +2086,16 @@ var WyControlsBar = class extends i4 {
         ` : this.isScrolled ? b2`<div class="divider"></div>` : ""}
 
         <div class="category-section">
+          ${this.showPrivateVaultLink ? b2`
+            <a
+              class="vault-link"
+              href="${this.privateVaultHref}"
+              aria-label="Open private prompts"
+              title="Private prompts"
+            >
+              <span class="material-symbols-outlined" aria-hidden="true">lock</span>
+            </a>
+          ` : ""}
           <div class="chips-track" role="tablist">
             <button
               class="chip chip--featured ${this.showFeaturedOnly ? "active" : ""}"
@@ -2181,6 +2193,8 @@ __publicField(WyControlsBar, "properties", {
   searchValue: { type: String, attribute: "search-value" },
   hideViewToggle: { type: Boolean, attribute: "hide-view-toggle" },
   hideDetailsToggle: { type: Boolean, attribute: "hide-details-toggle" },
+  showPrivateVaultLink: { type: Boolean, attribute: "show-private-vault-link" },
+  privateVaultHref: { type: String, attribute: "private-vault-href" },
   showFeaturedOnly: { type: Boolean, attribute: "show-featured-only" },
   chipVariant: { type: String, attribute: "chip-variant" },
   isScrolled: { type: Boolean, state: true },
@@ -2490,9 +2504,14 @@ __publicField(WyControlsBar, "styles", i`
       flex: 1 1 auto;
       min-width: 0;
       position: relative;
+      display: flex;
+      align-items: center;
+      gap: var(--s-2, 8px);
     }
 
     .chips-track {
+      flex: 1 1 auto;
+      min-width: 0;
       display: flex;
       align-items: center;
       gap: var(--s-2, 8px);
@@ -2513,6 +2532,68 @@ __publicField(WyControlsBar, "styles", i`
 
     .chips-track::-webkit-scrollbar {
       display: none;
+    }
+
+    .vault-link {
+      flex: 0 0 auto;
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink-mute, #6B6B6A);
+      border: 1px solid var(--paper-edge, #DDD6C8);
+      border-radius: var(--wy-controls-radius, 999px);
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      transition:
+        color var(--dur-1, 150ms) var(--ease, ease),
+        border-color var(--dur-1, 150ms) var(--ease, ease);
+    }
+
+    .vault-link::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--ink, #282828);
+      opacity: 0;
+      transition: opacity var(--dur-1, 150ms) var(--ease, ease);
+      pointer-events: none;
+    }
+
+    .vault-link:hover,
+    .vault-link:focus-visible {
+      color: var(--ink, #282828);
+      border-color: var(--ink-soft, #B9B2A6);
+    }
+
+    .vault-link:hover::before,
+    .vault-link:focus-visible::before {
+      opacity: 0.06;
+    }
+
+    .vault-link:focus-visible {
+      outline: 2px solid var(--ink, #282828);
+      outline-offset: 2px;
+    }
+
+    .vault-link .material-symbols-outlined {
+      position: relative;
+      z-index: 1;
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 17px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      font-feature-settings: 'liga';
+      -webkit-font-feature-settings: 'liga';
+      -webkit-font-smoothing: antialiased;
     }
 
     :host([data-scrolled]) .category-section {
