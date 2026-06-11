@@ -805,6 +805,22 @@
         "image": "public/images/1780602698474.jpg"
       },
       {
+        "id": "gouache-landscape-study",
+        "name": "Gouache Landscape Study",
+        "description": "Converts an uploaded image into an expressive presentation-ready digital painting with loose gouache, pastel, and dry-brush handling on warm toned paper.\n\nSubmit an uploaded image with this prompt. The attached gouache style reference is included automatically.",
+        "template": "Convert the attached image to an expressive, presentation-ready digital painting that feels like a loose gouache, pastel, and dry-brush study on warm toned paper, consistent with the style of {{gouache-style-reference}}. Use broad, confident, painterly marks with visible brush texture, irregular edges, scumbled pigment, and layered opaque color. Favor impressionistic suggestion over precise realism: forms should be simplified, atmospheric, and readable through silhouette, massing, color temperature, and value contrast rather than detailed linework.\n\nUse a soft, muted natural palette with warm earth tones, deep greens, mossy olive shadows, occasional bright chartreuse accents, and restrained warm reds or russets where appropriate. Keep the lighting diffuse and even, with minimal hard shadows and a calm open-air feeling. Preserve negative space and avoid overfilling the composition; the image should feel airy, quiet, and composed.\n\nMaintain a handmade, observational quality: energetic but controlled brushwork, soft transitions, organic variation in mark size and opacity, and subtle surface texture. Avoid photorealism, glossy rendering, hard digital outlines, repetitive patterning, synthetic grain, moire, pixel jitter, procedural noise, or over-sharpened detail. The overall vibe should be calm, solitary, informal, and design-oriented, like a high-end landscape architect's quick concept rendering refined into a polished painterly study.",
+        "variables": [],
+        "referenceImages": [
+          {
+            "variable": "gouache-style-reference",
+            "label": "Gouache Style Reference",
+            "path": "public/images/gouache-style-reference.jpg",
+            "instructions": "Use this reference for the loose gouache, pastel, dry-brush handling, warm toned paper, muted natural greens, scumbled pigment, and calm open-air landscape-architect concept rendering quality."
+          }
+        ],
+        "image": "public/images/gouache-style-reference.jpg"
+      },
+      {
         "id": "moody-modernist-oil",
         "name": "Moody Modernist Oil Painting",
         "description": "Converts an uploaded image into a quiet, atmospheric modernist oil painting with broad gestural brushwork, compressed depth, fluid semi-abstract forms, and emotionally charged restrained color.",
