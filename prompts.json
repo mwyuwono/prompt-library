@@ -402,7 +402,7 @@
     "title": "Iron Railing Rendering Workflow",
     "description": "Two-step workflow for turning a marked-up railing mockup into a customized image-generation prompt, then a photorealistic historic-district-ready rendering.",
     "instructions": "Step 1: upload the mockup image with the proposed railing path, rail count, post count, and footing/anchor marks. Step 2: paste the customized prompt from Step 1 and submit it with the same mockup/reference image to generate the rendering.",
-    "category": "Productivity",
+    "category": "Architecture",
     "icon": "architecture",
     "featured": false,
     "slug": "iron-railing-rendering-workflow",
@@ -440,6 +440,32 @@
             "rows": 12
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "interior-photo-editorial-retouch",
+    "title": "Interior Photo Editorial Retouch",
+    "description": "Transforms an uploaded interior photograph into a polished, editorial architectural/interiors image, with variants for preserving contents exactly or removing incidental clutter.",
+    "instructions": "Upload an interior photograph and choose whether to preserve all contents exactly or remove incidental clutter.",
+    "category": "Architecture",
+    "icon": "architecture",
+    "featured": false,
+    "slug": "interior-photo-editorial-retouch",
+    "template": "",
+    "variables": [],
+    "variations": [
+      {
+        "id": "contents-maintained",
+        "name": "Contents Maintained",
+        "description": "Preserves all furniture, decor, objects, artwork, textiles, fixtures, architectural details, and visible contents exactly as they appear while applying only photographic corrections and professional retouching.",
+        "template": "Transform the uploaded interior photograph into a polished, editorial-quality architectural/interiors photograph while preserving the room's identity, layout, camera position, and factual contents. Use the uploaded image as the source of truth.\n\nCorrect perspective, verticals, lens distortion, framing, color balance, exposure, contrast, shadows, highlights, white balance, and lighting consistency so the image reads like a professionally shot magazine or design portfolio photograph. Improve sharpness, tonal depth, material realism, and spatial clarity. Retain natural-looking daylight or existing artificial light as appropriate. Remove visual artifacts, noise, blur, muddy color casts, uneven lighting, and amateur snapshot qualities.\n\nThe result should feel realistic, restrained, and photographically credible: clean, balanced, well-composed, and editorial, without looking overprocessed, staged beyond the original scene, or artificially generated.\n\nMaintain all furniture, decor, objects, artwork, textiles, lighting fixtures, architectural details, and visible contents exactly as they appear in the uploaded image. Do not remove, replace, rearrange, add, resize, restyle, or reinterpret any objects. The only changes should be photographic corrections and professional retouching treatments: perspective correction, color correction, lighting correction, exposure balancing, lens correction, clarity, realism, and artifact cleanup."
+      },
+      {
+        "id": "clutter-removed",
+        "name": "Clutter Removed",
+        "description": "Preserves the room, major furniture, built-ins, artwork, rugs, fixtures, window treatments, and design intent while removing only incidental clutter and temporary distractions.",
+        "template": "Transform the uploaded interior photograph into a polished, editorial-quality architectural/interiors photograph while preserving the room's identity, layout, camera position, and factual contents. Use the uploaded image as the source of truth.\n\nCorrect perspective, verticals, lens distortion, framing, color balance, exposure, contrast, shadows, highlights, white balance, and lighting consistency so the image reads like a professionally shot magazine or design portfolio photograph. Improve sharpness, tonal depth, material realism, and spatial clarity. Retain natural-looking daylight or existing artificial light as appropriate. Remove visual artifacts, noise, blur, muddy color casts, uneven lighting, and amateur snapshot qualities.\n\nThe result should feel realistic, restrained, and photographically credible: clean, balanced, well-composed, and editorial, without looking overprocessed, staged beyond the original scene, or artificially generated.\n\nMaintain the room architecture, layout, camera position, major furniture, built-ins, artwork, rugs, lighting fixtures, window treatments, and overall design intent. Remove only incidental clutter and distracting temporary items, such as loose papers, cords, bags, personal items, trash, random small objects, messy surfaces, or anything that makes the room feel casually unprepared.\n\nDo not redesign, refurnish, redecorate, replace major items, change finishes, alter architectural features, or introduce new decor. After decluttering, clean and lightly stage the room only through removal, straightening, and subtle visual tidying. The final image should look like the same room, professionally photographed for an interiors publication."
       }
     ]
   },
@@ -555,7 +581,7 @@
     "id": "architectural-rendering",
     "title": "Architectural Rendering",
     "description": "Converts uploaded building or architectural images into historically styled renderings, elevations, plates, murals, isometric views, or reusable rendering-style prompts.",
-    "category": "Art",
+    "category": "Architecture",
     "icon": "architecture",
     "variables": [],
     "variations": [
@@ -957,7 +983,7 @@
   {
     "id": "restyle-image",
     "title": "Photography",
-    "description": "Transforms an uploaded photo into a selected fine-art, editorial, archival, or architectural photography style.",
+    "description": "Transforms an uploaded photo into a selected fine-art, editorial, or archival photography style.",
     "category": "Art",
     "icon": "camera_alt",
     "variables": [
@@ -985,13 +1011,6 @@
         "template": "Transform this uploaded reference image into a high-fidelity, magazine-quality photograph suitable for a luxury publication.\n\nCritical Execution: Upscale and reconstruct. Treat the input as a spatial reference only. If the input is low-resolution, degraded, or blurry, synthesize new, sharp, high-definition textures to replace pixelated areas. Restore clarity to fine details, ensuring every element has the crispness consistent with an 8K full-frame DSLR capture.\n\nTechnical Requirements: Emulate a 24mm tilt-shift lens capture for perfect vertical alignment and sophisticated perspective without distortion.\n\nLighting & Depth: Implement a natural lighting scheme using soft, diffused indirect sunlight. Prioritize 'Global Illumination' to create authentic micro-shadows in corners and crevices. The image must feature high dynamic range (HDR) with realistic highlight roll-off and deep shadow detail.\n\nMateriality: Uphold the materiality of the original scene. Ensure tactile quality: wood grain must show subtle pores, fabrics visible weaves, and stone natural matte or polished reflections.\n\nAesthetic Filter: Avoid any 'plastic,' hyper-smooth, or overly-processed AI artifacts. Maintain a slight, natural film grain. The final output must be indistinguishable from a physical photograph.\n\nOptional user notes (may be blank; if blank, ignore this field): {{additional_notes}}"
       },
       {
-        "id": "upscale-2",
-        "name": "Faithful Interior Upscale",
-        "description": "Best for interiors, rooms, furniture, and design renderings that already have the right composition. Improves fidelity, sharpness, and texture while preserving layout, camera angle, lighting direction, and design intent.\n\nSubmit an uploaded photo or rendering with this prompt.",
-        "template": "Upscale and enhance the provided image while preserving the original composition, camera angle, proportions, room layout, furniture placement, fabric pattern, lighting direction, and overall design intent.\n\nThe goal is to make the image read as a high-end editorial photograph suitable for an interiors magazine such as Architectural Digest, Frederic Magazine, The World of Interiors, or a luxury advertising campaign.\n\nIncrease resolution, sharpness, and image fidelity while maintaining a natural photographic look. Recover and add plausible missing material texture where the source image is soft, low-resolution, or compressed. Remove digital artifacts, smearing, over-smoothing, compression noise, and unnatural AI blur.\n\nKeep the image grounded, quiet, sophisticated, and photorealistic.",
-        "variables": []
-      },
-      {
         "id": "tina-barney",
         "name": "Large-Format Color Portrait",
         "description": "Gives portraits, groups, or lived-in interiors a restrained large-format color photography look: naturalistic color, quiet psychological presence, and gallery-ready editorial polish.\n\nSubmit an uploaded portrait, group, or interior photo with this prompt.",
@@ -1010,6 +1029,37 @@
         "template": "Transform this antique photograph into a seamless, high-quality color photograph. The colorization should be completely natural, replicating the aesthetic of a photo taken with a contemporary color camera, while preserving the original subject and setting without any changes."
       },
       {
+        "id": "faithful-upscale",
+        "name": "Style Preservation Upscale",
+        "description": "",
+        "image": "",
+        "template": "Upscale and enhance the provided image while preserving its exact existing aesthetic intent.\n\nUse the source image as the authority for composition, subject identity, framing, camera position, perspective, lighting, color, contrast, atmosphere, texture, depth of field, grain, sharpness, lens behavior, and overall visual character.\n\nInfer the intended image language before enhancing. If the source is clean, sharp, modern, commercial, editorial, architectural, or studio-like, preserve that polished precision. If the source is analog, archival, vintage, cinematic, documentary, painterly, soft-focus, low-light, or intentionally imperfect, preserve its grain, softness, haze, tonal compression, lens falloff, blur, patina, and medium-specific imperfections.\n\nIncrease resolution, fidelity, and print-readiness without changing the image’s content or style. Recover plausible detail only where the source is degraded, and keep all added detail consistent with the original medium, optics, lighting, and material behavior.\n\nRemove digital artifacts such as compression blocks, AI smearing, pixelation, banding, moiré, edge halos, warped details, duplicated textures, and over-smoothing. Preserve intentional grain, texture, softness, blur, haze, aging, and natural irregularity.\n\nDo not modernize, restyle, beautify, over-sharpen, over-clean, over-saturate, over-contrast, crop, recompose, add content, remove content, redesign subjects, or reinterpret the image.\n\nFinal result: a higher-resolution faithful master version of the same image, with improved technical quality and no change to its original aesthetic intent.",
+        "variables": [],
+        "referenceImages": []
+      }
+    ],
+    "featured": false,
+    "slug": "restyle-photograph",
+    "template": "",
+    "instructions": "Select a variant for the desired photographic treatment."
+  },
+  {
+    "id": "architectural-photo-visualization",
+    "title": "Architectural Photo Visualization",
+    "description": "Enhances interior, room, architectural, and design mockup images into polished, photorealistic portfolio-quality photographs.",
+    "instructions": "Select a variant for the uploaded interior, room, architectural image, or design mockup.",
+    "category": "Architecture",
+    "icon": "photo_camera",
+    "variables": [],
+    "variations": [
+      {
+        "id": "upscale-2",
+        "name": "Interior Upscale",
+        "description": "Best for interiors, rooms, furniture, and design renderings that already have the right composition. Improves fidelity, sharpness, and texture while preserving layout, camera angle, lighting direction, and design intent.\n\nSubmit an uploaded photo or rendering with this prompt.",
+        "template": "Upscale and enhance the provided image while preserving the original composition, camera angle, proportions, room layout, furniture placement, fabric pattern, lighting direction, and overall design intent.\n\nThe goal is to make the image read as a high-end editorial photograph suitable for an interiors magazine such as Architectural Digest, Frederic Magazine, The World of Interiors, or a luxury advertising campaign.\n\nIncrease resolution, sharpness, and image fidelity while maintaining a natural photographic look. Recover and add plausible missing material texture where the source image is soft, low-resolution, or compressed. Remove digital artifacts, smearing, over-smoothing, compression noise, and unnatural AI blur.\n\nKeep the image grounded, quiet, sophisticated, and photorealistic.",
+        "variables": []
+      },
+      {
         "id": "photorendering",
         "name": "Mockup to Architectural Photo",
         "description": "Converts a pasted-together architectural or interior design mockup into a believable portfolio-quality photo. Integrates added elements with matching perspective, lighting, scale, and material fidelity without redesigning them.\n\nSubmit an uploaded mockup image with this prompt.",
@@ -1018,9 +1068,8 @@
       }
     ],
     "featured": false,
-    "slug": "restyle-photograph",
-    "template": "",
-    "instructions": "Select a variant for the desired photographic treatment."
+    "slug": "architectural-photo-visualization",
+    "template": ""
   },
   {
     "id": "component-adaptation",
@@ -1444,7 +1493,7 @@
     "id": "architectural-detail-trace-prep",
     "title": "Enlarge & Refine Details",
     "description": "Generates detail-enlargement image prompts from a reference image and a list of details, producing macro views suitable for hand-tracing references.",
-    "category": "Art",
+    "category": "Architecture",
     "icon": "architecture",
     "template": "Task: Analyze the attached 'reference' image and generate a series of highly specific, individual image-generation prompts. Each generated prompt must focus on one specific detail from the list provided below. The goal of these prompts is to generate a new image that acts as a high-precision enlargement of the detail to serve as a reference for hand-tracing. I will include the same image reference--provided here--with each of the individual prompts when I use them. If you reference the image file in the individual prompts, refer to it as 'the reference image' rather than by file name.\n\nThe Details to Isolate:\n\n{{details_to_isolate}}\n\nRequirements for Each Generated Prompt:\nFor every item listed above, write a prompt that ensures the resulting image is a macro-Isolation where The detail must fill at least 80% of the frame. the shape, character and form of the enlarged detail must be consistent with the provided reference image.\n\nOutput Format:\nProvide the results as a numbered list of ready-to-copy prompts. Format it as:\n\"Prompt for [Detail Name]: \n[Full descriptive prompt text here]\"",
     "variables": [
@@ -1623,7 +1672,7 @@
     "id": "untitled-prompt-1777069256245",
     "title": "Room Repainter",
     "description": "Visualizes a room repainted in specified colors from an uploaded room image.",
-    "category": "Art",
+    "category": "Architecture",
     "template": "Task:\nI am providing a photo of an existing room. Generate a highly realistic visualization of the same room repainted with my specified colors while preserving the architecture, layout, proportions, furniture placement, finishes, and camera perspective of the original image.\n\nUser Inputs:\n- Wall Paint Color: {{WALLS}}\n- Trim / Molding / Baseboard / Door Paint Color: {{TRIM}}\n- Ceiling Color: {{CEILING}}\n\nColor Accuracy Rules:\n- If the user names a paint brand and color (for example: Benjamin Moore, Farrow & Ball, Sherwin-Williams, Behr, etc.), identify and match the exact real-world shade before generating.\n- Use the official manufacturer reference whenever possible (hex, RGB, or equivalent digital approximation).\n- Maintain realistic paint behavior under the room’s lighting conditions.\n- If the requested color is ambiguous, infer the most likely authentic shade associated with that brand name.\n\nImage Generation Instructions:\n- Repaint only the specified surfaces:\n  - Walls = Wall Paint Color\n  - Trim, moldings, casings, doors, built-ins, baseboards = Trim Paint Color\n- Preserve all original room geometry and details.\n- Keep furniture, décor, windows, flooring, rugs, artwork, fixtures, and objects unchanged unless repainting logically affects reflected light.\n- Maintain natural shadows, reflections, depth, and texture.\n- Respect material differences (wood trim, plaster walls, glossy trim, matte walls, etc.).\n- Produce a realistic result consistent with professional architectural photography.\n\nQuality Standard:\n- High-resolution output.\n- Crisp detail and accurate edges where paint meets trim, ceilings, floors, and fixtures.\n- Balanced exposure and natural lighting.\n- Sophisticated, believable color rendering.\n- No visible text overlays, labels, watermarks, or prompt text.\n- No generic “AI-generated” artifacts or surreal distortions.\n- No unnecessary redesign of the room.\n\nStylistic Goal:\nCreate a polished, aspirational result that helps the user confidently evaluate the repaint decision.\n\nAfter Generating the First Image:\nImmediately suggest one strong next-step visualization the user is likely to find useful based on the room and request. Examples:\n- Same room in morning daylight\n- Same room at warm evening lamplight\n- Alternate trim color options\n- Higher-contrast version\n- Historic / traditional styling interpretation\n- Modernized styling interpretation\n- Adjacent connected room coordinated with this palette\n\nThen ask a concise follow-up question offering to generate it.",
     "variables": [
       {
