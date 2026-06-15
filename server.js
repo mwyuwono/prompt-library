@@ -280,12 +280,16 @@ function stripMarkdown(value = '') {
 
 function parseToolTypeAndStatus(indexBody = '', readmeBody = '') {
     const source = `${indexBody}\n${readmeBody}`;
-    const typeMatch = source.match(/\*\*Type:\*\*\s*([^-\n]+?)(?:\s+[—-]\s+\*\*Status:\*\*\s*([^\n]+))?\s*(?:\n|$)/);
+    const typeLine = source.match(/\*\*Type:\*\*\s*([^\n]+)/)?.[1] || '';
+    const statusOnTypeLine = typeLine.match(/[—-]\s+\*\*Status:\*\*\s*(.+)$/)?.[1] || '';
+    const type = typeLine
+        .replace(/[—-]\s+\*\*Status:\*\*.*$/, '')
+        .trim();
     const statusMatch = source.match(/\*\*Status:\*\*\s*([^\n]+)/);
 
     return {
-        type: stripMarkdown(typeMatch?.[1] || ''),
-        status: stripMarkdown(typeMatch?.[2] || statusMatch?.[1] || '')
+        type: stripMarkdown(type),
+        status: stripMarkdown(statusOnTypeLine || statusMatch?.[1] || '')
     };
 }
 
@@ -344,32 +348,64 @@ function parseKeySources(section = '') {
         });
 }
 
+function getIndexSummary(indexBody = '') {
+    return indexBody
+        .split(/\r?\n/)
+        .map(line => line.trim())
+        .find(line => line &&
+            !line.includes('**Type:**') &&
+            !/^Key invocation:/i.test(line)
+        ) || '';
+}
+
+function isMetadataOnlyOverview(value = '') {
+    const cleaned = stripMarkdown(value);
+    return !cleaned ||
+        /^Type:\s*.+Status:\s*.+$/i.test(cleaned) ||
+        /^Type:\s*.+$/i.test(cleaned);
+}
+
 function parseToolsIndex() {
     if (!fs.existsSync(BULLFINCH_TOOLS_INDEX)) {
         return [];
     }
 
     const indexText = fs.readFileSync(BULLFINCH_TOOLS_INDEX, 'utf8');
-    const entryRegex = /^###\s+\[([^\]]+)\]\(([^)]+)\)([\s\S]*?)(?=^###\s+\[|\n##\s+Open Items|\n##\s+\w|\s*$)/gm;
+    const toolsSectionEnd = indexText.search(/\n##\s+Open Items/);
+    const toolsIndexText = toolsSectionEnd === -1 ? indexText : indexText.slice(0, toolsSectionEnd);
+    const entryRegex = /^###\s+\[([^\]]+)\]\(([^)]+)\)/gm;
+    const entries = [];
     const tools = [];
     let match;
 
-    while ((match = entryRegex.exec(indexText)) !== null) {
-        const title = match[1].trim();
-        const href = match[2].trim();
-        const indexBody = match[3].trim();
+    while ((match = entryRegex.exec(toolsIndexText)) !== null) {
+        entries.push({
+            title: match[1].trim(),
+            href: match[2].trim(),
+            headingEnd: entryRegex.lastIndex,
+            start: match.index
+        });
+    }
+
+    entries.forEach((entry, index) => {
+        const title = entry.title;
+        const href = entry.href;
+        const nextStart = entries[index + 1]?.start ?? toolsIndexText.length;
+        const indexBody = toolsIndexText.slice(entry.headingEnd, nextStart).trim();
         const slug = slugFromToolHref(href);
 
-        if (!slug) continue;
+        if (!slug) return;
 
         const readmePath = path.join(BULLFINCH_TOOLS_ROOT, slug, 'README.txt');
-        if (!fs.existsSync(readmePath)) continue;
+        if (!fs.existsSync(readmePath)) return;
 
         const readme = fs.readFileSync(readmePath, 'utf8');
         const sections = parseReadmeSections(readme);
         const parsed = parseToolTypeAndStatus(indexBody, readme);
-        const overview = getSection(sections, ['Overview', 'Summary']) ||
-            stripMarkdown(indexBody.split(/\r?\n/).find(line => line.trim() && !line.includes('**Type:**')) || '');
+        const readmeOverview = getSection(sections, ['Overview', 'Summary']);
+        const overview = isMetadataOnlyOverview(readmeOverview)
+            ? stripMarkdown(getIndexSummary(indexBody))
+            : readmeOverview;
         const keyInvocation = getSection(sections, ['Key Invocation', 'How to Invoke', 'Invocation']);
         const keySourcesSection = getSection(sections, ['Key Sources', 'Key Files']);
         const usageNotes = getSection(sections, ['Usage Notes', 'When to Use It', 'Policy']);
@@ -389,7 +425,7 @@ function parseToolsIndex() {
             folderPath: path.dirname(readmePath),
             sourceIndexPath: BULLFINCH_TOOLS_INDEX
         });
-    }
+    });
 
     return tools.filter(tool => /active/i.test(tool.status));
 }

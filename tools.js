@@ -90,7 +90,7 @@ function applyFilters() {
         return (!query || searchText.includes(query)) &&
             (!type || tool.type === type) &&
             (!status || tool.status === status);
-    });
+    }).sort((a, b) => scoreToolMatch(b, query) - scoreToolMatch(a, query));
 
     if (!filteredTools.some(tool => tool.slug === selectedSlug)) {
         selectedSlug = filteredTools[0]?.slug || null;
@@ -298,6 +298,21 @@ function setView(view) {
     gridViewButton.classList.toggle('active', view === 'grid');
     listViewButton.classList.toggle('active', view === 'list');
     renderToolCards();
+}
+
+function scoreToolMatch(tool, query) {
+    if (!query) return 0;
+
+    const title = String(tool.title || '').toLowerCase();
+    const slug = String(tool.slug || '').toLowerCase();
+    const type = String(tool.type || '').toLowerCase();
+
+    if (title === query) return 100;
+    if (title.startsWith(query)) return 80;
+    if (title.includes(query)) return 60;
+    if (slug.includes(query)) return 40;
+    if (type.includes(query)) return 20;
+    return 0;
 }
 
 async function copyText(text) {

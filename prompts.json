@@ -1536,7 +1536,16 @@
     "category": "Art",
     "icon": "edit",
     "template": "Convert the attached image into a minimalist black and white line drawing. Use clean, continuous black outlines on a solid white background. No shading, no gradients, and no textures; only pure vector-style mono-lines suitable for pen plotting and tracing.",
-    "variables": [],
+    "variables": [
+      {
+        "name": "detail_areas",
+        "label": "Details to Enlarge",
+        "placeholder": "1. the left standing figure's visible hand and wrist area, including any adjacent held botanical/leaf contour needed for alignment;\n2. the right seated figure's raised hand and fingers near the central wing;\n3. the right seated figure's hand gripping the vertical staff, including enough of the staff to preserve alignment.",
+        "value": "",
+        "inputType": "textarea",
+        "rows": 6
+      }
+    ],
     "slug": "line-drawing",
     "featured": false,
     "image": "public/images/1776263511993.jpg",
@@ -1576,17 +1585,17 @@
       {
         "id": "detail-enlargement",
         "name": "Detail Enlargement",
-        "description": "Enlarges a specified area as a faithful replacement insert for the original line drawing.",
+        "description": "Creates a sheet of one or more source-faithful enlarged recovery inserts for the original line drawing.",
         "image": "",
-        "template": "Detail area: {{detail_area}}\n\nConvert only the specified detail area from the attached image into a clean black-and-white outline drawing for pen plotting and vector tracing. Enlarge the detail as a higher-resolution replacement insert that can be pasted back into the original full composition without changing pose, layout, or alignment.\n\nPreserve the source exactly: orientation, contour boundaries, internal proportions, tilt, gaze direction, expression, gesture, silhouette, camera angle, and crop relationship. Do not stylize, beautify, reinterpret, add features, remove important structure, or simplify into a new design.\n\nUse pure black continuous vector-style mono-lines on solid white. No fill, shading, gradients, gray tones, texture, photographic noise, or hatching unless explicitly requested. Include essential contours, construction lines, separations, and distinctive features, but avoid dense micro-marks that may merge during Adobe Capture vectorization. Keep line weight visually consistent and plotter-friendly.",
+        "template": "Details to enlarge:\n{{detail_areas}}\n\nCreate a clean black-and-white detail recovery insert sheet from the attached source image. Each item listed above is a separate disconnected detail area to enlarge and recover as its own copy-ready insert.\n\nFor each requested detail, isolate the specified source area and enlarge it as a higher-resolution replacement insert for pen plotting, vector tracing, and manual paste-back into the original composition. Preserve the source exactly: orientation, gesture, silhouette, contour boundaries, internal proportions, tilt, expression, gaze direction, finger positions, grip logic, overlap relationships, camera angle, and crop relationship. Do not stylize, beautify, reinterpret, correct anatomy, add features, remove important structure, or simplify the detail into a new design.\n\nArrange the output as a single sheet of separate enlarged inserts. Keep the inserts in the same order as the list above, reading left to right and top to bottom. Separate each insert with generous blank white space so each one can be copied or cropped individually. Do not add labels, numbers, captions, arrows, borders, boxes, crop marks, registration marks, or any other guide graphics unless explicitly requested.\n\nFor each insert, include the requested detail plus the minimum adjacent source context needed for alignment, such as a wrist, cuff, held object, staff segment, wing edge, botanical contour, neighboring contour, or overlap boundary. Do not include unrelated surrounding artwork. Each insert may use its own enlargement scale so complex areas such as faces, hands, feet, fingers, and small held objects are large enough to recover clearly.\n\nUse pure black continuous contour lines on a solid white background. No fill, shading, gradients, gray tones, texture, photographic noise, stippling, hatching, paper tone, or scan artifacts unless explicitly requested. Include essential contours, construction lines, separations, overlaps, joints, knuckles, nails, facial features, garment edges, object edges, and distinctive source marks where they are needed for faithful recovery. Avoid dense micro-marks that may merge during Adobe Capture vectorization. Keep line weight visually consistent, fine, and plotter-friendly.\n\nUse restrained inference only where the source is degraded, faint, broken, or low-resolution. Infer only what is strongly implied by visible source structure, adjacent contours, repeated motifs, anatomical continuity, object continuity, and the artwork's own line language. Prefer a slightly incomplete but source-plausible recovery over over-detailed fabrication.",
         "variables": [
           {
-            "name": "detail_area",
-            "label": "Detail Area",
-            "placeholder": "e.g., face, hand, ornament, object, animal head, garment, or tool",
+            "name": "detail_areas",
+            "label": "Details to Enlarge",
+            "placeholder": "1. the left standing figure's visible hand and wrist area, including any adjacent held botanical/leaf contour needed for alignment;\n2. the right seated figure's raised hand and fingers near the central wing;\n3. the right seated figure's hand gripping the vertical staff, including enough of the staff to preserve alignment.",
             "value": "",
             "inputType": "textarea",
-            "rows": 3
+            "rows": 6
           }
         ]
       },

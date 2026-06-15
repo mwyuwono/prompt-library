@@ -58,7 +58,7 @@
 
 .tools-shell {
     display: grid;
-    grid-template-rows: auto auto minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
     gap: var(--s-5);
     min-height: 100vh;
     box-sizing: border-box;
@@ -98,10 +98,18 @@
     font-weight: 700;
 }
 
+.tools-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 440px);
+    align-items: start;
+    gap: var(--s-5);
+}
+
 .tools-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: var(--s-3);
+    min-width: 0;
 }
 
 .tools-grid[data-view="list"] {
@@ -191,8 +199,12 @@
 
 .tool-detail {
     align-self: start;
+    position: sticky;
+    top: var(--s-5);
     display: grid;
     gap: var(--s-4);
+    max-height: calc(100vh - var(--s-10));
+    overflow: auto;
     padding: var(--s-5);
     border-radius: var(--radius-3);
     background: color-mix(in srgb, var(--white) 72%, var(--paper));
@@ -384,4 +396,15 @@
 .tool-empty-detail .material-symbols-outlined {
     font-size: 48px;
     opacity: 0.5;
+}
+
+@media (max-width: 1180px) {
+    .tools-content {
+        grid-template-columns: 1fr;
+    }
+
+    .tool-detail {
+        position: static;
+        max-height: none;
+    }
 }
