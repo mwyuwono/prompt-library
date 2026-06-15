@@ -1547,6 +1547,23 @@
         "variables": []
       },
       {
+        "id": "detail-enlargement",
+        "name": "Detail Enlargement",
+        "description": "Enlarges a specified area as a faithful replacement insert for the original line drawing.",
+        "image": "",
+        "template": "Detail area: {{detail_area}}\n\nConvert only the specified detail area from the attached image into a clean black-and-white outline drawing for pen plotting and vector tracing. Enlarge the detail as a higher-resolution replacement insert that can be pasted back into the original full composition without changing pose, layout, or alignment.\n\nPreserve the source exactly: orientation, contour boundaries, internal proportions, tilt, gaze direction, expression, gesture, silhouette, camera angle, and crop relationship. Do not stylize, beautify, reinterpret, add features, remove important structure, or simplify into a new design.\n\nUse pure black continuous vector-style mono-lines on solid white. No fill, shading, gradients, gray tones, texture, photographic noise, or hatching unless explicitly requested. Include essential contours, construction lines, separations, and distinctive features, but avoid dense micro-marks that may merge during Adobe Capture vectorization. Keep line weight visually consistent and plotter-friendly.",
+        "variables": [
+          {
+            "name": "detail_area",
+            "label": "Detail Area",
+            "placeholder": "e.g., face, hand, ornament, object, animal head, garment, or tool",
+            "value": "",
+            "inputType": "textarea",
+            "rows": 3
+          }
+        ]
+      },
+      {
         "id": "detailed-vector",
         "name": "Detailed Vector Drawing",
         "description": "Specify the max number of colors. ",

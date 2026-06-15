@@ -255,6 +255,7 @@ wy-button:not(:defined) {
 }
 .prompt-list-item-meta {
     display: flex; align-items: center; justify-content: flex-end;
+    gap: var(--space-xs);
     padding-left: var(--space-lg); min-width: 140px;
 }
 .prompt-list-item-header {
@@ -410,6 +411,87 @@ body.modal-open {
 
 .prompt-card:hover  { opacity: 0.85; }
 .prompt-card:active { opacity: 0.7;  }
+
+.card-visibility-tools {
+    position: absolute;
+    top: var(--space-sm);
+    right: var(--inner-gutter);
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.prompt-card[data-masonry-column="2"] .card-visibility-tools {
+    right: var(--inner-gutter);
+}
+
+.prompt-card[data-masonry-column="1"] .card-visibility-tools {
+    right: calc(var(--inner-gutter) + var(--s-6));
+}
+
+.prompt-hidden-toggle {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    color: var(--ink-mute);
+    background: color-mix(in srgb, var(--paper) 86%, transparent);
+    border: var(--hair) solid var(--paper-edge);
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    opacity: 0;
+    transition:
+        opacity var(--dur-1) var(--ease),
+        color var(--dur-1) var(--ease),
+        border-color var(--dur-1) var(--ease),
+        background-color var(--dur-1) var(--ease);
+}
+
+.prompt-hidden-toggle:hover {
+    color: var(--ink);
+    border-color: var(--ink-soft);
+    background: var(--paper);
+}
+
+.prompt-hidden-toggle:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+    opacity: 1;
+}
+
+.prompt-hidden-toggle .material-symbols-outlined {
+    font-size: 18px;
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+}
+
+.prompt-card:hover .prompt-hidden-toggle,
+.prompt-card:focus-within .prompt-hidden-toggle,
+.prompt-card[data-hidden="true"] .prompt-hidden-toggle,
+.prompt-list-item:hover .prompt-hidden-toggle,
+.prompt-list-item:focus-within .prompt-hidden-toggle {
+    opacity: 1;
+}
+
+.hidden-status-badge {
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    padding: 0 8px;
+    border: var(--hair) solid var(--paper-edge);
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
+    color: var(--ink-mute);
+    font-family: var(--ff-sans);
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
 
 .card-thumbnail {
     aspect-ratio: 16 / 9;
@@ -569,6 +651,8 @@ body.modal-open {
 @media (max-width: 768px) {
     .card-arrow-button { display: none; }
     .card-footer { display: none; }
+    .card-visibility-tools { top: var(--space-xs); right: 16px; }
+    .prompt-hidden-toggle { opacity: 1; }
 }
 
 .prompt-card.featured-olive .card-title       { color: var(--ink); }

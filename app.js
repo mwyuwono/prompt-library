@@ -12,6 +12,8 @@ class PromptLibrary {
         this.showDetails = true; // Default to visible on desktop
         this.currentView = 'grid'; // Default to grid view
         this.showFeaturedOnly = options.startFeaturedOnly ?? false;
+        this.showHiddenOnly = false;
+        this.hiddenPromptIds = this.loadHiddenPromptIds();
 
         // DOM elements
         this.promptGrid = document.getElementById('promptGrid');
@@ -319,14 +321,15 @@ Server will start on http://localhost:3001`;
 
         if (this.controlsBar) {
             this.controlsBar.addEventListener('filter-change', (e) => {
-                const { search, searchValue, viewMode, showDetails, category, showFeaturedOnly } = e.detail;
+                const { search, searchValue, viewMode, showDetails, category, showFeaturedOnly, showHiddenOnly } = e.detail;
                 // Support both 'search' and 'searchValue' for compatibility with controls bar component
                 this.searchTerm = (search || searchValue || '').toLowerCase();
                 this.showDetails = Boolean(showDetails);
                 this.showFeaturedOnly = Boolean(showFeaturedOnly);
+                this.showHiddenOnly = Boolean(showHiddenOnly);
                 
-                // When Featured filter is active, ignore category selection
-                if (this.showFeaturedOnly) {
+                // When exclusive filters are active, ignore category selection
+                if (this.showFeaturedOnly || this.showHiddenOnly) {
                     this.selectedCategory = '';
                 } else {
                     this.selectedCategory = category === 'all' ? '' : category;
@@ -490,6 +493,7 @@ Server will start on http://localhost:3001`;
         this.controlsBar.searchValue = this.searchTerm;
         this.controlsBar.activeCategory = this.selectedCategory || 'all';
         this.controlsBar.showFeaturedOnly = this.showFeaturedOnly;
+        this.controlsBar.showHiddenOnly = this.showHiddenOnly;
     }
 
     /**
@@ -500,6 +504,7 @@ Server will start on http://localhost:3001`;
 
         this.filteredPrompts = this.prompts.filter(prompt => {
             const searchLower = this.searchTerm;
+            const isHidden = this.isPromptHidden(prompt);
 
             const matchesSearch = !searchLower ||
                 [
@@ -508,6 +513,14 @@ Server will start on http://localhost:3001`;
                     prompt.instructions,
                     prompt.category
                 ].some(value => (value || '').toLowerCase().includes(searchLower));
+
+            if (this.showHiddenOnly) {
+                return matchesSearch && isHidden;
+            }
+
+            if (isHidden) {
+                return false;
+            }
 
             if (isSearchActive) {
                 return matchesSearch;
@@ -536,6 +549,48 @@ Server will start on http://localhost:3001`;
         });
 
         this.renderPrompts();
+    }
+
+    loadHiddenPromptIds() {
+        try {
+            const stored = window.localStorage.getItem('wy-hidden-prompt-ids');
+            const ids = JSON.parse(stored || '[]');
+            return new Set(Array.isArray(ids) ? ids.filter(Boolean) : []);
+        } catch {
+            return new Set();
+        }
+    }
+
+    saveHiddenPromptIds() {
+        try {
+            window.localStorage.setItem(
+                'wy-hidden-prompt-ids',
+                JSON.stringify([...this.hiddenPromptIds])
+            );
+        } catch {
+            this.showToast('Hidden setting could not be saved in this browser.');
+        }
+    }
+
+    isPromptHidden(prompt) {
+        return Boolean(prompt?.id && this.hiddenPromptIds.has(prompt.id));
+    }
+
+    togglePromptHidden(prompt, shouldHide) {
+        if (!prompt?.id) {
+            return;
+        }
+
+        if (shouldHide) {
+            this.hiddenPromptIds.add(prompt.id);
+        } else {
+            this.hiddenPromptIds.delete(prompt.id);
+        }
+
+        this.saveHiddenPromptIds();
+        this.filterPrompts();
+        this.syncControlsBar();
+        this.showToast(shouldHide ? 'Artwork hidden from public view.' : 'Artwork restored.');
     }
 
     /**
@@ -997,6 +1052,9 @@ Server will start on http://localhost:3001`;
         const variableCount = prompt.variables?.length || 0;
         const hiddenClass = this.showDetails ? '' : 'hidden';
         const descriptionHiddenClass = this.shouldKeepDescriptionsVisibleOnMobile() ? '' : hiddenClass;
+        const isHidden = this.isPromptHidden(prompt);
+        const hiddenActionLabel = isHidden ? 'Restore artwork' : 'Hide artwork';
+        const hiddenActionIcon = isHidden ? 'visibility' : 'visibility_off';
 
         const imageHTML = promptImage ? `
             <div class="prompt-list-item-thumbnail">
@@ -1013,6 +1071,10 @@ Server will start on http://localhost:3001`;
                 <div class="prompt-list-item-description ${descriptionHiddenClass}">${this.renderDescription(prompt.description)}</div>
             </div>
             <div class="prompt-list-item-meta">
+                ${isHidden ? '<span class="hidden-status-badge">Hidden</span>' : ''}
+                <button class="prompt-hidden-toggle" type="button" aria-label="${hiddenActionLabel}" title="${hiddenActionLabel}">
+                    <span class="material-symbols-outlined">${hiddenActionIcon}</span>
+                </button>
                 <span class="variable-count-badge ${hiddenClass}">${variableCount > 0 ? `${variableCount} variable${variableCount > 1 ? 's' : ''}` : 'No variables'}</span>
             </div>
         `;
@@ -1031,6 +1093,16 @@ Server will start on http://localhost:3001`;
             this.dismissSearchForSelection();
             this.openPromptModal(index);
         };
+
+        const hiddenToggle = item.querySelector('.prompt-hidden-toggle');
+        if (hiddenToggle) {
+            hiddenToggle.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                const prompt = this.filteredPrompts[index];
+                this.togglePromptHidden(prompt, !this.isPromptHidden(prompt));
+            });
+        }
 
         item.addEventListener('click', openModal);
 
@@ -1051,6 +1123,7 @@ Server will start on http://localhost:3001`;
         card.dataset.index = index;
         card.dataset.category = prompt.category; // Add category for color coding
         card.dataset.locked = prompt.locked !== false;
+        card.dataset.hidden = this.isPromptHidden(prompt);
 
         const promptImage = this.getPromptImage(prompt);
 
@@ -1157,9 +1230,20 @@ Server will start on http://localhost:3001`;
         const descriptionHiddenClass = this.shouldKeepDescriptionsVisibleOnMobile() ? '' : hiddenClass;
 
         const promptImage = this.getPromptImage(prompt);
+        const isHidden = this.isPromptHidden(prompt);
+        const hiddenActionLabel = isHidden ? 'Restore artwork' : 'Hide artwork';
+        const hiddenActionIcon = isHidden ? 'visibility' : 'visibility_off';
 
         // Image Thumbnail
         const imageHTML = promptImage ? `<div class="card-thumbnail"><img src="${promptImage}" alt="${prompt.title}"></div>` : '';
+        const hiddenControlsHTML = `
+            <div class="card-visibility-tools">
+                ${isHidden ? '<span class="hidden-status-badge">Hidden</span>' : ''}
+                <button class="prompt-hidden-toggle" type="button" aria-label="${hiddenActionLabel}" title="${hiddenActionLabel}">
+                    <span class="material-symbols-outlined">${hiddenActionIcon}</span>
+                </button>
+            </div>
+        `;
 
         // Icon section for non-image cards
         let iconHTML = '';
@@ -1196,6 +1280,7 @@ Server will start on http://localhost:3001`;
         ` : '';
 
         return `
+            ${hiddenControlsHTML}
             ${imageHTML}
             <div class="card-content">
                 <div>
@@ -1295,6 +1380,16 @@ Server will start on http://localhost:3001`;
             this.dismissSearchForSelection();
             this.openPromptModal(index);
         };
+
+        const hiddenToggle = card.querySelector('.prompt-hidden-toggle');
+        if (hiddenToggle) {
+            hiddenToggle.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                const prompt = this.filteredPrompts[index];
+                this.togglePromptHidden(prompt, !this.isPromptHidden(prompt));
+            });
+        }
 
         card.addEventListener('click', (event) => {
             event.preventDefault();

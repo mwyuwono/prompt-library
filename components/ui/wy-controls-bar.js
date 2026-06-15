@@ -12,6 +12,7 @@ export class WyControlsBar extends LitElement {
         showPrivateVaultLink: { type: Boolean, attribute: 'show-private-vault-link' },
         privateVaultHref: { type: String, attribute: 'private-vault-href' },
         showFeaturedOnly: { type: Boolean, attribute: 'show-featured-only' },
+        showHiddenOnly: { type: Boolean, attribute: 'show-hidden-only' },
         chipVariant: { type: String, attribute: 'chip-variant' },
         isScrolled: { type: Boolean, state: true },
         scrollState: { type: String, state: true },
@@ -30,6 +31,7 @@ export class WyControlsBar extends LitElement {
         this.showPrivateVaultLink = false;
         this.privateVaultHref = './private.html';
         this.showFeaturedOnly = false;
+        this.showHiddenOnly = false;
         this.chipVariant = '';
         this.isScrolled = false;
         this.scrollState = 'normal';
@@ -678,6 +680,17 @@ export class WyControlsBar extends LitElement {
       flex-shrink: 0;
     }
 
+    .chip--hidden::before {
+      content: 'visibility_off';
+      font-family: 'Material Symbols Outlined';
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+      font-size: 14px;
+      line-height: 1;
+      letter-spacing: 0;
+      text-transform: none;
+      flex-shrink: 0;
+    }
+
     /* ---- Mobile cancel button ---- */
     .mobile-cancel {
       flex: 0 0 auto;
@@ -984,14 +997,19 @@ export class WyControlsBar extends LitElement {
               @click="${this._toggleFeatured}"
             >Featured</button>
             <button
-              class="chip ${this.activeCategory === 'all' && !this.showFeaturedOnly ? 'active' : ''}"
-              aria-pressed="${this.activeCategory === 'all' && !this.showFeaturedOnly}"
+              class="chip chip--hidden ${this.showHiddenOnly ? 'active' : ''}"
+              aria-pressed="${this.showHiddenOnly}"
+              @click="${this._toggleHidden}"
+            >Hidden</button>
+            <button
+              class="chip ${this.activeCategory === 'all' && !this.showFeaturedOnly && !this.showHiddenOnly ? 'active' : ''}"
+              aria-pressed="${this.activeCategory === 'all' && !this.showFeaturedOnly && !this.showHiddenOnly}"
               @click="${() => this._setCategory('all')}"
             >All</button>
             ${this.categories.map(cat => html`
               <button
-                class="chip ${this.activeCategory === cat && !this.showFeaturedOnly ? 'active' : ''}"
-                aria-pressed="${this.activeCategory === cat && !this.showFeaturedOnly}"
+                class="chip ${this.activeCategory === cat && !this.showFeaturedOnly && !this.showHiddenOnly ? 'active' : ''}"
+                aria-pressed="${this.activeCategory === cat && !this.showFeaturedOnly && !this.showHiddenOnly}"
                 @click="${() => this._setCategory(cat)}"
               >${cat}</button>
             `)}
@@ -1054,11 +1072,19 @@ export class WyControlsBar extends LitElement {
     _setCategory(cat) {
         this.activeCategory = cat;
         if (this.showFeaturedOnly) this.showFeaturedOnly = false;
+        if (this.showHiddenOnly) this.showHiddenOnly = false;
         this._notifyChange();
     }
 
     _toggleFeatured() {
         this.showFeaturedOnly = !this.showFeaturedOnly;
+        if (this.showFeaturedOnly) this.showHiddenOnly = false;
+        this._notifyChange();
+    }
+
+    _toggleHidden() {
+        this.showHiddenOnly = !this.showHiddenOnly;
+        if (this.showHiddenOnly) this.showFeaturedOnly = false;
         this._notifyChange();
     }
 
@@ -1069,7 +1095,8 @@ export class WyControlsBar extends LitElement {
                 viewMode: this.viewMode,
                 showDetails: this.showDetails,
                 category: this.activeCategory,
-                showFeaturedOnly: this.showFeaturedOnly
+                showFeaturedOnly: this.showFeaturedOnly,
+                showHiddenOnly: this.showHiddenOnly
             },
             bubbles: true,
             composed: true
