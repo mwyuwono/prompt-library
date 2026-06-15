@@ -96,6 +96,10 @@ const PRIVATE_PROMPTS_ENCRYPTED_FILE = path.join(__dirname, 'private-prompts.enc
 const PRIVATE_PASSPHRASE_FILE = path.join(__dirname, 'private-passcode.txt');
 const ADMIN_SETTINGS_FILE = path.join(__dirname, 'admin-settings.json');
 const PALETTES_FILE = path.join(__dirname, 'palettes.json');
+const BULLFINCH_ROOT = process.env.BULLFINCH_ROOT ||
+    '/Users/mwy/Library/CloudStorage/GoogleDrive-matt@weaver-yuwono.com/My Drive/Bullfinch';
+const BULLFINCH_TOOLS_ROOT = path.join(BULLFINCH_ROOT, 'Tools');
+const BULLFINCH_TOOLS_INDEX = path.join(BULLFINCH_TOOLS_ROOT, 'README.txt');
 const DEFAULT_ADMIN_SETTINGS = {
     heroImage: {
         masterPrompt: ''
@@ -255,6 +259,143 @@ function createPromptShell({ title = 'Untitled Prompt', category = 'Productivity
         template: '',
         variables: []
     };
+}
+
+function slugFromToolHref(href = '') {
+    return String(href)
+        .replace(/\\/g, '/')
+        .replace(/^Tools\//, '')
+        .split('/')[0]
+        .trim();
+}
+
+function stripMarkdown(value = '') {
+    return String(value)
+        .replace(/\*\*([^*]+)\*\*/g, '$1')
+        .replace(/`([^`]+)`/g, '$1')
+        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+        .replace(/^[-*]\s+/gm, '')
+        .trim();
+}
+
+function parseToolTypeAndStatus(indexBody = '', readmeBody = '') {
+    const source = `${indexBody}\n${readmeBody}`;
+    const typeMatch = source.match(/\*\*Type:\*\*\s*([^-\n]+?)(?:\s+[—-]\s+\*\*Status:\*\*\s*([^\n]+))?\s*(?:\n|$)/);
+    const statusMatch = source.match(/\*\*Status:\*\*\s*([^\n]+)/);
+
+    return {
+        type: stripMarkdown(typeMatch?.[1] || ''),
+        status: stripMarkdown(typeMatch?.[2] || statusMatch?.[1] || '')
+    };
+}
+
+function parseReadmeSections(readme = '') {
+    const sections = {};
+    const headingRegex = /^##\s+(.+)$/gm;
+    const headings = [];
+    let match;
+
+    while ((match = headingRegex.exec(readme)) !== null) {
+        headings.push({
+            title: match[1].trim(),
+            start: match.index,
+            contentStart: headingRegex.lastIndex
+        });
+    }
+
+    headings.forEach((heading, index) => {
+        const end = headings[index + 1]?.start ?? readme.length;
+        sections[heading.title.toLowerCase()] = readme.slice(heading.contentStart, end).trim();
+    });
+
+    return sections;
+}
+
+function getSection(sections, names) {
+    for (const name of names) {
+        const section = sections[String(name).toLowerCase()];
+        if (section) return section;
+    }
+    return '';
+}
+
+function parseKeySources(section = '') {
+    return section
+        .split(/\r?\n/)
+        .map(line => line.trim())
+        .filter(line => /^[-*]\s+/.test(line))
+        .map(line => {
+            const markdownLink = line.match(/^[-*]\s+\[([^\]]+)\]\(([^)]+)\)\s*(?:[—-]\s*(.*))?$/);
+            if (markdownLink) {
+                return {
+                    label: markdownLink[1],
+                    target: markdownLink[2],
+                    note: stripMarkdown(markdownLink[3] || '')
+                };
+            }
+
+            const plain = line.replace(/^[-*]\s+/, '');
+            const [target, ...noteParts] = plain.split(/\s+[—-]\s+/);
+            return {
+                label: stripMarkdown(target),
+                target: stripMarkdown(target),
+                note: stripMarkdown(noteParts.join(' - '))
+            };
+        });
+}
+
+function parseToolsIndex() {
+    if (!fs.existsSync(BULLFINCH_TOOLS_INDEX)) {
+        return [];
+    }
+
+    const indexText = fs.readFileSync(BULLFINCH_TOOLS_INDEX, 'utf8');
+    const entryRegex = /^###\s+\[([^\]]+)\]\(([^)]+)\)([\s\S]*?)(?=^###\s+\[|\n##\s+Open Items|\n##\s+\w|\s*$)/gm;
+    const tools = [];
+    let match;
+
+    while ((match = entryRegex.exec(indexText)) !== null) {
+        const title = match[1].trim();
+        const href = match[2].trim();
+        const indexBody = match[3].trim();
+        const slug = slugFromToolHref(href);
+
+        if (!slug) continue;
+
+        const readmePath = path.join(BULLFINCH_TOOLS_ROOT, slug, 'README.txt');
+        if (!fs.existsSync(readmePath)) continue;
+
+        const readme = fs.readFileSync(readmePath, 'utf8');
+        const sections = parseReadmeSections(readme);
+        const parsed = parseToolTypeAndStatus(indexBody, readme);
+        const overview = getSection(sections, ['Overview', 'Summary']) ||
+            stripMarkdown(indexBody.split(/\r?\n/).find(line => line.trim() && !line.includes('**Type:**')) || '');
+        const keyInvocation = getSection(sections, ['Key Invocation', 'How to Invoke', 'Invocation']);
+        const keySourcesSection = getSection(sections, ['Key Sources', 'Key Files']);
+        const usageNotes = getSection(sections, ['Usage Notes', 'When to Use It', 'Policy']);
+        const routing = getSection(sections, ['Tool Routing', 'Editable Source']);
+
+        tools.push({
+            slug,
+            title,
+            type: parsed.type || 'Tool',
+            status: parsed.status || 'Active',
+            overview,
+            keyInvocation,
+            keySources: parseKeySources(keySourcesSection),
+            usageNotes,
+            routing,
+            readmePath,
+            folderPath: path.dirname(readmePath),
+            sourceIndexPath: BULLFINCH_TOOLS_INDEX
+        });
+    }
+
+    return tools.filter(tool => /active/i.test(tool.status));
+}
+
+function getToolBySlug(slug) {
+    return parseToolsIndex().find(tool => tool.slug === slug);
 }
 
 function getGitAskPassPath() {
@@ -702,6 +843,61 @@ async function generateOpenAIHeroImage(prompt, quality) {
 }
 
 // API Routes
+
+/**
+ * GET /api/tools
+ * Returns active Bullfinch tools from the Bullfinch tool registry.
+ */
+app.get('/api/tools', (req, res) => {
+    try {
+        const tools = parseToolsIndex();
+        const types = [...new Set(tools.map(tool => tool.type).filter(Boolean))].sort();
+        const statuses = [...new Set(tools.map(tool => tool.status).filter(Boolean))].sort();
+
+        res.json({
+            success: true,
+            tools,
+            types,
+            statuses,
+            bullfinchRoot: BULLFINCH_ROOT,
+            sourceIndexPath: BULLFINCH_TOOLS_INDEX
+        });
+    } catch (error) {
+        console.error('Error loading Bullfinch tools:', error);
+        res.status(500).json({
+            success: false,
+            error: error.message || 'Failed to load Bullfinch tools'
+        });
+    }
+});
+
+/**
+ * GET /api/tools/:slug
+ * Returns one active Bullfinch tool by slug.
+ */
+app.get('/api/tools/:slug', (req, res) => {
+    try {
+        const tool = getToolBySlug(req.params.slug);
+
+        if (!tool) {
+            return res.status(404).json({
+                success: false,
+                error: 'Tool not found'
+            });
+        }
+
+        res.json({
+            success: true,
+            tool
+        });
+    } catch (error) {
+        console.error('Error loading Bullfinch tool:', error);
+        res.status(500).json({
+            success: false,
+            error: error.message || 'Failed to load Bullfinch tool'
+        });
+    }
+});
 
 /**
  * GET /api/prompts

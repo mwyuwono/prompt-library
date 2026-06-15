@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light">
+    <title>Tools - Prompts Library Admin</title>
+
+    <link rel="stylesheet" href="tokens.css?v=20260319-1532">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin.css?v=20260601-hero-settings">
+    <link rel="stylesheet" href="tools.css?v=20260615-tools">
+</head>
+<body class="admin-page tools-page">
+    <aside class="prompt-list">
+        <div class="sidebar-header">
+            <div class="sidebar-title-row">
+                <h2>Tools</h2>
+            </div>
+            <p id="toolsSourceStatus" class="dataset-status">Reading active tools from Bullfinch.</p>
+            <div class="sidebar-links">
+                <a href="/admin.html" class="view-public-link">
+                    <span class="material-symbols-outlined">edit_note</span>
+                    Prompt Admin
+                </a>
+                <a href="/admin-settings.html" class="view-public-link">
+                    <span class="material-symbols-outlined">settings</span>
+                    Admin Settings
+                </a>
+                <a href="/index.html" class="view-public-link" target="_blank">
+                    <span class="material-symbols-outlined">open_in_new</span>
+                    View Public Site
+                </a>
+            </div>
+        </div>
+
+        <div class="sidebar-search">
+            <span class="material-symbols-outlined">search</span>
+            <input type="text" id="toolSearchInput" placeholder="Search tools..." autocomplete="off">
+        </div>
+
+        <div class="tool-filter-stack">
+            <label class="tool-filter-field" for="toolTypeFilter">
+                <span>Type</span>
+                <select id="toolTypeFilter">
+                    <option value="">All types</option>
+                </select>
+            </label>
+            <label class="tool-filter-field" for="toolStatusFilter">
+                <span>Status</span>
+                <select id="toolStatusFilter">
+                    <option value="">All statuses</option>
+                </select>
+            </label>
+            <div class="tool-view-switch" role="group" aria-label="Tool layout">
+                <button id="gridViewButton" class="dataset-button active" type="button" data-view="grid">Grid</button>
+                <button id="listViewButton" class="dataset-button" type="button" data-view="list">List</button>
+            </div>
+        </div>
+
+        <div id="toolListItems"></div>
+    </aside>
+
+    <main id="main-content">
+        <section class="tools-shell">
+            <header class="tools-header">
+                <div>
+                    <p class="tools-kicker">Bullfinch Registry</p>
+                    <h1>Local Tools</h1>
+                </div>
+                <p id="toolsCount" class="tools-count">Loading...</p>
+            </header>
+
+            <div id="toolsGrid" class="tools-grid" aria-live="polite"></div>
+            <section id="toolDetail" class="tool-detail" aria-live="polite"></section>
+        </section>
+    </main>
+
+    <wy-toast id="toast"></wy-toast>
+
+    <script type="module">
+        import './web-components.js?v=20260605-admin-toasts';
+    </script>
+    <script type="module" src="tools.js?v=20260615-tools"></script>
+</body>
+</html>
