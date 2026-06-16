@@ -12039,13 +12039,16 @@ __publicField(WyLinksModal, "styles", i`
 
     @media (max-width: 600px) {
       .link-dropdown {
-        position: static;
+        align-items: flex-start;
+        flex-direction: column;
       }
 
       .link-menu {
-        left: var(--spacing-md, 1rem);
-        right: var(--spacing-md, 1rem);
+        position: static;
+        width: max-content;
         min-width: 0;
+        max-width: calc(100vw - (var(--spacing-md, 1rem) * 2));
+        margin-top: var(--spacing-xs, 0.25rem);
       }
     }
 
