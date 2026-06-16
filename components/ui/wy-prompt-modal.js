@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit';
+import { live } from 'lit/directives/live.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 
 export class WyPromptModal extends LitElement {
@@ -70,6 +71,10 @@ export class WyPromptModal extends LitElement {
     // Ensure activeTab has a value
     if (!this.activeTab) {
       this.activeTab = 'variables';
+    }
+
+    if (changedProperties.has('variations') || changedProperties.has('activeVariationIndex')) {
+      this._clampActiveVariationIndex();
     }
   }
 
@@ -1510,6 +1515,24 @@ export class WyPromptModal extends LitElement {
     return this.variables && this.variables.length > 0 ? 'variables' : 'overview';
   }
 
+  _clampActiveVariationIndex() {
+    if (!this.variations || this.variations.length === 0) {
+      this.activeVariationIndex = 0;
+      return;
+    }
+
+    if (!Number.isInteger(this.activeVariationIndex) || this.activeVariationIndex < 0 || this.activeVariationIndex >= this.variations.length) {
+      this.activeVariationIndex = 0;
+    }
+  }
+
+  _getActiveVariationIndex() {
+    if (!this.variations || this.variations.length === 0) return 0;
+    return Number.isInteger(this.activeVariationIndex) && this.activeVariationIndex >= 0 && this.activeVariationIndex < this.variations.length
+      ? this.activeVariationIndex
+      : 0;
+  }
+
   _renderOverview(template) {
     return html`
       <div class="overview">
@@ -1546,11 +1569,11 @@ export class WyPromptModal extends LitElement {
           <select
             id="variation-select"
             class="variation-select-native"
-            .value="${activeVariation?.id || ''}"
+            .value=${live(activeVariation?.id || '')}
             @change="${this._handleVariationSelectChange}"
           >
             ${this.variations.map(variation => html`
-              <option value="${variation.id}">${variation.name}</option>
+              <option value="${variation.id}" .selected=${variation.id === activeVariation?.id}>${variation.name}</option>
             `)}
           </select>
           <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
@@ -1807,12 +1830,13 @@ export class WyPromptModal extends LitElement {
   }
 
   render() {
+    const activeVariationIndex = this._getActiveVariationIndex();
     const currentTemplate = this.variations.length > 0
-      ? this.variations[this.activeVariationIndex].template
+      ? this.variations[activeVariationIndex].template
       : this.template;
 
     const compiledPrompt = this._compilePrompt(currentTemplate);
-    const activeVariation = this.variations[this.activeVariationIndex];
+    const activeVariation = this.variations[activeVariationIndex];
     const standardActiveTab = this._getActiveStandardTab();
     const hasVariables = this.variables.length > 0;
     const useVisualSelector = this._usesVisualVariationSelector();
