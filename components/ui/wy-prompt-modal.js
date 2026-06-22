@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { live } from 'lit/directives/live.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
+import { marked } from 'marked';
 
 export class WyPromptModal extends LitElement {
   static properties = {
@@ -354,6 +355,9 @@ export class WyPromptModal extends LitElement {
       color: var(--md-sys-color-text-muted);
       margin: 0;
     }
+
+    .description-text p { margin: 0 0 0.5em; }
+    .description-text p:last-child { margin-bottom: 0; }
 
     .description-text ol,
     .description-text ul {
@@ -872,6 +876,9 @@ export class WyPromptModal extends LitElement {
         margin: 0;
     }
 
+    .prompt-instructions-copy p { margin: 0 0 0.5em; }
+    .prompt-instructions-copy p:last-child { margin-bottom: 0; }
+
     .prompt-instructions-copy ol,
     .prompt-instructions-copy ul {
         margin: 2px 0 0;
@@ -937,6 +944,9 @@ export class WyPromptModal extends LitElement {
         line-height: 1.6;
         color: var(--md-sys-color-text-muted);
     }
+
+    .variation-description-copy p { margin: 0 0 0.5em; }
+    .variation-description-copy p:last-child { margin-bottom: 0; }
 
     /* Legacy selector styles (kept for backwards compatibility) */
     .variation-selector {
@@ -1025,9 +1035,83 @@ export class WyPromptModal extends LitElement {
       font-size: 1rem;
       line-height: 1.7;
       color: var(--md-sys-color-on-surface);
-      white-space: pre-wrap;
       border: 1px solid var(--md-sys-color-outline-variant);
     }
+
+    /* Markdown element styles within preview-area */
+    .preview-area p { margin: 0 0 1em; }
+    .preview-area p:last-child { margin-bottom: 0; }
+    .preview-area h1, .preview-area h2, .preview-area h3,
+    .preview-area h4, .preview-area h5, .preview-area h6 {
+      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      font-weight: 600;
+      line-height: 1.3;
+      margin: 1.2em 0 0.4em;
+      color: var(--md-sys-color-on-surface);
+    }
+    .preview-area h1:first-child, .preview-area h2:first-child,
+    .preview-area h3:first-child { margin-top: 0; }
+    .preview-area h1 { font-size: 1.4rem; }
+    .preview-area h2 { font-size: 1.2rem; }
+    .preview-area h3 { font-size: 1.05rem; }
+    .preview-area h4, .preview-area h5, .preview-area h6 { font-size: 1rem; }
+    .preview-area ul, .preview-area ol {
+      margin: 0 0 1em;
+      padding-left: 1.5em;
+    }
+    .preview-area li + li { margin-top: 0.25em; }
+    .preview-area blockquote {
+      margin: 0 0 1em;
+      padding: 0.5em 1em;
+      border-left: 3px solid var(--md-sys-color-outline-variant);
+      color: var(--ink-mute, #6B6760);
+      font-style: italic;
+    }
+    .preview-area code {
+      font-family: 'DM Mono', 'Fira Code', monospace;
+      font-size: 0.875em;
+      background: var(--md-sys-color-surface-container);
+      padding: 0.1em 0.35em;
+      border-radius: 3px;
+    }
+    .preview-area pre {
+      background: var(--md-sys-color-surface-container);
+      padding: 1em;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 0 0 1em;
+    }
+    .preview-area pre code {
+      background: none;
+      padding: 0;
+      font-size: 0.875rem;
+    }
+    .preview-area hr {
+      border: none;
+      border-top: 1px solid var(--md-sys-color-outline-variant);
+      margin: 1.2em 0;
+    }
+    .preview-area table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 0 0 1em;
+      font-size: 0.9rem;
+    }
+    .preview-area th, .preview-area td {
+      text-align: left;
+      padding: 6px 12px;
+      border: 1px solid var(--md-sys-color-outline-variant);
+    }
+    .preview-area th {
+      background: var(--md-sys-color-surface-container);
+      font-weight: 600;
+    }
+    .preview-area a {
+      color: var(--md-sys-color-primary);
+      text-decoration: underline;
+    }
+    .preview-area strong { font-weight: 600; }
+    .preview-area em { font-style: italic; }
 
     .overview::after {
       content: '';
@@ -1079,6 +1163,9 @@ export class WyPromptModal extends LitElement {
       font-weight: 400;
       line-height: 1.5;
     }
+
+    .overview-lead p { margin: 0 0 0.75em; }
+    .overview-lead p:last-child { margin-bottom: 0; }
 
     .overview-lead ol,
     .overview-lead ul {
@@ -1403,33 +1490,10 @@ export class WyPromptModal extends LitElement {
     this.descriptionExpanded = !this.descriptionExpanded;
   }
 
-  // Render description as lightweight markdown (ordered/unordered lists, bold)
+  // Render markdown text as HTML using marked
   _renderDescriptionMarkdown(text) {
     if (!text) return '';
-    const escapeHTML = (str) => str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    const processInline = (str) => escapeHTML(str).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    if (!/^(\d+\.|-|\*) /m.test(text)) return processInline(text);
-    const lines = text.split('\n');
-    const parts = [];
-    let listItems = null;
-    let listType = null;
-    const flushList = () => {
-      if (listItems) {
-        parts.push(`<${listType}>${listItems.join('')}</${listType}>`);
-        listItems = null; listType = null;
-      }
-    };
-    lines.forEach(line => {
-      const trimmed = line.trim();
-      const ol = trimmed.match(/^(\d+)\.\s+(.+)/);
-      if (ol) { if (listType === 'ul') flushList(); if (!listItems) { listItems = []; listType = 'ol'; } listItems.push(`<li>${processInline(ol[2])}</li>`); return; }
-      const ul = trimmed.match(/^[-*]\s+(.+)/);
-      if (ul) { if (listType === 'ol') flushList(); if (!listItems) { listItems = []; listType = 'ul'; } listItems.push(`<li>${processInline(ul[1])}</li>`); return; }
-      flushList();
-      if (trimmed) parts.push(processInline(trimmed));
-    });
-    flushList();
-    return parts.join('');
+    return marked.parse(text, { breaks: true });
   }
 
   _renderPromptIntro(showDescription = true) {
@@ -1505,7 +1569,7 @@ export class WyPromptModal extends LitElement {
           ${step.variables.map(v => this._renderVariable(v))}
         </div>
       ` : html`
-        <div class="preview-area">${compiledPrompt}</div>
+        <div class="preview-area">${unsafeHTML(marked.parse(compiledPrompt, { breaks: true }))}</div>
       `}
     `;
   }
@@ -1810,7 +1874,7 @@ export class WyPromptModal extends LitElement {
 
           <div class="body">
             ${standardActiveTab === 'preview' ? html`
-              <div class="preview-area">${compiledPrompt}</div>
+              <div class="preview-area">${unsafeHTML(marked.parse(compiledPrompt, { breaks: true }))}</div>
             ` : hasVariables ? html`
               <div class="variables-grid">
                 ${this.variables.map(v => this._renderVariable(v))}
@@ -1924,7 +1988,7 @@ export class WyPromptModal extends LitElement {
 
                 <div class="body">
                   ${standardActiveTab === 'preview' ? html`
-                    <div class="preview-area">${compiledPrompt}</div>
+                    <div class="preview-area">${unsafeHTML(marked.parse(compiledPrompt, { breaks: true }))}</div>
                   ` : hasVariables ? html`
                     <div class="variables-grid">
                       ${this.variables.map(v => this._renderVariable(v))}
