@@ -169,6 +169,12 @@ Prompts can include multiple template variations:
 
 First variation is default. User input preserved when switching. Variables shared across variations.
 
+### Prompt Preview Images
+
+Multi-variant prompt previews have two levels: the prompt-level `image` is the hero/card image, while each `variations[].image` is used for that variant's visual preview.
+
+When generating or refreshing preview images, existing generated previews may be visually 16:9 but not exact. Normalize final project copies to exact `1920x1080` before final validation.
+
 ### Variable Types
 
 **Supported:**

@@ -785,7 +785,7 @@
     "instructions": "Upload an image with this prompt, then select the conversion style. Optionally upload a Style Reference image to align the style more closely.",
     "template": "",
     "variables": [],
-    "image": "public/images/1779936094867.jpg",
+    "image": "public/images/image-restyle-technical-engraving-preview.png",
     "variations": [
       {
         "id": "technical-engraving",
@@ -793,7 +793,7 @@
         "description": "Converts an uploaded image into a precise antiquarian technical engraving with thin graphite-gray lines, restrained monochrome tone, and aged paper.",
         "template": "Convert the provided image to a precise antiquarian technical engraving style: thin graphite-gray ink lines on aged warm paper, restrained monochrome palette, formal measured composition, and an archival plate-like sensibility.\n\nUse delicate ruled linework, hairline contours, sparse crosshatching or parallel hatching for tonal structure, and subtle paper grain or age patina. Preserve a disciplined, observational quality with high geometric control, minimal painterly gesture, and a quiet scholarly mood.\n\nLighting should feel flat, diffuse, and document-like rather than dramatic. The overall vibe should be restrained, historical, analytical, and contemplative, as if taken from an 18th- or early-19th-century architectural, scientific, or design treatise.\n\nAvoid modern digital gloss, photorealism, saturated color, heavy shadows, and expressive brushwork.\n\nIn your response, remind the user they can upload a Style Reference image to align the styles more closely.",
         "variables": [],
-        "image": "public/images/1779940927210.jpg"
+        "image": "public/images/image-restyle-technical-engraving-preview.png"
       },
       {
         "id": "blue-white-watercolor",
@@ -801,7 +801,7 @@
         "description": "Converts an uploaded image into a refined antiquarian blue-and-white watercolor sketch with porcelain-like indigo pigment on aged warm ivory paper.",
         "template": "Convert the provided image to a refined antiquarian blue-and-white watercolor sketch on aged warm ivory paper. Preserve the subject's core silhouette, proportions, and essential identity, but present it as a quiet archival object study rather than a dramatic illustration. Fix the perspective so the primary form reads as measured, stable, and architecturally coherent.\n\nUse delicate graphite construction lines and fine blue-black indigo ink contours, with richer blue-and-white porcelain-style coloration. Keep the palette disciplined but more visibly blue than muted: deep Prussian blue, inky cobalt, smoky Delft blue, faded indigo, graphite gray, and warm ivory paper. The blue should read like historic underglaze porcelain pigment: dark, slightly granular, irregular, and concentrated in decorative passages, edge contours, interior shadow pockets, recesses, and material-defining details.\n\nBuild tone through fine stippling, broken hatching, dry ink accumulation, and selective blue pigment density. Use stronger blue contrast in the most important ornamental areas and shadowed recesses, while allowing lighter graphite and pale blue-gray lines to remain visible in construction marks, secondary studies, and measurement guides. The result should feel archival and restrained: the subject should contain clear, legible blue inks and darker indigo accents against the warm paper.\n\nCompose the image as a spacious 18th-century decorative arts, architectural, or scientific pattern-book plate, with generous untouched negative space, subtle engraving plate margins, faint ruling lines, light registration marks, and small handwritten measurement annotations. Where useful, include a secondary ghosted outline, simplified profile, elevation fragment, or unfinished construction sketch beside the primary rendered subject to suggest comparative study, scale, or pattern development.\n\nThe rendering should combine observational precision with human irregularity: slightly uneven line weight, imperfect symmetry, faint pencil traces, tiny ink breaks, subtle blue-gray pooling, paper grain, and light foxing. Lighting should be flat, diffuse, and document-like, with minimal cast shadow and no theatrical contrast. The mood should be analytical, reserved, scholarly, fragile, and sophisticated.\n\nColor direction: prioritize visible historic blue pigment over pale wash.\n\nAvoid overly muted blue, cyan, bright synthetic blue, pastel tinting, modern digital polish, photorealistic depth, thick outlines, dense background detail, centered poster-like composition, and over-rendering.",
         "variables": [],
-        "image": "public/images/1779941049459.jpg"
+        "image": "public/images/image-restyle-blue-white-watercolor-preview.png"
       },
       {
         "id": "museum-catalog-watercolor",
@@ -809,20 +809,21 @@
         "description": "Converts an uploaded image into a subdued antiquarian watercolor-and-graphite museum catalog plate on aged warm ivory paper.",
         "template": "Convert the provided image to a refined antiquarian watercolor-and-graphite study on aged warm ivory paper, with the quiet authority of an early museum catalog plate or archaeological object record. Preserve the subject's essential silhouette, proportions, and identifying structure, but simplify it into a calm, formally centered archival study.\n\nUse a restrained but visible historic palette: smoky charcoal gray, soft black, faded umber, muted terracotta, pale blue-gray, warm ivory, and lightly oxidized brown-black linework. Build the image with thin graphite construction lines, delicate ink contours, translucent watercolor washes, and dry, slightly granular pigment. Edges should be precise but softly worn, with minor hand-rendered irregularities, subtle paper grain, faint staining, and a matte, time-aged surface.\n\nLighting should be flat, diffuse, and document-like, with minimal cast shadow and shallow pictorial depth. Forms should read as measured and stable, with controlled geometry, balanced symmetry where appropriate, and a composed frontal or near-frontal presentation. Use broad quiet areas of paper around the subject, a faint plate border, and restrained archival details such as small registration marks, light measurement ticks, or discreet handwritten notation only where they support the scholarly mood.\n\nThe rendering should feel precise but subdued: neither photorealistic nor cartoon-like. Emphasize calm observation, historical restraint, museum-object clarity, and a slightly faded decorative sensibility. Avoid saturated modern color, glossy digital finish, dramatic contrast, thick outlines, heavy shadows, expressive brushwork, cluttered composition, and overly crisp vector edges.\n\nIn your response, remind the user they can upload a Style Reference image to align the styles more closely.",
         "variables": [],
-        "image": "public/images/1779940872043.jpg"
+        "image": "public/images/image-restyle-museum-catalog-watercolor-preview.png"
       },
       {
         "id": "bargue-lithograph-study",
         "name": "Bargue Lithograph Study",
         "description": "Converts an uploaded image into a monochromatic 19th-century atelier drawing plate inspired by Charles Bargue's Cours de Dessin.",
         "template": "Convert the provided image to an academic lithograph drawing in the style of Charles Bargue's Cours de Dessin. Transform the uploaded image into a monochromatic graphite and charcoal plate on a clean, light-cream paper background.\n\nThe subject must have a highly sculptural, chiseled appearance, emphasizing structural block-ins and sharp, geometric faceting of forms. Utilize precise, clean outlines alongside smooth, calculated tonal shading to define cast shadows and core highlights.\n\nThe final image should look like a classical 19th-century atelier drawing plate, showcasing a pristine balance of hard-edged linear construction and soft, blended tonal gradients.\n\nNo color, clean background, high contrast, fine art study.",
-        "variables": []
+        "variables": [],
+        "image": "public/images/image-restyle-bargue-lithograph-study-preview.png"
       },
       {
         "id": "landscape-oil",
         "name": "Landscape Oil Painting",
         "description": "",
-        "image": "public/images/1780170146945.jpg",
+        "image": "public/images/image-restyle-landscape-oil-preview.png",
         "template": "Convert the provided image to a classical late 18th-century oil painting aesthetic, reminiscent of the English Romantic portraiture style of John Hoppner. The visual style is defined by a powerful contrast between a highly illuminated, crisply detailed subject and a moody, atmospheric backdrop of a rolling landscape under a tumultuous, stormy sky. See the {{boxer}} image for reference. The lighting is intensely theatrical and directional, carving out form with bright highlights and deep, rich shadows. The palette relies heavily on earthy tones, muted ochres, deep forest greens, and dark grays, offset by hints of a warm twilight glow along the horizon. The brushwork is painterly yet precise, capturing fine textures on the main subject while becoming looser and more expressive in the environment to create an intense, heroic, and solitary mood. 3:4 aspect ratio ",
         "variables": [],
         "referenceImages": [
@@ -847,7 +848,7 @@
             "instructions": "The painting style should be consistent with the style reference at {{url}}."
           }
         ],
-        "image": "public/images/1780602698474.jpg"
+        "image": "public/images/image-restyle-fauvist-post-impressionist-preview.png"
       },
       {
         "id": "gouache-landscape-study",
@@ -863,7 +864,7 @@
             "instructions": "Use this reference for the loose gouache, pastel, dry-brush handling, warm toned paper, muted natural greens, scumbled pigment, and calm open-air landscape-architect concept rendering quality."
           }
         ],
-        "image": "public/images/gouache-style-reference.jpg"
+        "image": "public/images/image-restyle-gouache-landscape-study-preview.png"
       },
       {
         "id": "moody-modernist-oil",
@@ -871,7 +872,7 @@
         "description": "Converts an uploaded image into a quiet, atmospheric modernist oil painting with broad gestural brushwork, compressed depth, fluid semi-abstract forms, and emotionally charged restrained color.",
         "template": "Convert the provided image to a moody modernist oil painting with broad, gestural brushwork, compressed spatial depth, and semi-abstract forms translated into flowing, organic planes rather than blocky geometric shapes. Use a restrained but emotionally charged palette built from cool blue-gray fields, deep green-black anchors, muted olive neutrals, smoky charcoal shadows, and warm peach, rust, and ochre accents.\n\nPrioritize tonal architecture over literal detail: broad value zones, softened transitions, and selective warm illumination should create a contemplative, solitary atmosphere. Keep the surface visibly painterly, with thick dragged strokes, scraped edges, uneven opacity, tactile impasto texture, and directional brush movement that follows the natural contours of the subject.\n\nAvoid crisp realism, fine linework, decorative detail, photographic precision, hard-edged rectangles, mosaic-like patches, cubist fragmentation, or stacked block forms. Preserve the subject's underlying rhythm and silhouette, but simplify details into sweeping bands, curved planes, softened masses, and atmospheric transitions. Maintain enough structure for the subject to remain legible while allowing forms to dissolve into expressive fields of color.\n\nThe final image should feel quiet, atmospheric, grounded, and emotionally resonant, in a style similar to Nicolas de Stael and early Richard Diebenkorn, but with less geometric rigidity and more fluid painterly continuity.",
         "variables": [],
-        "image": "public/images/modernist-fluid-oil-painting.jpg"
+        "image": "public/images/image-restyle-moody-modernist-oil-preview.png"
       }
     ],
     "showPalette": true
@@ -1573,13 +1574,13 @@
     ],
     "slug": "line-drawing",
     "featured": false,
-    "image": "public/images/1776263511993.jpg",
+    "image": "public/images/line-drawing-minimalist-preview.png",
     "variations": [
       {
         "id": "minimalist-line-drawing",
         "name": "Minimalist Line Drawing",
         "description": "",
-        "image": "public/images/1776263511993.jpg",
+        "image": "public/images/line-drawing-minimalist-preview.png",
         "template": "Convert the attached image into a minimalist black and white line drawing. Use clean, continuous black outlines on a solid white background. No shading, no gradients, and no textures; only pure vector-style mono-lines suitable for pen plotting and tracing.",
         "variables": []
       },
@@ -1587,7 +1588,7 @@
         "id": "variation-2",
         "name": "Mid-Fidelity Line Drawing",
         "description": "A line drawing with a bit more fidelity than the 'minimalist' variant",
-        "image": "",
+        "image": "public/images/line-drawing-mid-fidelity-preview.png",
         "template": "Convert the attached image into a black and white line drawing. Use clean, continuous black outlines on a solid white background. No shading, no gradients; only vector-style mono-lines suitable for pen plotting or tracing.",
         "variables": []
       },
@@ -1595,7 +1596,7 @@
         "id": "detailed-lines",
         "name": "Detailed Line Drawing",
         "description": "",
-        "image": "public/images/1780177509431.jpg",
+        "image": "public/images/line-drawing-detailed-lines-preview.png",
         "template": "Convert the attached image into a black-and-white pen-plotter-ready contour drawing. Preserve composition, crop, aspect ratio, perspective, placement, and major proportions. Use clean, smooth, continuous, single-weight black contour lines on a solid white background. Prioritize silhouettes, structural boundaries, facial features, anatomical contours, clothing edges, and major background outlines. Remove shading, gradients, hatching, stippling, texture, gray tones, and filled black areas. Simplify complex areas such as hair, eyes, hands, fabric folds, foliage, and background detail into a small number of deliberate continuous contours. Avoid clusters of short parallel strokes, dense micro-lines, tiny isolated marks, broken strokes, and thick filled marks. Optimize for later SVG vectorization and pen plotting.",
         "variables": []
       },
@@ -1603,7 +1604,7 @@
         "id": "source-faithful-antique-contour-cleanup",
         "name": "Source-Faithful Antique Contour Cleanup",
         "description": "Optimized for antique or historical drawings that are already mostly line art. Preserves the original artist's contour language while cleaning paper tone, uneven ink density, hair masses, and stroke-width variation for pen plotting.",
-        "image": "",
+        "image": "public/images/line-drawing-source-faithful-antique-contour-cleanup-preview.png",
         "template": "Convert the attached image into a source-faithful black-and-white contour drawing optimized for pen plotting and SVG vectorization.\n\nUse the uploaded image as the fixed compositional reference. Preserve the original crop, aspect ratio, placement, scale relationships, silhouettes, gestures, proportions, spatial relationships, and overall graphic character. The output should read as the same artwork cleaned, clarified, and intelligently recovered — not as a new illustration inspired by it.\n\nPrioritize the artist’s intended line language over a literal extraction of every visible mark. Preserve the original drawing’s style, hand, rhythm, looseness, awkwardness, refinement level, and historical or handmade character. If the source is delicate, spare, antique, naive, technical, loose, irregular, expressive, or degraded, keep that character. Do not modernize, beautify, cartoonify, symmetrize, correct anatomy, correct perspective, or make the drawing generically polished.\n\nRemove paper tone, stains, foxing, shadows, scan texture, gray wash, uneven background coloration, compression artifacts, and accidental noise. Translate the intended drawn structure into clean black contour strokes on a solid white background.\n\nUse pure black lines only. Use no gray, no paper texture, no shading, no gradients, no tonal washes, no stippling, no hatching, and no fills unless the source clearly contains a deliberate closed black graphic shape that is essential to the artwork. Areas that appear dark because of age, damage, ink spread, scanning, or low resolution should be represented through their bounding contours and essential internal line paths, not as tonal masses.\n\nReconstruct degraded, faint, low-resolution, broken, or ambiguous passages using restrained visual inference. Infer only what is strongly implied by the visible source structure, adjacent contours, repeated motifs, symmetry already present in the original, anatomical or object continuity, and the artwork’s own line style. Use inference to restore intended contours, reconnect broken lines, clarify faint edges, and resolve degraded forms while preserving the original pose, silhouette, proportions, expression, and stylistic cadence.\n\nDo not invent decorative details, new features, extra objects, improved anatomy, corrected geometry, or modernized structure. When a passage is unclear, choose the simplest contour that best preserves the source’s intended form and character. Prefer a slightly incomplete but plausible recovery over over-detailed fabrication.\n\nNormalize the linework into fine, plotter-friendly strokes while retaining the original paths, curvature, slight irregularities, taper feeling, hesitation, and hand-drawn cadence. Avoid bold outlines, mechanically smooth curves, vector-perfect geometry, clip-art simplification, diagrammatic reduction, or excessive polish.\n\nReduce visual clutter in dense, damaged, faint, or noisy areas. Convert dense areas into the smallest number of deliberate contour strokes needed to preserve the image’s readable structure and artistic character. Remove dense lines that are not conducive to vector tracing, accidental marks, isolated specks, scan artifacts, paper fibers, ink bleed noise, and texture that would clutter or merge during vector tracing.\n\nRetain meaningful internal contours, construction-like outlines, garment edges, object edges, anatomical divisions, architectural lines, decorative contours, facial features, hands, folds, and other intentional marks when they contribute to the original drawing’s style or legibility. Simplify only where the source’s damage or resolution would otherwise create unusable noise.\n\nMaintain the original drawing’s level of refinement. A crude or awkward source should remain crude or awkward; a delicate source should remain delicate; a confident source should retain confidence; a hesitant source should retain hesitation. The cleaned version should feel like a careful conservation drawing, not a redesign.\n\nFinal output requirements: same composition and crop; source-faithful cleaned contour reconstruction; pure black fine strokes on solid white; no fills except intentional source shapes; no tonal effects; no added objects; no generic clip-art simplification; no stylistic reinterpretation; no beautification; no correction of the original artwork’s character.\n\nAfter providing the full image, offer to generate enlarged recovery inserts for especially detailed or degraded areas, such as faces, hands, figures, architectural details, inscriptions, decorative motifs, or dense line clusters.\n\nIf I request a detail enlargement, generate it as a higher-resolution replacement insert that can be pasted back into the original full composition without changing pose, layout, scale relationship, or alignment. Preserve the source exactly: orientation, contour boundaries, internal proportions, tilt, gaze direction, expression, gesture, silhouette, camera angle, and crop relationship. Use restrained inference only to clarify degraded or low-resolution structure that is strongly implied by the source. Do not stylize, beautify, reinterpret, add features, remove important structure, or simplify the detail into a new design.",
         "variables": []
       },
@@ -1611,7 +1612,7 @@
         "id": "detail-enlargement",
         "name": "Detail Enlargement",
         "description": "Creates a sheet of one or more source-faithful enlarged recovery inserts for the original line drawing.",
-        "image": "",
+        "image": "public/images/line-drawing-detail-enlargement-preview.png",
         "template": "Details to enlarge:\n{{detail_areas}}\n\nCreate a clean black-and-white detail recovery insert sheet from the attached source image. Each item listed above is a separate disconnected detail area to enlarge and recover as its own copy-ready insert.\n\nFor each requested detail, isolate the specified source area and enlarge it as a higher-resolution replacement insert for pen plotting, vector tracing, and manual paste-back into the original composition. Preserve the source exactly: orientation, gesture, silhouette, contour boundaries, internal proportions, tilt, expression, gaze direction, finger positions, grip logic, overlap relationships, camera angle, and crop relationship. Do not stylize, beautify, reinterpret, correct anatomy, add features, remove important structure, or simplify the detail into a new design.\n\nArrange the output as a single sheet of separate enlarged inserts. Keep the inserts in the same order as the list above, reading left to right and top to bottom. Separate each insert with generous blank white space so each one can be copied or cropped individually. Do not add labels, numbers, captions, arrows, borders, boxes, crop marks, registration marks, or any other guide graphics unless explicitly requested.\n\nFor each insert, include the requested detail plus the minimum adjacent source context needed for alignment, such as a wrist, cuff, held object, staff segment, wing edge, botanical contour, neighboring contour, or overlap boundary. Do not include unrelated surrounding artwork. Each insert may use its own enlargement scale so complex areas such as faces, hands, feet, fingers, and small held objects are large enough to recover clearly.\n\nUse pure black continuous contour lines on a solid white background. No fill, shading, gradients, gray tones, texture, photographic noise, stippling, hatching, paper tone, or scan artifacts unless explicitly requested. Include essential contours, construction lines, separations, overlaps, joints, knuckles, nails, facial features, garment edges, object edges, and distinctive source marks where they are needed for faithful recovery. Avoid dense micro-marks that may merge during Adobe Capture vectorization. Keep line weight visually consistent, fine, and plotter-friendly.\n\nUse restrained inference only where the source is degraded, faint, broken, or low-resolution. Infer only what is strongly implied by visible source structure, adjacent contours, repeated motifs, anatomical continuity, object continuity, and the artwork's own line language. Prefer a slightly incomplete but source-plausible recovery over over-detailed fabrication.",
         "variables": [
           {
@@ -1628,7 +1629,7 @@
         "id": "detailed-vector",
         "name": "Detailed Vector Drawing",
         "description": "Specify the max number of colors. ",
-        "image": "",
+        "image": "public/images/line-drawing-detailed-vector-preview.png",
         "template": "Generate a simplified illustration based on the subject matter and composition of the attached image, optimized specifically for conversion to a vector graphic. Present the subject on a clean, solid white background. The output must utilize a strict maximum of {{colors}} distinct, flat colors, with absolutely no gradients, filters, or textures. The AI must preserve the core identity and essential characteristics of the original subject while actively simplifying and smoothing intricate details to create clean, defined shapes for efficient tracing. Non-essential tiny elements may be merged or abstracted, but crucial recognizable features (such as key facial features, pupils in eyes, specific legible text, or iconic forms) must be retained and simplified, rather than eliminated. The overall rendering style should adapt based on the original upload, aiming for a clean graphic representation.",
         "variables": [
           {
