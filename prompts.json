@@ -1640,7 +1640,9 @@
           }
         ]
       }
-    ]
+    ],
+    "variationSelector": "visual",
+    "variationSelectorTileMode": "details"
   },
   {
     "id": "svg-plotter-drawing",
