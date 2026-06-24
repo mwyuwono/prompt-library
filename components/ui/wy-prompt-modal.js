@@ -1025,6 +1025,127 @@ export class WyPromptModal extends LitElement {
 
     .form-group wy-option-toggle {
       --md-sys-typescale-body-medium: 500 1rem/1.45 var(--font-sans, 'DM Sans', sans-serif);
+      display: block;
+      width: 100%;
+    }
+
+    .form-group wy-option-toggle .label {
+      margin: 0 0 var(--spacing-xs, 4px) 0;
+      color: var(--md-sys-color-primary);
+      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      font-size: 0.875rem;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .form-group wy-option-toggle .description {
+      margin: 0;
+      max-width: 36rem;
+      color: color-mix(in srgb, var(--md-sys-color-primary) 70%, transparent);
+      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      font-size: var(--md-sys-typescale-body-small-size, 0.875rem);
+      font-weight: 400;
+      line-height: 1.8;
+    }
+
+    .form-group wy-option-toggle .switch-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: var(--spacing-md, 16px);
+      min-height: 38px;
+    }
+
+    .form-group wy-option-toggle .switch-copy {
+      min-width: 0;
+    }
+
+    .form-group wy-option-toggle .switch-control {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm, 8px);
+      justify-self: end;
+    }
+
+    .form-group wy-option-toggle .switch-state {
+      min-width: 2.5rem;
+      text-align: right;
+      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      font-size: 0.625rem;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--md-sys-color-primary);
+      transition: color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+      user-select: none;
+    }
+
+    .form-group wy-option-toggle .switch-button {
+      appearance: none;
+      position: relative;
+      overflow: hidden;
+      border: 0;
+      padding: 0;
+      flex: 0 0 auto;
+      width: 52px;
+      height: 30px;
+      border-radius: var(--md-sys-shape-corner-full, 9999px);
+      background: var(--wy-option-toggle-off-bg, var(--paper-deep));
+      cursor: pointer;
+      transition: background-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+    }
+
+    .form-group wy-option-toggle .switch-button.checked {
+      background: var(--md-sys-color-primary);
+    }
+
+    .form-group wy-option-toggle .switch-button::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: currentColor;
+      opacity: 0;
+      transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+      pointer-events: none;
+    }
+
+    .form-group wy-option-toggle .switch-button:hover::after {
+      opacity: var(--md-sys-state-hover-opacity, 0.08);
+    }
+
+    .form-group wy-option-toggle .switch-button:focus-visible {
+      outline: 2px solid var(--md-sys-color-primary);
+      outline-offset: 2px;
+    }
+
+    .form-group wy-option-toggle .switch-thumb {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 24px;
+      height: 24px;
+      border-radius: var(--md-sys-shape-corner-full, 9999px);
+      background: var(--md-sys-color-primary);
+      transition:
+        transform var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
+        background-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+    }
+
+    .form-group wy-option-toggle .switch-button.checked .switch-thumb {
+      transform: translateX(22px);
+      background: var(--md-sys-color-surface);
+    }
+
+    .form-group wy-option-toggle .selected-value-text {
+      margin: var(--spacing-sm, 8px) 0 0 0;
+      color: color-mix(in srgb, var(--md-sys-color-on-surface) 86%, transparent);
+      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      font-size: var(--md-sys-typescale-body-small-size, 0.875rem);
+      font-weight: 400;
+      line-height: 1.7;
     }
 
     .preview-area {

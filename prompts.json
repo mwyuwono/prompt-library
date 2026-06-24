@@ -143,8 +143,8 @@
           "Right"
         ],
         "optionDescriptions": [
-          "Generated panel connects to the right edge of the reference.",
-          "Generated panel connects to the left edge of the reference."
+          "Left side of the generated panel connects to the reference.",
+          "Right side of the generated panel connects to the reference."
         ],
         "value": "Left",
         "size": "compact"
@@ -928,7 +928,7 @@
         "name": "Impressionist Print",
         "description": "Inspired by late 19th-century Impressionist printmaking and Japanese ukiyo-e woodblock prints",
         "image": "public/images/1782275141153.jpg",
-      "template": "Convert the provided image to a style inspired by late 19th-century Impressionist printmaking and Japanese ukiyo-e woodblock prints, similar to Mary Cassatt's color aquatints. The aesthetic features delicate, precise contour linework paired with flat, graphic blocks of color. Surfaces and attire should feature intricate, repeating organic and textile patterns. The color palette is characterized by rich indigo blues, warm creams, muted earth tones, and soft pastel accents. Lighting is completely soft and diffuse, eliminating heavy shadows and relying on sharp graphic compositions to define form. The overall vibe is quiet, domestic, intimate, and deeply contemplative. Refer to style reference: {{cassat_print}}",
+        "template": "Convert the provided image to a style inspired by late 19th-century Impressionist printmaking and Japanese ukiyo-e woodblock prints, similar to Mary Cassatt's color aquatints. The aesthetic features delicate, precise contour linework paired with flat, graphic blocks of color. Surfaces and attire should feature intricate, repeating organic and textile patterns. The color palette is characterized by rich indigo blues, warm creams, muted earth tones, and soft pastel accents. Lighting is completely soft and diffuse, eliminating heavy shadows and relying on sharp graphic compositions to define form. The overall vibe is quiet, domestic, intimate, and deeply contemplative. Refer to style reference: {{cassat_print}}",
         "variables": [],
         "referenceImages": [
           {
