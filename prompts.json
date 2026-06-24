@@ -120,6 +120,40 @@
     "slug": "oil-painting-study-reference"
   },
   {
+    "id": "wallpaper-artwork-extension",
+    "title": "Wallpaper Artwork Extension",
+    "description": "Extends an uploaded hand-painted wallpaper image into a wider seamless landscape panel, with a left/right toggle and a 10% overlap band for manual compositing.",
+    "category": "Art",
+    "icon": "panorama",
+    "featured": false,
+    "image": "public/images/wallpaper-artwork-extension-preview.png",
+    "template": "Connect to reference on {{connect_side}}.\n\nUse the uploaded wallpaper image as the source panel. Extend the artwork into a wider seamless hand-painted landscape wallpaper panel.\n\nCritical alignment rule: the generated image must include a narrow overlap band equal to approximately 10% of the reference image width on the connecting side. If connecting on the Left, the leftmost 10% of the generated image must visibly repeat and align with the rightmost 10% of the reference image. If connecting on the Right, the rightmost 10% of the generated image must visibly repeat and align with the leftmost 10% of the reference image. This overlap is for manual compositing; preserve matching forms, brushwork, spacing, color, horizon, scale, and edge details.\n\nContinue the scene naturally beyond the overlap. Maintain the exact visual language of the reference: hand-painted wallpaper, landscape-panel composition, painterly brushwork, pigment behavior, line quality, atmospheric depth, palette, texture, aging, negative space, botanical forms, terrain logic, and decorative pacing.\n\nDo not mirror, clone, tile, or mechanically repeat the full image. Extend only from the connecting edge. Preserve continuity of all forms crossing the seam. Introduce new adjacent landscape elements that feel authored by the same hand and belong to the same panoramic world.\n\nAvoid modern photorealism, digital smoothness, harsh contrast, synthetic gradients, excessive detail, clutter, text, borders, frames, labels, watermarks, or visible seam artifacts.\n\nOutput a single clean extension panel suitable for manual alignment into a seamless panorama.",
+    "variables": [
+      {
+        "name": "connect_side",
+        "label": "Connect Side",
+        "description": "Choose which side of the generated panel connects to the uploaded reference image.",
+        "inputType": "toggle",
+        "labels": [
+          "Left",
+          "Right"
+        ],
+        "options": [
+          "Left",
+          "Right"
+        ],
+        "optionDescriptions": [
+          "Generated panel connects to the right edge of the reference.",
+          "Generated panel connects to the left edge of the reference."
+        ],
+        "value": "Left",
+        "size": "compact"
+      }
+    ],
+    "instructions": "Upload a wallpaper image, then choose which side of the generated extension panel should connect to the reference.",
+    "slug": "wallpaper-artwork-extension"
+  },
+  {
     "id": "proofreader",
     "title": "Writing Assistant",
     "description": "Restructures pasted text for clarity, flow, and stronger organization while preserving your voice.",
@@ -718,7 +752,7 @@
         "template": "Using the uploaded image as the architectural reference, create a 16:9 hand-painted Chinoiserie wallpaper mural featuring the building as an orthographic, eye-level architectural facade centered in the mid-ground. Preserve the source architecture's recognizable massing, proportions, facade rhythm, openings, roof logic, material cues, ornament, and primary details while translating it into a flat decorative mural composition.\n\n**Composition:** Establish clear depth while maintaining a refined wallpaper-panel flatness. Center the facade in the mid-ground as the primary focus. Frame it with statuesque, balanced trees arranged in a classical, ordered, symmetrical or near-symmetrical structure. Use ample negative space across the canvas so each element breathes, echoing the spatial restraint and luxurious pacing of high-end De Gournay wallpaper. Every element should feel intentional and necessary: no clutter, no filler, no dense floral scatter.\n\n**Context:** Build the setting from the architectural style's real geographical and historical origins. Match the surrounding regional flora, background terrain, landforms, and clean defined topography to that origin with scholarly accuracy. Use masculine botanical species where botanicals appear: mature trees, structured shrubs, palms, cypress, pine, oak, bamboo, reeds, agave, or regionally appropriate substantial planting rather than dainty florals.\n\n**Aesthetic:** Blend architectural blueprint precision with a decorative Chinoiserie mural finish. The mood should be serious, sophisticated, atmospheric, slightly surreal, luminous, quiet, moody, premium, and masculine. Maintain a composed, formal, high-design sensibility rather than a whimsical garden scene.\n\nMedium and surface: Fine watercolor and gouache on textured gessoed canvas or aged silk wallpaper substrate. Make the surface visibly hand-painted, non-digital, and tactile, with subtle silk weave or gesso texture, pigment pooling, soft wash transitions, and refined brush variation.\n\nLinework and light: Render crisp, precise ink outlines on both architecture and natural elements. Use architectural drafting clarity, controlled line hierarchy, and clean silhouette definition. Introduce subtle depth through direct warm-toned lighting, disciplined value shifts, and soft-edged shadows while preserving the flat decorative panel feel.\n\n{{Composition_Ref}} is a composition and style example. \n\n{{colors_spacing}} is an example of style and negative space usage. ",
         "variables": [],
         "instructions": "Upload a building image with this prompt.",
-        "image": "public/images/architectural-rendering-chinoiserie-mural-facade.png",
+        "image": "public/images/1782317395427.jpg",
         "referenceImages": [
           {
             "variable": "colors_spacing",
@@ -894,7 +928,7 @@
         "name": "Impressionist Print",
         "description": "Inspired by late 19th-century Impressionist printmaking and Japanese ukiyo-e woodblock prints",
         "image": "public/images/1782275141153.jpg",
-        "template": "Convert the provided image to a style inspired by late 19th-century Impressionist printmaking and Japanese ukiyo-e woodblock prints, similar to Mary Cassatt's color aquatints. The aesthetic features delicate, precise contour linework paired with flat, graphic blocks of color. Surfaces and attire should feature intricate, repeating organic and textile patterns. The color palette is characterized by rich indigo blues, warm creams, muted earth tones, and soft pastel accents. Lighting is completely soft and diffuse, eliminating heavy shadows and relying on sharp graphic compositions to define form. The overall vibe is quiet, domestic, intimate, and deeply contemplative. Refer to style reference: {{cassatprint}}",
+      "template": "Convert the provided image to a style inspired by late 19th-century Impressionist printmaking and Japanese ukiyo-e woodblock prints, similar to Mary Cassatt's color aquatints. The aesthetic features delicate, precise contour linework paired with flat, graphic blocks of color. Surfaces and attire should feature intricate, repeating organic and textile patterns. The color palette is characterized by rich indigo blues, warm creams, muted earth tones, and soft pastel accents. Lighting is completely soft and diffuse, eliminating heavy shadows and relying on sharp graphic compositions to define form. The overall vibe is quiet, domestic, intimate, and deeply contemplative. Refer to style reference: {{cassat_print}}",
         "variables": [],
         "referenceImages": [
           {
