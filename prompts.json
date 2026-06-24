@@ -873,6 +873,22 @@
         "template": "Convert the provided image to a moody modernist oil painting with broad, gestural brushwork, compressed spatial depth, and semi-abstract forms translated into flowing, organic planes rather than blocky geometric shapes. Use a restrained but emotionally charged palette built from cool blue-gray fields, deep green-black anchors, muted olive neutrals, smoky charcoal shadows, and warm peach, rust, and ochre accents.\n\nPrioritize tonal architecture over literal detail: broad value zones, softened transitions, and selective warm illumination should create a contemplative, solitary atmosphere. Keep the surface visibly painterly, with thick dragged strokes, scraped edges, uneven opacity, tactile impasto texture, and directional brush movement that follows the natural contours of the subject.\n\nAvoid crisp realism, fine linework, decorative detail, photographic precision, hard-edged rectangles, mosaic-like patches, cubist fragmentation, or stacked block forms. Preserve the subject's underlying rhythm and silhouette, but simplify details into sweeping bands, curved planes, softened masses, and atmospheric transitions. Maintain enough structure for the subject to remain legible while allowing forms to dissolve into expressive fields of color.\n\nThe final image should feel quiet, atmospheric, grounded, and emotionally resonant, in a style similar to Nicolas de Stael and early Richard Diebenkorn, but with less geometric rigidity and more fluid painterly continuity.",
         "variables": [],
         "image": "public/images/image-restyle-moody-modernist-oil-preview.png"
+      },
+      {
+        "id": "variation-9",
+        "name": "Impressionist Print",
+        "description": "Inspired by late 19th-century Impressionist printmaking and Japanese ukiyo-e woodblock prints",
+        "image": "",
+        "template": "Convert the provided image to a style inspired by late 19th-century Impressionist printmaking and Japanese ukiyo-e woodblock prints, similar to Mary Cassatt's color aquatints. The aesthetic features delicate, precise contour linework paired with flat, graphic blocks of color. Surfaces and attire should feature intricate, repeating organic and textile patterns. The color palette is characterized by rich indigo blues, warm creams, muted earth tones, and soft pastel accents. Lighting is completely soft and diffuse, eliminating heavy shadows and relying on sharp graphic compositions to define form. The overall vibe is quiet, domestic, intimate, and deeply contemplative. Refer to style reference: {{cassatprint}}",
+        "variables": [],
+        "referenceImages": [
+          {
+            "variable": "cassat_print",
+            "label": "Cassat Reference Image",
+            "path": "public/images/1782273618012.jpg",
+            "instructions": ""
+          }
+        ]
       }
     ],
     "showPalette": true
