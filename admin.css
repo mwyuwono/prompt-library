@@ -1224,13 +1224,20 @@ wy-prompt-editor .prompt-image-remove {
             padding: 0;
             border: 0;
             border-radius: var(--md-sys-shape-corner-full, 9999px);
-            background-color: var(--md-sys-color-error, #B3261E);
-            color: var(--md-sys-color-on-error, #FFF);
+            background-color: transparent;
+            color: var(--md-sys-color-error, #B3261E);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 8px color-mix(in srgb, var(--ink, #1A1A1A) 24%, transparent);
+            transition: background-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+        }
+wy-prompt-editor .prompt-image-remove:hover {
+            background-color: color-mix(in srgb, var(--md-sys-color-error, #B3261E) 10%, transparent);
+        }
+wy-prompt-editor .prompt-image-remove:focus-visible {
+            outline: 2px solid var(--md-sys-color-error, #B3261E);
+            outline-offset: 2px;
         }
 wy-prompt-editor .prompt-image-remove .material-symbols-outlined {
             font-size: 18px;
@@ -2626,6 +2633,14 @@ wy-image-upload .image-preview:hover .remove-button {
 wy-image-upload .remove-button:hover {
             background-color: color-mix(in srgb, var(--md-sys-color-error, #B3261E) 90%, black);
         }
+wy-image-upload .image-preview:focus-within .remove-button {
+            opacity: 1;
+        }
+wy-image-upload .remove-button:focus-visible {
+            opacity: 1;
+            outline: 2px solid var(--md-sys-color-on-surface, #1A1A1A);
+            outline-offset: 2px;
+        }
 wy-image-upload .remove-button .material-symbols-outlined {
             font-size: 18px;
             color: white;
@@ -2966,7 +2981,7 @@ wy-option-toggle .switch-button {
             width: 52px;
             height: 30px;
             border-radius: var(--md-sys-shape-corner-full, 9999px);
-            background: var(--wy-option-toggle-off-bg, #E8E4D8);
+            background: var(--wy-option-toggle-off-bg, var(--paper-deep, #EEE8DD));
             cursor: pointer;
             transition: background-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
         }
@@ -3039,7 +3054,7 @@ wy-option-toggle[disabled] {
         }
 wy-option-toggle[disabled] .switch-button {
             cursor: not-allowed;
-            background: var(--wy-option-toggle-disabled-bg, #D1CDC0);
+            background: var(--wy-option-toggle-disabled-bg, var(--paper-edge, #DDD6C8));
         }
 @media (max-width: 520px) {
   wy-option-toggle .switch-row {

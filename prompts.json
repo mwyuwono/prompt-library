@@ -786,7 +786,8 @@
     "slug": "architectural-rendering",
     "instructions": "Select a variant for the desired drawing style or presentation format.",
     "image": "public/images/architectural-rendering-historic-panoramic-mural.png",
-    "variationSelector": "visual"
+    "variationSelector": "visual",
+    "variationSelectorTileMode": "details"
   },
   {
     "id": "engraving-conversion",
