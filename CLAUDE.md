@@ -95,6 +95,7 @@ Every `wy-*` tag used by `index.html`, `private.html`, `admin.html`, or their sc
 - Legacy `--md-sys-*` aliases still resolve and are used by existing components for compatibility.
 - Local app-specific layout custom properties are appropriate in `styles.css`.
 - For **migrated admin editor components** (light DOM), edit styles directly in `admin.css` using tag-scoped selectors. For **components still on shadow DOM**, avoid `::part()` for structural layout — prefer component custom properties or edit the component source in `components/ui/`.
+- When a user identifies a specific Admin UI polish issue, audit sibling controls and repeated component patterns for the same issue before implementing. Apply the fix consistently across similar instances unless the user explicitly scopes the request to one element. Examples: button radius, field surface color, spacing rhythm, menu shadows, and typography hierarchy.
 - Dark mode is not supported. Do not add `prefers-color-scheme: dark` blocks.
 
 ### External Assets

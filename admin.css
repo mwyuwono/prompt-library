@@ -3305,4 +3305,517 @@ wy-prompt-editor .visibility-setting.archive {
     border: 1px solid var(--err);
 }
 
+/* ---- admin polish pass: editorial controls, variant workflow, image rhythm ---- */
+wy-prompt-editor .card {
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 5%, transparent),
+        0 4px 14px color-mix(in srgb, var(--ink, #1A1A1A) 3%, transparent);
+}
+
+wy-prompt-editor .editor-nav {
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 5%, transparent),
+        0 4px 14px color-mix(in srgb, var(--ink, #1A1A1A) 3%, transparent);
+}
+
+wy-prompt-editor .button-small,
+wy-variation-editor .control-button,
+wy-variation-editor .add-step-button,
+wy-variation-editor .add-variation-button,
+wy-step-editor .control-button,
+wy-variable-editor .add-button,
+wy-reference-image-editor .add-button,
+wy-variable-editor .icon-button,
+wy-reference-image-editor .icon-button {
+    border-radius: var(--radius-pill);
+}
+
+wy-prompt-editor .label,
+wy-image-upload .label {
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    line-height: 1.3;
+    text-transform: uppercase;
+    color: var(--ink-mute, #6B6B6A);
+    margin: 0 0 var(--s-2, 8px);
+}
+
+wy-prompt-editor {
+    --admin-neutral-field: color-mix(in srgb, var(--white, #FFF) 82%, var(--paper, #F7F4EE));
+}
+
+wy-prompt-editor wy-form-field {
+    --field-bg: var(--admin-neutral-field);
+}
+
+wy-prompt-editor .card > wy-form-field + wy-form-field,
+wy-prompt-editor .card > wy-dropdown + .label,
+wy-prompt-editor .card > wy-dropdown + wy-image-upload,
+wy-prompt-editor .card > wy-dropdown + .label + .prompt-image-card {
+    margin-top: var(--s-5, 24px);
+}
+
+wy-prompt-editor .card > .label {
+    margin-top: var(--s-5, 24px);
+}
+
+wy-prompt-editor .card > .label:first-child,
+wy-prompt-editor .card > .card-title + .label {
+    margin-top: 0;
+}
+
+wy-prompt-editor .card > .label + .prompt-image-card {
+    margin-top: 0;
+}
+
+wy-prompt-editor .prompt-image-card,
+wy-image-upload .upload-zone {
+    background: var(--admin-neutral-field);
+    border: 0;
+    border-radius: var(--radius-2, 10px);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 8%, transparent);
+}
+
+wy-image-upload .upload-zone {
+    padding: var(--s-5, 24px);
+}
+
+wy-image-upload .upload-zone.compact {
+    min-height: 74px;
+    padding: var(--s-4, 16px) var(--s-5, 24px);
+}
+
+wy-image-upload .upload-zone:hover {
+    background: var(--surface-2, #FFF);
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 13%, transparent),
+        0 0 0 3px color-mix(in srgb, var(--ink, #1A1A1A) 4%, transparent);
+}
+
+wy-image-upload .icon-container {
+    background: var(--surface-2, #FFF);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 7%, transparent);
+}
+
+wy-image-upload .upload-text,
+wy-prompt-editor .prompt-image-title {
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.9375rem;
+    font-weight: 650;
+}
+
+wy-image-upload .upload-hint,
+wy-prompt-editor .prompt-image-hint {
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: var(--ink-mute, #6B6B6A);
+}
+
+wy-prompt-editor .prompt-image-summary {
+    grid-template-columns: 144px minmax(0, 1fr);
+    gap: var(--s-4, 16px);
+    min-height: 84px;
+    padding: var(--s-2, 8px) 44px var(--s-2, 8px) var(--s-2, 8px);
+}
+
+wy-prompt-editor .prompt-image-thumbnail {
+    width: 144px;
+    border-radius: var(--radius-2, 10px);
+}
+
+wy-prompt-editor .prompt-image-remove,
+wy-image-upload .remove-button {
+    box-shadow: none;
+}
+
+wy-prompt-editor .hero-generator {
+    margin-top: var(--s-5, 24px);
+    background: var(--admin-neutral-field);
+    border: 0;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 8%, transparent);
+}
+
+wy-dropdown {
+    --wy-dropdown-label-color: var(--ink-mute, #6B6B6A);
+    --wy-dropdown-text-color: var(--ink, #1A1A1A);
+    --wy-dropdown-icon-color: var(--ink-mute, #6B6B6A);
+    --wy-dropdown-bg: var(--admin-neutral-field);
+    --wy-dropdown-border: color-mix(in srgb, var(--ink, #1A1A1A) 10%, transparent);
+    --wy-dropdown-border-hover: color-mix(in srgb, var(--ink, #1A1A1A) 18%, transparent);
+    --wy-dropdown-menu-bg: var(--surface-2, #FFF);
+    --wy-dropdown-item-hover-bg: color-mix(in srgb, var(--ink, #1A1A1A) 5%, transparent);
+}
+
+wy-dropdown .label {
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    margin: 0 0 var(--s-2, 8px);
+}
+
+wy-dropdown .selector {
+    min-height: 52px;
+    padding: 0 var(--s-4, 16px);
+    border: 1px solid var(--wy-dropdown-border);
+    border-radius: var(--radius-2, 10px);
+    box-shadow: none;
+}
+
+wy-dropdown .selector:hover:not(:disabled) {
+    border-color: var(--wy-dropdown-border-hover);
+    box-shadow: none;
+}
+
+wy-dropdown .selector:focus-visible {
+    outline: none;
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 28%, transparent),
+        0 0 0 3px color-mix(in srgb, var(--accent-rust, #C06F45) 18%, transparent);
+}
+
+wy-dropdown .value {
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.9375rem;
+    font-weight: 600;
+}
+
+wy-dropdown .dropdown {
+    top: calc(100% + var(--s-2, 8px));
+    background: var(--wy-dropdown-menu-bg);
+    border: 1px solid color-mix(in srgb, var(--ink, #1A1A1A) 8%, transparent);
+    border-radius: var(--radius-2, 10px);
+    box-shadow: none;
+    max-height: min(300px, 46vh);
+    padding: var(--s-1, 4px);
+}
+
+wy-dropdown .item {
+    border-radius: var(--radius-2, 10px);
+    padding: 12px var(--s-4, 16px);
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.875rem;
+}
+
+wy-dropdown .item:hover,
+wy-dropdown .item.focused {
+    background: var(--wy-dropdown-item-hover-bg);
+}
+
+wy-dropdown .item.selected {
+    background: color-mix(in srgb, var(--ink, #1A1A1A) 8%, transparent);
+}
+
+wy-prompt-editor .variation-display-setting {
+    grid-template-columns: 32px minmax(0, 1fr);
+    align-items: start;
+    gap: var(--s-3, 12px) var(--s-4, 16px);
+    padding: var(--s-4, 16px) 0 var(--s-5, 24px);
+    background: transparent;
+    border: 0;
+    border-top: 1px solid color-mix(in srgb, var(--ink, #1A1A1A) 8%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--ink, #1A1A1A) 8%, transparent);
+    border-radius: 0;
+    box-shadow: none;
+}
+
+wy-prompt-editor .variation-display-icon {
+    width: 32px;
+    height: 32px;
+    margin-top: 2px;
+    background: var(--surface-2, #FFF);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 7%, transparent);
+}
+
+wy-prompt-editor .variation-display-icon .material-symbols-outlined {
+    font-size: 18px;
+}
+
+wy-prompt-editor .variation-display-setting wy-option-toggle .label {
+    margin-bottom: var(--s-1, 4px);
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+}
+
+wy-prompt-editor .variation-display-setting wy-option-toggle + wy-option-toggle {
+    margin-top: var(--s-2, 8px);
+    padding-top: var(--s-3, 12px);
+    border-top: 1px solid color-mix(in srgb, var(--ink, #1A1A1A) 7%, transparent);
+}
+
+wy-prompt-editor .variation-display-setting wy-option-toggle + wy-option-toggle .label {
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    color: var(--ink-mute, #6B6B6A);
+}
+
+wy-prompt-editor .variation-display-setting wy-option-toggle .description {
+    line-height: 1.55;
+    color: var(--ink-mute, #6B6B6A);
+}
+
+wy-prompt-editor .variation-display-setting wy-option-toggle .group {
+    background: var(--surface-2, #FFF);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 8%, transparent);
+    width: min(100%, 540px);
+}
+
+wy-prompt-editor .variation-display-setting wy-option-toggle .option {
+    min-height: 34px;
+    padding-inline: var(--s-3, 12px);
+    color: var(--ink-mute, #6B6B6A);
+    font-size: 0.75rem;
+}
+
+wy-prompt-editor .variation-display-setting wy-option-toggle .option.selected {
+    background: var(--ink, #1A1A1A);
+    color: var(--paper, #F7F4EE);
+}
+
+wy-prompt-editor .variation-display-setting wy-option-toggle .switch-button {
+    background: var(--surface-2, #FFF);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 12%, transparent);
+}
+
+wy-prompt-editor .variation-display-setting wy-option-toggle .switch-button.checked {
+    background: var(--ink, #1A1A1A);
+}
+
+wy-variation-editor .variation-fields {
+    gap: var(--s-6, 32px);
+}
+
+wy-variation-editor .field-group {
+    gap: var(--s-2, 8px);
+}
+
+wy-variation-editor .field-group + .field-group,
+wy-variation-editor .mode-toggle + .field-group,
+wy-variation-editor .field-group + wy-code-textarea,
+wy-variation-editor .steps-section {
+    margin-top: var(--s-2, 8px);
+}
+
+wy-variation-editor .mode-toggle,
+wy-prompt-editor .mode-toggle {
+    background: var(--surface-2, #FFF);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 9%, transparent);
+}
+
+wy-variation-editor .mode-toggle label,
+wy-prompt-editor .mode-toggle label {
+    min-height: 40px;
+    padding: 0 var(--s-5, 24px);
+}
+
+wy-variation-editor .variation-card,
+wy-step-editor .step-card {
+    background: color-mix(in srgb, var(--white, #FFF) 82%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 7%, transparent);
+}
+
+wy-variation-editor .variation-selector {
+    position: sticky;
+    top: 84px;
+    z-index: 8;
+    margin: 0 0 var(--s-5, 24px);
+    padding-top: var(--s-1, 4px);
+}
+
+wy-variation-editor .variation-selector-toggle {
+    min-height: 58px;
+    gap: var(--s-3, 12px);
+    padding: 10px var(--s-4, 16px);
+    background: var(--surface-2, #FFF);
+    border: 1px solid color-mix(in srgb, var(--ink, #1A1A1A) 13%, transparent);
+    border-radius: var(--radius-pill);
+    box-shadow: none;
+}
+
+wy-variation-editor .variation-selector-toggle:focus-visible {
+    outline: none;
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 28%, transparent),
+        0 0 0 3px color-mix(in srgb, var(--accent-rust, #C06F45) 24%, transparent);
+}
+
+wy-variation-editor .variation-selector-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 0 var(--s-3, 12px);
+    border-radius: var(--radius-pill);
+    background: var(--ink, #1A1A1A);
+    color: var(--paper, #F7F4EE);
+    letter-spacing: 0.12em;
+}
+
+wy-variation-editor .variation-selector-current {
+    font-size: 1.0625rem;
+}
+
+wy-variation-editor .variation-selector-meta {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 0 var(--s-3, 12px);
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
+    color: var(--ink, #1A1A1A);
+    font-weight: 700;
+}
+
+wy-variation-editor .variation-selector-list {
+    position: relative;
+    z-index: 9;
+    gap: var(--s-1, 4px);
+    max-height: min(430px, calc(100vh - 170px));
+    overflow-y: auto;
+    margin-top: var(--s-2, 8px);
+    padding: var(--s-2, 8px);
+    background: var(--surface-2, #FFF);
+    border: 1px solid color-mix(in srgb, var(--ink, #1A1A1A) 8%, transparent);
+    border-radius: var(--radius-2, 10px);
+    box-shadow: none;
+}
+
+wy-variation-editor .variation-row {
+    min-height: 42px;
+    padding: 9px var(--s-3, 12px);
+    border-left: 3px solid transparent;
+    border-radius: var(--radius-2, 10px);
+}
+
+wy-variation-editor .variation-row.selected {
+    background: color-mix(in srgb, var(--accent-rust, #C06F45) 13%, var(--white, #FFF));
+    border-left-color: var(--accent-rust, #C06F45);
+    box-shadow: none;
+}
+
+wy-variation-editor .variation-row-title {
+    font-size: 0.9375rem;
+}
+
+wy-variation-editor .variation-row-check {
+    color: var(--accent-rust, #C06F45);
+}
+
+wy-variation-editor .variation-card.expanded {
+    background: color-mix(in srgb, var(--ink, #1A1A1A) 4%, var(--white, #FFF));
+    box-shadow: none;
+}
+
+wy-variation-editor .variation-controls,
+wy-step-editor .step-controls {
+    padding-block: var(--s-3, 12px);
+}
+
+wy-variation-editor .control-button,
+wy-step-editor .control-button,
+wy-variation-editor .add-step-button,
+wy-variation-editor .add-variation-button,
+wy-variable-editor .add-button,
+wy-reference-image-editor .add-button {
+    min-height: 42px;
+    padding: 0 var(--s-5, 24px);
+    border: 1px solid color-mix(in srgb, var(--ink, #1A1A1A) 84%, transparent);
+    background: transparent;
+    color: var(--ink, #1A1A1A);
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.9375rem;
+    font-weight: 650;
+    line-height: 1;
+    box-shadow: none;
+}
+
+wy-variation-editor .control-button,
+wy-step-editor .control-button {
+    min-height: 34px;
+    padding: 0 var(--s-3, 12px);
+    font-size: 0.8125rem;
+}
+
+wy-variable-editor .add-button,
+wy-reference-image-editor .add-button {
+    width: fit-content;
+    margin-top: var(--s-5, 24px);
+}
+
+wy-variable-editor .variables-list,
+wy-reference-image-editor .refs-list {
+    gap: var(--s-5, 24px);
+}
+
+wy-variable-editor .variable-item,
+wy-reference-image-editor .ref-item {
+    background: color-mix(in srgb, var(--white, #FFF) 78%, transparent);
+    border: 1px solid color-mix(in srgb, var(--ink, #1A1A1A) 8%, transparent);
+    border-radius: var(--radius-2, 10px);
+}
+
+wy-variable-editor input,
+wy-variable-editor select,
+wy-reference-image-editor input,
+wy-reference-image-editor textarea,
+wy-step-editor input,
+wy-step-editor textarea,
+wy-code-textarea textarea,
+wy-prompt-editor .hero-prompt-textarea,
+wy-prompt-editor .hero-control-label select {
+    background: var(--surface-2, #FFF);
+    border: 0;
+    border-radius: var(--radius-2, 10px);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 8%, transparent);
+    font-family: var(--font-body, 'Inter', sans-serif);
+}
+
+wy-variable-editor input:focus,
+wy-variable-editor select:focus,
+wy-reference-image-editor input:focus,
+wy-reference-image-editor textarea:focus,
+wy-step-editor input:focus,
+wy-step-editor textarea:focus,
+wy-code-textarea textarea:focus,
+wy-prompt-editor .hero-prompt-textarea:focus,
+wy-prompt-editor .hero-control-label select:focus {
+    outline: none;
+    border-color: transparent;
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 24%, transparent),
+        0 0 0 3px color-mix(in srgb, var(--accent-rust, #C06F45) 16%, transparent);
+}
+
+wy-code-textarea .variable-chip {
+    border-radius: var(--radius-pill);
+    background: var(--surface-2, #FFF);
+    color: var(--ink, #1A1A1A);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 12%, transparent);
+}
+
+wy-variable-editor .field-label,
+wy-reference-image-editor .field-label,
+wy-variation-editor .field-label,
+wy-step-editor .field-label,
+wy-code-textarea .label {
+    font-family: var(--font-body, 'Inter', sans-serif);
+    letter-spacing: 0.14em;
+    color: var(--ink-mute, #6B6B6A);
+}
+
+@media (max-width: 1200px) {
+    wy-variation-editor .variation-selector {
+        top: 132px;
+    }
+
+    wy-variation-editor .variation-selector-toggle {
+        min-height: 54px;
+    }
+
+    wy-variation-editor .variation-selector-current {
+        font-size: 1rem;
+    }
+}
+
 /* === END admin editor (light DOM migrated) === */
