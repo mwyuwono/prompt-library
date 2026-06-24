@@ -1,7 +1,7 @@
 // Run this after pasting LLM output into prompts.json
 // Usage: node validate-prompts.js
 
-const fs = require('fs');
+import fs from 'node:fs';
 
 // --- Load files ---
 let original, updated;

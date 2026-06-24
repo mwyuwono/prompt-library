@@ -89,7 +89,8 @@ Before committing public prompt changes to `prompts.json`:
 - No manual placeholders like `[Describe...]`
 - Variable `name` matches placeholder exactly
 - `inputType` is omitted, `"textarea"`, or `"toggle"` only
-- JSON validates (run through a formatter)
+- JSON validates with `node validate-prompts.js` when `prompts.json.bak` is available
+- If `validate-prompts.js` fails because CommonJS `require` is incompatible with the package's ESM setting, validate prompt JSON with `jq empty prompts.json` plus targeted checks for image path existence and preview dimensions until the script is fixed
 - Test in UI: variables render, preview compiles, copy works
 
 For private prompt changes:
