@@ -1141,7 +1141,8 @@ export class WyPromptEditor extends LitElement {
                     <!-- Section 1: Basic Information -->
                     <div class="card" data-section="basic">
                         <h2 class="card-title" data-eyebrow="Section 01">Basic Information</h2>
-                        <wy-form-field label="Prompt Title" id="title" required>
+                        <div class="form-field">
+                            <label class="field-label" for="title">Prompt Title<span class="req">*</span></label>
                             <input
                                 type="text"
                                 id="title"
@@ -1149,8 +1150,10 @@ export class WyPromptEditor extends LitElement {
                                 @input="${(e) => this._handleFieldChange('title', e.target.value)}"
                                 ?disabled="${this.readonly}"
                             >
-                        </wy-form-field>
-                        <wy-form-field label="Slug" id="slug" description="URL-friendly identifier (auto-generated from title)">
+                        </div>
+                        <div class="form-field">
+                            <label class="field-label" for="slug">Slug</label>
+                            <p class="field-description">URL-friendly identifier (auto-generated from title)</p>
                             <input
                                 type="text"
                                 id="slug"
@@ -1158,8 +1161,10 @@ export class WyPromptEditor extends LitElement {
                                 @input="${(e) => this._handleFieldChange('slug', e.target.value)}"
                                 ?disabled="${this.readonly}"
                             >
-                        </wy-form-field>
-                        <wy-form-field label="Prompt ID" id="id" description="Unique identifier (read-only)">
+                        </div>
+                        <div class="form-field">
+                            <label class="field-label" for="id">Prompt ID</label>
+                            <p class="field-description">Unique identifier (read-only)</p>
                             <input
                                 type="text"
                                 id="id"
@@ -1167,8 +1172,9 @@ export class WyPromptEditor extends LitElement {
                                 disabled
                                 readonly
                             >
-                        </wy-form-field>
-                        <wy-form-field label="Description" id="description">
+                        </div>
+                        <div class="form-field">
+                            <label class="field-label" for="description">Description</label>
                             <textarea
                                 id="description"
                                 rows="3"
@@ -1176,8 +1182,10 @@ export class WyPromptEditor extends LitElement {
                                 @input="${(e) => this._handleFieldChange('description', e.target.value)}"
                                 ?disabled="${this.readonly}"
                             ></textarea>
-                        </wy-form-field>
-                        <wy-form-field label="Instructions" id="instructions" description="Usage notes shown in the prompt modal and only on expanded prompt cards">
+                        </div>
+                        <div class="form-field">
+                            <label class="field-label" for="instructions">Instructions</label>
+                            <p class="field-description">Usage notes shown in the prompt modal and only on expanded prompt cards</p>
                             <textarea
                                 id="instructions"
                                 rows="4"
@@ -1185,13 +1193,15 @@ export class WyPromptEditor extends LitElement {
                                 @input="${(e) => this._handleFieldChange('instructions', e.target.value)}"
                                 ?disabled="${this.readonly}"
                             ></textarea>
-                        </wy-form-field>
+                        </div>
                     </div>
 
                     <!-- Section 2: Visuals & Metadata -->
                     <div class="card" data-section="visuals">
                         <h2 class="card-title" data-eyebrow="Section 02">Visuals & Metadata</h2>
-                        <wy-form-field label="Icon" id="icon" description="Material Symbol icon name (e.g., 'restaurant', 'code', 'music_note')">
+                        <div class="form-field">
+                            <label class="field-label" for="icon">Icon</label>
+                            <p class="field-description">Material Symbol icon name (e.g., 'restaurant', 'code', 'music_note')</p>
                             <input
                                 type="text"
                                 id="icon"
@@ -1200,7 +1210,7 @@ export class WyPromptEditor extends LitElement {
                                 placeholder="icon_name"
                                 ?disabled="${this.readonly}"
                             >
-                        </wy-form-field>
+                        </div>
                         <wy-dropdown
                             label="Category"
                             .value="${this._editedPrompt.category || ''}"

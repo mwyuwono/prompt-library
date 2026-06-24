@@ -366,51 +366,54 @@ export class WyVariationEditor extends LitElement {
                 <!-- Fields -->
                 <div class="variation-fields">
                     <!-- Variation Name -->
-                    <wy-form-field label="Variation Name" required>
+                    <div class="form-field">
+                        <label class="field-label" for="variation-name-${index}">Variation Name<span class="req">*</span></label>
                         <input
+                            id="variation-name-${index}"
                             type="text"
                             .value="${variation.name || ''}"
                             @input="${(e) => this._handleFieldChange(index, 'name', e.target.value)}"
                             placeholder="e.g., Tina Barney Style Photo"
                         >
-                    </wy-form-field>
+                    </div>
 
                     <!-- Variation ID -->
-                    <wy-form-field
-                        label="Variation ID"
-                        description="Unique identifier (lowercase, no spaces)"
-                    >
+                    <div class="form-field">
+                        <label class="field-label" for="variation-id-${index}">Variation ID</label>
+                        <p class="field-description">Unique identifier (lowercase, no spaces)</p>
                         <input
+                            id="variation-id-${index}"
                             type="text"
                             .value="${variation.id || ''}"
                             @input="${(e) => this._handleFieldChange(index, 'id', e.target.value)}"
                             placeholder="e.g., tina-barney"
                         >
-                    </wy-form-field>
+                    </div>
 
                     <!-- Variation Description -->
-                    <wy-form-field label="Description" data-vsection="description">
+                    <div class="form-field" data-vsection="description">
+                        <label class="field-label" for="variation-description-${index}">Description</label>
                         <textarea
+                            id="variation-description-${index}"
                             rows="3"
                             .value="${variation.description || ''}"
                             @input="${(e) => this._handleFieldChange(index, 'description', e.target.value)}"
                             placeholder="Description shown in variation selector"
                         ></textarea>
-                    </wy-form-field>
+                    </div>
 
                     <!-- Variation Instructions -->
-                    <wy-form-field
-                        data-vsection="instructions"
-                        label="Instructions"
-                        description="Optional usage notes shown with this variant. Supports lightweight Markdown such as **bold** and lists."
-                    >
+                    <div class="form-field" data-vsection="instructions">
+                        <label class="field-label" for="variation-instructions-${index}">Instructions</label>
+                        <p class="field-description">Optional usage notes shown with this variant. Supports lightweight Markdown such as **bold** and lists.</p>
                         <textarea
+                            id="variation-instructions-${index}"
                             rows="4"
                             .value="${variation.instructions || ''}"
                             @input="${(e) => this._handleFieldChange(index, 'instructions', e.target.value)}"
                             placeholder="e.g., Upload with this variant:&#10;1. Your artwork&#10;2. The reference image"
                         ></textarea>
-                    </wy-form-field>
+                    </div>
 
                     <div data-vsection="image">
                         <wy-image-upload

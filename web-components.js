@@ -3718,106 +3718,6 @@ __publicField(WyTabs, "styles", i`
   `);
 customElements.define("wy-tabs", WyTabs);
 
-// components/ui/wy-form-field.js
-var WyFormField = class extends i4 {
-  render() {
-    return b2`
-      <div class="label-container">
-        ${this.label ? b2`<label for="${this.id}">${this.label}${this.required ? b2`<span class="required-mark">*</span>` : ""}</label>` : ""}
-      </div>
-      ${this.description ? b2`<div class="description">${this.description}</div>` : ""}
-      <slot></slot>
-      ${this.error ? b2`<div class="error" id="${this.id}-error">${this.error}</div>` : ""}
-    `;
-  }
-};
-__publicField(WyFormField, "properties", {
-  label: { type: String },
-  id: { type: String },
-  description: { type: String },
-  error: { type: String },
-  required: { type: Boolean }
-});
-__publicField(WyFormField, "styles", i`
-    :host {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      margin-bottom: 24px;
-      width: 100%;
-    }
-
-    .label-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    label {
-      font-family: var(--font-body);
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      color: var(--md-sys-color-on-surface-variant);
-    }
-
-    .required-mark {
-      color: var(--err);
-      margin-left: 2px;
-    }
-
-    .description {
-      font-family: var(--font-body);
-      font-size: 0.8125rem;
-      color: var(--md-sys-color-on-surface-variant);
-      opacity: 0.7;
-      margin-bottom: 4px;
-    }
-
-    .error {
-      font-family: var(--font-body);
-      font-size: 0.75rem;
-      color: var(--err);
-      margin-top: 4px;
-    }
-
-    ::slotted(input),
-    ::slotted(textarea),
-    ::slotted(select) {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 12px 16px;
-      border-radius: var(--radius-2, var(--md-sys-shape-corner-small));
-      border: 0;
-      background-color: var(--field-bg, var(--md-sys-color-surface-container-lowest));
-      font-family: var(--font-body);
-      font-size: 1rem;
-      color: var(--md-sys-color-on-surface);
-      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 7%, transparent);
-      transition:
-        box-shadow var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
-        background-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
-    }
-
-    ::slotted(input:focus),
-    ::slotted(textarea:focus),
-    ::slotted(select:focus) {
-      outline: none;
-      background-color: var(--surface-2, var(--md-sys-color-surface-container-lowest));
-      box-shadow:
-        inset 0 0 0 1px color-mix(in srgb, var(--md-sys-color-primary) 24%, transparent),
-        0 0 0 3px color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
-    }
-
-    ::slotted([aria-invalid="true"]) {
-      box-shadow:
-        inset 0 0 0 1px color-mix(in srgb, var(--err) 32%, transparent),
-        0 0 0 3px color-mix(in srgb, var(--err) 8%, transparent);
-    }
-  `);
-customElements.define("wy-form-field", WyFormField);
-
 // components/ui/wy-dropdown.js
 var WyDropdown = class extends i4 {
   constructor() {
@@ -5061,51 +4961,54 @@ This action cannot be undone.`;
                 <!-- Fields -->
                 <div class="variation-fields">
                     <!-- Variation Name -->
-                    <wy-form-field label="Variation Name" required>
+                    <div class="form-field">
+                        <label class="field-label" for="variation-name-${index}">Variation Name<span class="req">*</span></label>
                         <input
+                            id="variation-name-${index}"
                             type="text"
                             .value="${variation.name || ""}"
                             @input="${(e9) => this._handleFieldChange(index, "name", e9.target.value)}"
                             placeholder="e.g., Tina Barney Style Photo"
                         >
-                    </wy-form-field>
+                    </div>
 
                     <!-- Variation ID -->
-                    <wy-form-field
-                        label="Variation ID"
-                        description="Unique identifier (lowercase, no spaces)"
-                    >
+                    <div class="form-field">
+                        <label class="field-label" for="variation-id-${index}">Variation ID</label>
+                        <p class="field-description">Unique identifier (lowercase, no spaces)</p>
                         <input
+                            id="variation-id-${index}"
                             type="text"
                             .value="${variation.id || ""}"
                             @input="${(e9) => this._handleFieldChange(index, "id", e9.target.value)}"
                             placeholder="e.g., tina-barney"
                         >
-                    </wy-form-field>
+                    </div>
 
                     <!-- Variation Description -->
-                    <wy-form-field label="Description" data-vsection="description">
+                    <div class="form-field" data-vsection="description">
+                        <label class="field-label" for="variation-description-${index}">Description</label>
                         <textarea
+                            id="variation-description-${index}"
                             rows="3"
                             .value="${variation.description || ""}"
                             @input="${(e9) => this._handleFieldChange(index, "description", e9.target.value)}"
                             placeholder="Description shown in variation selector"
                         ></textarea>
-                    </wy-form-field>
+                    </div>
 
                     <!-- Variation Instructions -->
-                    <wy-form-field
-                        data-vsection="instructions"
-                        label="Instructions"
-                        description="Optional usage notes shown with this variant. Supports lightweight Markdown such as **bold** and lists."
-                    >
+                    <div class="form-field" data-vsection="instructions">
+                        <label class="field-label" for="variation-instructions-${index}">Instructions</label>
+                        <p class="field-description">Optional usage notes shown with this variant. Supports lightweight Markdown such as **bold** and lists.</p>
                         <textarea
+                            id="variation-instructions-${index}"
                             rows="4"
                             .value="${variation.instructions || ""}"
                             @input="${(e9) => this._handleFieldChange(index, "instructions", e9.target.value)}"
                             placeholder="e.g., Upload with this variant:&#10;1. Your artwork&#10;2. The reference image"
                         ></textarea>
-                    </wy-form-field>
+                    </div>
 
                     <div data-vsection="image">
                         <wy-image-upload
@@ -6281,7 +6184,8 @@ ${subjectPrompt}`
                     <!-- Section 1: Basic Information -->
                     <div class="card" data-section="basic">
                         <h2 class="card-title" data-eyebrow="Section 01">Basic Information</h2>
-                        <wy-form-field label="Prompt Title" id="title" required>
+                        <div class="form-field">
+                            <label class="field-label" for="title">Prompt Title<span class="req">*</span></label>
                             <input
                                 type="text"
                                 id="title"
@@ -6289,8 +6193,10 @@ ${subjectPrompt}`
                                 @input="${(e9) => this._handleFieldChange("title", e9.target.value)}"
                                 ?disabled="${this.readonly}"
                             >
-                        </wy-form-field>
-                        <wy-form-field label="Slug" id="slug" description="URL-friendly identifier (auto-generated from title)">
+                        </div>
+                        <div class="form-field">
+                            <label class="field-label" for="slug">Slug</label>
+                            <p class="field-description">URL-friendly identifier (auto-generated from title)</p>
                             <input
                                 type="text"
                                 id="slug"
@@ -6298,8 +6204,10 @@ ${subjectPrompt}`
                                 @input="${(e9) => this._handleFieldChange("slug", e9.target.value)}"
                                 ?disabled="${this.readonly}"
                             >
-                        </wy-form-field>
-                        <wy-form-field label="Prompt ID" id="id" description="Unique identifier (read-only)">
+                        </div>
+                        <div class="form-field">
+                            <label class="field-label" for="id">Prompt ID</label>
+                            <p class="field-description">Unique identifier (read-only)</p>
                             <input
                                 type="text"
                                 id="id"
@@ -6307,8 +6215,9 @@ ${subjectPrompt}`
                                 disabled
                                 readonly
                             >
-                        </wy-form-field>
-                        <wy-form-field label="Description" id="description">
+                        </div>
+                        <div class="form-field">
+                            <label class="field-label" for="description">Description</label>
                             <textarea
                                 id="description"
                                 rows="3"
@@ -6316,8 +6225,10 @@ ${subjectPrompt}`
                                 @input="${(e9) => this._handleFieldChange("description", e9.target.value)}"
                                 ?disabled="${this.readonly}"
                             ></textarea>
-                        </wy-form-field>
-                        <wy-form-field label="Instructions" id="instructions" description="Usage notes shown in the prompt modal and only on expanded prompt cards">
+                        </div>
+                        <div class="form-field">
+                            <label class="field-label" for="instructions">Instructions</label>
+                            <p class="field-description">Usage notes shown in the prompt modal and only on expanded prompt cards</p>
                             <textarea
                                 id="instructions"
                                 rows="4"
@@ -6325,13 +6236,15 @@ ${subjectPrompt}`
                                 @input="${(e9) => this._handleFieldChange("instructions", e9.target.value)}"
                                 ?disabled="${this.readonly}"
                             ></textarea>
-                        </wy-form-field>
+                        </div>
                     </div>
 
                     <!-- Section 2: Visuals & Metadata -->
                     <div class="card" data-section="visuals">
                         <h2 class="card-title" data-eyebrow="Section 02">Visuals & Metadata</h2>
-                        <wy-form-field label="Icon" id="icon" description="Material Symbol icon name (e.g., 'restaurant', 'code', 'music_note')">
+                        <div class="form-field">
+                            <label class="field-label" for="icon">Icon</label>
+                            <p class="field-description">Material Symbol icon name (e.g., 'restaurant', 'code', 'music_note')</p>
                             <input
                                 type="text"
                                 id="icon"
@@ -6340,7 +6253,7 @@ ${subjectPrompt}`
                                 placeholder="icon_name"
                                 ?disabled="${this.readonly}"
                             >
-                        </wy-form-field>
+                        </div>
                         <wy-dropdown
                             label="Category"
                             .value="${this._editedPrompt.category || ""}"

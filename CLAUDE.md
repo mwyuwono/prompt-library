@@ -51,9 +51,9 @@ This project is now self-contained. The former shared design-system sources were
 
 The admin prompt-editor component tree renders in **light DOM** (`createRenderRoot() { return this; }`) and its styles live in `admin.css`, **scoped by element tag** (e.g. `wy-prompt-editor .card { … }`, `wy-variation-editor .variation-card { … }`). This is safe because `admin.html` loads only `tokens.css` + `admin.css` (not `styles.css`), and these editor components are not used by the public/private pages.
 
-- **Migrated (light DOM, styles in `admin.css`):** `wy-prompt-editor`, `wy-variation-editor`, `wy-step-editor`, `wy-variable-editor`, `wy-reference-image-editor`, `wy-image-upload`, `wy-dropdown`, `wy-option-toggle`, `wy-code-textarea`.
-- **Still shadow DOM (deferred):** `wy-form-field` (uses a `<slot>`), plus all public/shared components (`wy-button`, `wy-modal`, `wy-prompt-modal`, `wy-toast`, `wy-controls-bar`, `wy-color-palette`, `wy-links-modal`, `wy-copy-confirm`, `wy-filter-chip`, `wy-tabs`, `wy-info-panel`) — do not migrate these.
-- The generated editor styles in `admin.css` sit between the `=== BEGIN admin editor (light DOM migrated) — generated ===` / `=== END admin editor (light DOM migrated) ===` comment markers; component blocks are ordered parent-first so descendant tag-scoped rules win on specificity ties. The new variant-selector styles and the requested visual overrides follow the generated component blocks within the same region.
+- **Migrated (light DOM, styles in `admin.css`):** `wy-prompt-editor`, `wy-variation-editor`, `wy-step-editor`, `wy-variable-editor`, `wy-reference-image-editor`, `wy-image-upload`, `wy-dropdown`, `wy-option-toggle`, `wy-code-textarea`. Former `wy-form-field` usages are now inlined in the admin editor parents as `.form-field` markup.
+- **Still shadow DOM (deferred):** public/shared components (`wy-button`, `wy-modal`, `wy-prompt-modal`, `wy-toast`, `wy-controls-bar`, `wy-color-palette`, `wy-links-modal`, `wy-copy-confirm`, `wy-filter-chip`, `wy-tabs`, `wy-info-panel`) — do not migrate these.
+- The editor styles in `admin.css` sit between the `=== BEGIN admin editor (light DOM migrated) ===` / `=== END admin editor (light DOM migrated) ===` comment markers; component blocks are ordered parent-first so descendant tag-scoped rules win on specificity ties.
 - **Editing CSS for a migrated component does NOT require `npm run build:components`** — edit `admin.css` directly. Only changes to component **markup or JS logic** require a rebuild.
 
 ### Canonical Style Guide
@@ -71,7 +71,7 @@ Use `style-guide-v3.html` as the single visual reference for tokens, typography,
 | App layout (`.header-top`, `.controls-bar`) | `styles.css` |
 | Public app components (`.prompt-card`, list rows, vault UI) | `styles.css` |
 | Admin editor components (light-DOM `wy-*` in the editor tree) | `admin.css` (tag-scoped, e.g. `wy-prompt-editor .card`) |
-| Shared/public web components still on shadow DOM (`wy-toast`, `wy-controls-bar`, modals, `wy-form-field`) | `components/ui/*.js` |
+| Shared/public web components still on shadow DOM (`wy-toast`, `wy-controls-bar`, modals) | `components/ui/*.js` |
 
 ### Component Build Flow
 
