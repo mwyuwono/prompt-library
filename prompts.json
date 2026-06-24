@@ -121,7 +121,7 @@
   },
   {
     "id": "wallpaper-artwork-extension",
-    "title": "Wallpaper Artwork Extension",
+    "title": "Extend Panoramic Scene",
     "description": "Extends an uploaded hand-painted wallpaper image into a wider seamless landscape panel, with a left/right toggle and a 10% overlap band for manual compositing.",
     "category": "Art",
     "icon": "panorama",
@@ -151,7 +151,7 @@
       }
     ],
     "instructions": "Upload a wallpaper image, then choose which side of the generated extension panel should connect to the reference.",
-    "slug": "wallpaper-artwork-extension"
+    "slug": "extend-panoramic-scene"
   },
   {
     "id": "proofreader",
