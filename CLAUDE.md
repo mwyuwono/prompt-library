@@ -45,6 +45,17 @@ This is a separate React/Vite site deployed by its own Vercel project to https:/
 
 This project is now self-contained. The former shared design-system sources were snapshotted into this repository and are maintained here.
 
+> **Repository override (supersedes global rules).** This repository does **not** consume an external design system (e.g. `m3-design-v2`). For this repo, this clause **supersedes** the global "Design System as the Default Execution Path" rule and the global shadow-DOM / `::part()` guidance. The admin editor is being migrated **away from shadow-DOM web components toward light DOM with plain CSS in `admin.css`** (see below), so design changes can be made directly without the bundle round-trip or shadow boundary. Treat `admin.css` edits to migrated components as the normal path, not a local-override exception.
+
+### Admin Editor: Light-DOM Components
+
+The admin prompt-editor component tree renders in **light DOM** (`createRenderRoot() { return this; }`) and its styles live in `admin.css`, **scoped by element tag** (e.g. `wy-prompt-editor .card { … }`, `wy-variation-editor .variation-card { … }`). This is safe because `admin.html` loads only `tokens.css` + `admin.css` (not `styles.css`), and these editor components are not used by the public/private pages.
+
+- **Migrated (light DOM, styles in `admin.css`):** `wy-prompt-editor`, `wy-variation-editor`, `wy-step-editor`, `wy-variable-editor`, `wy-reference-image-editor`, `wy-image-upload`, `wy-dropdown`, `wy-option-toggle`, `wy-code-textarea`.
+- **Still shadow DOM (deferred):** `wy-form-field` (uses a `<slot>`), plus all public/shared components (`wy-button`, `wy-modal`, `wy-prompt-modal`, `wy-toast`, `wy-controls-bar`, `wy-color-palette`, `wy-links-modal`, `wy-copy-confirm`, `wy-filter-chip`, `wy-tabs`, `wy-info-panel`) — do not migrate these.
+- The generated editor styles in `admin.css` sit between the `=== BEGIN admin editor (light DOM migrated) — generated ===` / `=== END admin editor (light DOM migrated) ===` comment markers; component blocks are ordered parent-first so descendant tag-scoped rules win on specificity ties. The new variant-selector styles and the requested visual overrides follow the generated component blocks within the same region.
+- **Editing CSS for a migrated component does NOT require `npm run build:components`** — edit `admin.css` directly. Only changes to component **markup or JS logic** require a rebuild.
+
 ### Canonical Style Guide
 
 When the user says "my style guide", "the style guide", or "design system reference" in this repository, they mean `style-guide-v3.html`. Treat `style-guide.html` and `style-guide-v2.html` as deprecated redirect stubs only.
@@ -59,7 +70,8 @@ Use `style-guide-v3.html` as the single visual reference for tokens, typography,
 | Base styles, utility classes, category colors | `tokens.css` |
 | App layout (`.header-top`, `.controls-bar`) | `styles.css` |
 | Public app components (`.prompt-card`, list rows, vault UI) | `styles.css` |
-| Web Components (`wy-toast`, `wy-controls-bar`, admin editor, modals) | `components/ui/*.js` |
+| Admin editor components (light-DOM `wy-*` in the editor tree) | `admin.css` (tag-scoped, e.g. `wy-prompt-editor .card`) |
+| Shared/public web components still on shadow DOM (`wy-toast`, `wy-controls-bar`, modals, `wy-form-field`) | `components/ui/*.js` |
 
 ### Component Build Flow
 
@@ -71,6 +83,8 @@ npm run build:components
 
 `components/index.js` loads the committed local bundle for the public and private pages. `admin.html` imports the same local bundle directly.
 
+**Light-DOM admin editor exception:** components in the admin editor tree render in light DOM with styles in `admin.css` (see "Admin Editor: Light-DOM Components"). Editing their **CSS** does not require a rebuild; only **markup/JS** changes to those components do.
+
 ### Bundle Completeness Check
 
 Every `wy-*` tag used by `index.html`, `private.html`, `admin.html`, or their scripts must be registered from `components/ui/index.js`. When adding or removing components, update `components/ui/index.js`, run `npm run build:components`, and verify `customElements.get('wy-component-name')` resolves in the browser.
@@ -80,7 +94,7 @@ Every `wy-*` tag used by `index.html`, `private.html`, `admin.html`, or their sc
 - Prefer the canonical tokens already defined in `tokens.css`: `--paper`, `--paper-deep`, `--paper-edge`, `--ink`, `--ink-mute`, `--ink-soft`, `--white`, `--ok`, and `--err`.
 - Legacy `--md-sys-*` aliases still resolve and are used by existing components for compatibility.
 - Local app-specific layout custom properties are appropriate in `styles.css`.
-- Avoid `::part()` for structural layout. Prefer component custom properties or edit the component source in `components/ui/`.
+- For **migrated admin editor components** (light DOM), edit styles directly in `admin.css` using tag-scoped selectors. For **components still on shadow DOM**, avoid `::part()` for structural layout — prefer component custom properties or edit the component source in `components/ui/`.
 - Dark mode is not supported. Do not add `prefers-color-scheme: dark` blocks.
 
 ### External Assets
@@ -104,7 +118,7 @@ Google Fonts and Material Symbols are still loaded externally. Treat those as fo
 ├── app.js           # Public site logic (PromptLibrary class)
 ├── admin.html       # Admin interface (editable)
 ├── admin.js         # Admin orchestration logic
-├── admin.css        # Admin page layout
+├── admin.css        # Admin page layout + light-DOM editor component styles (tag-scoped)
 ├── server.js        # Express server with API endpoints
 ├── tokens.css       # Local tokens, base styles, and compatibility mappings
 ├── styles.css       # Public site component styles

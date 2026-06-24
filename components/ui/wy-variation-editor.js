@@ -1,10 +1,11 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html } from 'lit';
 
 export class WyVariationEditor extends LitElement {
     static properties = {
         variations: { type: Array },
         allowReorder: { type: Boolean, attribute: 'allow-reorder' },
-        _expandedIndex: { type: Number, state: true },
+        _selectedIndex: { type: Number, state: true },
+        _listExpanded: { type: Boolean, state: true },
         _expandedStepsByVariation: { type: Object, state: true }
     };
 
@@ -12,371 +13,76 @@ export class WyVariationEditor extends LitElement {
         super();
         this.variations = [];
         this.allowReorder = true;
-        this._expandedIndex = -1;
+        this._selectedIndex = 0;
+        this._listExpanded = false;
         this._expandedStepsByVariation = {};
+        this._dragIndex = null;
     }
 
-    static styles = css`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1');
+    // Light DOM: styles live in admin.css (scoped under wy-variation-editor).
+    createRenderRoot() {
+        return this;
+    }
 
-        :host {
-            display: block;
-        }
+    _toggleList() {
+        this._listExpanded = !this._listExpanded;
+    }
 
-        .material-symbols-outlined {
-            font-family: 'Material Symbols Outlined';
-            font-size: 20px;
-        }
-
-        .variations-list {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-md, 16px);
-        }
-
-        .variation-card {
-            background-color: var(--field-bg, #FBF9F4);
-            border-radius: var(--radius-2, 10px);
-            border: 0;
-            overflow: hidden;
-            transition:
-                box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
-        }
-
-        .variation-card.expanded {
-            box-shadow: 0 8px 22px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
-        }
-
-        .variation-header {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm, 8px);
-            padding: 14px 16px;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            user-select: none;
-        }
-
-        .variation-header::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-color: var(--md-sys-color-primary, #282828);
-            opacity: 0;
-            transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-            pointer-events: none;
-        }
-
-        .variation-header:hover::before {
-            opacity: var(--md-sys-state-hover-opacity, 0.08);
-        }
-
-        .drag-handle {
-            flex-shrink: 0;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            cursor: grab;
-        }
-
-        .drag-handle:active {
-            cursor: grabbing;
-        }
-
-        .variation-title {
-            flex: 1;
-            font-family: var(--font-serif, 'Playfair Display', serif);
-            font-size: 1.0625rem;
-            font-weight: 600;
-            color: var(--md-sys-color-on-surface, #121714);
-            margin: 0;
-        }
-
-        .variation-badge {
-            flex-shrink: 0;
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.6875rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
-            background-color: color-mix(in srgb, var(--accent-terracotta, #C18A4D) 22%, transparent);
-            color: color-mix(in srgb, var(--accent-rust, #C06F45) 78%, var(--ink, #1A1A1A));
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-        }
-
-        .collapse-icon {
-            flex-shrink: 0;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            transition: transform var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        .variation-card.expanded .collapse-icon {
-            transform: rotate(180deg);
-        }
-
-        .variation-content {
-            display: grid;
-            grid-template-rows: 0fr;
-            transition: grid-template-rows var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        .variation-card.expanded .variation-content {
-            grid-template-rows: 1fr;
-        }
-
-        .variation-content-inner {
-            overflow: hidden;
-        }
-
-        .variation-fields {
-            padding: 4px var(--spacing-md, 16px) var(--spacing-md, 16px);
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-lg, 24px);
-        }
-
-        .mode-toggle {
-            display: inline-flex;
-            gap: var(--spacing-xs, 4px);
-            padding: var(--spacing-xs, 4px);
-            background-color: var(--paper-deep, #EEE8DD);
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-        }
-
-        .mode-toggle label {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs, 4px);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.8125rem;
-            font-weight: 600;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-            padding: 0.5rem 1.1rem;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .mode-toggle input[type="radio"] {
-            position: absolute;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .mode-toggle label:has(input:checked) {
-            background: var(--md-sys-color-primary, #282828);
-            color: var(--md-sys-color-on-primary, #FFF);
-        }
-
-        .steps-section {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-md, 16px);
-        }
-
-        .add-step-button {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--spacing-xs, 4px);
-            padding: var(--spacing-sm, 8px);
-            background: transparent;
-            border: 0;
-            border-radius: var(--radius-2, 10px);
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 10%, transparent);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        .add-step-button::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-color: var(--md-sys-color-primary, #282828);
-            opacity: 0;
-            transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-            pointer-events: none;
-        }
-
-        .add-step-button:hover {
-            border-color: var(--md-sys-color-primary, #282828);
-            color: var(--md-sys-color-primary, #282828);
-        }
-
-        .add-step-button:hover::before {
-            opacity: var(--md-sys-state-hover-opacity, 0.08);
-        }
-
-        .variation-controls {
-            display: flex;
-            gap: var(--spacing-xs, 4px);
-            padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 3.5%, transparent);
-            box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
-        }
-
-        .control-button {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs, 4px);
-            padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
-            background: color-mix(in srgb, var(--ink, #1A1A1A) 4%, transparent);
-            border: 0;
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.8125rem;
-            font-weight: 600;
-            color: var(--md-sys-color-on-surface, #121714);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .control-button::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-color: var(--md-sys-color-on-surface, #121714);
-            opacity: 0;
-            transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-            pointer-events: none;
-        }
-
-        .control-button:hover::before {
-            opacity: var(--md-sys-state-hover-opacity, 0.08);
-        }
-
-        .control-button:focus-visible {
-            outline: 3px solid var(--md-sys-color-primary, #282828);
-            outline-offset: 2px;
-        }
-
-        .control-button:disabled {
-            opacity: var(--md-sys-state-disabled-opacity, 0.38);
-            cursor: not-allowed;
-        }
-
-        .control-button.delete {
-            margin-left: auto;
-            color: var(--md-sys-color-error, #BA1A1A);
-        }
-
-        .control-button.delete::before {
-            background-color: var(--md-sys-color-error, #BA1A1A);
-        }
-
-        .control-button .material-symbols-outlined {
-            font-size: 18px;
-        }
-
-        .add-variation-button {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--spacing-xs, 4px);
-            padding: var(--spacing-md, 16px);
-            background: transparent;
-            border: 0;
-            border-radius: var(--radius-2, 10px);
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 10%, transparent);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.9375rem;
-            font-weight: 500;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            margin-top: var(--spacing-md, 16px);
-            transition: all var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        .add-variation-button::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-color: var(--md-sys-color-primary, #282828);
-            opacity: 0;
-            transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-            pointer-events: none;
-        }
-
-        .add-variation-button:hover {
-            border-color: var(--md-sys-color-primary, #282828);
-            color: var(--md-sys-color-primary, #282828);
-        }
-
-        .add-variation-button:hover::before {
-            opacity: var(--md-sys-state-hover-opacity, 0.08);
-        }
-
-        .add-variation-button .material-symbols-outlined {
-            font-size: 24px;
-        }
-
-        .field-group {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-xs, 4px);
-        }
-
-        .field-label {
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.6875rem;
-            font-weight: 700;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-        }
-
-        .field-description {
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.8125rem;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            margin-top: calc(-1 * var(--spacing-xs, 4px));
-        }
-
-        .section-divider {
-            height: 1px;
-            background-color: var(--md-sys-color-outline-variant, #DDD);
-            margin: var(--spacing-md, 16px) 0;
-        }
-    `;
-
-    _handleToggle(index) {
-        this._expandedIndex = this._expandedIndex === index ? -1 : index;
+    _selectVariation(index) {
+        this._selectedIndex = index;
+        this._listExpanded = false;
         this._notifyVariationExpand();
     }
 
     expandVariation(index) {
         if (index < 0 || index >= this.variations.length) return;
-        this._expandedIndex = index;
+        this._selectedIndex = index;
         this._notifyVariationExpand();
         this.requestUpdate();
     }
 
     getSectionElement(variationIndex, section = 'variation') {
-        const card = this.shadowRoot?.querySelector(`.variation-card[data-variation-index="${variationIndex}"]`);
+        const card = this.querySelector(`.variation-card[data-variation-index="${variationIndex}"]`);
         if (!card || section === 'variation') return card;
         return card.querySelector(`[data-vsection="${section}"]`) || card;
     }
 
     _notifyVariationExpand() {
         this.dispatchEvent(new CustomEvent('variation-expand', {
-            detail: { index: this._expandedIndex },
+            detail: { index: this._selectedIndex },
             bubbles: true,
             composed: true
         }));
+    }
+
+    // --- Drag reorder (selector list) ---
+    _onDragStart(e, index) {
+        this._dragIndex = index;
+        e.dataTransfer.effectAllowed = 'move';
+    }
+
+    _onDragOver(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+    }
+
+    _onDrop(e, index) {
+        e.preventDefault();
+        const from = this._dragIndex;
+        this._dragIndex = null;
+        if (from === null || from === index) return;
+
+        const selectedVariation = this.variations[this._selectedIndex];
+        const updated = [...this.variations];
+        const [moved] = updated.splice(from, 1);
+        updated.splice(index, 0, moved);
+        this._selectedIndex = updated.indexOf(selectedVariation);
+        this._notifyChange(updated);
+        this._notifyVariationExpand();
+    }
+
+    _onDragEnd() {
+        this._dragIndex = null;
     }
 
     _handleFieldChange(index, field, value) {
@@ -423,7 +129,7 @@ export class WyVariationEditor extends LitElement {
         const { index: stepIndex, step } = e.detail;
         const updatedVariations = [...this.variations];
         const variation = updatedVariations[variationIndex];
-        
+
         if (variation.steps) {
             variation.steps[stepIndex] = step;
             this._notifyChange(updatedVariations);
@@ -434,7 +140,7 @@ export class WyVariationEditor extends LitElement {
         const { index: stepIndex } = e.detail;
         const updatedVariations = [...this.variations];
         const variation = updatedVariations[variationIndex];
-        
+
         if (variation.steps && variation.steps.length > 1) {
             variation.steps.splice(stepIndex, 1);
             this._notifyChange(updatedVariations);
@@ -446,7 +152,7 @@ export class WyVariationEditor extends LitElement {
     _handleStepMoveUp(variationIndex, e) {
         const { index: stepIndex } = e.detail;
         if (stepIndex === 0) return;
-        
+
         const updatedVariations = [...this.variations];
         const steps = updatedVariations[variationIndex].steps;
         [steps[stepIndex - 1], steps[stepIndex]] = [steps[stepIndex], steps[stepIndex - 1]];
@@ -457,9 +163,9 @@ export class WyVariationEditor extends LitElement {
         const { index: stepIndex } = e.detail;
         const updatedVariations = [...this.variations];
         const steps = updatedVariations[variationIndex].steps;
-        
+
         if (stepIndex === steps.length - 1) return;
-        
+
         [steps[stepIndex], steps[stepIndex + 1]] = [steps[stepIndex + 1], steps[stepIndex]];
         this._notifyChange(updatedVariations);
     }
@@ -468,7 +174,7 @@ export class WyVariationEditor extends LitElement {
         const { index: stepIndex } = e.detail;
         const currentExpanded = this._expandedStepsByVariation[variationIndex] || [];
         const stepIndexInArray = currentExpanded.indexOf(stepIndex);
-        
+
         if (stepIndexInArray > -1) {
             // Step is currently expanded, collapse it
             currentExpanded.splice(stepIndexInArray, 1);
@@ -476,7 +182,7 @@ export class WyVariationEditor extends LitElement {
             // Step is currently collapsed, expand it
             currentExpanded.push(stepIndex);
         }
-        
+
         this._expandedStepsByVariation = {
             ...this._expandedStepsByVariation,
             [variationIndex]: [...currentExpanded]
@@ -487,11 +193,11 @@ export class WyVariationEditor extends LitElement {
     _handleAddStep(variationIndex) {
         const updatedVariations = [...this.variations];
         const variation = updatedVariations[variationIndex];
-        
+
         if (!variation.steps) {
             variation.steps = [];
         }
-        
+
         const newStepNumber = variation.steps.length + 1;
         variation.steps.push({
             id: `step-${newStepNumber}`,
@@ -500,7 +206,7 @@ export class WyVariationEditor extends LitElement {
             template: '',
             variables: []
         });
-        
+
         this._notifyChange(updatedVariations);
     }
 
@@ -559,17 +265,23 @@ export class WyVariationEditor extends LitElement {
     _handleMoveUp(index) {
         if (index === 0) return;
         const updatedVariations = [...this.variations];
-        [updatedVariations[index - 1], updatedVariations[index]] = 
+        [updatedVariations[index - 1], updatedVariations[index]] =
             [updatedVariations[index], updatedVariations[index - 1]];
+        if (this._selectedIndex === index) this._selectedIndex = index - 1;
+        else if (this._selectedIndex === index - 1) this._selectedIndex = index;
         this._notifyChange(updatedVariations);
+        this._notifyVariationExpand();
     }
 
     _handleMoveDown(index) {
         if (index === this.variations.length - 1) return;
         const updatedVariations = [...this.variations];
-        [updatedVariations[index], updatedVariations[index + 1]] = 
+        [updatedVariations[index], updatedVariations[index + 1]] =
             [updatedVariations[index + 1], updatedVariations[index]];
+        if (this._selectedIndex === index) this._selectedIndex = index + 1;
+        else if (this._selectedIndex === index + 1) this._selectedIndex = index;
         this._notifyChange(updatedVariations);
+        this._notifyVariationExpand();
     }
 
     _handleDelete(index) {
@@ -580,17 +292,20 @@ export class WyVariationEditor extends LitElement {
 
         const variation = this.variations[index];
         const confirmMessage = `Delete variation "${variation.name || 'Unnamed'}"?\n\nThis action cannot be undone.`;
-        
+
         if (confirm(confirmMessage)) {
             const updatedVariations = this.variations.filter((_, i) => i !== index);
-            this._notifyChange(updatedVariations);
-            
-            // Adjust expanded index
-            if (this._expandedIndex === index) {
-                this._expandedIndex = -1;
-            } else if (this._expandedIndex > index) {
-                this._expandedIndex--;
+
+            // Keep the selection in range after removal
+            if (this._selectedIndex >= index && this._selectedIndex > 0) {
+                this._selectedIndex--;
             }
+            if (this._selectedIndex > updatedVariations.length - 1) {
+                this._selectedIndex = updatedVariations.length - 1;
+            }
+
+            this._notifyChange(updatedVariations);
+            this._notifyVariationExpand();
         }
     }
 
@@ -608,9 +323,11 @@ export class WyVariationEditor extends LitElement {
                 referenceImages: []
             }
         ];
+        // Focus the new variation
+        this._selectedIndex = updatedVariations.length - 1;
+        this._listExpanded = false;
         this._notifyChange(updatedVariations);
-        // Expand the new variation
-        this._expandedIndex = updatedVariations.length - 1;
+        this._notifyVariationExpand();
     }
 
     _notifyChange(updatedVariations) {
@@ -630,251 +347,282 @@ export class WyVariationEditor extends LitElement {
     }
 
     _renderVariation(variation, index) {
-        const isExpanded = this._expandedIndex === index;
         const isFirst = index === 0;
         const isLast = index === this.variations.length - 1;
         const hasSteps = variation.steps && variation.steps.length > 0;
         const hasTemplate = variation.template || (!hasSteps);
-        const variationMode = hasSteps ? 'multi' : 'single';
         const variableNames = (variation.variables || []).map(v => v.name);
 
         return html`
-            <div class="variation-card ${isExpanded ? 'expanded' : ''}" data-variation-index="${index}">
+            <div class="variation-card expanded" data-variation-index="${index}">
                 <!-- Header -->
-                <div class="variation-header" @click="${() => this._handleToggle(index)}">
-                    ${this.allowReorder ? html`
-                        <span class="material-symbols-outlined drag-handle">drag_indicator</span>
-                    ` : ''}
+                <div class="variation-header">
                     <h3 class="variation-title">${variation.name || 'Unnamed Variation'}</h3>
                     ${hasSteps ? html`
                         <span class="variation-badge">Multi-Step</span>
                     ` : ''}
-                    <span class="material-symbols-outlined collapse-icon">expand_more</span>
                 </div>
 
-                <!-- Content -->
-                <div class="variation-content">
-                    <div class="variation-content-inner">
-                        <div class="variation-fields">
-                            <!-- Variation Name -->
-                            <wy-form-field label="Variation Name" required>
-                                <input
-                                    type="text"
-                                    .value="${variation.name || ''}"
-                                    @input="${(e) => this._handleFieldChange(index, 'name', e.target.value)}"
-                                    placeholder="e.g., Tina Barney Style Photo"
-                                    @click="${(e) => e.stopPropagation()}"
-                                >
-                            </wy-form-field>
+                <!-- Fields -->
+                <div class="variation-fields">
+                    <!-- Variation Name -->
+                    <wy-form-field label="Variation Name" required>
+                        <input
+                            type="text"
+                            .value="${variation.name || ''}"
+                            @input="${(e) => this._handleFieldChange(index, 'name', e.target.value)}"
+                            placeholder="e.g., Tina Barney Style Photo"
+                        >
+                    </wy-form-field>
 
-                            <!-- Variation ID -->
-                            <wy-form-field 
-                                label="Variation ID" 
-                                description="Unique identifier (lowercase, no spaces)"
-                            >
-                                <input
-                                    type="text"
-                                    .value="${variation.id || ''}"
-                                    @input="${(e) => this._handleFieldChange(index, 'id', e.target.value)}"
-                                    placeholder="e.g., tina-barney"
-                                    @click="${(e) => e.stopPropagation()}"
-                                >
-                            </wy-form-field>
+                    <!-- Variation ID -->
+                    <wy-form-field
+                        label="Variation ID"
+                        description="Unique identifier (lowercase, no spaces)"
+                    >
+                        <input
+                            type="text"
+                            .value="${variation.id || ''}"
+                            @input="${(e) => this._handleFieldChange(index, 'id', e.target.value)}"
+                            placeholder="e.g., tina-barney"
+                        >
+                    </wy-form-field>
 
-                            <!-- Variation Description -->
-                            <wy-form-field label="Description" data-vsection="description">
-                                <textarea
-                                    rows="3"
-                                    .value="${variation.description || ''}"
-                                    @input="${(e) => this._handleFieldChange(index, 'description', e.target.value)}"
-                                    placeholder="Description shown in variation selector"
-                                    @click="${(e) => e.stopPropagation()}"
-                                ></textarea>
-                            </wy-form-field>
+                    <!-- Variation Description -->
+                    <wy-form-field label="Description" data-vsection="description">
+                        <textarea
+                            rows="3"
+                            .value="${variation.description || ''}"
+                            @input="${(e) => this._handleFieldChange(index, 'description', e.target.value)}"
+                            placeholder="Description shown in variation selector"
+                        ></textarea>
+                    </wy-form-field>
 
-                            <!-- Variation Instructions -->
-                            <wy-form-field
-                                data-vsection="instructions"
-                                label="Instructions"
-                                description="Optional usage notes shown with this variant. Supports lightweight Markdown such as **bold** and lists."
-                            >
-                                <textarea
-                                    rows="4"
-                                    .value="${variation.instructions || ''}"
-                                    @input="${(e) => this._handleFieldChange(index, 'instructions', e.target.value)}"
-                                    placeholder="e.g., Upload with this variant:&#10;1. Your artwork&#10;2. The reference image"
-                                    @click="${(e) => e.stopPropagation()}"
-                                ></textarea>
-                            </wy-form-field>
+                    <!-- Variation Instructions -->
+                    <wy-form-field
+                        data-vsection="instructions"
+                        label="Instructions"
+                        description="Optional usage notes shown with this variant. Supports lightweight Markdown such as **bold** and lists."
+                    >
+                        <textarea
+                            rows="4"
+                            .value="${variation.instructions || ''}"
+                            @input="${(e) => this._handleFieldChange(index, 'instructions', e.target.value)}"
+                            placeholder="e.g., Upload with this variant:&#10;1. Your artwork&#10;2. The reference image"
+                        ></textarea>
+                    </wy-form-field>
 
-                            <div data-vsection="image" @click="${(e) => e.stopPropagation()}">
-                                <wy-image-upload
-                                    label="Variation Image"
-                                    .value="${variation.image || ''}"
-                                    @change="${(e) => this._handleImageChange(index, e)}"
-                                    @remove="${() => this._handleImageRemove(index)}"
-                                ></wy-image-upload>
-                            </div>
-
-                            <!-- Mode Toggle -->
-                            <div class="mode-toggle" @click="${(e) => e.stopPropagation()}">
-                                <label>
-                                    <input 
-                                        type="radio" 
-                                        name="mode-${index}" 
-                                        value="single" 
-                                        ?checked="${variationMode === 'single'}"
-                                        @change="${() => this._handleModeChange(index, 'single')}"
-                                    >
-                                    Template
-                                </label>
-                                <label>
-                                    <input 
-                                        type="radio" 
-                                        name="mode-${index}" 
-                                        value="multi" 
-                                        ?checked="${variationMode === 'multi'}"
-                                        @change="${() => this._handleModeChange(index, 'multi')}"
-                                    >
-                                    Multi-Step
-                                </label>
-                            </div>
-
-                            ${hasTemplate && !hasSteps ? html`
-                                <!-- Template Mode -->
-                                <div class="section-divider"></div>
-                                
-                                <!-- Variables -->
-                                <div class="field-group" data-vsection="variables">
-                                    <label class="field-label">Variables</label>
-                                    <p class="field-description">
-                                        Define input fields for this variation
-                                    </p>
-                                    <wy-variable-editor
-                                        .variables="${variation.variables || []}"
-                                        @change="${(e) => this._handleVariableChange(index, e)}"
-                                        @click="${(e) => e.stopPropagation()}"
-                                    ></wy-variable-editor>
-                                </div>
-
-                                <!-- Reference Images -->
-                                <div class="field-group" data-vsection="reference-images" @click="${(e) => e.stopPropagation()}">
-                                    <label class="field-label">Reference Images</label>
-                                    <p class="field-description">
-                                        Upload images and reference them with {{variable_name}}. URLs are substituted when the prompt is copied.
-                                    </p>
-                                    <wy-reference-image-editor
-                                        .referenceImages="${variation.referenceImages || []}"
-                                        @change="${(e) => this._handleRefImageListChange(index, e)}"
-                                        @reference-image-upload="${(e) => this._handleRefImageChange(index, e)}"
-                                        @reference-image-remove="${(e) => this._handleRefImageRemove(index, e)}"
-                                    ></wy-reference-image-editor>
-                                </div>
-
-                                <!-- Template -->
-                                <div class="field-group" data-vsection="template">
-                                    <label class="field-label">Template</label>
-                                    <p class="field-description">
-                                        Prompt template for this variation. Use {{variable-name}} for substitutions.
-                                    </p>
-                                    <wy-code-textarea
-                                        .value="${variation.template || ''}"
-                                        .variables="${variableNames}"
-                                        placeholder="Enter your prompt template here..."
-                                        rows="12"
-                                        @value-input="${(e) => this._handleTemplateChange(index, e)}"
-                                        @click="${(e) => e.stopPropagation()}"
-                                    ></wy-code-textarea>
-                                </div>
-                            ` : ''}
-
-                            ${hasSteps ? html`
-                                <!-- Multi-Step Mode -->
-                                <div class="section-divider"></div>
-                                
-                                <div class="field-group" data-vsection="steps">
-                                    <label class="field-label">Steps</label>
-                                    <p class="field-description">
-                                        Define the sequence of prompts for this variation
-                                    </p>
-                                    <div class="steps-section" @click="${(e) => e.stopPropagation()}">
-                                        ${variation.steps.map((step, stepIndex) => {
-                                            const expandedSteps = this._expandedStepsByVariation[index] || [];
-                                            const isExpanded = expandedSteps.includes(stepIndex);
-                                            return html`
-                                            <wy-step-editor
-                                                .step="${step}"
-                                                .index="${stepIndex}"
-                                                .total="${variation.steps.length}"
-                                                .expanded="${isExpanded}"
-                                                @step-change="${(e) => this._handleStepChange(index, e)}"
-                                                @step-delete="${(e) => this._handleStepDelete(index, e)}"
-                                                @step-move-up="${(e) => this._handleStepMoveUp(index, e)}"
-                                                @step-move-down="${(e) => this._handleStepMoveDown(index, e)}"
-                                                @step-toggle="${(e) => this._handleStepToggle(index, e)}"
-                                            ></wy-step-editor>
-                                        `;})}
-                                        <button 
-                                            class="add-step-button" 
-                                            @click="${() => this._handleAddStep(index)}"
-                                        >
-                                            <span class="material-symbols-outlined">add</span>
-                                            Add Step
-                                        </button>
-                                    </div>
-                                </div>
-                            ` : ''}
-                        </div>
-
-                        <!-- Variation Controls -->
-                        <div class="variation-controls" @click="${(e) => e.stopPropagation()}">
-                            ${this.allowReorder ? html`
-                                <button
-                                    class="control-button"
-                                    @click="${() => this._handleMoveUp(index)}"
-                                    ?disabled="${isFirst}"
-                                    title="Move variation up"
-                                >
-                                    <span class="material-symbols-outlined">arrow_upward</span>
-                                    Move Up
-                                </button>
-                                <button
-                                    class="control-button"
-                                    @click="${() => this._handleMoveDown(index)}"
-                                    ?disabled="${isLast}"
-                                    title="Move variation down"
-                                >
-                                    <span class="material-symbols-outlined">arrow_downward</span>
-                                    Move Down
-                                </button>
-                            ` : ''}
-                            <button
-                                class="control-button delete"
-                                @click="${() => this._handleDelete(index)}"
-                                ?disabled="${this.variations.length === 1}"
-                                title="Delete variation"
-                            >
-                                <span class="material-symbols-outlined">delete</span>
-                                Delete Variation
-                            </button>
-                        </div>
+                    <div data-vsection="image">
+                        <wy-image-upload
+                            label="Variation Image"
+                            .value="${variation.image || ''}"
+                            @change="${(e) => this._handleImageChange(index, e)}"
+                            @remove="${() => this._handleImageRemove(index)}"
+                        ></wy-image-upload>
                     </div>
+
+                    <!-- Mode Toggle -->
+                    <div class="mode-toggle">
+                        <label>
+                            <input
+                                type="radio"
+                                name="mode-${index}"
+                                value="single"
+                                ?checked="${!hasSteps}"
+                                @change="${() => this._handleModeChange(index, 'single')}"
+                            >
+                            Template
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                name="mode-${index}"
+                                value="multi"
+                                ?checked="${hasSteps}"
+                                @change="${() => this._handleModeChange(index, 'multi')}"
+                            >
+                            Multi-Step
+                        </label>
+                    </div>
+
+                    ${hasTemplate && !hasSteps ? html`
+                        <!-- Template Mode -->
+                        <div class="section-divider"></div>
+
+                        <!-- Variables -->
+                        <div class="field-group" data-vsection="variables">
+                            <label class="field-label">Variables</label>
+                            <p class="field-description">
+                                Define input fields for this variation
+                            </p>
+                            <wy-variable-editor
+                                .variables="${variation.variables || []}"
+                                @change="${(e) => this._handleVariableChange(index, e)}"
+                            ></wy-variable-editor>
+                        </div>
+
+                        <!-- Reference Images -->
+                        <div class="field-group" data-vsection="reference-images">
+                            <label class="field-label">Reference Images</label>
+                            <p class="field-description">
+                                Upload images and reference them with {{variable_name}}. URLs are substituted when the prompt is copied.
+                            </p>
+                            <wy-reference-image-editor
+                                .referenceImages="${variation.referenceImages || []}"
+                                @change="${(e) => this._handleRefImageListChange(index, e)}"
+                                @reference-image-upload="${(e) => this._handleRefImageChange(index, e)}"
+                                @reference-image-remove="${(e) => this._handleRefImageRemove(index, e)}"
+                            ></wy-reference-image-editor>
+                        </div>
+
+                        <!-- Template -->
+                        <div class="field-group" data-vsection="template">
+                            <label class="field-label">Template</label>
+                            <p class="field-description">
+                                Prompt template for this variation. Use {{variable-name}} for substitutions.
+                            </p>
+                            <wy-code-textarea
+                                .value="${variation.template || ''}"
+                                .variables="${variableNames}"
+                                placeholder="Enter your prompt template here..."
+                                rows="12"
+                                @value-input="${(e) => this._handleTemplateChange(index, e)}"
+                            ></wy-code-textarea>
+                        </div>
+                    ` : ''}
+
+                    ${hasSteps ? html`
+                        <!-- Multi-Step Mode -->
+                        <div class="section-divider"></div>
+
+                        <div class="field-group" data-vsection="steps">
+                            <label class="field-label">Steps</label>
+                            <p class="field-description">
+                                Define the sequence of prompts for this variation
+                            </p>
+                            <div class="steps-section">
+                                ${variation.steps.map((step, stepIndex) => {
+                                    const expandedSteps = this._expandedStepsByVariation[index] || [];
+                                    const isExpanded = expandedSteps.includes(stepIndex);
+                                    return html`
+                                    <wy-step-editor
+                                        .step="${step}"
+                                        .index="${stepIndex}"
+                                        .total="${variation.steps.length}"
+                                        .expanded="${isExpanded}"
+                                        @step-change="${(e) => this._handleStepChange(index, e)}"
+                                        @step-delete="${(e) => this._handleStepDelete(index, e)}"
+                                        @step-move-up="${(e) => this._handleStepMoveUp(index, e)}"
+                                        @step-move-down="${(e) => this._handleStepMoveDown(index, e)}"
+                                        @step-toggle="${(e) => this._handleStepToggle(index, e)}"
+                                    ></wy-step-editor>
+                                `;})}
+                                <button
+                                    class="add-step-button"
+                                    @click="${() => this._handleAddStep(index)}"
+                                >
+                                    <span class="material-symbols-outlined">add</span>
+                                    Add Step
+                                </button>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+
+                <!-- Variation Controls -->
+                <div class="variation-controls">
+                    ${this.allowReorder ? html`
+                        <button
+                            class="control-button"
+                            @click="${() => this._handleMoveUp(index)}"
+                            ?disabled="${isFirst}"
+                            title="Move variation up"
+                        >
+                            <span class="material-symbols-outlined">arrow_upward</span>
+                            Move Up
+                        </button>
+                        <button
+                            class="control-button"
+                            @click="${() => this._handleMoveDown(index)}"
+                            ?disabled="${isLast}"
+                            title="Move variation down"
+                        >
+                            <span class="material-symbols-outlined">arrow_downward</span>
+                            Move Down
+                        </button>
+                    ` : ''}
+                    <button
+                        class="control-button delete"
+                        @click="${() => this._handleDelete(index)}"
+                        ?disabled="${this.variations.length === 1}"
+                        title="Delete variation"
+                    >
+                        <span class="material-symbols-outlined">delete</span>
+                        Delete Variation
+                    </button>
                 </div>
             </div>
         `;
     }
 
     render() {
+        const count = this.variations?.length || 0;
+        const selectedIndex = Math.min(Math.max(this._selectedIndex, 0), Math.max(0, count - 1));
+        const selected = count > 0 ? this.variations[selectedIndex] : null;
+        const selectedHasSteps = selected?.steps && selected.steps.length > 0;
+
         return html`
-            <div class="variations-list">
-                ${this.variations.map((variation, index) => 
-                    this._renderVariation(variation, index)
-                )}
+            <div class="variation-selector ${this._listExpanded ? 'expanded' : ''}">
+                <button
+                    type="button"
+                    class="variation-selector-toggle"
+                    @click="${this._toggleList}"
+                    aria-expanded="${this._listExpanded ? 'true' : 'false'}"
+                >
+                    <span class="variation-selector-eyebrow">Editing variant</span>
+                    <span class="variation-selector-current">
+                        ${selected?.name || 'Unnamed Variation'}
+                        ${selectedHasSteps ? html`<span class="variation-badge">Multi-Step</span>` : ''}
+                    </span>
+                    <span class="variation-selector-meta">${selectedIndex + 1} / ${count}</span>
+                    <span class="material-symbols-outlined variation-selector-chevron">expand_more</span>
+                </button>
+
+                ${this._listExpanded ? html`
+                    <div class="variation-selector-list" role="listbox">
+                        ${this.variations.map((variation, index) => html`
+                            <div
+                                class="variation-row ${index === selectedIndex ? 'selected' : ''}"
+                                role="option"
+                                aria-selected="${index === selectedIndex ? 'true' : 'false'}"
+                                draggable="${this.allowReorder ? 'true' : 'false'}"
+                                @dragstart="${(e) => this._onDragStart(e, index)}"
+                                @dragover="${this._onDragOver}"
+                                @drop="${(e) => this._onDrop(e, index)}"
+                                @dragend="${this._onDragEnd}"
+                                @click="${() => this._selectVariation(index)}"
+                            >
+                                ${this.allowReorder ? html`
+                                    <span class="material-symbols-outlined variation-row-handle" title="Drag to reorder">drag_indicator</span>
+                                ` : ''}
+                                <span class="variation-row-title">${variation.name || 'Unnamed Variation'}</span>
+                                ${variation.steps && variation.steps.length > 0 ? html`
+                                    <span class="variation-badge">Multi-Step</span>
+                                ` : ''}
+                                ${index === selectedIndex ? html`
+                                    <span class="material-symbols-outlined variation-row-check">check</span>
+                                ` : ''}
+                            </div>
+                        `)}
+                        <button class="add-variation-button" @click="${this._handleAddVariation}">
+                            <span class="material-symbols-outlined">add</span>
+                            Add Variation
+                        </button>
+                    </div>
+                ` : ''}
             </div>
-            <button class="add-variation-button" @click="${this._handleAddVariation}">
-                <span class="material-symbols-outlined">add</span>
-                Add Variation
-            </button>
+
+            ${selected ? this._renderVariation(selected, selectedIndex) : ''}
         `;
     }
 }

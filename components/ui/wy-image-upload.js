@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html } from 'lit';
 
 export class WyImageUpload extends LitElement {
     static properties = {
@@ -20,152 +20,11 @@ export class WyImageUpload extends LitElement {
         this._isDragging = false;
     }
 
-    static styles = css`
-        :host {
-            display: block;
-            width: 100%;
-        }
 
-        .label {
-            font-family: var(--font-display, 'Playfair Display', serif);
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--md-sys-color-text-heading, #121714);
-            margin-bottom: var(--spacing-sm, 8px);
-            display: block;
-        }
-
-        .upload-zone {
-            position: relative;
-            border: 2px dashed color-mix(in srgb, var(--md-sys-color-primary, #282828) 20%, transparent);
-            border-radius: var(--md-sys-shape-corner-medium, 16px);
-            padding: var(--spacing-2xl, 48px) var(--spacing-xl, 32px);
-            text-align: center;
-            cursor: pointer;
-            transition: all var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-            background-color: transparent;
-        }
-
-        .upload-zone:hover {
-            background-color: var(--md-sys-color-surface, #FDFBF7);
-            border-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 40%, transparent);
-        }
-
-        .upload-zone.dragging {
-            border-color: var(--md-sys-color-primary, #282828);
-            border-style: solid;
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 5%, transparent);
-        }
-
-        .upload-zone.has-image {
-            padding: 0;
-            border-style: solid;
-            border-color: var(--md-sys-color-outline-variant, #DDD);
-            overflow: hidden;
-        }
-
-        .upload-zone.compact {
-            min-height: 0;
-            padding: var(--spacing-md, 16px);
-            text-align: left;
-        }
-
-        .icon-container {
-            width: 48px;
-            height: 48px;
-            margin: 0 auto var(--spacing-md, 16px);
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 5%, transparent);
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .material-symbols-outlined {
-            font-family: 'Material Symbols Outlined';
-            font-size: 24px;
-            color: var(--md-sys-color-primary, #282828);
-        }
-
-        .upload-text {
-            font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: 0.9375rem;
-            font-weight: 500;
-            color: var(--md-sys-color-on-surface, #121714);
-            margin-bottom: var(--spacing-xs, 4px);
-        }
-
-        .upload-hint {
-            font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: 0.8125rem;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-        }
-
-        .image-preview {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .preview-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .remove-button {
-            position: absolute;
-            top: var(--spacing-sm, 8px);
-            right: var(--spacing-sm, 8px);
-            width: 32px;
-            height: 32px;
-            background-color: var(--md-sys-color-error, #B3261E);
-            border: none;
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        .image-preview:hover .remove-button {
-            opacity: 1;
-        }
-
-        .remove-button:hover {
-            background-color: color-mix(in srgb, var(--md-sys-color-error, #B3261E) 90%, black);
-        }
-
-        .remove-button .material-symbols-outlined {
-            font-size: 18px;
-            color: white;
-        }
-
-        .compact-empty {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm, 8px);
-        }
-
-        .compact-empty .icon-container {
-            flex: 0 0 auto;
-            width: 36px;
-            height: 36px;
-            margin: 0;
-        }
-
-        input[type="file"] {
-            display: none;
-        }
-    `;
+    // Light DOM: styles live in admin.css (scoped under this element tag).
+    createRenderRoot() {
+        return this;
+    }
 
     _handleDragOver(e) {
         e.preventDefault();
@@ -236,7 +95,7 @@ export class WyImageUpload extends LitElement {
 
     _handleClick() {
         if (!this.value) {
-            this.shadowRoot.querySelector('input[type="file"]').click();
+            this.querySelector('input[type="file"]').click();
         }
     }
 

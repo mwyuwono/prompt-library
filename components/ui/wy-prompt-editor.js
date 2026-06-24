@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html } from 'lit';
 
 export class WyPromptEditor extends LitElement {
     static properties = {
@@ -104,979 +104,10 @@ export class WyPromptEditor extends LitElement {
         }
     }
 
-    static styles = css`
-        :host {
-            display: block;
-            width: 100%;
-        }
-
-        .material-symbols-outlined {
-            font-family: 'Material Symbols Outlined';
-            font-size: 20px;
-        }
-
-        .editor-layout {
-            display: grid;
-            grid-template-columns: minmax(190px, 240px) minmax(0, 1fr);
-            gap: var(--spacing-xl, 32px);
-            align-items: start;
-        }
-
-        .editor-form {
-            grid-column: 2;
-            grid-row: 2;
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-lg, 24px);
-            height: fit-content;
-        }
-
-        .editor-header {
-            padding-bottom: var(--spacing-md, 16px);
-            margin-bottom: var(--spacing-md, 16px);
-        }
-
-        .breadcrumbs {
-            font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: 0.875rem;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            margin-bottom: var(--spacing-sm, 8px);
-        }
-
-        .breadcrumbs a {
-            color: var(--md-sys-color-primary, #282828);
-            text-decoration: none;
-        }
-
-        .breadcrumbs a:hover {
-            text-decoration: underline;
-        }
-
-        h1 {
-            font-family: var(--font-serif, 'Playfair Display', serif);
-            font-size: 2rem;
-            font-weight: 600;
-            color: var(--md-sys-color-on-surface, #121714);
-            margin: 0 0 var(--spacing-xs, 4px) 0;
-        }
-
-        .subtitle {
-            font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: 1rem;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            margin-bottom: var(--spacing-md, 16px);
-        }
-
-        .info-banner {
-            padding: var(--spacing-md, 16px);
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 5%, transparent);
-            border-left: 4px solid var(--md-sys-color-primary, #282828);
-            border-radius: var(--md-sys-shape-corner-xs, 4px);
-            margin-bottom: var(--spacing-md, 16px);
-        }
-
-        .info-banner p {
-            font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: 0.875rem;
-            color: var(--md-sys-color-on-surface, #121714);
-            margin: 0;
-            line-height: 1.5;
-        }
-
-        .info-banner code {
-            font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
-            font-size: 0.8125rem;
-            padding: 2px 6px;
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 10%, transparent);
-            border-radius: var(--md-sys-shape-corner-xs, 4px);
-        }
-
-        .actions {
-            grid-column: 2;
-            grid-row: 1;
-            display: flex;
-            justify-content: flex-end;
-            gap: var(--spacing-sm, 8px);
-            margin: 0 0 var(--spacing-md, 16px) 0;
-            position: sticky;
-            top: var(--spacing-lg, 24px);
-            z-index: 5;
-            padding: var(--spacing-sm, 8px);
-            background-color: var(--md-sys-color-background, #FDFBF7);
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-        }
-
-        .button {
-            padding: var(--spacing-sm, 8px) var(--spacing-lg, 24px);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-            font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: 0.9375rem;
-            font-weight: 500;
-            cursor: pointer;
-            border: none;
-            transition: all var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        a.button {
-            text-decoration: none;
-        }
-
-        .button-secondary {
-            background-color: transparent;
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            color: var(--md-sys-color-on-surface, #121714);
-        }
-
-        .button-secondary:hover {
-            background-color: var(--md-sys-color-surface-variant, #F5F2EA);
-        }
-
-        .button-primary {
-            background-color: var(--md-sys-color-primary, #282828);
-            color: var(--md-sys-color-on-primary, #FFFFFF);
-        }
-
-        .button-primary:hover {
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 90%, black);
-        }
-
-        .card {
-            background-color: var(--md-sys-color-surface, #F5F2EA);
-            border-radius: var(--md-sys-shape-corner-large, 24px);
-            padding: var(--spacing-lg, 24px);
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-        }
-
-        .card-title {
-            font-family: var(--font-serif, 'Playfair Display', serif);
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--md-sys-color-on-surface, #121714);
-            margin: 0 0 var(--spacing-md, 16px) 0;
-        }
-
-        .editor-nav {
-            grid-column: 1;
-            grid-row: 1 / span 2;
-            position: sticky;
-            top: var(--spacing-lg, 24px);
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-sm, 8px);
-            padding: var(--spacing-md, 16px) 0;
-            border-top: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            border-bottom: 1px solid var(--md-sys-color-outline-variant, #DDD);
-        }
-
-        .editor-nav-toggle {
-            display: none;
-        }
-
-        .editor-nav-title {
-            margin: 0 0 var(--spacing-xs, 4px);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.6875rem;
-            font-weight: 700;
-            letter-spacing: 0.16em;
-            text-transform: uppercase;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-        }
-
-        .editor-nav-list {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .editor-nav-item {
-            width: 100%;
-            min-height: 32px;
-            padding: 6px 8px;
-            border: 0;
-            border-left: 2px solid transparent;
-            background: transparent;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            cursor: pointer;
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.875rem;
-            line-height: 1.25;
-            text-align: left;
-            transition:
-                border-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
-                color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
-                background-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        .editor-nav-item:hover {
-            color: var(--md-sys-color-on-surface, #121714);
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 5%, transparent);
-        }
-
-        .editor-nav-item.active {
-            color: var(--md-sys-color-primary, #282828);
-            border-left-color: var(--md-sys-color-primary, #282828);
-            font-weight: 600;
-        }
-
-        .editor-nav-item.subitem {
-            min-height: 28px;
-            padding-left: 20px;
-            font-size: 0.8125rem;
-        }
-
-        .editor-nav-item.variant {
-            font-family: var(--font-serif, 'Playfair Display', serif);
-            font-size: 0.9375rem;
-            color: var(--md-sys-color-on-surface, #121714);
-        }
-
-        .mode-toggle {
-            display: flex;
-            gap: var(--spacing-md, 16px);
-            padding: var(--spacing-md, 16px);
-            background-color: var(--md-sys-color-surface-variant, #F5F2EA);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-        }
-
-        .mode-toggle label {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs, 4px);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.9375rem;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .mode-toggle input[type="radio"] {
-            cursor: pointer;
-        }
-
-        .card-description {
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.9375rem;
-            line-height: 1.5;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            margin: 0 0 var(--spacing-md, 16px) 0;
-        }
-
-        .label {
-            font-family: var(--font-display, 'Playfair Display', serif);
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--md-sys-color-text-heading, #121714);
-            margin-bottom: var(--spacing-sm, 8px);
-            display: block;
-        }
-
-        .hero-generator {
-            display: flex;
-            flex-direction: column;
-            margin-top: var(--spacing-md, 16px);
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-            background: color-mix(in srgb, var(--paper, #F7F4EE) 42%, transparent);
-            overflow: hidden;
-        }
-
-        .prompt-image-card {
-            position: relative;
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-            padding: var(--spacing-sm, 8px);
-        }
-
-        .prompt-image-summary {
-            display: grid;
-            grid-template-columns: 132px minmax(0, 1fr);
-            gap: var(--spacing-sm, 8px);
-            align-items: center;
-            padding-right: 44px;
-            list-style: none;
-            cursor: pointer;
-        }
-
-        .prompt-image-summary::-webkit-details-marker {
-            display: none;
-        }
-
-        .prompt-image-summary:focus-visible {
-            outline: 2px solid var(--md-sys-color-primary, #282828);
-            outline-offset: 3px;
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-        }
-
-        .prompt-image-thumbnail {
-            width: 132px;
-            aspect-ratio: 16 / 9;
-            object-fit: cover;
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-        }
-
-        .prompt-image-copy {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            min-width: 0;
-            font-family: var(--font-body, 'Inter', sans-serif);
-        }
-
-        .prompt-image-title {
-            font-size: 0.875rem;
-            font-weight: 700;
-            color: var(--md-sys-color-on-surface, #121714);
-        }
-
-        .prompt-image-hint {
-            font-size: 0.75rem;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-        }
-
-        .prompt-image-expanded {
-            margin-top: var(--spacing-sm, 8px);
-            overflow: hidden;
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-        }
-
-        .prompt-image-expanded img {
-            display: block;
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            object-fit: cover;
-        }
-
-        .prompt-image-remove {
-            position: absolute;
-            top: var(--spacing-sm, 8px);
-            right: var(--spacing-sm, 8px);
-            width: 32px;
-            height: 32px;
-            padding: 0;
-            border: 0;
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-            background-color: var(--md-sys-color-error, #B3261E);
-            color: var(--md-sys-color-on-error, #FFF);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 8px color-mix(in srgb, var(--ink, #1A1A1A) 24%, transparent);
-        }
-
-        .prompt-image-remove .material-symbols-outlined {
-            font-size: 18px;
-            color: currentColor;
-        }
-
-        .hero-generator-summary {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: var(--spacing-md, 16px);
-            padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
-            list-style: none;
-            cursor: pointer;
-        }
-
-        .hero-generator-summary::-webkit-details-marker {
-            display: none;
-        }
-
-        .hero-generator-summary-text {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            min-width: 0;
-        }
-
-        .hero-generator-summary .material-symbols-outlined {
-            transition: transform var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        .hero-generator[open] .hero-generator-summary .material-symbols-outlined {
-            transform: rotate(180deg);
-        }
-
-        .hero-generator-body {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-sm, 8px);
-            padding: 0 var(--spacing-md, 16px) var(--spacing-md, 16px);
-        }
-
-        .hero-generator-header {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: var(--spacing-md, 16px);
-        }
-
-        .hero-generator-tools {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: flex-end;
-            gap: var(--spacing-xs, 4px);
-        }
-
-        .hero-generator-title {
-            font-family: var(--font-serif, 'Playfair Display', serif);
-            font-size: 0.9375rem;
-            font-weight: 600;
-            color: var(--md-sys-color-on-surface, #121714);
-            margin: 0;
-        }
-
-        .hero-provider-status {
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.75rem;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            margin: var(--spacing-xs, 4px) 0 0;
-        }
-
-        .hero-controls {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: var(--spacing-sm, 8px);
-        }
-
-        .hero-control-label {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-xs, 4px);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.8125rem;
-            font-weight: 600;
-            color: var(--md-sys-color-on-surface, #121714);
-        }
-
-        .hero-control-label select,
-        .hero-prompt-textarea {
-            width: 100%;
-            box-sizing: border-box;
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-            background-color: var(--md-sys-color-background, #FDFBF7);
-            color: var(--md-sys-color-on-surface, #121714);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.9375rem;
-        }
-
-        .hero-control-label select {
-            min-height: 40px;
-            padding: 0 var(--spacing-sm, 8px);
-        }
-
-        .hero-prompt-textarea {
-            min-height: 140px;
-            padding: var(--spacing-sm, 8px);
-            line-height: 1.45;
-            resize: vertical;
-        }
-
-        .hero-actions,
-        .hero-preview-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--spacing-sm, 8px);
-            align-items: center;
-        }
-
-        .hero-preview-shell {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-sm, 8px);
-        }
-
-        .hero-preview-image {
-            width: min(100%, 360px);
-            aspect-ratio: 16 / 9;
-            object-fit: cover;
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-        }
-
-        .hero-status-message,
-        .hero-error-message {
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.875rem;
-            line-height: 1.4;
-            margin: 0;
-        }
-
-        .hero-status-message {
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-        }
-
-        .hero-error-message {
-            color: var(--err, #B3261E);
-        }
-
-        .add-step-button {
-            width: 100%;
-            margin-top: var(--spacing-md, 16px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--spacing-xs, 4px);
-        }
-
-        .card-header-with-action {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: var(--spacing-md, 16px);
-            margin-bottom: var(--spacing-md, 16px);
-        }
-
-        .card-header-with-action > div {
-            flex: 1;
-        }
-
-        .button-ghost {
-            background: color-mix(in srgb, var(--ink, #1A1A1A) 5%, transparent);
-            border: 0;
-            color: var(--md-sys-color-primary, #282828);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .button-ghost::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-color: var(--md-sys-color-primary, #282828);
-            opacity: 0;
-            transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-            pointer-events: none;
-        }
-
-        .button-ghost:hover::before {
-            opacity: var(--md-sys-state-hover-opacity, 0.08);
-        }
-
-        .button-ghost:hover {
-            color: var(--md-sys-color-primary, #282828);
-        }
-
-        .button-small {
-            padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
-            font-size: 0.8125rem;
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs, 4px);
-            white-space: nowrap;
-        }
-
-        /* Refined admin polish layer */
-        .editor-layout {
-            grid-template-columns: 216px minmax(0, 1fr);
-            grid-template-rows: auto 1fr;
-            gap: 20px;
-            max-width: 1140px;
-            margin: 0 auto;
-            padding: 0px clamp(20px, 20px, 56px) 96px;
-        }
-
-        .actions {
-            grid-column: 1 / -1;
-            grid-row: 1;
-            align-items: center;
-            justify-content: space-between;
-            gap: var(--spacing-sm, 8px);
-            margin: 12px 0 28px;
-            top: 12px;
-            padding: 10px 12px 10px 18px;
-            background: color-mix(in srgb, var(--surface-2, #FFF) 86%, var(--paper, #F7F4EE));
-            backdrop-filter: blur(10px) saturate(120%);
-            -webkit-backdrop-filter: blur(10px) saturate(120%);
-            border: 0;
-            border-radius: var(--radius-3, 16px);
-            box-shadow: 0 10px 28px color-mix(in srgb, var(--ink, #1A1A1A) 7%, transparent);
-        }
-
-        .toolbar-context {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            min-width: 0;
-        }
-
-        .toolbar-title {
-            max-width: min(48vw, 520px);
-            overflow: hidden;
-            color: var(--ink, #1A1A1A);
-            font-family: var(--font-serif, 'Lora', serif);
-            font-size: 1.0625rem;
-            font-weight: 600;
-            line-height: 1.2;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .toolbar-dirty {
-            flex-shrink: 0;
-            width: 7px;
-            height: 7px;
-            margin-top: 1px;
-            border-radius: 50%;
-            background: var(--accent-terracotta, #C18A4D);
-            box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-terracotta, #C18A4D) 16%, transparent);
-        }
-
-        .toolbar-actions {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm, 8px);
-            flex-shrink: 0;
-        }
-
-        .button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-            font-family: var(--font-body, 'Inter', sans-serif);
-            font-size: 0.875rem;
-            font-weight: 600;
-            letter-spacing: 0.01em;
-            padding: 0.55rem 1.25rem;
-        }
-
-        .button-secondary {
-            border: 0;
-            background: color-mix(in srgb, var(--ink, #1A1A1A) 5%, transparent);
-        }
-
-        .editor-nav {
-            grid-column: 1;
-            grid-row: 2;
-            top: 84px;
-            gap: var(--spacing-xs, 4px);
-            padding: 14px 12px;
-            background: var(--surface-1, var(--paper, #F7F4EE));
-            border: 0;
-            border-radius: var(--radius-2, 10px);
-            box-shadow: 0 10px 26px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
-        }
-
-        .editor-nav-title,
-        .card-title::before {
-            font-family: var(--font-body, 'Inter', sans-serif);
-            font-size: 0.6875rem;
-            font-weight: 700;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-        }
-
-        .editor-nav-title {
-            padding: 0 6px 8px;
-            margin: 0;
-        }
-
-        .editor-nav-item {
-            position: relative;
-            min-height: 32px;
-            padding: 7px 10px 7px 14px;
-            border-left: 0;
-            border-radius: var(--radius-2, 10px);
-            font-family: var(--font-body, 'Inter', sans-serif);
-            font-size: 0.8125rem;
-            font-weight: 500;
-        }
-
-        .editor-nav-item::before {
-            content: '';
-            position: absolute;
-            left: 6px;
-            top: 50%;
-            width: 2px;
-            height: 0;
-            border-radius: 3px;
-            background: var(--md-sys-color-primary, #282828);
-            transform: translateY(-50%);
-            transition: height var(--md-sys-motion-duration-short2, 150ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        .editor-nav-item.active {
-            border-left-color: transparent;
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 6%, transparent);
-        }
-
-        .editor-nav-item.active::before {
-            height: 14px;
-        }
-
-        .editor-nav-item.subitem {
-            padding-left: 24px;
-            font-size: 0.78rem;
-        }
-
-        .editor-form {
-            grid-column: 2;
-            grid-row: 2;
-        }
-
-        .editor-header {
-            margin-bottom: 2px;
-            padding-bottom: 0;
-        }
-
-        .breadcrumbs {
-            font-family: var(--font-body, 'Inter', sans-serif);
-            font-size: 0.8125rem;
-        }
-
-        h1,
-        .card-title,
-        .hero-generator-title {
-            font-family: var(--font-serif, 'Lora', serif);
-            letter-spacing: -0.015em;
-        }
-
-        h1 {
-            font-size: 2rem;
-            margin-bottom: 6px;
-        }
-
-        .subtitle {
-            font-family: var(--font-body, 'Inter', sans-serif);
-            font-size: 0.95rem;
-        }
-
-        .card {
-            background: var(--surface-2, #FFF);
-            border: 0;
-            border-radius: var(--radius-3, 16px);
-            padding: 26px 28px;
-            box-shadow: 0 12px 32px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
-        }
-
-        .card-title {
-            font-size: 1.375rem;
-            margin-bottom: var(--spacing-md, 16px);
-        }
-
-        .card-title::before {
-            content: attr(data-eyebrow);
-            display: block;
-            margin-bottom: 7px;
-        }
-
-        .card-description {
-            font-family: var(--font-body, 'Inter', sans-serif);
-            font-size: 0.875rem;
-            line-height: 1.6;
-        }
-
-        .mode-toggle {
-            display: inline-flex;
-            gap: var(--spacing-xs, 4px);
-            padding: var(--spacing-xs, 4px);
-            width: max-content;
-            max-width: 100%;
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-            background: var(--paper-deep, #EEE8DD);
-        }
-
-        .mode-toggle label {
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-            padding: 0.5rem 1.1rem;
-            font-family: var(--font-body, 'Inter', sans-serif);
-            font-size: 0.8125rem;
-            font-weight: 600;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-        }
-
-        .mode-toggle label:has(input:checked) {
-            background: var(--md-sys-color-primary, #282828);
-            color: var(--md-sys-color-on-primary, #FFF);
-        }
-
-        .mode-toggle input[type="radio"] {
-            position: absolute;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .info-banner {
-            display: flex;
-            border: 0;
-            background: color-mix(in srgb, var(--accent-sage, #7D8E39) 12%, var(--surface-2, #FFF));
-            border-radius: var(--radius-2, 10px);
-        }
-
-        .hero-control-label,
-        .card-header-with-action,
-        .hero-provider-status,
-        .hero-status-message,
-        .hero-error-message {
-            font-family: var(--font-body, 'Inter', sans-serif);
-        }
-
-        .hero-control-label select,
-        .hero-prompt-textarea {
-            background: var(--field-bg, #FBF9F4);
-            border: 0;
-            border-radius: var(--radius-2, 10px);
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 7%, transparent);
-        }
-
-        .visibility-settings {
-            display: grid;
-            gap: var(--spacing-md, 16px);
-        }
-
-        .visibility-setting {
-            display: grid;
-            grid-template-columns: 40px minmax(0, 1fr);
-            gap: var(--spacing-md, 16px);
-            align-items: center;
-            padding: 18px 20px;
-            border: 0;
-            border-radius: var(--radius-2, 10px);
-            background: var(--field-bg, #FBF9F4);
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
-        }
-
-        .visibility-setting.archive {
-            background: color-mix(in srgb, var(--err, #B3261E) 4%, var(--field-bg, #FBF9F4));
-        }
-
-        .variation-display-setting {
-            display: grid;
-            grid-template-columns: 40px minmax(0, 1fr);
-            gap: var(--spacing-md, 16px);
-            align-items: center;
-            padding: 18px 20px;
-            margin-bottom: var(--spacing-lg, 24px);
-            border: 0;
-            border-radius: var(--radius-2, 10px);
-            background: var(--field-bg, #FBF9F4);
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
-        }
-
-        .variation-display-options {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-md, 16px);
-            min-width: 0;
-        }
-
-        .visibility-icon,
-        .variation-display-icon {
-            display: inline-grid;
-            place-items: center;
-            width: 40px;
-            height: 40px;
-            border-radius: var(--md-sys-shape-corner-full, 999px);
-            background: var(--surface-2, #FFF);
-            color: var(--ink, #1A1A1A);
-            box-shadow: 0 4px 12px color-mix(in srgb, var(--ink, #1A1A1A) 7%, transparent);
-        }
-
-        .visibility-setting.archive .visibility-icon {
-            color: var(--err, #B3261E);
-            box-shadow: 0 4px 12px color-mix(in srgb, var(--err, #B3261E) 10%, transparent);
-        }
-
-        .visibility-icon .material-symbols-outlined,
-        .variation-display-icon .material-symbols-outlined {
-            font-size: 21px;
-        }
-
-        .visibility-setting wy-option-toggle {
-            --wy-option-toggle-off-bg: var(--paper-deep, #EEE8DD);
-        }
-
-        @media (max-width: 1200px) {
-            .editor-layout {
-                grid-template-columns: 1fr;
-                gap: var(--spacing-lg, 24px);
-            }
-
-            .actions {
-                grid-column: 1;
-                grid-row: 1;
-                top: 12px;
-                margin: 8px 0 0;
-                border-radius: var(--radius-3, 16px);
-            }
-
-            .toolbar-title {
-                max-width: 46vw;
-            }
-
-            .editor-nav {
-                grid-column: 1;
-                grid-row: 2;
-                top: 64px;
-                z-index: 4;
-                background: var(--surface-1, var(--paper, #F7F4EE));
-                padding: var(--spacing-sm, 8px);
-                border: 0;
-                border-radius: var(--radius-2, 10px);
-            }
-
-            .editor-form {
-                grid-column: 1;
-                grid-row: 3;
-            }
-
-            .editor-nav-toggle {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                width: 100%;
-                min-height: 40px;
-                border: 0;
-                background: transparent;
-                color: var(--md-sys-color-on-surface, #121714);
-                cursor: pointer;
-                font-family: var(--font-sans, 'DM Sans', sans-serif);
-                font-size: 0.875rem;
-                font-weight: 600;
-                text-align: left;
-            }
-
-            .editor-nav-toggle .material-symbols-outlined {
-                transition: transform var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-            }
-
-            .editor-nav.open .editor-nav-toggle .material-symbols-outlined {
-                transform: rotate(180deg);
-            }
-
-            .editor-nav-title {
-                display: none;
-            }
-
-            .editor-nav-list {
-                display: none;
-                max-height: min(56vh, 520px);
-                overflow-y: auto;
-                padding-top: var(--spacing-xs, 4px);
-            }
-
-            .editor-nav.open .editor-nav-list {
-                display: flex;
-            }
-
-            .hero-controls {
-                grid-template-columns: 1fr;
-            }
-
-            .visibility-setting {
-                grid-template-columns: 1fr;
-                gap: var(--spacing-sm, 8px);
-            }
-        }
-    `;
+    // Light DOM: styles live in admin.css (scoped under wy-prompt-editor).
+    createRenderRoot() {
+        return this;
+    }
 
     _generateSlug(title) {
         return title
@@ -1179,12 +210,12 @@ export class WyPromptEditor extends LitElement {
     }
 
     _getTextareaValue(codeTextarea) {
-        const textarea = codeTextarea?.shadowRoot?.querySelector('textarea');
+        const textarea = codeTextarea?.querySelector('textarea');
         return textarea ? textarea.value : null;
     }
 
     _syncStandardTemplateForSave() {
-        const codeTextarea = this.shadowRoot.querySelector('wy-code-textarea');
+        const codeTextarea = this.querySelector('wy-code-textarea');
         const value = this._getTextareaValue(codeTextarea);
         if (value !== null) {
             this._editedPrompt.template = value;
@@ -1195,7 +226,7 @@ export class WyPromptEditor extends LitElement {
         if (!stepEditors || !steps) return;
 
         stepEditors.forEach((stepEditor, index) => {
-            const codeTextarea = stepEditor.shadowRoot?.querySelector('wy-code-textarea');
+            const codeTextarea = stepEditor.querySelector('wy-code-textarea');
             const value = this._getTextareaValue(codeTextarea);
             if (value !== null && steps[index]) {
                 steps[index].template = value;
@@ -1204,12 +235,15 @@ export class WyPromptEditor extends LitElement {
     }
 
     _syncVariationTemplatesForSave() {
-        const variationEditor = this.shadowRoot.querySelector('wy-variation-editor');
+        const variationEditor = this.querySelector('wy-variation-editor');
         const variations = this._editedPrompt?.variations;
         if (!variationEditor || !variations) return;
 
-        const variationCards = variationEditor.shadowRoot?.querySelectorAll('.variation-card') || [];
-        variationCards.forEach((card, index) => {
+        // Only the currently-selected variation is rendered, so map cards by their
+        // data-variation-index rather than by loop position.
+        const variationCards = variationEditor.querySelectorAll('.variation-card') || [];
+        variationCards.forEach((card) => {
+            const index = Number(card.dataset.variationIndex);
             const variation = variations[index];
             if (!variation) return;
 
@@ -1232,7 +266,7 @@ export class WyPromptEditor extends LitElement {
             this._syncVariationTemplatesForSave();
         } else if (this._promptMode === 'multi') {
             this._syncStepTemplatesForSave(
-                this.shadowRoot.querySelectorAll('wy-step-editor'),
+                this.querySelectorAll('wy-step-editor'),
                 this._editedPrompt.steps
             );
         } else {
@@ -1750,7 +784,12 @@ export class WyPromptEditor extends LitElement {
 
         if (this._editedPrompt.variations?.length) {
             items.push({ id: 'variations', label: 'Variations' });
-            this._editedPrompt.variations.forEach((variation, index) => {
+            // Only the active variant is shown in the nav to reduce clutter; one variant
+            // is editable at a time and selection is driven from the Variations card.
+            const activeIndex = this._openVariationIndex >= 0 ? this._openVariationIndex : 0;
+            const variation = this._editedPrompt.variations[activeIndex];
+            if (variation) {
+                const index = activeIndex;
                 const id = `variation-${index}`;
                 items.push({
                     id,
@@ -1759,17 +798,15 @@ export class WyPromptEditor extends LitElement {
                     variationIndex: index
                 });
 
-                if (index === this._openVariationIndex) {
-                    const hasSteps = variation.steps && variation.steps.length > 0;
-                    items.push({ id: `${id}-description`, label: 'Description', type: 'subitem', variationIndex: index, vsection: 'description' });
-                    items.push({ id: `${id}-instructions`, label: 'Instructions', type: 'subitem', variationIndex: index, vsection: 'instructions' });
-                    items.push({ id: `${id}-image`, label: 'Image', type: 'subitem', variationIndex: index, vsection: 'image' });
-                    items.push({ id: `${id}-${hasSteps ? 'steps' : 'variables'}`, label: hasSteps ? 'Steps' : 'Variables', type: 'subitem', variationIndex: index, vsection: hasSteps ? 'steps' : 'variables' });
-                    if (!hasSteps) {
-                        items.push({ id: `${id}-template`, label: 'Template', type: 'subitem', variationIndex: index, vsection: 'template' });
-                    }
+                const hasSteps = variation.steps && variation.steps.length > 0;
+                items.push({ id: `${id}-description`, label: 'Description', type: 'subitem', variationIndex: index, vsection: 'description' });
+                items.push({ id: `${id}-instructions`, label: 'Instructions', type: 'subitem', variationIndex: index, vsection: 'instructions' });
+                items.push({ id: `${id}-image`, label: 'Image', type: 'subitem', variationIndex: index, vsection: 'image' });
+                items.push({ id: `${id}-${hasSteps ? 'steps' : 'variables'}`, label: hasSteps ? 'Steps' : 'Variables', type: 'subitem', variationIndex: index, vsection: hasSteps ? 'steps' : 'variables' });
+                if (!hasSteps) {
+                    items.push({ id: `${id}-template`, label: 'Template', type: 'subitem', variationIndex: index, vsection: 'template' });
                 }
-            });
+            }
         } else {
             items.push({ id: 'prompt-type', label: 'Prompt Type' });
             if (this._promptMode === 'single') {
@@ -1821,7 +858,7 @@ export class WyPromptEditor extends LitElement {
         this._navOpen = false;
 
         if (Number.isInteger(item.variationIndex)) {
-            const variationEditor = this.shadowRoot?.querySelector('wy-variation-editor');
+            const variationEditor = this.querySelector('wy-variation-editor');
             variationEditor?.expandVariation(item.variationIndex);
             this._openVariationIndex = item.variationIndex;
             await this.updateComplete;
@@ -1831,7 +868,7 @@ export class WyPromptEditor extends LitElement {
             return;
         }
 
-        this._scrollTargetIntoView(this.shadowRoot?.querySelector(`[data-section="${item.id}"]`));
+        this._scrollTargetIntoView(this.querySelector(`[data-section="${item.id}"]`));
     }
 
     _scrollTargetIntoView(target) {
@@ -1890,9 +927,9 @@ export class WyPromptEditor extends LitElement {
 
     _handleWindowScroll() {
         if (!this._editedPrompt) return;
-        const sections = [...this.shadowRoot.querySelectorAll('[data-section]')]
+        const sections = [...this.querySelectorAll('[data-section]')]
             .map(element => ({ id: element.dataset.section, element }));
-        const variationEditor = this.shadowRoot?.querySelector('wy-variation-editor');
+        const variationEditor = this.querySelector('wy-variation-editor');
 
         if (variationEditor && this._openVariationIndex >= 0) {
             ['description', 'instructions', 'image', 'variables', 'template', 'steps'].forEach(section => {

@@ -3832,6 +3832,10 @@ var WyDropdown = class extends i4 {
     this._showDropdown = false;
     this._focusedIndex = -1;
   }
+  // Light DOM: styles live in admin.css (scoped under this element tag).
+  createRenderRoot() {
+    return this;
+  }
   render() {
     const selectedOption = this.options.find((opt) => opt.value === this.value);
     const displayValue = selectedOption ? selectedOption.label : this.placeholder;
@@ -3945,229 +3949,6 @@ __publicField(WyDropdown, "properties", {
   _showDropdown: { type: Boolean, state: true },
   _focusedIndex: { type: Number, state: true }
 });
-__publicField(WyDropdown, "styles", i`
-        /* Note: Fonts (DM Sans, Material Symbols) should be loaded in consuming page <head> */
-        
-        :host {
-            display: block;
-            /* Fallback values for component-specific tokens */
-            --wy-dropdown-label-color: #71717A;
-            --wy-dropdown-text-color: #52525B;
-            --wy-dropdown-icon-color: #52525B;
-            --wy-dropdown-bg: var(--md-sys-color-surface-container-lowest, #FDFBF7);
-            --wy-dropdown-border: var(--md-sys-color-outline-variant, #D7D3C8);
-            --wy-dropdown-border-hover: var(--md-sys-color-outline-variant, #D7D3C8);
-            --wy-dropdown-menu-bg: var(--md-sys-color-surface-container-high, #EBE5DE);
-            --wy-dropdown-item-hover-bg: var(--md-sys-color-surface-container-high, #EBE5DE);
-        }
-        
-        /* Subtle variant - lighter backgrounds for modal integration */
-        :host([variant="subtle"]) {
-            --wy-dropdown-bg: var(--md-sys-color-surface-container-low, #FDFBF7);  /* Button bg - lighter than modal */
-            --wy-dropdown-border: var(--md-sys-color-outline-variant, #D7D3C8);
-            --wy-dropdown-menu-bg: var(--md-sys-color-surface-container-low, #FDFBF7);  /* Menu bg */
-            --wy-dropdown-item-hover-bg: var(--md-sys-color-surface-container, #F5F2EA);  /* Item hover */
-        }
-        
-        /* Material Symbols font configuration */
-        .material-symbols-outlined {
-            font-family: 'Material Symbols Outlined';
-            font-weight: normal;
-            font-style: normal;
-            font-size: 24px;
-            line-height: 1;
-            letter-spacing: normal;
-            text-transform: none;
-            display: inline-block;
-            white-space: nowrap;
-            word-wrap: normal;
-            direction: ltr;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            text-rendering: optimizeLegibility;
-            font-feature-settings: 'liga';
-            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
-        }
-        
-        .container {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .label {
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: var(--md-sys-typescale-label-small-size, 0.6875rem);
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--wy-dropdown-label-color);
-            margin-bottom: var(--spacing-sm, 8px);
-            margin-left: var(--spacing-xs, 4px);
-        }
-        
-        .selector {
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: var(--spacing-md, 16px) var(--spacing-lg, 24px);
-            background-color: var(--wy-dropdown-bg);
-            border: 1px solid var(--wy-dropdown-border);
-            border-radius: var(--md-sys-shape-corner-medium, 12px);
-            cursor: pointer;
-            transition: border-color var(--md-sys-motion-duration-short4, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-            text-align: left;
-        }
-        
-        .selector:disabled {
-            cursor: not-allowed;
-            opacity: var(--md-sys-state-disabled-opacity, 0.38);
-        }
-        
-        /* MD3 State Layer for hover */
-        .selector::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-color: var(--md-sys-color-on-surface, #121714);
-            opacity: 0;
-            transition: opacity var(--md-sys-motion-duration-short2, 150ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-            pointer-events: none;
-            border-radius: inherit;
-        }
-        
-        .selector:hover:not(:disabled) {
-            border-color: var(--wy-dropdown-border-hover);
-        }
-        
-        .selector:hover:not(:disabled)::before {
-            opacity: var(--md-sys-state-hover-opacity, 0.08);
-        }
-        
-        .selector:focus-visible {
-            outline: 3px solid var(--md-sys-color-primary, #282828);
-            outline-offset: 2px;
-        }
-        
-        .selector:active:not(:disabled)::before {
-            opacity: var(--md-sys-state-pressed-opacity, 0.12);
-        }
-        
-        .value {
-            flex: 1;
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.9375rem;
-            font-weight: 500;
-            color: var(--wy-dropdown-text-color);
-            position: relative;
-            z-index: 1;
-        }
-        
-        .value.placeholder {
-            opacity: 0.6;
-        }
-        
-        .icon {
-            color: var(--wy-dropdown-icon-color);
-            transition: color var(--md-sys-motion-duration-short2, 150ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
-                        transform var(--md-sys-motion-duration-short2, 150ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-            position: relative;
-            z-index: 1;
-            margin-left: var(--spacing-sm, 8px);
-        }
-        
-        .selector:hover:not(:disabled) .icon {
-            color: var(--wy-dropdown-text-color);
-        }
-        
-        .selector.open .icon {
-            transform: rotate(180deg);
-        }
-        
-        .dropdown {
-            position: absolute;
-            top: calc(100% + var(--spacing-xs, 4px));
-            left: 0;
-            right: 0;
-            background-color: var(--wy-dropdown-menu-bg);
-            border: 1px solid var(--md-sys-color-outline-variant, #D7D3C8);
-            border-radius: var(--md-sys-shape-corner-medium, 16px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-            z-index: 100;
-            overflow: hidden;
-            max-height: 240px;
-            overflow-y: auto;
-            margin-top: var(--spacing-sm, 8px);
-        }
-        
-        .item {
-            position: relative;
-            overflow: hidden;
-            padding: var(--spacing-md, 16px) var(--spacing-lg, 24px);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.875rem;
-            color: var(--wy-dropdown-text-color);
-            cursor: pointer;
-            transition: background-color var(--md-sys-motion-duration-short2, 150ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-        
-        /* State layer for menu items */
-        .item::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-color: var(--md-sys-color-on-surface, #121714);
-            opacity: 0;
-            transition: opacity var(--md-sys-motion-duration-short2, 150ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-            pointer-events: none;
-        }
-        
-        .item:hover::before,
-        .item.focused::before {
-            opacity: var(--md-sys-state-hover-opacity, 0.08);
-        }
-        
-        .item.selected {
-            color: var(--md-sys-color-primary, #282828);
-            font-weight: 600;
-            background-color: var(--md-sys-color-primary-container, #E8F5E9);
-        }
-        
-        .item.selected::before {
-            background-color: var(--md-sys-color-primary, #282828);
-        }
-        
-        .no-results {
-            padding: var(--spacing-md, 16px) var(--spacing-lg, 24px);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.875rem;
-            color: var(--md-sys-color-on-surface-variant, #49454E);
-            opacity: 0.6;
-            font-style: italic;
-            text-align: center;
-        }
-        
-        /* Scrollbar styling */
-        .dropdown::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        .dropdown::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        
-        .dropdown::-webkit-scrollbar-thumb {
-            background: var(--md-sys-color-outline-variant, #D7D3C8);
-            border-radius: var(--radius-1);
-        }
-        
-        .dropdown::-webkit-scrollbar-thumb:hover {
-            background: var(--md-sys-color-outline, #2d4e3c);
-        }
-    `);
 customElements.define("wy-dropdown", WyDropdown);
 
 // components/ui/wy-info-panel.js
@@ -4273,6 +4054,10 @@ var WyOptionToggle = class extends i4 {
     this.size = "default";
     this.showSelectedValueText = false;
     this.ariaLabel = "";
+  }
+  // Light DOM: styles live in admin.css (scoped under this element tag).
+  createRenderRoot() {
+    return this;
   }
   willUpdate(changedProperties) {
     if (!this._hasValidOptions()) {
@@ -4442,250 +4227,6 @@ __publicField(WyOptionToggle, "properties", {
   showSelectedValueText: { type: Boolean, attribute: "show-selected-value-text" },
   ariaLabel: { type: String, attribute: "aria-label" }
 });
-__publicField(WyOptionToggle, "styles", i`
-        :host {
-            display: block;
-            width: 100%;
-        }
-
-        .label {
-            margin: 0 0 var(--spacing-md, 16px) 0;
-            color: var(--md-sys-color-primary, #282828);
-            font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: 0.875rem;
-            font-weight: 700;
-            line-height: 1.2;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-        }
-
-        .description {
-            margin: 0 0 var(--spacing-sm, 8px) 0;
-            max-width: 36rem;
-            color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 70%, transparent);
-            font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: var(--md-sys-typescale-body-small-size, 0.875rem);
-            font-weight: 400;
-            line-height: 1.8;
-        }
-
-        .group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: var(--spacing-xxs, 2px);
-            padding: var(--spacing-xxs, 2px);
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-            background: var(--md-sys-color-surface-container-high, #EBE5DE);
-        }
-
-        .option {
-            position: relative;
-            overflow: hidden;
-            border: 0;
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-            min-height: 34px;
-            padding: var(--spacing-xs, 4px) var(--spacing-md, 16px);
-            background: transparent;
-            color: color-mix(in srgb, var(--md-sys-color-on-surface-variant, #5E6E66) 84%, transparent);
-            font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: var(--md-sys-typescale-label-large-size, 0.875rem);
-            font-weight: 600;
-            line-height: 1.2;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition:
-                background-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
-                color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        .option::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: currentColor;
-            opacity: 0;
-            transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-            pointer-events: none;
-        }
-
-        .option:hover::after {
-            opacity: var(--md-sys-state-hover-opacity, 0.08);
-        }
-
-        .option.selected {
-            background: var(--md-sys-color-primary, #282828);
-            color: var(--md-sys-color-on-primary, #FFFFFF);
-        }
-
-        .option:focus-visible {
-            outline: 2px solid var(--md-sys-color-primary, #282828);
-            outline-offset: 1px;
-        }
-
-        :host([disabled]) .group {
-            opacity: var(--md-sys-state-disabled-opacity, 0.38);
-        }
-
-        :host([disabled]) .option {
-            cursor: not-allowed;
-        }
-
-        .switch-row {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) auto;
-            align-items: center;
-            gap: var(--spacing-md, 16px);
-            min-height: 38px;
-        }
-
-        .switch-copy {
-            min-width: 0;
-        }
-
-        .switch-copy .label {
-            margin-bottom: var(--spacing-xs, 4px);
-        }
-
-        .switch-copy .description {
-            margin-bottom: 0;
-        }
-
-        .switch-control {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm, 8px);
-            justify-self: end;
-        }
-
-        .switch-state {
-            min-width: 2.5rem;
-            text-align: right;
-            font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: 0.625rem;
-            font-weight: 700;
-            line-height: 1.1;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: var(--md-sys-color-primary, #282828);
-            transition: color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-            user-select: none;
-        }
-
-        .switch-button {
-            position: relative;
-            overflow: hidden;
-            border: 0;
-            padding: 0;
-            flex: 0 0 auto;
-            width: 52px;
-            height: 30px;
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-            background: var(--wy-option-toggle-off-bg, #E8E4D8);
-            cursor: pointer;
-            transition: background-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        :host([size='compact']) .switch-button {
-            width: 52px;
-            height: 30px;
-        }
-
-        .switch-button.checked {
-            background: var(--md-sys-color-primary, #282828);
-        }
-
-        .switch-button::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: currentColor;
-            opacity: 0;
-            transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-            pointer-events: none;
-        }
-
-        .switch-button:hover::after {
-            opacity: var(--md-sys-state-hover-opacity, 0.08);
-        }
-
-        .switch-button:focus-visible {
-            outline: 2px solid var(--md-sys-color-primary, #282828);
-            outline-offset: 2px;
-        }
-
-        .switch-thumb {
-            position: absolute;
-            top: 3px;
-            left: 3px;
-            width: 24px;
-            height: 24px;
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-            background: var(--md-sys-color-primary, #282828);
-            transition: transform var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        :host([size='compact']) .switch-thumb {
-            top: 3px;
-            left: 3px;
-            width: 24px;
-            height: 24px;
-        }
-
-        .switch-button.checked .switch-thumb {
-            transform: translateX(22px);
-            background: var(--md-sys-color-surface, #F5F2EA);
-        }
-
-        :host([size='compact']) .switch-button.checked .switch-thumb {
-            transform: translateX(22px);
-        }
-
-        :host([size='compact']) .switch-state {
-            font-size: 0.5625rem;
-            letter-spacing: 0.12em;
-        }
-
-        .selected-value-text {
-            margin: var(--spacing-sm, 8px) 0 0 0;
-            color: color-mix(in srgb, var(--md-sys-color-on-surface, #121714) 86%, transparent);
-            font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: var(--md-sys-typescale-body-medium-size, 1rem);
-            font-weight: 400;
-            line-height: 1.7;
-        }
-
-        :host([size='compact']) .selected-value-text {
-            margin-top: var(--spacing-xs, 4px);
-            font-size: 0.8125rem;
-            line-height: 1.35;
-        }
-
-        :host([disabled]) {
-            opacity: 0.4;
-            filter: grayscale(1);
-        }
-
-        :host([disabled]) .switch-button {
-            cursor: not-allowed;
-            background: var(--wy-option-toggle-disabled-bg, #D1CDC0);
-        }
-
-        @media (max-width: 520px) {
-            .switch-row {
-                grid-template-columns: 1fr;
-                align-items: start;
-            }
-
-            .switch-control {
-                justify-self: start;
-            }
-
-            .switch-state {
-                text-align: left;
-            }
-        }
-    `);
 customElements.define("wy-option-toggle", WyOptionToggle);
 
 // components/ui/wy-image-upload.js
@@ -4698,6 +4239,10 @@ var WyImageUpload = class extends i4 {
     this.label = "Background Texture";
     this.compact = false;
     this._isDragging = false;
+  }
+  // Light DOM: styles live in admin.css (scoped under this element tag).
+  createRenderRoot() {
+    return this;
   }
   _handleDragOver(e9) {
     e9.preventDefault();
@@ -4756,7 +4301,7 @@ var WyImageUpload = class extends i4 {
   }
   _handleClick() {
     if (!this.value) {
-      this.shadowRoot.querySelector('input[type="file"]').click();
+      this.querySelector('input[type="file"]').click();
     }
   }
   render() {
@@ -4815,152 +4360,6 @@ __publicField(WyImageUpload, "properties", {
   compact: { type: Boolean },
   _isDragging: { type: Boolean, state: true }
 });
-__publicField(WyImageUpload, "styles", i`
-        :host {
-            display: block;
-            width: 100%;
-        }
-
-        .label {
-            font-family: var(--font-display, 'Playfair Display', serif);
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--md-sys-color-text-heading, #121714);
-            margin-bottom: var(--spacing-sm, 8px);
-            display: block;
-        }
-
-        .upload-zone {
-            position: relative;
-            border: 2px dashed color-mix(in srgb, var(--md-sys-color-primary, #282828) 20%, transparent);
-            border-radius: var(--md-sys-shape-corner-medium, 16px);
-            padding: var(--spacing-2xl, 48px) var(--spacing-xl, 32px);
-            text-align: center;
-            cursor: pointer;
-            transition: all var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-            background-color: transparent;
-        }
-
-        .upload-zone:hover {
-            background-color: var(--md-sys-color-surface, #FDFBF7);
-            border-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 40%, transparent);
-        }
-
-        .upload-zone.dragging {
-            border-color: var(--md-sys-color-primary, #282828);
-            border-style: solid;
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 5%, transparent);
-        }
-
-        .upload-zone.has-image {
-            padding: 0;
-            border-style: solid;
-            border-color: var(--md-sys-color-outline-variant, #DDD);
-            overflow: hidden;
-        }
-
-        .upload-zone.compact {
-            min-height: 0;
-            padding: var(--spacing-md, 16px);
-            text-align: left;
-        }
-
-        .icon-container {
-            width: 48px;
-            height: 48px;
-            margin: 0 auto var(--spacing-md, 16px);
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 5%, transparent);
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .material-symbols-outlined {
-            font-family: 'Material Symbols Outlined';
-            font-size: 24px;
-            color: var(--md-sys-color-primary, #282828);
-        }
-
-        .upload-text {
-            font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: 0.9375rem;
-            font-weight: 500;
-            color: var(--md-sys-color-on-surface, #121714);
-            margin-bottom: var(--spacing-xs, 4px);
-        }
-
-        .upload-hint {
-            font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: 0.8125rem;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-        }
-
-        .image-preview {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .preview-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .remove-button {
-            position: absolute;
-            top: var(--spacing-sm, 8px);
-            right: var(--spacing-sm, 8px);
-            width: 32px;
-            height: 32px;
-            background-color: var(--md-sys-color-error, #B3261E);
-            border: none;
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        .image-preview:hover .remove-button {
-            opacity: 1;
-        }
-
-        .remove-button:hover {
-            background-color: color-mix(in srgb, var(--md-sys-color-error, #B3261E) 90%, black);
-        }
-
-        .remove-button .material-symbols-outlined {
-            font-size: 18px;
-            color: white;
-        }
-
-        .compact-empty {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm, 8px);
-        }
-
-        .compact-empty .icon-container {
-            flex: 0 0 auto;
-            width: 36px;
-            height: 36px;
-            margin: 0;
-        }
-
-        input[type="file"] {
-            display: none;
-        }
-    `);
 customElements.define("wy-image-upload", WyImageUpload);
 
 // components/ui/wy-code-textarea.js
@@ -4973,6 +4372,10 @@ var WyCodeTextarea = class extends i4 {
     this.rows = 8;
     this.label = "Template";
     this.maxLength = 0;
+  }
+  // Light DOM: styles live in admin.css (scoped under wy-code-textarea).
+  createRenderRoot() {
+    return this;
   }
   _handleInput(e9) {
     this.value = e9.target.value;
@@ -4992,15 +4395,15 @@ var WyCodeTextarea = class extends i4 {
   }
   updated(changedProperties) {
     if (changedProperties.has("value")) {
-      const textarea = this.shadowRoot.querySelector("textarea");
-      const isFocused = this.shadowRoot.activeElement === textarea;
+      const textarea = this.querySelector("textarea");
+      const isFocused = document.activeElement === textarea;
       if (textarea && !isFocused && textarea.value !== this.value) {
         textarea.value = this.value;
       }
     }
   }
   _insertVariable(variableName) {
-    const textarea = this.shadowRoot.querySelector("textarea");
+    const textarea = this.querySelector("textarea");
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
     const textBefore = this.value.substring(0, start);
@@ -5060,91 +4463,6 @@ __publicField(WyCodeTextarea, "properties", {
   label: { type: String },
   maxLength: { type: Number, attribute: "max-length" }
 });
-__publicField(WyCodeTextarea, "styles", i`
-        :host {
-            display: block;
-            width: 100%;
-        }
-
-        .label {
-            font-family: var(--font-body, 'Inter', sans-serif);
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.14em;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            margin-bottom: var(--spacing-sm, 8px);
-            display: block;
-        }
-
-        textarea {
-            width: 100%;
-            box-sizing: border-box;
-            padding: var(--spacing-md, 16px);
-            border-radius: var(--radius-2, 10px);
-            border: 0;
-            background-color: var(--field-bg, transparent);
-            font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
-            font-size: 0.875rem;
-            line-height: 1.5;
-            color: var(--md-sys-color-on-surface, #121714);
-            resize: vertical;
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 7%, transparent);
-            transition: box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        textarea:focus {
-            outline: none;
-            box-shadow:
-                inset 0 0 0 1px color-mix(in srgb, var(--md-sys-color-primary, #282828) 24%, transparent),
-                0 0 0 3px color-mix(in srgb, var(--md-sys-color-primary, #282828) 10%, transparent);
-        }
-
-        textarea::placeholder {
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            opacity: 0.6;
-        }
-
-        .variable-chips {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--spacing-xs, 4px);
-            margin-top: var(--spacing-sm, 8px);
-        }
-
-        .variable-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--spacing-xxs, 2px);
-            padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 10%, transparent);
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-            font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
-            font-size: 0.75rem;
-            color: var(--md-sys-color-primary, #282828);
-            cursor: pointer;
-            border: 0;
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--md-sys-color-primary, #282828) 18%, transparent);
-            transition: all var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        .variable-chip:hover {
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 20%, transparent);
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--md-sys-color-primary, #282828) 24%, transparent);
-        }
-
-        .char-count {
-            font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: 0.75rem;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            text-align: right;
-            margin-top: var(--spacing-xs, 4px);
-        }
-
-        .char-count.over-limit {
-            color: var(--md-sys-color-error, #FF0101);
-        }
-    `);
 customElements.define("wy-code-textarea", WyCodeTextarea);
 
 // components/ui/wy-variable-editor.js
@@ -5153,6 +4471,10 @@ var WyVariableEditor = class extends i4 {
     super();
     this.variables = [];
     this.allowReorder = true;
+  }
+  // Light DOM: styles live in admin.css (scoped under this element tag).
+  createRenderRoot() {
+    return this;
   }
   _emitChange() {
     this.dispatchEvent(new CustomEvent("change", {
@@ -5287,160 +4609,6 @@ __publicField(WyVariableEditor, "properties", {
   variables: { type: Array },
   allowReorder: { type: Boolean, attribute: "allow-reorder" }
 });
-__publicField(WyVariableEditor, "styles", i`
-        :host {
-            display: block;
-            width: 100%;
-        }
-
-        .material-symbols-outlined {
-            font-family: 'Material Symbols Outlined';
-            font-size: 20px;
-            font-weight: normal;
-            font-style: normal;
-            line-height: 1;
-            letter-spacing: normal;
-            text-transform: none;
-            display: inline-block;
-            white-space: nowrap;
-            word-wrap: normal;
-            direction: ltr;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            text-rendering: optimizeLegibility;
-            font-feature-settings: 'liga';
-        }
-
-        .variables-list {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-md, 16px);
-        }
-
-        .variable-item {
-            display: flex;
-            gap: var(--spacing-sm, 8px);
-            padding: var(--spacing-md, 16px);
-            background-color: var(--md-sys-color-surface-variant, #F5F2EA);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-        }
-
-        .drag-handle {
-            display: flex;
-            align-items: center;
-            cursor: grab;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            padding: var(--spacing-xs, 4px);
-        }
-
-        .drag-handle:active {
-            cursor: grabbing;
-        }
-
-        .variable-fields {
-            flex: 1;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: var(--spacing-sm, 8px);
-        }
-
-        .field {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-xxs, 2px);
-        }
-
-        .field.full-width {
-            grid-column: 1 / -1;
-        }
-
-        .field-label {
-            font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-        }
-
-        input, select {
-            padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            border-radius: var(--md-sys-shape-corner-xs, 4px);
-            font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: 0.875rem;
-            color: var(--md-sys-color-on-surface, #121714);
-            background-color: var(--md-sys-color-surface, #FDFBF7);
-            transition: border-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--md-sys-color-primary, #282828);
-        }
-
-        input[readonly] {
-            background-color: color-mix(in srgb, var(--md-sys-color-surface-variant, #F5F2EA) 50%, transparent);
-            cursor: not-allowed;
-        }
-
-        .name-prefix {
-            display: inline-block;
-            font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
-            font-size: 0.8125rem;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            margin-right: var(--spacing-xxs, 2px);
-        }
-
-        .toggle-options {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: var(--spacing-sm, 8px);
-            grid-column: 1 / -1;
-        }
-
-        .remove-button {
-            display: flex;
-            align-items: flex-start;
-            padding-top: 20px;
-        }
-
-        .icon-button {
-            background: none;
-            border: none;
-            padding: var(--spacing-xs, 4px);
-            cursor: pointer;
-            color: var(--md-sys-color-error, #FF0101);
-            border-radius: var(--md-sys-shape-corner-xs, 4px);
-            transition: background-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        .icon-button:hover {
-            background-color: color-mix(in srgb, var(--md-sys-color-error, #FF0101) 10%, transparent);
-        }
-
-        .add-button {
-            margin-top: var(--spacing-md, 16px);
-            padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
-            background-color: transparent;
-            border: 1px solid var(--md-sys-color-primary, #282828);
-            color: var(--md-sys-color-primary, #282828);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-            font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: 0.875rem;
-            font-weight: 500;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: var(--spacing-xs, 4px);
-            transition: all var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        .add-button:hover {
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 10%, transparent);
-        }
-    `);
 customElements.define("wy-variable-editor", WyVariableEditor);
 
 // components/ui/wy-reference-image-editor.js
@@ -5448,6 +4616,10 @@ var WyReferenceImageEditor = class extends i4 {
   constructor() {
     super();
     this.referenceImages = [];
+  }
+  // Light DOM: styles live in admin.css (scoped under this element tag).
+  createRenderRoot() {
+    return this;
   }
   _emitChange() {
     this.dispatchEvent(new CustomEvent("change", {
@@ -5585,163 +4757,6 @@ var WyReferenceImageEditor = class extends i4 {
 __publicField(WyReferenceImageEditor, "properties", {
   referenceImages: { type: Array }
 });
-__publicField(WyReferenceImageEditor, "styles", i`
-        :host {
-            display: block;
-            width: 100%;
-        }
-
-        .material-symbols-outlined {
-            font-family: 'Material Symbols Outlined';
-            font-size: 20px;
-            font-weight: normal;
-            font-style: normal;
-            line-height: 1;
-            letter-spacing: normal;
-            text-transform: none;
-            display: inline-block;
-            white-space: nowrap;
-            word-wrap: normal;
-            direction: ltr;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            text-rendering: optimizeLegibility;
-            font-feature-settings: 'liga';
-        }
-
-        .refs-list {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-md, 16px);
-        }
-
-        .ref-item {
-            padding: var(--spacing-md, 16px);
-            background-color: var(--md-sys-color-surface-variant, #F5F2EA);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-        }
-
-        .ref-item-header {
-            display: flex;
-            gap: var(--spacing-sm, 8px);
-            align-items: flex-start;
-            margin-bottom: var(--spacing-sm, 8px);
-        }
-
-        .ref-fields {
-            flex: 1;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: var(--spacing-sm, 8px);
-        }
-
-        .field {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-xxs, 2px);
-        }
-
-        .field-label {
-            font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-        }
-
-        input,
-        textarea {
-            padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            border-radius: var(--md-sys-shape-corner-xs, 4px);
-            font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: 0.875rem;
-            color: var(--md-sys-color-on-surface, #121714);
-            background-color: var(--md-sys-color-surface, #FDFBF7);
-            transition: border-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        textarea {
-            min-height: 84px;
-            resize: vertical;
-            line-height: 1.5;
-        }
-
-        input:focus,
-        textarea:focus {
-            outline: none;
-            border-color: var(--md-sys-color-primary, #282828);
-        }
-
-        input.invalid {
-            border-color: var(--md-sys-color-error, #FF0101);
-        }
-
-        .placeholder-hint {
-            margin-top: var(--spacing-xs, 4px);
-            font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
-            font-size: 0.8125rem;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-        }
-
-        .placeholder-hint.has-value {
-            color: var(--md-sys-color-primary, #282828);
-        }
-
-        .validation-error {
-            font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: 0.75rem;
-            color: var(--md-sys-color-error, #FF0101);
-            margin-top: var(--spacing-xxs, 2px);
-        }
-
-        .remove-button {
-            display: flex;
-            align-items: flex-start;
-            flex-shrink: 0;
-        }
-
-        .icon-button {
-            background: none;
-            border: none;
-            padding: var(--spacing-xs, 4px);
-            cursor: pointer;
-            color: var(--md-sys-color-error, #FF0101);
-            border-radius: var(--md-sys-shape-corner-xs, 4px);
-            transition: background-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        .icon-button:hover {
-            background-color: color-mix(in srgb, var(--md-sys-color-error, #FF0101) 10%, transparent);
-        }
-
-        .upload-section {
-            margin-top: var(--spacing-sm, 8px);
-        }
-
-        .add-button {
-            margin-top: var(--spacing-md, 16px);
-            padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
-            background-color: transparent;
-            border: 1px solid var(--md-sys-color-primary, #282828);
-            color: var(--md-sys-color-primary, #282828);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-            font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: 0.875rem;
-            font-weight: 500;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: var(--spacing-xs, 4px);
-            transition: all var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        .add-button:hover {
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 10%, transparent);
-        }
-    `);
 customElements.define("wy-reference-image-editor", WyReferenceImageEditor);
 
 // components/ui/wy-variation-editor.js
@@ -5750,30 +4765,65 @@ var WyVariationEditor = class extends i4 {
     super();
     this.variations = [];
     this.allowReorder = true;
-    this._expandedIndex = -1;
+    this._selectedIndex = 0;
+    this._listExpanded = false;
     this._expandedStepsByVariation = {};
+    this._dragIndex = null;
   }
-  _handleToggle(index) {
-    this._expandedIndex = this._expandedIndex === index ? -1 : index;
+  // Light DOM: styles live in admin.css (scoped under wy-variation-editor).
+  createRenderRoot() {
+    return this;
+  }
+  _toggleList() {
+    this._listExpanded = !this._listExpanded;
+  }
+  _selectVariation(index) {
+    this._selectedIndex = index;
+    this._listExpanded = false;
     this._notifyVariationExpand();
   }
   expandVariation(index) {
     if (index < 0 || index >= this.variations.length) return;
-    this._expandedIndex = index;
+    this._selectedIndex = index;
     this._notifyVariationExpand();
     this.requestUpdate();
   }
   getSectionElement(variationIndex, section = "variation") {
-    const card = this.shadowRoot?.querySelector(`.variation-card[data-variation-index="${variationIndex}"]`);
+    const card = this.querySelector(`.variation-card[data-variation-index="${variationIndex}"]`);
     if (!card || section === "variation") return card;
     return card.querySelector(`[data-vsection="${section}"]`) || card;
   }
   _notifyVariationExpand() {
     this.dispatchEvent(new CustomEvent("variation-expand", {
-      detail: { index: this._expandedIndex },
+      detail: { index: this._selectedIndex },
       bubbles: true,
       composed: true
     }));
+  }
+  // --- Drag reorder (selector list) ---
+  _onDragStart(e9, index) {
+    this._dragIndex = index;
+    e9.dataTransfer.effectAllowed = "move";
+  }
+  _onDragOver(e9) {
+    e9.preventDefault();
+    e9.dataTransfer.dropEffect = "move";
+  }
+  _onDrop(e9, index) {
+    e9.preventDefault();
+    const from = this._dragIndex;
+    this._dragIndex = null;
+    if (from === null || from === index) return;
+    const selectedVariation = this.variations[this._selectedIndex];
+    const updated = [...this.variations];
+    const [moved] = updated.splice(from, 1);
+    updated.splice(index, 0, moved);
+    this._selectedIndex = updated.indexOf(selectedVariation);
+    this._notifyChange(updated);
+    this._notifyVariationExpand();
+  }
+  _onDragEnd() {
+    this._dragIndex = null;
   }
   _handleFieldChange(index, field, value) {
     const updatedVariations = [...this.variations];
@@ -5924,13 +4974,19 @@ var WyVariationEditor = class extends i4 {
     if (index === 0) return;
     const updatedVariations = [...this.variations];
     [updatedVariations[index - 1], updatedVariations[index]] = [updatedVariations[index], updatedVariations[index - 1]];
+    if (this._selectedIndex === index) this._selectedIndex = index - 1;
+    else if (this._selectedIndex === index - 1) this._selectedIndex = index;
     this._notifyChange(updatedVariations);
+    this._notifyVariationExpand();
   }
   _handleMoveDown(index) {
     if (index === this.variations.length - 1) return;
     const updatedVariations = [...this.variations];
     [updatedVariations[index], updatedVariations[index + 1]] = [updatedVariations[index + 1], updatedVariations[index]];
+    if (this._selectedIndex === index) this._selectedIndex = index + 1;
+    else if (this._selectedIndex === index + 1) this._selectedIndex = index;
     this._notifyChange(updatedVariations);
+    this._notifyVariationExpand();
   }
   _handleDelete(index) {
     if (this.variations.length === 1) {
@@ -5943,12 +4999,14 @@ var WyVariationEditor = class extends i4 {
 This action cannot be undone.`;
     if (confirm(confirmMessage)) {
       const updatedVariations = this.variations.filter((_3, i6) => i6 !== index);
-      this._notifyChange(updatedVariations);
-      if (this._expandedIndex === index) {
-        this._expandedIndex = -1;
-      } else if (this._expandedIndex > index) {
-        this._expandedIndex--;
+      if (this._selectedIndex >= index && this._selectedIndex > 0) {
+        this._selectedIndex--;
       }
+      if (this._selectedIndex > updatedVariations.length - 1) {
+        this._selectedIndex = updatedVariations.length - 1;
+      }
+      this._notifyChange(updatedVariations);
+      this._notifyVariationExpand();
     }
   }
   _handleAddVariation() {
@@ -5965,8 +5023,10 @@ This action cannot be undone.`;
         referenceImages: []
       }
     ];
+    this._selectedIndex = updatedVariations.length - 1;
+    this._listExpanded = false;
     this._notifyChange(updatedVariations);
-    this._expandedIndex = updatedVariations.length - 1;
+    this._notifyVariationExpand();
   }
   _notifyChange(updatedVariations) {
     this.dispatchEvent(new CustomEvent("change", {
@@ -5983,595 +5043,290 @@ This action cannot be undone.`;
     }));
   }
   _renderVariation(variation, index) {
-    const isExpanded = this._expandedIndex === index;
     const isFirst = index === 0;
     const isLast = index === this.variations.length - 1;
     const hasSteps = variation.steps && variation.steps.length > 0;
     const hasTemplate = variation.template || !hasSteps;
-    const variationMode = hasSteps ? "multi" : "single";
     const variableNames = (variation.variables || []).map((v3) => v3.name);
     return b2`
-            <div class="variation-card ${isExpanded ? "expanded" : ""}" data-variation-index="${index}">
+            <div class="variation-card expanded" data-variation-index="${index}">
                 <!-- Header -->
-                <div class="variation-header" @click="${() => this._handleToggle(index)}">
-                    ${this.allowReorder ? b2`
-                        <span class="material-symbols-outlined drag-handle">drag_indicator</span>
-                    ` : ""}
+                <div class="variation-header">
                     <h3 class="variation-title">${variation.name || "Unnamed Variation"}</h3>
                     ${hasSteps ? b2`
                         <span class="variation-badge">Multi-Step</span>
                     ` : ""}
-                    <span class="material-symbols-outlined collapse-icon">expand_more</span>
                 </div>
 
-                <!-- Content -->
-                <div class="variation-content">
-                    <div class="variation-content-inner">
-                        <div class="variation-fields">
-                            <!-- Variation Name -->
-                            <wy-form-field label="Variation Name" required>
-                                <input
-                                    type="text"
-                                    .value="${variation.name || ""}"
-                                    @input="${(e9) => this._handleFieldChange(index, "name", e9.target.value)}"
-                                    placeholder="e.g., Tina Barney Style Photo"
-                                    @click="${(e9) => e9.stopPropagation()}"
-                                >
-                            </wy-form-field>
+                <!-- Fields -->
+                <div class="variation-fields">
+                    <!-- Variation Name -->
+                    <wy-form-field label="Variation Name" required>
+                        <input
+                            type="text"
+                            .value="${variation.name || ""}"
+                            @input="${(e9) => this._handleFieldChange(index, "name", e9.target.value)}"
+                            placeholder="e.g., Tina Barney Style Photo"
+                        >
+                    </wy-form-field>
 
-                            <!-- Variation ID -->
-                            <wy-form-field 
-                                label="Variation ID" 
-                                description="Unique identifier (lowercase, no spaces)"
-                            >
-                                <input
-                                    type="text"
-                                    .value="${variation.id || ""}"
-                                    @input="${(e9) => this._handleFieldChange(index, "id", e9.target.value)}"
-                                    placeholder="e.g., tina-barney"
-                                    @click="${(e9) => e9.stopPropagation()}"
-                                >
-                            </wy-form-field>
+                    <!-- Variation ID -->
+                    <wy-form-field
+                        label="Variation ID"
+                        description="Unique identifier (lowercase, no spaces)"
+                    >
+                        <input
+                            type="text"
+                            .value="${variation.id || ""}"
+                            @input="${(e9) => this._handleFieldChange(index, "id", e9.target.value)}"
+                            placeholder="e.g., tina-barney"
+                        >
+                    </wy-form-field>
 
-                            <!-- Variation Description -->
-                            <wy-form-field label="Description" data-vsection="description">
-                                <textarea
-                                    rows="3"
-                                    .value="${variation.description || ""}"
-                                    @input="${(e9) => this._handleFieldChange(index, "description", e9.target.value)}"
-                                    placeholder="Description shown in variation selector"
-                                    @click="${(e9) => e9.stopPropagation()}"
-                                ></textarea>
-                            </wy-form-field>
+                    <!-- Variation Description -->
+                    <wy-form-field label="Description" data-vsection="description">
+                        <textarea
+                            rows="3"
+                            .value="${variation.description || ""}"
+                            @input="${(e9) => this._handleFieldChange(index, "description", e9.target.value)}"
+                            placeholder="Description shown in variation selector"
+                        ></textarea>
+                    </wy-form-field>
 
-                            <!-- Variation Instructions -->
-                            <wy-form-field
-                                data-vsection="instructions"
-                                label="Instructions"
-                                description="Optional usage notes shown with this variant. Supports lightweight Markdown such as **bold** and lists."
-                            >
-                                <textarea
-                                    rows="4"
-                                    .value="${variation.instructions || ""}"
-                                    @input="${(e9) => this._handleFieldChange(index, "instructions", e9.target.value)}"
-                                    placeholder="e.g., Upload with this variant:&#10;1. Your artwork&#10;2. The reference image"
-                                    @click="${(e9) => e9.stopPropagation()}"
-                                ></textarea>
-                            </wy-form-field>
+                    <!-- Variation Instructions -->
+                    <wy-form-field
+                        data-vsection="instructions"
+                        label="Instructions"
+                        description="Optional usage notes shown with this variant. Supports lightweight Markdown such as **bold** and lists."
+                    >
+                        <textarea
+                            rows="4"
+                            .value="${variation.instructions || ""}"
+                            @input="${(e9) => this._handleFieldChange(index, "instructions", e9.target.value)}"
+                            placeholder="e.g., Upload with this variant:&#10;1. Your artwork&#10;2. The reference image"
+                        ></textarea>
+                    </wy-form-field>
 
-                            <div data-vsection="image" @click="${(e9) => e9.stopPropagation()}">
-                                <wy-image-upload
-                                    label="Variation Image"
-                                    .value="${variation.image || ""}"
-                                    @change="${(e9) => this._handleImageChange(index, e9)}"
-                                    @remove="${() => this._handleImageRemove(index)}"
-                                ></wy-image-upload>
-                            </div>
-
-                            <!-- Mode Toggle -->
-                            <div class="mode-toggle" @click="${(e9) => e9.stopPropagation()}">
-                                <label>
-                                    <input 
-                                        type="radio" 
-                                        name="mode-${index}" 
-                                        value="single" 
-                                        ?checked="${variationMode === "single"}"
-                                        @change="${() => this._handleModeChange(index, "single")}"
-                                    >
-                                    Template
-                                </label>
-                                <label>
-                                    <input 
-                                        type="radio" 
-                                        name="mode-${index}" 
-                                        value="multi" 
-                                        ?checked="${variationMode === "multi"}"
-                                        @change="${() => this._handleModeChange(index, "multi")}"
-                                    >
-                                    Multi-Step
-                                </label>
-                            </div>
-
-                            ${hasTemplate && !hasSteps ? b2`
-                                <!-- Template Mode -->
-                                <div class="section-divider"></div>
-                                
-                                <!-- Variables -->
-                                <div class="field-group" data-vsection="variables">
-                                    <label class="field-label">Variables</label>
-                                    <p class="field-description">
-                                        Define input fields for this variation
-                                    </p>
-                                    <wy-variable-editor
-                                        .variables="${variation.variables || []}"
-                                        @change="${(e9) => this._handleVariableChange(index, e9)}"
-                                        @click="${(e9) => e9.stopPropagation()}"
-                                    ></wy-variable-editor>
-                                </div>
-
-                                <!-- Reference Images -->
-                                <div class="field-group" data-vsection="reference-images" @click="${(e9) => e9.stopPropagation()}">
-                                    <label class="field-label">Reference Images</label>
-                                    <p class="field-description">
-                                        Upload images and reference them with {{variable_name}}. URLs are substituted when the prompt is copied.
-                                    </p>
-                                    <wy-reference-image-editor
-                                        .referenceImages="${variation.referenceImages || []}"
-                                        @change="${(e9) => this._handleRefImageListChange(index, e9)}"
-                                        @reference-image-upload="${(e9) => this._handleRefImageChange(index, e9)}"
-                                        @reference-image-remove="${(e9) => this._handleRefImageRemove(index, e9)}"
-                                    ></wy-reference-image-editor>
-                                </div>
-
-                                <!-- Template -->
-                                <div class="field-group" data-vsection="template">
-                                    <label class="field-label">Template</label>
-                                    <p class="field-description">
-                                        Prompt template for this variation. Use {{variable-name}} for substitutions.
-                                    </p>
-                                    <wy-code-textarea
-                                        .value="${variation.template || ""}"
-                                        .variables="${variableNames}"
-                                        placeholder="Enter your prompt template here..."
-                                        rows="12"
-                                        @value-input="${(e9) => this._handleTemplateChange(index, e9)}"
-                                        @click="${(e9) => e9.stopPropagation()}"
-                                    ></wy-code-textarea>
-                                </div>
-                            ` : ""}
-
-                            ${hasSteps ? b2`
-                                <!-- Multi-Step Mode -->
-                                <div class="section-divider"></div>
-                                
-                                <div class="field-group" data-vsection="steps">
-                                    <label class="field-label">Steps</label>
-                                    <p class="field-description">
-                                        Define the sequence of prompts for this variation
-                                    </p>
-                                    <div class="steps-section" @click="${(e9) => e9.stopPropagation()}">
-                                        ${variation.steps.map((step, stepIndex) => {
-      const expandedSteps = this._expandedStepsByVariation[index] || [];
-      const isExpanded2 = expandedSteps.includes(stepIndex);
-      return b2`
-                                            <wy-step-editor
-                                                .step="${step}"
-                                                .index="${stepIndex}"
-                                                .total="${variation.steps.length}"
-                                                .expanded="${isExpanded2}"
-                                                @step-change="${(e9) => this._handleStepChange(index, e9)}"
-                                                @step-delete="${(e9) => this._handleStepDelete(index, e9)}"
-                                                @step-move-up="${(e9) => this._handleStepMoveUp(index, e9)}"
-                                                @step-move-down="${(e9) => this._handleStepMoveDown(index, e9)}"
-                                                @step-toggle="${(e9) => this._handleStepToggle(index, e9)}"
-                                            ></wy-step-editor>
-                                        `;
-    })}
-                                        <button 
-                                            class="add-step-button" 
-                                            @click="${() => this._handleAddStep(index)}"
-                                        >
-                                            <span class="material-symbols-outlined">add</span>
-                                            Add Step
-                                        </button>
-                                    </div>
-                                </div>
-                            ` : ""}
-                        </div>
-
-                        <!-- Variation Controls -->
-                        <div class="variation-controls" @click="${(e9) => e9.stopPropagation()}">
-                            ${this.allowReorder ? b2`
-                                <button
-                                    class="control-button"
-                                    @click="${() => this._handleMoveUp(index)}"
-                                    ?disabled="${isFirst}"
-                                    title="Move variation up"
-                                >
-                                    <span class="material-symbols-outlined">arrow_upward</span>
-                                    Move Up
-                                </button>
-                                <button
-                                    class="control-button"
-                                    @click="${() => this._handleMoveDown(index)}"
-                                    ?disabled="${isLast}"
-                                    title="Move variation down"
-                                >
-                                    <span class="material-symbols-outlined">arrow_downward</span>
-                                    Move Down
-                                </button>
-                            ` : ""}
-                            <button
-                                class="control-button delete"
-                                @click="${() => this._handleDelete(index)}"
-                                ?disabled="${this.variations.length === 1}"
-                                title="Delete variation"
-                            >
-                                <span class="material-symbols-outlined">delete</span>
-                                Delete Variation
-                            </button>
-                        </div>
+                    <div data-vsection="image">
+                        <wy-image-upload
+                            label="Variation Image"
+                            .value="${variation.image || ""}"
+                            @change="${(e9) => this._handleImageChange(index, e9)}"
+                            @remove="${() => this._handleImageRemove(index)}"
+                        ></wy-image-upload>
                     </div>
+
+                    <!-- Mode Toggle -->
+                    <div class="mode-toggle">
+                        <label>
+                            <input
+                                type="radio"
+                                name="mode-${index}"
+                                value="single"
+                                ?checked="${!hasSteps}"
+                                @change="${() => this._handleModeChange(index, "single")}"
+                            >
+                            Template
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                name="mode-${index}"
+                                value="multi"
+                                ?checked="${hasSteps}"
+                                @change="${() => this._handleModeChange(index, "multi")}"
+                            >
+                            Multi-Step
+                        </label>
+                    </div>
+
+                    ${hasTemplate && !hasSteps ? b2`
+                        <!-- Template Mode -->
+                        <div class="section-divider"></div>
+
+                        <!-- Variables -->
+                        <div class="field-group" data-vsection="variables">
+                            <label class="field-label">Variables</label>
+                            <p class="field-description">
+                                Define input fields for this variation
+                            </p>
+                            <wy-variable-editor
+                                .variables="${variation.variables || []}"
+                                @change="${(e9) => this._handleVariableChange(index, e9)}"
+                            ></wy-variable-editor>
+                        </div>
+
+                        <!-- Reference Images -->
+                        <div class="field-group" data-vsection="reference-images">
+                            <label class="field-label">Reference Images</label>
+                            <p class="field-description">
+                                Upload images and reference them with {{variable_name}}. URLs are substituted when the prompt is copied.
+                            </p>
+                            <wy-reference-image-editor
+                                .referenceImages="${variation.referenceImages || []}"
+                                @change="${(e9) => this._handleRefImageListChange(index, e9)}"
+                                @reference-image-upload="${(e9) => this._handleRefImageChange(index, e9)}"
+                                @reference-image-remove="${(e9) => this._handleRefImageRemove(index, e9)}"
+                            ></wy-reference-image-editor>
+                        </div>
+
+                        <!-- Template -->
+                        <div class="field-group" data-vsection="template">
+                            <label class="field-label">Template</label>
+                            <p class="field-description">
+                                Prompt template for this variation. Use {{variable-name}} for substitutions.
+                            </p>
+                            <wy-code-textarea
+                                .value="${variation.template || ""}"
+                                .variables="${variableNames}"
+                                placeholder="Enter your prompt template here..."
+                                rows="12"
+                                @value-input="${(e9) => this._handleTemplateChange(index, e9)}"
+                            ></wy-code-textarea>
+                        </div>
+                    ` : ""}
+
+                    ${hasSteps ? b2`
+                        <!-- Multi-Step Mode -->
+                        <div class="section-divider"></div>
+
+                        <div class="field-group" data-vsection="steps">
+                            <label class="field-label">Steps</label>
+                            <p class="field-description">
+                                Define the sequence of prompts for this variation
+                            </p>
+                            <div class="steps-section">
+                                ${variation.steps.map((step, stepIndex) => {
+      const expandedSteps = this._expandedStepsByVariation[index] || [];
+      const isExpanded = expandedSteps.includes(stepIndex);
+      return b2`
+                                    <wy-step-editor
+                                        .step="${step}"
+                                        .index="${stepIndex}"
+                                        .total="${variation.steps.length}"
+                                        .expanded="${isExpanded}"
+                                        @step-change="${(e9) => this._handleStepChange(index, e9)}"
+                                        @step-delete="${(e9) => this._handleStepDelete(index, e9)}"
+                                        @step-move-up="${(e9) => this._handleStepMoveUp(index, e9)}"
+                                        @step-move-down="${(e9) => this._handleStepMoveDown(index, e9)}"
+                                        @step-toggle="${(e9) => this._handleStepToggle(index, e9)}"
+                                    ></wy-step-editor>
+                                `;
+    })}
+                                <button
+                                    class="add-step-button"
+                                    @click="${() => this._handleAddStep(index)}"
+                                >
+                                    <span class="material-symbols-outlined">add</span>
+                                    Add Step
+                                </button>
+                            </div>
+                        </div>
+                    ` : ""}
+                </div>
+
+                <!-- Variation Controls -->
+                <div class="variation-controls">
+                    ${this.allowReorder ? b2`
+                        <button
+                            class="control-button"
+                            @click="${() => this._handleMoveUp(index)}"
+                            ?disabled="${isFirst}"
+                            title="Move variation up"
+                        >
+                            <span class="material-symbols-outlined">arrow_upward</span>
+                            Move Up
+                        </button>
+                        <button
+                            class="control-button"
+                            @click="${() => this._handleMoveDown(index)}"
+                            ?disabled="${isLast}"
+                            title="Move variation down"
+                        >
+                            <span class="material-symbols-outlined">arrow_downward</span>
+                            Move Down
+                        </button>
+                    ` : ""}
+                    <button
+                        class="control-button delete"
+                        @click="${() => this._handleDelete(index)}"
+                        ?disabled="${this.variations.length === 1}"
+                        title="Delete variation"
+                    >
+                        <span class="material-symbols-outlined">delete</span>
+                        Delete Variation
+                    </button>
                 </div>
             </div>
         `;
   }
   render() {
+    const count = this.variations?.length || 0;
+    const selectedIndex = Math.min(Math.max(this._selectedIndex, 0), Math.max(0, count - 1));
+    const selected = count > 0 ? this.variations[selectedIndex] : null;
+    const selectedHasSteps = selected?.steps && selected.steps.length > 0;
     return b2`
-            <div class="variations-list">
-                ${this.variations.map(
-      (variation, index) => this._renderVariation(variation, index)
-    )}
+            <div class="variation-selector ${this._listExpanded ? "expanded" : ""}">
+                <button
+                    type="button"
+                    class="variation-selector-toggle"
+                    @click="${this._toggleList}"
+                    aria-expanded="${this._listExpanded ? "true" : "false"}"
+                >
+                    <span class="variation-selector-eyebrow">Editing variant</span>
+                    <span class="variation-selector-current">
+                        ${selected?.name || "Unnamed Variation"}
+                        ${selectedHasSteps ? b2`<span class="variation-badge">Multi-Step</span>` : ""}
+                    </span>
+                    <span class="variation-selector-meta">${selectedIndex + 1} / ${count}</span>
+                    <span class="material-symbols-outlined variation-selector-chevron">expand_more</span>
+                </button>
+
+                ${this._listExpanded ? b2`
+                    <div class="variation-selector-list" role="listbox">
+                        ${this.variations.map((variation, index) => b2`
+                            <div
+                                class="variation-row ${index === selectedIndex ? "selected" : ""}"
+                                role="option"
+                                aria-selected="${index === selectedIndex ? "true" : "false"}"
+                                draggable="${this.allowReorder ? "true" : "false"}"
+                                @dragstart="${(e9) => this._onDragStart(e9, index)}"
+                                @dragover="${this._onDragOver}"
+                                @drop="${(e9) => this._onDrop(e9, index)}"
+                                @dragend="${this._onDragEnd}"
+                                @click="${() => this._selectVariation(index)}"
+                            >
+                                ${this.allowReorder ? b2`
+                                    <span class="material-symbols-outlined variation-row-handle" title="Drag to reorder">drag_indicator</span>
+                                ` : ""}
+                                <span class="variation-row-title">${variation.name || "Unnamed Variation"}</span>
+                                ${variation.steps && variation.steps.length > 0 ? b2`
+                                    <span class="variation-badge">Multi-Step</span>
+                                ` : ""}
+                                ${index === selectedIndex ? b2`
+                                    <span class="material-symbols-outlined variation-row-check">check</span>
+                                ` : ""}
+                            </div>
+                        `)}
+                        <button class="add-variation-button" @click="${this._handleAddVariation}">
+                            <span class="material-symbols-outlined">add</span>
+                            Add Variation
+                        </button>
+                    </div>
+                ` : ""}
             </div>
-            <button class="add-variation-button" @click="${this._handleAddVariation}">
-                <span class="material-symbols-outlined">add</span>
-                Add Variation
-            </button>
+
+            ${selected ? this._renderVariation(selected, selectedIndex) : ""}
         `;
   }
 };
 __publicField(WyVariationEditor, "properties", {
   variations: { type: Array },
   allowReorder: { type: Boolean, attribute: "allow-reorder" },
-  _expandedIndex: { type: Number, state: true },
+  _selectedIndex: { type: Number, state: true },
+  _listExpanded: { type: Boolean, state: true },
   _expandedStepsByVariation: { type: Object, state: true }
 });
-__publicField(WyVariationEditor, "styles", i`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1');
-
-        :host {
-            display: block;
-        }
-
-        .material-symbols-outlined {
-            font-family: 'Material Symbols Outlined';
-            font-size: 20px;
-        }
-
-        .variations-list {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-md, 16px);
-        }
-
-        .variation-card {
-            background-color: var(--field-bg, #FBF9F4);
-            border-radius: var(--radius-2, 10px);
-            border: 0;
-            overflow: hidden;
-            transition:
-                box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
-        }
-
-        .variation-card.expanded {
-            box-shadow: 0 8px 22px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
-        }
-
-        .variation-header {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm, 8px);
-            padding: 14px 16px;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            user-select: none;
-        }
-
-        .variation-header::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-color: var(--md-sys-color-primary, #282828);
-            opacity: 0;
-            transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-            pointer-events: none;
-        }
-
-        .variation-header:hover::before {
-            opacity: var(--md-sys-state-hover-opacity, 0.08);
-        }
-
-        .drag-handle {
-            flex-shrink: 0;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            cursor: grab;
-        }
-
-        .drag-handle:active {
-            cursor: grabbing;
-        }
-
-        .variation-title {
-            flex: 1;
-            font-family: var(--font-serif, 'Playfair Display', serif);
-            font-size: 1.0625rem;
-            font-weight: 600;
-            color: var(--md-sys-color-on-surface, #121714);
-            margin: 0;
-        }
-
-        .variation-badge {
-            flex-shrink: 0;
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.6875rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
-            background-color: color-mix(in srgb, var(--accent-terracotta, #C18A4D) 22%, transparent);
-            color: color-mix(in srgb, var(--accent-rust, #C06F45) 78%, var(--ink, #1A1A1A));
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-        }
-
-        .collapse-icon {
-            flex-shrink: 0;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            transition: transform var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        .variation-card.expanded .collapse-icon {
-            transform: rotate(180deg);
-        }
-
-        .variation-content {
-            display: grid;
-            grid-template-rows: 0fr;
-            transition: grid-template-rows var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        .variation-card.expanded .variation-content {
-            grid-template-rows: 1fr;
-        }
-
-        .variation-content-inner {
-            overflow: hidden;
-        }
-
-        .variation-fields {
-            padding: 4px var(--spacing-md, 16px) var(--spacing-md, 16px);
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-lg, 24px);
-        }
-
-        .mode-toggle {
-            display: inline-flex;
-            gap: var(--spacing-xs, 4px);
-            padding: var(--spacing-xs, 4px);
-            background-color: var(--paper-deep, #EEE8DD);
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-        }
-
-        .mode-toggle label {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs, 4px);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.8125rem;
-            font-weight: 600;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-            padding: 0.5rem 1.1rem;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .mode-toggle input[type="radio"] {
-            position: absolute;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .mode-toggle label:has(input:checked) {
-            background: var(--md-sys-color-primary, #282828);
-            color: var(--md-sys-color-on-primary, #FFF);
-        }
-
-        .steps-section {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-md, 16px);
-        }
-
-        .add-step-button {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--spacing-xs, 4px);
-            padding: var(--spacing-sm, 8px);
-            background: transparent;
-            border: 0;
-            border-radius: var(--radius-2, 10px);
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 10%, transparent);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        .add-step-button::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-color: var(--md-sys-color-primary, #282828);
-            opacity: 0;
-            transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-            pointer-events: none;
-        }
-
-        .add-step-button:hover {
-            border-color: var(--md-sys-color-primary, #282828);
-            color: var(--md-sys-color-primary, #282828);
-        }
-
-        .add-step-button:hover::before {
-            opacity: var(--md-sys-state-hover-opacity, 0.08);
-        }
-
-        .variation-controls {
-            display: flex;
-            gap: var(--spacing-xs, 4px);
-            padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 3.5%, transparent);
-            box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
-        }
-
-        .control-button {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs, 4px);
-            padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
-            background: color-mix(in srgb, var(--ink, #1A1A1A) 4%, transparent);
-            border: 0;
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.8125rem;
-            font-weight: 600;
-            color: var(--md-sys-color-on-surface, #121714);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .control-button::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-color: var(--md-sys-color-on-surface, #121714);
-            opacity: 0;
-            transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-            pointer-events: none;
-        }
-
-        .control-button:hover::before {
-            opacity: var(--md-sys-state-hover-opacity, 0.08);
-        }
-
-        .control-button:focus-visible {
-            outline: 3px solid var(--md-sys-color-primary, #282828);
-            outline-offset: 2px;
-        }
-
-        .control-button:disabled {
-            opacity: var(--md-sys-state-disabled-opacity, 0.38);
-            cursor: not-allowed;
-        }
-
-        .control-button.delete {
-            margin-left: auto;
-            color: var(--md-sys-color-error, #BA1A1A);
-        }
-
-        .control-button.delete::before {
-            background-color: var(--md-sys-color-error, #BA1A1A);
-        }
-
-        .control-button .material-symbols-outlined {
-            font-size: 18px;
-        }
-
-        .add-variation-button {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--spacing-xs, 4px);
-            padding: var(--spacing-md, 16px);
-            background: transparent;
-            border: 0;
-            border-radius: var(--radius-2, 10px);
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 10%, transparent);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.9375rem;
-            font-weight: 500;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            margin-top: var(--spacing-md, 16px);
-            transition: all var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        .add-variation-button::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-color: var(--md-sys-color-primary, #282828);
-            opacity: 0;
-            transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-            pointer-events: none;
-        }
-
-        .add-variation-button:hover {
-            border-color: var(--md-sys-color-primary, #282828);
-            color: var(--md-sys-color-primary, #282828);
-        }
-
-        .add-variation-button:hover::before {
-            opacity: var(--md-sys-state-hover-opacity, 0.08);
-        }
-
-        .add-variation-button .material-symbols-outlined {
-            font-size: 24px;
-        }
-
-        .field-group {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-xs, 4px);
-        }
-
-        .field-label {
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.6875rem;
-            font-weight: 700;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-        }
-
-        .field-description {
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.8125rem;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            margin-top: calc(-1 * var(--spacing-xs, 4px));
-        }
-
-        .section-divider {
-            height: 1px;
-            background-color: var(--md-sys-color-outline-variant, #DDD);
-            margin: var(--spacing-md, 16px) 0;
-        }
-    `);
 customElements.define("wy-variation-editor", WyVariationEditor);
 
 // components/ui/wy-prompt-editor.js
@@ -6633,6 +5388,10 @@ var WyPromptEditor = class extends i4 {
     if (changedProperties.has("heroImageMasterPrompt") && this._editedPrompt && !this._heroPromptDirty) {
       this._heroPrompt = this._buildHeroImagePrompt();
     }
+  }
+  // Light DOM: styles live in admin.css (scoped under wy-prompt-editor).
+  createRenderRoot() {
+    return this;
   }
   _generateSlug(title) {
     return title.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
@@ -6716,11 +5475,11 @@ ${subjectPrompt}`
     }
   }
   _getTextareaValue(codeTextarea) {
-    const textarea = codeTextarea?.shadowRoot?.querySelector("textarea");
+    const textarea = codeTextarea?.querySelector("textarea");
     return textarea ? textarea.value : null;
   }
   _syncStandardTemplateForSave() {
-    const codeTextarea = this.shadowRoot.querySelector("wy-code-textarea");
+    const codeTextarea = this.querySelector("wy-code-textarea");
     const value = this._getTextareaValue(codeTextarea);
     if (value !== null) {
       this._editedPrompt.template = value;
@@ -6729,7 +5488,7 @@ ${subjectPrompt}`
   _syncStepTemplatesForSave(stepEditors, steps) {
     if (!stepEditors || !steps) return;
     stepEditors.forEach((stepEditor, index) => {
-      const codeTextarea = stepEditor.shadowRoot?.querySelector("wy-code-textarea");
+      const codeTextarea = stepEditor.querySelector("wy-code-textarea");
       const value = this._getTextareaValue(codeTextarea);
       if (value !== null && steps[index]) {
         steps[index].template = value;
@@ -6737,11 +5496,12 @@ ${subjectPrompt}`
     });
   }
   _syncVariationTemplatesForSave() {
-    const variationEditor = this.shadowRoot.querySelector("wy-variation-editor");
+    const variationEditor = this.querySelector("wy-variation-editor");
     const variations = this._editedPrompt?.variations;
     if (!variationEditor || !variations) return;
-    const variationCards = variationEditor.shadowRoot?.querySelectorAll(".variation-card") || [];
-    variationCards.forEach((card, index) => {
+    const variationCards = variationEditor.querySelectorAll(".variation-card") || [];
+    variationCards.forEach((card) => {
+      const index = Number(card.dataset.variationIndex);
       const variation = variations[index];
       if (!variation) return;
       if (variation.steps && variation.steps.length > 0) {
@@ -6761,7 +5521,7 @@ ${subjectPrompt}`
       this._syncVariationTemplatesForSave();
     } else if (this._promptMode === "multi") {
       this._syncStepTemplatesForSave(
-        this.shadowRoot.querySelectorAll("wy-step-editor"),
+        this.querySelectorAll("wy-step-editor"),
         this._editedPrompt.steps
       );
     } else {
@@ -7188,7 +5948,10 @@ ${subjectPrompt}`
     ];
     if (this._editedPrompt.variations?.length) {
       items.push({ id: "variations", label: "Variations" });
-      this._editedPrompt.variations.forEach((variation, index) => {
+      const activeIndex = this._openVariationIndex >= 0 ? this._openVariationIndex : 0;
+      const variation = this._editedPrompt.variations[activeIndex];
+      if (variation) {
+        const index = activeIndex;
         const id = `variation-${index}`;
         items.push({
           id,
@@ -7196,17 +5959,15 @@ ${subjectPrompt}`
           type: "variant",
           variationIndex: index
         });
-        if (index === this._openVariationIndex) {
-          const hasSteps = variation.steps && variation.steps.length > 0;
-          items.push({ id: `${id}-description`, label: "Description", type: "subitem", variationIndex: index, vsection: "description" });
-          items.push({ id: `${id}-instructions`, label: "Instructions", type: "subitem", variationIndex: index, vsection: "instructions" });
-          items.push({ id: `${id}-image`, label: "Image", type: "subitem", variationIndex: index, vsection: "image" });
-          items.push({ id: `${id}-${hasSteps ? "steps" : "variables"}`, label: hasSteps ? "Steps" : "Variables", type: "subitem", variationIndex: index, vsection: hasSteps ? "steps" : "variables" });
-          if (!hasSteps) {
-            items.push({ id: `${id}-template`, label: "Template", type: "subitem", variationIndex: index, vsection: "template" });
-          }
+        const hasSteps = variation.steps && variation.steps.length > 0;
+        items.push({ id: `${id}-description`, label: "Description", type: "subitem", variationIndex: index, vsection: "description" });
+        items.push({ id: `${id}-instructions`, label: "Instructions", type: "subitem", variationIndex: index, vsection: "instructions" });
+        items.push({ id: `${id}-image`, label: "Image", type: "subitem", variationIndex: index, vsection: "image" });
+        items.push({ id: `${id}-${hasSteps ? "steps" : "variables"}`, label: hasSteps ? "Steps" : "Variables", type: "subitem", variationIndex: index, vsection: hasSteps ? "steps" : "variables" });
+        if (!hasSteps) {
+          items.push({ id: `${id}-template`, label: "Template", type: "subitem", variationIndex: index, vsection: "template" });
         }
-      });
+      }
     } else {
       items.push({ id: "prompt-type", label: "Prompt Type" });
       if (this._promptMode === "single") {
@@ -7255,7 +6016,7 @@ ${subjectPrompt}`
     this._activeSection = item.id;
     this._navOpen = false;
     if (Number.isInteger(item.variationIndex)) {
-      const variationEditor = this.shadowRoot?.querySelector("wy-variation-editor");
+      const variationEditor = this.querySelector("wy-variation-editor");
       variationEditor?.expandVariation(item.variationIndex);
       this._openVariationIndex = item.variationIndex;
       await this.updateComplete;
@@ -7264,7 +6025,7 @@ ${subjectPrompt}`
       this._scrollTargetIntoView(target);
       return;
     }
-    this._scrollTargetIntoView(this.shadowRoot?.querySelector(`[data-section="${item.id}"]`));
+    this._scrollTargetIntoView(this.querySelector(`[data-section="${item.id}"]`));
   }
   _scrollTargetIntoView(target) {
     if (!target) return;
@@ -7317,8 +6078,8 @@ ${subjectPrompt}`
   }
   _handleWindowScroll() {
     if (!this._editedPrompt) return;
-    const sections = [...this.shadowRoot.querySelectorAll("[data-section]")].map((element) => ({ id: element.dataset.section, element }));
-    const variationEditor = this.shadowRoot?.querySelector("wy-variation-editor");
+    const sections = [...this.querySelectorAll("[data-section]")].map((element) => ({ id: element.dataset.section, element }));
+    const variationEditor = this.querySelector("wy-variation-editor");
     if (variationEditor && this._openVariationIndex >= 0) {
       ["description", "instructions", "image", "variables", "template", "steps"].forEach((section) => {
         const element = variationEditor.getSectionElement?.(this._openVariationIndex, section);
@@ -7839,979 +6600,6 @@ __publicField(WyPromptEditor, "properties", {
   _openVariationIndex: { type: Number, state: true },
   _isDirty: { type: Boolean, state: true }
 });
-__publicField(WyPromptEditor, "styles", i`
-        :host {
-            display: block;
-            width: 100%;
-        }
-
-        .material-symbols-outlined {
-            font-family: 'Material Symbols Outlined';
-            font-size: 20px;
-        }
-
-        .editor-layout {
-            display: grid;
-            grid-template-columns: minmax(190px, 240px) minmax(0, 1fr);
-            gap: var(--spacing-xl, 32px);
-            align-items: start;
-        }
-
-        .editor-form {
-            grid-column: 2;
-            grid-row: 2;
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-lg, 24px);
-            height: fit-content;
-        }
-
-        .editor-header {
-            padding-bottom: var(--spacing-md, 16px);
-            margin-bottom: var(--spacing-md, 16px);
-        }
-
-        .breadcrumbs {
-            font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: 0.875rem;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            margin-bottom: var(--spacing-sm, 8px);
-        }
-
-        .breadcrumbs a {
-            color: var(--md-sys-color-primary, #282828);
-            text-decoration: none;
-        }
-
-        .breadcrumbs a:hover {
-            text-decoration: underline;
-        }
-
-        h1 {
-            font-family: var(--font-serif, 'Playfair Display', serif);
-            font-size: 2rem;
-            font-weight: 600;
-            color: var(--md-sys-color-on-surface, #121714);
-            margin: 0 0 var(--spacing-xs, 4px) 0;
-        }
-
-        .subtitle {
-            font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: 1rem;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            margin-bottom: var(--spacing-md, 16px);
-        }
-
-        .info-banner {
-            padding: var(--spacing-md, 16px);
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 5%, transparent);
-            border-left: 4px solid var(--md-sys-color-primary, #282828);
-            border-radius: var(--md-sys-shape-corner-xs, 4px);
-            margin-bottom: var(--spacing-md, 16px);
-        }
-
-        .info-banner p {
-            font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: 0.875rem;
-            color: var(--md-sys-color-on-surface, #121714);
-            margin: 0;
-            line-height: 1.5;
-        }
-
-        .info-banner code {
-            font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
-            font-size: 0.8125rem;
-            padding: 2px 6px;
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 10%, transparent);
-            border-radius: var(--md-sys-shape-corner-xs, 4px);
-        }
-
-        .actions {
-            grid-column: 2;
-            grid-row: 1;
-            display: flex;
-            justify-content: flex-end;
-            gap: var(--spacing-sm, 8px);
-            margin: 0 0 var(--spacing-md, 16px) 0;
-            position: sticky;
-            top: var(--spacing-lg, 24px);
-            z-index: 5;
-            padding: var(--spacing-sm, 8px);
-            background-color: var(--md-sys-color-background, #FDFBF7);
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-        }
-
-        .button {
-            padding: var(--spacing-sm, 8px) var(--spacing-lg, 24px);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-            font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: 0.9375rem;
-            font-weight: 500;
-            cursor: pointer;
-            border: none;
-            transition: all var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        a.button {
-            text-decoration: none;
-        }
-
-        .button-secondary {
-            background-color: transparent;
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            color: var(--md-sys-color-on-surface, #121714);
-        }
-
-        .button-secondary:hover {
-            background-color: var(--md-sys-color-surface-variant, #F5F2EA);
-        }
-
-        .button-primary {
-            background-color: var(--md-sys-color-primary, #282828);
-            color: var(--md-sys-color-on-primary, #FFFFFF);
-        }
-
-        .button-primary:hover {
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 90%, black);
-        }
-
-        .card {
-            background-color: var(--md-sys-color-surface, #F5F2EA);
-            border-radius: var(--md-sys-shape-corner-large, 24px);
-            padding: var(--spacing-lg, 24px);
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-        }
-
-        .card-title {
-            font-family: var(--font-serif, 'Playfair Display', serif);
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--md-sys-color-on-surface, #121714);
-            margin: 0 0 var(--spacing-md, 16px) 0;
-        }
-
-        .editor-nav {
-            grid-column: 1;
-            grid-row: 1 / span 2;
-            position: sticky;
-            top: var(--spacing-lg, 24px);
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-sm, 8px);
-            padding: var(--spacing-md, 16px) 0;
-            border-top: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            border-bottom: 1px solid var(--md-sys-color-outline-variant, #DDD);
-        }
-
-        .editor-nav-toggle {
-            display: none;
-        }
-
-        .editor-nav-title {
-            margin: 0 0 var(--spacing-xs, 4px);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.6875rem;
-            font-weight: 700;
-            letter-spacing: 0.16em;
-            text-transform: uppercase;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-        }
-
-        .editor-nav-list {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .editor-nav-item {
-            width: 100%;
-            min-height: 32px;
-            padding: 6px 8px;
-            border: 0;
-            border-left: 2px solid transparent;
-            background: transparent;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            cursor: pointer;
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.875rem;
-            line-height: 1.25;
-            text-align: left;
-            transition:
-                border-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
-                color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
-                background-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        .editor-nav-item:hover {
-            color: var(--md-sys-color-on-surface, #121714);
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 5%, transparent);
-        }
-
-        .editor-nav-item.active {
-            color: var(--md-sys-color-primary, #282828);
-            border-left-color: var(--md-sys-color-primary, #282828);
-            font-weight: 600;
-        }
-
-        .editor-nav-item.subitem {
-            min-height: 28px;
-            padding-left: 20px;
-            font-size: 0.8125rem;
-        }
-
-        .editor-nav-item.variant {
-            font-family: var(--font-serif, 'Playfair Display', serif);
-            font-size: 0.9375rem;
-            color: var(--md-sys-color-on-surface, #121714);
-        }
-
-        .mode-toggle {
-            display: flex;
-            gap: var(--spacing-md, 16px);
-            padding: var(--spacing-md, 16px);
-            background-color: var(--md-sys-color-surface-variant, #F5F2EA);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-        }
-
-        .mode-toggle label {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs, 4px);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.9375rem;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .mode-toggle input[type="radio"] {
-            cursor: pointer;
-        }
-
-        .card-description {
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.9375rem;
-            line-height: 1.5;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            margin: 0 0 var(--spacing-md, 16px) 0;
-        }
-
-        .label {
-            font-family: var(--font-display, 'Playfair Display', serif);
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--md-sys-color-text-heading, #121714);
-            margin-bottom: var(--spacing-sm, 8px);
-            display: block;
-        }
-
-        .hero-generator {
-            display: flex;
-            flex-direction: column;
-            margin-top: var(--spacing-md, 16px);
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-            background: color-mix(in srgb, var(--paper, #F7F4EE) 42%, transparent);
-            overflow: hidden;
-        }
-
-        .prompt-image-card {
-            position: relative;
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-            padding: var(--spacing-sm, 8px);
-        }
-
-        .prompt-image-summary {
-            display: grid;
-            grid-template-columns: 132px minmax(0, 1fr);
-            gap: var(--spacing-sm, 8px);
-            align-items: center;
-            padding-right: 44px;
-            list-style: none;
-            cursor: pointer;
-        }
-
-        .prompt-image-summary::-webkit-details-marker {
-            display: none;
-        }
-
-        .prompt-image-summary:focus-visible {
-            outline: 2px solid var(--md-sys-color-primary, #282828);
-            outline-offset: 3px;
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-        }
-
-        .prompt-image-thumbnail {
-            width: 132px;
-            aspect-ratio: 16 / 9;
-            object-fit: cover;
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-        }
-
-        .prompt-image-copy {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            min-width: 0;
-            font-family: var(--font-body, 'Inter', sans-serif);
-        }
-
-        .prompt-image-title {
-            font-size: 0.875rem;
-            font-weight: 700;
-            color: var(--md-sys-color-on-surface, #121714);
-        }
-
-        .prompt-image-hint {
-            font-size: 0.75rem;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-        }
-
-        .prompt-image-expanded {
-            margin-top: var(--spacing-sm, 8px);
-            overflow: hidden;
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-        }
-
-        .prompt-image-expanded img {
-            display: block;
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            object-fit: cover;
-        }
-
-        .prompt-image-remove {
-            position: absolute;
-            top: var(--spacing-sm, 8px);
-            right: var(--spacing-sm, 8px);
-            width: 32px;
-            height: 32px;
-            padding: 0;
-            border: 0;
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-            background-color: var(--md-sys-color-error, #B3261E);
-            color: var(--md-sys-color-on-error, #FFF);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 8px color-mix(in srgb, var(--ink, #1A1A1A) 24%, transparent);
-        }
-
-        .prompt-image-remove .material-symbols-outlined {
-            font-size: 18px;
-            color: currentColor;
-        }
-
-        .hero-generator-summary {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: var(--spacing-md, 16px);
-            padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
-            list-style: none;
-            cursor: pointer;
-        }
-
-        .hero-generator-summary::-webkit-details-marker {
-            display: none;
-        }
-
-        .hero-generator-summary-text {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            min-width: 0;
-        }
-
-        .hero-generator-summary .material-symbols-outlined {
-            transition: transform var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        .hero-generator[open] .hero-generator-summary .material-symbols-outlined {
-            transform: rotate(180deg);
-        }
-
-        .hero-generator-body {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-sm, 8px);
-            padding: 0 var(--spacing-md, 16px) var(--spacing-md, 16px);
-        }
-
-        .hero-generator-header {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: var(--spacing-md, 16px);
-        }
-
-        .hero-generator-tools {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: flex-end;
-            gap: var(--spacing-xs, 4px);
-        }
-
-        .hero-generator-title {
-            font-family: var(--font-serif, 'Playfair Display', serif);
-            font-size: 0.9375rem;
-            font-weight: 600;
-            color: var(--md-sys-color-on-surface, #121714);
-            margin: 0;
-        }
-
-        .hero-provider-status {
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.75rem;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            margin: var(--spacing-xs, 4px) 0 0;
-        }
-
-        .hero-controls {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: var(--spacing-sm, 8px);
-        }
-
-        .hero-control-label {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-xs, 4px);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.8125rem;
-            font-weight: 600;
-            color: var(--md-sys-color-on-surface, #121714);
-        }
-
-        .hero-control-label select,
-        .hero-prompt-textarea {
-            width: 100%;
-            box-sizing: border-box;
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-            background-color: var(--md-sys-color-background, #FDFBF7);
-            color: var(--md-sys-color-on-surface, #121714);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.9375rem;
-        }
-
-        .hero-control-label select {
-            min-height: 40px;
-            padding: 0 var(--spacing-sm, 8px);
-        }
-
-        .hero-prompt-textarea {
-            min-height: 140px;
-            padding: var(--spacing-sm, 8px);
-            line-height: 1.45;
-            resize: vertical;
-        }
-
-        .hero-actions,
-        .hero-preview-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--spacing-sm, 8px);
-            align-items: center;
-        }
-
-        .hero-preview-shell {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-sm, 8px);
-        }
-
-        .hero-preview-image {
-            width: min(100%, 360px);
-            aspect-ratio: 16 / 9;
-            object-fit: cover;
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-        }
-
-        .hero-status-message,
-        .hero-error-message {
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.875rem;
-            line-height: 1.4;
-            margin: 0;
-        }
-
-        .hero-status-message {
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-        }
-
-        .hero-error-message {
-            color: var(--err, #B3261E);
-        }
-
-        .add-step-button {
-            width: 100%;
-            margin-top: var(--spacing-md, 16px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--spacing-xs, 4px);
-        }
-
-        .card-header-with-action {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: var(--spacing-md, 16px);
-            margin-bottom: var(--spacing-md, 16px);
-        }
-
-        .card-header-with-action > div {
-            flex: 1;
-        }
-
-        .button-ghost {
-            background: color-mix(in srgb, var(--ink, #1A1A1A) 5%, transparent);
-            border: 0;
-            color: var(--md-sys-color-primary, #282828);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .button-ghost::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-color: var(--md-sys-color-primary, #282828);
-            opacity: 0;
-            transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-            pointer-events: none;
-        }
-
-        .button-ghost:hover::before {
-            opacity: var(--md-sys-state-hover-opacity, 0.08);
-        }
-
-        .button-ghost:hover {
-            color: var(--md-sys-color-primary, #282828);
-        }
-
-        .button-small {
-            padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
-            font-size: 0.8125rem;
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs, 4px);
-            white-space: nowrap;
-        }
-
-        /* Refined admin polish layer */
-        .editor-layout {
-            grid-template-columns: 216px minmax(0, 1fr);
-            grid-template-rows: auto 1fr;
-            gap: 20px;
-            max-width: 1140px;
-            margin: 0 auto;
-            padding: 0px clamp(20px, 20px, 56px) 96px;
-        }
-
-        .actions {
-            grid-column: 1 / -1;
-            grid-row: 1;
-            align-items: center;
-            justify-content: space-between;
-            gap: var(--spacing-sm, 8px);
-            margin: 12px 0 28px;
-            top: 12px;
-            padding: 10px 12px 10px 18px;
-            background: color-mix(in srgb, var(--surface-2, #FFF) 86%, var(--paper, #F7F4EE));
-            backdrop-filter: blur(10px) saturate(120%);
-            -webkit-backdrop-filter: blur(10px) saturate(120%);
-            border: 0;
-            border-radius: var(--radius-3, 16px);
-            box-shadow: 0 10px 28px color-mix(in srgb, var(--ink, #1A1A1A) 7%, transparent);
-        }
-
-        .toolbar-context {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            min-width: 0;
-        }
-
-        .toolbar-title {
-            max-width: min(48vw, 520px);
-            overflow: hidden;
-            color: var(--ink, #1A1A1A);
-            font-family: var(--font-serif, 'Lora', serif);
-            font-size: 1.0625rem;
-            font-weight: 600;
-            line-height: 1.2;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .toolbar-dirty {
-            flex-shrink: 0;
-            width: 7px;
-            height: 7px;
-            margin-top: 1px;
-            border-radius: 50%;
-            background: var(--accent-terracotta, #C18A4D);
-            box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-terracotta, #C18A4D) 16%, transparent);
-        }
-
-        .toolbar-actions {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm, 8px);
-            flex-shrink: 0;
-        }
-
-        .button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-            font-family: var(--font-body, 'Inter', sans-serif);
-            font-size: 0.875rem;
-            font-weight: 600;
-            letter-spacing: 0.01em;
-            padding: 0.55rem 1.25rem;
-        }
-
-        .button-secondary {
-            border: 0;
-            background: color-mix(in srgb, var(--ink, #1A1A1A) 5%, transparent);
-        }
-
-        .editor-nav {
-            grid-column: 1;
-            grid-row: 2;
-            top: 84px;
-            gap: var(--spacing-xs, 4px);
-            padding: 14px 12px;
-            background: var(--surface-1, var(--paper, #F7F4EE));
-            border: 0;
-            border-radius: var(--radius-2, 10px);
-            box-shadow: 0 10px 26px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
-        }
-
-        .editor-nav-title,
-        .card-title::before {
-            font-family: var(--font-body, 'Inter', sans-serif);
-            font-size: 0.6875rem;
-            font-weight: 700;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-        }
-
-        .editor-nav-title {
-            padding: 0 6px 8px;
-            margin: 0;
-        }
-
-        .editor-nav-item {
-            position: relative;
-            min-height: 32px;
-            padding: 7px 10px 7px 14px;
-            border-left: 0;
-            border-radius: var(--radius-2, 10px);
-            font-family: var(--font-body, 'Inter', sans-serif);
-            font-size: 0.8125rem;
-            font-weight: 500;
-        }
-
-        .editor-nav-item::before {
-            content: '';
-            position: absolute;
-            left: 6px;
-            top: 50%;
-            width: 2px;
-            height: 0;
-            border-radius: 3px;
-            background: var(--md-sys-color-primary, #282828);
-            transform: translateY(-50%);
-            transition: height var(--md-sys-motion-duration-short2, 150ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        .editor-nav-item.active {
-            border-left-color: transparent;
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 6%, transparent);
-        }
-
-        .editor-nav-item.active::before {
-            height: 14px;
-        }
-
-        .editor-nav-item.subitem {
-            padding-left: 24px;
-            font-size: 0.78rem;
-        }
-
-        .editor-form {
-            grid-column: 2;
-            grid-row: 2;
-        }
-
-        .editor-header {
-            margin-bottom: 2px;
-            padding-bottom: 0;
-        }
-
-        .breadcrumbs {
-            font-family: var(--font-body, 'Inter', sans-serif);
-            font-size: 0.8125rem;
-        }
-
-        h1,
-        .card-title,
-        .hero-generator-title {
-            font-family: var(--font-serif, 'Lora', serif);
-            letter-spacing: -0.015em;
-        }
-
-        h1 {
-            font-size: 2rem;
-            margin-bottom: 6px;
-        }
-
-        .subtitle {
-            font-family: var(--font-body, 'Inter', sans-serif);
-            font-size: 0.95rem;
-        }
-
-        .card {
-            background: var(--surface-2, #FFF);
-            border: 0;
-            border-radius: var(--radius-3, 16px);
-            padding: 26px 28px;
-            box-shadow: 0 12px 32px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
-        }
-
-        .card-title {
-            font-size: 1.375rem;
-            margin-bottom: var(--spacing-md, 16px);
-        }
-
-        .card-title::before {
-            content: attr(data-eyebrow);
-            display: block;
-            margin-bottom: 7px;
-        }
-
-        .card-description {
-            font-family: var(--font-body, 'Inter', sans-serif);
-            font-size: 0.875rem;
-            line-height: 1.6;
-        }
-
-        .mode-toggle {
-            display: inline-flex;
-            gap: var(--spacing-xs, 4px);
-            padding: var(--spacing-xs, 4px);
-            width: max-content;
-            max-width: 100%;
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-            background: var(--paper-deep, #EEE8DD);
-        }
-
-        .mode-toggle label {
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-            padding: 0.5rem 1.1rem;
-            font-family: var(--font-body, 'Inter', sans-serif);
-            font-size: 0.8125rem;
-            font-weight: 600;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-        }
-
-        .mode-toggle label:has(input:checked) {
-            background: var(--md-sys-color-primary, #282828);
-            color: var(--md-sys-color-on-primary, #FFF);
-        }
-
-        .mode-toggle input[type="radio"] {
-            position: absolute;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .info-banner {
-            display: flex;
-            border: 0;
-            background: color-mix(in srgb, var(--accent-sage, #7D8E39) 12%, var(--surface-2, #FFF));
-            border-radius: var(--radius-2, 10px);
-        }
-
-        .hero-control-label,
-        .card-header-with-action,
-        .hero-provider-status,
-        .hero-status-message,
-        .hero-error-message {
-            font-family: var(--font-body, 'Inter', sans-serif);
-        }
-
-        .hero-control-label select,
-        .hero-prompt-textarea {
-            background: var(--field-bg, #FBF9F4);
-            border: 0;
-            border-radius: var(--radius-2, 10px);
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 7%, transparent);
-        }
-
-        .visibility-settings {
-            display: grid;
-            gap: var(--spacing-md, 16px);
-        }
-
-        .visibility-setting {
-            display: grid;
-            grid-template-columns: 40px minmax(0, 1fr);
-            gap: var(--spacing-md, 16px);
-            align-items: center;
-            padding: 18px 20px;
-            border: 0;
-            border-radius: var(--radius-2, 10px);
-            background: var(--field-bg, #FBF9F4);
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
-        }
-
-        .visibility-setting.archive {
-            background: color-mix(in srgb, var(--err, #B3261E) 4%, var(--field-bg, #FBF9F4));
-        }
-
-        .variation-display-setting {
-            display: grid;
-            grid-template-columns: 40px minmax(0, 1fr);
-            gap: var(--spacing-md, 16px);
-            align-items: center;
-            padding: 18px 20px;
-            margin-bottom: var(--spacing-lg, 24px);
-            border: 0;
-            border-radius: var(--radius-2, 10px);
-            background: var(--field-bg, #FBF9F4);
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
-        }
-
-        .variation-display-options {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-md, 16px);
-            min-width: 0;
-        }
-
-        .visibility-icon,
-        .variation-display-icon {
-            display: inline-grid;
-            place-items: center;
-            width: 40px;
-            height: 40px;
-            border-radius: var(--md-sys-shape-corner-full, 999px);
-            background: var(--surface-2, #FFF);
-            color: var(--ink, #1A1A1A);
-            box-shadow: 0 4px 12px color-mix(in srgb, var(--ink, #1A1A1A) 7%, transparent);
-        }
-
-        .visibility-setting.archive .visibility-icon {
-            color: var(--err, #B3261E);
-            box-shadow: 0 4px 12px color-mix(in srgb, var(--err, #B3261E) 10%, transparent);
-        }
-
-        .visibility-icon .material-symbols-outlined,
-        .variation-display-icon .material-symbols-outlined {
-            font-size: 21px;
-        }
-
-        .visibility-setting wy-option-toggle {
-            --wy-option-toggle-off-bg: var(--paper-deep, #EEE8DD);
-        }
-
-        @media (max-width: 1200px) {
-            .editor-layout {
-                grid-template-columns: 1fr;
-                gap: var(--spacing-lg, 24px);
-            }
-
-            .actions {
-                grid-column: 1;
-                grid-row: 1;
-                top: 12px;
-                margin: 8px 0 0;
-                border-radius: var(--radius-3, 16px);
-            }
-
-            .toolbar-title {
-                max-width: 46vw;
-            }
-
-            .editor-nav {
-                grid-column: 1;
-                grid-row: 2;
-                top: 64px;
-                z-index: 4;
-                background: var(--surface-1, var(--paper, #F7F4EE));
-                padding: var(--spacing-sm, 8px);
-                border: 0;
-                border-radius: var(--radius-2, 10px);
-            }
-
-            .editor-form {
-                grid-column: 1;
-                grid-row: 3;
-            }
-
-            .editor-nav-toggle {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                width: 100%;
-                min-height: 40px;
-                border: 0;
-                background: transparent;
-                color: var(--md-sys-color-on-surface, #121714);
-                cursor: pointer;
-                font-family: var(--font-sans, 'DM Sans', sans-serif);
-                font-size: 0.875rem;
-                font-weight: 600;
-                text-align: left;
-            }
-
-            .editor-nav-toggle .material-symbols-outlined {
-                transition: transform var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-            }
-
-            .editor-nav.open .editor-nav-toggle .material-symbols-outlined {
-                transform: rotate(180deg);
-            }
-
-            .editor-nav-title {
-                display: none;
-            }
-
-            .editor-nav-list {
-                display: none;
-                max-height: min(56vh, 520px);
-                overflow-y: auto;
-                padding-top: var(--spacing-xs, 4px);
-            }
-
-            .editor-nav.open .editor-nav-list {
-                display: flex;
-            }
-
-            .hero-controls {
-                grid-template-columns: 1fr;
-            }
-
-            .visibility-setting {
-                grid-template-columns: 1fr;
-                gap: var(--spacing-sm, 8px);
-            }
-        }
-    `);
 customElements.define("wy-prompt-editor", WyPromptEditor);
 
 // components/ui/wy-step-editor.js
@@ -8822,6 +6610,10 @@ var WyStepEditor = class extends i4 {
     this.index = 0;
     this.total = 1;
     this.expanded = false;
+  }
+  // Light DOM: styles live in admin.css (scoped under wy-step-editor).
+  createRenderRoot() {
+    return this;
   }
   _handleToggle() {
     this.dispatchEvent(new CustomEvent("step-toggle", {
@@ -9012,226 +6804,6 @@ __publicField(WyStepEditor, "properties", {
   total: { type: Number },
   expanded: { type: Boolean }
 });
-__publicField(WyStepEditor, "styles", i`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1');
-
-        :host {
-            display: block;
-            margin-bottom: var(--spacing-md, 16px);
-        }
-
-        .material-symbols-outlined {
-            font-family: 'Material Symbols Outlined';
-            font-size: 20px;
-        }
-
-        .step-card {
-            background-color: var(--field-bg, #FBF9F4);
-            border-radius: var(--radius-2, 10px);
-            border: 0;
-            overflow: hidden;
-            transition:
-                box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
-        }
-
-        .step-card.expanded {
-            box-shadow: 0 8px 22px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
-        }
-
-        .step-header {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm, 8px);
-            padding: 14px 16px;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            user-select: none;
-        }
-
-        .step-header::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-color: var(--md-sys-color-primary, #282828);
-            opacity: 0;
-            transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-            pointer-events: none;
-        }
-
-        .step-header:hover::before {
-            opacity: var(--md-sys-state-hover-opacity, 0.08);
-        }
-
-        .step-badge {
-            flex-shrink: 0;
-            display: inline-flex;
-            align-items: center;
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.6875rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            padding: 4px 11px;
-            background-color: var(--md-sys-color-primary, #282828);
-            color: var(--md-sys-color-on-primary, #FFFFFF);
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-        }
-
-        .step-title {
-            flex: 1;
-            font-family: var(--font-serif, 'Playfair Display', serif);
-            font-size: 1.0625rem;
-            font-weight: 600;
-            color: var(--md-sys-color-on-surface, #121714);
-            margin: 0;
-        }
-
-        .collapse-icon {
-            flex-shrink: 0;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            transition: transform var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        .step-card.expanded .collapse-icon {
-            transform: rotate(180deg);
-        }
-
-        .step-content {
-            display: grid;
-            grid-template-rows: 0fr;
-            transition: grid-template-rows var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        .step-card.expanded .step-content {
-            grid-template-rows: 1fr;
-        }
-
-        .step-content-inner {
-            overflow: hidden;
-        }
-
-        .step-fields {
-            padding: 4px var(--spacing-md, 16px) var(--spacing-md, 16px);
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-md, 16px);
-        }
-
-        .step-controls {
-            display: flex;
-            gap: var(--spacing-sm, 8px);
-            padding: 10px var(--spacing-md, 16px);
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 3.5%, transparent);
-            box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
-        }
-
-        .control-button {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs, 4px);
-            padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
-            background: color-mix(in srgb, var(--ink, #1A1A1A) 4%, transparent);
-            border: 0;
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.8125rem;
-            font-weight: 600;
-            color: var(--md-sys-color-on-surface, #121714);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .control-button::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-color: var(--md-sys-color-on-surface, #121714);
-            opacity: 0;
-            transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-            pointer-events: none;
-        }
-
-        .control-button:hover::before {
-            opacity: var(--md-sys-state-hover-opacity, 0.08);
-        }
-
-        .control-button:focus-visible {
-            outline: 3px solid var(--md-sys-color-primary, #282828);
-            outline-offset: 2px;
-        }
-
-        .control-button:disabled {
-            opacity: var(--md-sys-state-disabled-opacity, 0.38);
-            cursor: not-allowed;
-        }
-
-        .control-button.delete {
-            margin-left: auto;
-            color: var(--md-sys-color-error, #BA1A1A);
-        }
-
-        .control-button.delete::before {
-            background-color: var(--md-sys-color-error, #BA1A1A);
-        }
-
-        .control-button .material-symbols-outlined {
-            font-size: 18px;
-        }
-
-        .field-group {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-xs, 4px);
-        }
-
-        .field-label {
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.6875rem;
-            font-weight: 700;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-        }
-
-        .field-description {
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.8125rem;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            margin-top: calc(-1 * var(--spacing-xs, 4px));
-        }
-
-        input,
-        textarea {
-            width: 100%;
-            padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: 0.9375rem;
-            color: var(--md-sys-color-on-surface, #121714);
-            background-color: var(--surface-2, #FFF);
-            border: 0;
-            border-radius: var(--radius-2, 10px);
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 7%, transparent);
-            transition: box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        input:focus,
-        textarea:focus {
-            outline: none;
-            box-shadow:
-                inset 0 0 0 1px color-mix(in srgb, var(--md-sys-color-primary, #282828) 24%, transparent),
-                0 0 0 3px color-mix(in srgb, var(--md-sys-color-primary, #282828) 8%, transparent);
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 80px;
-            font-family: inherit;
-        }
-    `);
 customElements.define("wy-step-editor", WyStepEditor);
 
 // node_modules/lit-html/directive-helpers.js

@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html } from 'lit';
 
 export class WyCodeTextarea extends LitElement {
     static properties = {
@@ -20,91 +20,10 @@ export class WyCodeTextarea extends LitElement {
         this.maxLength = 0;
     }
 
-    static styles = css`
-        :host {
-            display: block;
-            width: 100%;
-        }
-
-        .label {
-            font-family: var(--font-body, 'Inter', sans-serif);
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.14em;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            margin-bottom: var(--spacing-sm, 8px);
-            display: block;
-        }
-
-        textarea {
-            width: 100%;
-            box-sizing: border-box;
-            padding: var(--spacing-md, 16px);
-            border-radius: var(--radius-2, 10px);
-            border: 0;
-            background-color: var(--field-bg, transparent);
-            font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
-            font-size: 0.875rem;
-            line-height: 1.5;
-            color: var(--md-sys-color-on-surface, #121714);
-            resize: vertical;
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 7%, transparent);
-            transition: box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        textarea:focus {
-            outline: none;
-            box-shadow:
-                inset 0 0 0 1px color-mix(in srgb, var(--md-sys-color-primary, #282828) 24%, transparent),
-                0 0 0 3px color-mix(in srgb, var(--md-sys-color-primary, #282828) 10%, transparent);
-        }
-
-        textarea::placeholder {
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            opacity: 0.6;
-        }
-
-        .variable-chips {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--spacing-xs, 4px);
-            margin-top: var(--spacing-sm, 8px);
-        }
-
-        .variable-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--spacing-xxs, 2px);
-            padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 10%, transparent);
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-            font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
-            font-size: 0.75rem;
-            color: var(--md-sys-color-primary, #282828);
-            cursor: pointer;
-            border: 0;
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--md-sys-color-primary, #282828) 18%, transparent);
-            transition: all var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-
-        .variable-chip:hover {
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 20%, transparent);
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--md-sys-color-primary, #282828) 24%, transparent);
-        }
-
-        .char-count {
-            font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: 0.75rem;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            text-align: right;
-            margin-top: var(--spacing-xs, 4px);
-        }
-
-        .char-count.over-limit {
-            color: var(--md-sys-color-error, #FF0101);
-        }
-    `;
+    // Light DOM: styles live in admin.css (scoped under wy-code-textarea).
+    createRenderRoot() {
+        return this;
+    }
 
     _handleInput(e) {
         // Update internal value to keep it in sync
@@ -129,10 +48,9 @@ export class WyCodeTextarea extends LitElement {
 
     updated(changedProperties) {
         if (changedProperties.has('value')) {
-            const textarea = this.shadowRoot.querySelector('textarea');
+            const textarea = this.querySelector('textarea');
             // Only update textarea value if it's not currently focused (avoid interfering with typing)
-            // Check shadowRoot.activeElement for proper shadow DOM focus detection
-            const isFocused = this.shadowRoot.activeElement === textarea;
+            const isFocused = document.activeElement === textarea;
             if (textarea && !isFocused && textarea.value !== this.value) {
                 textarea.value = this.value;
             }
@@ -140,7 +58,7 @@ export class WyCodeTextarea extends LitElement {
     }
 
     _insertVariable(variableName) {
-        const textarea = this.shadowRoot.querySelector('textarea');
+        const textarea = this.querySelector('textarea');
         const start = textarea.selectionStart;
         const end = textarea.selectionEnd;
         const textBefore = this.value.substring(0, start);
