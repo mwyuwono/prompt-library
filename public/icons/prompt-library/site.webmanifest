@@ -1,0 +1,28 @@
+{
+  "name": "Prompt Library",
+  "short_name": "Prompts",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#79830c",
+  "theme_color": "#79830c",
+  "icons": [
+    {
+      "src": "/public/icons/prompt-library/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/public/icons/prompt-library/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/public/icons/prompt-library/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "description": "Reusable prompt library"
+}
