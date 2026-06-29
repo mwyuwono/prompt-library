@@ -68,6 +68,21 @@ Architecture-specific guidance for the Prompt Library project. Covers:
 
 ---
 
+### 4. prompt-image-creator
+**Location:** `skills/prompt-image-creator/SKILL.md`
+
+Guidance for creating prompt preview images in "The Nineteenth" style. Covers:
+
+- Warm off-white paper backgrounds and matte editorial composition
+- Off-center layouts with deliberate negative space and hairline grid rules
+- Restrained color, square corners, and forbidden visual effects
+- Special handling for type-led images, full-bleed artwork, and photography
+- Project asset rules for saving preview images under `public/images/`
+
+**Use when:** Generating, editing, or refreshing prompt card images, prompt hero images, or other visual assets for prompts in this project.
+
+---
+
 ## How Agents Use Skills
 
 Compatible AI agents (like Claude Code) can:
@@ -81,6 +96,7 @@ For example, when adding a new prompt with custom styling, an agent might use:
 - `prompt-library-architecture` - For data structure and app patterns
 - `vanilla-js-development` - For JavaScript implementation
 - `material-design-css` - For styling with design tokens
+- `prompt-image-creator` - For creating prompt preview images in the house style
 
 ## Skill Format
 
