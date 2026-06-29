@@ -59,6 +59,31 @@ Prompts with variations can use a prompt-level image as an explicit card thumbna
 
 The prompt-level image is used as the overall prompt thumbnail in list and grid views. If a multi-variation prompt does not have a prompt-level image, the first variation image is used as the default thumbnail. When the prompt is open, the selected variation's image is shown; variations without an image simply omit that image area.
 
+For image-generation prompts with multiple variants, save the shared base/reference image used to create the variant previews in `public/images/` and record it on the prompt:
+
+```json
+{
+  "previewBaseImage": "public/images/example-base-reference.png",
+  "previewBaseImageDescription": "Short note explaining the standardized preview source."
+}
+```
+
+When adding or refreshing variant previews later, reuse that same saved base image so the variant thumbnails show standardized outputs from a consistent source. Final project preview images should be exact `1920x1080`.
+
+Use descriptive preview filenames:
+
+```text
+{prompt-slug}-{variant-slug}-{base-subject}-preview.png
+{prompt-slug}-base-{base-subject}.png
+```
+
+Example:
+
+```text
+topographic-site-plan-manuscript-fort-sewall-preview.png
+topographic-site-plan-base-fort-sewall-satellite.png
+```
+
 ## Supported Input Types
 
 | Type | Config |
@@ -92,6 +117,18 @@ Before committing public prompt changes to `prompts.json`:
 - JSON validates with `node validate-prompts.js` when `prompts.json.bak` is available
 - If `validate-prompts.js` fails because CommonJS `require` is incompatible with the package's ESM setting, validate prompt JSON with `jq empty prompts.json` plus targeted checks for image path existence and preview dimensions until the script is fixed
 - Test in UI: variables render, preview compiles, copy works
+
+### Image Preview Validation
+
+When changing generated preview images, validate JSON, referenced image paths, and final dimensions:
+
+```sh
+jq empty prompts.json
+jq -r '.[] | select(.id=="PROMPT_ID") | [.image,.previewBaseImage,(.variations[]?.image)][] | select(. != null and . != "")' prompts.json | while read -r p; do test -f "$p" || echo "missing $p"; done
+magick identify -format '%f %wx%h\n' public/images/*preview*.png
+```
+
+Multi-variant prompt preview images should report `1920x1080`.
 
 For private prompt changes:
 
