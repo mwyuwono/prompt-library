@@ -157,8 +157,7 @@ export class WyPromptModal extends LitElement {
     .scrim {
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.3); /* Darker scrim for focus */
-      backdrop-filter: blur(4px);
+      background: rgba(40, 40, 40, 0.6); /* Solid ink scrim — no blur per Nineteenth */
     }
 
     .modal-container {
@@ -348,7 +347,7 @@ export class WyPromptModal extends LitElement {
     }
 
     .description-text {
-      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      font-family: var(--ff-sans);
       font-size: 1rem;
       font-weight: 300;
       line-height: 1.6;
@@ -409,7 +408,7 @@ export class WyPromptModal extends LitElement {
         background: none;
         border: none;
         color: var(--md-sys-color-text-heading);
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-family: var(--ff-sans);
         font-size: 0.875rem;
         font-weight: 500;
         cursor: pointer;
@@ -432,7 +431,7 @@ export class WyPromptModal extends LitElement {
         background: none;
         border: none;
         padding: 12px 0 16px 0;
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-family: var(--ff-sans);
         font-size: 0.875rem;
         font-weight: 500;
         color: var(--md-sys-color-on-surface-variant);
@@ -545,7 +544,7 @@ export class WyPromptModal extends LitElement {
         border-radius: 0;
         background-color: var(--md-sys-color-surface-container-lowest, #FDFBF7);
         color: var(--md-sys-color-on-surface, #1D1B20);
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-family: var(--ff-sans);
         font-size: 0.9375rem;
         font-weight: 500;
         cursor: pointer;
@@ -586,12 +585,10 @@ export class WyPromptModal extends LitElement {
         min-width: 0;
         min-height: 100%;
         padding: 0;
-        background: var(--md-sys-color-surface-container-lowest, #FDFBF7);
+        background: transparent;
         color: var(--md-sys-color-on-surface, #1D1B20);
-        border: 1px solid var(--paper-edge, #DDD6C8);
         border-radius: 0;
         cursor: pointer;
-        overflow: hidden;
         position: relative;
         text-align: left;
         transition:
@@ -599,42 +596,31 @@ export class WyPromptModal extends LitElement {
             box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
     }
 
-    .visual-variation-tile::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: currentColor;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-    }
-
-    .visual-variation-tile:hover::after {
-        opacity: var(--md-sys-state-hover-opacity, 0.08);
-    }
-
     .visual-variation-tile:focus-visible {
         outline: 3px solid var(--wy-prompt-modal-focus-ring, color-mix(in srgb, var(--md-sys-color-primary) 18%, transparent));
         outline-offset: 2px;
     }
 
-    .visual-variation-tile.selected {
-        border-color: var(--md-sys-color-primary, #282828);
-        box-shadow: inset 0 0 0 1px var(--md-sys-color-primary, #282828);
+    /* Selected = 1px ink frame on the plate (img can't host ::after, so frame the border) */
+    .visual-variation-tile.selected .visual-variation-media,
+    .visual-variation-tile.selected .visual-variation-text-tile {
+        border-color: var(--ink, #1A1A1A);
+        box-shadow: 0 0 0 1px var(--ink, #1A1A1A);
     }
 
     .visual-variation-media {
+        position: relative;
         display: block;
         width: 100%;
-        aspect-ratio: 4 / 3;
+        aspect-ratio: 16 / 9;
         object-fit: cover;
-        background: var(--paper-deep, #EEE8DD);
-        border-bottom: 1px solid var(--paper-edge, #DDD6C8);
+        background: linear-gradient(150deg, #E6E0D4, #CDC4B2);
+        border: 1px solid var(--paper-edge, #DDD6C8);
+        transition: opacity var(--dur-2, 350ms) var(--ease, cubic-bezier(0.2, 0.6, 0.2, 1));
     }
 
-    .visual-variation-tile.thumbnail-only .visual-variation-media,
-    .visual-variation-tile.thumbnail-only .visual-variation-text-tile {
-        border-bottom: 0;
+    .visual-variation-tile:hover .visual-variation-media {
+        opacity: 0.9;
     }
 
     .visual-variation-text-tile {
@@ -644,13 +630,8 @@ export class WyPromptModal extends LitElement {
         align-items: center;
         justify-content: center;
         padding: var(--spacing-md, 16px);
-        background:
-            linear-gradient(
-                135deg,
-                color-mix(in srgb, var(--paper-deep, #EEE8DD) 74%, transparent),
-                var(--md-sys-color-surface-container-lowest, #FDFBF7)
-            );
-        border-bottom: 1px solid var(--paper-edge, #DDD6C8);
+        background: linear-gradient(150deg, #E6E0D4, #CDC4B2);
+        border: 1px solid var(--paper-edge, #DDD6C8);
     }
 
     .visual-variation-text-tile .material-symbols-outlined {
@@ -663,15 +644,19 @@ export class WyPromptModal extends LitElement {
         flex-direction: column;
         gap: var(--spacing-xs, 4px);
         padding: var(--spacing-sm, 12px);
+        padding-top: 8px;
+        margin-top: 10px;
+        border-top: 1px solid var(--paper-edge, #DDD6C8);
         min-width: 0;
     }
 
     .visual-variation-name {
-        color: var(--md-sys-color-on-surface, #1D1B20);
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
-        font-size: 0.8125rem;
-        font-weight: 700;
-        line-height: 1.25;
+        color: var(--ink, #1A1A1A);
+        font-family: var(--ff-serif);
+        font-style: italic;
+        font-weight: 500;
+        font-size: 1rem;
+        line-height: 1.2;
         overflow-wrap: anywhere;
     }
 
@@ -680,10 +665,10 @@ export class WyPromptModal extends LitElement {
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
-        color: var(--md-sys-color-text-muted);
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        color: var(--ink-mute, #6B6B6A);
+        font-family: var(--ff-sans);
         font-size: 0.75rem;
-        line-height: 1.35;
+        line-height: 1.45;
     }
 
     .visual-variation-tile.thumbnail-only.has-image .visual-variation-copy {
@@ -712,7 +697,7 @@ export class WyPromptModal extends LitElement {
     .variation-image img {
         display: block;
         width: 100%;
-        aspect-ratio: 16 / 10;
+        aspect-ratio: 16 / 9;
         object-fit: cover;
         border: 1px solid var(--paper-edge, #DDD6C8);
     }
@@ -770,7 +755,7 @@ export class WyPromptModal extends LitElement {
 
     .reference-image-label {
         color: var(--ink, #1A1A1A);
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-family: var(--ff-sans);
         font-size: 0.875rem;
         font-weight: 600;
         line-height: 1.2;
@@ -783,7 +768,7 @@ export class WyPromptModal extends LitElement {
         display: -webkit-box;
         margin-top: 6px;
         color: var(--ink-mute, #6B6B6A);
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-family: var(--ff-sans);
         font-size: 0.75rem;
         line-height: 1.45;
         overflow: hidden;
@@ -824,7 +809,7 @@ export class WyPromptModal extends LitElement {
         border-radius: 0;
         background: transparent;
         color: var(--ink, #1A1A1A);
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-family: var(--ff-sans);
         font-size: 0.6875rem;
         font-weight: 600;
         line-height: 1.1;
@@ -864,7 +849,7 @@ export class WyPromptModal extends LitElement {
 
     .prompt-instructions-heading {
         margin: 0 0 var(--spacing-xxs, 4px);
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-family: var(--ff-sans);
         font-size: 0.6875rem;
         font-weight: 600;
         letter-spacing: 0.14em;
@@ -891,7 +876,7 @@ export class WyPromptModal extends LitElement {
 
     .variation-description-heading {
         margin: 0 0 var(--spacing-xxs, 4px);
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-family: var(--ff-sans);
         font-size: 0.6875rem;
         font-weight: 600;
         letter-spacing: 0.14em;
@@ -960,7 +945,7 @@ export class WyPromptModal extends LitElement {
     }
 
     .variation-label {
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-family: var(--ff-sans);
         font-size: 0.75rem;
         font-weight: 600;
         letter-spacing: 0.04em;
@@ -969,7 +954,7 @@ export class WyPromptModal extends LitElement {
     }
 
     .variation-select {
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-family: var(--ff-sans);
         font-size: 0.875rem;
         color: var(--md-sys-color-on-surface);
         background: transparent;
@@ -987,7 +972,7 @@ export class WyPromptModal extends LitElement {
 
     .form-group label {
         display: block;
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-family: var(--ff-sans);
         font-size: 0.75rem;
         font-weight: 700;
         text-transform: uppercase;
@@ -1002,7 +987,7 @@ export class WyPromptModal extends LitElement {
         padding: 16px; /* Increased padding for breathing room */
         border: 1px solid var(--md-sys-color-outline-variant);
         border-radius: 0;
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-family: var(--ff-sans);
         font-size: 1rem;
         color: var(--md-sys-color-on-surface);
         background: var(--md-sys-color-surface-container-lowest);
@@ -1024,7 +1009,7 @@ export class WyPromptModal extends LitElement {
     }
 
     .form-group wy-option-toggle {
-      --md-sys-typescale-body-medium: 500 1rem/1.45 var(--font-sans, 'DM Sans', sans-serif);
+      --md-sys-typescale-body-medium: 500 1rem/1.45 var(--ff-sans);
       display: block;
       width: 100%;
     }
@@ -1032,7 +1017,7 @@ export class WyPromptModal extends LitElement {
     .form-group wy-option-toggle .label {
       margin: 0 0 var(--spacing-xs, 4px) 0;
       color: var(--md-sys-color-primary);
-      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      font-family: var(--ff-sans);
       font-size: 0.875rem;
       font-weight: 700;
       line-height: 1.2;
@@ -1044,7 +1029,7 @@ export class WyPromptModal extends LitElement {
       margin: 0;
       max-width: 36rem;
       color: color-mix(in srgb, var(--md-sys-color-primary) 70%, transparent);
-      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      font-family: var(--ff-sans);
       font-size: var(--md-sys-typescale-body-small-size, 0.875rem);
       font-weight: 400;
       line-height: 1.8;
@@ -1072,7 +1057,7 @@ export class WyPromptModal extends LitElement {
     .form-group wy-option-toggle .switch-state {
       min-width: 2.5rem;
       text-align: right;
-      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      font-family: var(--ff-sans);
       font-size: 0.625rem;
       font-weight: 700;
       line-height: 1.1;
@@ -1142,7 +1127,7 @@ export class WyPromptModal extends LitElement {
     .form-group wy-option-toggle .selected-value-text {
       margin: var(--spacing-sm, 8px) 0 0 0;
       color: color-mix(in srgb, var(--md-sys-color-on-surface) 86%, transparent);
-      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      font-family: var(--ff-sans);
       font-size: var(--md-sys-typescale-body-small-size, 0.875rem);
       font-weight: 400;
       line-height: 1.7;
@@ -1152,7 +1137,7 @@ export class WyPromptModal extends LitElement {
       background: var(--md-sys-color-surface-container-highest);
       border-radius: 0;
       padding: 24px;
-      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      font-family: var(--ff-sans);
       font-size: 1rem;
       line-height: 1.7;
       color: var(--md-sys-color-on-surface);
@@ -1164,7 +1149,7 @@ export class WyPromptModal extends LitElement {
     .preview-area p:last-child { margin-bottom: 0; }
     .preview-area h1, .preview-area h2, .preview-area h3,
     .preview-area h4, .preview-area h5, .preview-area h6 {
-      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      font-family: var(--ff-sans);
       font-weight: 600;
       line-height: 1.3;
       margin: 1.2em 0 0.4em;
@@ -1244,7 +1229,7 @@ export class WyPromptModal extends LitElement {
       display: block;
       margin-bottom: 14px;
       color: var(--ink-soft, #A8A49C);
-      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      font-family: var(--ff-sans);
       font-size: 0.6875rem;
       font-weight: 600;
       letter-spacing: 0.18em;
@@ -1261,7 +1246,7 @@ export class WyPromptModal extends LitElement {
     .overview-figure img {
       display: block;
       width: 100%;
-      aspect-ratio: 16 / 10;
+      aspect-ratio: 16 / 9;
       object-fit: cover;
       border: 1px solid var(--paper-edge, #DDD6C8);
     }
@@ -1333,7 +1318,7 @@ export class WyPromptModal extends LitElement {
         border-radius: 0;
         text-transform: uppercase;
         letter-spacing: 0.18em;
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-family: var(--ff-sans);
         font-size: 0.875rem;
         font-weight: 500;
         cursor: pointer;
@@ -1374,7 +1359,7 @@ export class WyPromptModal extends LitElement {
     }
 
     .stepper-label {
-      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      font-family: var(--ff-sans);
       font-size: var(--md-sys-typescale-label-medium-size, 0.75rem);
       letter-spacing: 0.05em;
       text-transform: uppercase;
@@ -1406,7 +1391,7 @@ export class WyPromptModal extends LitElement {
       background: none;
       border: none;
       padding: 8px 0;
-      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      font-family: var(--ff-sans);
       font-size: 0.875rem;
       font-weight: 500;
       color: var(--md-sys-color-on-surface-variant);
@@ -1508,7 +1493,7 @@ export class WyPromptModal extends LitElement {
       }
 
       .overview-figure img {
-        aspect-ratio: 16 / 10;
+        aspect-ratio: 16 / 9;
         max-height: 220px;
       }
 

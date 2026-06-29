@@ -481,6 +481,8 @@ Server will start on http://localhost:3001`;
         if (this.controlsBar) {
             this.controlsBar.categories = categories;
             this.controlsBar.activeCategory = this.selectedCategory || 'all';
+            this.controlsBar.showFeaturedFilter = this.hasFeaturedPrompts();
+            this.controlsBar.showHiddenFilter = this.hasHiddenPrompts();
         }
     }
 
@@ -488,18 +490,40 @@ Server will start on http://localhost:3001`;
         if (!this.controlsBar) {
             return;
         }
+        this.normalizeUnavailableFilters();
         this.controlsBar.viewMode = this.currentView;
         this.controlsBar.showDetails = this.showDetails;
         this.controlsBar.searchValue = this.searchTerm;
         this.controlsBar.activeCategory = this.selectedCategory || 'all';
+        this.controlsBar.showFeaturedFilter = this.hasFeaturedPrompts();
+        this.controlsBar.showHiddenFilter = this.hasHiddenPrompts();
         this.controlsBar.showFeaturedOnly = this.showFeaturedOnly;
         this.controlsBar.showHiddenOnly = this.showHiddenOnly;
+    }
+
+    hasFeaturedPrompts() {
+        return this.prompts.some(prompt => prompt.featured === true && !this.isPromptHidden(prompt));
+    }
+
+    hasHiddenPrompts() {
+        return this.prompts.some(prompt => this.isPromptHidden(prompt));
+    }
+
+    normalizeUnavailableFilters() {
+        if (this.showFeaturedOnly && !this.hasFeaturedPrompts()) {
+            this.showFeaturedOnly = false;
+        }
+
+        if (this.showHiddenOnly && !this.hasHiddenPrompts()) {
+            this.showHiddenOnly = false;
+        }
     }
 
     /**
      * Filter prompts based on search term, category, and featured status
      */
     filterPrompts() {
+        this.normalizeUnavailableFilters();
         const isSearchActive = this.isSearchActive();
 
         this.filteredPrompts = this.prompts.filter(prompt => {

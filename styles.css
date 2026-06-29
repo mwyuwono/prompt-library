@@ -95,6 +95,55 @@ body.controls-floating:not(.private-vault-page) .header-top .quick-links,
 body.controls-floating:not(.private-vault-page) .header-top .quick-link-btn,
 body.controls-floating:not(.private-vault-page) #adminButton { display: none !important; }
 
+.vault-link {
+    flex: 0 0 auto;
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-mute);
+    border: var(--hair) solid var(--paper-edge);
+    border-radius: var(--radius-pill);
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    transition:
+        color var(--dur-1) var(--ease),
+        border-color var(--dur-1) var(--ease);
+}
+
+.vault-link::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--ink);
+    opacity: 0;
+    transition: opacity var(--dur-1) var(--ease);
+    pointer-events: none;
+}
+
+.vault-link:hover,
+.vault-link:focus-visible {
+    color: var(--ink);
+    border-color: var(--ink-soft);
+}
+
+.vault-link:hover::before,
+.vault-link:focus-visible::before { opacity: 0.06; }
+
+.vault-link:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+}
+
+.vault-link .material-symbols-outlined {
+    position: relative;
+    z-index: 1;
+    font-size: 18px;
+    line-height: 1;
+}
+
 .quick-links { display: flex; align-items: center; gap: var(--space-md); }
 
 .quick-link-btn {

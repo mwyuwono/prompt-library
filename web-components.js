@@ -2,7 +2,7 @@ var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 
-// node_modules/tslib/tslib.es6.mjs
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/tslib/tslib.es6.mjs
 function __decorate(decorators, target, key, desc) {
   var c4 = arguments.length, r7 = c4 < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d4;
   if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r7 = Reflect.decorate(decorators, target, key, desc);
@@ -10,14 +10,14 @@ function __decorate(decorators, target, key, desc) {
   return c4 > 3 && r7 && Object.defineProperty(target, key, r7), r7;
 }
 
-// node_modules/@lit/reactive-element/decorators/custom-element.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@lit/reactive-element/decorators/custom-element.js
 var t = (t6) => (e9, o8) => {
   void 0 !== o8 ? o8.addInitializer(() => {
     customElements.define(t6, e9);
   }) : customElements.define(t6, e9);
 };
 
-// node_modules/@lit/reactive-element/css-tag.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@lit/reactive-element/css-tag.js
 var t2 = globalThis;
 var e = t2.ShadowRoot && (void 0 === t2.ShadyCSS || t2.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype;
 var s = /* @__PURE__ */ Symbol();
@@ -62,7 +62,7 @@ var c = e ? (t6) => t6 : (t6) => t6 instanceof CSSStyleSheet ? ((t7) => {
   return r(e9);
 })(t6) : t6;
 
-// node_modules/@lit/reactive-element/reactive-element.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@lit/reactive-element/reactive-element.js
 var { is: i2, defineProperty: e2, getOwnPropertyDescriptor: h, getOwnPropertyNames: r2, getOwnPropertySymbols: o2, getPrototypeOf: n2 } = Object;
 var a = globalThis;
 var c2 = a.trustedTypes;
@@ -284,7 +284,7 @@ var y = class extends HTMLElement {
 };
 y.elementStyles = [], y.shadowRootOptions = { mode: "open" }, y[d("elementProperties")] = /* @__PURE__ */ new Map(), y[d("finalized")] = /* @__PURE__ */ new Map(), p?.({ ReactiveElement: y }), (a.reactiveElementVersions ?? (a.reactiveElementVersions = [])).push("2.1.2");
 
-// node_modules/@lit/reactive-element/decorators/property.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@lit/reactive-element/decorators/property.js
 var o3 = { attribute: true, type: String, converter: u, reflect: false, hasChanged: f };
 var r3 = (t6 = o3, e9, r7) => {
   const { kind: n5, metadata: i6 } = r7;
@@ -314,15 +314,15 @@ function n3(t6) {
   })(t6, e9, o8);
 }
 
-// node_modules/@lit/reactive-element/decorators/state.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@lit/reactive-element/decorators/state.js
 function r4(r7) {
   return n3({ ...r7, state: true, attribute: false });
 }
 
-// node_modules/@lit/reactive-element/decorators/base.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@lit/reactive-element/decorators/base.js
 var e3 = (e9, t6, c4) => (c4.configurable = true, c4.enumerable = true, Reflect.decorate && "object" != typeof t6 && Object.defineProperty(e9, t6, c4), c4);
 
-// node_modules/@lit/reactive-element/decorators/query.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@lit/reactive-element/decorators/query.js
 function e4(e9, r7) {
   return (n5, s4, i6) => {
     const o8 = (t6) => t6.renderRoot?.querySelector(e9) ?? null;
@@ -346,7 +346,7 @@ function e4(e9, r7) {
   };
 }
 
-// node_modules/lit-html/lit-html.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/lit-html/lit-html.js
 var t3 = globalThis;
 var i3 = (t6) => t6;
 var s2 = t3.trustedTypes;
@@ -601,7 +601,7 @@ var D = (t6, i6, s4) => {
   return h3._$AI(t6), h3;
 };
 
-// node_modules/lit-element/lit-element.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/lit-element/lit-element.js
 var s3 = globalThis;
 var i4 = class extends y {
   constructor() {
@@ -631,10 +631,10 @@ var o5 = s3.litElementPolyfillSupport;
 o5?.({ LitElement: i4 });
 (s3.litElementVersions ?? (s3.litElementVersions = [])).push("4.2.2");
 
-// node_modules/lit-html/is-server.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/lit-html/is-server.js
 var o6 = false;
 
-// node_modules/@material/web/icon/internal/icon.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@material/web/icon/internal/icon.js
 var Icon = class extends i4 {
   render() {
     return b2`<slot></slot>`;
@@ -650,11 +650,11 @@ var Icon = class extends i4 {
   }
 };
 
-// node_modules/@material/web/icon/internal/icon-styles.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@material/web/icon/internal/icon-styles.js
 var styles = i`:host{font-size:var(--md-icon-size, 24px);width:var(--md-icon-size, 24px);height:var(--md-icon-size, 24px);color:inherit;font-variation-settings:inherit;font-weight:400;font-family:var(--md-icon-font, Material Symbols Outlined);display:inline-flex;font-style:normal;place-items:center;place-content:center;line-height:1;overflow:hidden;letter-spacing:normal;text-transform:none;user-select:none;white-space:nowrap;word-wrap:normal;flex-shrink:0;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;-moz-osx-font-smoothing:grayscale}::slotted(svg){fill:currentColor}::slotted(*){height:100%;width:100%}
 `;
 
-// node_modules/@material/web/icon/icon.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@material/web/icon/icon.js
 var MdIcon = class MdIcon2 extends Icon {
 };
 MdIcon.styles = [styles];
@@ -662,7 +662,7 @@ MdIcon = __decorate([
   t("md-icon")
 ], MdIcon);
 
-// node_modules/@material/web/divider/internal/divider.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@material/web/divider/internal/divider.js
 var Divider = class extends i4 {
   constructor() {
     super(...arguments);
@@ -681,11 +681,11 @@ __decorate([
   n3({ type: Boolean, reflect: true, attribute: "inset-end" })
 ], Divider.prototype, "insetEnd", void 0);
 
-// node_modules/@material/web/divider/internal/divider-styles.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@material/web/divider/internal/divider-styles.js
 var styles2 = i`:host{box-sizing:border-box;color:var(--md-divider-color, var(--md-sys-color-outline-variant, #cac4d0));display:flex;height:var(--md-divider-thickness, 1px);width:100%}:host([inset]),:host([inset-start]){padding-inline-start:16px}:host([inset]),:host([inset-end]){padding-inline-end:16px}:host::before{background:currentColor;content:"";height:100%;width:100%}@media(forced-colors: active){:host::before{background:CanvasText}}
 `;
 
-// node_modules/@material/web/divider/divider.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@material/web/divider/divider.js
 var MdDivider = class MdDivider2 extends Divider {
 };
 MdDivider.styles = [styles2];
@@ -693,7 +693,7 @@ MdDivider = __decorate([
   t("md-divider")
 ], MdDivider);
 
-// node_modules/lit-html/directive.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/lit-html/directive.js
 var t4 = { ATTRIBUTE: 1, CHILD: 2, PROPERTY: 3, BOOLEAN_ATTRIBUTE: 4, EVENT: 5, ELEMENT: 6 };
 var e6 = (t6) => (...e9) => ({ _$litDirective$: t6, values: e9 });
 var i5 = class {
@@ -713,7 +713,7 @@ var i5 = class {
   }
 };
 
-// node_modules/lit-html/directives/class-map.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/lit-html/directives/class-map.js
 var e7 = e6(class extends i5 {
   constructor(t6) {
     if (super(t6), t6.type !== t4.ATTRIBUTE || "class" !== t6.name || t6.strings?.length > 2) throw Error("`classMap()` can only be used in the `class` attribute and must be the only part in the attribute.");
@@ -737,7 +737,7 @@ var e7 = e6(class extends i5 {
   }
 });
 
-// node_modules/@material/web/internal/aria/aria.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@material/web/internal/aria/aria.js
 var ARIA_PROPERTIES = [
   "role",
   "ariaAtomic",
@@ -786,7 +786,7 @@ function ariaPropertyToAttribute(property) {
   return property.replace("aria", "aria-").replace(/Elements?/g, "").toLowerCase();
 }
 
-// node_modules/@material/web/internal/aria/delegate.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@material/web/internal/aria/delegate.js
 var privateIgnoreAttributeChangesFor = /* @__PURE__ */ Symbol("privateIgnoreAttributeChangesFor");
 function mixinDelegatesAria(base) {
   var _a2;
@@ -876,7 +876,7 @@ function ariaAttributeToDataProperty(ariaAttribute) {
   return ariaAttribute.replace(/-\w/, (dashLetter) => dashLetter[1].toUpperCase());
 }
 
-// node_modules/@material/web/internal/events/redispatch-event.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@material/web/internal/events/redispatch-event.js
 function redispatchEvent(element, event) {
   if (event.bubbles && (!element.shadowRoot || event.composed)) {
     event.stopPropagation();
@@ -889,7 +889,7 @@ function redispatchEvent(element, event) {
   return dispatched;
 }
 
-// node_modules/@material/web/internal/motion/animation.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@material/web/internal/motion/animation.js
 var EASING = {
   STANDARD: "cubic-bezier(0.2, 0, 0, 1)",
   STANDARD_ACCELERATE: "cubic-bezier(.3,0,1,1)",
@@ -899,7 +899,7 @@ var EASING = {
   EMPHASIZED_DECELERATE: "cubic-bezier(.05,.7,.1,1)"
 };
 
-// node_modules/@material/web/dialog/internal/animations.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@material/web/dialog/internal/animations.js
 var DIALOG_DEFAULT_OPEN_ANIMATION = {
   dialog: [
     [
@@ -1007,7 +1007,7 @@ var DIALOG_DEFAULT_CLOSE_ANIMATION = {
   ]
 };
 
-// node_modules/@material/web/dialog/internal/dialog.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@material/web/dialog/internal/dialog.js
 var dialogBaseClass = mixinDelegatesAria(i4);
 var Dialog = class extends dialogBaseClass {
   // We do not use `delegatesFocus: true` due to a Chromium bug with
@@ -1427,11 +1427,11 @@ function isFocusable(element) {
   return element.shadowRoot?.delegatesFocus ?? false;
 }
 
-// node_modules/@material/web/dialog/internal/dialog-styles.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@material/web/dialog/internal/dialog-styles.js
 var styles3 = i`:host{border-start-start-radius:var(--md-dialog-container-shape-start-start, var(--md-dialog-container-shape, var(--md-sys-shape-corner-extra-large, 28px)));border-start-end-radius:var(--md-dialog-container-shape-start-end, var(--md-dialog-container-shape, var(--md-sys-shape-corner-extra-large, 28px)));border-end-end-radius:var(--md-dialog-container-shape-end-end, var(--md-dialog-container-shape, var(--md-sys-shape-corner-extra-large, 28px)));border-end-start-radius:var(--md-dialog-container-shape-end-start, var(--md-dialog-container-shape, var(--md-sys-shape-corner-extra-large, 28px)));display:contents;margin:auto;max-height:min(560px,100% - 48px);max-width:min(560px,100% - 48px);min-height:140px;min-width:280px;position:fixed;height:fit-content;width:fit-content}dialog{background:rgba(0,0,0,0);border:none;border-radius:inherit;flex-direction:column;height:inherit;margin:inherit;max-height:inherit;max-width:inherit;min-height:inherit;min-width:inherit;outline:none;overflow:visible;padding:0;width:inherit}dialog[open]{display:flex}::backdrop{background:none}.scrim{background:var(--md-sys-color-scrim, #000);display:none;inset:0;opacity:32%;pointer-events:none;position:fixed;z-index:1}:host([open]) .scrim{display:flex}h2{all:unset;align-self:stretch}.headline{align-items:center;color:var(--md-dialog-headline-color, var(--md-sys-color-on-surface, #1d1b20));display:flex;flex-direction:column;font-family:var(--md-dialog-headline-font, var(--md-sys-typescale-headline-small-font, var(--md-ref-typeface-brand, Roboto)));font-size:var(--md-dialog-headline-size, var(--md-sys-typescale-headline-small-size, 1.5rem));line-height:var(--md-dialog-headline-line-height, var(--md-sys-typescale-headline-small-line-height, 2rem));font-weight:var(--md-dialog-headline-weight, var(--md-sys-typescale-headline-small-weight, var(--md-ref-typeface-weight-regular, 400)));position:relative}slot[name=headline]::slotted(*){align-items:center;align-self:stretch;box-sizing:border-box;display:flex;gap:8px;padding:24px 24px 0}.icon{display:flex}slot[name=icon]::slotted(*){color:var(--md-dialog-icon-color, var(--md-sys-color-secondary, #625b71));fill:currentColor;font-size:var(--md-dialog-icon-size, 24px);margin-top:24px;height:var(--md-dialog-icon-size, 24px);width:var(--md-dialog-icon-size, 24px)}.has-icon slot[name=headline]::slotted(*){justify-content:center;padding-top:16px}.scrollable slot[name=headline]::slotted(*){padding-bottom:16px}.scrollable.has-headline slot[name=content]::slotted(*){padding-top:8px}.container{border-radius:inherit;display:flex;flex-direction:column;flex-grow:1;overflow:hidden;position:relative;transform-origin:top}.container::before{background:var(--md-dialog-container-color, var(--md-sys-color-surface-container-high, #ece6f0));border-radius:inherit;content:"";inset:0;position:absolute}.scroller{display:flex;flex:1;flex-direction:column;overflow:hidden;z-index:1}.scrollable .scroller{overflow-y:scroll}.content{color:var(--md-dialog-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));font-family:var(--md-dialog-supporting-text-font, var(--md-sys-typescale-body-medium-font, var(--md-ref-typeface-plain, Roboto)));font-size:var(--md-dialog-supporting-text-size, var(--md-sys-typescale-body-medium-size, 0.875rem));line-height:var(--md-dialog-supporting-text-line-height, var(--md-sys-typescale-body-medium-line-height, 1.25rem));flex:1;font-weight:var(--md-dialog-supporting-text-weight, var(--md-sys-typescale-body-medium-weight, var(--md-ref-typeface-weight-regular, 400)));height:min-content;position:relative}slot[name=content]::slotted(*){box-sizing:border-box;padding:24px}.anchor{position:absolute}.top.anchor{top:0}.bottom.anchor{bottom:0}.actions{position:relative}slot[name=actions]::slotted(*){box-sizing:border-box;display:flex;gap:8px;justify-content:flex-end;padding:16px 24px 24px}.has-actions slot[name=content]::slotted(*){padding-bottom:8px}md-divider{display:none;position:absolute}.has-headline.show-top-divider .headline md-divider,.has-actions.show-bottom-divider .actions md-divider{display:flex}.headline md-divider{bottom:0}.actions md-divider{top:0}@media(forced-colors: active){dialog{outline:2px solid WindowText}}
 `;
 
-// node_modules/@material/web/dialog/dialog.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@material/web/dialog/dialog.js
 var MdDialog = class MdDialog2 extends Dialog {
 };
 MdDialog.styles = [styles3];
@@ -1439,7 +1439,7 @@ MdDialog = __decorate([
   t("md-dialog")
 ], MdDialog);
 
-// components/ui/wy-button.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-button.js
 var WyButton = class extends i4 {
   constructor() {
     super();
@@ -1719,7 +1719,7 @@ __publicField(WyButton, "styles", i`
   `);
 customElements.define("wy-button", WyButton);
 
-// components/ui/wy-filter-chip.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-filter-chip.js
 var WyFilterChip = class extends i4 {
   render() {
     return b2`
@@ -1816,7 +1816,7 @@ __publicField(WyFilterChip, "styles", i`
   `);
 customElements.define("wy-filter-chip", WyFilterChip);
 
-// components/ui/wy-controls-bar.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-controls-bar.js
 var WyControlsBar = class extends i4 {
   constructor() {
     super();
@@ -1827,8 +1827,8 @@ var WyControlsBar = class extends i4 {
     this.searchValue = "";
     this.hideViewToggle = false;
     this.hideDetailsToggle = false;
-    this.showPrivateVaultLink = false;
-    this.privateVaultHref = "./private.html";
+    this.showFeaturedFilter = false;
+    this.showHiddenFilter = false;
     this.showFeaturedOnly = false;
     this.showHiddenOnly = false;
     this.chipVariant = "";
@@ -2088,27 +2088,21 @@ var WyControlsBar = class extends i4 {
         ` : this.isScrolled ? b2`<div class="divider"></div>` : ""}
 
         <div class="category-section">
-          ${this.showPrivateVaultLink ? b2`
-            <a
-              class="vault-link"
-              href="${this.privateVaultHref}"
-              aria-label="Open private prompts"
-              title="Private prompts"
-            >
-              <span class="material-symbols-outlined" aria-hidden="true">lock</span>
-            </a>
-          ` : ""}
           <div class="chips-track" role="tablist">
-            <button
-              class="chip chip--featured ${this.showFeaturedOnly ? "active" : ""}"
-              aria-pressed="${this.showFeaturedOnly}"
-              @click="${this._toggleFeatured}"
-            >Featured</button>
-            <button
-              class="chip chip--hidden ${this.showHiddenOnly ? "active" : ""}"
-              aria-pressed="${this.showHiddenOnly}"
-              @click="${this._toggleHidden}"
-            >Hidden</button>
+            ${this.showFeaturedFilter ? b2`
+              <button
+                class="chip chip--featured ${this.showFeaturedOnly ? "active" : ""}"
+                aria-pressed="${this.showFeaturedOnly}"
+                @click="${this._toggleFeatured}"
+              >Featured</button>
+            ` : ""}
+            ${this.showHiddenFilter ? b2`
+              <button
+                class="chip chip--hidden ${this.showHiddenOnly ? "active" : ""}"
+                aria-pressed="${this.showHiddenOnly}"
+                @click="${this._toggleHidden}"
+              >Hidden</button>
+            ` : ""}
             <button
               class="chip ${this.activeCategory === "all" && !this.showFeaturedOnly && !this.showHiddenOnly ? "active" : ""}"
               aria-pressed="${this.activeCategory === "all" && !this.showFeaturedOnly && !this.showHiddenOnly}"
@@ -2208,8 +2202,8 @@ __publicField(WyControlsBar, "properties", {
   searchValue: { type: String, attribute: "search-value" },
   hideViewToggle: { type: Boolean, attribute: "hide-view-toggle" },
   hideDetailsToggle: { type: Boolean, attribute: "hide-details-toggle" },
-  showPrivateVaultLink: { type: Boolean, attribute: "show-private-vault-link" },
-  privateVaultHref: { type: String, attribute: "private-vault-href" },
+  showFeaturedFilter: { type: Boolean, attribute: "show-featured-filter" },
+  showHiddenFilter: { type: Boolean, attribute: "show-hidden-filter" },
   showFeaturedOnly: { type: Boolean, attribute: "show-featured-only" },
   showHiddenOnly: { type: Boolean, attribute: "show-hidden-only" },
   chipVariant: { type: String, attribute: "chip-variant" },
@@ -2550,68 +2544,6 @@ __publicField(WyControlsBar, "styles", i`
       display: none;
     }
 
-    .vault-link {
-      flex: 0 0 auto;
-      width: 28px;
-      height: 28px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--ink-mute, #6B6B6A);
-      border: 1px solid var(--paper-edge, #DDD6C8);
-      border-radius: var(--wy-controls-radius, 999px);
-      text-decoration: none;
-      position: relative;
-      overflow: hidden;
-      transition:
-        color var(--dur-1, 150ms) var(--ease, ease),
-        border-color var(--dur-1, 150ms) var(--ease, ease);
-    }
-
-    .vault-link::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--ink, #282828);
-      opacity: 0;
-      transition: opacity var(--dur-1, 150ms) var(--ease, ease);
-      pointer-events: none;
-    }
-
-    .vault-link:hover,
-    .vault-link:focus-visible {
-      color: var(--ink, #282828);
-      border-color: var(--ink-soft, #B9B2A6);
-    }
-
-    .vault-link:hover::before,
-    .vault-link:focus-visible::before {
-      opacity: 0.06;
-    }
-
-    .vault-link:focus-visible {
-      outline: 2px solid var(--ink, #282828);
-      outline-offset: 2px;
-    }
-
-    .vault-link .material-symbols-outlined {
-      position: relative;
-      z-index: 1;
-      font-family: 'Material Symbols Outlined';
-      font-weight: normal;
-      font-style: normal;
-      font-size: 17px;
-      line-height: 1;
-      letter-spacing: normal;
-      text-transform: none;
-      white-space: nowrap;
-      word-wrap: normal;
-      direction: ltr;
-      font-feature-settings: 'liga';
-      -webkit-font-feature-settings: 'liga';
-      -webkit-font-smoothing: antialiased;
-    }
-
     :host([data-scrolled]) .category-section {
       flex: 0 1 auto;
       max-width: 600px;
@@ -2891,7 +2823,7 @@ __publicField(WyControlsBar, "styles", i`
   `);
 customElements.define("wy-controls-bar", WyControlsBar);
 
-// components/ui/wy-toast.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-toast.js
 var WyToast = class extends i4 {
   constructor() {
     super();
@@ -3211,7 +3143,7 @@ __publicField(WyToast, "styles", i`
   `);
 customElements.define("wy-toast", WyToast);
 
-// components/ui/wy-copy-confirm.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-copy-confirm.js
 var WyCopyConfirm = class extends i4 {
   constructor() {
     super();
@@ -3460,7 +3392,7 @@ __publicField(WyCopyConfirm, "styles", i`
   `);
 customElements.define("wy-copy-confirm", WyCopyConfirm);
 
-// components/ui/wy-modal.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-modal.js
 var WyModal = class extends i4 {
   constructor() {
     super();
@@ -3619,7 +3551,7 @@ __publicField(WyModal, "styles", i`
   `);
 customElements.define("wy-modal", WyModal);
 
-// components/ui/wy-tabs.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-tabs.js
 var WyTabs = class extends i4 {
   render() {
     return b2`
@@ -3718,7 +3650,7 @@ __publicField(WyTabs, "styles", i`
   `);
 customElements.define("wy-tabs", WyTabs);
 
-// components/ui/wy-dropdown.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-dropdown.js
 var WyDropdown = class extends i4 {
   constructor() {
     super();
@@ -3851,7 +3783,7 @@ __publicField(WyDropdown, "properties", {
 });
 customElements.define("wy-dropdown", WyDropdown);
 
-// components/ui/wy-info-panel.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-info-panel.js
 var WyInfoPanel = class extends i4 {
   constructor() {
     super();
@@ -3938,7 +3870,7 @@ __publicField(WyInfoPanel, "styles", i`
     `);
 customElements.define("wy-info-panel", WyInfoPanel);
 
-// components/ui/wy-option-toggle.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-option-toggle.js
 var WyOptionToggle = class extends i4 {
   constructor() {
     super();
@@ -4129,7 +4061,7 @@ __publicField(WyOptionToggle, "properties", {
 });
 customElements.define("wy-option-toggle", WyOptionToggle);
 
-// components/ui/wy-image-upload.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-image-upload.js
 var WyImageUpload = class extends i4 {
   constructor() {
     super();
@@ -4262,7 +4194,7 @@ __publicField(WyImageUpload, "properties", {
 });
 customElements.define("wy-image-upload", WyImageUpload);
 
-// components/ui/wy-code-textarea.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-code-textarea.js
 var WyCodeTextarea = class extends i4 {
   constructor() {
     super();
@@ -4365,7 +4297,7 @@ __publicField(WyCodeTextarea, "properties", {
 });
 customElements.define("wy-code-textarea", WyCodeTextarea);
 
-// components/ui/wy-variable-editor.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-variable-editor.js
 var WyVariableEditor = class extends i4 {
   constructor() {
     super();
@@ -4511,7 +4443,7 @@ __publicField(WyVariableEditor, "properties", {
 });
 customElements.define("wy-variable-editor", WyVariableEditor);
 
-// components/ui/wy-reference-image-editor.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-reference-image-editor.js
 var WyReferenceImageEditor = class extends i4 {
   constructor() {
     super();
@@ -4659,7 +4591,7 @@ __publicField(WyReferenceImageEditor, "properties", {
 });
 customElements.define("wy-reference-image-editor", WyReferenceImageEditor);
 
-// components/ui/wy-variation-editor.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-variation-editor.js
 var WyVariationEditor = class extends i4 {
   constructor() {
     super();
@@ -5232,7 +5164,7 @@ __publicField(WyVariationEditor, "properties", {
 });
 customElements.define("wy-variation-editor", WyVariationEditor);
 
-// components/ui/wy-prompt-editor.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-prompt-editor.js
 var WyPromptEditor = class extends i4 {
   constructor() {
     super();
@@ -6515,7 +6447,7 @@ __publicField(WyPromptEditor, "properties", {
 });
 customElements.define("wy-prompt-editor", WyPromptEditor);
 
-// components/ui/wy-step-editor.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-step-editor.js
 var WyStepEditor = class extends i4 {
   constructor() {
     super();
@@ -6719,13 +6651,13 @@ __publicField(WyStepEditor, "properties", {
 });
 customElements.define("wy-step-editor", WyStepEditor);
 
-// node_modules/lit-html/directive-helpers.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/lit-html/directive-helpers.js
 var { I: t5 } = j;
 var r6 = (o8) => void 0 === o8.strings;
 var m2 = {};
 var p3 = (o8, t6 = m2) => o8._$AH = t6;
 
-// node_modules/lit-html/directives/live.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/lit-html/directives/live.js
 var l3 = e6(class extends i5 {
   constructor(r7) {
     if (super(r7), r7.type !== t4.PROPERTY && r7.type !== t4.ATTRIBUTE && r7.type !== t4.BOOLEAN_ATTRIBUTE) throw Error("The `live` directive is not allowed on child or event bindings");
@@ -6746,7 +6678,7 @@ var l3 = e6(class extends i5 {
   }
 });
 
-// node_modules/lit-html/directives/unsafe-html.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/lit-html/directives/unsafe-html.js
 var e8 = class extends i5 {
   constructor(i6) {
     if (super(i6), this.it = A, i6.type !== t4.CHILD) throw Error(this.constructor.directiveName + "() can only be used in child bindings");
@@ -6764,7 +6696,7 @@ var e8 = class extends i5 {
 e8.directiveName = "unsafeHTML", e8.resultType = 1;
 var o7 = e6(e8);
 
-// node_modules/marked/lib/marked.esm.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/marked/lib/marked.esm.js
 function M2() {
   return { async: false, breaks: false, extensions: null, gfm: true, hooks: null, pedantic: false, renderer: null, silent: false, tokenizer: null, walkTokens: null };
 }
@@ -8002,7 +7934,7 @@ var Xt = g2.parseInline;
 var Vt = b3.parse;
 var Yt = x2.lex;
 
-// components/ui/wy-prompt-modal.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-prompt-modal.js
 var WyPromptModal = class extends i4 {
   constructor() {
     super();
@@ -8989,8 +8921,7 @@ __publicField(WyPromptModal, "styles", i`
     .scrim {
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.3); /* Darker scrim for focus */
-      backdrop-filter: blur(4px);
+      background: rgba(40, 40, 40, 0.6); /* Solid ink scrim — no blur per Nineteenth */
     }
 
     .modal-container {
@@ -9180,7 +9111,7 @@ __publicField(WyPromptModal, "styles", i`
     }
 
     .description-text {
-      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      font-family: var(--ff-sans);
       font-size: 1rem;
       font-weight: 300;
       line-height: 1.6;
@@ -9241,7 +9172,7 @@ __publicField(WyPromptModal, "styles", i`
         background: none;
         border: none;
         color: var(--md-sys-color-text-heading);
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-family: var(--ff-sans);
         font-size: 0.875rem;
         font-weight: 500;
         cursor: pointer;
@@ -9264,7 +9195,7 @@ __publicField(WyPromptModal, "styles", i`
         background: none;
         border: none;
         padding: 12px 0 16px 0;
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-family: var(--ff-sans);
         font-size: 0.875rem;
         font-weight: 500;
         color: var(--md-sys-color-on-surface-variant);
@@ -9377,7 +9308,7 @@ __publicField(WyPromptModal, "styles", i`
         border-radius: 0;
         background-color: var(--md-sys-color-surface-container-lowest, #FDFBF7);
         color: var(--md-sys-color-on-surface, #1D1B20);
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-family: var(--ff-sans);
         font-size: 0.9375rem;
         font-weight: 500;
         cursor: pointer;
@@ -9418,12 +9349,10 @@ __publicField(WyPromptModal, "styles", i`
         min-width: 0;
         min-height: 100%;
         padding: 0;
-        background: var(--md-sys-color-surface-container-lowest, #FDFBF7);
+        background: transparent;
         color: var(--md-sys-color-on-surface, #1D1B20);
-        border: 1px solid var(--paper-edge, #DDD6C8);
         border-radius: 0;
         cursor: pointer;
-        overflow: hidden;
         position: relative;
         text-align: left;
         transition:
@@ -9431,42 +9360,31 @@ __publicField(WyPromptModal, "styles", i`
             box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
     }
 
-    .visual-variation-tile::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: currentColor;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-    }
-
-    .visual-variation-tile:hover::after {
-        opacity: var(--md-sys-state-hover-opacity, 0.08);
-    }
-
     .visual-variation-tile:focus-visible {
         outline: 3px solid var(--wy-prompt-modal-focus-ring, color-mix(in srgb, var(--md-sys-color-primary) 18%, transparent));
         outline-offset: 2px;
     }
 
-    .visual-variation-tile.selected {
-        border-color: var(--md-sys-color-primary, #282828);
-        box-shadow: inset 0 0 0 1px var(--md-sys-color-primary, #282828);
+    /* Selected = 1px ink frame on the plate (img can't host ::after, so frame the border) */
+    .visual-variation-tile.selected .visual-variation-media,
+    .visual-variation-tile.selected .visual-variation-text-tile {
+        border-color: var(--ink, #1A1A1A);
+        box-shadow: 0 0 0 1px var(--ink, #1A1A1A);
     }
 
     .visual-variation-media {
+        position: relative;
         display: block;
         width: 100%;
-        aspect-ratio: 4 / 3;
+        aspect-ratio: 16 / 9;
         object-fit: cover;
-        background: var(--paper-deep, #EEE8DD);
-        border-bottom: 1px solid var(--paper-edge, #DDD6C8);
+        background: linear-gradient(150deg, #E6E0D4, #CDC4B2);
+        border: 1px solid var(--paper-edge, #DDD6C8);
+        transition: opacity var(--dur-2, 350ms) var(--ease, cubic-bezier(0.2, 0.6, 0.2, 1));
     }
 
-    .visual-variation-tile.thumbnail-only .visual-variation-media,
-    .visual-variation-tile.thumbnail-only .visual-variation-text-tile {
-        border-bottom: 0;
+    .visual-variation-tile:hover .visual-variation-media {
+        opacity: 0.9;
     }
 
     .visual-variation-text-tile {
@@ -9476,13 +9394,8 @@ __publicField(WyPromptModal, "styles", i`
         align-items: center;
         justify-content: center;
         padding: var(--spacing-md, 16px);
-        background:
-            linear-gradient(
-                135deg,
-                color-mix(in srgb, var(--paper-deep, #EEE8DD) 74%, transparent),
-                var(--md-sys-color-surface-container-lowest, #FDFBF7)
-            );
-        border-bottom: 1px solid var(--paper-edge, #DDD6C8);
+        background: linear-gradient(150deg, #E6E0D4, #CDC4B2);
+        border: 1px solid var(--paper-edge, #DDD6C8);
     }
 
     .visual-variation-text-tile .material-symbols-outlined {
@@ -9495,15 +9408,19 @@ __publicField(WyPromptModal, "styles", i`
         flex-direction: column;
         gap: var(--spacing-xs, 4px);
         padding: var(--spacing-sm, 12px);
+        padding-top: 8px;
+        margin-top: 10px;
+        border-top: 1px solid var(--paper-edge, #DDD6C8);
         min-width: 0;
     }
 
     .visual-variation-name {
-        color: var(--md-sys-color-on-surface, #1D1B20);
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
-        font-size: 0.8125rem;
-        font-weight: 700;
-        line-height: 1.25;
+        color: var(--ink, #1A1A1A);
+        font-family: var(--ff-serif);
+        font-style: italic;
+        font-weight: 500;
+        font-size: 1rem;
+        line-height: 1.2;
         overflow-wrap: anywhere;
     }
 
@@ -9512,10 +9429,10 @@ __publicField(WyPromptModal, "styles", i`
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
-        color: var(--md-sys-color-text-muted);
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        color: var(--ink-mute, #6B6B6A);
+        font-family: var(--ff-sans);
         font-size: 0.75rem;
-        line-height: 1.35;
+        line-height: 1.45;
     }
 
     .visual-variation-tile.thumbnail-only.has-image .visual-variation-copy {
@@ -9544,7 +9461,7 @@ __publicField(WyPromptModal, "styles", i`
     .variation-image img {
         display: block;
         width: 100%;
-        aspect-ratio: 16 / 10;
+        aspect-ratio: 16 / 9;
         object-fit: cover;
         border: 1px solid var(--paper-edge, #DDD6C8);
     }
@@ -9602,7 +9519,7 @@ __publicField(WyPromptModal, "styles", i`
 
     .reference-image-label {
         color: var(--ink, #1A1A1A);
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-family: var(--ff-sans);
         font-size: 0.875rem;
         font-weight: 600;
         line-height: 1.2;
@@ -9615,7 +9532,7 @@ __publicField(WyPromptModal, "styles", i`
         display: -webkit-box;
         margin-top: 6px;
         color: var(--ink-mute, #6B6B6A);
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-family: var(--ff-sans);
         font-size: 0.75rem;
         line-height: 1.45;
         overflow: hidden;
@@ -9656,7 +9573,7 @@ __publicField(WyPromptModal, "styles", i`
         border-radius: 0;
         background: transparent;
         color: var(--ink, #1A1A1A);
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-family: var(--ff-sans);
         font-size: 0.6875rem;
         font-weight: 600;
         line-height: 1.1;
@@ -9696,7 +9613,7 @@ __publicField(WyPromptModal, "styles", i`
 
     .prompt-instructions-heading {
         margin: 0 0 var(--spacing-xxs, 4px);
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-family: var(--ff-sans);
         font-size: 0.6875rem;
         font-weight: 600;
         letter-spacing: 0.14em;
@@ -9723,7 +9640,7 @@ __publicField(WyPromptModal, "styles", i`
 
     .variation-description-heading {
         margin: 0 0 var(--spacing-xxs, 4px);
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-family: var(--ff-sans);
         font-size: 0.6875rem;
         font-weight: 600;
         letter-spacing: 0.14em;
@@ -9792,7 +9709,7 @@ __publicField(WyPromptModal, "styles", i`
     }
 
     .variation-label {
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-family: var(--ff-sans);
         font-size: 0.75rem;
         font-weight: 600;
         letter-spacing: 0.04em;
@@ -9801,7 +9718,7 @@ __publicField(WyPromptModal, "styles", i`
     }
 
     .variation-select {
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-family: var(--ff-sans);
         font-size: 0.875rem;
         color: var(--md-sys-color-on-surface);
         background: transparent;
@@ -9819,7 +9736,7 @@ __publicField(WyPromptModal, "styles", i`
 
     .form-group label {
         display: block;
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-family: var(--ff-sans);
         font-size: 0.75rem;
         font-weight: 700;
         text-transform: uppercase;
@@ -9834,7 +9751,7 @@ __publicField(WyPromptModal, "styles", i`
         padding: 16px; /* Increased padding for breathing room */
         border: 1px solid var(--md-sys-color-outline-variant);
         border-radius: 0;
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-family: var(--ff-sans);
         font-size: 1rem;
         color: var(--md-sys-color-on-surface);
         background: var(--md-sys-color-surface-container-lowest);
@@ -9856,7 +9773,7 @@ __publicField(WyPromptModal, "styles", i`
     }
 
     .form-group wy-option-toggle {
-      --md-sys-typescale-body-medium: 500 1rem/1.45 var(--font-sans, 'DM Sans', sans-serif);
+      --md-sys-typescale-body-medium: 500 1rem/1.45 var(--ff-sans);
       display: block;
       width: 100%;
     }
@@ -9864,7 +9781,7 @@ __publicField(WyPromptModal, "styles", i`
     .form-group wy-option-toggle .label {
       margin: 0 0 var(--spacing-xs, 4px) 0;
       color: var(--md-sys-color-primary);
-      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      font-family: var(--ff-sans);
       font-size: 0.875rem;
       font-weight: 700;
       line-height: 1.2;
@@ -9876,7 +9793,7 @@ __publicField(WyPromptModal, "styles", i`
       margin: 0;
       max-width: 36rem;
       color: color-mix(in srgb, var(--md-sys-color-primary) 70%, transparent);
-      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      font-family: var(--ff-sans);
       font-size: var(--md-sys-typescale-body-small-size, 0.875rem);
       font-weight: 400;
       line-height: 1.8;
@@ -9904,7 +9821,7 @@ __publicField(WyPromptModal, "styles", i`
     .form-group wy-option-toggle .switch-state {
       min-width: 2.5rem;
       text-align: right;
-      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      font-family: var(--ff-sans);
       font-size: 0.625rem;
       font-weight: 700;
       line-height: 1.1;
@@ -9974,7 +9891,7 @@ __publicField(WyPromptModal, "styles", i`
     .form-group wy-option-toggle .selected-value-text {
       margin: var(--spacing-sm, 8px) 0 0 0;
       color: color-mix(in srgb, var(--md-sys-color-on-surface) 86%, transparent);
-      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      font-family: var(--ff-sans);
       font-size: var(--md-sys-typescale-body-small-size, 0.875rem);
       font-weight: 400;
       line-height: 1.7;
@@ -9984,7 +9901,7 @@ __publicField(WyPromptModal, "styles", i`
       background: var(--md-sys-color-surface-container-highest);
       border-radius: 0;
       padding: 24px;
-      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      font-family: var(--ff-sans);
       font-size: 1rem;
       line-height: 1.7;
       color: var(--md-sys-color-on-surface);
@@ -9996,7 +9913,7 @@ __publicField(WyPromptModal, "styles", i`
     .preview-area p:last-child { margin-bottom: 0; }
     .preview-area h1, .preview-area h2, .preview-area h3,
     .preview-area h4, .preview-area h5, .preview-area h6 {
-      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      font-family: var(--ff-sans);
       font-weight: 600;
       line-height: 1.3;
       margin: 1.2em 0 0.4em;
@@ -10076,7 +9993,7 @@ __publicField(WyPromptModal, "styles", i`
       display: block;
       margin-bottom: 14px;
       color: var(--ink-soft, #A8A49C);
-      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      font-family: var(--ff-sans);
       font-size: 0.6875rem;
       font-weight: 600;
       letter-spacing: 0.18em;
@@ -10093,7 +10010,7 @@ __publicField(WyPromptModal, "styles", i`
     .overview-figure img {
       display: block;
       width: 100%;
-      aspect-ratio: 16 / 10;
+      aspect-ratio: 16 / 9;
       object-fit: cover;
       border: 1px solid var(--paper-edge, #DDD6C8);
     }
@@ -10165,7 +10082,7 @@ __publicField(WyPromptModal, "styles", i`
         border-radius: 0;
         text-transform: uppercase;
         letter-spacing: 0.18em;
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-family: var(--ff-sans);
         font-size: 0.875rem;
         font-weight: 500;
         cursor: pointer;
@@ -10206,7 +10123,7 @@ __publicField(WyPromptModal, "styles", i`
     }
 
     .stepper-label {
-      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      font-family: var(--ff-sans);
       font-size: var(--md-sys-typescale-label-medium-size, 0.75rem);
       letter-spacing: 0.05em;
       text-transform: uppercase;
@@ -10238,7 +10155,7 @@ __publicField(WyPromptModal, "styles", i`
       background: none;
       border: none;
       padding: 8px 0;
-      font-family: var(--font-sans, 'DM Sans', sans-serif);
+      font-family: var(--ff-sans);
       font-size: 0.875rem;
       font-weight: 500;
       color: var(--md-sys-color-on-surface-variant);
@@ -10340,7 +10257,7 @@ __publicField(WyPromptModal, "styles", i`
       }
 
       .overview-figure img {
-        aspect-ratio: 16 / 10;
+        aspect-ratio: 16 / 9;
         max-height: 220px;
       }
 
@@ -10374,7 +10291,7 @@ __publicField(WyPromptModal, "styles", i`
     `);
 customElements.define("wy-prompt-modal", WyPromptModal);
 
-// components/ui/wy-links-modal.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-links-modal.js
 var WyLinksModal = class extends i4 {
   constructor() {
     super();
@@ -11000,7 +10917,7 @@ try {
   throw error;
 }
 
-// components/ui/wy-color-palette.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-color-palette.js
 var WyColorPalette = class extends i4 {
   constructor() {
     super();
@@ -11421,7 +11338,7 @@ __publicField(WyColorPalette, "styles", i`
     `);
 customElements.define("wy-color-palette", WyColorPalette);
 
-// components/ui/index.js
+// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/index.js
 console.log("[prompts-library] Local web components registered");
 /*! Bundled license information:
 

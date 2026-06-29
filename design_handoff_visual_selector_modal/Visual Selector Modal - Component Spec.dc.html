@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/the-nineteenth-design-system-0c7ae4e8-f3b4-48ef-aa97-270c036b6328/colors_and_type.css">
+  <link rel="stylesheet" href="_ds/the-nineteenth-design-system-0c7ae4e8-f3b4-48ef-aa97-270c036b6328/preview/_shell.css">
+  <script src="_ds/the-nineteenth-design-system-0c7ae4e8-f3b4-48ef-aa97-270c036b6328/_ds_bundle.js"></script>
+  <style>
+    html, body { margin: 0; padding: 0; background: var(--paper); }
+    *, *::before, *::after { box-sizing: border-box; }
+    .spec-icon { display: inline-flex; align-items: center; justify-content: center; }
+    .spec-icon svg { display: block; }
+  </style>
+</helmet>
+
+<div style="max-width: 1320px; margin: 0 auto; padding: 72px var(--outer-gutter, 40px) 120px; font-family: var(--ff-sans); color: var(--ink);">
+
+  <!-- MASTHEAD -->
+  <header style="display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 48px; align-items: end;">
+    <div>
+      <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 28px;">
+        <span style="font-family: var(--ff-sans); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.18em; font-weight: 500; color: var(--ink-mute);">Component</span>
+        <span style="width: 40px; border-top: 1px solid var(--ink);"></span>
+        <span style="font-family: var(--ff-serif); font-style: italic; font-size: 0.95rem; color: var(--ink-mute);">Nº 09</span>
+      </div>
+      <h1 style="font-family: var(--ff-serif); font-weight: 500; font-size: clamp(2.75rem, 5vw, 4.25rem); line-height: 1.02; letter-spacing: -0.015em; margin: 0; color: var(--ink);">The visual selector <em style="font-style: italic;">modal</em></h1>
+      <p style="font-family: var(--ff-sans); font-size: 1.0625rem; line-height: 1.6; color: var(--ink-mute); max-width: 56ch; margin: 24px 0 0; font-weight: 400;">A two-column dialog for browsing a prompt and its visual variants. Established, approved, and now folded into the house — every surface drawn in paper, ink, and hairline rule.</p>
+    </div>
+    <div style="border-top: 1px solid var(--ink); padding-top: 14px;">
+      <div style="display: flex; justify-content: space-between; font-family: var(--ff-mono); font-size: 0.6875rem; color: var(--ink-mute); padding: 4px 0;"><span>SURFACE</span><span>Dialog · 1120px</span></div>
+      <div style="display: flex; justify-content: space-between; font-family: var(--ff-mono); font-size: 0.6875rem; color: var(--ink-mute); padding: 4px 0; border-top: 1px solid var(--paper-edge);"><span>TYPE</span><span>Lora · Inter</span></div>
+      <div style="display: flex; justify-content: space-between; font-family: var(--ff-mono); font-size: 0.6875rem; color: var(--ink-mute); padding: 4px 0; border-top: 1px solid var(--paper-edge);"><span>RADIUS</span><span>0</span></div>
+      <div style="display: flex; justify-content: space-between; font-family: var(--ff-mono); font-size: 0.6875rem; color: var(--ink-mute); padding: 4px 0; border-top: 1px solid var(--paper-edge);"><span>STATUS</span><span>Approved</span></div>
+    </div>
+  </header>
+
+  <div style="border-top: 1px solid var(--ink); margin: 56px 0 0;"></div>
+
+  <!-- SECTION I — THE ARTIFACT -->
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 16px; margin-bottom: 28px;">
+      <span style="font-family: var(--ff-serif); font-style: italic; font-size: 1rem; color: var(--ink-mute);">I.</span>
+      <span style="font-family: var(--ff-sans); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.18em; font-weight: 500; color: var(--ink);">The assembled dialog</span>
+    </div>
+
+    <!-- scrim stage -->
+    <div style="background: var(--paper-deep); padding: 0;">
+      <div style="background: rgba(40, 40, 40, 0.6); padding: 56px; display: flex; justify-content: center;">
+
+        <!-- MODAL -->
+        <div style="width: 100%; max-width: 1080px; background: var(--paper); border: 1px solid var(--paper-edge); box-shadow: var(--shadow-modal); display: flex; flex-direction: column; overflow: hidden;">
+
+          <!-- header -->
+          <div style="padding: 32px 32px 8px; display: flex; flex-direction: column; gap: 16px; flex-shrink: 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <button style="display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px 0 14px; border: none; background: var(--ink); color: var(--paper); font-family: var(--ff-sans); font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.18em; cursor: pointer; transition: opacity var(--dur-1) var(--ease);" style-hover="opacity: 0.85;">
+                  <span class="spec-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><rect x="9" y="9" width="11" height="11"></rect><path d="M5 15V5a1 1 0 0 1 1-1h9"></path></svg></span>
+                  <span>Copy prompt</span>
+                </button>
+                <button aria-label="Copy link" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border: 1px solid var(--paper-edge); background: transparent; color: var(--ink); cursor: pointer; transition: background var(--dur-1) var(--ease), color var(--dur-1) var(--ease);" style-hover="background: var(--ink); color: var(--paper);">
+                  <span class="spec-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><path d="M10 14a4 4 0 0 0 6 0l2-2a4 4 0 0 0-6-6l-1 1"></path><path d="M14 10a4 4 0 0 0-6 0l-2 2a4 4 0 0 0 6 6l1-1"></path></svg></span>
+                </button>
+                <button aria-label="Edit" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border: 1px solid var(--paper-edge); background: transparent; color: var(--ink); cursor: pointer; transition: background var(--dur-1) var(--ease), color var(--dur-1) var(--ease);" style-hover="background: var(--ink); color: var(--paper);">
+                  <span class="spec-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><path d="M4 20h4L19 9l-4-4L4 16z"></path><path d="M14 6l4 4"></path></svg></span>
+                </button>
+                <button aria-label="Download" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border: 1px solid var(--paper-edge); background: transparent; color: var(--ink); cursor: pointer; transition: background var(--dur-1) var(--ease), color var(--dur-1) var(--ease);" style-hover="background: var(--ink); color: var(--paper);">
+                  <span class="spec-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><path d="M12 4v11"></path><path d="M7 11l5 5 5-5"></path><path d="M5 20h14"></path></svg></span>
+                </button>
+              </div>
+              <button aria-label="Close" onClick="{{ noop }}" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border: 1px solid var(--paper-edge); background: transparent; color: var(--ink); cursor: pointer; transition: background var(--dur-1) var(--ease), color var(--dur-1) var(--ease);" style-hover="background: var(--ink); color: var(--paper);">
+                <span class="spec-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><path d="M6 6l12 12M18 6L6 18"></path></svg></span>
+              </button>
+            </div>
+          </div>
+
+          <!-- content: visual selector layout -->
+          <div style="display: grid; grid-template-columns: minmax(0, 1fr) 264px; gap: 24px; padding: 0 32px 32px; align-items: start;">
+
+            <!-- main column -->
+            <div style="min-width: 0; display: flex; flex-direction: column;">
+              <!-- prompt intro -->
+              <div style="margin-bottom: 16px;">
+                <span style="font-family: var(--ff-sans); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.18em; font-weight: 500; color: var(--ink-mute);">Art</span>
+                <h2 style="font-family: var(--ff-serif); font-weight: 500; font-size: 2.5rem; line-height: 1.1; letter-spacing: -0.015em; margin: 10px 0 12px; color: var(--ink);">Image restyle</h2>
+                <p style="font-family: var(--ff-sans); font-size: 1rem; line-height: 1.6; color: var(--ink-mute); margin: 0; max-width: 58ch;">Converts an uploaded image into a refined archival study, an expressive painting, or a museum-catalog plate treatment.</p>
+              </div>
+
+              <!-- selected variation panel -->
+              <div style="display: flex; flex-direction: column; gap: 24px; margin: 8px 0 24px;">
+                <div style="border-top: 1px solid var(--paper-edge); border-bottom: 1px solid var(--paper-edge); padding: 16px 0;">
+                  <button type="button" onClick="{{ toggleDetails }}" style="display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; margin: 0; padding: 0; background: transparent; border: 0; cursor: pointer; text-align: left;">
+                    <span style="font-family: var(--ff-serif); font-size: 1.125rem; font-weight: 500; line-height: 1.25; color: var(--ink);">{{ activeName }}</span>
+                    <span class="spec-icon" style="transition: transform var(--dur-1) var(--ease); transform: {{ chevronTransform }};"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><path d="M6 9l6 6 6-6"></path></svg></span>
+                  </button>
+                  <sc-if value="{{ detailsExpanded }}" hint-placeholder-val="{{ true }}">
+                    <p style="font-family: var(--ff-sans); font-size: 0.9375rem; line-height: 1.6; color: var(--ink-mute); margin: 12px 0 0;">{{ activeDesc }}</p>
+                  </sc-if>
+                </div>
+
+                <!-- reference images -->
+                <sc-if value="{{ showReferenceImages }}" hint-placeholder-val="{{ true }}">
+                  <div>
+                    <p style="font-family: var(--ff-sans); font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); margin: 0 0 8px;">Reference images</p>
+                    <div style="border: 1px solid var(--paper-edge); background: var(--paper);">
+                      <div style="display: grid; grid-template-columns: 72px minmax(0, 1fr) auto; align-items: center; gap: 16px; padding: 16px;">
+                        <span style="display: block; width: 72px; height: 72px; border: 1px solid var(--paper-edge); background: linear-gradient(140deg, var(--paper-deep), #cabfa6);"></span>
+                        <div style="min-width: 0;">
+                          <div style="font-family: var(--ff-sans); font-size: 0.875rem; font-weight: 600; color: var(--ink); line-height: 1.2;">Style reference</div>
+                          <div style="font-family: var(--ff-sans); font-size: 0.75rem; color: var(--ink-mute); line-height: 1.45; margin-top: 6px;">public/images/1780434725046.jpg</div>
+                          <span style="display: inline-block; margin-top: 6px; font-family: var(--ff-mono); font-size: 0.6875rem; color: var(--ink-soft);">{{ refVarToken }}</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                          <button style="display: flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 10px; border: 1px solid var(--paper-edge); background: transparent; color: var(--ink); font-family: var(--ff-sans); font-size: 0.6875rem; font-weight: 600; cursor: pointer; transition: background var(--dur-1) var(--ease), color var(--dur-1) var(--ease);" style-hover="background: var(--ink); color: var(--paper);">
+                            <span class="spec-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><rect x="6" y="5" width="12" height="16"></rect><path d="M9 5V3h6v2"></path><path d="M9 11h6M9 15h6"></path></svg></span>
+                            <span>Instruction</span>
+                          </button>
+                          <button style="display: flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 10px; border: 1px solid var(--paper-edge); background: transparent; color: var(--ink); font-family: var(--ff-sans); font-size: 0.6875rem; font-weight: 600; cursor: pointer; transition: background var(--dur-1) var(--ease), color var(--dur-1) var(--ease);" style-hover="background: var(--ink); color: var(--paper);">
+                            <span class="spec-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><rect x="4" y="5" width="16" height="14"></rect><circle cx="9" cy="10" r="1.5"></circle><path d="M4 17l5-5 4 4 3-3 4 4"></path></svg></span>
+                            <span>Image</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </sc-if>
+              </div>
+
+              <!-- tabs -->
+              <div style="display: flex; align-items: center; gap: 32px; border-bottom: 1px solid var(--paper-edge);">
+                <button type="button" onClick="{{ selectOverview }}" style="{{ tab0Style }}">Overview</button>
+                <button type="button" onClick="{{ selectPreview }}" style="{{ tab1Style }}">Full prompt</button>
+              </div>
+
+              <!-- body -->
+              <div style="padding: 24px 0 0; flex: 1;">
+                <sc-if value="{{ showOverview }}" hint-placeholder-val="{{ true }}">
+                  <div>
+                    <figure style="margin: 0 0 20px;">
+                      <div style="width: 100%; aspect-ratio: 16 / 9; border: 1px solid var(--paper-edge); background: linear-gradient(140deg, var(--paper-deep), #BFB5A6);"></div>
+                      <figcaption style="margin: 8px 0 0; text-align: right; font-family: var(--ff-serif); font-style: italic; font-size: 0.8125rem; color: var(--ink-mute);">Nº 01 — Example output</figcaption>
+                    </figure>
+                    <p style="font-family: var(--ff-sans); font-size: 1.0625rem; line-height: 1.75; color: var(--ink); margin: 0; max-width: 60ch;">Upload an image, then choose a conversion style. Optionally attach a style reference to align the result more closely with a chosen treatment.</p>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ showPreview }}" hint-placeholder-val="{{ false }}">
+                  <div style="font-family: var(--ff-mono); font-size: 0.8125rem; line-height: 1.7; color: var(--ink); background: var(--paper-deep); border: 1px solid var(--paper-edge); padding: 20px 22px; white-space: pre-wrap;">{{ promptText }}</div>
+                </sc-if>
+              </div>
+            </div>
+
+            <!-- variant rail -->
+            <aside aria-label="Variants" style="position: sticky; top: 16px; display: flex; flex-direction: column; gap: 12px; padding: 16px; background: var(--paper-deep); border: 1px solid var(--paper-edge);">
+              <p style="font-family: var(--ff-sans); font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); margin: 0;">Variant</p>
+              <div role="listbox" style="display: grid; grid-template-columns: 1fr; gap: 12px;">
+                <sc-for list="{{ variants }}" as="variant" hint-placeholder-count="5">
+                  <button type="button" role="option" onClick="{{ variant.onSelect }}" style="position: relative; display: flex; flex-direction: column; min-width: 0; padding: 0; background: transparent; border: 0; cursor: pointer; text-align: left;">
+                    <span style="position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; background: linear-gradient(150deg, #E6E0D4, #CDC4B2); border: 1px solid var(--paper-edge); transition: opacity var(--dur-2) var(--ease);" style-hover="opacity: 0.9;">
+                      <sc-if value="{{ variant.selected }}" hint-placeholder-val="{{ false }}">
+                        <span style="position: absolute; inset: -1px; border: 1px solid {{ accent }}; pointer-events: none;"></span>
+                      </sc-if>
+                    </span>
+                    <span style="display: flex; align-items: baseline; justify-content: space-between; gap: 10px; border-top: 1px solid var(--paper-edge); padding-top: 8px; margin-top: 10px;">
+                      <span style="font-family: var(--ff-serif); font-style: italic; font-weight: 500; font-size: 0.9375rem; line-height: 1.2; color: var(--ink);">{{ variant.name }}</span>
+                    </span>
+                  </button>
+                </sc-for>
+              </div>
+            </aside>
+
+          </div>
+        </div>
+        <!-- /MODAL -->
+      </div>
+    </div>
+  </section>
+
+  <div style="border-top: 1px solid var(--ink); margin: 72px 0 0;"></div>
+
+  <!-- SECTION II — ANATOMY -->
+  <section style="margin-top: 40px;">
+    <div style="display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px;">
+      <span style="font-family: var(--ff-serif); font-style: italic; font-size: 1rem; color: var(--ink-mute);">II.</span>
+      <span style="font-family: var(--ff-sans); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.18em; font-weight: 500; color: var(--ink);">Anatomy</span>
+    </div>
+    <p style="font-family: var(--ff-sans); font-size: 1rem; line-height: 1.6; color: var(--ink-mute); max-width: 56ch; margin: 0 0 8px;">Each approved part, drawn at rest with the tokens that hold it. These are the pieces the house now owns.</p>
+
+    <!-- A · Header actions -->
+    <div style="border-top: 1px solid var(--ink); padding-top: 24px; margin-top: 32px; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; align-items: start;">
+      <div>
+        <div style="font-family: var(--ff-serif); font-style: italic; font-size: 1.25rem; color: var(--ink);">A. Header actions</div>
+        <p style="font-family: var(--ff-sans); font-size: 0.875rem; line-height: 1.55; color: var(--ink-mute); margin: 10px 0 0;">Three weights: primary fill, hairline icon, and a labeled primary. All square. Hover inverts.</p>
+        <div style="font-family: var(--ff-mono); font-size: 0.6875rem; color: var(--ink-soft); margin-top: 16px; line-height: 1.6;">40×40 · radius 0<br>border 1px paper-edge<br>hover → ink / paper</div>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px;">
+        <button style="display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px 0 14px; border: none; background: var(--ink); color: var(--paper); font-family: var(--ff-sans); font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.18em; cursor: pointer; transition: opacity var(--dur-1) var(--ease);" style-hover="opacity: 0.85;">
+          <span class="spec-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><rect x="9" y="9" width="11" height="11"></rect><path d="M5 15V5a1 1 0 0 1 1-1h9"></path></svg></span>
+          <span>Copy prompt</span>
+        </button>
+        <button aria-label="Save" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border: none; background: var(--ink); color: var(--paper); cursor: pointer; transition: opacity var(--dur-1) var(--ease);" style-hover="opacity: 0.85;">
+          <span class="spec-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><path d="M5 5h11l3 3v11H5z"></path><path d="M8 5v5h7M8 19v-5h8"></path></svg></span>
+        </button>
+        <button aria-label="Link" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border: 1px solid var(--paper-edge); background: transparent; color: var(--ink); cursor: pointer; transition: background var(--dur-1) var(--ease), color var(--dur-1) var(--ease);" style-hover="background: var(--ink); color: var(--paper);">
+          <span class="spec-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><path d="M10 14a4 4 0 0 0 6 0l2-2a4 4 0 0 0-6-6l-1 1"></path><path d="M14 10a4 4 0 0 0-6 0l-2 2a4 4 0 0 0 6 6l1-1"></path></svg></span>
+        </button>
+        <button aria-label="Edit" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border: 1px solid var(--paper-edge); background: transparent; color: var(--ink); cursor: pointer; transition: background var(--dur-1) var(--ease), color var(--dur-1) var(--ease);" style-hover="background: var(--ink); color: var(--paper);">
+          <span class="spec-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><path d="M4 20h4L19 9l-4-4L4 16z"></path><path d="M14 6l4 4"></path></svg></span>
+        </button>
+        <button aria-label="Close" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border: 1px solid var(--paper-edge); background: transparent; color: var(--ink); cursor: pointer; transition: background var(--dur-1) var(--ease), color var(--dur-1) var(--ease);" style-hover="background: var(--ink); color: var(--paper);">
+          <span class="spec-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><path d="M6 6l12 12M18 6L6 18"></path></svg></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- B · Tabs -->
+    <div style="border-top: 1px solid var(--paper-edge); padding-top: 24px; margin-top: 32px; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; align-items: start;">
+      <div>
+        <div style="font-family: var(--ff-serif); font-style: italic; font-size: 1.25rem; color: var(--ink);">B. Tabs</div>
+        <p style="font-family: var(--ff-sans); font-size: 0.875rem; line-height: 1.55; color: var(--ink-mute); margin: 10px 0 0;">Underline navigation. The active tab carries an ink rule and weight; the rest sit muted.</p>
+        <div style="font-family: var(--ff-mono); font-size: 0.6875rem; color: var(--ink-soft); margin-top: 16px; line-height: 1.6;">active → 2px ink rule<br>idle → ink-mute, 500</div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 32px; border-bottom: 1px solid var(--paper-edge); max-width: 360px;">
+        <button type="button" onClick="{{ selectOverview }}" style="{{ tab0Style }}">Overview</button>
+        <button type="button" onClick="{{ selectPreview }}" style="{{ tab1Style }}">Full prompt</button>
+      </div>
+    </div>
+
+    <!-- C · Variant tiles -->
+    <div style="border-top: 1px solid var(--paper-edge); padding-top: 24px; margin-top: 32px; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; align-items: start;">
+      <div>
+        <div style="font-family: var(--ff-serif); font-style: italic; font-size: 1.25rem; color: var(--ink);">C. Variant tiles</div>
+        <p style="font-family: var(--ff-sans); font-size: 0.875rem; line-height: 1.55; color: var(--ink-mute); margin: 10px 0 0;">A neutral plate over a serif caption — name, edition number, and a two-line note. The chosen tile gains an accent frame. Click to select.</p>
+        <div style="font-family: var(--ff-mono); font-size: 0.6875rem; color: var(--ink-soft); margin-top: 16px; line-height: 1.6;">media 16:9 · radius 0<br>caption → Lora italic<br>selected → accent frame</div>
+      </div>
+      <div role="listbox" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(168px, 1fr)); gap: 12px;">
+        <sc-for list="{{ variants }}" as="variant" hint-placeholder-count="5">
+          <button type="button" role="option" onClick="{{ variant.onSelect }}" style="position: relative; display: flex; flex-direction: column; min-width: 0; padding: 0; background: transparent; border: 0; cursor: pointer; text-align: left;">
+            <span style="position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; background: linear-gradient(150deg, #E6E0D4, #CDC4B2); border: 1px solid var(--paper-edge); transition: opacity var(--dur-2) var(--ease);" style-hover="opacity: 0.9;">
+              <sc-if value="{{ variant.selected }}" hint-placeholder-val="{{ false }}">
+                <span style="position: absolute; inset: -1px; border: 1px solid {{ accent }}; pointer-events: none;"></span>
+              </sc-if>
+            </span>
+            <span style="display: flex; align-items: baseline; justify-content: space-between; gap: 10px; border-top: 1px solid var(--paper-edge); padding-top: 8px; margin-top: 10px;">
+              <span style="font-family: var(--ff-serif); font-style: italic; font-weight: 500; font-size: 1rem; line-height: 1.2; color: var(--ink);">{{ variant.name }}</span>
+            </span>
+            <span style="font-family: var(--ff-sans); font-size: 0.75rem; line-height: 1.45; color: var(--ink-mute); margin-top: 6px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{{ variant.desc }}</span>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- D · Selected-variant panel -->
+    <div style="border-top: 1px solid var(--paper-edge); padding-top: 24px; margin-top: 32px; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; align-items: start;">
+      <div>
+        <div style="font-family: var(--ff-serif); font-style: italic; font-size: 1.25rem; color: var(--ink);">D. Selected panel</div>
+        <p style="font-family: var(--ff-sans); font-size: 0.875rem; line-height: 1.55; color: var(--ink-mute); margin: 10px 0 0;">A serif name bracketed by hairline rules, with a chevron disclosure for its description. Click to toggle.</p>
+        <div style="font-family: var(--ff-mono); font-size: 0.6875rem; color: var(--ink-soft); margin-top: 16px; line-height: 1.6;">name → Lora 1.125rem<br>rules → paper-edge</div>
+      </div>
+      <div style="max-width: 520px;">
+        <div style="border-top: 1px solid var(--paper-edge); border-bottom: 1px solid var(--paper-edge); padding: 16px 0;">
+          <button type="button" onClick="{{ toggleDetails }}" style="display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; margin: 0; padding: 0; background: transparent; border: 0; cursor: pointer; text-align: left;">
+            <span style="font-family: var(--ff-serif); font-size: 1.125rem; font-weight: 500; line-height: 1.25; color: var(--ink);">{{ activeName }}</span>
+            <span class="spec-icon" style="transition: transform var(--dur-1) var(--ease); transform: {{ chevronTransform }};"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><path d="M6 9l6 6 6-6"></path></svg></span>
+          </button>
+          <sc-if value="{{ detailsExpanded }}" hint-placeholder-val="{{ true }}">
+            <p style="font-family: var(--ff-sans); font-size: 0.9375rem; line-height: 1.6; color: var(--ink-mute); margin: 12px 0 0;">{{ activeDesc }}</p>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+
+    <!-- E · Variable inputs -->
+    <div style="border-top: 1px solid var(--paper-edge); padding-top: 24px; margin-top: 32px; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; align-items: start;">
+      <div>
+        <div style="font-family: var(--ff-serif); font-style: italic; font-size: 1.25rem; color: var(--ink);">E. Variable inputs</div>
+        <p style="font-family: var(--ff-sans); font-size: 0.875rem; line-height: 1.55; color: var(--ink-mute); margin: 10px 0 0;">Text field, multiline area, and a two-state switch. Square corners, hairline borders, ink focus.</p>
+        <div style="font-family: var(--ff-mono); font-size: 0.6875rem; color: var(--ink-soft); margin-top: 16px; line-height: 1.6;">border 1px paper-edge<br>focus → 1px ink</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 24px; max-width: 520px;">
+        <div>
+          <label style="display: block; font-family: var(--ff-sans); font-size: 0.8125rem; font-weight: 600; color: var(--ink); margin-bottom: 8px;">Subject</label>
+          <input type="text" placeholder="A weathered oak console…" style="width: 100%; min-height: 48px; padding: 0 16px; border: 1px solid var(--paper-edge); background: var(--white); color: var(--ink); font-family: var(--ff-sans); font-size: 0.9375rem; outline: none;" style-focus="border-color: var(--ink);">
+        </div>
+        <div>
+          <label style="display: block; font-family: var(--ff-sans); font-size: 0.8125rem; font-weight: 600; color: var(--ink); margin-bottom: 8px;">Notes</label>
+          <textarea rows="3" placeholder="Markdown supported" style="width: 100%; padding: 12px 16px; border: 1px solid var(--paper-edge); background: var(--white); color: var(--ink); font-family: var(--ff-sans); font-size: 0.9375rem; line-height: 1.6; resize: vertical; outline: none;" style-focus="border-color: var(--ink);"></textarea>
+          <span style="display: block; font-family: var(--ff-sans); font-size: 0.75rem; color: var(--ink-soft); margin-top: 6px;">Markdown supported</span>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; border: 1px solid var(--paper-edge); padding: 16px;">
+          <div style="min-width: 0;">
+            <div style="font-family: var(--ff-sans); font-size: 0.875rem; font-weight: 600; color: var(--ink);">View perspective</div>
+            <div style="font-family: var(--ff-sans); font-size: 0.8125rem; color: var(--ink-mute); margin-top: 2px;">{{ toggleLabel }}</div>
+          </div>
+          <button type="button" role="switch" aria-checked="{{ toggleChecked }}" onClick="{{ toggleSwitch }}" style="position: relative; flex: 0 0 auto; width: 52px; height: 28px; border: 1px solid var(--ink); background: {{ toggleTrackBg }}; cursor: pointer; padding: 0; transition: background var(--dur-1) var(--ease);">
+            <span style="position: absolute; top: 2px; left: 2px; width: 22px; height: 22px; background: {{ toggleKnobBg }}; transition: transform var(--dur-1) var(--ease); transform: {{ toggleKnobTransform }};"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- F · Modal shell & scrim -->
+    <div style="border-top: 1px solid var(--paper-edge); padding-top: 24px; margin-top: 32px; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; align-items: start;">
+      <div>
+        <div style="font-family: var(--ff-serif); font-style: italic; font-size: 1.25rem; color: var(--ink);">F. Shell &amp; scrim</div>
+        <p style="font-family: var(--ff-sans); font-size: 0.875rem; line-height: 1.55; color: var(--ink-mute); margin: 10px 0 0;">Paper surface, hairline edge, faint modal lift, over a solid ink scrim at sixty percent.</p>
+        <div style="font-family: var(--ff-mono); font-size: 0.6875rem; color: var(--ink-soft); margin-top: 16px; line-height: 1.6;">scrim → rgba(40,40,40,.6)<br>shadow → shadow-modal<br>edge → 1px paper-edge</div>
+      </div>
+      <div style="background: rgba(40, 40, 40, 0.6); padding: 32px; display: flex; justify-content: center;">
+        <div style="width: 100%; max-width: 420px; background: var(--paper); border: 1px solid var(--paper-edge); box-shadow: var(--shadow-modal); padding: 28px;">
+          <span style="font-family: var(--ff-sans); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.18em; color: var(--ink-mute);">Dialog</span>
+          <h3 style="font-family: var(--ff-serif); font-weight: 500; font-size: 1.75rem; line-height: 1.1; letter-spacing: -0.015em; margin: 10px 0 0; color: var(--ink);">A surface, <em style="font-style: italic;">in paper.</em></h3>
+          <p style="font-family: var(--ff-sans); font-size: 0.9375rem; line-height: 1.6; color: var(--ink-mute); margin: 12px 0 0;">No rounding, no glow — only the single reserved shadow and a 1px edge.</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- COLOPHON -->
+  <div style="border-top: 1px solid var(--ink); margin-top: 80px; padding-top: 16px; display: flex; justify-content: space-between; align-items: baseline;">
+    <span style="font-family: var(--ff-serif); font-style: italic; font-size: 0.95rem; color: var(--ink-mute);">The Nineteenth — Component library</span>
+    <span style="font-family: var(--ff-mono); font-size: 0.6875rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.14em;">Visual selector · Nº 09</span>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 1320}, &quot;accentColor&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#1A1A1A&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;options&quot;: [&quot;#1A1A1A&quot;, &quot;#C06F45&quot;, &quot;#7D8E39&quot;, &quot;#C06D5C&quot;], &quot;section&quot;: &quot;Treatment&quot;}, &quot;showReferenceImages&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Treatment&quot;}}">
+class Component extends DCLogic {
+  state = {
+    activeTab: 'overview',
+    selectedId: 'technical-engraving',
+    detailsExpanded: true,
+    toggleOn: false,
+  };
+
+  _variants() {
+    return [
+      { id: 'technical-engraving', name: 'Technical Engraving', desc: 'Thin graphite-gray lines, restrained monochrome tone, and aged paper — an archival plate sensibility.' },
+      { id: 'blue-white', name: 'Blue-and-White Watercolor', desc: 'Porcelain-like indigo pigment on aged warm ivory paper, granular and concentrated in the detail.' },
+      { id: 'museum-catalog', name: 'Museum Catalog Watercolor', desc: 'Subdued watercolor-and-graphite plate with the quiet authority of an early museum catalog.' },
+      { id: 'bargue', name: 'Bargue Lithograph Study', desc: 'A monochrome 19th-century atelier drawing plate after Charles Bargue\u2019s Cours de Dessin.' },
+      { id: 'landscape-oil', name: 'Landscape Oil Painting', desc: 'Romantic English portraiture under a tumultuous, stormy sky; theatrical, directional light.' },
+    ];
+  }
+
+  _promptText() {
+    return 'Convert the provided image to a precise antiquarian technical engraving style: thin graphite-gray ink lines on aged warm paper, restrained monochrome palette, formal measured composition, and an archival plate-like sensibility.\n\nUse delicate ruled linework, hairline contours, sparse crosshatching or parallel hatching for tonal structure, and subtle paper grain or age patina.';
+  }
+
+  _tabStyle(active, accent) {
+    const base = 'background: none; border: none; padding: 12px 0 16px; font-family: var(--ff-sans); font-size: 0.875rem; cursor: pointer; margin: 0; white-space: nowrap; border-bottom: 2px solid transparent; transition: color var(--dur-1) var(--ease);';
+    if (active) {
+      return base + ' color: var(--ink); font-weight: 700; border-bottom-color: ' + accent + ';';
+    }
+    return base + ' color: var(--ink-mute); font-weight: 500;';
+  }
+
+  renderVals() {
+    const accent = this.props.accentColor ?? '#1A1A1A';
+    const variants = this._variants().map((v, i) => ({
+      ...v,
+      num: 'Nº 0' + (i + 1),
+      selected: v.id === this.state.selectedId,
+      onSelect: () => this.setState({ selectedId: v.id }),
+    }));
+    const active = variants.find(v => v.selected) || variants[0];
+    const overview = this.state.activeTab === 'overview';
+
+    return {
+      accent,
+      variants,
+      activeName: active.name,
+      activeDesc: active.desc,
+      promptText: this._promptText(),
+      refVarToken: '{{boxer}}',
+      noop: () => {},
+
+      selectOverview: () => this.setState({ activeTab: 'overview' }),
+      selectPreview: () => this.setState({ activeTab: 'preview' }),
+      showOverview: overview,
+      showPreview: !overview,
+      tab0Style: this._tabStyle(overview, accent),
+      tab1Style: this._tabStyle(!overview, accent),
+
+      detailsExpanded: this.state.detailsExpanded,
+      toggleDetails: () => this.setState({ detailsExpanded: !this.state.detailsExpanded }),
+      chevronTransform: this.state.detailsExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+
+      showReferenceImages: this.props.showReferenceImages ?? true,
+
+      toggleSwitch: () => this.setState({ toggleOn: !this.state.toggleOn }),
+      toggleChecked: this.state.toggleOn ? 'true' : 'false',
+      toggleLabel: this.state.toggleOn ? 'Perspective — restrained dimensional view' : 'Elevation — straight-on centered view',
+      toggleTrackBg: this.state.toggleOn ? 'var(--ink)' : 'transparent',
+      toggleKnobBg: this.state.toggleOn ? 'var(--paper)' : 'var(--ink)',
+      toggleKnobTransform: this.state.toggleOn ? 'translateX(24px)' : 'translateX(0)',
+    };
+  }
+}
+</script>
+</body>
+</html>

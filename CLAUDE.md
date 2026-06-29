@@ -186,6 +186,8 @@ First variation is default. User input preserved when switching. Variables share
 
 ### Prompt Preview Images
 
+Prompt preview artwork should be exact `1920x1080` images, which is a `16:9` landscape aspect ratio. The public grid/card UI renders prompt thumbnails in a 16:9 frame, so normalize generated preview images to exact dimensions before committing rather than relying on images that are only visually close to 16:9.
+
 Multi-variant prompt previews have two levels: the prompt-level `image` is the hero/card image, while each `variations[].image` is used for that variant's visual preview.
 
 When an image-generation prompt has multiple variants, save the shared base/reference image used to generate the variant previews in `public/images/` and record it on the prompt as `previewBaseImage`. Use the same saved base image for future variant preview images so the variant set shows standardized results. Add a short `previewBaseImageDescription` when the source or purpose would not be obvious from the filename.
