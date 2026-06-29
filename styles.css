@@ -93,7 +93,7 @@ body {
 body.controls-floating .header-logo-text { display: none; }
 body.controls-floating:not(.private-vault-page) .header-top .quick-links,
 body.controls-floating:not(.private-vault-page) .header-top .quick-link-btn,
-body.controls-floating:not(.private-vault-page) #adminButton { display: none !important; }
+body.controls-floating:not(.private-vault-page) #adminButton { display: none; }
 
 .vault-link {
     flex: 0 0 auto;
@@ -893,7 +893,7 @@ mark {
     padding: 0 0.2em; border-radius: 0; font-weight: 400;
 }
 
-[hidden], .hidden { display: none !important; }
+[hidden], .hidden { display: none; }
 
 /* ============================== PRIVATE VAULT ============================== */
 

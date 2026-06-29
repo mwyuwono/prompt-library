@@ -30,9 +30,9 @@
     gap: var(--spacing-xs, 4px);
     min-height: 40px;
     padding: 0 var(--spacing-md, 16px);
-    border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-    border-radius: var(--md-sys-shape-corner-small, 8px);
-    color: var(--md-sys-color-on-surface, #121714);
+    border: 1px solid var(--paper-edge, #DDD);
+    border-radius: var(--radius-2, 8px);
+    color: var(--ink, #121714);
     text-decoration: none;
     font-size: 0.9375rem;
     font-weight: 500;
@@ -45,7 +45,7 @@
 .settings-back-link:focus-visible,
 .settings-button:focus-visible,
 .settings-field textarea:focus-visible {
-    outline: 3px solid var(--md-sys-color-primary, #282828);
+    outline: 3px solid var(--ink, #282828);
     outline-offset: 2px;
 }
 
@@ -61,7 +61,7 @@
 h1,
 h2 {
     margin: 0;
-    color: var(--md-sys-color-on-surface, #121714);
+    color: var(--ink, #121714);
     font-family: var(--font-serif, 'Playfair Display', serif);
     font-weight: 600;
     letter-spacing: 0;
@@ -80,8 +80,8 @@ h2 {
     flex-direction: column;
     gap: var(--spacing-md, 16px);
     padding: var(--spacing-lg, 24px);
-    border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-    border-radius: var(--md-sys-shape-corner-small, 8px);
+    border: 1px solid var(--paper-edge, #DDD);
+    border-radius: var(--radius-2, 8px);
     background: var(--white, #FFFFFF);
 }
 
@@ -103,7 +103,7 @@ h2 {
     min-height: 40px;
     padding: 0 var(--spacing-lg, 24px);
     border: 0;
-    border-radius: var(--md-sys-shape-corner-small, 8px);
+    border-radius: var(--radius-2, 8px);
     font-family: var(--font-body, 'DM Sans', sans-serif);
     font-size: 0.9375rem;
     font-weight: 500;
@@ -116,14 +116,14 @@ h2 {
 }
 
 .settings-button-primary {
-    background: var(--md-sys-color-primary, #282828);
-    color: var(--md-sys-color-on-primary, #FFFFFF);
+    background: var(--ink, #282828);
+    color: var(--paper, #FFFFFF);
 }
 
 .settings-button-secondary {
     background: transparent;
-    border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-    color: var(--md-sys-color-on-surface, #121714);
+    border: 1px solid var(--paper-edge, #DDD);
+    color: var(--ink, #121714);
 }
 
 .settings-button-primary:not(:disabled):hover,
@@ -135,7 +135,7 @@ h2 {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-xs, 4px);
-    color: var(--md-sys-color-on-surface, #121714);
+    color: var(--ink, #121714);
     font-size: 0.875rem;
     font-weight: 600;
 }
@@ -145,10 +145,10 @@ h2 {
     width: 100%;
     min-height: min(62vh, 680px);
     padding: var(--spacing-md, 16px);
-    border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-    border-radius: var(--md-sys-shape-corner-small, 8px);
+    border: 1px solid var(--paper-edge, #DDD);
+    border-radius: var(--radius-2, 8px);
     background: var(--paper, #FDFBF7);
-    color: var(--md-sys-color-on-surface, #121714);
+    color: var(--ink, #121714);
     font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
     font-size: 0.875rem;
     line-height: 1.5;
@@ -165,9 +165,9 @@ h2 {
 
 .settings-help code {
     padding: 2px 6px;
-    border-radius: var(--md-sys-shape-corner-xs, 4px);
+    border-radius: var(--radius-2, 4px);
     background: color-mix(in srgb, var(--ink, #1A1A1A) 7%, transparent);
-    color: var(--md-sys-color-on-surface, #121714);
+    color: var(--ink, #121714);
 }
 
 .settings-status.error {
@@ -201,8 +201,8 @@ h2 {
 }
 
 .palette-item {
-    border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-    border-radius: var(--md-sys-shape-corner-small, 8px);
+    border: 1px solid var(--paper-edge, #DDD);
+    border-radius: var(--radius-2, 8px);
     background: var(--paper, #FDFBF7);
     overflow: hidden;
 }
@@ -228,14 +228,14 @@ h2 {
     font-family: var(--font-body, 'DM Sans', sans-serif);
     font-size: 0.9375rem;
     font-weight: 600;
-    color: var(--md-sys-color-on-surface, #121714);
+    color: var(--ink, #121714);
     padding: var(--spacing-xs, 4px) 0;
     cursor: text;
 }
 
 .palette-name-input:focus {
     outline: none;
-    border-bottom: 2px solid var(--md-sys-color-primary, #282828);
+    border-bottom: 2px solid var(--ink, #282828);
 }
 
 .palette-chips-preview {
@@ -268,7 +268,7 @@ h2 {
     flex-direction: column;
     gap: var(--spacing-sm, 8px);
     padding: 0 var(--spacing-md, 16px) var(--spacing-md, 16px);
-    border-top: 1px solid var(--md-sys-color-outline-variant, #DDD);
+    border-top: 1px solid var(--paper-edge, #DDD);
 }
 
 .palette-item.expanded .palette-item-body {
@@ -291,8 +291,8 @@ h2 {
     width: 32px;
     height: 32px;
     padding: 2px;
-    border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-    border-radius: var(--md-sys-shape-corner-xs, 4px);
+    border: 1px solid var(--paper-edge, #DDD);
+    border-radius: var(--radius-2, 4px);
     cursor: pointer;
     background: none;
     flex-shrink: 0;
@@ -302,12 +302,12 @@ h2 {
 .color-name-input {
     height: 32px;
     padding: 0 var(--spacing-sm, 8px);
-    border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-    border-radius: var(--md-sys-shape-corner-xs, 4px);
+    border: 1px solid var(--paper-edge, #DDD);
+    border-radius: var(--radius-2, 4px);
     background: var(--white, #FFFFFF);
     font-family: var(--font-body, 'DM Sans', sans-serif);
     font-size: 0.875rem;
-    color: var(--md-sys-color-on-surface, #121714);
+    color: var(--ink, #121714);
 }
 
 .color-hex-input {
@@ -323,7 +323,7 @@ h2 {
 
 .color-hex-input:focus,
 .color-name-input:focus {
-    outline: 2px solid var(--md-sys-color-primary, #282828);
+    outline: 2px solid var(--ink, #282828);
     outline-offset: 1px;
 }
 
@@ -335,7 +335,7 @@ h2 {
     width: 32px;
     height: 32px;
     border: none;
-    border-radius: var(--md-sys-shape-corner-xs, 4px);
+    border-radius: var(--radius-2, 4px);
     background: transparent;
     color: var(--err, #B3261E);
     cursor: pointer;
@@ -353,7 +353,7 @@ h2 {
     align-items: center;
     justify-content: space-between;
     padding-top: var(--spacing-xs, 4px);
-    border-top: 1px solid var(--md-sys-color-outline-variant, #DDD);
+    border-top: 1px solid var(--paper-edge, #DDD);
 }
 
 .add-color-btn {
@@ -362,8 +362,8 @@ h2 {
     gap: 4px;
     height: 30px;
     padding: 0 var(--spacing-sm, 8px);
-    border: 1px dashed var(--md-sys-color-outline-variant, #DDD);
-    border-radius: var(--md-sys-shape-corner-xs, 4px);
+    border: 1px dashed var(--paper-edge, #DDD);
+    border-radius: var(--radius-2, 4px);
     background: transparent;
     color: var(--ink-mute, #5E6E66);
     font-family: var(--font-body, 'DM Sans', sans-serif);

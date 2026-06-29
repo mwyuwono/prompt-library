@@ -12,7 +12,7 @@
     background: var(--surface-canvas, #ECE6DA);
     margin: 0;
     padding: 0;
-    transition: grid-template-columns var(--md-sys-motion-duration-medium1, 350ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+    transition: grid-template-columns var(--dur-2, 350ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
 }
 
 .admin-page.sidebar-collapsed {
@@ -31,7 +31,7 @@
     position: sticky;
     top: 0;
     min-width: var(--admin-sidebar-width, 300px);
-    transition: opacity var(--md-sys-motion-duration-short2, 150ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+    transition: opacity var(--dur-1, 150ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
 }
 
 .admin-page.sidebar-collapsed .prompt-list {
@@ -66,7 +66,7 @@
     font-family: var(--font-serif, 'Lora', serif);
     font-size: 1.5rem;
     font-weight: 600;
-    color: var(--md-sys-color-on-surface, #121714);
+    color: var(--ink, #121714);
     letter-spacing: -0.015em;
     margin: 0;
 }
@@ -76,9 +76,9 @@
     align-items: center;
     gap: 6px;
     border: 0;
-    border-radius: var(--md-sys-shape-corner-full, 9999px);
-    background: var(--md-sys-color-primary, #282828);
-    color: var(--md-sys-color-on-primary, #FFF);
+    border-radius: var(--radius-pill, 9999px);
+    background: var(--ink, #282828);
+    color: var(--paper, #FFF);
     font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 0.75rem;
     font-weight: 600;
@@ -96,7 +96,7 @@
     width: 34px;
     height: 34px;
     border: 0;
-    border-radius: var(--md-sys-shape-corner-full, 9999px);
+    border-radius: var(--radius-pill, 9999px);
     background: var(--surface-2, #FFF);
     color: var(--ink, #1A1A1A);
     cursor: pointer;
@@ -115,17 +115,17 @@
     gap: var(--spacing-xs, 4px);
     padding: var(--spacing-xs, 4px);
     margin-bottom: var(--admin-sidebar-gap-compact);
-    border-radius: var(--md-sys-shape-corner-full, 9999px);
-    background: var(--md-sys-color-surface-variant, #ECE9E4);
+    border-radius: var(--radius-pill, 9999px);
+    background: var(--paper-deep, #ECE9E4);
     width: 100%;
 }
 
 .dataset-button {
     flex: 1;
     border: none;
-    border-radius: var(--md-sys-shape-corner-full, 9999px);
+    border-radius: var(--radius-pill, 9999px);
     background: transparent;
-    color: var(--md-sys-color-on-surface-variant, #3F4944);
+    color: var(--ink-mute, #3F4944);
     font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 0.75rem;
     font-weight: 600;
@@ -134,13 +134,13 @@
 }
 
 .dataset-button.active {
-    background: var(--md-sys-color-primary, #282828);
-    color: var(--md-sys-color-on-primary, #FFF);
+    background: var(--ink, #282828);
+    color: var(--paper, #FFF);
 }
 
 .dataset-status {
     margin: 0 0 var(--admin-sidebar-gap) 0;
-    color: var(--md-sys-color-on-surface-variant, #3F4944);
+    color: var(--ink-mute, #3F4944);
     font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 0.75rem;
     line-height: 1.5;
@@ -177,7 +177,7 @@
     overflow: hidden;
     box-shadow: 0 8px 18px color-mix(in srgb, var(--backup-status-color) 22%, transparent);
     transition:
-        box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+        box-shadow var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
 }
 
 .backup-status-button::before {
@@ -187,7 +187,7 @@
     z-index: -1;
     background: var(--backup-status-hover);
     opacity: 0;
-    transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+    transition: opacity var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
 }
 
 .backup-status-button:hover::before {
@@ -257,13 +257,13 @@
     box-sizing: border-box;
     font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 0.8125rem;
-    color: var(--md-sys-color-on-surface-variant, #3F4944);
+    color: var(--ink-mute, #3F4944);
     text-decoration: none;
     padding: 0 10px;
     border-radius: var(--radius-2);
     overflow: hidden;
     transition:
-        color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+        color var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
 }
 
 .view-public-link::before {
@@ -274,11 +274,11 @@
     border-radius: inherit;
     background: var(--ink);
     opacity: 0;
-    transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+    transition: opacity var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
 }
 
 .view-public-link:hover {
-    color: var(--md-sys-color-on-surface, #121714);
+    color: var(--ink, #121714);
 }
 
 .view-public-link:hover::before {
@@ -305,21 +305,21 @@
     padding: 0 var(--spacing-md, 16px);
     margin: var(--admin-sidebar-gap) var(--admin-sidebar-inset) var(--admin-sidebar-gap);
     transition:
-        box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
-        background-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+        box-shadow var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1)),
+        background-color var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 7%, transparent);
 }
 
 .sidebar-search:focus-within {
     background: var(--surface-2, #FFF);
     box-shadow:
-        inset 0 0 0 1px color-mix(in srgb, var(--md-sys-color-primary, #282828) 22%, transparent),
-        0 0 0 3px color-mix(in srgb, var(--md-sys-color-primary, #282828) 8%, transparent);
+        inset 0 0 0 1px color-mix(in srgb, var(--ink, #282828) 22%, transparent),
+        0 0 0 3px color-mix(in srgb, var(--ink, #282828) 8%, transparent);
 }
 
 .sidebar-search .material-symbols-outlined {
     font-size: 22px;
-    color: var(--md-sys-color-on-surface-variant, #3F4944);
+    color: var(--ink-mute, #3F4944);
     flex-shrink: 0;
 }
 
@@ -329,13 +329,13 @@
     background: transparent;
     font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 1rem;
-    color: var(--md-sys-color-on-surface, #121714);
+    color: var(--ink, #121714);
     outline: none;
     min-width: 0;
 }
 
 .sidebar-search input::placeholder {
-    color: var(--md-sys-color-on-surface-variant, #3F4944);
+    color: var(--ink-mute, #3F4944);
     opacity: 0.85;
 }
 
@@ -363,8 +363,8 @@
     isolation: isolate;
     overflow: hidden;
     transition:
-        box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
-        color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+        box-shadow var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1)),
+        color var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
 }
 
 .prompt-item::before {
@@ -375,7 +375,7 @@
     border-radius: inherit;
     background: var(--ink);
     opacity: var(--prompt-item-state-opacity);
-    transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+    transition: opacity var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
 }
 
 .prompt-item:hover {
@@ -408,8 +408,8 @@
     line-height: 1;
     flex-shrink: 0;
     transition:
-        background-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
-        color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+        background-color var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1)),
+        color var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
 }
 
 .prompt-item-content {
@@ -421,7 +421,7 @@
     font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 0.875rem;
     font-weight: 600;
-    color: var(--md-sys-color-on-surface, #121714);
+    color: var(--ink, #121714);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -431,7 +431,7 @@
 .prompt-item-category {
     font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 0.6875rem;
-    color: var(--md-sys-color-on-surface-variant, #3F4944);
+    color: var(--ink-mute, #3F4944);
     letter-spacing: 0;
     margin-top: 2px;
     white-space: nowrap;
@@ -445,16 +445,16 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    background: var(--md-sys-color-error-container, #FFDAD6);
-    color: var(--md-sys-color-on-error-container, #410002);
+    background: var(--err-container, #FFDAD6);
+    color: var(--on-err-container, #410002);
     padding: 2px 6px;
-    border-radius: var(--md-sys-shape-corner-full, 9999px);
+    border-radius: var(--radius-pill, 9999px);
     white-space: nowrap;
 }
 
 .prompt-item .badge.neutral {
-    background: var(--md-sys-color-secondary-container, #DDE5DC);
-    color: var(--md-sys-color-on-secondary-container, #141E17);
+    background: var(--paper-edge, #DDE5DC);
+    color: var(--ink, #141E17);
 }
 
 /* Main Content */
@@ -478,9 +478,9 @@
     min-height: 40px;
     padding: 0 14px 0 12px;
     border: 0;
-    border-radius: var(--md-sys-shape-corner-full, 9999px);
+    border-radius: var(--radius-pill, 9999px);
     background: var(--surface-2, #FFF);
-    color: var(--md-sys-color-primary, #282828);
+    color: var(--ink, #282828);
     font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 0.8125rem;
     font-weight: 600;
@@ -512,7 +512,7 @@
     display: grid;
     place-items: center;
     padding: var(--spacing-lg, 24px);
-    background: color-mix(in srgb, var(--md-sys-color-on-surface, #121714) 28%, transparent);
+    background: color-mix(in srgb, var(--ink, #121714) 28%, transparent);
 }
 
 .backup-modal-backdrop[hidden] {
@@ -526,8 +526,8 @@
     box-sizing: border-box;
     border: 0;
     border-radius: var(--radius-3);
-    background: var(--md-sys-color-surface, #F5F2EA);
-    box-shadow: var(--shadow-modal, 0 18px 60px color-mix(in srgb, var(--md-sys-color-on-surface, #121714) 22%, transparent));
+    background: var(--paper, #F5F2EA);
+    box-shadow: var(--shadow-modal, 0 18px 60px color-mix(in srgb, var(--ink, #121714) 22%, transparent));
     padding: var(--spacing-lg, 24px);
 }
 
@@ -541,7 +541,7 @@
 
 .backup-modal-kicker {
     margin: 0 0 var(--spacing-xs, 4px) 0;
-    color: var(--md-sys-color-on-surface-variant, #3F4944);
+    color: var(--ink-mute, #3F4944);
     font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 0.75rem;
     font-weight: 700;
@@ -551,7 +551,7 @@
 
 .backup-modal h2 {
     margin: 0;
-    color: var(--md-sys-color-on-surface, #121714);
+    color: var(--ink, #121714);
     font-family: var(--font-serif, 'Playfair Display', serif);
     font-size: 1.75rem;
     line-height: 1.2;
@@ -565,9 +565,9 @@
     width: 40px;
     height: 40px;
     border: 0;
-    border-radius: var(--md-sys-shape-corner-full, 9999px);
+    border-radius: var(--radius-pill, 9999px);
     background: transparent;
-    color: var(--md-sys-color-on-surface, #121714);
+    color: var(--ink, #121714);
     cursor: pointer;
     overflow: hidden;
 }
@@ -580,7 +580,7 @@
     z-index: -1;
     background: currentColor;
     opacity: 0;
-    transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+    transition: opacity var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
 }
 
 .backup-icon-button:hover::before,
@@ -591,7 +591,7 @@
 .backup-icon-button:focus-visible,
 .backup-action-button:focus-visible,
 .backup-remote-field input:focus-visible {
-    outline: 2px solid var(--md-sys-color-primary, #282828);
+    outline: 2px solid var(--ink, #282828);
     outline-offset: 2px;
 }
 
@@ -601,8 +601,8 @@
     padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
     border: 0;
     border-radius: var(--radius-2);
-    background: var(--md-sys-color-surface-container-lowest, #FDFBF7);
-    color: var(--md-sys-color-on-surface, #121714);
+    background: var(--white, #FDFBF7);
+    color: var(--ink, #121714);
     font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 0.875rem;
     line-height: 1.5;
@@ -632,12 +632,12 @@
     border: 0;
     border-radius: var(--radius-2);
     padding: var(--spacing-sm, 8px);
-    background: var(--md-sys-color-surface-container-lowest, #FDFBF7);
+    background: var(--white, #FDFBF7);
 }
 
 .backup-status-grid dt {
     margin: 0 0 var(--spacing-xs, 4px) 0;
-    color: var(--md-sys-color-on-surface-variant, #3F4944);
+    color: var(--ink-mute, #3F4944);
     font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 0.6875rem;
     font-weight: 700;
@@ -647,7 +647,7 @@
 
 .backup-status-grid dd {
     margin: 0;
-    color: var(--md-sys-color-on-surface, #121714);
+    color: var(--ink, #121714);
     font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 0.875rem;
     line-height: 1.4;
@@ -659,7 +659,7 @@
     color: var(--err);
     font-weight: 700;
     text-shadow: 0 0 10px color-mix(in srgb, var(--err) 32%, transparent);
-    animation: backupBranchAlertPulse 1800ms var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)) infinite;
+    animation: backupBranchAlertPulse 1800ms var(--ease, cubic-bezier(0.2, 0, 0, 1)) infinite;
 }
 
 @keyframes backupBranchAlertPulse {
@@ -685,7 +685,7 @@
     display: grid;
     gap: var(--spacing-xs, 4px);
     margin-bottom: var(--spacing-md, 16px);
-    color: var(--md-sys-color-on-surface, #121714);
+    color: var(--ink, #121714);
     font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 0.875rem;
     font-weight: 600;
@@ -696,8 +696,8 @@
     box-sizing: border-box;
     border: 0;
     border-radius: var(--radius-2);
-    background: var(--md-sys-color-surface-container-lowest, #FDFBF7);
-    color: var(--md-sys-color-on-surface, #121714);
+    background: var(--white, #FDFBF7);
+    color: var(--ink, #121714);
     font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 0.875rem;
     padding: 0 var(--spacing-sm, 8px);
@@ -718,7 +718,7 @@
     justify-content: center;
     gap: var(--spacing-xs, 4px);
     min-height: 40px;
-    border-radius: var(--md-sys-shape-corner-full, 9999px);
+    border-radius: var(--radius-pill, 9999px);
     border: 0;
     font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 0.875rem;
@@ -733,13 +733,13 @@
 }
 
 .backup-action-button.primary {
-    background: var(--md-sys-color-primary, #282828);
-    color: var(--md-sys-color-on-primary, #FFF);
+    background: var(--ink, #282828);
+    color: var(--paper, #FFF);
 }
 
 .backup-action-button.secondary {
     background: transparent;
-    color: var(--md-sys-color-primary, #282828);
+    color: var(--ink, #282828);
 }
 
 .backup-action-button.danger {
@@ -759,7 +759,7 @@
     justify-content: center;
     text-align: center;
     padding: var(--spacing-3xl, 64px);
-    color: var(--md-sys-color-on-surface-variant, #5E6E66);
+    color: var(--ink-mute, #5E6E66);
 }
 
 .empty-state.hidden {
@@ -776,7 +776,7 @@
     font-family: var(--font-serif, 'Playfair Display', serif);
     font-size: 1.5rem;
     font-weight: 600;
-    color: var(--md-sys-color-on-surface, #121714);
+    color: var(--ink, #121714);
     margin: 0 0 var(--spacing-sm, 8px) 0;
 }
 
@@ -790,12 +790,12 @@
 .server-error-state {
     padding: var(--spacing-xl, 32px);
     text-align: center;
-    color: var(--md-sys-color-on-surface, #121714);
+    color: var(--ink, #121714);
 }
 
 .server-error-state .material-symbols-outlined {
     font-size: 48px;
-    color: var(--md-sys-color-error, #BA1A1A);
+    color: var(--err, #BA1A1A);
     margin-bottom: var(--spacing-md, 16px);
     display: block;
 }
@@ -805,7 +805,7 @@
     font-size: 1.25rem;
     font-weight: 600;
     margin-bottom: var(--spacing-sm, 8px);
-    color: var(--md-sys-color-on-surface, #121714);
+    color: var(--ink, #121714);
 }
 
 .server-error-state h4 {
@@ -814,7 +814,7 @@
     font-weight: 600;
     margin-top: var(--spacing-lg, 24px);
     margin-bottom: var(--spacing-xs, 4px);
-    color: var(--md-sys-color-on-surface, #121714);
+    color: var(--ink, #121714);
     text-align: left;
     max-width: 400px;
     margin-left: auto;
@@ -824,7 +824,7 @@
 .server-error-state p {
     font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 0.875rem;
-    color: var(--md-sys-color-on-surface-variant, #5E6E66);
+    color: var(--ink-mute, #5E6E66);
     margin-bottom: var(--spacing-md, 16px);
 }
 
@@ -842,18 +842,18 @@
 }
 
 .server-error-state code {
-    background: var(--md-sys-color-surface-container, #EBE5DE);
+    background: var(--paper-deep, #EBE5DE);
     padding: 2px 6px;
-    border-radius: var(--md-sys-shape-corner-xs, 4px);
+    border-radius: var(--radius-2, 4px);
     font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
     font-size: 0.875rem;
-    color: var(--md-sys-color-primary, #282828);
+    color: var(--ink, #282828);
 }
 
 .server-url {
     margin-top: var(--spacing-lg, 24px);
-    font-size: var(--md-sys-typescale-body-small-size, 0.75rem);
-    color: var(--md-sys-color-on-surface-variant, #5E6E66);
+    font-size: var(--fs-body-s, 0.75rem);
+    color: var(--ink-mute, #5E6E66);
 }
 
 /* Responsive */
@@ -990,11 +990,11 @@ wy-prompt-editor .editor-header {
 wy-prompt-editor .breadcrumbs {
             font-family: var(--font-body, 'DM Sans', sans-serif);
             font-size: 0.875rem;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+            color: var(--ink-mute, #5E6E66);
             margin-bottom: var(--spacing-sm, 8px);
         }
 wy-prompt-editor .breadcrumbs a {
-            color: var(--md-sys-color-primary, #282828);
+            color: var(--ink, #282828);
             text-decoration: none;
         }
 wy-prompt-editor .breadcrumbs a:hover {
@@ -1004,26 +1004,26 @@ wy-prompt-editor h1 {
             font-family: var(--font-serif, 'Playfair Display', serif);
             font-size: 2rem;
             font-weight: 600;
-            color: var(--md-sys-color-on-surface, #121714);
+            color: var(--ink, #121714);
             margin: 0 0 var(--spacing-xs, 4px) 0;
         }
 wy-prompt-editor .subtitle {
             font-family: var(--font-body, 'DM Sans', sans-serif);
             font-size: 1rem;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+            color: var(--ink-mute, #5E6E66);
             margin-bottom: var(--spacing-md, 16px);
         }
 wy-prompt-editor .info-banner {
             padding: var(--spacing-md, 16px);
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 5%, transparent);
-            border-left: 4px solid var(--md-sys-color-primary, #282828);
-            border-radius: var(--md-sys-shape-corner-xs, 4px);
+            background-color: color-mix(in srgb, var(--ink, #282828) 5%, transparent);
+            border-left: 4px solid var(--ink, #282828);
+            border-radius: var(--radius-2, 4px);
             margin-bottom: var(--spacing-md, 16px);
         }
 wy-prompt-editor .info-banner p {
             font-family: var(--font-body, 'DM Sans', sans-serif);
             font-size: 0.875rem;
-            color: var(--md-sys-color-on-surface, #121714);
+            color: var(--ink, #121714);
             margin: 0;
             line-height: 1.5;
         }
@@ -1031,8 +1031,8 @@ wy-prompt-editor .info-banner code {
             font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
             font-size: 0.8125rem;
             padding: 2px 6px;
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 10%, transparent);
-            border-radius: var(--md-sys-shape-corner-xs, 4px);
+            background-color: color-mix(in srgb, var(--ink, #282828) 10%, transparent);
+            border-radius: var(--radius-2, 4px);
         }
 wy-prompt-editor .actions {
             grid-column: 2;
@@ -1045,49 +1045,49 @@ wy-prompt-editor .actions {
             top: var(--spacing-lg, 24px);
             z-index: 5;
             padding: var(--spacing-sm, 8px);
-            background-color: var(--md-sys-color-background, #FDFBF7);
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
+            background-color: var(--paper, #FDFBF7);
+            border: 1px solid var(--paper-edge, #DDD);
+            border-radius: var(--radius-2, 8px);
         }
 wy-prompt-editor .button {
             padding: var(--spacing-sm, 8px) var(--spacing-lg, 24px);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
+            border-radius: var(--radius-2, 8px);
             font-family: var(--font-body, 'DM Sans', sans-serif);
             font-size: 0.9375rem;
             font-weight: 500;
             cursor: pointer;
             border: none;
-            transition: all var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition: all var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
         }
 wy-prompt-editor a.button {
             text-decoration: none;
         }
 wy-prompt-editor .button-secondary {
             background-color: transparent;
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            color: var(--md-sys-color-on-surface, #121714);
+            border: 1px solid var(--paper-edge, #DDD);
+            color: var(--ink, #121714);
         }
 wy-prompt-editor .button-secondary:hover {
-            background-color: var(--md-sys-color-surface-variant, #F5F2EA);
+            background-color: var(--paper-deep, #F5F2EA);
         }
 wy-prompt-editor .button-primary {
-            background-color: var(--md-sys-color-primary, #282828);
-            color: var(--md-sys-color-on-primary, #FFFFFF);
+            background-color: var(--ink, #282828);
+            color: var(--paper, #FFFFFF);
         }
 wy-prompt-editor .button-primary:hover {
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 90%, black);
+            background-color: color-mix(in srgb, var(--ink, #282828) 90%, black);
         }
 wy-prompt-editor .card {
-            background-color: var(--md-sys-color-surface, #F5F2EA);
-            border-radius: var(--md-sys-shape-corner-large, 24px);
+            background-color: var(--paper, #F5F2EA);
+            border-radius: var(--radius-3, 24px);
             padding: var(--spacing-lg, 24px);
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
+            border: 1px solid var(--paper-edge, #DDD);
         }
 wy-prompt-editor .card-title {
             font-family: var(--font-serif, 'Playfair Display', serif);
             font-size: 1.25rem;
             font-weight: 600;
-            color: var(--md-sys-color-on-surface, #121714);
+            color: var(--ink, #121714);
             margin: 0 0 var(--spacing-md, 16px) 0;
         }
 wy-prompt-editor .editor-nav {
@@ -1099,8 +1099,8 @@ wy-prompt-editor .editor-nav {
             flex-direction: column;
             gap: var(--spacing-sm, 8px);
             padding: var(--spacing-md, 16px) 0;
-            border-top: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            border-bottom: 1px solid var(--md-sys-color-outline-variant, #DDD);
+            border-top: 1px solid var(--paper-edge, #DDD);
+            border-bottom: 1px solid var(--paper-edge, #DDD);
         }
 wy-prompt-editor .editor-nav-toggle {
             display: none;
@@ -1112,7 +1112,7 @@ wy-prompt-editor .editor-nav-title {
             font-weight: 700;
             letter-spacing: 0.16em;
             text-transform: uppercase;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+            color: var(--ink-mute, #5E6E66);
         }
 wy-prompt-editor .editor-nav-list {
             display: flex;
@@ -1126,24 +1126,24 @@ wy-prompt-editor .editor-nav-item {
             border: 0;
             border-left: 2px solid transparent;
             background: transparent;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+            color: var(--ink-mute, #5E6E66);
             cursor: pointer;
             font-family: var(--font-sans, 'DM Sans', sans-serif);
             font-size: 0.875rem;
             line-height: 1.25;
             text-align: left;
             transition:
-                border-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
-                color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
-                background-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+                border-color var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1)),
+                color var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1)),
+                background-color var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
         }
 wy-prompt-editor .editor-nav-item:hover {
-            color: var(--md-sys-color-on-surface, #121714);
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 5%, transparent);
+            color: var(--ink, #121714);
+            background-color: color-mix(in srgb, var(--ink, #282828) 5%, transparent);
         }
 wy-prompt-editor .editor-nav-item.active {
-            color: var(--md-sys-color-primary, #282828);
-            border-left-color: var(--md-sys-color-primary, #282828);
+            color: var(--ink, #282828);
+            border-left-color: var(--ink, #282828);
             font-weight: 600;
         }
 wy-prompt-editor .editor-nav-item.subitem {
@@ -1154,14 +1154,14 @@ wy-prompt-editor .editor-nav-item.subitem {
 wy-prompt-editor .editor-nav-item.variant {
             font-family: var(--font-serif, 'Playfair Display', serif);
             font-size: 0.9375rem;
-            color: var(--md-sys-color-on-surface, #121714);
+            color: var(--ink, #121714);
         }
 wy-prompt-editor .mode-toggle {
             display: flex;
             gap: var(--spacing-md, 16px);
             padding: var(--spacing-md, 16px);
-            background-color: var(--md-sys-color-surface-variant, #F5F2EA);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
+            background-color: var(--paper-deep, #F5F2EA);
+            border-radius: var(--radius-2, 8px);
         }
 wy-prompt-editor .mode-toggle label {
             display: flex;
@@ -1179,7 +1179,7 @@ wy-prompt-editor .card-description {
             font-family: var(--font-sans, 'DM Sans', sans-serif);
             font-size: 0.9375rem;
             line-height: 1.5;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+            color: var(--ink-mute, #5E6E66);
             margin: 0 0 var(--spacing-md, 16px) 0;
         }
 wy-prompt-editor .label {
@@ -1188,7 +1188,7 @@ wy-prompt-editor .label {
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            color: var(--md-sys-color-text-heading, #121714);
+            color: var(--ink, #121714);
             margin-bottom: var(--spacing-sm, 8px);
             display: block;
         }
@@ -1239,8 +1239,8 @@ wy-variation-editor .form-field textarea {
             color: var(--ink, #1A1A1A);
             box-shadow: inset 0 0 0 1px var(--admin-hairline-soft);
             transition:
-                box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
-                background-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+                box-shadow var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1)),
+                background-color var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
         }
 wy-prompt-editor .form-field textarea,
 wy-variation-editor .form-field textarea {
@@ -1267,15 +1267,15 @@ wy-prompt-editor .hero-generator {
             display: flex;
             flex-direction: column;
             margin-top: var(--spacing-md, 16px);
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
+            border: 1px solid var(--paper-edge, #DDD);
+            border-radius: var(--radius-2, 8px);
             background: color-mix(in srgb, var(--paper, #F7F4EE) 42%, transparent);
             overflow: hidden;
         }
 wy-prompt-editor .prompt-image-card {
             position: relative;
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
+            border: 1px solid var(--paper-edge, #DDD);
+            border-radius: var(--radius-2, 8px);
             padding: var(--spacing-sm, 8px);
         }
 wy-prompt-editor .prompt-image-summary {
@@ -1291,15 +1291,15 @@ wy-prompt-editor .prompt-image-summary::-webkit-details-marker {
             display: none;
         }
 wy-prompt-editor .prompt-image-summary:focus-visible {
-            outline: 2px solid var(--md-sys-color-primary, #282828);
+            outline: 2px solid var(--ink, #282828);
             outline-offset: 3px;
-            border-radius: var(--md-sys-shape-corner-small, 8px);
+            border-radius: var(--radius-2, 8px);
         }
 wy-prompt-editor .prompt-image-thumbnail {
             width: 132px;
             aspect-ratio: 16 / 9;
             object-fit: cover;
-            border-radius: var(--md-sys-shape-corner-small, 8px);
+            border-radius: var(--radius-2, 8px);
         }
 wy-prompt-editor .prompt-image-copy {
             display: flex;
@@ -1311,17 +1311,17 @@ wy-prompt-editor .prompt-image-copy {
 wy-prompt-editor .prompt-image-title {
             font-size: 0.875rem;
             font-weight: 700;
-            color: var(--md-sys-color-on-surface, #121714);
+            color: var(--ink, #121714);
         }
 wy-prompt-editor .prompt-image-hint {
             font-size: 0.75rem;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+            color: var(--ink-mute, #5E6E66);
         }
 wy-prompt-editor .prompt-image-expanded {
             margin-top: var(--spacing-sm, 8px);
             overflow: hidden;
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
+            border: 1px solid var(--paper-edge, #DDD);
+            border-radius: var(--radius-2, 8px);
         }
 wy-prompt-editor .prompt-image-expanded img {
             display: block;
@@ -1337,20 +1337,20 @@ wy-prompt-editor .prompt-image-remove {
             height: 32px;
             padding: 0;
             border: 0;
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
+            border-radius: var(--radius-pill, 9999px);
             background-color: transparent;
-            color: var(--md-sys-color-error, #B3261E);
+            color: var(--err, #B3261E);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition: background-color var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
         }
 wy-prompt-editor .prompt-image-remove:hover {
-            background-color: color-mix(in srgb, var(--md-sys-color-error, #B3261E) 10%, transparent);
+            background-color: color-mix(in srgb, var(--err, #B3261E) 10%, transparent);
         }
 wy-prompt-editor .prompt-image-remove:focus-visible {
-            outline: 2px solid var(--md-sys-color-error, #B3261E);
+            outline: 2px solid var(--err, #B3261E);
             outline-offset: 2px;
         }
 wy-prompt-editor .prompt-image-remove .material-symbols-outlined {
@@ -1376,7 +1376,7 @@ wy-prompt-editor .hero-generator-summary-text {
             min-width: 0;
         }
 wy-prompt-editor .hero-generator-summary .material-symbols-outlined {
-            transition: transform var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition: transform var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
         }
 wy-prompt-editor .hero-generator[open] .hero-generator-summary .material-symbols-outlined {
             transform: rotate(180deg);
@@ -1403,13 +1403,13 @@ wy-prompt-editor .hero-generator-title {
             font-family: var(--font-serif, 'Playfair Display', serif);
             font-size: 0.9375rem;
             font-weight: 600;
-            color: var(--md-sys-color-on-surface, #121714);
+            color: var(--ink, #121714);
             margin: 0;
         }
 wy-prompt-editor .hero-provider-status {
             font-family: var(--font-sans, 'DM Sans', sans-serif);
             font-size: 0.75rem;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+            color: var(--ink-mute, #5E6E66);
             margin: var(--spacing-xs, 4px) 0 0;
         }
 wy-prompt-editor .hero-controls {
@@ -1424,16 +1424,16 @@ wy-prompt-editor .hero-control-label {
             font-family: var(--font-sans, 'DM Sans', sans-serif);
             font-size: 0.8125rem;
             font-weight: 600;
-            color: var(--md-sys-color-on-surface, #121714);
+            color: var(--ink, #121714);
         }
 wy-prompt-editor .hero-control-label select,
 wy-prompt-editor .hero-prompt-textarea {
             width: 100%;
             box-sizing: border-box;
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-            background-color: var(--md-sys-color-background, #FDFBF7);
-            color: var(--md-sys-color-on-surface, #121714);
+            border: 1px solid var(--paper-edge, #DDD);
+            border-radius: var(--radius-2, 8px);
+            background-color: var(--paper, #FDFBF7);
+            color: var(--ink, #121714);
             font-family: var(--font-sans, 'DM Sans', sans-serif);
             font-size: 0.9375rem;
         }
@@ -1463,8 +1463,8 @@ wy-prompt-editor .hero-preview-image {
             width: min(100%, 360px);
             aspect-ratio: 16 / 9;
             object-fit: cover;
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
+            border-radius: var(--radius-2, 8px);
+            border: 1px solid var(--paper-edge, #DDD);
         }
 wy-prompt-editor .hero-status-message,
 wy-prompt-editor .hero-error-message {
@@ -1474,7 +1474,7 @@ wy-prompt-editor .hero-error-message {
             margin: 0;
         }
 wy-prompt-editor .hero-status-message {
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+            color: var(--ink-mute, #5E6E66);
         }
 wy-prompt-editor .hero-error-message {
             color: var(--err, #B3261E);
@@ -1500,7 +1500,7 @@ wy-prompt-editor .card-header-with-action > div {
 wy-prompt-editor .button-ghost {
             background: color-mix(in srgb, var(--ink, #1A1A1A) 5%, transparent);
             border: 0;
-            color: var(--md-sys-color-primary, #282828);
+            color: var(--ink, #282828);
             position: relative;
             overflow: hidden;
         }
@@ -1508,16 +1508,16 @@ wy-prompt-editor .button-ghost::before {
             content: '';
             position: absolute;
             inset: 0;
-            background-color: var(--md-sys-color-primary, #282828);
+            background-color: var(--ink, #282828);
             opacity: 0;
-            transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition: opacity var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
             pointer-events: none;
         }
 wy-prompt-editor .button-ghost:hover::before {
-            opacity: var(--md-sys-state-hover-opacity, 0.08);
+            opacity: var(--state-hover-opacity, 0.08);
         }
 wy-prompt-editor .button-ghost:hover {
-            color: var(--md-sys-color-primary, #282828);
+            color: var(--ink, #282828);
         }
 wy-prompt-editor .button-small {
             padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
@@ -1527,7 +1527,7 @@ wy-prompt-editor .button-small {
             gap: var(--spacing-xs, 4px);
             white-space: nowrap;
         }
-wy-prompt-editor /* Refined admin polish layer */
+/* Refined admin polish layer */
         .editor-layout {
             grid-template-columns: 216px minmax(0, 1fr);
             grid-template-rows: auto 1fr;
@@ -1592,7 +1592,7 @@ wy-prompt-editor .button {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
+            border-radius: var(--radius-pill, 9999px);
             font-family: var(--font-body, 'Inter', sans-serif);
             font-size: 0.875rem;
             font-weight: 600;
@@ -1621,7 +1621,7 @@ wy-prompt-editor .card-title::before {
             font-weight: 700;
             letter-spacing: 0.14em;
             text-transform: uppercase;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+            color: var(--ink-mute, #5E6E66);
         }
 wy-prompt-editor .editor-nav-title {
             padding: 0 6px 8px;
@@ -1645,13 +1645,13 @@ wy-prompt-editor .editor-nav-item::before {
             width: 2px;
             height: 0;
             border-radius: 3px;
-            background: var(--md-sys-color-primary, #282828);
+            background: var(--ink, #282828);
             transform: translateY(-50%);
-            transition: height var(--md-sys-motion-duration-short2, 150ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition: height var(--dur-1, 150ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
         }
 wy-prompt-editor .editor-nav-item.active {
             border-left-color: transparent;
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 6%, transparent);
+            background-color: color-mix(in srgb, var(--ink, #282828) 6%, transparent);
         }
 wy-prompt-editor .editor-nav-item.active::before {
             height: 14px;
@@ -1714,20 +1714,20 @@ wy-prompt-editor .mode-toggle {
             width: max-content;
             max-width: 100%;
             box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
+            border-radius: var(--radius-pill, 9999px);
             background: var(--paper-deep, #EEE8DD);
         }
 wy-prompt-editor .mode-toggle label {
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
+            border-radius: var(--radius-pill, 9999px);
             padding: 0.5rem 1.1rem;
             font-family: var(--font-body, 'Inter', sans-serif);
             font-size: 0.8125rem;
             font-weight: 600;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+            color: var(--ink-mute, #5E6E66);
         }
 wy-prompt-editor .mode-toggle label:has(input:checked) {
-            background: var(--md-sys-color-primary, #282828);
-            color: var(--md-sys-color-on-primary, #FFF);
+            background: var(--ink, #282828);
+            color: var(--paper, #FFF);
         }
 wy-prompt-editor .mode-toggle input[type="radio"] {
             position: absolute;
@@ -1800,7 +1800,7 @@ wy-prompt-editor .variation-display-icon {
             width: 32px;
             height: 32px;
             margin-top: 2px;
-            border-radius: var(--md-sys-shape-corner-full, 999px);
+            border-radius: var(--radius-pill, 999px);
             background: var(--admin-panel-bg);
             color: var(--ink, #1A1A1A);
             box-shadow: inset 0 0 0 1px var(--admin-hairline-soft);
@@ -1853,7 +1853,7 @@ wy-prompt-editor .visibility-setting wy-option-toggle {
                 min-height: 40px;
                 border: 0;
                 background: transparent;
-                color: var(--md-sys-color-on-surface, #121714);
+                color: var(--ink, #121714);
                 cursor: pointer;
                 font-family: var(--font-sans, 'DM Sans', sans-serif);
                 font-size: 0.875rem;
@@ -1861,7 +1861,7 @@ wy-prompt-editor .visibility-setting wy-option-toggle {
                 text-align: left;
             }
   wy-prompt-editor .editor-nav-toggle .material-symbols-outlined {
-                transition: transform var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+                transition: transform var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
             }
   wy-prompt-editor .editor-nav.open .editor-nav-toggle .material-symbols-outlined {
                 transform: rotate(180deg);
@@ -1891,7 +1891,7 @@ wy-prompt-editor .visibility-setting wy-option-toggle {
 /* ---- wy-variation-editor ---- */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
 
-        :host {
+        wy-variation-editor {
             display: block;
         }
 wy-variation-editor .material-symbols-outlined {
@@ -1909,7 +1909,7 @@ wy-variation-editor .variation-card {
             border: 1px solid var(--bg-alt);
             overflow: hidden;
             transition:
-                box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+                box-shadow var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
             box-shadow: inset 0 0 0 1px var(--admin-hairline-soft);
         }
 wy-variation-editor .variation-card.expanded {
@@ -1931,11 +1931,11 @@ wy-variation-editor .variation-header::before {
             display: none;
         }
 wy-variation-editor .variation-header:hover::before {
-            opacity: var(--md-sys-state-hover-opacity, 0.08);
+            opacity: var(--state-hover-opacity, 0.08);
         }
 wy-variation-editor .drag-handle {
             flex-shrink: 0;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+            color: var(--ink-mute, #5E6E66);
             cursor: grab;
         }
 wy-variation-editor .drag-handle:active {
@@ -1946,7 +1946,7 @@ wy-variation-editor .variation-title {
             font-family: var(--font-serif, 'Playfair Display', serif);
             font-size: 1.0625rem;
             font-weight: 600;
-            color: var(--md-sys-color-on-surface, #121714);
+            color: var(--ink, #121714);
             margin: 0;
         }
 wy-variation-editor .variation-card.expanded .variation-title {
@@ -1962,12 +1962,12 @@ wy-variation-editor .variation-badge {
             padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
             background-color: color-mix(in srgb, var(--accent-terracotta, #C18A4D) 22%, transparent);
             color: color-mix(in srgb, var(--accent-rust, #C06F45) 78%, var(--ink, #1A1A1A));
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
+            border-radius: var(--radius-pill, 9999px);
         }
 wy-variation-editor .collapse-icon {
             flex-shrink: 0;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            transition: transform var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            color: var(--ink-mute, #5E6E66);
+            transition: transform var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
         }
 wy-variation-editor .variation-card.expanded .collapse-icon {
             transform: rotate(180deg);
@@ -1975,7 +1975,7 @@ wy-variation-editor .variation-card.expanded .collapse-icon {
 wy-variation-editor .variation-content {
             display: grid;
             grid-template-rows: 0fr;
-            transition: grid-template-rows var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1));
+            transition: grid-template-rows var(--dur-2, 300ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
         }
 wy-variation-editor .variation-card.expanded .variation-content {
             grid-template-rows: 1fr;
@@ -1995,7 +1995,7 @@ wy-variation-editor .mode-toggle {
             padding: var(--spacing-xs, 4px);
             background-color: var(--paper-deep, #EEE8DD);
             box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
+            border-radius: var(--radius-pill, 9999px);
         }
 wy-variation-editor .mode-toggle label {
             display: flex;
@@ -2004,8 +2004,8 @@ wy-variation-editor .mode-toggle label {
             font-family: var(--font-sans, 'DM Sans', sans-serif);
             font-size: 0.8125rem;
             font-weight: 600;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
+            color: var(--ink-mute, #5E6E66);
+            border-radius: var(--radius-pill, 9999px);
             padding: 0.5rem 1.1rem;
             cursor: pointer;
             user-select: none;
@@ -2016,8 +2016,8 @@ wy-variation-editor .mode-toggle input[type="radio"] {
             pointer-events: none;
         }
 wy-variation-editor .mode-toggle label:has(input:checked) {
-            background: var(--md-sys-color-primary, #282828);
-            color: var(--md-sys-color-on-primary, #FFF);
+            background: var(--ink, #282828);
+            color: var(--paper, #FFF);
         }
 wy-variation-editor .steps-section {
             display: flex;
@@ -2038,27 +2038,27 @@ wy-variation-editor .add-step-button {
             font-family: var(--font-sans, 'DM Sans', sans-serif);
             font-size: 0.875rem;
             font-weight: 500;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+            color: var(--ink-mute, #5E6E66);
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            transition: box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition: box-shadow var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
         }
 wy-variation-editor .add-step-button::before {
             content: '';
             position: absolute;
             inset: 0;
-            background-color: var(--md-sys-color-primary, #282828);
+            background-color: var(--ink, #282828);
             opacity: 0;
-            transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition: opacity var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
             pointer-events: none;
         }
 wy-variation-editor .add-step-button:hover {
-            border-color: var(--md-sys-color-primary, #282828);
-            color: var(--md-sys-color-primary, #282828);
+            border-color: var(--ink, #282828);
+            color: var(--ink, #282828);
         }
 wy-variation-editor .add-step-button:hover::before {
-            opacity: var(--md-sys-state-hover-opacity, 0.08);
+            opacity: var(--state-hover-opacity, 0.08);
         }
 wy-variation-editor .variation-controls {
             display: flex;
@@ -2074,11 +2074,11 @@ wy-variation-editor .control-button {
             padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
             background: color-mix(in srgb, var(--ink, #1A1A1A) 4%, transparent);
             border: 0;
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
+            border-radius: var(--radius-pill, 9999px);
             font-family: var(--font-sans, 'DM Sans', sans-serif);
             font-size: 0.8125rem;
             font-weight: 600;
-            color: var(--md-sys-color-on-surface, #121714);
+            color: var(--ink, #121714);
             cursor: pointer;
             position: relative;
             overflow: hidden;
@@ -2087,28 +2087,28 @@ wy-variation-editor .control-button::before {
             content: '';
             position: absolute;
             inset: 0;
-            background-color: var(--md-sys-color-on-surface, #121714);
+            background-color: var(--ink, #121714);
             opacity: 0;
-            transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition: opacity var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
             pointer-events: none;
         }
 wy-variation-editor .control-button:hover::before {
-            opacity: var(--md-sys-state-hover-opacity, 0.08);
+            opacity: var(--state-hover-opacity, 0.08);
         }
 wy-variation-editor .control-button:focus-visible {
-            outline: 3px solid var(--md-sys-color-primary, #282828);
+            outline: 3px solid var(--ink, #282828);
             outline-offset: 2px;
         }
 wy-variation-editor .control-button:disabled {
-            opacity: var(--md-sys-state-disabled-opacity, 0.38);
+            opacity: var(--state-disabled-opacity, 0.38);
             cursor: not-allowed;
         }
 wy-variation-editor .control-button.delete {
             margin-left: auto;
-            color: var(--md-sys-color-error, #BA1A1A);
+            color: var(--err, #BA1A1A);
         }
 wy-variation-editor .control-button.delete::before {
-            background-color: var(--md-sys-color-error, #BA1A1A);
+            background-color: var(--err, #BA1A1A);
         }
 wy-variation-editor .control-button .material-symbols-outlined {
             font-size: 18px;
@@ -2127,28 +2127,28 @@ wy-variation-editor .add-variation-button {
             font-family: var(--font-sans, 'DM Sans', sans-serif);
             font-size: 0.9375rem;
             font-weight: 500;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+            color: var(--ink-mute, #5E6E66);
             cursor: pointer;
             position: relative;
             overflow: hidden;
             margin-top: var(--spacing-md, 16px);
-            transition: all var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition: all var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
         }
 wy-variation-editor .add-variation-button::before {
             content: '';
             position: absolute;
             inset: 0;
-            background-color: var(--md-sys-color-primary, #282828);
+            background-color: var(--ink, #282828);
             opacity: 0;
-            transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition: opacity var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
             pointer-events: none;
         }
 wy-variation-editor .add-variation-button:hover {
-            border-color: var(--md-sys-color-primary, #282828);
-            color: var(--md-sys-color-primary, #282828);
+            border-color: var(--ink, #282828);
+            color: var(--ink, #282828);
         }
 wy-variation-editor .add-variation-button:hover::before {
-            opacity: var(--md-sys-state-hover-opacity, 0.08);
+            opacity: var(--state-hover-opacity, 0.08);
         }
 wy-variation-editor .add-variation-button .material-symbols-outlined {
             font-size: 24px;
@@ -2164,17 +2164,17 @@ wy-variation-editor .field-label {
             font-weight: 700;
             letter-spacing: 0.14em;
             text-transform: uppercase;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+            color: var(--ink-mute, #5E6E66);
         }
 wy-variation-editor .field-description {
             font-family: var(--font-sans, 'DM Sans', sans-serif);
             font-size: 0.8125rem;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+            color: var(--ink-mute, #5E6E66);
             margin-top: calc(-1 * var(--spacing-xs, 4px));
         }
 wy-variation-editor .section-divider {
             height: 1px;
-            background-color: var(--md-sys-color-outline-variant, #DDD);
+            background-color: var(--paper-edge, #DDD);
             margin: var(--spacing-md, 16px) 0;
         }
 
@@ -2182,7 +2182,7 @@ wy-variation-editor .section-divider {
 /* ---- wy-step-editor ---- */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
 
-        :host {
+        wy-step-editor {
             display: block;
             margin-bottom: var(--spacing-md, 16px);
         }
@@ -2196,7 +2196,7 @@ wy-step-editor .step-card {
             border: 0;
             overflow: hidden;
             transition:
-                box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+                box-shadow var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
             box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
         }
 wy-step-editor .step-card.expanded {
@@ -2216,13 +2216,13 @@ wy-step-editor .step-header::before {
             content: '';
             position: absolute;
             inset: 0;
-            background-color: var(--md-sys-color-primary, #282828);
+            background-color: var(--ink, #282828);
             opacity: 0;
-            transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition: opacity var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
             pointer-events: none;
         }
 wy-step-editor .step-header:hover::before {
-            opacity: var(--md-sys-state-hover-opacity, 0.08);
+            opacity: var(--state-hover-opacity, 0.08);
         }
 wy-step-editor .step-badge {
             flex-shrink: 0;
@@ -2234,22 +2234,22 @@ wy-step-editor .step-badge {
             text-transform: uppercase;
             letter-spacing: 0.05em;
             padding: 4px 11px;
-            background-color: var(--md-sys-color-primary, #282828);
-            color: var(--md-sys-color-on-primary, #FFFFFF);
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
+            background-color: var(--ink, #282828);
+            color: var(--paper, #FFFFFF);
+            border-radius: var(--radius-pill, 9999px);
         }
 wy-step-editor .step-title {
             flex: 1;
             font-family: var(--font-serif, 'Playfair Display', serif);
             font-size: 1.0625rem;
             font-weight: 600;
-            color: var(--md-sys-color-on-surface, #121714);
+            color: var(--ink, #121714);
             margin: 0;
         }
 wy-step-editor .collapse-icon {
             flex-shrink: 0;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
-            transition: transform var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            color: var(--ink-mute, #5E6E66);
+            transition: transform var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
         }
 wy-step-editor .step-card.expanded .collapse-icon {
             transform: rotate(180deg);
@@ -2257,7 +2257,7 @@ wy-step-editor .step-card.expanded .collapse-icon {
 wy-step-editor .step-content {
             display: grid;
             grid-template-rows: 0fr;
-            transition: grid-template-rows var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1));
+            transition: grid-template-rows var(--dur-2, 300ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
         }
 wy-step-editor .step-card.expanded .step-content {
             grid-template-rows: 1fr;
@@ -2275,7 +2275,7 @@ wy-step-editor .step-controls {
             display: flex;
             gap: var(--spacing-sm, 8px);
             padding: 10px var(--spacing-md, 16px);
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 3.5%, transparent);
+            background-color: color-mix(in srgb, var(--ink, #282828) 3.5%, transparent);
             box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
         }
 wy-step-editor .control-button {
@@ -2285,11 +2285,11 @@ wy-step-editor .control-button {
             padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
             background: color-mix(in srgb, var(--ink, #1A1A1A) 4%, transparent);
             border: 0;
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
+            border-radius: var(--radius-pill, 9999px);
             font-family: var(--font-sans, 'DM Sans', sans-serif);
             font-size: 0.8125rem;
             font-weight: 600;
-            color: var(--md-sys-color-on-surface, #121714);
+            color: var(--ink, #121714);
             cursor: pointer;
             position: relative;
             overflow: hidden;
@@ -2298,28 +2298,28 @@ wy-step-editor .control-button::before {
             content: '';
             position: absolute;
             inset: 0;
-            background-color: var(--md-sys-color-on-surface, #121714);
+            background-color: var(--ink, #121714);
             opacity: 0;
-            transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition: opacity var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
             pointer-events: none;
         }
 wy-step-editor .control-button:hover::before {
-            opacity: var(--md-sys-state-hover-opacity, 0.08);
+            opacity: var(--state-hover-opacity, 0.08);
         }
 wy-step-editor .control-button:focus-visible {
-            outline: 3px solid var(--md-sys-color-primary, #282828);
+            outline: 3px solid var(--ink, #282828);
             outline-offset: 2px;
         }
 wy-step-editor .control-button:disabled {
-            opacity: var(--md-sys-state-disabled-opacity, 0.38);
+            opacity: var(--state-disabled-opacity, 0.38);
             cursor: not-allowed;
         }
 wy-step-editor .control-button.delete {
             margin-left: auto;
-            color: var(--md-sys-color-error, #BA1A1A);
+            color: var(--err, #BA1A1A);
         }
 wy-step-editor .control-button.delete::before {
-            background-color: var(--md-sys-color-error, #BA1A1A);
+            background-color: var(--err, #BA1A1A);
         }
 wy-step-editor .control-button .material-symbols-outlined {
             font-size: 18px;
@@ -2333,14 +2333,14 @@ wy-step-editor .field-label {
             font-family: var(--font-sans, 'DM Sans', sans-serif);
             font-size: 0.6875rem;
             font-weight: 700;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+            color: var(--ink-mute, #5E6E66);
             letter-spacing: 0.14em;
             text-transform: uppercase;
         }
 wy-step-editor .field-description {
             font-family: var(--font-sans, 'DM Sans', sans-serif);
             font-size: 0.8125rem;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+            color: var(--ink-mute, #5E6E66);
             margin-top: calc(-1 * var(--spacing-xs, 4px));
         }
 wy-step-editor input,
@@ -2349,19 +2349,19 @@ wy-step-editor textarea {
             padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
             font-family: var(--font-sans, 'DM Sans', sans-serif);
             font-size: 0.9375rem;
-            color: var(--md-sys-color-on-surface, #121714);
+            color: var(--ink, #121714);
             background-color: var(--surface-2, #FFF);
             border: 0;
             border-radius: var(--radius-2, 10px);
             box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 7%, transparent);
-            transition: box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition: box-shadow var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
         }
 wy-step-editor input:focus,
 wy-step-editor textarea:focus {
             outline: none;
             box-shadow:
-                inset 0 0 0 1px color-mix(in srgb, var(--md-sys-color-primary, #282828) 24%, transparent),
-                0 0 0 3px color-mix(in srgb, var(--md-sys-color-primary, #282828) 8%, transparent);
+                inset 0 0 0 1px color-mix(in srgb, var(--ink, #282828) 24%, transparent),
+                0 0 0 3px color-mix(in srgb, var(--ink, #282828) 8%, transparent);
         }
 wy-step-editor textarea {
             resize: vertical;
@@ -2401,15 +2401,15 @@ wy-variable-editor .variable-item {
             display: flex;
             gap: var(--spacing-sm, 8px);
             padding: var(--spacing-md, 16px);
-            background-color: var(--md-sys-color-surface-variant, #F5F2EA);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
+            background-color: var(--paper-deep, #F5F2EA);
+            border-radius: var(--radius-2, 8px);
+            border: 1px solid var(--paper-edge, #DDD);
         }
 wy-variable-editor .drag-handle {
             display: flex;
             align-items: center;
             cursor: grab;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+            color: var(--ink-mute, #5E6E66);
             padding: var(--spacing-xs, 4px);
         }
 wy-variable-editor .drag-handle:active {
@@ -2435,33 +2435,33 @@ wy-variable-editor .field-label {
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+            color: var(--ink-mute, #5E6E66);
         }
 wy-variable-editor input,
 wy-variable-editor select {
             padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            border-radius: var(--md-sys-shape-corner-xs, 4px);
+            border: 1px solid var(--paper-edge, #DDD);
+            border-radius: var(--radius-2, 4px);
             font-family: var(--font-body, 'DM Sans', sans-serif);
             font-size: 0.875rem;
-            color: var(--md-sys-color-on-surface, #121714);
-            background-color: var(--md-sys-color-surface, #FDFBF7);
-            transition: border-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            color: var(--ink, #121714);
+            background-color: var(--paper, #FDFBF7);
+            transition: border-color var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
         }
 wy-variable-editor input:focus,
 wy-variable-editor select:focus {
             outline: none;
-            border-color: var(--md-sys-color-primary, #282828);
+            border-color: var(--ink, #282828);
         }
 wy-variable-editor input[readonly] {
-            background-color: color-mix(in srgb, var(--md-sys-color-surface-variant, #F5F2EA) 50%, transparent);
+            background-color: color-mix(in srgb, var(--paper-deep, #F5F2EA) 50%, transparent);
             cursor: not-allowed;
         }
 wy-variable-editor .name-prefix {
             display: inline-block;
             font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
             font-size: 0.8125rem;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+            color: var(--ink-mute, #5E6E66);
             margin-right: var(--spacing-xxs, 2px);
         }
 wy-variable-editor .toggle-options {
@@ -2480,20 +2480,20 @@ wy-variable-editor .icon-button {
             border: none;
             padding: var(--spacing-xs, 4px);
             cursor: pointer;
-            color: var(--md-sys-color-error, #FF0101);
-            border-radius: var(--md-sys-shape-corner-xs, 4px);
-            transition: background-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            color: var(--err, #FF0101);
+            border-radius: var(--radius-2, 4px);
+            transition: background-color var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
         }
 wy-variable-editor .icon-button:hover {
-            background-color: color-mix(in srgb, var(--md-sys-color-error, #FF0101) 10%, transparent);
+            background-color: color-mix(in srgb, var(--err, #FF0101) 10%, transparent);
         }
 wy-variable-editor .add-button {
             margin-top: var(--spacing-md, 16px);
             padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
             background-color: transparent;
-            border: 1px solid var(--md-sys-color-primary, #282828);
-            color: var(--md-sys-color-primary, #282828);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
+            border: 1px solid var(--ink, #282828);
+            color: var(--ink, #282828);
+            border-radius: var(--radius-2, 8px);
             font-family: var(--font-body, 'DM Sans', sans-serif);
             font-size: 0.875rem;
             font-weight: 500;
@@ -2501,10 +2501,10 @@ wy-variable-editor .add-button {
             display: inline-flex;
             align-items: center;
             gap: var(--spacing-xs, 4px);
-            transition: all var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition: all var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
         }
 wy-variable-editor .add-button:hover {
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 10%, transparent);
+            background-color: color-mix(in srgb, var(--ink, #282828) 10%, transparent);
         }
 
 
@@ -2537,9 +2537,9 @@ wy-reference-image-editor .refs-list {
         }
 wy-reference-image-editor .ref-item {
             padding: var(--spacing-md, 16px);
-            background-color: var(--md-sys-color-surface-variant, #F5F2EA);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
+            background-color: var(--paper-deep, #F5F2EA);
+            border-radius: var(--radius-2, 8px);
+            border: 1px solid var(--paper-edge, #DDD);
         }
 wy-reference-image-editor .ref-item-header {
             display: flex;
@@ -2564,18 +2564,18 @@ wy-reference-image-editor .field-label {
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+            color: var(--ink-mute, #5E6E66);
         }
 wy-reference-image-editor input,
 wy-reference-image-editor textarea {
             padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
-            border: 1px solid var(--md-sys-color-outline-variant, #DDD);
-            border-radius: var(--md-sys-shape-corner-xs, 4px);
+            border: 1px solid var(--paper-edge, #DDD);
+            border-radius: var(--radius-2, 4px);
             font-family: var(--font-body, 'DM Sans', sans-serif);
             font-size: 0.875rem;
-            color: var(--md-sys-color-on-surface, #121714);
-            background-color: var(--md-sys-color-surface, #FDFBF7);
-            transition: border-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            color: var(--ink, #121714);
+            background-color: var(--paper, #FDFBF7);
+            transition: border-color var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
         }
 wy-reference-image-editor textarea {
             min-height: 84px;
@@ -2585,24 +2585,24 @@ wy-reference-image-editor textarea {
 wy-reference-image-editor input:focus,
 wy-reference-image-editor textarea:focus {
             outline: none;
-            border-color: var(--md-sys-color-primary, #282828);
+            border-color: var(--ink, #282828);
         }
 wy-reference-image-editor input.invalid {
-            border-color: var(--md-sys-color-error, #FF0101);
+            border-color: var(--err, #FF0101);
         }
 wy-reference-image-editor .placeholder-hint {
             margin-top: var(--spacing-xs, 4px);
             font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
             font-size: 0.8125rem;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+            color: var(--ink-mute, #5E6E66);
         }
 wy-reference-image-editor .placeholder-hint.has-value {
-            color: var(--md-sys-color-primary, #282828);
+            color: var(--ink, #282828);
         }
 wy-reference-image-editor .validation-error {
             font-family: var(--font-body, 'DM Sans', sans-serif);
             font-size: 0.75rem;
-            color: var(--md-sys-color-error, #FF0101);
+            color: var(--err, #FF0101);
             margin-top: var(--spacing-xxs, 2px);
         }
 wy-reference-image-editor .remove-button {
@@ -2615,12 +2615,12 @@ wy-reference-image-editor .icon-button {
             border: none;
             padding: var(--spacing-xs, 4px);
             cursor: pointer;
-            color: var(--md-sys-color-error, #FF0101);
-            border-radius: var(--md-sys-shape-corner-xs, 4px);
-            transition: background-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            color: var(--err, #FF0101);
+            border-radius: var(--radius-2, 4px);
+            transition: background-color var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
         }
 wy-reference-image-editor .icon-button:hover {
-            background-color: color-mix(in srgb, var(--md-sys-color-error, #FF0101) 10%, transparent);
+            background-color: color-mix(in srgb, var(--err, #FF0101) 10%, transparent);
         }
 wy-reference-image-editor .upload-section {
             margin-top: var(--spacing-sm, 8px);
@@ -2629,9 +2629,9 @@ wy-reference-image-editor .add-button {
             margin-top: var(--spacing-md, 16px);
             padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
             background-color: transparent;
-            border: 1px solid var(--md-sys-color-primary, #282828);
-            color: var(--md-sys-color-primary, #282828);
-            border-radius: var(--md-sys-shape-corner-small, 8px);
+            border: 1px solid var(--ink, #282828);
+            color: var(--ink, #282828);
+            border-radius: var(--radius-2, 8px);
             font-family: var(--font-body, 'DM Sans', sans-serif);
             font-size: 0.875rem;
             font-weight: 500;
@@ -2639,10 +2639,10 @@ wy-reference-image-editor .add-button {
             display: inline-flex;
             align-items: center;
             gap: var(--spacing-xs, 4px);
-            transition: all var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition: all var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
         }
 wy-reference-image-editor .add-button:hover {
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 10%, transparent);
+            background-color: color-mix(in srgb, var(--ink, #282828) 10%, transparent);
         }
 
 
@@ -2657,33 +2657,33 @@ wy-image-upload .label {
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            color: var(--md-sys-color-text-heading, #121714);
+            color: var(--ink, #121714);
             margin-bottom: var(--spacing-sm, 8px);
             display: block;
         }
 wy-image-upload .upload-zone {
             position: relative;
-            border: 2px dashed color-mix(in srgb, var(--md-sys-color-primary, #282828) 20%, transparent);
-            border-radius: var(--md-sys-shape-corner-medium, 16px);
+            border: 2px dashed color-mix(in srgb, var(--ink, #282828) 20%, transparent);
+            border-radius: var(--radius-2, 16px);
             padding: var(--spacing-2xl, 48px) var(--spacing-xl, 32px);
             text-align: center;
             cursor: pointer;
-            transition: all var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition: all var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
             background-color: transparent;
         }
 wy-image-upload .upload-zone:hover {
-            background-color: var(--md-sys-color-surface, #FDFBF7);
-            border-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 40%, transparent);
+            background-color: var(--paper, #FDFBF7);
+            border-color: color-mix(in srgb, var(--ink, #282828) 40%, transparent);
         }
 wy-image-upload .upload-zone.dragging {
-            border-color: var(--md-sys-color-primary, #282828);
+            border-color: var(--ink, #282828);
             border-style: solid;
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 5%, transparent);
+            background-color: color-mix(in srgb, var(--ink, #282828) 5%, transparent);
         }
 wy-image-upload .upload-zone.has-image {
             padding: 0;
             border-style: solid;
-            border-color: var(--md-sys-color-outline-variant, #DDD);
+            border-color: var(--paper-edge, #DDD);
             overflow: hidden;
         }
 wy-image-upload .upload-zone.compact {
@@ -2695,8 +2695,8 @@ wy-image-upload .icon-container {
             width: 48px;
             height: 48px;
             margin: 0 auto var(--spacing-md, 16px);
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 5%, transparent);
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
+            background-color: color-mix(in srgb, var(--ink, #282828) 5%, transparent);
+            border-radius: var(--radius-pill, 9999px);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -2704,19 +2704,19 @@ wy-image-upload .icon-container {
 wy-image-upload .material-symbols-outlined {
             font-family: 'Material Symbols Outlined';
             font-size: 24px;
-            color: var(--md-sys-color-primary, #282828);
+            color: var(--ink, #282828);
         }
 wy-image-upload .upload-text {
             font-family: var(--font-body, 'DM Sans', sans-serif);
             font-size: 0.9375rem;
             font-weight: 500;
-            color: var(--md-sys-color-on-surface, #121714);
+            color: var(--ink, #121714);
             margin-bottom: var(--spacing-xs, 4px);
         }
 wy-image-upload .upload-hint {
             font-family: var(--font-body, 'DM Sans', sans-serif);
             font-size: 0.8125rem;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+            color: var(--ink-mute, #5E6E66);
         }
 wy-image-upload .image-preview {
             position: relative;
@@ -2737,29 +2737,29 @@ wy-image-upload .remove-button {
             right: var(--spacing-sm, 8px);
             width: 32px;
             height: 32px;
-            background-color: var(--md-sys-color-error, #B3261E);
+            background-color: var(--err, #B3261E);
             border: none;
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
+            border-radius: var(--radius-pill, 9999px);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             opacity: 0;
-            transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition: opacity var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
 wy-image-upload .image-preview:hover .remove-button {
             opacity: 1;
         }
 wy-image-upload .remove-button:hover {
-            background-color: color-mix(in srgb, var(--md-sys-color-error, #B3261E) 90%, black);
+            background-color: color-mix(in srgb, var(--err, #B3261E) 90%, black);
         }
 wy-image-upload .image-preview:focus-within .remove-button {
             opacity: 1;
         }
 wy-image-upload .remove-button:focus-visible {
             opacity: 1;
-            outline: 2px solid var(--md-sys-color-on-surface, #1A1A1A);
+            outline: 2px solid var(--ink, #1A1A1A);
             outline-offset: 2px;
         }
 wy-image-upload .remove-button .material-symbols-outlined {
@@ -2783,29 +2783,29 @@ wy-image-upload input[type="file"] {
 
 
 /* ---- wy-dropdown ---- */
-wy-dropdown /* Note: Fonts (DM Sans,
+/* Note: Fonts (DM Sans,
 wy-dropdown Material Symbols) should be loaded in consuming page <head> */
         
-        :host {
+        wy-dropdown {
             display: block;
             /* Fallback values for component-specific tokens */
             --wy-dropdown-label-color: #71717A;
             --wy-dropdown-text-color: #52525B;
             --wy-dropdown-icon-color: #52525B;
-            --wy-dropdown-bg: var(--md-sys-color-surface-container-lowest, #FDFBF7);
-            --wy-dropdown-border: var(--md-sys-color-outline-variant, #D7D3C8);
-            --wy-dropdown-border-hover: var(--md-sys-color-outline-variant, #D7D3C8);
-            --wy-dropdown-menu-bg: var(--md-sys-color-surface-container-high, #EBE5DE);
-            --wy-dropdown-item-hover-bg: var(--md-sys-color-surface-container-high, #EBE5DE);
+            --wy-dropdown-bg: var(--white, #FDFBF7);
+            --wy-dropdown-border: var(--paper-edge, #D7D3C8);
+            --wy-dropdown-border-hover: var(--paper-edge, #D7D3C8);
+            --wy-dropdown-menu-bg: var(--paper-edge, #EBE5DE);
+            --wy-dropdown-item-hover-bg: var(--paper-edge, #EBE5DE);
         }
-wy-dropdown /* Subtle variant - lighter backgrounds for modal integration */
-        :host([variant="subtle"]) {
-            --wy-dropdown-bg: var(--md-sys-color-surface-container-low, #FDFBF7);  /* Button bg - lighter than modal */
-            --wy-dropdown-border: var(--md-sys-color-outline-variant, #D7D3C8);
-            --wy-dropdown-menu-bg: var(--md-sys-color-surface-container-low, #FDFBF7);  /* Menu bg */
-            --wy-dropdown-item-hover-bg: var(--md-sys-color-surface-container, #F5F2EA);  /* Item hover */
+/* Subtle variant - lighter backgrounds for modal integration */
+        wy-dropdown[variant="subtle"] {
+            --wy-dropdown-bg: var(--paper, #FDFBF7);  /* Button bg - lighter than modal */
+            --wy-dropdown-border: var(--paper-edge, #D7D3C8);
+            --wy-dropdown-menu-bg: var(--paper, #FDFBF7);  /* Menu bg */
+            --wy-dropdown-item-hover-bg: var(--paper-deep, #F5F2EA);  /* Item hover */
         }
-wy-dropdown /* Material Symbols font configuration */
+/* Material Symbols font configuration */
         .material-symbols-outlined {
             font-family: 'Material Symbols Outlined';
             font-weight: normal;
@@ -2831,7 +2831,7 @@ wy-dropdown .container {
         }
 wy-dropdown .label {
             font-family: var(--font-sans, 'DM Sans', sans-serif);
-            font-size: var(--md-sys-typescale-label-small-size, 0.6875rem);
+            font-size: var(--fs-ui-xs, 0.6875rem);
             font-weight: 700;
             letter-spacing: 0.1em;
             text-transform: uppercase;
@@ -2849,23 +2849,23 @@ wy-dropdown .selector {
             padding: var(--spacing-md, 16px) var(--spacing-lg, 24px);
             background-color: var(--wy-dropdown-bg);
             border: 1px solid var(--wy-dropdown-border);
-            border-radius: var(--md-sys-shape-corner-medium, 12px);
+            border-radius: var(--radius-2, 12px);
             cursor: pointer;
-            transition: border-color var(--md-sys-motion-duration-short4, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition: border-color var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
             text-align: left;
         }
 wy-dropdown .selector:disabled {
             cursor: not-allowed;
-            opacity: var(--md-sys-state-disabled-opacity, 0.38);
+            opacity: var(--state-disabled-opacity, 0.38);
         }
-wy-dropdown /* MD3 State Layer for hover */
+/* MD3 State Layer for hover */
         .selector::before {
             content: '';
             position: absolute;
             inset: 0;
-            background-color: var(--md-sys-color-on-surface, #121714);
+            background-color: var(--ink, #121714);
             opacity: 0;
-            transition: opacity var(--md-sys-motion-duration-short2, 150ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition: opacity var(--dur-1, 150ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
             pointer-events: none;
             border-radius: inherit;
         }
@@ -2873,14 +2873,14 @@ wy-dropdown .selector:hover:not(:disabled) {
             border-color: var(--wy-dropdown-border-hover);
         }
 wy-dropdown .selector:hover:not(:disabled)::before {
-            opacity: var(--md-sys-state-hover-opacity, 0.08);
+            opacity: var(--state-hover-opacity, 0.08);
         }
 wy-dropdown .selector:focus-visible {
-            outline: 3px solid var(--md-sys-color-primary, #282828);
+            outline: 3px solid var(--ink, #282828);
             outline-offset: 2px;
         }
 wy-dropdown .selector:active:not(:disabled)::before {
-            opacity: var(--md-sys-state-pressed-opacity, 0.12);
+            opacity: var(--state-pressed-opacity, 0.12);
         }
 wy-dropdown .value {
             flex: 1;
@@ -2896,8 +2896,8 @@ wy-dropdown .value.placeholder {
         }
 wy-dropdown .icon {
             color: var(--wy-dropdown-icon-color);
-            transition: color var(--md-sys-motion-duration-short2, 150ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
-                        transform var(--md-sys-motion-duration-short2, 150ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition: color var(--dur-1, 150ms) var(--ease, cubic-bezier(0.2, 0, 0, 1)),
+                        transform var(--dur-1, 150ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
             position: relative;
             z-index: 1;
             margin-left: var(--spacing-sm, 8px);
@@ -2914,8 +2914,8 @@ wy-dropdown .dropdown {
             left: 0;
             right: 0;
             background-color: var(--wy-dropdown-menu-bg);
-            border: 1px solid var(--md-sys-color-outline-variant, #D7D3C8);
-            border-radius: var(--md-sys-shape-corner-medium, 16px);
+            border: 1px solid var(--paper-edge, #D7D3C8);
+            border-radius: var(--radius-2, 16px);
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
             z-index: 100;
             overflow: hidden;
@@ -2931,40 +2931,40 @@ wy-dropdown .item {
             font-size: 0.875rem;
             color: var(--wy-dropdown-text-color);
             cursor: pointer;
-            transition: background-color var(--md-sys-motion-duration-short2, 150ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition: background-color var(--dur-1, 150ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
         }
-wy-dropdown /* State layer for menu items */
+/* State layer for menu items */
         .item::before {
             content: '';
             position: absolute;
             inset: 0;
-            background-color: var(--md-sys-color-on-surface, #121714);
+            background-color: var(--ink, #121714);
             opacity: 0;
-            transition: opacity var(--md-sys-motion-duration-short2, 150ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition: opacity var(--dur-1, 150ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
             pointer-events: none;
         }
 wy-dropdown .item:hover::before,
 wy-dropdown .item.focused::before {
-            opacity: var(--md-sys-state-hover-opacity, 0.08);
+            opacity: var(--state-hover-opacity, 0.08);
         }
 wy-dropdown .item.selected {
-            color: var(--md-sys-color-primary, #282828);
+            color: var(--ink, #282828);
             font-weight: 600;
-            background-color: var(--md-sys-color-primary-container, #E8F5E9);
+            background-color: var(--paper-deep, #E8F5E9);
         }
 wy-dropdown .item.selected::before {
-            background-color: var(--md-sys-color-primary, #282828);
+            background-color: var(--ink, #282828);
         }
 wy-dropdown .no-results {
             padding: var(--spacing-md, 16px) var(--spacing-lg, 24px);
             font-family: var(--font-sans, 'DM Sans', sans-serif);
             font-size: 0.875rem;
-            color: var(--md-sys-color-on-surface-variant, #49454E);
+            color: var(--ink-mute, #49454E);
             opacity: 0.6;
             font-style: italic;
             text-align: center;
         }
-wy-dropdown /* Scrollbar styling */
+/* Scrollbar styling */
         .dropdown::-webkit-scrollbar {
             width: 8px;
         }
@@ -2972,11 +2972,11 @@ wy-dropdown .dropdown::-webkit-scrollbar-track {
             background: transparent;
         }
 wy-dropdown .dropdown::-webkit-scrollbar-thumb {
-            background: var(--md-sys-color-outline-variant, #D7D3C8);
+            background: var(--paper-edge, #D7D3C8);
             border-radius: var(--radius-1);
         }
 wy-dropdown .dropdown::-webkit-scrollbar-thumb:hover {
-            background: var(--md-sys-color-outline, #2d4e3c);
+            background: var(--paper-edge, #2d4e3c);
         }
 
 
@@ -2987,7 +2987,7 @@ wy-option-toggle {
         }
 wy-option-toggle .label {
             margin: 0 0 var(--spacing-md, 16px) 0;
-            color: var(--md-sys-color-primary, #282828);
+            color: var(--ink, #282828);
             font-family: var(--font-body, 'DM Sans', sans-serif);
             font-size: 0.875rem;
             font-weight: 700;
@@ -2998,9 +2998,9 @@ wy-option-toggle .label {
 wy-option-toggle .description {
             margin: 0 0 var(--spacing-sm, 8px) 0;
             max-width: 36rem;
-            color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 70%, transparent);
+            color: color-mix(in srgb, var(--ink, #282828) 70%, transparent);
             font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: var(--md-sys-typescale-body-small-size, 0.875rem);
+            font-size: var(--fs-body-s, 0.875rem);
             font-weight: 400;
             line-height: 1.8;
         }
@@ -3009,28 +3009,28 @@ wy-option-toggle .group {
             grid-template-columns: 1fr 1fr;
             gap: var(--spacing-xxs, 2px);
             padding: var(--spacing-xxs, 2px);
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-            background: var(--md-sys-color-surface-container-high, #EBE5DE);
+            border-radius: var(--radius-pill, 9999px);
+            background: var(--paper-edge, #EBE5DE);
         }
 wy-option-toggle .option {
             position: relative;
             overflow: hidden;
             border: 0;
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
+            border-radius: var(--radius-pill, 9999px);
             min-height: 34px;
             padding: var(--spacing-xs, 4px) var(--spacing-md, 16px);
             background: transparent;
-            color: color-mix(in srgb, var(--md-sys-color-on-surface-variant, #5E6E66) 84%, transparent);
+            color: color-mix(in srgb, var(--ink-mute, #5E6E66) 84%, transparent);
             font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: var(--md-sys-typescale-label-large-size, 0.875rem);
+            font-size: var(--fs-ui-xs, 0.875rem);
             font-weight: 600;
             line-height: 1.2;
             letter-spacing: 0.1em;
             text-transform: uppercase;
             cursor: pointer;
             transition:
-                background-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
-                color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+                background-color var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1)),
+                color var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
         }
 wy-option-toggle .option::after {
             content: '';
@@ -3038,22 +3038,22 @@ wy-option-toggle .option::after {
             inset: 0;
             background: currentColor;
             opacity: 0;
-            transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition: opacity var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
             pointer-events: none;
         }
 wy-option-toggle .option:hover::after {
-            opacity: var(--md-sys-state-hover-opacity, 0.08);
+            opacity: var(--state-hover-opacity, 0.08);
         }
 wy-option-toggle .option.selected {
-            background: var(--md-sys-color-primary, #282828);
-            color: var(--md-sys-color-on-primary, #FFFFFF);
+            background: var(--ink, #282828);
+            color: var(--paper, #FFFFFF);
         }
 wy-option-toggle .option:focus-visible {
-            outline: 2px solid var(--md-sys-color-primary, #282828);
+            outline: 2px solid var(--ink, #282828);
             outline-offset: 1px;
         }
 wy-option-toggle[disabled] .group {
-            opacity: var(--md-sys-state-disabled-opacity, 0.38);
+            opacity: var(--state-disabled-opacity, 0.38);
         }
 wy-option-toggle[disabled] .option {
             cursor: not-allowed;
@@ -3090,8 +3090,8 @@ wy-option-toggle .switch-state {
             line-height: 1.1;
             letter-spacing: 0.15em;
             text-transform: uppercase;
-            color: var(--md-sys-color-primary, #282828);
-            transition: color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            color: var(--ink, #282828);
+            transition: color var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
             user-select: none;
         }
 wy-option-toggle .switch-button {
@@ -3102,17 +3102,17 @@ wy-option-toggle .switch-button {
             flex: 0 0 auto;
             width: 52px;
             height: 30px;
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
+            border-radius: var(--radius-pill, 9999px);
             background: var(--wy-option-toggle-off-bg, var(--paper-deep, #EEE8DD));
             cursor: pointer;
-            transition: background-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition: background-color var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
         }
 wy-option-toggle[size='compact'] .switch-button {
             width: 52px;
             height: 30px;
         }
 wy-option-toggle .switch-button.checked {
-            background: var(--md-sys-color-primary, #282828);
+            background: var(--ink, #282828);
         }
 wy-option-toggle .switch-button::after {
             content: '';
@@ -3120,14 +3120,14 @@ wy-option-toggle .switch-button::after {
             inset: 0;
             background: currentColor;
             opacity: 0;
-            transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition: opacity var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
             pointer-events: none;
         }
 wy-option-toggle .switch-button:hover::after {
-            opacity: var(--md-sys-state-hover-opacity, 0.08);
+            opacity: var(--state-hover-opacity, 0.08);
         }
 wy-option-toggle .switch-button:focus-visible {
-            outline: 2px solid var(--md-sys-color-primary, #282828);
+            outline: 2px solid var(--ink, #282828);
             outline-offset: 2px;
         }
 wy-option-toggle .switch-thumb {
@@ -3136,9 +3136,9 @@ wy-option-toggle .switch-thumb {
             left: 3px;
             width: 24px;
             height: 24px;
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
-            background: var(--md-sys-color-primary, #282828);
-            transition: transform var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            border-radius: var(--radius-pill, 9999px);
+            background: var(--ink, #282828);
+            transition: transform var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
         }
 wy-option-toggle[size='compact'] .switch-thumb {
             top: 3px;
@@ -3148,7 +3148,7 @@ wy-option-toggle[size='compact'] .switch-thumb {
         }
 wy-option-toggle .switch-button.checked .switch-thumb {
             transform: translateX(22px);
-            background: var(--md-sys-color-surface, #F5F2EA);
+            background: var(--paper, #F5F2EA);
         }
 wy-option-toggle[size='compact'] .switch-button.checked .switch-thumb {
             transform: translateX(22px);
@@ -3159,9 +3159,9 @@ wy-option-toggle[size='compact'] .switch-state {
         }
 wy-option-toggle .selected-value-text {
             margin: var(--spacing-sm, 8px) 0 0 0;
-            color: color-mix(in srgb, var(--md-sys-color-on-surface, #121714) 86%, transparent);
+            color: color-mix(in srgb, var(--ink, #121714) 86%, transparent);
             font-family: var(--font-body, 'DM Sans', sans-serif);
-            font-size: var(--md-sys-typescale-body-medium-size, 1rem);
+            font-size: var(--fs-body, 1rem);
             font-weight: 400;
             line-height: 1.7;
         }
@@ -3203,7 +3203,7 @@ wy-code-textarea .label {
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.14em;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+            color: var(--ink-mute, #5E6E66);
             margin-bottom: var(--spacing-sm, 8px);
             display: block;
         }
@@ -3217,19 +3217,19 @@ wy-code-textarea textarea {
             font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
             font-size: 0.875rem;
             line-height: 1.5;
-            color: var(--md-sys-color-on-surface, #121714);
+            color: var(--ink, #121714);
             resize: vertical;
             box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 7%, transparent);
-            transition: box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            transition: box-shadow var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
         }
 wy-code-textarea textarea:focus {
             outline: none;
             box-shadow:
-                inset 0 0 0 1px color-mix(in srgb, var(--md-sys-color-primary, #282828) 24%, transparent),
-                0 0 0 3px color-mix(in srgb, var(--md-sys-color-primary, #282828) 10%, transparent);
+                inset 0 0 0 1px color-mix(in srgb, var(--ink, #282828) 24%, transparent),
+                0 0 0 3px color-mix(in srgb, var(--ink, #282828) 10%, transparent);
         }
 wy-code-textarea textarea::placeholder {
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+            color: var(--ink-mute, #5E6E66);
             opacity: 0.6;
         }
 wy-code-textarea .variable-chips {
@@ -3243,29 +3243,29 @@ wy-code-textarea .variable-chip {
             align-items: center;
             gap: var(--spacing-xxs, 2px);
             padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 10%, transparent);
-            border-radius: var(--md-sys-shape-corner-full, 9999px);
+            background-color: color-mix(in srgb, var(--ink, #282828) 10%, transparent);
+            border-radius: var(--radius-pill, 9999px);
             font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
             font-size: 0.75rem;
-            color: var(--md-sys-color-primary, #282828);
+            color: var(--ink, #282828);
             cursor: pointer;
             border: 0;
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--md-sys-color-primary, #282828) 18%, transparent);
-            transition: all var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #282828) 18%, transparent);
+            transition: all var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
         }
 wy-code-textarea .variable-chip:hover {
-            background-color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 20%, transparent);
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--md-sys-color-primary, #282828) 24%, transparent);
+            background-color: color-mix(in srgb, var(--ink, #282828) 20%, transparent);
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #282828) 24%, transparent);
         }
 wy-code-textarea .char-count {
             font-family: var(--font-body, 'DM Sans', sans-serif);
             font-size: 0.75rem;
-            color: var(--md-sys-color-on-surface-variant, #5E6E66);
+            color: var(--ink-mute, #5E6E66);
             text-align: right;
             margin-top: var(--spacing-xs, 4px);
         }
 wy-code-textarea .char-count.over-limit {
-            color: var(--md-sys-color-error, #FF0101);
+            color: var(--err, #FF0101);
         }
 
 /* ---- variant selector (new) ---- */
@@ -3292,7 +3292,7 @@ wy-variation-editor .variation-selector-eyebrow {
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--md-sys-color-on-surface-variant, #5E6E66);
+    color: var(--ink-mute, #5E6E66);
 }
 wy-variation-editor .variation-selector-current {
     display: flex;
@@ -3303,7 +3303,7 @@ wy-variation-editor .variation-selector-current {
     font-family: var(--font-serif, 'Lora', serif);
     font-size: 1rem;
     font-weight: 600;
-    color: var(--md-sys-color-on-surface, #121714);
+    color: var(--ink, #121714);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -3311,12 +3311,12 @@ wy-variation-editor .variation-selector-current {
 wy-variation-editor .variation-selector-meta {
     flex-shrink: 0;
     font-size: 0.8125rem;
-    color: var(--md-sys-color-on-surface-variant, #5E6E66);
+    color: var(--ink-mute, #5E6E66);
 }
 wy-variation-editor .variation-selector-chevron {
     flex-shrink: 0;
-    color: var(--md-sys-color-on-surface-variant, #5E6E66);
-    transition: transform var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+    color: var(--ink-mute, #5E6E66);
+    transition: transform var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
 }
 wy-variation-editor .variation-selector.expanded .variation-selector-chevron {
     transform: rotate(180deg);
@@ -3340,17 +3340,17 @@ wy-variation-editor .variation-row {
     cursor: pointer;
     position: relative;
     font-family: var(--font-body, 'Inter', sans-serif);
-    transition: background-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+    transition: background-color var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
 }
 wy-variation-editor .variation-row:hover {
-    background: color-mix(in srgb, var(--md-sys-color-primary, #282828) 6%, transparent);
+    background: color-mix(in srgb, var(--ink, #282828) 6%, transparent);
 }
 wy-variation-editor .variation-row.selected {
-    background: color-mix(in srgb, var(--md-sys-color-primary, #282828) 8%, transparent);
+    background: color-mix(in srgb, var(--ink, #282828) 8%, transparent);
 }
 wy-variation-editor .variation-row-handle {
     flex-shrink: 0;
-    color: var(--md-sys-color-on-surface-variant, #5E6E66);
+    color: var(--ink-mute, #5E6E66);
     cursor: grab;
 }
 wy-variation-editor .variation-row-handle:active {
@@ -3361,7 +3361,7 @@ wy-variation-editor .variation-row-title {
     min-width: 0;
     font-size: 0.9375rem;
     font-weight: 600;
-    color: var(--md-sys-color-on-surface, #121714);
+    color: var(--ink, #121714);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -3369,7 +3369,7 @@ wy-variation-editor .variation-row-title {
 wy-variation-editor .variation-row-check {
     flex-shrink: 0;
     font-size: 18px;
-    color: var(--md-sys-color-primary, #282828);
+    color: var(--ink, #282828);
 }
 wy-variation-editor .variation-selector-list .add-variation-button {
     margin-top: var(--spacing-xs, 4px);

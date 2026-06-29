@@ -210,7 +210,7 @@ class LinksManager {
             // Reduce title size
             const title = this.modal.shadowRoot.querySelector('.modal-title');
             if (title) {
-                title.style.fontSize = 'var(--md-sys-typescale-headline-medium-size)';
+                title.style.fontSize = '1.75rem';
             }
         }
     }
