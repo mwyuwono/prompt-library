@@ -711,6 +711,23 @@
         "instructions": "Upload a building image with this prompt. "
       },
       {
+        "id": "manuscript-watercolor-survey",
+        "name": "Manuscript Watercolor Survey",
+        "description": "Transforms an uploaded architectural image into a restrained early-19th-century manuscript watercolor/gouache survey with a fixed archival style reference, aged paper, ruled border, formal garden or ground treatment, and loose cursive lower margin.",
+        "image": "public/images/architectural-rendering-manuscript-watercolor-preview.png",
+        "template": "Use the uploaded building image as the architectural source. Use this style reference for medium, palette, rendering behavior, texture, atmosphere, and archival presentation:\n{{manuscript_watercolor_style_reference}}\n\nTransform the source building into an early 19th-century manuscript watercolor/gouache architectural survey on aged paper.\n\nUse the uploaded building image as the source of truth for the building's identity, geometry, massing, proportions, roof logic, facade rhythm, opening placement, material cues, ornament, site relationship, and important factual details. Preserve the building so it remains recognizable, but translate it into the visual language of the style reference.\n\nRender with delicate ink-and-wash draftsmanship, fine controlled outlines, pale mineral pigments, soft gray-green shadows, chalky whites, muted ochres, dusty red accents, desaturated greens, and a light blue sky or softly washed background when appropriate. Favor measured architectural-document precision, flat daylight, quiet atmosphere, gentle perspective, and handmade irregularities over dramatic realism.\n\nPreserve the major spatial relationships from the source image while translating surfaces into hand-painted washes with subtle paper grain, faint staining, uneven pigment density, and lightly softened edges. If the source includes gardens, paths, walls, trees, neighboring structures, streets, or landscape context, simplify them into an orderly manuscript-survey setting: clipped hedges, formal beds, low garden walls, restrained tree masses, pale paths, and measured ground planes where appropriate. Keep contextual elements subordinate to the building.\n\nInclude an archival sheet feel: an off-white paper field, thin ruled border or plate edge when composition allows, and a lower margin that may contain loose decorative cursive inscription marks. Do not create prominent readable text unless it already exists in the source image.\n\nDo not copy the specific palace, garden, trees, or caption from the style reference unless those elements are present in the uploaded source. Do not modernize the scene, add fantasy-map styling, turn it into an oil painting, make it photorealistic, use bold digital colors, add cinematic lighting, create thick impasto texture, or replace the source architecture with invented content.",
+        "variables": [],
+        "instructions": "Upload a building image with this prompt. The fixed manuscript watercolor style reference is included automatically.",
+        "referenceImages": [
+          {
+            "variable": "manuscript_watercolor_style_reference",
+            "label": "Manuscript Watercolor Style Reference",
+            "path": "public/images/architectural-rendering-manuscript-watercolor-style-reference.jpg",
+            "instructions": "Use this reference for early 19th-century manuscript watercolor/gouache handling, pale mineral palette, ruled archival border, aged paper, formal garden context, soft sky, delicate linework, and lower-margin cursive presentation. Do not copy the specific building or caption unless present in the uploaded source."
+          }
+        ]
+      },
+      {
         "id": "quiet-americana-realist-elevation",
         "name": "Quiet Americana Realist Elevation",
         "description": "Converts an uploaded architectural image into a quiet cinematic realist painting with flattened frontal elevation logic, muted archival Americana color, and included Hopper/Wyeth-adjacent style references.\n\nSubmit an uploaded building image with this prompt. The two attached style references are included automatically.",
