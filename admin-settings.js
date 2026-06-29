@@ -41,7 +41,7 @@ function renderPaletteList() {
 
         // Build preview chips HTML
         const chipsHtml = palette.colors.map(c =>
-            `<span class="palette-chip-preview" style="background:${c.hex || '#ccc'}"></span>`
+            `<span class="palette-chip-preview" style="--palette-chip-color: ${safeHex(c.hex)}"></span>`
         ).join('');
 
         // Build color rows HTML
@@ -66,7 +66,7 @@ function renderPaletteList() {
                 <div class="color-rows">${colorRowsHtml}</div>
                 <div class="palette-item-footer">
                     <button class="add-color-btn" data-pi="${pi}">
-                        <span class="material-symbols-outlined" style="font-size:16px">add</span>
+                        <span class="material-symbols-outlined add-color-icon">add</span>
                         Add Color
                     </button>
                     <button class="palette-delete-btn" data-pi="${pi}" title="Delete palette" aria-label="Delete palette">
@@ -161,12 +161,17 @@ function renderChipsPreview(item, pi) {
     const preview = item.querySelector('.palette-chips-preview');
     if (!preview) return;
     preview.innerHTML = workingPalettes[pi].colors.map(c =>
-        `<span class="palette-chip-preview" style="background:${c.hex || '#ccc'}"></span>`
+        `<span class="palette-chip-preview" style="--palette-chip-color: ${safeHex(c.hex)}"></span>`
     ).join('');
 }
 
 function escAttr(str) {
     return String(str).replace(/"/g, '&quot;').replace(/</g, '&lt;');
+}
+
+function safeHex(value) {
+    const text = String(value || '').trim();
+    return /^#[0-9a-fA-F]{6}$/.test(text) ? text : 'var(--paper-edge)';
 }
 
 async function loadPalettes() {

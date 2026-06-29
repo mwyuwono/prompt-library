@@ -3,7 +3,7 @@
     margin: 0;
     background: var(--paper, #FDFBF7);
     color: var(--ink, #1A1A1A);
-    font-family: var(--font-body, 'DM Sans', sans-serif);
+    font-family: var(--font-body, 'Inter', sans-serif);
 }
 
 .material-symbols-outlined {
@@ -62,7 +62,7 @@ h1,
 h2 {
     margin: 0;
     color: var(--ink, #121714);
-    font-family: var(--font-serif, 'Playfair Display', serif);
+    font-family: var(--font-serif, 'Lora', serif);
     font-weight: 600;
     letter-spacing: 0;
 }
@@ -104,7 +104,7 @@ h2 {
     padding: 0 var(--spacing-lg, 24px);
     border: 0;
     border-radius: var(--radius-2, 8px);
-    font-family: var(--font-body, 'DM Sans', sans-serif);
+    font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 0.9375rem;
     font-weight: 500;
     cursor: pointer;
@@ -225,7 +225,7 @@ h2 {
     min-width: 0;
     border: none;
     background: transparent;
-    font-family: var(--font-body, 'DM Sans', sans-serif);
+    font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 0.9375rem;
     font-weight: 600;
     color: var(--ink, #121714);
@@ -248,8 +248,13 @@ h2 {
     width: 16px;
     height: 16px;
     border-radius: 3px;
-    border: 1px solid rgba(0,0,0,0.1);
+    border: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+    background: var(--palette-chip-color, var(--paper-edge));
     flex-shrink: 0;
+}
+
+.add-color-icon {
+    font-size: 16px;
 }
 
 .palette-expand-icon {
@@ -305,7 +310,7 @@ h2 {
     border: 1px solid var(--paper-edge, #DDD);
     border-radius: var(--radius-2, 4px);
     background: var(--white, #FFFFFF);
-    font-family: var(--font-body, 'DM Sans', sans-serif);
+    font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 0.875rem;
     color: var(--ink, #121714);
 }
@@ -366,7 +371,7 @@ h2 {
     border-radius: var(--radius-2, 4px);
     background: transparent;
     color: var(--ink-mute, #5E6E66);
-    font-family: var(--font-body, 'DM Sans', sans-serif);
+    font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 0.8125rem;
     cursor: pointer;
 }

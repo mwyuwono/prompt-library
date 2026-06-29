@@ -112,12 +112,12 @@ export class WyReferenceImageEditor extends LitElement {
                                             placeholder="Style Reference"
                                         >
                                     </div>
-                                    <div class="field" style="grid-column: 1 / -1;">
+                                    <div class="field full-width">
                                         <span class="placeholder-hint ${ref.variable && this._isValidVariable(ref.variable) ? 'has-value' : ''}">
                                             Use ${hint} in your template
                                         </span>
                                     </div>
-                                    <div class="field" style="grid-column: 1 / -1;">
+                                    <div class="field full-width">
                                         <label class="field-label">Copy Instructions</label>
                                         <textarea
                                             .value="${ref.instructions || ''}"

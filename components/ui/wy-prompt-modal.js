@@ -152,8 +152,8 @@ export class WyPromptModal extends LitElement {
     return html`
       <div class="stepper-container">
         <div class="stepper-progress">
-          <div class="stepper-progress-bar" 
-               style="width: ${progressPercent}%">
+              <div class="stepper-progress-bar"
+               style="--step-progress: ${progressPercent}%">
           </div>
         </div>
         <div class="stepper-header">

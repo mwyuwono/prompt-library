@@ -552,7 +552,7 @@
 .backup-modal h2 {
     margin: 0;
     color: var(--ink, #121714);
-    font-family: var(--font-serif, 'Playfair Display', serif);
+    font-family: var(--font-serif, 'Lora', serif);
     font-size: 1.75rem;
     line-height: 1.2;
 }
@@ -773,7 +773,7 @@
 }
 
 .empty-state h3 {
-    font-family: var(--font-serif, 'Playfair Display', serif);
+    font-family: var(--font-serif, 'Lora', serif);
     font-size: 1.5rem;
     font-weight: 600;
     color: var(--ink, #121714);
@@ -801,7 +801,7 @@
 }
 
 .server-error-state h3 {
-    font-family: var(--font-serif, 'Playfair Display', serif);
+    font-family: var(--font-serif, 'Lora', serif);
     font-size: 1.25rem;
     font-weight: 600;
     margin-bottom: var(--spacing-sm, 8px);
@@ -988,7 +988,7 @@ wy-prompt-editor .editor-header {
             margin-bottom: var(--spacing-md, 16px);
         }
 wy-prompt-editor .breadcrumbs {
-            font-family: var(--font-body, 'DM Sans', sans-serif);
+            font-family: var(--font-body, 'Inter', sans-serif);
             font-size: 0.875rem;
             color: var(--ink-mute, #5E6E66);
             margin-bottom: var(--spacing-sm, 8px);
@@ -1001,14 +1001,14 @@ wy-prompt-editor .breadcrumbs a:hover {
             text-decoration: underline;
         }
 wy-prompt-editor h1 {
-            font-family: var(--font-serif, 'Playfair Display', serif);
+            font-family: var(--font-serif, 'Lora', serif);
             font-size: 2rem;
             font-weight: 600;
             color: var(--ink, #121714);
             margin: 0 0 var(--spacing-xs, 4px) 0;
         }
 wy-prompt-editor .subtitle {
-            font-family: var(--font-body, 'DM Sans', sans-serif);
+            font-family: var(--font-body, 'Inter', sans-serif);
             font-size: 1rem;
             color: var(--ink-mute, #5E6E66);
             margin-bottom: var(--spacing-md, 16px);
@@ -1021,7 +1021,7 @@ wy-prompt-editor .info-banner {
             margin-bottom: var(--spacing-md, 16px);
         }
 wy-prompt-editor .info-banner p {
-            font-family: var(--font-body, 'DM Sans', sans-serif);
+            font-family: var(--font-body, 'Inter', sans-serif);
             font-size: 0.875rem;
             color: var(--ink, #121714);
             margin: 0;
@@ -1052,7 +1052,7 @@ wy-prompt-editor .actions {
 wy-prompt-editor .button {
             padding: var(--spacing-sm, 8px) var(--spacing-lg, 24px);
             border-radius: var(--radius-2, 8px);
-            font-family: var(--font-body, 'DM Sans', sans-serif);
+            font-family: var(--font-body, 'Inter', sans-serif);
             font-size: 0.9375rem;
             font-weight: 500;
             cursor: pointer;
@@ -1084,7 +1084,7 @@ wy-prompt-editor .card {
             border: 1px solid var(--paper-edge, #DDD);
         }
 wy-prompt-editor .card-title {
-            font-family: var(--font-serif, 'Playfair Display', serif);
+            font-family: var(--font-serif, 'Lora', serif);
             font-size: 1.25rem;
             font-weight: 600;
             color: var(--ink, #121714);
@@ -1107,7 +1107,7 @@ wy-prompt-editor .editor-nav-toggle {
         }
 wy-prompt-editor .editor-nav-title {
             margin: 0 0 var(--spacing-xs, 4px);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-family: var(--font-sans, 'Inter', sans-serif);
             font-size: 0.6875rem;
             font-weight: 700;
             letter-spacing: 0.16em;
@@ -1128,7 +1128,7 @@ wy-prompt-editor .editor-nav-item {
             background: transparent;
             color: var(--ink-mute, #5E6E66);
             cursor: pointer;
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-family: var(--font-sans, 'Inter', sans-serif);
             font-size: 0.875rem;
             line-height: 1.25;
             text-align: left;
@@ -1152,7 +1152,7 @@ wy-prompt-editor .editor-nav-item.subitem {
             font-size: 0.8125rem;
         }
 wy-prompt-editor .editor-nav-item.variant {
-            font-family: var(--font-serif, 'Playfair Display', serif);
+            font-family: var(--font-serif, 'Lora', serif);
             font-size: 0.9375rem;
             color: var(--ink, #121714);
         }
@@ -1167,7 +1167,7 @@ wy-prompt-editor .mode-toggle label {
             display: flex;
             align-items: center;
             gap: var(--spacing-xs, 4px);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-family: var(--font-sans, 'Inter', sans-serif);
             font-size: 0.9375rem;
             cursor: pointer;
             user-select: none;
@@ -1176,14 +1176,14 @@ wy-prompt-editor .mode-toggle input[type="radio"] {
             cursor: pointer;
         }
 wy-prompt-editor .card-description {
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-family: var(--font-sans, 'Inter', sans-serif);
             font-size: 0.9375rem;
             line-height: 1.5;
             color: var(--ink-mute, #5E6E66);
             margin: 0 0 var(--spacing-md, 16px) 0;
         }
 wy-prompt-editor .label {
-            font-family: var(--font-display, 'Playfair Display', serif);
+            font-family: var(--font-display, 'Lora', serif);
             font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
@@ -1400,14 +1400,14 @@ wy-prompt-editor .hero-generator-tools {
             gap: var(--spacing-xs, 4px);
         }
 wy-prompt-editor .hero-generator-title {
-            font-family: var(--font-serif, 'Playfair Display', serif);
+            font-family: var(--font-serif, 'Lora', serif);
             font-size: 0.9375rem;
             font-weight: 600;
             color: var(--ink, #121714);
             margin: 0;
         }
 wy-prompt-editor .hero-provider-status {
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-family: var(--font-sans, 'Inter', sans-serif);
             font-size: 0.75rem;
             color: var(--ink-mute, #5E6E66);
             margin: var(--spacing-xs, 4px) 0 0;
@@ -1421,7 +1421,7 @@ wy-prompt-editor .hero-control-label {
             display: flex;
             flex-direction: column;
             gap: var(--spacing-xs, 4px);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-family: var(--font-sans, 'Inter', sans-serif);
             font-size: 0.8125rem;
             font-weight: 600;
             color: var(--ink, #121714);
@@ -1434,7 +1434,7 @@ wy-prompt-editor .hero-prompt-textarea {
             border-radius: var(--radius-2, 8px);
             background-color: var(--paper, #FDFBF7);
             color: var(--ink, #121714);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-family: var(--font-sans, 'Inter', sans-serif);
             font-size: 0.9375rem;
         }
 wy-prompt-editor .hero-control-label select {
@@ -1468,7 +1468,7 @@ wy-prompt-editor .hero-preview-image {
         }
 wy-prompt-editor .hero-status-message,
 wy-prompt-editor .hero-error-message {
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-family: var(--font-sans, 'Inter', sans-serif);
             font-size: 0.875rem;
             line-height: 1.4;
             margin: 0;
@@ -1855,7 +1855,7 @@ wy-prompt-editor .visibility-setting wy-option-toggle {
                 background: transparent;
                 color: var(--ink, #121714);
                 cursor: pointer;
-                font-family: var(--font-sans, 'DM Sans', sans-serif);
+                font-family: var(--font-sans, 'Inter', sans-serif);
                 font-size: 0.875rem;
                 font-weight: 600;
                 text-align: left;
@@ -1889,7 +1889,6 @@ wy-prompt-editor .visibility-setting wy-option-toggle {
 
 
 /* ---- wy-variation-editor ---- */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
 
         wy-variation-editor {
             display: block;
@@ -1943,7 +1942,7 @@ wy-variation-editor .drag-handle:active {
         }
 wy-variation-editor .variation-title {
             flex: 1;
-            font-family: var(--font-serif, 'Playfair Display', serif);
+            font-family: var(--font-serif, 'Lora', serif);
             font-size: 1.0625rem;
             font-weight: 600;
             color: var(--ink, #121714);
@@ -1954,7 +1953,7 @@ wy-variation-editor .variation-card.expanded .variation-title {
         }
 wy-variation-editor .variation-badge {
             flex-shrink: 0;
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-family: var(--font-sans, 'Inter', sans-serif);
             font-size: 0.6875rem;
             font-weight: 700;
             text-transform: uppercase;
@@ -2001,7 +2000,7 @@ wy-variation-editor .mode-toggle label {
             display: flex;
             align-items: center;
             gap: var(--spacing-xs, 4px);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-family: var(--font-sans, 'Inter', sans-serif);
             font-size: 0.8125rem;
             font-weight: 600;
             color: var(--ink-mute, #5E6E66);
@@ -2035,7 +2034,7 @@ wy-variation-editor .add-step-button {
             border: 0;
             border-radius: var(--radius-2, 10px);
             box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 10%, transparent);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-family: var(--font-sans, 'Inter', sans-serif);
             font-size: 0.875rem;
             font-weight: 500;
             color: var(--ink-mute, #5E6E66);
@@ -2075,7 +2074,7 @@ wy-variation-editor .control-button {
             background: color-mix(in srgb, var(--ink, #1A1A1A) 4%, transparent);
             border: 0;
             border-radius: var(--radius-pill, 9999px);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-family: var(--font-sans, 'Inter', sans-serif);
             font-size: 0.8125rem;
             font-weight: 600;
             color: var(--ink, #121714);
@@ -2124,7 +2123,7 @@ wy-variation-editor .add-variation-button {
             border: 0;
             border-radius: var(--radius-2, 10px);
             box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 10%, transparent);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-family: var(--font-sans, 'Inter', sans-serif);
             font-size: 0.9375rem;
             font-weight: 500;
             color: var(--ink-mute, #5E6E66);
@@ -2159,7 +2158,7 @@ wy-variation-editor .field-group {
             gap: var(--spacing-xs, 4px);
         }
 wy-variation-editor .field-label {
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-family: var(--font-sans, 'Inter', sans-serif);
             font-size: 0.6875rem;
             font-weight: 700;
             letter-spacing: 0.14em;
@@ -2167,7 +2166,7 @@ wy-variation-editor .field-label {
             color: var(--ink-mute, #5E6E66);
         }
 wy-variation-editor .field-description {
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-family: var(--font-sans, 'Inter', sans-serif);
             font-size: 0.8125rem;
             color: var(--ink-mute, #5E6E66);
             margin-top: calc(-1 * var(--spacing-xs, 4px));
@@ -2180,7 +2179,6 @@ wy-variation-editor .section-divider {
 
 
 /* ---- wy-step-editor ---- */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
 
         wy-step-editor {
             display: block;
@@ -2228,7 +2226,7 @@ wy-step-editor .step-badge {
             flex-shrink: 0;
             display: inline-flex;
             align-items: center;
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-family: var(--font-sans, 'Inter', sans-serif);
             font-size: 0.6875rem;
             font-weight: 700;
             text-transform: uppercase;
@@ -2240,7 +2238,7 @@ wy-step-editor .step-badge {
         }
 wy-step-editor .step-title {
             flex: 1;
-            font-family: var(--font-serif, 'Playfair Display', serif);
+            font-family: var(--font-serif, 'Lora', serif);
             font-size: 1.0625rem;
             font-weight: 600;
             color: var(--ink, #121714);
@@ -2286,7 +2284,7 @@ wy-step-editor .control-button {
             background: color-mix(in srgb, var(--ink, #1A1A1A) 4%, transparent);
             border: 0;
             border-radius: var(--radius-pill, 9999px);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-family: var(--font-sans, 'Inter', sans-serif);
             font-size: 0.8125rem;
             font-weight: 600;
             color: var(--ink, #121714);
@@ -2330,7 +2328,7 @@ wy-step-editor .field-group {
             gap: var(--spacing-xs, 4px);
         }
 wy-step-editor .field-label {
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-family: var(--font-sans, 'Inter', sans-serif);
             font-size: 0.6875rem;
             font-weight: 700;
             color: var(--ink-mute, #5E6E66);
@@ -2338,7 +2336,7 @@ wy-step-editor .field-label {
             text-transform: uppercase;
         }
 wy-step-editor .field-description {
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-family: var(--font-sans, 'Inter', sans-serif);
             font-size: 0.8125rem;
             color: var(--ink-mute, #5E6E66);
             margin-top: calc(-1 * var(--spacing-xs, 4px));
@@ -2347,7 +2345,7 @@ wy-step-editor input,
 wy-step-editor textarea {
             width: 100%;
             padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-family: var(--font-sans, 'Inter', sans-serif);
             font-size: 0.9375rem;
             color: var(--ink, #121714);
             background-color: var(--surface-2, #FFF);
@@ -2430,7 +2428,7 @@ wy-variable-editor .field.full-width {
             grid-column: 1 / -1;
         }
 wy-variable-editor .field-label {
-            font-family: var(--font-body, 'DM Sans', sans-serif);
+            font-family: var(--font-body, 'Inter', sans-serif);
             font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
@@ -2442,7 +2440,7 @@ wy-variable-editor select {
             padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
             border: 1px solid var(--paper-edge, #DDD);
             border-radius: var(--radius-2, 4px);
-            font-family: var(--font-body, 'DM Sans', sans-serif);
+            font-family: var(--font-body, 'Inter', sans-serif);
             font-size: 0.875rem;
             color: var(--ink, #121714);
             background-color: var(--paper, #FDFBF7);
@@ -2494,7 +2492,7 @@ wy-variable-editor .add-button {
             border: 1px solid var(--ink, #282828);
             color: var(--ink, #282828);
             border-radius: var(--radius-2, 8px);
-            font-family: var(--font-body, 'DM Sans', sans-serif);
+            font-family: var(--font-body, 'Inter', sans-serif);
             font-size: 0.875rem;
             font-weight: 500;
             cursor: pointer;
@@ -2554,12 +2552,16 @@ wy-reference-image-editor .ref-fields {
             gap: var(--spacing-sm, 8px);
         }
 wy-reference-image-editor .field {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-xxs, 2px);
-        }
+                display: flex;
+                flex-direction: column;
+                gap: var(--spacing-xxs, 2px);
+            }
+
+            wy-reference-image-editor .field.full-width {
+                grid-column: 1 / -1;
+            }
 wy-reference-image-editor .field-label {
-            font-family: var(--font-body, 'DM Sans', sans-serif);
+            font-family: var(--font-body, 'Inter', sans-serif);
             font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
@@ -2571,7 +2573,7 @@ wy-reference-image-editor textarea {
             padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
             border: 1px solid var(--paper-edge, #DDD);
             border-radius: var(--radius-2, 4px);
-            font-family: var(--font-body, 'DM Sans', sans-serif);
+            font-family: var(--font-body, 'Inter', sans-serif);
             font-size: 0.875rem;
             color: var(--ink, #121714);
             background-color: var(--paper, #FDFBF7);
@@ -2600,7 +2602,7 @@ wy-reference-image-editor .placeholder-hint.has-value {
             color: var(--ink, #282828);
         }
 wy-reference-image-editor .validation-error {
-            font-family: var(--font-body, 'DM Sans', sans-serif);
+            font-family: var(--font-body, 'Inter', sans-serif);
             font-size: 0.75rem;
             color: var(--err, #FF0101);
             margin-top: var(--spacing-xxs, 2px);
@@ -2632,7 +2634,7 @@ wy-reference-image-editor .add-button {
             border: 1px solid var(--ink, #282828);
             color: var(--ink, #282828);
             border-radius: var(--radius-2, 8px);
-            font-family: var(--font-body, 'DM Sans', sans-serif);
+            font-family: var(--font-body, 'Inter', sans-serif);
             font-size: 0.875rem;
             font-weight: 500;
             cursor: pointer;
@@ -2652,7 +2654,7 @@ wy-image-upload {
             width: 100%;
         }
 wy-image-upload .label {
-            font-family: var(--font-display, 'Playfair Display', serif);
+            font-family: var(--font-display, 'Lora', serif);
             font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
@@ -2707,14 +2709,14 @@ wy-image-upload .material-symbols-outlined {
             color: var(--ink, #282828);
         }
 wy-image-upload .upload-text {
-            font-family: var(--font-body, 'DM Sans', sans-serif);
+            font-family: var(--font-body, 'Inter', sans-serif);
             font-size: 0.9375rem;
             font-weight: 500;
             color: var(--ink, #121714);
             margin-bottom: var(--spacing-xs, 4px);
         }
 wy-image-upload .upload-hint {
-            font-family: var(--font-body, 'DM Sans', sans-serif);
+            font-family: var(--font-body, 'Inter', sans-serif);
             font-size: 0.8125rem;
             color: var(--ink-mute, #5E6E66);
         }
@@ -2783,7 +2785,7 @@ wy-image-upload input[type="file"] {
 
 
 /* ---- wy-dropdown ---- */
-/* Note: Fonts (DM Sans,
+/* Note: Fonts (Inter,
 wy-dropdown Material Symbols) should be loaded in consuming page <head> */
         
         wy-dropdown {
@@ -2830,7 +2832,7 @@ wy-dropdown .container {
             flex-direction: column;
         }
 wy-dropdown .label {
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-family: var(--font-sans, 'Inter', sans-serif);
             font-size: var(--fs-ui-xs, 0.6875rem);
             font-weight: 700;
             letter-spacing: 0.1em;
@@ -2884,7 +2886,7 @@ wy-dropdown .selector:active:not(:disabled)::before {
         }
 wy-dropdown .value {
             flex: 1;
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-family: var(--font-sans, 'Inter', sans-serif);
             font-size: 0.9375rem;
             font-weight: 500;
             color: var(--wy-dropdown-text-color);
@@ -2927,7 +2929,7 @@ wy-dropdown .item {
             position: relative;
             overflow: hidden;
             padding: var(--spacing-md, 16px) var(--spacing-lg, 24px);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-family: var(--font-sans, 'Inter', sans-serif);
             font-size: 0.875rem;
             color: var(--wy-dropdown-text-color);
             cursor: pointer;
@@ -2957,7 +2959,7 @@ wy-dropdown .item.selected::before {
         }
 wy-dropdown .no-results {
             padding: var(--spacing-md, 16px) var(--spacing-lg, 24px);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-family: var(--font-sans, 'Inter', sans-serif);
             font-size: 0.875rem;
             color: var(--ink-mute, #49454E);
             opacity: 0.6;
@@ -2988,7 +2990,7 @@ wy-option-toggle {
 wy-option-toggle .label {
             margin: 0 0 var(--spacing-md, 16px) 0;
             color: var(--ink, #282828);
-            font-family: var(--font-body, 'DM Sans', sans-serif);
+            font-family: var(--font-body, 'Inter', sans-serif);
             font-size: 0.875rem;
             font-weight: 700;
             line-height: 1.2;
@@ -2999,7 +3001,7 @@ wy-option-toggle .description {
             margin: 0 0 var(--spacing-sm, 8px) 0;
             max-width: 36rem;
             color: color-mix(in srgb, var(--ink, #282828) 70%, transparent);
-            font-family: var(--font-body, 'DM Sans', sans-serif);
+            font-family: var(--font-body, 'Inter', sans-serif);
             font-size: var(--fs-body-s, 0.875rem);
             font-weight: 400;
             line-height: 1.8;
@@ -3021,7 +3023,7 @@ wy-option-toggle .option {
             padding: var(--spacing-xs, 4px) var(--spacing-md, 16px);
             background: transparent;
             color: color-mix(in srgb, var(--ink-mute, #5E6E66) 84%, transparent);
-            font-family: var(--font-body, 'DM Sans', sans-serif);
+            font-family: var(--font-body, 'Inter', sans-serif);
             font-size: var(--fs-ui-xs, 0.875rem);
             font-weight: 600;
             line-height: 1.2;
@@ -3084,7 +3086,7 @@ wy-option-toggle .switch-control {
 wy-option-toggle .switch-state {
             min-width: 2.5rem;
             text-align: right;
-            font-family: var(--font-body, 'DM Sans', sans-serif);
+            font-family: var(--font-body, 'Inter', sans-serif);
             font-size: 0.625rem;
             font-weight: 700;
             line-height: 1.1;
@@ -3160,7 +3162,7 @@ wy-option-toggle[size='compact'] .switch-state {
 wy-option-toggle .selected-value-text {
             margin: var(--spacing-sm, 8px) 0 0 0;
             color: color-mix(in srgb, var(--ink, #121714) 86%, transparent);
-            font-family: var(--font-body, 'DM Sans', sans-serif);
+            font-family: var(--font-body, 'Inter', sans-serif);
             font-size: var(--fs-body, 1rem);
             font-weight: 400;
             line-height: 1.7;
@@ -3258,7 +3260,7 @@ wy-code-textarea .variable-chip:hover {
             box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #282828) 24%, transparent);
         }
 wy-code-textarea .char-count {
-            font-family: var(--font-body, 'DM Sans', sans-serif);
+            font-family: var(--font-body, 'Inter', sans-serif);
             font-size: 0.75rem;
             color: var(--ink-mute, #5E6E66);
             text-align: right;

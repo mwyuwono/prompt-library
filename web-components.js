@@ -1286,7 +1286,7 @@ var WyModal = class extends i4 {
           role="dialog"
           aria-modal="true"
           aria-labelledby="wyModalHeading"
-          style="max-width: ${this.maxWidth}"
+          style="--wy-modal-max-width: ${this.maxWidth}"
         >
           <h2 class="headline-text" id="wyModalHeading">${this.heading}</h2>
           <form method="dialog" class="modal-content">${this.bodyHtml ? o5(this.bodyHtml) : ""}</form>
@@ -2274,12 +2274,12 @@ var WyReferenceImageEditor = class extends i4 {
                                             placeholder="Style Reference"
                                         >
                                     </div>
-                                    <div class="field" style="grid-column: 1 / -1;">
+                                    <div class="field full-width">
                                         <span class="placeholder-hint ${ref.variable && this._isValidVariable(ref.variable) ? "has-value" : ""}">
                                             Use ${hint} in your template
                                         </span>
                                     </div>
-                                    <div class="field" style="grid-column: 1 / -1;">
+                                    <div class="field full-width">
                                         <label class="field-label">Copy Instructions</label>
                                         <textarea
                                             .value="${ref.instructions || ""}"
@@ -5753,8 +5753,8 @@ var WyPromptModal = class extends i4 {
     return b2`
       <div class="stepper-container">
         <div class="stepper-progress">
-          <div class="stepper-progress-bar" 
-               style="width: ${progressPercent}%">
+              <div class="stepper-progress-bar"
+               style="--step-progress: ${progressPercent}%">
           </div>
         </div>
         <div class="stepper-header">
@@ -6615,7 +6615,6 @@ var WyLinksModal = class extends i4 {
   }
   connectedCallback() {
     super.connectedCallback();
-    this._loadFonts();
     this._escKeyHandler = this._handleEscKey.bind(this);
   }
   disconnectedCallback() {
@@ -6652,15 +6651,6 @@ var WyLinksModal = class extends i4 {
       this._handleClose();
     }
   }
-  _loadFonts() {
-    if (!document.querySelector('link[href*="Material+Symbols"][data-wy-links-modal-fonts]')) {
-      const materialLink = document.createElement("link");
-      materialLink.rel = "stylesheet";
-      materialLink.href = "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap";
-      materialLink.setAttribute("data-wy-links-modal-fonts", "material");
-      document.head.appendChild(materialLink);
-    }
-  }
   render() {
     return b2`
       <div class="modal-overlay" @click="${this._handleOverlayClick}">
@@ -6687,7 +6677,7 @@ var WyLinksModal = class extends i4 {
                   </button>
                 </div>
               ` : ""}
-              ${!this.links || this.links.length === 0 ? b2`<p style="color: var(--ink-mute); text-align: center; padding: 2rem;">No links available.</p>` : this.links.map((category, categoryIndex) => b2`
+              ${!this.links || this.links.length === 0 ? b2`<p class="empty-state">No links available.</p>` : this.links.map((category, categoryIndex) => b2`
                   <section class="section">
                     <h2 class="section-header">${category.category}</h2>
                     <div class="chips-container">

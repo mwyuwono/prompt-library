@@ -46,7 +46,7 @@ export class WyModal extends LitElement {
           role="dialog"
           aria-modal="true"
           aria-labelledby="wyModalHeading"
-          style="max-width: ${this.maxWidth}"
+          style="--wy-modal-max-width: ${this.maxWidth}"
         >
           <h2 class="headline-text" id="wyModalHeading">${this.heading}</h2>
           <form method="dialog" class="modal-content">${this.bodyHtml ? unsafeHTML(this.bodyHtml) : ''}</form>

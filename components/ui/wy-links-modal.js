@@ -41,7 +41,6 @@ export class WyLinksModal extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this._loadFonts();
     this._escKeyHandler = this._handleEscKey.bind(this);
   }
 
@@ -83,18 +82,6 @@ export class WyLinksModal extends LitElement {
     }
   }
 
-  _loadFonts() {
-    // Lora (serif) and Inter (sans) are loaded globally via tokens.css per The
-    // Nineteenth design system. Only Material Symbols needs a fallback load here.
-    if (!document.querySelector('link[href*="Material+Symbols"][data-wy-links-modal-fonts]')) {
-      const materialLink = document.createElement('link');
-      materialLink.rel = 'stylesheet';
-      materialLink.href = 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap';
-      materialLink.setAttribute('data-wy-links-modal-fonts', 'material');
-      document.head.appendChild(materialLink);
-    }
-  }
-
   render() {
     return html`
       <div class="modal-overlay" @click="${this._handleOverlayClick}">
@@ -122,7 +109,7 @@ export class WyLinksModal extends LitElement {
                 </div>
               ` : ''}
               ${!this.links || this.links.length === 0
-                ? html`<p style="color: var(--ink-mute); text-align: center; padding: 2rem;">No links available.</p>`
+                ? html`<p class="empty-state">No links available.</p>`
                 : this.links.map((category, categoryIndex) => html`
                   <section class="section">
                     <h2 class="section-header">${category.category}</h2>

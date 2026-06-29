@@ -919,6 +919,13 @@ wy-links-modal {
       margin: 0;
     }
 
+    wy-links-modal .empty-state {
+      color: var(--ink-mute);
+      margin: 0;
+      padding: var(--s-6, 32px);
+      text-align: center;
+    }
+
     /* Sections container - matches space-y-10 */
     wy-links-modal .sections-container {
       display: flex;
@@ -2555,7 +2562,7 @@ wy-controls-bar {
     wy-prompt-modal .variation-description-copy p { margin: 0 0 0.5em; }
     wy-prompt-modal .variation-description-copy p:last-child { margin-bottom: 0; }
 
-    /* Legacy selector styles (kept for backwards compatibility) */
+    /* Selector styles for the compact variation fallback layout. */
     wy-prompt-modal .variation-selector {
         margin: 0 var(--spacing-xl, 32px) var(--spacing-md, 16px);
         padding: var(--spacing-sm, 12px);
@@ -2968,11 +2975,12 @@ wy-controls-bar {
       margin-bottom: var(--spacing-md, 16px);
     }
 
-    wy-prompt-modal .stepper-progress-bar {
-      height: 100%;
-      background: var(--ink);
-      transition: width var(--dur-2, 300ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
-    }
+wy-prompt-modal .stepper-progress-bar {
+  height: 100%;
+  width: var(--step-progress, 0%);
+  background: var(--ink);
+  transition: width var(--dur-2, 300ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
+}
 
     wy-prompt-modal .stepper-header {
       display: flex;
@@ -3263,7 +3271,7 @@ wy-tabs {
     }
 
 /* wy-button */
-/* Fonts are loaded globally via HTML link tags - no @import needed in Shadow DOM */
+/* Fonts are loaded globally via tokens.css and page Material Symbols links. */
 
     wy-button {
       display: inline-block;
@@ -3511,9 +3519,10 @@ wy-modal {
       background: color-mix(in srgb, var(--ink) 28%, transparent);
     }
 
-    wy-modal .dialog {
-      width: 100%;
-      max-height: min(90vh, calc(100dvh - 48px));
+wy-modal .dialog {
+  width: 100%;
+  max-width: var(--wy-modal-max-width, 560px);
+  max-height: min(90vh, calc(100dvh - 48px));
       box-sizing: border-box;
       display: flex;
       flex-direction: column;

@@ -194,7 +194,7 @@ class PromptLibrary {
         // Check if admin server is running on port 3001
         const serverAvailable = await this.checkAdminServer();
         
-        adminButton.style.display = 'inline-block';
+        adminButton.hidden = false;
 
         if (serverAvailable) {
             adminButton.addEventListener('click', () => {
@@ -425,7 +425,7 @@ Server will start on http://localhost:3001`;
 
             // Escape - Close prompt modal or shortcuts modal
             if (e.key === 'Escape') {
-                if (this.promptModal && this.promptModal.classList.contains('show')) {
+                if (this.promptModal?.open) {
                     this.closePromptModal();
                     return;
                 }
@@ -667,8 +667,7 @@ Server will start on http://localhost:3001`;
         if (this.paletteLink) {
             const isSearchActive = this.isSearchActive();
             // Show palette link only when Fabric category is active
-            this.paletteLink.style.display =
-                this.selectedCategory === 'Fabric' && !isSearchActive ? 'inline-block' : 'none';
+            this.paletteLink.hidden = this.selectedCategory !== 'Fabric' || isSearchActive;
         }
     }
 
