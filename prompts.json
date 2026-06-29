@@ -120,6 +120,19 @@
     "slug": "oil-painting-study-reference"
   },
   {
+    "id": "contour-form-study",
+    "title": "Contour Form Study",
+    "description": "Turns an uploaded drawing into a dimensional contour study for understanding facial planes, light, and likely correction areas.",
+    "category": "Art",
+    "icon": "gesture",
+    "featured": false,
+    "image": "public/images/contour-form-study-preview.png",
+    "template": "Use the uploaded drawing as the source of truth.\n\nRender an educational contour/form study of the drawing that makes the three-dimensional structure easier to understand. Preserve the drawing's identity, pose, composition, proportions, and major shapes, but do not feel bound to the original medium. Choose whatever visual treatment best clarifies form: topographic contour lines, planar facial mapping, subtle tonal bands, cross-contour wrapping lines, or a clean academic study style.\n\nThe goal is not to create a polished corrected artwork. The goal is to help the artist understand how the forms turn in space and how light should move across them. Emphasize facial planes, contour logic, shadow edges, turning forms, and the relationship between surface direction and value.\n\nMake the study feel dimensional and useful for revision. Avoid inventing new anatomy, changing the expression, beautifying the subject, or replacing the original drawing style. The contour study should read as a diagnostic companion to the uploaded drawing.\n\nAfter rendering the image, add a short note that lists three likely corrections or revision areas that would help the drawing. Then ask whether the user would like you to render one of those correction areas as a focused follow-up image.",
+    "variables": [],
+    "slug": "contour-form-study",
+    "instructions": "Upload a drawing with this prompt. The generated response should include a contour/form study plus three likely correction areas and an offer to render one of those areas as a focused follow-up."
+  },
+  {
     "id": "wallpaper-artwork-extension",
     "title": "Extend Panoramic Scene",
     "description": "Extends an uploaded hand-painted wallpaper image into a wider seamless landscape panel, with a left/right toggle and a 10% overlap band for manual compositing.",
@@ -1008,6 +1021,28 @@
     "instructions": "Select a variant for general prompting or image-generation prompting.",
     "slug": "prompt-builder-assistant",
     "image": "public/images/1780365264408.jpg"
+  },
+  {
+    "id": "reusable-prompt-builder",
+    "title": "Reusable Prompt Builder",
+    "description": "Converts a successful one-off prompt into a durable reusable prompt template, minimizing variables and preparing a prompt-library draft.",
+    "category": "Productivity",
+    "icon": "dynamic_form",
+    "featured": false,
+    "slug": "reusable-prompt-builder",
+    "image": "public/images/reusable-prompt-builder-preview.png",
+    "template": "Source prompt or prompt-making context:\n{{source_prompt}}\n\nYou are helping convert the source material above into a durable reusable prompt. Preserve the mechanism that made the original prompt useful while replacing case-specific details with clear variables, static anchors, and usage notes.\n\nFirst, identify the durable mechanism:\n- Core task or transformation\n- Changeable subject or input material\n- Static style, reference, tone, constraints, output format, or workflow\n- Quality criteria that make the prompt succeed\n\nClassify prompt elements into:\n- Changeable variables: details that must vary across future uses\n- Static anchors: wording, style references, constraints, examples, or assets that should remain fixed\n- Ambiguous items: details that could reasonably be either variable or fixed\n\nMinimize variables before proposing them:\n- Use variables only when the user must supply information before the prompt can work.\n- Do not create variables for choices the model can make well from the source material, the user's goal, or the static prompt logic.\n- Prefer static instructions when the same behavior should happen every time.\n- Prefer a follow-up offer when a choice can be deferred until after the first output.\n- Do not create optional variables merely to expose customization. If the prompt can make a good first-pass decision, encode the decision criteria in the prompt and offer follow-up refinement after the output.\n\nIf the reusable prompt needs variables, stop after this confirmation format:\n\nProposed Variables\n- `variable_name` (required/optional): what it controls\n\nStatic Anchors\n- [anchors that remain fixed]\n\nConfirmation Needed\nPlease confirm these variables, rename any of them, or tell me which should be static instead.\n\nIf no variables are needed, skip confirmation and proceed directly to the final reusable prompt and prompt-library draft.\n\nAfter variables are confirmed, or immediately if no variables are needed, produce this final format:\n\nReusable Prompt\n[Copy-ready reusable prompt text. If variables are used, put a compact 'Variables to fill' block at the top. If no variables are used, omit that block.]\n\nChange Map\n- Changeable: [variables and what they control, or 'uploaded/source material only' if no prompt variables are needed]\n- Static: [anchors that remain fixed]\n- Clarified/assumed: [only if relevant]\n\nPrompt Library Draft\n- title:\n- description:\n- category:\n- icon:\n- template:\n- variables: [JSON-like array; use [] when there are no variables]\n- referenceImages: [JSON-like array or []]\n- usage notes:\n\nRules for the prompt-library draft:\n- Use `{{variable_name}}` placeholders in the template only for confirmed variables.\n- Use snake_case variable names that describe the future input, not the original example.\n- Supported variable types are plain text input, textarea with `inputType: \"textarea\"` and optional `rows`, and toggle with two string options.\n- For uploaded subject images that change per use, describe them in usage notes; do not make them referenceImages.\n- For fixed style/reference images that should remain attached to the library prompt, include a referenceImages entry with variable, label, and a placeholder path if the final path is unknown.\n- Do not invent real file paths.\n- Keep the prompt self-contained enough to paste into another chat or image tool.\n\nWriting rules:\n- Replace one-off nouns with role-based references such as 'the uploaded drawing', 'the Subject Reference', 'the site shown in the uploaded map', or 'the provided draft'.\n- Preserve explicit negative constraints when they prevent common failure modes.\n- Avoid overfitting to the original subject, place, person, object, medium, or use case unless the user identifies it as static.\n- State what source material controls factual accuracy, such as 'Use the uploaded image as the source of truth'.\n- For image prompts, distinguish content preservation from style transformation: subject/source reference controls geometry, identity, layout, or factual content; style reference controls medium, palette, rendering behavior, texture, or atmosphere.\n- When the original prompt includes personal uncertainty or user context, generalize it into a reusable purpose rather than preserving the anecdote.\n\nBefore finalizing, verify that the reusable prompt can work with a different subject, the original mechanism is preserved, all placeholders are defined, static reference assets are not accidentally turned into variables, and every variable represents information required before first use rather than customization that could be handled by model judgment or a follow-up offer.",
+    "variables": [
+      {
+        "name": "source_prompt",
+        "label": "Source Prompt",
+        "placeholder": "Paste the one-off prompt, successful result context, and any reuse goal here.",
+        "value": "",
+        "inputType": "textarea",
+        "rows": 10
+      }
+    ],
+    "instructions": "Paste the one-off prompt and any useful outcome context. The assistant should either propose necessary variables for confirmation or, when variables are unnecessary, produce the reusable prompt and prompt-library draft immediately."
   },
   {
     "id": "qa-check",
