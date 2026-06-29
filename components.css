@@ -13,7 +13,7 @@ wy-copy-confirm {
       transform: translateX(-50%) translateY(16px) scale(0.98);
       transform-origin: 50% 100%;
       transition:
-        wy-copy-confirm transform 380ms cubic-bezier(0.34, 1.56, 0.64, 1),
+        transform 380ms cubic-bezier(0.34, 1.56, 0.64, 1),
         opacity 220ms cubic-bezier(0.2, 0.6, 0.2, 1);
       will-change: transform, opacity;
     }
@@ -134,7 +134,7 @@ wy-copy-confirm {
       text-decoration: none;
       cursor: pointer;
       transition:
-        wy-copy-confirm background-color 160ms ease,
+        background-color 160ms ease,
         transform 160ms ease;
     }
 
@@ -167,8 +167,8 @@ wy-filter-chip {
       font-weight: var(--wy-filter-chip-font-weight, 500);
       cursor: pointer;
       transition:
-        wy-filter-chip background-color var(--dur-1, 200ms) var(--ease),
-        wy-filter-chip color var(--dur-1, 200ms) var(--ease),
+        background-color var(--dur-1, 200ms) var(--ease),
+        color var(--dur-1, 200ms) var(--ease),
         transform var(--dur-1, 200ms) var(--ease);
       
       /* Opaque background by default; overridden by variant */
@@ -485,7 +485,7 @@ wy-toast {
       z-index: 3000;
       pointer-events: none;
       transition:
-        wy-toast transform 380ms cubic-bezier(0.34, 1.56, 0.64, 1),
+        transform 380ms cubic-bezier(0.34, 1.56, 0.64, 1),
         opacity 220ms cubic-bezier(0.2, 0.6, 0.2, 1);
       opacity: 0;
       will-change: transform, opacity;
@@ -524,7 +524,7 @@ wy-toast {
       align-items: center;
       gap: 12px;
       box-shadow:
-        wy-toast inset 0 1px 0 rgba(247, 244, 238, 0.10),
+        inset 0 1px 0 rgba(247, 244, 238, 0.10),
         0 18px 48px -12px rgba(13, 13, 13, 0.45),
         0 6px 16px -6px rgba(13, 13, 13, 0.28);
       outline: 1px solid rgba(247, 244, 238, 0.12);
@@ -1171,9 +1171,9 @@ wy-controls-bar {
       box-shadow: none;
       transition:
         top 300ms cubic-bezier(0.2, 0, 0, 1),
-        wy-controls-bar transform 300ms cubic-bezier(0.2, 0, 0, 1),
-        wy-controls-bar padding 300ms cubic-bezier(0.2, 0, 0, 1),
-        wy-controls-bar box-shadow 300ms cubic-bezier(0.2, 0, 0, 1),
+        transform 300ms cubic-bezier(0.2, 0, 0, 1),
+        padding 300ms cubic-bezier(0.2, 0, 0, 1),
+        box-shadow 300ms cubic-bezier(0.2, 0, 0, 1),
         opacity 200ms cubic-bezier(0.2, 0, 0, 1);
     }
 
@@ -1187,9 +1187,9 @@ wy-controls-bar {
       box-shadow: none;
       transition:
         top var(--wy-controls-return-duration, 150ms) cubic-bezier(0.2, 0, 0, 1),
-        wy-controls-bar transform var(--wy-controls-return-duration, 150ms) cubic-bezier(0.2, 0, 0, 1),
-        wy-controls-bar padding var(--wy-controls-return-duration, 150ms) cubic-bezier(0.2, 0, 0, 1),
-        wy-controls-bar box-shadow var(--wy-controls-return-duration, 150ms) cubic-bezier(0.2, 0, 0, 1),
+        transform var(--wy-controls-return-duration, 150ms) cubic-bezier(0.2, 0, 0, 1),
+        padding var(--wy-controls-return-duration, 150ms) cubic-bezier(0.2, 0, 0, 1),
+        box-shadow var(--wy-controls-return-duration, 150ms) cubic-bezier(0.2, 0, 0, 1),
         opacity var(--wy-controls-return-opacity-duration, 140ms) cubic-bezier(0.2, 0, 0, 1);
     }
 
@@ -1234,8 +1234,8 @@ wy-controls-bar {
       outline: none;
       box-sizing: border-box;
       transition:
-        wy-controls-bar background 150ms cubic-bezier(0.2, 0, 0, 1),
-        wy-controls-bar border-color 150ms cubic-bezier(0.2, 0, 0, 1),
+        background 150ms cubic-bezier(0.2, 0, 0, 1),
+        border-color 150ms cubic-bezier(0.2, 0, 0, 1),
         box-shadow 150ms cubic-bezier(0.2, 0, 0, 1);
     }
 
@@ -1483,9 +1483,9 @@ wy-controls-bar {
       white-space: nowrap;
       cursor: pointer;
       transition:
-        wy-controls-bar color 150ms cubic-bezier(0.2, 0, 0, 1),
-        wy-controls-bar background 150ms cubic-bezier(0.2, 0, 0, 1),
-        wy-controls-bar border-color 150ms cubic-bezier(0.2, 0, 0, 1),
+        color 150ms cubic-bezier(0.2, 0, 0, 1),
+        background 150ms cubic-bezier(0.2, 0, 0, 1),
+        border-color 150ms cubic-bezier(0.2, 0, 0, 1),
         transform 150ms cubic-bezier(0.2, 0, 0, 1);
     }
 
@@ -1590,7 +1590,7 @@ wy-controls-bar {
         flex: 0 0 auto;
         width: 36px;
         transition:
-          wy-controls-bar width 250ms cubic-bezier(0.2, 0, 0, 1),
+          width 250ms cubic-bezier(0.2, 0, 0, 1),
           flex 250ms cubic-bezier(0.2, 0, 0, 1);
       }
 
@@ -1604,12 +1604,12 @@ wy-controls-bar {
         font-size: 16px;
         cursor: pointer;
         transition:
-          wy-controls-bar width 250ms cubic-bezier(0.2, 0, 0, 1),
-          wy-controls-bar padding 250ms cubic-bezier(0.2, 0, 0, 1),
-          wy-controls-bar background 250ms cubic-bezier(0.2, 0, 0, 1),
-          wy-controls-bar color 150ms cubic-bezier(0.2, 0, 0, 1) 100ms,
-          wy-controls-bar border-radius 250ms cubic-bezier(0.2, 0, 0, 1),
-          wy-controls-bar border-color 150ms cubic-bezier(0.2, 0, 0, 1),
+          width 250ms cubic-bezier(0.2, 0, 0, 1),
+          padding 250ms cubic-bezier(0.2, 0, 0, 1),
+          background 250ms cubic-bezier(0.2, 0, 0, 1),
+          color 150ms cubic-bezier(0.2, 0, 0, 1) 100ms,
+          border-radius 250ms cubic-bezier(0.2, 0, 0, 1),
+          border-color 150ms cubic-bezier(0.2, 0, 0, 1),
           box-shadow 150ms cubic-bezier(0.2, 0, 0, 1);
       }
 
@@ -1623,8 +1623,8 @@ wy-controls-bar {
         transform: translate(-50%, -50%);
         color: var(--ink, #282828);
         transition:
-          wy-controls-bar left 250ms cubic-bezier(0.2, 0, 0, 1),
-          wy-controls-bar transform 250ms cubic-bezier(0.2, 0, 0, 1),
+          left 250ms cubic-bezier(0.2, 0, 0, 1),
+          transform 250ms cubic-bezier(0.2, 0, 0, 1),
           color 150ms cubic-bezier(0.2, 0, 0, 1);
       }
 
@@ -1638,8 +1638,8 @@ wy-controls-bar {
         flex: 1 1 auto;
         min-width: 0;
         transition:
-          wy-controls-bar opacity 250ms cubic-bezier(0.2, 0, 0, 1),
-          wy-controls-bar transform 250ms cubic-bezier(0.2, 0, 0, 1),
+          opacity 250ms cubic-bezier(0.2, 0, 0, 1),
+          transform 250ms cubic-bezier(0.2, 0, 0, 1),
           max-width 250ms cubic-bezier(0.2, 0, 0, 1);
       }
 
@@ -2214,7 +2214,7 @@ wy-controls-bar {
         position: relative;
         text-align: left;
         transition:
-            wy-prompt-modal border-color var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1)),
+            border-color var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1)),
             box-shadow var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
     }
 
@@ -2744,7 +2744,7 @@ wy-controls-bar {
       border-radius: var(--radius-pill, 9999px);
       background: var(--ink);
       transition:
-        wy-prompt-modal transform var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1)),
+        transform var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1)),
         background-color var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
     }
 
@@ -3305,8 +3305,8 @@ wy-tabs {
       font-weight: var(--wy-button-font-weight, 500);
       border-radius: var(--wy-button-radius, var(--radius-pill, 999px));
       transition: 
-        wy-button transform var(--dur-1) var(--ease),
-        wy-button box-shadow var(--dur-1) var(--ease),
+        transform var(--dur-1) var(--ease),
+        box-shadow var(--dur-1) var(--ease),
         background-color var(--dur-1) var(--ease);
     }
 
@@ -3516,7 +3516,10 @@ wy-modal {
       align-items: center;
       justify-content: center;
       padding: var(--s-5, 24px);
-      background: color-mix(in srgb, var(--ink) 28%, transparent);
+      background: color-mix(in srgb, var(--ink) 12%, transparent);
+      backdrop-filter: blur(var(--modal-blur-amount, 8px)) saturate(var(--modal-blur-saturation, 120%));
+      -webkit-backdrop-filter: blur(var(--modal-blur-amount, 8px)) saturate(var(--modal-blur-saturation, 120%));
+      animation: wy-modal-overlay-in var(--dur-2, 350ms) var(--ease) both;
     }
 
 wy-modal .dialog {
@@ -3532,6 +3535,24 @@ wy-modal .dialog {
       border-radius: var(--radius-3);
       box-shadow: var(--shadow-modal);
       padding: var(--s-5, 24px);
+      animation: wy-modal-dialog-in var(--dur-2, 350ms) var(--ease) both;
+    }
+
+    @keyframes wy-modal-overlay-in {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes wy-modal-dialog-in {
+      from { opacity: 0; transform: translateY(8px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      wy-modal .modal-overlay,
+      wy-modal .dialog {
+        animation: none;
+      }
     }
 
     wy-modal .headline-text {
