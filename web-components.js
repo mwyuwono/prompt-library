@@ -2,7 +2,7 @@ var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/tslib/tslib.es6.mjs
+// node_modules/tslib/tslib.es6.mjs
 function __decorate(decorators, target, key, desc) {
   var c4 = arguments.length, r7 = c4 < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d4;
   if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r7 = Reflect.decorate(decorators, target, key, desc);
@@ -10,14 +10,14 @@ function __decorate(decorators, target, key, desc) {
   return c4 > 3 && r7 && Object.defineProperty(target, key, r7), r7;
 }
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@lit/reactive-element/decorators/custom-element.js
+// node_modules/@lit/reactive-element/decorators/custom-element.js
 var t = (t6) => (e9, o8) => {
   void 0 !== o8 ? o8.addInitializer(() => {
     customElements.define(t6, e9);
   }) : customElements.define(t6, e9);
 };
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@lit/reactive-element/css-tag.js
+// node_modules/@lit/reactive-element/css-tag.js
 var t2 = globalThis;
 var e = t2.ShadowRoot && (void 0 === t2.ShadyCSS || t2.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype;
 var s = /* @__PURE__ */ Symbol();
@@ -62,7 +62,7 @@ var c = e ? (t6) => t6 : (t6) => t6 instanceof CSSStyleSheet ? ((t7) => {
   return r(e9);
 })(t6) : t6;
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@lit/reactive-element/reactive-element.js
+// node_modules/@lit/reactive-element/reactive-element.js
 var { is: i2, defineProperty: e2, getOwnPropertyDescriptor: h, getOwnPropertyNames: r2, getOwnPropertySymbols: o2, getPrototypeOf: n2 } = Object;
 var a = globalThis;
 var c2 = a.trustedTypes;
@@ -284,7 +284,7 @@ var y = class extends HTMLElement {
 };
 y.elementStyles = [], y.shadowRootOptions = { mode: "open" }, y[d("elementProperties")] = /* @__PURE__ */ new Map(), y[d("finalized")] = /* @__PURE__ */ new Map(), p?.({ ReactiveElement: y }), (a.reactiveElementVersions ?? (a.reactiveElementVersions = [])).push("2.1.2");
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@lit/reactive-element/decorators/property.js
+// node_modules/@lit/reactive-element/decorators/property.js
 var o3 = { attribute: true, type: String, converter: u, reflect: false, hasChanged: f };
 var r3 = (t6 = o3, e9, r7) => {
   const { kind: n5, metadata: i6 } = r7;
@@ -314,15 +314,15 @@ function n3(t6) {
   })(t6, e9, o8);
 }
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@lit/reactive-element/decorators/state.js
+// node_modules/@lit/reactive-element/decorators/state.js
 function r4(r7) {
   return n3({ ...r7, state: true, attribute: false });
 }
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@lit/reactive-element/decorators/base.js
+// node_modules/@lit/reactive-element/decorators/base.js
 var e3 = (e9, t6, c4) => (c4.configurable = true, c4.enumerable = true, Reflect.decorate && "object" != typeof t6 && Object.defineProperty(e9, t6, c4), c4);
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@lit/reactive-element/decorators/query.js
+// node_modules/@lit/reactive-element/decorators/query.js
 function e4(e9, r7) {
   return (n5, s4, i6) => {
     const o8 = (t6) => t6.renderRoot?.querySelector(e9) ?? null;
@@ -346,7 +346,7 @@ function e4(e9, r7) {
   };
 }
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/lit-html/lit-html.js
+// node_modules/lit-html/lit-html.js
 var t3 = globalThis;
 var i3 = (t6) => t6;
 var s2 = t3.trustedTypes;
@@ -601,7 +601,7 @@ var D = (t6, i6, s4) => {
   return h3._$AI(t6), h3;
 };
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/lit-element/lit-element.js
+// node_modules/lit-element/lit-element.js
 var s3 = globalThis;
 var i4 = class extends y {
   constructor() {
@@ -631,10 +631,10 @@ var o5 = s3.litElementPolyfillSupport;
 o5?.({ LitElement: i4 });
 (s3.litElementVersions ?? (s3.litElementVersions = [])).push("4.2.2");
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/lit-html/is-server.js
+// node_modules/lit-html/is-server.js
 var o6 = false;
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@material/web/icon/internal/icon.js
+// node_modules/@material/web/icon/internal/icon.js
 var Icon = class extends i4 {
   render() {
     return b2`<slot></slot>`;
@@ -650,11 +650,11 @@ var Icon = class extends i4 {
   }
 };
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@material/web/icon/internal/icon-styles.js
+// node_modules/@material/web/icon/internal/icon-styles.js
 var styles = i`:host{font-size:var(--md-icon-size, 24px);width:var(--md-icon-size, 24px);height:var(--md-icon-size, 24px);color:inherit;font-variation-settings:inherit;font-weight:400;font-family:var(--md-icon-font, Material Symbols Outlined);display:inline-flex;font-style:normal;place-items:center;place-content:center;line-height:1;overflow:hidden;letter-spacing:normal;text-transform:none;user-select:none;white-space:nowrap;word-wrap:normal;flex-shrink:0;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;-moz-osx-font-smoothing:grayscale}::slotted(svg){fill:currentColor}::slotted(*){height:100%;width:100%}
 `;
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@material/web/icon/icon.js
+// node_modules/@material/web/icon/icon.js
 var MdIcon = class MdIcon2 extends Icon {
 };
 MdIcon.styles = [styles];
@@ -662,7 +662,7 @@ MdIcon = __decorate([
   t("md-icon")
 ], MdIcon);
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@material/web/divider/internal/divider.js
+// node_modules/@material/web/divider/internal/divider.js
 var Divider = class extends i4 {
   constructor() {
     super(...arguments);
@@ -681,11 +681,11 @@ __decorate([
   n3({ type: Boolean, reflect: true, attribute: "inset-end" })
 ], Divider.prototype, "insetEnd", void 0);
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@material/web/divider/internal/divider-styles.js
+// node_modules/@material/web/divider/internal/divider-styles.js
 var styles2 = i`:host{box-sizing:border-box;color:var(--md-divider-color, var(--md-sys-color-outline-variant, #cac4d0));display:flex;height:var(--md-divider-thickness, 1px);width:100%}:host([inset]),:host([inset-start]){padding-inline-start:16px}:host([inset]),:host([inset-end]){padding-inline-end:16px}:host::before{background:currentColor;content:"";height:100%;width:100%}@media(forced-colors: active){:host::before{background:CanvasText}}
 `;
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@material/web/divider/divider.js
+// node_modules/@material/web/divider/divider.js
 var MdDivider = class MdDivider2 extends Divider {
 };
 MdDivider.styles = [styles2];
@@ -693,7 +693,7 @@ MdDivider = __decorate([
   t("md-divider")
 ], MdDivider);
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/lit-html/directive.js
+// node_modules/lit-html/directive.js
 var t4 = { ATTRIBUTE: 1, CHILD: 2, PROPERTY: 3, BOOLEAN_ATTRIBUTE: 4, EVENT: 5, ELEMENT: 6 };
 var e6 = (t6) => (...e9) => ({ _$litDirective$: t6, values: e9 });
 var i5 = class {
@@ -713,7 +713,7 @@ var i5 = class {
   }
 };
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/lit-html/directives/class-map.js
+// node_modules/lit-html/directives/class-map.js
 var e7 = e6(class extends i5 {
   constructor(t6) {
     if (super(t6), t6.type !== t4.ATTRIBUTE || "class" !== t6.name || t6.strings?.length > 2) throw Error("`classMap()` can only be used in the `class` attribute and must be the only part in the attribute.");
@@ -737,7 +737,7 @@ var e7 = e6(class extends i5 {
   }
 });
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@material/web/internal/aria/aria.js
+// node_modules/@material/web/internal/aria/aria.js
 var ARIA_PROPERTIES = [
   "role",
   "ariaAtomic",
@@ -786,7 +786,7 @@ function ariaPropertyToAttribute(property) {
   return property.replace("aria", "aria-").replace(/Elements?/g, "").toLowerCase();
 }
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@material/web/internal/aria/delegate.js
+// node_modules/@material/web/internal/aria/delegate.js
 var privateIgnoreAttributeChangesFor = /* @__PURE__ */ Symbol("privateIgnoreAttributeChangesFor");
 function mixinDelegatesAria(base) {
   var _a2;
@@ -876,7 +876,7 @@ function ariaAttributeToDataProperty(ariaAttribute) {
   return ariaAttribute.replace(/-\w/, (dashLetter) => dashLetter[1].toUpperCase());
 }
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@material/web/internal/events/redispatch-event.js
+// node_modules/@material/web/internal/events/redispatch-event.js
 function redispatchEvent(element, event) {
   if (event.bubbles && (!element.shadowRoot || event.composed)) {
     event.stopPropagation();
@@ -889,7 +889,7 @@ function redispatchEvent(element, event) {
   return dispatched;
 }
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@material/web/internal/motion/animation.js
+// node_modules/@material/web/internal/motion/animation.js
 var EASING = {
   STANDARD: "cubic-bezier(0.2, 0, 0, 1)",
   STANDARD_ACCELERATE: "cubic-bezier(.3,0,1,1)",
@@ -899,7 +899,7 @@ var EASING = {
   EMPHASIZED_DECELERATE: "cubic-bezier(.05,.7,.1,1)"
 };
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@material/web/dialog/internal/animations.js
+// node_modules/@material/web/dialog/internal/animations.js
 var DIALOG_DEFAULT_OPEN_ANIMATION = {
   dialog: [
     [
@@ -1007,7 +1007,7 @@ var DIALOG_DEFAULT_CLOSE_ANIMATION = {
   ]
 };
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@material/web/dialog/internal/dialog.js
+// node_modules/@material/web/dialog/internal/dialog.js
 var dialogBaseClass = mixinDelegatesAria(i4);
 var Dialog = class extends dialogBaseClass {
   // We do not use `delegatesFocus: true` due to a Chromium bug with
@@ -1427,11 +1427,11 @@ function isFocusable(element) {
   return element.shadowRoot?.delegatesFocus ?? false;
 }
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@material/web/dialog/internal/dialog-styles.js
+// node_modules/@material/web/dialog/internal/dialog-styles.js
 var styles3 = i`:host{border-start-start-radius:var(--md-dialog-container-shape-start-start, var(--md-dialog-container-shape, var(--md-sys-shape-corner-extra-large, 28px)));border-start-end-radius:var(--md-dialog-container-shape-start-end, var(--md-dialog-container-shape, var(--md-sys-shape-corner-extra-large, 28px)));border-end-end-radius:var(--md-dialog-container-shape-end-end, var(--md-dialog-container-shape, var(--md-sys-shape-corner-extra-large, 28px)));border-end-start-radius:var(--md-dialog-container-shape-end-start, var(--md-dialog-container-shape, var(--md-sys-shape-corner-extra-large, 28px)));display:contents;margin:auto;max-height:min(560px,100% - 48px);max-width:min(560px,100% - 48px);min-height:140px;min-width:280px;position:fixed;height:fit-content;width:fit-content}dialog{background:rgba(0,0,0,0);border:none;border-radius:inherit;flex-direction:column;height:inherit;margin:inherit;max-height:inherit;max-width:inherit;min-height:inherit;min-width:inherit;outline:none;overflow:visible;padding:0;width:inherit}dialog[open]{display:flex}::backdrop{background:none}.scrim{background:var(--md-sys-color-scrim, #000);display:none;inset:0;opacity:32%;pointer-events:none;position:fixed;z-index:1}:host([open]) .scrim{display:flex}h2{all:unset;align-self:stretch}.headline{align-items:center;color:var(--md-dialog-headline-color, var(--md-sys-color-on-surface, #1d1b20));display:flex;flex-direction:column;font-family:var(--md-dialog-headline-font, var(--md-sys-typescale-headline-small-font, var(--md-ref-typeface-brand, Roboto)));font-size:var(--md-dialog-headline-size, var(--md-sys-typescale-headline-small-size, 1.5rem));line-height:var(--md-dialog-headline-line-height, var(--md-sys-typescale-headline-small-line-height, 2rem));font-weight:var(--md-dialog-headline-weight, var(--md-sys-typescale-headline-small-weight, var(--md-ref-typeface-weight-regular, 400)));position:relative}slot[name=headline]::slotted(*){align-items:center;align-self:stretch;box-sizing:border-box;display:flex;gap:8px;padding:24px 24px 0}.icon{display:flex}slot[name=icon]::slotted(*){color:var(--md-dialog-icon-color, var(--md-sys-color-secondary, #625b71));fill:currentColor;font-size:var(--md-dialog-icon-size, 24px);margin-top:24px;height:var(--md-dialog-icon-size, 24px);width:var(--md-dialog-icon-size, 24px)}.has-icon slot[name=headline]::slotted(*){justify-content:center;padding-top:16px}.scrollable slot[name=headline]::slotted(*){padding-bottom:16px}.scrollable.has-headline slot[name=content]::slotted(*){padding-top:8px}.container{border-radius:inherit;display:flex;flex-direction:column;flex-grow:1;overflow:hidden;position:relative;transform-origin:top}.container::before{background:var(--md-dialog-container-color, var(--md-sys-color-surface-container-high, #ece6f0));border-radius:inherit;content:"";inset:0;position:absolute}.scroller{display:flex;flex:1;flex-direction:column;overflow:hidden;z-index:1}.scrollable .scroller{overflow-y:scroll}.content{color:var(--md-dialog-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));font-family:var(--md-dialog-supporting-text-font, var(--md-sys-typescale-body-medium-font, var(--md-ref-typeface-plain, Roboto)));font-size:var(--md-dialog-supporting-text-size, var(--md-sys-typescale-body-medium-size, 0.875rem));line-height:var(--md-dialog-supporting-text-line-height, var(--md-sys-typescale-body-medium-line-height, 1.25rem));flex:1;font-weight:var(--md-dialog-supporting-text-weight, var(--md-sys-typescale-body-medium-weight, var(--md-ref-typeface-weight-regular, 400)));height:min-content;position:relative}slot[name=content]::slotted(*){box-sizing:border-box;padding:24px}.anchor{position:absolute}.top.anchor{top:0}.bottom.anchor{bottom:0}.actions{position:relative}slot[name=actions]::slotted(*){box-sizing:border-box;display:flex;gap:8px;justify-content:flex-end;padding:16px 24px 24px}.has-actions slot[name=content]::slotted(*){padding-bottom:8px}md-divider{display:none;position:absolute}.has-headline.show-top-divider .headline md-divider,.has-actions.show-bottom-divider .actions md-divider{display:flex}.headline md-divider{bottom:0}.actions md-divider{top:0}@media(forced-colors: active){dialog{outline:2px solid WindowText}}
 `;
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/@material/web/dialog/dialog.js
+// node_modules/@material/web/dialog/dialog.js
 var MdDialog = class MdDialog2 extends Dialog {
 };
 MdDialog.styles = [styles3];
@@ -1439,7 +1439,7 @@ MdDialog = __decorate([
   t("md-dialog")
 ], MdDialog);
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-button.js
+// components/ui/wy-button.js
 var WyButton = class extends i4 {
   constructor() {
     super();
@@ -1719,7 +1719,7 @@ __publicField(WyButton, "styles", i`
   `);
 customElements.define("wy-button", WyButton);
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-filter-chip.js
+// components/ui/wy-filter-chip.js
 var WyFilterChip = class extends i4 {
   render() {
     return b2`
@@ -1759,7 +1759,7 @@ __publicField(WyFilterChip, "styles", i`
       min-height: var(--wy-filter-chip-min-height, 28px);
       box-sizing: border-box;
       border-radius: var(--wy-filter-chip-radius, var(--radius-pill, 999px));
-      font-family: var(--wy-filter-chip-font-family, var(--font-sans, 'DM Sans', sans-serif));
+      font-family: var(--wy-filter-chip-font-family, var(--font-sans, 'Inter', sans-serif));
       font-size: var(--wy-filter-chip-font-size, 11px);
       font-weight: var(--wy-filter-chip-font-weight, 500);
       cursor: pointer;
@@ -1816,7 +1816,7 @@ __publicField(WyFilterChip, "styles", i`
   `);
 customElements.define("wy-filter-chip", WyFilterChip);
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-controls-bar.js
+// components/ui/wy-controls-bar.js
 var WyControlsBar = class extends i4 {
   constructor() {
     super();
@@ -2823,7 +2823,7 @@ __publicField(WyControlsBar, "styles", i`
   `);
 customElements.define("wy-controls-bar", WyControlsBar);
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-toast.js
+// components/ui/wy-toast.js
 var WyToast = class extends i4 {
   constructor() {
     super();
@@ -3143,7 +3143,7 @@ __publicField(WyToast, "styles", i`
   `);
 customElements.define("wy-toast", WyToast);
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-copy-confirm.js
+// components/ui/wy-copy-confirm.js
 var WyCopyConfirm = class extends i4 {
   constructor() {
     super();
@@ -3392,7 +3392,7 @@ __publicField(WyCopyConfirm, "styles", i`
   `);
 customElements.define("wy-copy-confirm", WyCopyConfirm);
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-modal.js
+// components/ui/wy-modal.js
 var WyModal = class extends i4 {
   constructor() {
     super();
@@ -3446,9 +3446,7 @@ __publicField(WyModal, "properties", {
   fullScreen: { type: Boolean, attribute: "full-screen" }
 });
 __publicField(WyModal, "styles", i`
-    /* Required fonts - load in page <head>:
-       <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-    */
+    /* Serif headings use --ff-serif (Lora), loaded globally via tokens.css. */
 
     :host {
       display: block;
@@ -3474,7 +3472,7 @@ __publicField(WyModal, "styles", i`
     
     /* Use more specific selector instead of !important */
     ::slotted(.headline-text) {
-      font-family: 'Playfair Display', serif;
+      font-family: var(--ff-serif, 'Lora', Georgia, serif);
       font-size: 1.75rem;
       color: var(--md-sys-color-text-heading);
       margin: 0;
@@ -3485,7 +3483,7 @@ __publicField(WyModal, "styles", i`
     
     /* Ensure specificity overrides any conflicting styles */
     md-dialog::slotted(.headline-text) {
-      font-family: 'Playfair Display', serif;
+      font-family: var(--ff-serif, 'Lora', Georgia, serif);
       font-size: 1.75rem;
       color: var(--md-sys-color-text-heading);
       margin: 0;
@@ -3551,7 +3549,7 @@ __publicField(WyModal, "styles", i`
   `);
 customElements.define("wy-modal", WyModal);
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-tabs.js
+// components/ui/wy-tabs.js
 var WyTabs = class extends i4 {
   render() {
     return b2`
@@ -3650,7 +3648,7 @@ __publicField(WyTabs, "styles", i`
   `);
 customElements.define("wy-tabs", WyTabs);
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-dropdown.js
+// components/ui/wy-dropdown.js
 var WyDropdown = class extends i4 {
   constructor() {
     super();
@@ -3783,7 +3781,7 @@ __publicField(WyDropdown, "properties", {
 });
 customElements.define("wy-dropdown", WyDropdown);
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-info-panel.js
+// components/ui/wy-info-panel.js
 var WyInfoPanel = class extends i4 {
   constructor() {
     super();
@@ -3807,8 +3805,8 @@ __publicField(WyInfoPanel, "properties", {
   heading: { type: String }
 });
 __publicField(WyInfoPanel, "styles", i`
-        /* Note: DM Sans font should be loaded in consuming page <head> */
-        
+        /* Type resolves to Lora/Inter via tokens.css (The Nineteenth). */
+
         :host {
             display: block;
             /* CSS custom properties for theming - can be overridden by parent component */
@@ -3827,7 +3825,7 @@ __publicField(WyInfoPanel, "styles", i`
             border-radius: var(--md-sys-shape-corner-medium, 16px);
             padding: var(--wy-info-panel-padding);
             color: var(--wy-info-panel-text-color);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-family: var(--font-sans, 'Inter', sans-serif);
             font-size: var(--wy-info-panel-font-size);
             line-height: 1.6;
             transition: background-color var(--md-sys-motion-duration-short4, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
@@ -3847,7 +3845,7 @@ __publicField(WyInfoPanel, "styles", i`
         }
         
         .panel-heading {
-            font-family: var(--font-serif, 'Playfair Display', serif);
+            font-family: var(--font-serif, 'Lora', Georgia, serif);
             font-size: var(--md-sys-typescale-title-medium-size, 1rem);
             color: var(--md-sys-color-on-surface);
             margin: 0;
@@ -3857,7 +3855,7 @@ __publicField(WyInfoPanel, "styles", i`
     /* Support for slotted content */
     ::slotted(*) {
         color: var(--wy-info-panel-text-color);
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-family: var(--font-sans, 'Inter', sans-serif);
     }
     
     ::slotted(p) {
@@ -3870,7 +3868,7 @@ __publicField(WyInfoPanel, "styles", i`
     `);
 customElements.define("wy-info-panel", WyInfoPanel);
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-option-toggle.js
+// components/ui/wy-option-toggle.js
 var WyOptionToggle = class extends i4 {
   constructor() {
     super();
@@ -4061,7 +4059,7 @@ __publicField(WyOptionToggle, "properties", {
 });
 customElements.define("wy-option-toggle", WyOptionToggle);
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-image-upload.js
+// components/ui/wy-image-upload.js
 var WyImageUpload = class extends i4 {
   constructor() {
     super();
@@ -4194,7 +4192,7 @@ __publicField(WyImageUpload, "properties", {
 });
 customElements.define("wy-image-upload", WyImageUpload);
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-code-textarea.js
+// components/ui/wy-code-textarea.js
 var WyCodeTextarea = class extends i4 {
   constructor() {
     super();
@@ -4297,7 +4295,7 @@ __publicField(WyCodeTextarea, "properties", {
 });
 customElements.define("wy-code-textarea", WyCodeTextarea);
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-variable-editor.js
+// components/ui/wy-variable-editor.js
 var WyVariableEditor = class extends i4 {
   constructor() {
     super();
@@ -4443,7 +4441,7 @@ __publicField(WyVariableEditor, "properties", {
 });
 customElements.define("wy-variable-editor", WyVariableEditor);
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-reference-image-editor.js
+// components/ui/wy-reference-image-editor.js
 var WyReferenceImageEditor = class extends i4 {
   constructor() {
     super();
@@ -4591,7 +4589,7 @@ __publicField(WyReferenceImageEditor, "properties", {
 });
 customElements.define("wy-reference-image-editor", WyReferenceImageEditor);
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-variation-editor.js
+// components/ui/wy-variation-editor.js
 var WyVariationEditor = class extends i4 {
   constructor() {
     super();
@@ -4920,12 +4918,13 @@ This action cannot be undone.`;
                     <!-- Variation Description -->
                     <div class="form-field" data-vsection="description">
                         <label class="field-label" for="variation-description-${index}">Description</label>
+                        <p class="field-description">Optional short differentiator shown in selectors. Do not repeat the parent prompt's shared task or input instructions.</p>
                         <textarea
                             id="variation-description-${index}"
                             rows="3"
                             .value="${variation.description || ""}"
                             @input="${(e9) => this._handleFieldChange(index, "description", e9.target.value)}"
-                            placeholder="Description shown in variation selector"
+                            placeholder="e.g., 18th Century Hand Colored Plan"
                         ></textarea>
                     </div>
 
@@ -5164,7 +5163,7 @@ __publicField(WyVariationEditor, "properties", {
 });
 customElements.define("wy-variation-editor", WyVariationEditor);
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-prompt-editor.js
+// components/ui/wy-prompt-editor.js
 var WyPromptEditor = class extends i4 {
   constructor() {
     super();
@@ -6447,7 +6446,7 @@ __publicField(WyPromptEditor, "properties", {
 });
 customElements.define("wy-prompt-editor", WyPromptEditor);
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-step-editor.js
+// components/ui/wy-step-editor.js
 var WyStepEditor = class extends i4 {
   constructor() {
     super();
@@ -6651,13 +6650,13 @@ __publicField(WyStepEditor, "properties", {
 });
 customElements.define("wy-step-editor", WyStepEditor);
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/lit-html/directive-helpers.js
+// node_modules/lit-html/directive-helpers.js
 var { I: t5 } = j;
 var r6 = (o8) => void 0 === o8.strings;
 var m2 = {};
 var p3 = (o8, t6 = m2) => o8._$AH = t6;
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/lit-html/directives/live.js
+// node_modules/lit-html/directives/live.js
 var l3 = e6(class extends i5 {
   constructor(r7) {
     if (super(r7), r7.type !== t4.PROPERTY && r7.type !== t4.ATTRIBUTE && r7.type !== t4.BOOLEAN_ATTRIBUTE) throw Error("The `live` directive is not allowed on child or event bindings");
@@ -6678,7 +6677,7 @@ var l3 = e6(class extends i5 {
   }
 });
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/lit-html/directives/unsafe-html.js
+// node_modules/lit-html/directives/unsafe-html.js
 var e8 = class extends i5 {
   constructor(i6) {
     if (super(i6), this.it = A, i6.type !== t4.CHILD) throw Error(this.constructor.directiveName + "() can only be used in child bindings");
@@ -6696,7 +6695,7 @@ var e8 = class extends i5 {
 e8.directiveName = "unsafeHTML", e8.resultType = 1;
 var o7 = e6(e8);
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/node_modules/marked/lib/marked.esm.js
+// node_modules/marked/lib/marked.esm.js
 function M2() {
   return { async: false, breaks: false, extensions: null, gfm: true, hooks: null, pedantic: false, renderer: null, silent: false, tokenizer: null, walkTokens: null };
 }
@@ -7934,7 +7933,7 @@ var Xt = g2.parseInline;
 var Vt = b3.parse;
 var Yt = x2.lex;
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-prompt-modal.js
+// components/ui/wy-prompt-modal.js
 var WyPromptModal = class extends i4 {
   constructor() {
     super();
@@ -8879,8 +8878,8 @@ __publicField(WyPromptModal, "properties", {
   showPalette: { type: Boolean, attribute: "show-palette" }
 });
 __publicField(WyPromptModal, "styles", i`
-    /* Required fonts - load in page <head>:
-       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,899&display=swap" rel="stylesheet">
+    /* Type (Lora serif / Inter sans) loads globally via tokens.css per The Nineteenth.
+       Material Symbols should be loaded in the consuming page <head>:
        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
     */
 
@@ -10291,7 +10290,7 @@ __publicField(WyPromptModal, "styles", i`
     `);
 customElements.define("wy-prompt-modal", WyPromptModal);
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-links-modal.js
+// components/ui/wy-links-modal.js
 var WyLinksModal = class extends i4 {
   constructor() {
     super();
@@ -10341,30 +10340,12 @@ var WyLinksModal = class extends i4 {
     }
   }
   _loadFonts() {
-    const existingLinks = document.querySelectorAll("link[data-wy-links-modal-fonts]");
-    if (existingLinks.length >= 3) {
-      return;
-    }
-    if (!document.querySelector('link[href*="Playfair+Display"][data-wy-links-modal-fonts]')) {
-      const playfairLink = document.createElement("link");
-      playfairLink.rel = "stylesheet";
-      playfairLink.href = "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap";
-      playfairLink.setAttribute("data-wy-links-modal-fonts", "playfair");
-      document.head.appendChild(playfairLink);
-    }
     if (!document.querySelector('link[href*="Material+Symbols"][data-wy-links-modal-fonts]')) {
       const materialLink = document.createElement("link");
       materialLink.rel = "stylesheet";
       materialLink.href = "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap";
       materialLink.setAttribute("data-wy-links-modal-fonts", "material");
       document.head.appendChild(materialLink);
-    }
-    if (!document.querySelector('link[href*="DM+Sans"][data-wy-links-modal-fonts]')) {
-      const dmSansLink = document.createElement("link");
-      dmSansLink.rel = "stylesheet";
-      dmSansLink.href = "https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap";
-      dmSansLink.setAttribute("data-wy-links-modal-fonts", "dm-sans");
-      document.head.appendChild(dmSansLink);
     }
   }
   render() {
@@ -10690,7 +10671,7 @@ __publicField(WyLinksModal, "styles", i`
 
     /* Title - matches mockup exactly */
     .modal-title {
-      font-family: var(--font-serif); /* playfair */
+      font-family: var(--font-serif); /* Lora */
       font-size: 2.25rem; /* text-4xl = 36px */
       font-weight: 500; /* font-medium */
       line-height: 1.2;
@@ -10713,7 +10694,7 @@ __publicField(WyLinksModal, "styles", i`
 
     /* Section header - matches mockup exactly */
     .section-header {
-      font-family: var(--font-serif); /* playfair */
+      font-family: var(--font-serif); /* Lora */
       font-size: 1.25rem; /* text-xl = 20px */
       font-weight: 500; /* font-medium */
       line-height: 1.2;
@@ -10876,7 +10857,7 @@ __publicField(WyLinksModal, "styles", i`
       border-radius: 20px;
       background: transparent;
       color: var(--md-sys-color-on-surface, #1A1A1A);
-      font-family: 'DM Sans', sans-serif;
+      font-family: var(--ff-sans, 'Inter', sans-serif);
       font-size: 0.9375rem;
       font-weight: 500;
       cursor: pointer;
@@ -10917,7 +10898,7 @@ try {
   throw error;
 }
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/wy-color-palette.js
+// components/ui/wy-color-palette.js
 var WyColorPalette = class extends i4 {
   constructor() {
     super();
@@ -11338,7 +11319,7 @@ __publicField(WyColorPalette, "styles", i`
     `);
 customElements.define("wy-color-palette", WyColorPalette);
 
-// ../sessions/clever-kind-hawking/mnt/prompts-library/components/ui/index.js
+// components/ui/index.js
 console.log("[prompts-library] Local web components registered");
 /*! Bundled license information:
 

@@ -393,12 +393,13 @@ export class WyVariationEditor extends LitElement {
                     <!-- Variation Description -->
                     <div class="form-field" data-vsection="description">
                         <label class="field-label" for="variation-description-${index}">Description</label>
+                        <p class="field-description">Optional short differentiator shown in selectors. Do not repeat the parent prompt's shared task or input instructions.</p>
                         <textarea
                             id="variation-description-${index}"
                             rows="3"
                             .value="${variation.description || ''}"
                             @input="${(e) => this._handleFieldChange(index, 'description', e.target.value)}"
-                            placeholder="Description shown in variation selector"
+                            placeholder="e.g., 18th Century Hand Colored Plan"
                         ></textarea>
                     </div>
 

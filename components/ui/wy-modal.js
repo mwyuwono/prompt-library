@@ -17,9 +17,7 @@ export class WyModal extends LitElement {
   }
 
   static styles = css`
-    /* Required fonts - load in page <head>:
-       <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-    */
+    /* Serif headings use --ff-serif (Lora), loaded globally via tokens.css. */
 
     :host {
       display: block;
@@ -45,7 +43,7 @@ export class WyModal extends LitElement {
     
     /* Use more specific selector instead of !important */
     ::slotted(.headline-text) {
-      font-family: 'Playfair Display', serif;
+      font-family: var(--ff-serif, 'Lora', Georgia, serif);
       font-size: 1.75rem;
       color: var(--md-sys-color-text-heading);
       margin: 0;
@@ -56,7 +54,7 @@ export class WyModal extends LitElement {
     
     /* Ensure specificity overrides any conflicting styles */
     md-dialog::slotted(.headline-text) {
-      font-family: 'Playfair Display', serif;
+      font-family: var(--ff-serif, 'Lora', Georgia, serif);
       font-size: 1.75rem;
       color: var(--md-sys-color-text-heading);
       margin: 0;

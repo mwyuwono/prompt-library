@@ -39,6 +39,56 @@ function validateUnusedVariables(ownerLabel, definedVariables, usedVariables) {
     return false;
 }
 
+function normalizeDescriptionText(text = "") {
+    return text
+        .toLowerCase()
+        .replace(/['']/g, "")
+        .replace(/[^a-z0-9]+/g, " ")
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean);
+}
+
+function getRepeatedPhrase(parentDescription = "", variationDescription = "") {
+    const parentWords = normalizeDescriptionText(parentDescription);
+    const variationWords = normalizeDescriptionText(variationDescription);
+    const phraseLength = 5;
+
+    if (parentWords.length < phraseLength || variationWords.length < phraseLength) {
+        return "";
+    }
+
+    const parentPhrases = new Set();
+    for (let index = 0; index <= parentWords.length - phraseLength; index += 1) {
+        parentPhrases.add(parentWords.slice(index, index + phraseLength).join(" "));
+    }
+
+    for (let index = 0; index <= variationWords.length - phraseLength; index += 1) {
+        const phrase = variationWords.slice(index, index + phraseLength).join(" ");
+        if (parentPhrases.has(phrase)) {
+            return phrase;
+        }
+    }
+
+    return "";
+}
+
+function validateVariationDescription(prompt, variation) {
+    if (!prompt.description || !variation.description) {
+        return false;
+    }
+
+    const repeatedPhrase = getRepeatedPhrase(prompt.description, variation.description);
+    if (!repeatedPhrase) {
+        return false;
+    }
+
+    console.error(`❌ ERROR in variation "${variation.id}" in prompt "${prompt.id}":`);
+    console.error("  - Variation descriptions must state only the unique differentiator of the variant.");
+    console.error(`  - Repeated parent-description phrase: "${repeatedPhrase}"`);
+    return true;
+}
+
 function validatePrompts() {
     let hasErrors = false;
 
@@ -116,6 +166,8 @@ function validatePrompts() {
                         variationVariables,
                         usedVariables
                     ) || hasErrors;
+
+                hasErrors = validateVariationDescription(prompt, variation) || hasErrors;
             });
         }
 

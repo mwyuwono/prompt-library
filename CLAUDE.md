@@ -184,6 +184,8 @@ Prompts can include multiple template variations:
 
 First variation is default. User input preserved when switching. Variables shared across variations.
 
+When a variation has a `description`, keep it to the unique differentiator of that variation only. Do not repeat the parent prompt's job, input requirements, or shared usage instructions. For example, use `18th Century Hand Colored Plan` instead of `Recreates an uploaded map, satellite view, or site-plan screenshot as...`.
+
 ### Prompt Preview Images
 
 Prompt preview artwork should be exact `1920x1080` images, which is a `16:9` landscape aspect ratio. The public grid/card UI renders prompt thumbnails in a 16:9 frame, so normalize generated preview images to exact dimensions before committing rather than relying on images that are only visually close to 16:9.

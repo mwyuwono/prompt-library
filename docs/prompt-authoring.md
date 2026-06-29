@@ -39,6 +39,22 @@ Use `{{variable}}` syntax. Manual placeholders like `[Describe...]` won't be rep
 
 The app checks variation-level first, then falls back to prompt-level.
 
+## Variation Descriptions
+
+Use `variations[].description` only for the unique differentiator of that variant. Do not repeat the parent prompt's job, accepted inputs, or shared usage instructions.
+
+Good:
+```json
+{ "name": "Manuscript Site Plan", "description": "18th Century Hand Colored Plan" }
+```
+
+Avoid:
+```json
+{ "name": "Manuscript Site Plan", "description": "Recreates an uploaded map, satellite view, or site-plan screenshot as..." }
+```
+
+Put common setup, input requirements, and shared usage notes in the parent prompt `description` or `instructions` instead.
+
 ## Prompt Images
 
 Standard prompts can use a prompt-level image:
@@ -112,6 +128,7 @@ Before committing public prompt changes to `prompts.json`:
 
 - All `{{variable}}` placeholders have entries in `variables`
 - No manual placeholders like `[Describe...]`
+- Variation descriptions state only what makes that variant different
 - Variable `name` matches placeholder exactly
 - `inputType` is omitted, `"textarea"`, or `"toggle"` only
 - JSON validates with `node validate-prompts.js` when `prompts.json.bak` is available

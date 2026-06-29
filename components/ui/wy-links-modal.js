@@ -80,34 +80,14 @@ export class WyLinksModal extends LitElement {
   }
 
   _loadFonts() {
-    const existingLinks = document.querySelectorAll('link[data-wy-links-modal-fonts]');
-    if (existingLinks.length >= 3) {
-      return; // All fonts already loaded
-    }
-
-    if (!document.querySelector('link[href*="Playfair+Display"][data-wy-links-modal-fonts]')) {
-      const playfairLink = document.createElement('link');
-      playfairLink.rel = 'stylesheet';
-      playfairLink.href = 'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap';
-      playfairLink.setAttribute('data-wy-links-modal-fonts', 'playfair');
-      document.head.appendChild(playfairLink);
-    }
-
+    // Lora (serif) and Inter (sans) are loaded globally via tokens.css per The
+    // Nineteenth design system. Only Material Symbols needs a fallback load here.
     if (!document.querySelector('link[href*="Material+Symbols"][data-wy-links-modal-fonts]')) {
       const materialLink = document.createElement('link');
       materialLink.rel = 'stylesheet';
       materialLink.href = 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap';
       materialLink.setAttribute('data-wy-links-modal-fonts', 'material');
       document.head.appendChild(materialLink);
-    }
-
-    // Load DM Sans font
-    if (!document.querySelector('link[href*="DM+Sans"][data-wy-links-modal-fonts]')) {
-      const dmSansLink = document.createElement('link');
-      dmSansLink.rel = 'stylesheet';
-      dmSansLink.href = 'https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap';
-      dmSansLink.setAttribute('data-wy-links-modal-fonts', 'dm-sans');
-      document.head.appendChild(dmSansLink);
     }
   }
 
@@ -300,7 +280,7 @@ export class WyLinksModal extends LitElement {
 
     /* Title - matches mockup exactly */
     .modal-title {
-      font-family: var(--font-serif); /* playfair */
+      font-family: var(--font-serif); /* Lora */
       font-size: 2.25rem; /* text-4xl = 36px */
       font-weight: 500; /* font-medium */
       line-height: 1.2;
@@ -323,7 +303,7 @@ export class WyLinksModal extends LitElement {
 
     /* Section header - matches mockup exactly */
     .section-header {
-      font-family: var(--font-serif); /* playfair */
+      font-family: var(--font-serif); /* Lora */
       font-size: 1.25rem; /* text-xl = 20px */
       font-weight: 500; /* font-medium */
       line-height: 1.2;
@@ -486,7 +466,7 @@ export class WyLinksModal extends LitElement {
       border-radius: 20px;
       background: transparent;
       color: var(--md-sys-color-on-surface, #1A1A1A);
-      font-family: 'DM Sans', sans-serif;
+      font-family: var(--ff-sans, 'Inter', sans-serif);
       font-size: 0.9375rem;
       font-weight: 500;
       cursor: pointer;

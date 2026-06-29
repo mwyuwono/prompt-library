@@ -22,8 +22,8 @@ export class WyInfoPanel extends LitElement {
     }
 
     static styles = css`
-        /* Note: DM Sans font should be loaded in consuming page <head> */
-        
+        /* Type resolves to Lora/Inter via tokens.css (The Nineteenth). */
+
         :host {
             display: block;
             /* CSS custom properties for theming - can be overridden by parent component */
@@ -42,7 +42,7 @@ export class WyInfoPanel extends LitElement {
             border-radius: var(--md-sys-shape-corner-medium, 16px);
             padding: var(--wy-info-panel-padding);
             color: var(--wy-info-panel-text-color);
-            font-family: var(--font-sans, 'DM Sans', sans-serif);
+            font-family: var(--font-sans, 'Inter', sans-serif);
             font-size: var(--wy-info-panel-font-size);
             line-height: 1.6;
             transition: background-color var(--md-sys-motion-duration-short4, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
@@ -62,7 +62,7 @@ export class WyInfoPanel extends LitElement {
         }
         
         .panel-heading {
-            font-family: var(--font-serif, 'Playfair Display', serif);
+            font-family: var(--font-serif, 'Lora', Georgia, serif);
             font-size: var(--md-sys-typescale-title-medium-size, 1rem);
             color: var(--md-sys-color-on-surface);
             margin: 0;
@@ -72,7 +72,7 @@ export class WyInfoPanel extends LitElement {
     /* Support for slotted content */
     ::slotted(*) {
         color: var(--wy-info-panel-text-color);
-        font-family: var(--font-sans, 'DM Sans', sans-serif);
+        font-family: var(--font-sans, 'Inter', sans-serif);
     }
     
     ::slotted(p) {

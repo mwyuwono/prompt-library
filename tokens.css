@@ -5,7 +5,7 @@
    terracotta as the hero accent color.
    ========================================================================== */
 
-@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Playfair+Display:ital,wght@0,400;0,500;0,600&family=Inter:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@400;500;600&display=swap");
 
 :root {
   color-scheme: light only;
@@ -53,7 +53,7 @@
   /* ========================================================================
      TYPOGRAPHY
      ======================================================================== */
-  --ff-serif:  "Lora", "Playfair Display", "Baskerville", Georgia, serif;
+  --ff-serif:  "Lora", "Baskerville", Georgia, serif;
   --ff-sans:   "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
   --ff-mono:   ui-monospace, "SF Mono", Menlo, monospace;
 

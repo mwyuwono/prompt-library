@@ -55,6 +55,58 @@ function allTemplates(prompt) {
   return texts.filter(Boolean);
 }
 
+function normalizeDescriptionText(text = '') {
+  return text
+    .toLowerCase()
+    .replace(/['']/g, '')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+}
+
+function getRepeatedPhrase(parentDescription = '', variationDescription = '') {
+  const parentWords = normalizeDescriptionText(parentDescription);
+  const variationWords = normalizeDescriptionText(variationDescription);
+  const phraseLength = 5;
+
+  if (parentWords.length < phraseLength || variationWords.length < phraseLength) {
+    return '';
+  }
+
+  const parentPhrases = new Set();
+  for (let index = 0; index <= parentWords.length - phraseLength; index += 1) {
+    parentPhrases.add(parentWords.slice(index, index + phraseLength).join(' '));
+  }
+
+  for (let index = 0; index <= variationWords.length - phraseLength; index += 1) {
+    const phrase = variationWords.slice(index, index + phraseLength).join(' ');
+    if (parentPhrases.has(phrase)) {
+      return phrase;
+    }
+  }
+
+  return '';
+}
+
+function validateVariationDescriptions(prompt) {
+  if (!prompt.description || !prompt.variations) return false;
+
+  let hasErrors = false;
+  prompt.variations.forEach(variation => {
+    if (!variation.description) return;
+
+    const repeatedPhrase = getRepeatedPhrase(prompt.description, variation.description);
+    if (repeatedPhrase) {
+      console.error(`FAIL [${prompt.id}/${variation.id}]: Variation descriptions must state only the unique differentiator of the variant.`);
+      console.error(`  Repeated parent-description phrase: "${repeatedPhrase}"`);
+      hasErrors = true;
+    }
+  });
+
+  return hasErrors;
+}
+
 original.forEach((orig, i) => {
   const match = updated.find(p => p.id === orig.id);
   if (!match) return; // already caught above
@@ -82,6 +134,13 @@ original.forEach(orig => {
   const newVarStr  = JSON.stringify(match.variables || []);
   if (origVarStr !== newVarStr) {
     console.error(`FAIL [${orig.id}]: variables[] array was changed.`);
+    passed = false;
+  }
+});
+
+// --- Check 6: variation descriptions do not repeat parent prompt framing ---
+updated.forEach(prompt => {
+  if (validateVariationDescriptions(prompt)) {
     passed = false;
   }
 });
