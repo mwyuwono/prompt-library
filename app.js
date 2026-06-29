@@ -403,7 +403,7 @@ Server will start on http://localhost:3001`;
             const searchInput = this.getControlsSearchInput();
             const isSearchFocused = searchInput &&
                 (document.activeElement === searchInput ||
-                    this.controlsBar?.shadowRoot?.activeElement === searchInput);
+                    this.controlsBar?.contains(document.activeElement));
 
             // Escape while search is focused clears query
             if (e.key === 'Escape' && isSearchFocused) {
@@ -457,7 +457,7 @@ Server will start on http://localhost:3001`;
     }
 
     getControlsSearchInput() {
-        return this.controlsBar?.shadowRoot?.querySelector('.search-input');
+        return this.controlsBar?.querySelector('.search-input');
     }
 
     dismissSearchForSelection() {
@@ -2258,7 +2258,7 @@ Server will start on http://localhost:3001`;
             const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
             const modKey = isMac ? '⌘' : 'Ctrl';
 
-            modal.innerHTML = `
+            modal.bodyHtml = `
                 <div class="shortcut-list">
                     <div class="shortcut-item">
                         <span class="shortcut-keys"><kbd>Esc</kbd></span>

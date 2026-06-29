@@ -1,11 +1,17 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html } from 'lit';
+import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 
 export class WyModal extends LitElement {
+  createRenderRoot() {
+    return this;
+  }
+
   static properties = {
     open: { type: Boolean, reflect: true },
     heading: { type: String },
     maxWidth: { type: String, attribute: 'max-width' },
-    fullScreen: { type: Boolean, attribute: 'full-screen' }
+    fullScreen: { type: Boolean, attribute: 'full-screen' },
+    bodyHtml: { type: String, attribute: false }
   };
 
   constructor() {
@@ -14,130 +20,78 @@ export class WyModal extends LitElement {
     this.heading = '';
     this.maxWidth = '560px';
     this.fullScreen = false;
+    this.bodyHtml = '';
+    this._handleKeyDown = this._handleKeyDown.bind(this);
   }
 
-  static styles = css`
-    /* Serif headings use --ff-serif (Lora), loaded globally via tokens.css. */
+  connectedCallback() {
+    // Capture body/action children before Lit replaces the light-DOM contents.
+    this._captureModalNodes();
+    super.connectedCallback();
+    document.addEventListener('keydown', this._handleKeyDown);
+  }
 
-    :host {
-      display: block;
-    }
-
-    /* Wrap md-dialog to override its internals if needed,
-       but primarily use CSS variables for styling. */
-    md-dialog {
-      --md-dialog-container-color: var(--md-sys-color-surface);
-      --md-dialog-container-shape: 28px;
-      --md-dialog-container-max-height: min(90vh, calc(100% - 48px));
-    }
-
-    /* Soft Modernism Detail: Surface border instead of heavy shadow */
-    md-dialog::part(container) {
-      border: 1px solid var(--md-sys-color-outline-variant);
-    }
-
-    /* Custom slide-up animation overrides for md-dialog */
-    /* Note: md-dialog uses standard M3 transitions, 
-       we'll inject specific timing for 'Soft Modernism' */
-    
-    
-    /* Use more specific selector instead of !important */
-    ::slotted(.headline-text) {
-      font-family: var(--ff-serif, 'Lora', Georgia, serif);
-      font-size: 1.75rem;
-      color: var(--md-sys-color-text-heading);
-      margin: 0;
-      padding-top: 24px;
-      padding-bottom: 8px;
-      display: block;
-    }
-    
-    /* Ensure specificity overrides any conflicting styles */
-    md-dialog::slotted(.headline-text) {
-      font-family: var(--ff-serif, 'Lora', Georgia, serif);
-      font-size: 1.75rem;
-      color: var(--md-sys-color-text-heading);
-      margin: 0;
-      padding-top: 24px;
-      padding-bottom: 8px;
-      display: block;
-    }
-
-    .modal-content {
-      padding: 12px 4px 24px 4px;
-      font-family: var(--font-body);
-      color: var(--md-sys-color-on-surface-variant);
-      line-height: 1.6;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      flex: 1;
-      min-height: 0;
-      overflow-y: auto;
-    }
-
-    .footer-actions {
-      display: flex;
-      gap: 12px;
-      justify-content: flex-end;
-      width: 100%;
-      padding-bottom: 16px;
-      padding-top: 8px;
-      flex-shrink: 0;
-    }
-
-    /* Mobile button label utility class */
-    ::slotted(.btn-label) {
-      display: inline;
-    }
-
-    /* Ensure buttons in footer are capsule-shaped */
-    ::slotted(md-filled-button),
-    ::slotted(md-outlined-button),
-    ::slotted(md-text-button) {
-      /* Radius is already global, but ensure layout space */
-    }
-
-    @media (max-width: 600px) {
-      md-dialog {
-        --md-dialog-container-max-width: 100vw;
-        --md-dialog-container-max-height: 100vh;
-        --md-dialog-container-shape: 28px 28px 0 0;
-        margin: 0;
-        align-self: flex-end;
-      }
-
-      .footer-actions {
-        padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-        gap: 8px;
-      }
-
-      /* Hide button labels on mobile */
-      ::slotted(.btn-label) {
-        display: none;
-      }
-    }
-  `;
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    document.removeEventListener('keydown', this._handleKeyDown);
+  }
 
   render() {
+    if (!this.open) return html``;
+
     return html`
-      <md-dialog 
-        ?open="${this.open}"
-        @close="${this._handleClose}"
-        @cancel="${this._handleCancel}"
-        style="--md-dialog-container-max-width: ${this.maxWidth}"
-      >
-        <div slot="headline" class="headline-text">
-          ${this.heading}
+      <div class="modal-overlay" @click="${this._handleOverlayClick}">
+        <div
+          class="dialog"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="wyModalHeading"
+          style="max-width: ${this.maxWidth}"
+        >
+          <h2 class="headline-text" id="wyModalHeading">${this.heading}</h2>
+          <form method="dialog" class="modal-content">${this.bodyHtml ? unsafeHTML(this.bodyHtml) : ''}</form>
+          <div class="footer-actions"></div>
         </div>
-        <form slot="content" method="dialog" class="modal-content">
-          <slot></slot>
-        </form>
-        <div slot="actions" class="footer-actions">
-          <slot name="actions"></slot>
-        </div>
-      </md-dialog>
+      </div>
     `;
+  }
+
+  willUpdate(changedProperties) {
+    if (changedProperties.has('open') && this.open) {
+      this._captureModalNodes();
+    }
+  }
+
+  firstUpdated() {
+    this._projectModalNodes();
+  }
+
+  updated() {
+    this._projectModalNodes();
+  }
+
+  _projectModalNodes() {
+    const body = this.querySelector('.modal-content');
+    const actions = this.querySelector('.footer-actions');
+    if (!this.bodyHtml && body && !body.childNodes.length && this._bodyNodes?.length) body.append(...this._bodyNodes);
+    if (actions && !actions.childNodes.length && this._actionNodes?.length) actions.append(...this._actionNodes);
+  }
+
+  _captureModalNodes() {
+    const children = Array.from(this.childNodes).filter(node => {
+      if (node.nodeType === Node.COMMENT_NODE) return false;
+      if (node.nodeType === Node.TEXT_NODE && !node.textContent.trim()) return false;
+      return !(node.nodeType === Node.ELEMENT_NODE && node.classList.contains('modal-overlay'));
+    });
+    if (!children.length) return;
+    this._actionNodes = children.filter(node =>
+      node.nodeType === Node.ELEMENT_NODE && node.getAttribute('slot') === 'actions'
+    );
+    this._bodyNodes = children.filter(node =>
+      !(node.nodeType === Node.ELEMENT_NODE && node.getAttribute('slot') === 'actions')
+    );
+    this._actionNodes.forEach(node => node.removeAttribute('slot'));
+    children.forEach(node => node.remove());
   }
 
   show() {
@@ -151,15 +105,18 @@ export class WyModal extends LitElement {
   _handleClose(e) {
     this.open = false;
     this.dispatchEvent(new CustomEvent('close', {
-      detail: e.detail,
+      detail: e?.detail,
       bubbles: true,
       composed: true
     }));
   }
 
-  _handleCancel(e) {
-    // Prevent dismissal if needed, or just sync state
-    this.open = false;
+  _handleOverlayClick(e) {
+    if (e.target === e.currentTarget) this._handleClose(e);
+  }
+
+  _handleKeyDown(e) {
+    if (e.key === 'Escape' && this.open) this._handleClose(e);
   }
 }
 

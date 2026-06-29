@@ -5,10 +5,6 @@
  * design system and are now maintained locally by prompts-library.
  */
 
-// Material Web dependencies used by the local wy-* components.
-import '@material/web/icon/icon.js';
-import '@material/web/dialog/dialog.js';
-
 // Local wy-* components used by the public, private, and admin interfaces.
 import './wy-button.js';
 import './wy-filter-chip.js';

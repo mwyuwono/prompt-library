@@ -1,69 +1,27 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html } from 'lit';
 
 export class WyTabs extends LitElement {
+  createRenderRoot() {
+    return this;
+  }
+
   static properties = {
     activeTab: { type: String, attribute: 'active-tab' }
   };
 
-  static styles = css`
-    :host {
-      display: block;
-      border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  connectedCallback() {
+    // Preserve existing tab button children after Lit renders into light DOM.
+    if (!this._capturedTabNodes) {
+      this._tabNodes = Array.from(this.childNodes);
+      this._tabNodes.forEach(node => node.remove());
+      this._capturedTabNodes = true;
     }
-
-    .tabs-list {
-      display: flex;
-      gap: 32px; /* Wider gap for cleaner look */
-      padding: 0 32px; /* Align with modal content padding */
-    }
-
-    .tab-item {
-      padding: 12px 0 16px 0; /* More bottom padding for visual balance */
-      font-family: var(--font-body);
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: var(--md-sys-color-on-surface-variant);
-      cursor: pointer;
-      position: relative;
-      transition: color 0.2s;
-      background: none;
-      border: none;
-      margin: 0;
-    }
-
-    .tab-item:hover {
-      color: var(--md-sys-color-text-heading);
-    }
-
-    .tab-item.active {
-      color: var(--md-sys-color-text-heading);
-      font-weight: 700;
-    }
-
-    .tab-item.active::after {
-      content: '';
-      position: absolute;
-      bottom: -1px; /* Overlap the border-bottom */
-      left: 0;
-      right: 0;
-      height: 2px;
-      background-color: var(--md-sys-color-primary);
-    }
-
-    /* Responsive padding to match page/modal gutters */
-    @media (max-width: 600px) {
-      .tabs-list {
-        padding: 0 16px;
-        gap: 24px;
-      }
-    }
-  `;
+    super.connectedCallback();
+  }
 
   render() {
     return html`
-      <div class="tabs-list" role="tablist">
-        <slot></slot>
-      </div>
+      <div class="tabs-list" role="tablist"></div>
     `;
   }
 
@@ -85,9 +43,21 @@ export class WyTabs extends LitElement {
   }
 
   updated(changedProperties) {
+    this._projectTabs();
     if (changedProperties.has('activeTab')) {
       this._updateTabs();
     }
+  }
+
+  firstUpdated() {
+    this._projectTabs();
+    this._updateTabs();
+  }
+
+  _projectTabs() {
+    const target = this.querySelector('.tabs-list');
+    if (!target || target.childNodes.length || !this._tabNodes?.length) return;
+    target.append(...this._tabNodes);
   }
 
   _updateTabs() {

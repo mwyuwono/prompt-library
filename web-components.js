@@ -2,65 +2,42 @@ var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 
-// node_modules/tslib/tslib.es6.mjs
-function __decorate(decorators, target, key, desc) {
-  var c4 = arguments.length, r7 = c4 < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d4;
-  if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r7 = Reflect.decorate(decorators, target, key, desc);
-  else for (var i6 = decorators.length - 1; i6 >= 0; i6--) if (d4 = decorators[i6]) r7 = (c4 < 3 ? d4(r7) : c4 > 3 ? d4(target, key, r7) : d4(target, key)) || r7;
-  return c4 > 3 && r7 && Object.defineProperty(target, key, r7), r7;
-}
-
-// node_modules/@lit/reactive-element/decorators/custom-element.js
-var t = (t6) => (e9, o8) => {
-  void 0 !== o8 ? o8.addInitializer(() => {
-    customElements.define(t6, e9);
-  }) : customElements.define(t6, e9);
-};
-
 // node_modules/@lit/reactive-element/css-tag.js
-var t2 = globalThis;
-var e = t2.ShadowRoot && (void 0 === t2.ShadyCSS || t2.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype;
+var t = globalThis;
+var e = t.ShadowRoot && (void 0 === t.ShadyCSS || t.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype;
 var s = /* @__PURE__ */ Symbol();
 var o = /* @__PURE__ */ new WeakMap();
 var n = class {
-  constructor(t6, e9, o8) {
-    if (this._$cssResult$ = true, o8 !== s) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
-    this.cssText = t6, this.t = e9;
+  constructor(t5, e6, o6) {
+    if (this._$cssResult$ = true, o6 !== s) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
+    this.cssText = t5, this.t = e6;
   }
   get styleSheet() {
-    let t6 = this.o;
+    let t5 = this.o;
     const s4 = this.t;
-    if (e && void 0 === t6) {
-      const e9 = void 0 !== s4 && 1 === s4.length;
-      e9 && (t6 = o.get(s4)), void 0 === t6 && ((this.o = t6 = new CSSStyleSheet()).replaceSync(this.cssText), e9 && o.set(s4, t6));
+    if (e && void 0 === t5) {
+      const e6 = void 0 !== s4 && 1 === s4.length;
+      e6 && (t5 = o.get(s4)), void 0 === t5 && ((this.o = t5 = new CSSStyleSheet()).replaceSync(this.cssText), e6 && o.set(s4, t5));
     }
-    return t6;
+    return t5;
   }
   toString() {
     return this.cssText;
   }
 };
-var r = (t6) => new n("string" == typeof t6 ? t6 : t6 + "", void 0, s);
-var i = (t6, ...e9) => {
-  const o8 = 1 === t6.length ? t6[0] : e9.reduce((e10, s4, o9) => e10 + ((t7) => {
-    if (true === t7._$cssResult$) return t7.cssText;
-    if ("number" == typeof t7) return t7;
-    throw Error("Value passed to 'css' function must be a 'css' function result: " + t7 + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
-  })(s4) + t6[o9 + 1], t6[0]);
-  return new n(o8, t6, s);
-};
-var S = (s4, o8) => {
-  if (e) s4.adoptedStyleSheets = o8.map((t6) => t6 instanceof CSSStyleSheet ? t6 : t6.styleSheet);
-  else for (const e9 of o8) {
-    const o9 = document.createElement("style"), n5 = t2.litNonce;
-    void 0 !== n5 && o9.setAttribute("nonce", n5), o9.textContent = e9.cssText, s4.appendChild(o9);
+var r = (t5) => new n("string" == typeof t5 ? t5 : t5 + "", void 0, s);
+var S = (s4, o6) => {
+  if (e) s4.adoptedStyleSheets = o6.map((t5) => t5 instanceof CSSStyleSheet ? t5 : t5.styleSheet);
+  else for (const e6 of o6) {
+    const o7 = document.createElement("style"), n4 = t.litNonce;
+    void 0 !== n4 && o7.setAttribute("nonce", n4), o7.textContent = e6.cssText, s4.appendChild(o7);
   }
 };
-var c = e ? (t6) => t6 : (t6) => t6 instanceof CSSStyleSheet ? ((t7) => {
-  let e9 = "";
-  for (const s4 of t7.cssRules) e9 += s4.cssText;
-  return r(e9);
-})(t6) : t6;
+var c = e ? (t5) => t5 : (t5) => t5 instanceof CSSStyleSheet ? ((t6) => {
+  let e6 = "";
+  for (const s4 of t6.cssRules) e6 += s4.cssText;
+  return r(e6);
+})(t5) : t5;
 
 // node_modules/@lit/reactive-element/reactive-element.js
 var { is: i2, defineProperty: e2, getOwnPropertyDescriptor: h, getOwnPropertyNames: r2, getOwnPropertySymbols: o2, getPrototypeOf: n2 } = Object;
@@ -68,169 +45,169 @@ var a = globalThis;
 var c2 = a.trustedTypes;
 var l = c2 ? c2.emptyScript : "";
 var p = a.reactiveElementPolyfillSupport;
-var d = (t6, s4) => t6;
-var u = { toAttribute(t6, s4) {
+var d = (t5, s4) => t5;
+var u = { toAttribute(t5, s4) {
   switch (s4) {
     case Boolean:
-      t6 = t6 ? l : null;
+      t5 = t5 ? l : null;
       break;
     case Object:
     case Array:
-      t6 = null == t6 ? t6 : JSON.stringify(t6);
+      t5 = null == t5 ? t5 : JSON.stringify(t5);
   }
-  return t6;
-}, fromAttribute(t6, s4) {
-  let i6 = t6;
+  return t5;
+}, fromAttribute(t5, s4) {
+  let i6 = t5;
   switch (s4) {
     case Boolean:
-      i6 = null !== t6;
+      i6 = null !== t5;
       break;
     case Number:
-      i6 = null === t6 ? null : Number(t6);
+      i6 = null === t5 ? null : Number(t5);
       break;
     case Object:
     case Array:
       try {
-        i6 = JSON.parse(t6);
-      } catch (t7) {
+        i6 = JSON.parse(t5);
+      } catch (t6) {
         i6 = null;
       }
   }
   return i6;
 } };
-var f = (t6, s4) => !i2(t6, s4);
+var f = (t5, s4) => !i2(t5, s4);
 var b = { attribute: true, type: String, converter: u, reflect: false, useDefault: false, hasChanged: f };
 Symbol.metadata ?? (Symbol.metadata = /* @__PURE__ */ Symbol("metadata")), a.litPropertyMetadata ?? (a.litPropertyMetadata = /* @__PURE__ */ new WeakMap());
 var y = class extends HTMLElement {
-  static addInitializer(t6) {
-    this._$Ei(), (this.l ?? (this.l = [])).push(t6);
+  static addInitializer(t5) {
+    this._$Ei(), (this.l ?? (this.l = [])).push(t5);
   }
   static get observedAttributes() {
     return this.finalize(), this._$Eh && [...this._$Eh.keys()];
   }
-  static createProperty(t6, s4 = b) {
-    if (s4.state && (s4.attribute = false), this._$Ei(), this.prototype.hasOwnProperty(t6) && ((s4 = Object.create(s4)).wrapped = true), this.elementProperties.set(t6, s4), !s4.noAccessor) {
-      const i6 = /* @__PURE__ */ Symbol(), h3 = this.getPropertyDescriptor(t6, i6, s4);
-      void 0 !== h3 && e2(this.prototype, t6, h3);
+  static createProperty(t5, s4 = b) {
+    if (s4.state && (s4.attribute = false), this._$Ei(), this.prototype.hasOwnProperty(t5) && ((s4 = Object.create(s4)).wrapped = true), this.elementProperties.set(t5, s4), !s4.noAccessor) {
+      const i6 = /* @__PURE__ */ Symbol(), h3 = this.getPropertyDescriptor(t5, i6, s4);
+      void 0 !== h3 && e2(this.prototype, t5, h3);
     }
   }
-  static getPropertyDescriptor(t6, s4, i6) {
-    const { get: e9, set: r7 } = h(this.prototype, t6) ?? { get() {
+  static getPropertyDescriptor(t5, s4, i6) {
+    const { get: e6, set: r5 } = h(this.prototype, t5) ?? { get() {
       return this[s4];
-    }, set(t7) {
-      this[s4] = t7;
+    }, set(t6) {
+      this[s4] = t6;
     } };
-    return { get: e9, set(s5) {
-      const h3 = e9?.call(this);
-      r7?.call(this, s5), this.requestUpdate(t6, h3, i6);
+    return { get: e6, set(s5) {
+      const h3 = e6?.call(this);
+      r5?.call(this, s5), this.requestUpdate(t5, h3, i6);
     }, configurable: true, enumerable: true };
   }
-  static getPropertyOptions(t6) {
-    return this.elementProperties.get(t6) ?? b;
+  static getPropertyOptions(t5) {
+    return this.elementProperties.get(t5) ?? b;
   }
   static _$Ei() {
     if (this.hasOwnProperty(d("elementProperties"))) return;
-    const t6 = n2(this);
-    t6.finalize(), void 0 !== t6.l && (this.l = [...t6.l]), this.elementProperties = new Map(t6.elementProperties);
+    const t5 = n2(this);
+    t5.finalize(), void 0 !== t5.l && (this.l = [...t5.l]), this.elementProperties = new Map(t5.elementProperties);
   }
   static finalize() {
     if (this.hasOwnProperty(d("finalized"))) return;
     if (this.finalized = true, this._$Ei(), this.hasOwnProperty(d("properties"))) {
-      const t7 = this.properties, s4 = [...r2(t7), ...o2(t7)];
-      for (const i6 of s4) this.createProperty(i6, t7[i6]);
+      const t6 = this.properties, s4 = [...r2(t6), ...o2(t6)];
+      for (const i6 of s4) this.createProperty(i6, t6[i6]);
     }
-    const t6 = this[Symbol.metadata];
-    if (null !== t6) {
-      const s4 = litPropertyMetadata.get(t6);
-      if (void 0 !== s4) for (const [t7, i6] of s4) this.elementProperties.set(t7, i6);
+    const t5 = this[Symbol.metadata];
+    if (null !== t5) {
+      const s4 = litPropertyMetadata.get(t5);
+      if (void 0 !== s4) for (const [t6, i6] of s4) this.elementProperties.set(t6, i6);
     }
     this._$Eh = /* @__PURE__ */ new Map();
-    for (const [t7, s4] of this.elementProperties) {
-      const i6 = this._$Eu(t7, s4);
-      void 0 !== i6 && this._$Eh.set(i6, t7);
+    for (const [t6, s4] of this.elementProperties) {
+      const i6 = this._$Eu(t6, s4);
+      void 0 !== i6 && this._$Eh.set(i6, t6);
     }
     this.elementStyles = this.finalizeStyles(this.styles);
   }
   static finalizeStyles(s4) {
     const i6 = [];
     if (Array.isArray(s4)) {
-      const e9 = new Set(s4.flat(1 / 0).reverse());
-      for (const s5 of e9) i6.unshift(c(s5));
+      const e6 = new Set(s4.flat(1 / 0).reverse());
+      for (const s5 of e6) i6.unshift(c(s5));
     } else void 0 !== s4 && i6.push(c(s4));
     return i6;
   }
-  static _$Eu(t6, s4) {
+  static _$Eu(t5, s4) {
     const i6 = s4.attribute;
-    return false === i6 ? void 0 : "string" == typeof i6 ? i6 : "string" == typeof t6 ? t6.toLowerCase() : void 0;
+    return false === i6 ? void 0 : "string" == typeof i6 ? i6 : "string" == typeof t5 ? t5.toLowerCase() : void 0;
   }
   constructor() {
     super(), this._$Ep = void 0, this.isUpdatePending = false, this.hasUpdated = false, this._$Em = null, this._$Ev();
   }
   _$Ev() {
-    this._$ES = new Promise((t6) => this.enableUpdating = t6), this._$AL = /* @__PURE__ */ new Map(), this._$E_(), this.requestUpdate(), this.constructor.l?.forEach((t6) => t6(this));
+    this._$ES = new Promise((t5) => this.enableUpdating = t5), this._$AL = /* @__PURE__ */ new Map(), this._$E_(), this.requestUpdate(), this.constructor.l?.forEach((t5) => t5(this));
   }
-  addController(t6) {
-    (this._$EO ?? (this._$EO = /* @__PURE__ */ new Set())).add(t6), void 0 !== this.renderRoot && this.isConnected && t6.hostConnected?.();
+  addController(t5) {
+    (this._$EO ?? (this._$EO = /* @__PURE__ */ new Set())).add(t5), void 0 !== this.renderRoot && this.isConnected && t5.hostConnected?.();
   }
-  removeController(t6) {
-    this._$EO?.delete(t6);
+  removeController(t5) {
+    this._$EO?.delete(t5);
   }
   _$E_() {
-    const t6 = /* @__PURE__ */ new Map(), s4 = this.constructor.elementProperties;
-    for (const i6 of s4.keys()) this.hasOwnProperty(i6) && (t6.set(i6, this[i6]), delete this[i6]);
-    t6.size > 0 && (this._$Ep = t6);
+    const t5 = /* @__PURE__ */ new Map(), s4 = this.constructor.elementProperties;
+    for (const i6 of s4.keys()) this.hasOwnProperty(i6) && (t5.set(i6, this[i6]), delete this[i6]);
+    t5.size > 0 && (this._$Ep = t5);
   }
   createRenderRoot() {
-    const t6 = this.shadowRoot ?? this.attachShadow(this.constructor.shadowRootOptions);
-    return S(t6, this.constructor.elementStyles), t6;
+    const t5 = this.shadowRoot ?? this.attachShadow(this.constructor.shadowRootOptions);
+    return S(t5, this.constructor.elementStyles), t5;
   }
   connectedCallback() {
-    this.renderRoot ?? (this.renderRoot = this.createRenderRoot()), this.enableUpdating(true), this._$EO?.forEach((t6) => t6.hostConnected?.());
+    this.renderRoot ?? (this.renderRoot = this.createRenderRoot()), this.enableUpdating(true), this._$EO?.forEach((t5) => t5.hostConnected?.());
   }
-  enableUpdating(t6) {
+  enableUpdating(t5) {
   }
   disconnectedCallback() {
-    this._$EO?.forEach((t6) => t6.hostDisconnected?.());
+    this._$EO?.forEach((t5) => t5.hostDisconnected?.());
   }
-  attributeChangedCallback(t6, s4, i6) {
-    this._$AK(t6, i6);
+  attributeChangedCallback(t5, s4, i6) {
+    this._$AK(t5, i6);
   }
-  _$ET(t6, s4) {
-    const i6 = this.constructor.elementProperties.get(t6), e9 = this.constructor._$Eu(t6, i6);
-    if (void 0 !== e9 && true === i6.reflect) {
+  _$ET(t5, s4) {
+    const i6 = this.constructor.elementProperties.get(t5), e6 = this.constructor._$Eu(t5, i6);
+    if (void 0 !== e6 && true === i6.reflect) {
       const h3 = (void 0 !== i6.converter?.toAttribute ? i6.converter : u).toAttribute(s4, i6.type);
-      this._$Em = t6, null == h3 ? this.removeAttribute(e9) : this.setAttribute(e9, h3), this._$Em = null;
+      this._$Em = t5, null == h3 ? this.removeAttribute(e6) : this.setAttribute(e6, h3), this._$Em = null;
     }
   }
-  _$AK(t6, s4) {
-    const i6 = this.constructor, e9 = i6._$Eh.get(t6);
-    if (void 0 !== e9 && this._$Em !== e9) {
-      const t7 = i6.getPropertyOptions(e9), h3 = "function" == typeof t7.converter ? { fromAttribute: t7.converter } : void 0 !== t7.converter?.fromAttribute ? t7.converter : u;
-      this._$Em = e9;
-      const r7 = h3.fromAttribute(s4, t7.type);
-      this[e9] = r7 ?? this._$Ej?.get(e9) ?? r7, this._$Em = null;
+  _$AK(t5, s4) {
+    const i6 = this.constructor, e6 = i6._$Eh.get(t5);
+    if (void 0 !== e6 && this._$Em !== e6) {
+      const t6 = i6.getPropertyOptions(e6), h3 = "function" == typeof t6.converter ? { fromAttribute: t6.converter } : void 0 !== t6.converter?.fromAttribute ? t6.converter : u;
+      this._$Em = e6;
+      const r5 = h3.fromAttribute(s4, t6.type);
+      this[e6] = r5 ?? this._$Ej?.get(e6) ?? r5, this._$Em = null;
     }
   }
-  requestUpdate(t6, s4, i6, e9 = false, h3) {
-    if (void 0 !== t6) {
-      const r7 = this.constructor;
-      if (false === e9 && (h3 = this[t6]), i6 ?? (i6 = r7.getPropertyOptions(t6)), !((i6.hasChanged ?? f)(h3, s4) || i6.useDefault && i6.reflect && h3 === this._$Ej?.get(t6) && !this.hasAttribute(r7._$Eu(t6, i6)))) return;
-      this.C(t6, s4, i6);
+  requestUpdate(t5, s4, i6, e6 = false, h3) {
+    if (void 0 !== t5) {
+      const r5 = this.constructor;
+      if (false === e6 && (h3 = this[t5]), i6 ?? (i6 = r5.getPropertyOptions(t5)), !((i6.hasChanged ?? f)(h3, s4) || i6.useDefault && i6.reflect && h3 === this._$Ej?.get(t5) && !this.hasAttribute(r5._$Eu(t5, i6)))) return;
+      this.C(t5, s4, i6);
     }
     false === this.isUpdatePending && (this._$ES = this._$EP());
   }
-  C(t6, s4, { useDefault: i6, reflect: e9, wrapped: h3 }, r7) {
-    i6 && !(this._$Ej ?? (this._$Ej = /* @__PURE__ */ new Map())).has(t6) && (this._$Ej.set(t6, r7 ?? s4 ?? this[t6]), true !== h3 || void 0 !== r7) || (this._$AL.has(t6) || (this.hasUpdated || i6 || (s4 = void 0), this._$AL.set(t6, s4)), true === e9 && this._$Em !== t6 && (this._$Eq ?? (this._$Eq = /* @__PURE__ */ new Set())).add(t6));
+  C(t5, s4, { useDefault: i6, reflect: e6, wrapped: h3 }, r5) {
+    i6 && !(this._$Ej ?? (this._$Ej = /* @__PURE__ */ new Map())).has(t5) && (this._$Ej.set(t5, r5 ?? s4 ?? this[t5]), true !== h3 || void 0 !== r5) || (this._$AL.has(t5) || (this.hasUpdated || i6 || (s4 = void 0), this._$AL.set(t5, s4)), true === e6 && this._$Em !== t5 && (this._$Eq ?? (this._$Eq = /* @__PURE__ */ new Set())).add(t5));
   }
   async _$EP() {
     this.isUpdatePending = true;
     try {
       await this._$ES;
-    } catch (t7) {
-      Promise.reject(t7);
+    } catch (t6) {
+      Promise.reject(t6);
     }
-    const t6 = this.scheduleUpdate();
-    return null != t6 && await t6, !this.isUpdatePending;
+    const t5 = this.scheduleUpdate();
+    return null != t5 && await t5, !this.isUpdatePending;
   }
   scheduleUpdate() {
     return this.performUpdate();
@@ -239,28 +216,28 @@ var y = class extends HTMLElement {
     if (!this.isUpdatePending) return;
     if (!this.hasUpdated) {
       if (this.renderRoot ?? (this.renderRoot = this.createRenderRoot()), this._$Ep) {
-        for (const [t8, s5] of this._$Ep) this[t8] = s5;
+        for (const [t7, s5] of this._$Ep) this[t7] = s5;
         this._$Ep = void 0;
       }
-      const t7 = this.constructor.elementProperties;
-      if (t7.size > 0) for (const [s5, i6] of t7) {
-        const { wrapped: t8 } = i6, e9 = this[s5];
-        true !== t8 || this._$AL.has(s5) || void 0 === e9 || this.C(s5, void 0, i6, e9);
+      const t6 = this.constructor.elementProperties;
+      if (t6.size > 0) for (const [s5, i6] of t6) {
+        const { wrapped: t7 } = i6, e6 = this[s5];
+        true !== t7 || this._$AL.has(s5) || void 0 === e6 || this.C(s5, void 0, i6, e6);
       }
     }
-    let t6 = false;
+    let t5 = false;
     const s4 = this._$AL;
     try {
-      t6 = this.shouldUpdate(s4), t6 ? (this.willUpdate(s4), this._$EO?.forEach((t7) => t7.hostUpdate?.()), this.update(s4)) : this._$EM();
+      t5 = this.shouldUpdate(s4), t5 ? (this.willUpdate(s4), this._$EO?.forEach((t6) => t6.hostUpdate?.()), this.update(s4)) : this._$EM();
     } catch (s5) {
-      throw t6 = false, this._$EM(), s5;
+      throw t5 = false, this._$EM(), s5;
     }
-    t6 && this._$AE(s4);
+    t5 && this._$AE(s4);
   }
-  willUpdate(t6) {
+  willUpdate(t5) {
   }
-  _$AE(t6) {
-    this._$EO?.forEach((t7) => t7.hostUpdated?.()), this.hasUpdated || (this.hasUpdated = true, this.firstUpdated(t6)), this.updated(t6);
+  _$AE(t5) {
+    this._$EO?.forEach((t6) => t6.hostUpdated?.()), this.hasUpdated || (this.hasUpdated = true, this.firstUpdated(t5)), this.updated(t5);
   }
   _$EM() {
     this._$AL = /* @__PURE__ */ new Map(), this.isUpdatePending = false;
@@ -271,95 +248,33 @@ var y = class extends HTMLElement {
   getUpdateComplete() {
     return this._$ES;
   }
-  shouldUpdate(t6) {
+  shouldUpdate(t5) {
     return true;
   }
-  update(t6) {
-    this._$Eq && (this._$Eq = this._$Eq.forEach((t7) => this._$ET(t7, this[t7]))), this._$EM();
+  update(t5) {
+    this._$Eq && (this._$Eq = this._$Eq.forEach((t6) => this._$ET(t6, this[t6]))), this._$EM();
   }
-  updated(t6) {
+  updated(t5) {
   }
-  firstUpdated(t6) {
+  firstUpdated(t5) {
   }
 };
 y.elementStyles = [], y.shadowRootOptions = { mode: "open" }, y[d("elementProperties")] = /* @__PURE__ */ new Map(), y[d("finalized")] = /* @__PURE__ */ new Map(), p?.({ ReactiveElement: y }), (a.reactiveElementVersions ?? (a.reactiveElementVersions = [])).push("2.1.2");
 
-// node_modules/@lit/reactive-element/decorators/property.js
-var o3 = { attribute: true, type: String, converter: u, reflect: false, hasChanged: f };
-var r3 = (t6 = o3, e9, r7) => {
-  const { kind: n5, metadata: i6 } = r7;
-  let s4 = globalThis.litPropertyMetadata.get(i6);
-  if (void 0 === s4 && globalThis.litPropertyMetadata.set(i6, s4 = /* @__PURE__ */ new Map()), "setter" === n5 && ((t6 = Object.create(t6)).wrapped = true), s4.set(r7.name, t6), "accessor" === n5) {
-    const { name: o8 } = r7;
-    return { set(r8) {
-      const n6 = e9.get.call(this);
-      e9.set.call(this, r8), this.requestUpdate(o8, n6, t6, true, r8);
-    }, init(e10) {
-      return void 0 !== e10 && this.C(o8, void 0, t6, e10), e10;
-    } };
-  }
-  if ("setter" === n5) {
-    const { name: o8 } = r7;
-    return function(r8) {
-      const n6 = this[o8];
-      e9.call(this, r8), this.requestUpdate(o8, n6, t6, true, r8);
-    };
-  }
-  throw Error("Unsupported decorator location: " + n5);
-};
-function n3(t6) {
-  return (e9, o8) => "object" == typeof o8 ? r3(t6, e9, o8) : ((t7, e10, o9) => {
-    const r7 = e10.hasOwnProperty(o9);
-    return e10.constructor.createProperty(o9, t7), r7 ? Object.getOwnPropertyDescriptor(e10, o9) : void 0;
-  })(t6, e9, o8);
-}
-
-// node_modules/@lit/reactive-element/decorators/state.js
-function r4(r7) {
-  return n3({ ...r7, state: true, attribute: false });
-}
-
-// node_modules/@lit/reactive-element/decorators/base.js
-var e3 = (e9, t6, c4) => (c4.configurable = true, c4.enumerable = true, Reflect.decorate && "object" != typeof t6 && Object.defineProperty(e9, t6, c4), c4);
-
-// node_modules/@lit/reactive-element/decorators/query.js
-function e4(e9, r7) {
-  return (n5, s4, i6) => {
-    const o8 = (t6) => t6.renderRoot?.querySelector(e9) ?? null;
-    if (r7) {
-      const { get: e10, set: r8 } = "object" == typeof s4 ? n5 : i6 ?? /* @__PURE__ */ (() => {
-        const t6 = /* @__PURE__ */ Symbol();
-        return { get() {
-          return this[t6];
-        }, set(e11) {
-          this[t6] = e11;
-        } };
-      })();
-      return e3(n5, s4, { get() {
-        let t6 = e10.call(this);
-        return void 0 === t6 && (t6 = o8(this), (null !== t6 || this.hasUpdated) && r8.call(this, t6)), t6;
-      } });
-    }
-    return e3(n5, s4, { get() {
-      return o8(this);
-    } });
-  };
-}
-
 // node_modules/lit-html/lit-html.js
-var t3 = globalThis;
-var i3 = (t6) => t6;
-var s2 = t3.trustedTypes;
-var e5 = s2 ? s2.createPolicy("lit-html", { createHTML: (t6) => t6 }) : void 0;
+var t2 = globalThis;
+var i3 = (t5) => t5;
+var s2 = t2.trustedTypes;
+var e3 = s2 ? s2.createPolicy("lit-html", { createHTML: (t5) => t5 }) : void 0;
 var h2 = "$lit$";
-var o4 = `lit$${Math.random().toFixed(9).slice(2)}$`;
-var n4 = "?" + o4;
-var r5 = `<${n4}>`;
+var o3 = `lit$${Math.random().toFixed(9).slice(2)}$`;
+var n3 = "?" + o3;
+var r3 = `<${n3}>`;
 var l2 = document;
 var c3 = () => l2.createComment("");
-var a2 = (t6) => null === t6 || "object" != typeof t6 && "function" != typeof t6;
+var a2 = (t5) => null === t5 || "object" != typeof t5 && "function" != typeof t5;
 var u2 = Array.isArray;
-var d2 = (t6) => u2(t6) || "function" == typeof t6?.[Symbol.iterator];
+var d2 = (t5) => u2(t5) || "function" == typeof t5?.[Symbol.iterator];
 var f2 = "[ 	\n\f\r]";
 var v = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g;
 var _ = /-->/g;
@@ -369,7 +284,7 @@ var p2 = RegExp(`>|${f2}(?:([^\\s"'>=/]+)(${f2}*=${f2}*(?:[^
 var g = /'/g;
 var $ = /"/g;
 var y2 = /^(?:script|style|textarea|title)$/i;
-var x = (t6) => (i6, ...s4) => ({ _$litType$: t6, strings: i6, values: s4 });
+var x = (t5) => (i6, ...s4) => ({ _$litType$: t5, strings: i6, values: s4 });
 var b2 = x(1);
 var w = x(2);
 var T = x(3);
@@ -377,68 +292,68 @@ var E = /* @__PURE__ */ Symbol.for("lit-noChange");
 var A = /* @__PURE__ */ Symbol.for("lit-nothing");
 var C = /* @__PURE__ */ new WeakMap();
 var P = l2.createTreeWalker(l2, 129);
-function V(t6, i6) {
-  if (!u2(t6) || !t6.hasOwnProperty("raw")) throw Error("invalid template strings array");
-  return void 0 !== e5 ? e5.createHTML(i6) : i6;
+function V(t5, i6) {
+  if (!u2(t5) || !t5.hasOwnProperty("raw")) throw Error("invalid template strings array");
+  return void 0 !== e3 ? e3.createHTML(i6) : i6;
 }
-var N = (t6, i6) => {
-  const s4 = t6.length - 1, e9 = [];
-  let n5, l6 = 2 === i6 ? "<svg>" : 3 === i6 ? "<math>" : "", c4 = v;
+var N = (t5, i6) => {
+  const s4 = t5.length - 1, e6 = [];
+  let n4, l6 = 2 === i6 ? "<svg>" : 3 === i6 ? "<math>" : "", c4 = v;
   for (let i7 = 0; i7 < s4; i7++) {
-    const s5 = t6[i7];
+    const s5 = t5[i7];
     let a3, u3, d4 = -1, f3 = 0;
-    for (; f3 < s5.length && (c4.lastIndex = f3, u3 = c4.exec(s5), null !== u3); ) f3 = c4.lastIndex, c4 === v ? "!--" === u3[1] ? c4 = _ : void 0 !== u3[1] ? c4 = m : void 0 !== u3[2] ? (y2.test(u3[2]) && (n5 = RegExp("</" + u3[2], "g")), c4 = p2) : void 0 !== u3[3] && (c4 = p2) : c4 === p2 ? ">" === u3[0] ? (c4 = n5 ?? v, d4 = -1) : void 0 === u3[1] ? d4 = -2 : (d4 = c4.lastIndex - u3[2].length, a3 = u3[1], c4 = void 0 === u3[3] ? p2 : '"' === u3[3] ? $ : g) : c4 === $ || c4 === g ? c4 = p2 : c4 === _ || c4 === m ? c4 = v : (c4 = p2, n5 = void 0);
-    const x3 = c4 === p2 && t6[i7 + 1].startsWith("/>") ? " " : "";
-    l6 += c4 === v ? s5 + r5 : d4 >= 0 ? (e9.push(a3), s5.slice(0, d4) + h2 + s5.slice(d4) + o4 + x3) : s5 + o4 + (-2 === d4 ? i7 : x3);
+    for (; f3 < s5.length && (c4.lastIndex = f3, u3 = c4.exec(s5), null !== u3); ) f3 = c4.lastIndex, c4 === v ? "!--" === u3[1] ? c4 = _ : void 0 !== u3[1] ? c4 = m : void 0 !== u3[2] ? (y2.test(u3[2]) && (n4 = RegExp("</" + u3[2], "g")), c4 = p2) : void 0 !== u3[3] && (c4 = p2) : c4 === p2 ? ">" === u3[0] ? (c4 = n4 ?? v, d4 = -1) : void 0 === u3[1] ? d4 = -2 : (d4 = c4.lastIndex - u3[2].length, a3 = u3[1], c4 = void 0 === u3[3] ? p2 : '"' === u3[3] ? $ : g) : c4 === $ || c4 === g ? c4 = p2 : c4 === _ || c4 === m ? c4 = v : (c4 = p2, n4 = void 0);
+    const x3 = c4 === p2 && t5[i7 + 1].startsWith("/>") ? " " : "";
+    l6 += c4 === v ? s5 + r3 : d4 >= 0 ? (e6.push(a3), s5.slice(0, d4) + h2 + s5.slice(d4) + o3 + x3) : s5 + o3 + (-2 === d4 ? i7 : x3);
   }
-  return [V(t6, l6 + (t6[s4] || "<?>") + (2 === i6 ? "</svg>" : 3 === i6 ? "</math>" : "")), e9];
+  return [V(t5, l6 + (t5[s4] || "<?>") + (2 === i6 ? "</svg>" : 3 === i6 ? "</math>" : "")), e6];
 };
 var S2 = class _S {
-  constructor({ strings: t6, _$litType$: i6 }, e9) {
-    let r7;
+  constructor({ strings: t5, _$litType$: i6 }, e6) {
+    let r5;
     this.parts = [];
     let l6 = 0, a3 = 0;
-    const u3 = t6.length - 1, d4 = this.parts, [f3, v3] = N(t6, i6);
-    if (this.el = _S.createElement(f3, e9), P.currentNode = this.el.content, 2 === i6 || 3 === i6) {
-      const t7 = this.el.content.firstChild;
-      t7.replaceWith(...t7.childNodes);
+    const u3 = t5.length - 1, d4 = this.parts, [f3, v3] = N(t5, i6);
+    if (this.el = _S.createElement(f3, e6), P.currentNode = this.el.content, 2 === i6 || 3 === i6) {
+      const t6 = this.el.content.firstChild;
+      t6.replaceWith(...t6.childNodes);
     }
-    for (; null !== (r7 = P.nextNode()) && d4.length < u3; ) {
-      if (1 === r7.nodeType) {
-        if (r7.hasAttributes()) for (const t7 of r7.getAttributeNames()) if (t7.endsWith(h2)) {
-          const i7 = v3[a3++], s4 = r7.getAttribute(t7).split(o4), e10 = /([.?@])?(.*)/.exec(i7);
-          d4.push({ type: 1, index: l6, name: e10[2], strings: s4, ctor: "." === e10[1] ? I : "?" === e10[1] ? L : "@" === e10[1] ? z : H }), r7.removeAttribute(t7);
-        } else t7.startsWith(o4) && (d4.push({ type: 6, index: l6 }), r7.removeAttribute(t7));
-        if (y2.test(r7.tagName)) {
-          const t7 = r7.textContent.split(o4), i7 = t7.length - 1;
+    for (; null !== (r5 = P.nextNode()) && d4.length < u3; ) {
+      if (1 === r5.nodeType) {
+        if (r5.hasAttributes()) for (const t6 of r5.getAttributeNames()) if (t6.endsWith(h2)) {
+          const i7 = v3[a3++], s4 = r5.getAttribute(t6).split(o3), e7 = /([.?@])?(.*)/.exec(i7);
+          d4.push({ type: 1, index: l6, name: e7[2], strings: s4, ctor: "." === e7[1] ? I : "?" === e7[1] ? L : "@" === e7[1] ? z : H }), r5.removeAttribute(t6);
+        } else t6.startsWith(o3) && (d4.push({ type: 6, index: l6 }), r5.removeAttribute(t6));
+        if (y2.test(r5.tagName)) {
+          const t6 = r5.textContent.split(o3), i7 = t6.length - 1;
           if (i7 > 0) {
-            r7.textContent = s2 ? s2.emptyScript : "";
-            for (let s4 = 0; s4 < i7; s4++) r7.append(t7[s4], c3()), P.nextNode(), d4.push({ type: 2, index: ++l6 });
-            r7.append(t7[i7], c3());
+            r5.textContent = s2 ? s2.emptyScript : "";
+            for (let s4 = 0; s4 < i7; s4++) r5.append(t6[s4], c3()), P.nextNode(), d4.push({ type: 2, index: ++l6 });
+            r5.append(t6[i7], c3());
           }
         }
-      } else if (8 === r7.nodeType) if (r7.data === n4) d4.push({ type: 2, index: l6 });
+      } else if (8 === r5.nodeType) if (r5.data === n3) d4.push({ type: 2, index: l6 });
       else {
-        let t7 = -1;
-        for (; -1 !== (t7 = r7.data.indexOf(o4, t7 + 1)); ) d4.push({ type: 7, index: l6 }), t7 += o4.length - 1;
+        let t6 = -1;
+        for (; -1 !== (t6 = r5.data.indexOf(o3, t6 + 1)); ) d4.push({ type: 7, index: l6 }), t6 += o3.length - 1;
       }
       l6++;
     }
   }
-  static createElement(t6, i6) {
+  static createElement(t5, i6) {
     const s4 = l2.createElement("template");
-    return s4.innerHTML = t6, s4;
+    return s4.innerHTML = t5, s4;
   }
 };
-function M(t6, i6, s4 = t6, e9) {
+function M(t5, i6, s4 = t5, e6) {
   if (i6 === E) return i6;
-  let h3 = void 0 !== e9 ? s4._$Co?.[e9] : s4._$Cl;
-  const o8 = a2(i6) ? void 0 : i6._$litDirective$;
-  return h3?.constructor !== o8 && (h3?._$AO?.(false), void 0 === o8 ? h3 = void 0 : (h3 = new o8(t6), h3._$AT(t6, s4, e9)), void 0 !== e9 ? (s4._$Co ?? (s4._$Co = []))[e9] = h3 : s4._$Cl = h3), void 0 !== h3 && (i6 = M(t6, h3._$AS(t6, i6.values), h3, e9)), i6;
+  let h3 = void 0 !== e6 ? s4._$Co?.[e6] : s4._$Cl;
+  const o6 = a2(i6) ? void 0 : i6._$litDirective$;
+  return h3?.constructor !== o6 && (h3?._$AO?.(false), void 0 === o6 ? h3 = void 0 : (h3 = new o6(t5), h3._$AT(t5, s4, e6)), void 0 !== e6 ? (s4._$Co ?? (s4._$Co = []))[e6] = h3 : s4._$Cl = h3), void 0 !== h3 && (i6 = M(t5, h3._$AS(t5, i6.values), h3, e6)), i6;
 }
 var R = class {
-  constructor(t6, i6) {
-    this._$AV = [], this._$AN = void 0, this._$AD = t6, this._$AM = i6;
+  constructor(t5, i6) {
+    this._$AV = [], this._$AN = void 0, this._$AD = t5, this._$AM = i6;
   }
   get parentNode() {
     return this._$AM.parentNode;
@@ -446,35 +361,35 @@ var R = class {
   get _$AU() {
     return this._$AM._$AU;
   }
-  u(t6) {
-    const { el: { content: i6 }, parts: s4 } = this._$AD, e9 = (t6?.creationScope ?? l2).importNode(i6, true);
-    P.currentNode = e9;
-    let h3 = P.nextNode(), o8 = 0, n5 = 0, r7 = s4[0];
-    for (; void 0 !== r7; ) {
-      if (o8 === r7.index) {
+  u(t5) {
+    const { el: { content: i6 }, parts: s4 } = this._$AD, e6 = (t5?.creationScope ?? l2).importNode(i6, true);
+    P.currentNode = e6;
+    let h3 = P.nextNode(), o6 = 0, n4 = 0, r5 = s4[0];
+    for (; void 0 !== r5; ) {
+      if (o6 === r5.index) {
         let i7;
-        2 === r7.type ? i7 = new k(h3, h3.nextSibling, this, t6) : 1 === r7.type ? i7 = new r7.ctor(h3, r7.name, r7.strings, this, t6) : 6 === r7.type && (i7 = new Z(h3, this, t6)), this._$AV.push(i7), r7 = s4[++n5];
+        2 === r5.type ? i7 = new k(h3, h3.nextSibling, this, t5) : 1 === r5.type ? i7 = new r5.ctor(h3, r5.name, r5.strings, this, t5) : 6 === r5.type && (i7 = new Z(h3, this, t5)), this._$AV.push(i7), r5 = s4[++n4];
       }
-      o8 !== r7?.index && (h3 = P.nextNode(), o8++);
+      o6 !== r5?.index && (h3 = P.nextNode(), o6++);
     }
-    return P.currentNode = l2, e9;
+    return P.currentNode = l2, e6;
   }
-  p(t6) {
+  p(t5) {
     let i6 = 0;
-    for (const s4 of this._$AV) void 0 !== s4 && (void 0 !== s4.strings ? (s4._$AI(t6, s4, i6), i6 += s4.strings.length - 2) : s4._$AI(t6[i6])), i6++;
+    for (const s4 of this._$AV) void 0 !== s4 && (void 0 !== s4.strings ? (s4._$AI(t5, s4, i6), i6 += s4.strings.length - 2) : s4._$AI(t5[i6])), i6++;
   }
 };
 var k = class _k {
   get _$AU() {
     return this._$AM?._$AU ?? this._$Cv;
   }
-  constructor(t6, i6, s4, e9) {
-    this.type = 2, this._$AH = A, this._$AN = void 0, this._$AA = t6, this._$AB = i6, this._$AM = s4, this.options = e9, this._$Cv = e9?.isConnected ?? true;
+  constructor(t5, i6, s4, e6) {
+    this.type = 2, this._$AH = A, this._$AN = void 0, this._$AA = t5, this._$AB = i6, this._$AM = s4, this.options = e6, this._$Cv = e6?.isConnected ?? true;
   }
   get parentNode() {
-    let t6 = this._$AA.parentNode;
+    let t5 = this._$AA.parentNode;
     const i6 = this._$AM;
-    return void 0 !== i6 && 11 === t6?.nodeType && (t6 = i6.parentNode), t6;
+    return void 0 !== i6 && 11 === t5?.nodeType && (t5 = i6.parentNode), t5;
   }
   get startNode() {
     return this._$AA;
@@ -482,45 +397,45 @@ var k = class _k {
   get endNode() {
     return this._$AB;
   }
-  _$AI(t6, i6 = this) {
-    t6 = M(this, t6, i6), a2(t6) ? t6 === A || null == t6 || "" === t6 ? (this._$AH !== A && this._$AR(), this._$AH = A) : t6 !== this._$AH && t6 !== E && this._(t6) : void 0 !== t6._$litType$ ? this.$(t6) : void 0 !== t6.nodeType ? this.T(t6) : d2(t6) ? this.k(t6) : this._(t6);
+  _$AI(t5, i6 = this) {
+    t5 = M(this, t5, i6), a2(t5) ? t5 === A || null == t5 || "" === t5 ? (this._$AH !== A && this._$AR(), this._$AH = A) : t5 !== this._$AH && t5 !== E && this._(t5) : void 0 !== t5._$litType$ ? this.$(t5) : void 0 !== t5.nodeType ? this.T(t5) : d2(t5) ? this.k(t5) : this._(t5);
   }
-  O(t6) {
-    return this._$AA.parentNode.insertBefore(t6, this._$AB);
+  O(t5) {
+    return this._$AA.parentNode.insertBefore(t5, this._$AB);
   }
-  T(t6) {
-    this._$AH !== t6 && (this._$AR(), this._$AH = this.O(t6));
+  T(t5) {
+    this._$AH !== t5 && (this._$AR(), this._$AH = this.O(t5));
   }
-  _(t6) {
-    this._$AH !== A && a2(this._$AH) ? this._$AA.nextSibling.data = t6 : this.T(l2.createTextNode(t6)), this._$AH = t6;
+  _(t5) {
+    this._$AH !== A && a2(this._$AH) ? this._$AA.nextSibling.data = t5 : this.T(l2.createTextNode(t5)), this._$AH = t5;
   }
-  $(t6) {
-    const { values: i6, _$litType$: s4 } = t6, e9 = "number" == typeof s4 ? this._$AC(t6) : (void 0 === s4.el && (s4.el = S2.createElement(V(s4.h, s4.h[0]), this.options)), s4);
-    if (this._$AH?._$AD === e9) this._$AH.p(i6);
+  $(t5) {
+    const { values: i6, _$litType$: s4 } = t5, e6 = "number" == typeof s4 ? this._$AC(t5) : (void 0 === s4.el && (s4.el = S2.createElement(V(s4.h, s4.h[0]), this.options)), s4);
+    if (this._$AH?._$AD === e6) this._$AH.p(i6);
     else {
-      const t7 = new R(e9, this), s5 = t7.u(this.options);
-      t7.p(i6), this.T(s5), this._$AH = t7;
+      const t6 = new R(e6, this), s5 = t6.u(this.options);
+      t6.p(i6), this.T(s5), this._$AH = t6;
     }
   }
-  _$AC(t6) {
-    let i6 = C.get(t6.strings);
-    return void 0 === i6 && C.set(t6.strings, i6 = new S2(t6)), i6;
+  _$AC(t5) {
+    let i6 = C.get(t5.strings);
+    return void 0 === i6 && C.set(t5.strings, i6 = new S2(t5)), i6;
   }
-  k(t6) {
+  k(t5) {
     u2(this._$AH) || (this._$AH = [], this._$AR());
     const i6 = this._$AH;
-    let s4, e9 = 0;
-    for (const h3 of t6) e9 === i6.length ? i6.push(s4 = new _k(this.O(c3()), this.O(c3()), this, this.options)) : s4 = i6[e9], s4._$AI(h3), e9++;
-    e9 < i6.length && (this._$AR(s4 && s4._$AB.nextSibling, e9), i6.length = e9);
+    let s4, e6 = 0;
+    for (const h3 of t5) e6 === i6.length ? i6.push(s4 = new _k(this.O(c3()), this.O(c3()), this, this.options)) : s4 = i6[e6], s4._$AI(h3), e6++;
+    e6 < i6.length && (this._$AR(s4 && s4._$AB.nextSibling, e6), i6.length = e6);
   }
-  _$AR(t6 = this._$AA.nextSibling, s4) {
-    for (this._$AP?.(false, true, s4); t6 !== this._$AB; ) {
-      const s5 = i3(t6).nextSibling;
-      i3(t6).remove(), t6 = s5;
+  _$AR(t5 = this._$AA.nextSibling, s4) {
+    for (this._$AP?.(false, true, s4); t5 !== this._$AB; ) {
+      const s5 = i3(t5).nextSibling;
+      i3(t5).remove(), t5 = s5;
     }
   }
-  setConnected(t6) {
-    void 0 === this._$AM && (this._$Cv = t6, this._$AP?.(t6));
+  setConnected(t5) {
+    void 0 === this._$AM && (this._$Cv = t5, this._$AP?.(t5));
   }
 };
 var H = class {
@@ -530,75 +445,75 @@ var H = class {
   get _$AU() {
     return this._$AM._$AU;
   }
-  constructor(t6, i6, s4, e9, h3) {
-    this.type = 1, this._$AH = A, this._$AN = void 0, this.element = t6, this.name = i6, this._$AM = e9, this.options = h3, s4.length > 2 || "" !== s4[0] || "" !== s4[1] ? (this._$AH = Array(s4.length - 1).fill(new String()), this.strings = s4) : this._$AH = A;
+  constructor(t5, i6, s4, e6, h3) {
+    this.type = 1, this._$AH = A, this._$AN = void 0, this.element = t5, this.name = i6, this._$AM = e6, this.options = h3, s4.length > 2 || "" !== s4[0] || "" !== s4[1] ? (this._$AH = Array(s4.length - 1).fill(new String()), this.strings = s4) : this._$AH = A;
   }
-  _$AI(t6, i6 = this, s4, e9) {
+  _$AI(t5, i6 = this, s4, e6) {
     const h3 = this.strings;
-    let o8 = false;
-    if (void 0 === h3) t6 = M(this, t6, i6, 0), o8 = !a2(t6) || t6 !== this._$AH && t6 !== E, o8 && (this._$AH = t6);
+    let o6 = false;
+    if (void 0 === h3) t5 = M(this, t5, i6, 0), o6 = !a2(t5) || t5 !== this._$AH && t5 !== E, o6 && (this._$AH = t5);
     else {
-      const e10 = t6;
-      let n5, r7;
-      for (t6 = h3[0], n5 = 0; n5 < h3.length - 1; n5++) r7 = M(this, e10[s4 + n5], i6, n5), r7 === E && (r7 = this._$AH[n5]), o8 || (o8 = !a2(r7) || r7 !== this._$AH[n5]), r7 === A ? t6 = A : t6 !== A && (t6 += (r7 ?? "") + h3[n5 + 1]), this._$AH[n5] = r7;
+      const e7 = t5;
+      let n4, r5;
+      for (t5 = h3[0], n4 = 0; n4 < h3.length - 1; n4++) r5 = M(this, e7[s4 + n4], i6, n4), r5 === E && (r5 = this._$AH[n4]), o6 || (o6 = !a2(r5) || r5 !== this._$AH[n4]), r5 === A ? t5 = A : t5 !== A && (t5 += (r5 ?? "") + h3[n4 + 1]), this._$AH[n4] = r5;
     }
-    o8 && !e9 && this.j(t6);
+    o6 && !e6 && this.j(t5);
   }
-  j(t6) {
-    t6 === A ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, t6 ?? "");
+  j(t5) {
+    t5 === A ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, t5 ?? "");
   }
 };
 var I = class extends H {
   constructor() {
     super(...arguments), this.type = 3;
   }
-  j(t6) {
-    this.element[this.name] = t6 === A ? void 0 : t6;
+  j(t5) {
+    this.element[this.name] = t5 === A ? void 0 : t5;
   }
 };
 var L = class extends H {
   constructor() {
     super(...arguments), this.type = 4;
   }
-  j(t6) {
-    this.element.toggleAttribute(this.name, !!t6 && t6 !== A);
+  j(t5) {
+    this.element.toggleAttribute(this.name, !!t5 && t5 !== A);
   }
 };
 var z = class extends H {
-  constructor(t6, i6, s4, e9, h3) {
-    super(t6, i6, s4, e9, h3), this.type = 5;
+  constructor(t5, i6, s4, e6, h3) {
+    super(t5, i6, s4, e6, h3), this.type = 5;
   }
-  _$AI(t6, i6 = this) {
-    if ((t6 = M(this, t6, i6, 0) ?? A) === E) return;
-    const s4 = this._$AH, e9 = t6 === A && s4 !== A || t6.capture !== s4.capture || t6.once !== s4.once || t6.passive !== s4.passive, h3 = t6 !== A && (s4 === A || e9);
-    e9 && this.element.removeEventListener(this.name, this, s4), h3 && this.element.addEventListener(this.name, this, t6), this._$AH = t6;
+  _$AI(t5, i6 = this) {
+    if ((t5 = M(this, t5, i6, 0) ?? A) === E) return;
+    const s4 = this._$AH, e6 = t5 === A && s4 !== A || t5.capture !== s4.capture || t5.once !== s4.once || t5.passive !== s4.passive, h3 = t5 !== A && (s4 === A || e6);
+    e6 && this.element.removeEventListener(this.name, this, s4), h3 && this.element.addEventListener(this.name, this, t5), this._$AH = t5;
   }
-  handleEvent(t6) {
-    "function" == typeof this._$AH ? this._$AH.call(this.options?.host ?? this.element, t6) : this._$AH.handleEvent(t6);
+  handleEvent(t5) {
+    "function" == typeof this._$AH ? this._$AH.call(this.options?.host ?? this.element, t5) : this._$AH.handleEvent(t5);
   }
 };
 var Z = class {
-  constructor(t6, i6, s4) {
-    this.element = t6, this.type = 6, this._$AN = void 0, this._$AM = i6, this.options = s4;
+  constructor(t5, i6, s4) {
+    this.element = t5, this.type = 6, this._$AN = void 0, this._$AM = i6, this.options = s4;
   }
   get _$AU() {
     return this._$AM._$AU;
   }
-  _$AI(t6) {
-    M(this, t6);
+  _$AI(t5) {
+    M(this, t5);
   }
 };
-var j = { M: h2, P: o4, A: n4, C: 1, L: N, R, D: d2, V: M, I: k, H, N: L, U: z, B: I, F: Z };
-var B = t3.litHtmlPolyfillSupport;
-B?.(S2, k), (t3.litHtmlVersions ?? (t3.litHtmlVersions = [])).push("3.3.2");
-var D = (t6, i6, s4) => {
-  const e9 = s4?.renderBefore ?? i6;
-  let h3 = e9._$litPart$;
+var j = { M: h2, P: o3, A: n3, C: 1, L: N, R, D: d2, V: M, I: k, H, N: L, U: z, B: I, F: Z };
+var B = t2.litHtmlPolyfillSupport;
+B?.(S2, k), (t2.litHtmlVersions ?? (t2.litHtmlVersions = [])).push("3.3.2");
+var D = (t5, i6, s4) => {
+  const e6 = s4?.renderBefore ?? i6;
+  let h3 = e6._$litPart$;
   if (void 0 === h3) {
-    const t7 = s4?.renderBefore ?? null;
-    e9._$litPart$ = h3 = new k(i6.insertBefore(c3(), t7), t7, void 0, s4 ?? {});
+    const t6 = s4?.renderBefore ?? null;
+    e6._$litPart$ = h3 = new k(i6.insertBefore(c3(), t6), t6, void 0, s4 ?? {});
   }
-  return h3._$AI(t6), h3;
+  return h3._$AI(t5), h3;
 };
 
 // node_modules/lit-element/lit-element.js
@@ -609,12 +524,12 @@ var i4 = class extends y {
   }
   createRenderRoot() {
     var _a2;
-    const t6 = super.createRenderRoot();
-    return (_a2 = this.renderOptions).renderBefore ?? (_a2.renderBefore = t6.firstChild), t6;
+    const t5 = super.createRenderRoot();
+    return (_a2 = this.renderOptions).renderBefore ?? (_a2.renderBefore = t5.firstChild), t5;
   }
-  update(t6) {
-    const r7 = this.render();
-    this.hasUpdated || (this.renderOptions.isConnected = this.isConnected), super.update(t6), this._$Do = D(r7, this.renderRoot, this.renderOptions);
+  update(t5) {
+    const r5 = this.render();
+    this.hasUpdated || (this.renderOptions.isConnected = this.isConnected), super.update(t5), this._$Do = D(r5, this.renderRoot, this.renderOptions);
   }
   connectedCallback() {
     super.connectedCallback(), this._$Do?.setConnected(true);
@@ -627,820 +542,15 @@ var i4 = class extends y {
   }
 };
 i4._$litElement$ = true, i4["finalized"] = true, s3.litElementHydrateSupport?.({ LitElement: i4 });
-var o5 = s3.litElementPolyfillSupport;
-o5?.({ LitElement: i4 });
+var o4 = s3.litElementPolyfillSupport;
+o4?.({ LitElement: i4 });
 (s3.litElementVersions ?? (s3.litElementVersions = [])).push("4.2.2");
-
-// node_modules/lit-html/is-server.js
-var o6 = false;
-
-// node_modules/@material/web/icon/internal/icon.js
-var Icon = class extends i4 {
-  render() {
-    return b2`<slot></slot>`;
-  }
-  connectedCallback() {
-    super.connectedCallback();
-    const ariaHidden = this.getAttribute("aria-hidden");
-    if (ariaHidden === "false") {
-      this.removeAttribute("aria-hidden");
-      return;
-    }
-    this.setAttribute("aria-hidden", "true");
-  }
-};
-
-// node_modules/@material/web/icon/internal/icon-styles.js
-var styles = i`:host{font-size:var(--md-icon-size, 24px);width:var(--md-icon-size, 24px);height:var(--md-icon-size, 24px);color:inherit;font-variation-settings:inherit;font-weight:400;font-family:var(--md-icon-font, Material Symbols Outlined);display:inline-flex;font-style:normal;place-items:center;place-content:center;line-height:1;overflow:hidden;letter-spacing:normal;text-transform:none;user-select:none;white-space:nowrap;word-wrap:normal;flex-shrink:0;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;-moz-osx-font-smoothing:grayscale}::slotted(svg){fill:currentColor}::slotted(*){height:100%;width:100%}
-`;
-
-// node_modules/@material/web/icon/icon.js
-var MdIcon = class MdIcon2 extends Icon {
-};
-MdIcon.styles = [styles];
-MdIcon = __decorate([
-  t("md-icon")
-], MdIcon);
-
-// node_modules/@material/web/divider/internal/divider.js
-var Divider = class extends i4 {
-  constructor() {
-    super(...arguments);
-    this.inset = false;
-    this.insetStart = false;
-    this.insetEnd = false;
-  }
-};
-__decorate([
-  n3({ type: Boolean, reflect: true })
-], Divider.prototype, "inset", void 0);
-__decorate([
-  n3({ type: Boolean, reflect: true, attribute: "inset-start" })
-], Divider.prototype, "insetStart", void 0);
-__decorate([
-  n3({ type: Boolean, reflect: true, attribute: "inset-end" })
-], Divider.prototype, "insetEnd", void 0);
-
-// node_modules/@material/web/divider/internal/divider-styles.js
-var styles2 = i`:host{box-sizing:border-box;color:var(--md-divider-color, var(--md-sys-color-outline-variant, #cac4d0));display:flex;height:var(--md-divider-thickness, 1px);width:100%}:host([inset]),:host([inset-start]){padding-inline-start:16px}:host([inset]),:host([inset-end]){padding-inline-end:16px}:host::before{background:currentColor;content:"";height:100%;width:100%}@media(forced-colors: active){:host::before{background:CanvasText}}
-`;
-
-// node_modules/@material/web/divider/divider.js
-var MdDivider = class MdDivider2 extends Divider {
-};
-MdDivider.styles = [styles2];
-MdDivider = __decorate([
-  t("md-divider")
-], MdDivider);
-
-// node_modules/lit-html/directive.js
-var t4 = { ATTRIBUTE: 1, CHILD: 2, PROPERTY: 3, BOOLEAN_ATTRIBUTE: 4, EVENT: 5, ELEMENT: 6 };
-var e6 = (t6) => (...e9) => ({ _$litDirective$: t6, values: e9 });
-var i5 = class {
-  constructor(t6) {
-  }
-  get _$AU() {
-    return this._$AM._$AU;
-  }
-  _$AT(t6, e9, i6) {
-    this._$Ct = t6, this._$AM = e9, this._$Ci = i6;
-  }
-  _$AS(t6, e9) {
-    return this.update(t6, e9);
-  }
-  update(t6, e9) {
-    return this.render(...e9);
-  }
-};
-
-// node_modules/lit-html/directives/class-map.js
-var e7 = e6(class extends i5 {
-  constructor(t6) {
-    if (super(t6), t6.type !== t4.ATTRIBUTE || "class" !== t6.name || t6.strings?.length > 2) throw Error("`classMap()` can only be used in the `class` attribute and must be the only part in the attribute.");
-  }
-  render(t6) {
-    return " " + Object.keys(t6).filter((s4) => t6[s4]).join(" ") + " ";
-  }
-  update(s4, [i6]) {
-    if (void 0 === this.st) {
-      this.st = /* @__PURE__ */ new Set(), void 0 !== s4.strings && (this.nt = new Set(s4.strings.join(" ").split(/\s/).filter((t6) => "" !== t6)));
-      for (const t6 in i6) i6[t6] && !this.nt?.has(t6) && this.st.add(t6);
-      return this.render(i6);
-    }
-    const r7 = s4.element.classList;
-    for (const t6 of this.st) t6 in i6 || (r7.remove(t6), this.st.delete(t6));
-    for (const t6 in i6) {
-      const s5 = !!i6[t6];
-      s5 === this.st.has(t6) || this.nt?.has(t6) || (s5 ? (r7.add(t6), this.st.add(t6)) : (r7.remove(t6), this.st.delete(t6)));
-    }
-    return E;
-  }
-});
-
-// node_modules/@material/web/internal/aria/aria.js
-var ARIA_PROPERTIES = [
-  "role",
-  "ariaAtomic",
-  "ariaAutoComplete",
-  "ariaBusy",
-  "ariaChecked",
-  "ariaColCount",
-  "ariaColIndex",
-  "ariaColSpan",
-  "ariaCurrent",
-  "ariaDisabled",
-  "ariaExpanded",
-  "ariaHasPopup",
-  "ariaHidden",
-  "ariaInvalid",
-  "ariaKeyShortcuts",
-  "ariaLabel",
-  "ariaLevel",
-  "ariaLive",
-  "ariaModal",
-  "ariaMultiLine",
-  "ariaMultiSelectable",
-  "ariaOrientation",
-  "ariaPlaceholder",
-  "ariaPosInSet",
-  "ariaPressed",
-  "ariaReadOnly",
-  "ariaRequired",
-  "ariaRoleDescription",
-  "ariaRowCount",
-  "ariaRowIndex",
-  "ariaRowSpan",
-  "ariaSelected",
-  "ariaSetSize",
-  "ariaSort",
-  "ariaValueMax",
-  "ariaValueMin",
-  "ariaValueNow",
-  "ariaValueText"
-];
-var ARIA_ATTRIBUTES = ARIA_PROPERTIES.map(ariaPropertyToAttribute);
-function isAriaAttribute(attribute) {
-  return ARIA_ATTRIBUTES.includes(attribute);
-}
-function ariaPropertyToAttribute(property) {
-  return property.replace("aria", "aria-").replace(/Elements?/g, "").toLowerCase();
-}
-
-// node_modules/@material/web/internal/aria/delegate.js
-var privateIgnoreAttributeChangesFor = /* @__PURE__ */ Symbol("privateIgnoreAttributeChangesFor");
-function mixinDelegatesAria(base) {
-  var _a2;
-  if (o6) {
-    return base;
-  }
-  class WithDelegatesAriaElement extends base {
-    constructor() {
-      super(...arguments);
-      this[_a2] = /* @__PURE__ */ new Set();
-    }
-    attributeChangedCallback(name, oldValue, newValue) {
-      if (!isAriaAttribute(name)) {
-        super.attributeChangedCallback(name, oldValue, newValue);
-        return;
-      }
-      if (this[privateIgnoreAttributeChangesFor].has(name)) {
-        return;
-      }
-      this[privateIgnoreAttributeChangesFor].add(name);
-      this.removeAttribute(name);
-      this[privateIgnoreAttributeChangesFor].delete(name);
-      const dataProperty = ariaAttributeToDataProperty(name);
-      if (newValue === null) {
-        delete this.dataset[dataProperty];
-      } else {
-        this.dataset[dataProperty] = newValue;
-      }
-      this.requestUpdate(ariaAttributeToDataProperty(name), oldValue);
-    }
-    getAttribute(name) {
-      if (isAriaAttribute(name)) {
-        return super.getAttribute(ariaAttributeToDataAttribute(name));
-      }
-      return super.getAttribute(name);
-    }
-    removeAttribute(name) {
-      super.removeAttribute(name);
-      if (isAriaAttribute(name)) {
-        super.removeAttribute(ariaAttributeToDataAttribute(name));
-        this.requestUpdate();
-      }
-    }
-  }
-  _a2 = privateIgnoreAttributeChangesFor;
-  setupDelegatesAriaProperties(WithDelegatesAriaElement);
-  return WithDelegatesAriaElement;
-}
-function setupDelegatesAriaProperties(ctor) {
-  for (const ariaProperty of ARIA_PROPERTIES) {
-    const ariaAttribute = ariaPropertyToAttribute(ariaProperty);
-    const dataAttribute = ariaAttributeToDataAttribute(ariaAttribute);
-    const dataProperty = ariaAttributeToDataProperty(ariaAttribute);
-    ctor.createProperty(ariaProperty, {
-      attribute: ariaAttribute,
-      noAccessor: true
-    });
-    ctor.createProperty(Symbol(dataAttribute), {
-      attribute: dataAttribute,
-      noAccessor: true
-    });
-    Object.defineProperty(ctor.prototype, ariaProperty, {
-      configurable: true,
-      enumerable: true,
-      get() {
-        return this.dataset[dataProperty] ?? null;
-      },
-      set(value) {
-        const prevValue = this.dataset[dataProperty] ?? null;
-        if (value === prevValue) {
-          return;
-        }
-        if (value === null) {
-          delete this.dataset[dataProperty];
-        } else {
-          this.dataset[dataProperty] = value;
-        }
-        this.requestUpdate(ariaProperty, prevValue);
-      }
-    });
-  }
-}
-function ariaAttributeToDataAttribute(ariaAttribute) {
-  return `data-${ariaAttribute}`;
-}
-function ariaAttributeToDataProperty(ariaAttribute) {
-  return ariaAttribute.replace(/-\w/, (dashLetter) => dashLetter[1].toUpperCase());
-}
-
-// node_modules/@material/web/internal/events/redispatch-event.js
-function redispatchEvent(element, event) {
-  if (event.bubbles && (!element.shadowRoot || event.composed)) {
-    event.stopPropagation();
-  }
-  const copy = Reflect.construct(event.constructor, [event.type, event]);
-  const dispatched = element.dispatchEvent(copy);
-  if (!dispatched) {
-    event.preventDefault();
-  }
-  return dispatched;
-}
-
-// node_modules/@material/web/internal/motion/animation.js
-var EASING = {
-  STANDARD: "cubic-bezier(0.2, 0, 0, 1)",
-  STANDARD_ACCELERATE: "cubic-bezier(.3,0,1,1)",
-  STANDARD_DECELERATE: "cubic-bezier(0,0,0,1)",
-  EMPHASIZED: "cubic-bezier(.3,0,0,1)",
-  EMPHASIZED_ACCELERATE: "cubic-bezier(.3,0,.8,.15)",
-  EMPHASIZED_DECELERATE: "cubic-bezier(.05,.7,.1,1)"
-};
-
-// node_modules/@material/web/dialog/internal/animations.js
-var DIALOG_DEFAULT_OPEN_ANIMATION = {
-  dialog: [
-    [
-      // Dialog slide down
-      [{ "transform": "translateY(-50px)" }, { "transform": "translateY(0)" }],
-      { duration: 500, easing: EASING.EMPHASIZED }
-    ]
-  ],
-  scrim: [
-    [
-      // Scrim fade in
-      [{ "opacity": 0 }, { "opacity": 0.32 }],
-      { duration: 500, easing: "linear" }
-    ]
-  ],
-  container: [
-    [
-      // Container fade in
-      [{ "opacity": 0 }, { "opacity": 1 }],
-      { duration: 50, easing: "linear", pseudoElement: "::before" }
-    ],
-    [
-      // Container grow
-      // Note: current spec says to grow from 0dp->100% and shrink from
-      // 100%->35%. We change this to 35%->100% to simplify the animation that
-      // is supposed to clip content as it grows. From 0dp it's possible to see
-      // text/actions appear before the container has fully grown.
-      [{ "height": "35%" }, { "height": "100%" }],
-      { duration: 500, easing: EASING.EMPHASIZED, pseudoElement: "::before" }
-    ]
-  ],
-  headline: [
-    [
-      // Headline fade in
-      [{ "opacity": 0 }, { "opacity": 0, offset: 0.2 }, { "opacity": 1 }],
-      { duration: 250, easing: "linear", fill: "forwards" }
-    ]
-  ],
-  content: [
-    [
-      // Content fade in
-      [{ "opacity": 0 }, { "opacity": 0, offset: 0.2 }, { "opacity": 1 }],
-      { duration: 250, easing: "linear", fill: "forwards" }
-    ]
-  ],
-  actions: [
-    [
-      // Actions fade in
-      [{ "opacity": 0 }, { "opacity": 0, offset: 0.5 }, { "opacity": 1 }],
-      { duration: 300, easing: "linear", fill: "forwards" }
-    ]
-  ]
-};
-var DIALOG_DEFAULT_CLOSE_ANIMATION = {
-  dialog: [
-    [
-      // Dialog slide up
-      [{ "transform": "translateY(0)" }, { "transform": "translateY(-50px)" }],
-      { duration: 150, easing: EASING.EMPHASIZED_ACCELERATE }
-    ]
-  ],
-  scrim: [
-    [
-      // Scrim fade out
-      [{ "opacity": 0.32 }, { "opacity": 0 }],
-      { duration: 150, easing: "linear" }
-    ]
-  ],
-  container: [
-    [
-      // Container shrink
-      [{ "height": "100%" }, { "height": "35%" }],
-      {
-        duration: 150,
-        easing: EASING.EMPHASIZED_ACCELERATE,
-        pseudoElement: "::before"
-      }
-    ],
-    [
-      // Container fade out
-      [{ "opacity": "1" }, { "opacity": "0" }],
-      { delay: 100, duration: 50, easing: "linear", pseudoElement: "::before" }
-    ]
-  ],
-  headline: [
-    [
-      // Headline fade out
-      [{ "opacity": 1 }, { "opacity": 0 }],
-      { duration: 100, easing: "linear", fill: "forwards" }
-    ]
-  ],
-  content: [
-    [
-      // Content fade out
-      [{ "opacity": 1 }, { "opacity": 0 }],
-      { duration: 100, easing: "linear", fill: "forwards" }
-    ]
-  ],
-  actions: [
-    [
-      // Actions fade out
-      [{ "opacity": 1 }, { "opacity": 0 }],
-      { duration: 100, easing: "linear", fill: "forwards" }
-    ]
-  ]
-};
-
-// node_modules/@material/web/dialog/internal/dialog.js
-var dialogBaseClass = mixinDelegatesAria(i4);
-var Dialog = class extends dialogBaseClass {
-  // We do not use `delegatesFocus: true` due to a Chromium bug with
-  // selecting text.
-  // See https://bugs.chromium.org/p/chromium/issues/detail?id=950357
-  /**
-   * Opens the dialog when set to `true` and closes it when set to `false`.
-   */
-  get open() {
-    return this.isOpen;
-  }
-  set open(open) {
-    if (open === this.isOpen) {
-      return;
-    }
-    this.isOpen = open;
-    if (open) {
-      this.setAttribute("open", "");
-      this.show();
-    } else {
-      this.removeAttribute("open");
-      this.close();
-    }
-  }
-  constructor() {
-    super();
-    this.quick = false;
-    this.returnValue = "";
-    this.noFocusTrap = false;
-    this.getOpenAnimation = () => DIALOG_DEFAULT_OPEN_ANIMATION;
-    this.getCloseAnimation = () => DIALOG_DEFAULT_CLOSE_ANIMATION;
-    this.isOpen = false;
-    this.isOpening = false;
-    this.isConnectedPromise = this.getIsConnectedPromise();
-    this.isAtScrollTop = false;
-    this.isAtScrollBottom = false;
-    this.nextClickIsFromContent = false;
-    this.hasHeadline = false;
-    this.hasActions = false;
-    this.hasIcon = false;
-    this.escapePressedWithoutCancel = false;
-    this.treewalker = o6 ? null : document.createTreeWalker(this, NodeFilter.SHOW_ELEMENT);
-    if (!o6) {
-      this.addEventListener("submit", this.handleSubmit);
-    }
-  }
-  /**
-   * Opens the dialog and fires a cancelable `open` event. After a dialog's
-   * animation, an `opened` event is fired.
-   *
-   * Add an `autofocus` attribute to a child of the dialog that should
-   * receive focus after opening.
-   *
-   * @return A Promise that resolves after the animation is finished and the
-   *     `opened` event was fired.
-   */
-  async show() {
-    this.isOpening = true;
-    await this.isConnectedPromise;
-    await this.updateComplete;
-    const dialog = this.dialog;
-    if (dialog.open || !this.isOpening) {
-      this.isOpening = false;
-      return;
-    }
-    const preventOpen = !this.dispatchEvent(new Event("open", { cancelable: true }));
-    if (preventOpen) {
-      this.open = false;
-      this.isOpening = false;
-      return;
-    }
-    dialog.showModal();
-    this.open = true;
-    if (this.scroller) {
-      this.scroller.scrollTop = 0;
-    }
-    this.querySelector("[autofocus]")?.focus();
-    await this.animateDialog(this.getOpenAnimation());
-    this.dispatchEvent(new Event("opened"));
-    this.isOpening = false;
-  }
-  /**
-   * Closes the dialog and fires a cancelable `close` event. After a dialog's
-   * animation, a `closed` event is fired.
-   *
-   * @param returnValue A return value usually indicating which button was used
-   *     to close a dialog. If a dialog is canceled by clicking the scrim or
-   *     pressing Escape, it will not change the return value after closing.
-   * @return A Promise that resolves after the animation is finished and the
-   *     `closed` event was fired.
-   */
-  async close(returnValue = this.returnValue) {
-    this.isOpening = false;
-    if (!this.isConnected) {
-      this.open = false;
-      return;
-    }
-    await this.updateComplete;
-    const dialog = this.dialog;
-    if (!dialog.open || this.isOpening) {
-      this.open = false;
-      return;
-    }
-    const prevReturnValue = this.returnValue;
-    this.returnValue = returnValue;
-    const preventClose = !this.dispatchEvent(new Event("close", { cancelable: true }));
-    if (preventClose) {
-      this.returnValue = prevReturnValue;
-      return;
-    }
-    await this.animateDialog(this.getCloseAnimation());
-    dialog.close(returnValue);
-    this.open = false;
-    this.dispatchEvent(new Event("closed"));
-  }
-  connectedCallback() {
-    super.connectedCallback();
-    this.isConnectedPromiseResolve();
-  }
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    this.isConnectedPromise = this.getIsConnectedPromise();
-  }
-  render() {
-    const scrollable = this.open && !(this.isAtScrollTop && this.isAtScrollBottom);
-    const classes = {
-      "has-headline": this.hasHeadline,
-      "has-actions": this.hasActions,
-      "has-icon": this.hasIcon,
-      "scrollable": scrollable,
-      "show-top-divider": scrollable && !this.isAtScrollTop,
-      "show-bottom-divider": scrollable && !this.isAtScrollBottom
-    };
-    const showFocusTrap = this.open && !this.noFocusTrap;
-    const focusTrap = b2`
-      <div
-        class="focus-trap"
-        tabindex="0"
-        aria-hidden="true"
-        @focus=${this.handleFocusTrapFocus}></div>
-    `;
-    const { ariaLabel } = this;
-    return b2`
-      <div class="scrim"></div>
-      <dialog
-        class=${e7(classes)}
-        aria-label=${ariaLabel || A}
-        aria-labelledby=${this.hasHeadline ? "headline" : A}
-        role=${this.type === "alert" ? "alertdialog" : A}
-        @cancel=${this.handleCancel}
-        @click=${this.handleDialogClick}
-        @close=${this.handleClose}
-        @keydown=${this.handleKeydown}
-        .returnValue=${this.returnValue || A}>
-        ${showFocusTrap ? focusTrap : A}
-        <div class="container" @click=${this.handleContentClick}>
-          <div class="headline">
-            <div class="icon" aria-hidden="true">
-              <slot name="icon" @slotchange=${this.handleIconChange}></slot>
-            </div>
-            <h2 id="headline" aria-hidden=${!this.hasHeadline || A}>
-              <slot
-                name="headline"
-                @slotchange=${this.handleHeadlineChange}></slot>
-            </h2>
-            <md-divider></md-divider>
-          </div>
-          <div class="scroller">
-            <div class="content">
-              <div class="top anchor"></div>
-              <slot name="content"></slot>
-              <div class="bottom anchor"></div>
-            </div>
-          </div>
-          <div class="actions">
-            <md-divider></md-divider>
-            <slot name="actions" @slotchange=${this.handleActionsChange}></slot>
-          </div>
-        </div>
-        ${showFocusTrap ? focusTrap : A}
-      </dialog>
-    `;
-  }
-  firstUpdated() {
-    this.intersectionObserver = new IntersectionObserver((entries) => {
-      for (const entry of entries) {
-        this.handleAnchorIntersection(entry);
-      }
-    }, { root: this.scroller });
-    this.intersectionObserver.observe(this.topAnchor);
-    this.intersectionObserver.observe(this.bottomAnchor);
-  }
-  handleDialogClick() {
-    if (this.nextClickIsFromContent) {
-      this.nextClickIsFromContent = false;
-      return;
-    }
-    const preventDefault = !this.dispatchEvent(new Event("cancel", { cancelable: true }));
-    if (preventDefault) {
-      return;
-    }
-    this.close();
-  }
-  handleContentClick() {
-    this.nextClickIsFromContent = true;
-  }
-  handleSubmit(event) {
-    const form = event.target;
-    const { submitter } = event;
-    if (form.getAttribute("method") !== "dialog" || !submitter) {
-      return;
-    }
-    this.close(submitter.getAttribute("value") ?? this.returnValue);
-  }
-  handleCancel(event) {
-    if (event.target !== this.dialog) {
-      return;
-    }
-    this.escapePressedWithoutCancel = false;
-    const preventDefault = !redispatchEvent(this, event);
-    event.preventDefault();
-    if (preventDefault) {
-      return;
-    }
-    this.close();
-  }
-  handleClose() {
-    if (!this.escapePressedWithoutCancel) {
-      return;
-    }
-    this.escapePressedWithoutCancel = false;
-    this.dialog?.dispatchEvent(new Event("cancel", { cancelable: true }));
-  }
-  handleKeydown(event) {
-    if (event.key !== "Escape") {
-      return;
-    }
-    this.escapePressedWithoutCancel = true;
-    setTimeout(() => {
-      this.escapePressedWithoutCancel = false;
-    });
-  }
-  async animateDialog(animation) {
-    this.cancelAnimations?.abort();
-    this.cancelAnimations = new AbortController();
-    if (this.quick) {
-      return;
-    }
-    const { dialog, scrim, container, headline, content, actions } = this;
-    if (!dialog || !scrim || !container || !headline || !content || !actions) {
-      return;
-    }
-    const { container: containerAnimate, dialog: dialogAnimate, scrim: scrimAnimate, headline: headlineAnimate, content: contentAnimate, actions: actionsAnimate } = animation;
-    const elementAndAnimation = [
-      [dialog, dialogAnimate ?? []],
-      [scrim, scrimAnimate ?? []],
-      [container, containerAnimate ?? []],
-      [headline, headlineAnimate ?? []],
-      [content, contentAnimate ?? []],
-      [actions, actionsAnimate ?? []]
-    ];
-    const animations = [];
-    for (const [element, animation2] of elementAndAnimation) {
-      for (const animateArgs of animation2) {
-        const animation3 = element.animate(...animateArgs);
-        this.cancelAnimations.signal.addEventListener("abort", () => {
-          animation3.cancel();
-        });
-        animations.push(animation3);
-      }
-    }
-    await Promise.all(animations.map((animation2) => animation2.finished.catch(() => {
-    })));
-  }
-  handleHeadlineChange(event) {
-    const slot = event.target;
-    this.hasHeadline = slot.assignedElements().length > 0;
-  }
-  handleActionsChange(event) {
-    const slot = event.target;
-    this.hasActions = slot.assignedElements().length > 0;
-  }
-  handleIconChange(event) {
-    const slot = event.target;
-    this.hasIcon = slot.assignedElements().length > 0;
-  }
-  handleAnchorIntersection(entry) {
-    const { target, isIntersecting } = entry;
-    if (target === this.topAnchor) {
-      this.isAtScrollTop = isIntersecting;
-    }
-    if (target === this.bottomAnchor) {
-      this.isAtScrollBottom = isIntersecting;
-    }
-  }
-  getIsConnectedPromise() {
-    return new Promise((resolve) => {
-      this.isConnectedPromiseResolve = resolve;
-    });
-  }
-  handleFocusTrapFocus(event) {
-    const [firstFocusableChild, lastFocusableChild] = this.getFirstAndLastFocusableChildren();
-    if (!firstFocusableChild || !lastFocusableChild) {
-      this.dialog?.focus();
-      return;
-    }
-    const isFirstFocusTrap = event.target === this.firstFocusTrap;
-    const isLastFocusTrap = !isFirstFocusTrap;
-    const focusCameFromFirstChild = event.relatedTarget === firstFocusableChild;
-    const focusCameFromLastChild = event.relatedTarget === lastFocusableChild;
-    const focusCameFromOutsideDialog = !focusCameFromFirstChild && !focusCameFromLastChild;
-    const shouldFocusFirstChild = isLastFocusTrap && focusCameFromLastChild || isFirstFocusTrap && focusCameFromOutsideDialog;
-    if (shouldFocusFirstChild) {
-      firstFocusableChild.focus();
-      return;
-    }
-    const shouldFocusLastChild = isFirstFocusTrap && focusCameFromFirstChild || isLastFocusTrap && focusCameFromOutsideDialog;
-    if (shouldFocusLastChild) {
-      lastFocusableChild.focus();
-      return;
-    }
-  }
-  getFirstAndLastFocusableChildren() {
-    if (!this.treewalker) {
-      return [null, null];
-    }
-    let firstFocusableChild = null;
-    let lastFocusableChild = null;
-    this.treewalker.currentNode = this.treewalker.root;
-    while (this.treewalker.nextNode()) {
-      const nextChild = this.treewalker.currentNode;
-      if (!isFocusable(nextChild)) {
-        continue;
-      }
-      if (!firstFocusableChild) {
-        firstFocusableChild = nextChild;
-      }
-      lastFocusableChild = nextChild;
-    }
-    return [firstFocusableChild, lastFocusableChild];
-  }
-};
-__decorate([
-  n3({ type: Boolean })
-], Dialog.prototype, "open", null);
-__decorate([
-  n3({ type: Boolean })
-], Dialog.prototype, "quick", void 0);
-__decorate([
-  n3({ attribute: false })
-], Dialog.prototype, "returnValue", void 0);
-__decorate([
-  n3()
-], Dialog.prototype, "type", void 0);
-__decorate([
-  n3({ type: Boolean, attribute: "no-focus-trap" })
-], Dialog.prototype, "noFocusTrap", void 0);
-__decorate([
-  e4("dialog")
-], Dialog.prototype, "dialog", void 0);
-__decorate([
-  e4(".scrim")
-], Dialog.prototype, "scrim", void 0);
-__decorate([
-  e4(".container")
-], Dialog.prototype, "container", void 0);
-__decorate([
-  e4(".headline")
-], Dialog.prototype, "headline", void 0);
-__decorate([
-  e4(".content")
-], Dialog.prototype, "content", void 0);
-__decorate([
-  e4(".actions")
-], Dialog.prototype, "actions", void 0);
-__decorate([
-  r4()
-], Dialog.prototype, "isAtScrollTop", void 0);
-__decorate([
-  r4()
-], Dialog.prototype, "isAtScrollBottom", void 0);
-__decorate([
-  e4(".scroller")
-], Dialog.prototype, "scroller", void 0);
-__decorate([
-  e4(".top.anchor")
-], Dialog.prototype, "topAnchor", void 0);
-__decorate([
-  e4(".bottom.anchor")
-], Dialog.prototype, "bottomAnchor", void 0);
-__decorate([
-  e4(".focus-trap")
-], Dialog.prototype, "firstFocusTrap", void 0);
-__decorate([
-  r4()
-], Dialog.prototype, "hasHeadline", void 0);
-__decorate([
-  r4()
-], Dialog.prototype, "hasActions", void 0);
-__decorate([
-  r4()
-], Dialog.prototype, "hasIcon", void 0);
-function isFocusable(element) {
-  const knownFocusableElements = ":is(button,input,select,textarea,object,:is(a,area)[href],[tabindex],[contenteditable=true])";
-  const notDisabled = ":not(:disabled,[disabled])";
-  const notNegativeTabIndex = ':not([tabindex^="-"])';
-  if (element.matches(knownFocusableElements + notDisabled + notNegativeTabIndex)) {
-    return true;
-  }
-  const isCustomElement = element.localName.includes("-");
-  if (!isCustomElement) {
-    return false;
-  }
-  if (!element.matches(notDisabled)) {
-    return false;
-  }
-  return element.shadowRoot?.delegatesFocus ?? false;
-}
-
-// node_modules/@material/web/dialog/internal/dialog-styles.js
-var styles3 = i`:host{border-start-start-radius:var(--md-dialog-container-shape-start-start, var(--md-dialog-container-shape, var(--md-sys-shape-corner-extra-large, 28px)));border-start-end-radius:var(--md-dialog-container-shape-start-end, var(--md-dialog-container-shape, var(--md-sys-shape-corner-extra-large, 28px)));border-end-end-radius:var(--md-dialog-container-shape-end-end, var(--md-dialog-container-shape, var(--md-sys-shape-corner-extra-large, 28px)));border-end-start-radius:var(--md-dialog-container-shape-end-start, var(--md-dialog-container-shape, var(--md-sys-shape-corner-extra-large, 28px)));display:contents;margin:auto;max-height:min(560px,100% - 48px);max-width:min(560px,100% - 48px);min-height:140px;min-width:280px;position:fixed;height:fit-content;width:fit-content}dialog{background:rgba(0,0,0,0);border:none;border-radius:inherit;flex-direction:column;height:inherit;margin:inherit;max-height:inherit;max-width:inherit;min-height:inherit;min-width:inherit;outline:none;overflow:visible;padding:0;width:inherit}dialog[open]{display:flex}::backdrop{background:none}.scrim{background:var(--md-sys-color-scrim, #000);display:none;inset:0;opacity:32%;pointer-events:none;position:fixed;z-index:1}:host([open]) .scrim{display:flex}h2{all:unset;align-self:stretch}.headline{align-items:center;color:var(--md-dialog-headline-color, var(--md-sys-color-on-surface, #1d1b20));display:flex;flex-direction:column;font-family:var(--md-dialog-headline-font, var(--md-sys-typescale-headline-small-font, var(--md-ref-typeface-brand, Roboto)));font-size:var(--md-dialog-headline-size, var(--md-sys-typescale-headline-small-size, 1.5rem));line-height:var(--md-dialog-headline-line-height, var(--md-sys-typescale-headline-small-line-height, 2rem));font-weight:var(--md-dialog-headline-weight, var(--md-sys-typescale-headline-small-weight, var(--md-ref-typeface-weight-regular, 400)));position:relative}slot[name=headline]::slotted(*){align-items:center;align-self:stretch;box-sizing:border-box;display:flex;gap:8px;padding:24px 24px 0}.icon{display:flex}slot[name=icon]::slotted(*){color:var(--md-dialog-icon-color, var(--md-sys-color-secondary, #625b71));fill:currentColor;font-size:var(--md-dialog-icon-size, 24px);margin-top:24px;height:var(--md-dialog-icon-size, 24px);width:var(--md-dialog-icon-size, 24px)}.has-icon slot[name=headline]::slotted(*){justify-content:center;padding-top:16px}.scrollable slot[name=headline]::slotted(*){padding-bottom:16px}.scrollable.has-headline slot[name=content]::slotted(*){padding-top:8px}.container{border-radius:inherit;display:flex;flex-direction:column;flex-grow:1;overflow:hidden;position:relative;transform-origin:top}.container::before{background:var(--md-dialog-container-color, var(--md-sys-color-surface-container-high, #ece6f0));border-radius:inherit;content:"";inset:0;position:absolute}.scroller{display:flex;flex:1;flex-direction:column;overflow:hidden;z-index:1}.scrollable .scroller{overflow-y:scroll}.content{color:var(--md-dialog-supporting-text-color, var(--md-sys-color-on-surface-variant, #49454f));font-family:var(--md-dialog-supporting-text-font, var(--md-sys-typescale-body-medium-font, var(--md-ref-typeface-plain, Roboto)));font-size:var(--md-dialog-supporting-text-size, var(--md-sys-typescale-body-medium-size, 0.875rem));line-height:var(--md-dialog-supporting-text-line-height, var(--md-sys-typescale-body-medium-line-height, 1.25rem));flex:1;font-weight:var(--md-dialog-supporting-text-weight, var(--md-sys-typescale-body-medium-weight, var(--md-ref-typeface-weight-regular, 400)));height:min-content;position:relative}slot[name=content]::slotted(*){box-sizing:border-box;padding:24px}.anchor{position:absolute}.top.anchor{top:0}.bottom.anchor{bottom:0}.actions{position:relative}slot[name=actions]::slotted(*){box-sizing:border-box;display:flex;gap:8px;justify-content:flex-end;padding:16px 24px 24px}.has-actions slot[name=content]::slotted(*){padding-bottom:8px}md-divider{display:none;position:absolute}.has-headline.show-top-divider .headline md-divider,.has-actions.show-bottom-divider .actions md-divider{display:flex}.headline md-divider{bottom:0}.actions md-divider{top:0}@media(forced-colors: active){dialog{outline:2px solid WindowText}}
-`;
-
-// node_modules/@material/web/dialog/dialog.js
-var MdDialog = class MdDialog2 extends Dialog {
-};
-MdDialog.styles = [styles3];
-MdDialog = __decorate([
-  t("md-dialog")
-], MdDialog);
 
 // components/ui/wy-button.js
 var WyButton = class extends i4 {
+  createRenderRoot() {
+    return this;
+  }
   constructor() {
     super();
     this.variant = "primary";
@@ -1448,6 +558,16 @@ var WyButton = class extends i4 {
     this.iconPosition = "trailing";
     this.disabled = false;
     this.fullWidth = false;
+    this.label = "";
+    this._capturedLabel = false;
+  }
+  connectedCallback() {
+    if (!this._capturedLabel && !this.label) {
+      this.label = this.textContent.trim();
+      this._capturedLabel = true;
+    }
+    Array.from(this.childNodes).forEach((node) => node.remove());
+    super.connectedCallback();
   }
   render() {
     const classes = [
@@ -1459,20 +579,19 @@ var WyButton = class extends i4 {
     return b2`
       <button 
         class="${classes}" 
-        part="button"
         ?disabled="${this.disabled}"
         @click="${this._handleClick}"
       >
         ${this.iconPosition === "leading" ? iconElement : null}
-        <span class="label"><slot></slot></span>
+        <span class="label">${this.label}</span>
         ${this.iconPosition === "trailing" ? iconElement : null}
       </button>
     `;
   }
-  _handleClick(e9) {
+  _handleClick(e6) {
     if (this.disabled) {
-      e9.preventDefault();
-      e9.stopPropagation();
+      e6.preventDefault();
+      e6.stopPropagation();
     }
   }
 };
@@ -1482,245 +601,16 @@ __publicField(WyButton, "properties", {
   icon: { type: String },
   iconPosition: { type: String, attribute: "icon-position" },
   disabled: { type: Boolean, reflect: true },
-  fullWidth: { type: Boolean, attribute: "full-width" }
+  fullWidth: { type: Boolean, attribute: "full-width" },
+  label: { type: String }
 });
-__publicField(WyButton, "styles", i`
-    /* Fonts are loaded globally via HTML link tags - no @import needed in Shadow DOM */
-
-    :host {
-      display: inline-block;
-    }
-
-    :host([full-width]) {
-      display: block;
-      width: 100%;
-    }
-
-    :host([full-width]) .button {
-      width: 100%;
-      justify-content: center;
-    }
-
-    :host([disabled]) {
-      pointer-events: none;
-    }
-
-    .button {
-      position: relative;
-      overflow: hidden;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: var(--spacing-sm);
-      border: none;
-      cursor: pointer;
-      text-decoration: none;
-      font-family: var(--font-sans);
-      font-weight: var(--wy-button-font-weight, 500);
-      border-radius: var(--wy-button-radius, var(--radius-pill, 999px));
-      transition: 
-        transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
-        box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
-        background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
-    }
-
-    /* State layer for hover/focus/pressed */
-    .button::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      transition: opacity var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
-      pointer-events: none;
-      border-radius: inherit;
-    }
-
-    /* Focus visible outline */
-    .button:focus-visible {
-      outline: 3px solid var(--md-sys-color-primary);
-      outline-offset: 2px;
-    }
-
-    /* ===== SIZE VARIANTS ===== */
-    
-    /* Large: 56px height */
-    .button.size-large {
-      height: 56px;
-      padding: 16px 40px;
-      font-size: 1rem;
-    }
-
-    .button.size-large .icon {
-      font-size: 18px;
-    }
-
-    /* Medium: 44px height (default) */
-    .button.size-medium {
-      height: 44px;
-      padding: 10px 32px;
-      font-size: 0.875rem;
-    }
-
-    .button.size-medium .icon {
-      font-size: 16px;
-    }
-
-    /* Small: 32px height */
-    .button.size-small {
-      height: 32px;
-      padding: 6px 20px;
-      font-size: 0.75rem;
-    }
-
-    .button.size-small .icon {
-      font-size: 14px;
-    }
-
-    /* ===== PRIMARY VARIANT (Filled Hunter Green) ===== */
-    .button.variant-primary {
-      background-color: var(--wy-button-primary-bg);
-      color: var(--wy-button-primary-fg);
-    }
-
-    .button.variant-primary::before {
-      background-color: var(--wy-button-primary-fg);
-    }
-
-    .button.variant-primary:hover:not(:disabled) {
-      background-color: var(--wy-button-primary-hover-bg);
-      box-shadow: var(--wy-button-primary-shadow-hover);
-      
-    }
-
-    .button.variant-primary:hover:not(:disabled)::before {
-      opacity: var(--md-sys-state-hover-opacity);
-    }
-
-    .button.variant-primary:active:not(:disabled) {
-      transform: translateY(0);
-    }
-
-    .button.variant-primary:active:not(:disabled)::before {
-      opacity: var(--md-sys-state-pressed-opacity);
-    }
-
-    /* ===== SECONDARY VARIANT (Tonal - Warm Clay / Serif) ===== */
-    .button.variant-secondary {
-      background-color: var(--wy-button-secondary-bg);
-      color: var(--wy-button-secondary-fg);
-      /* font-family: var(--font-serif); Removed in favor of sans-serif */
-    }
-
-    .button.variant-secondary::before {
-      background-color: var(--md-sys-color-primary);
-    }
-
-    .button.variant-secondary:hover:not(:disabled) {
-      background-color: var(--wy-button-secondary-hover-bg);
-    }
-
-    .button.variant-secondary:hover:not(:disabled)::before {
-      opacity: var(--md-sys-state-hover-opacity);
-    }
-
-    .button.variant-secondary:active:not(:disabled)::before {
-      opacity: var(--md-sys-state-pressed-opacity);
-    }
-
-    /* ===== OUTLINED VARIANT (Editorial) ===== */
-    .button.variant-outlined {
-      background-color: var(--wy-button-outlined-bg);
-      color: var(--wy-button-outlined-fg);
-      border: 1px solid var(--wy-button-outlined-border);
-      /* font-family: var(--font-serif); Removed in favor of sans-serif */
-    }
-
-    .button.variant-outlined::before {
-      background-color: var(--wy-button-secondary-bg);
-    }
-
-    .button.variant-outlined:hover:not(:disabled) {
-      background-color: var(--wy-button-outlined-hover-bg);
-    }
-
-    .button.variant-outlined:hover:not(:disabled)::before {
-      opacity: 0.3;
-    }
-
-    .button.variant-outlined:active:not(:disabled)::before {
-      opacity: 0.5;
-    }
-
-    /* ===== TEXT VARIANT (Utility - ALL CAPS) ===== */
-    .button.variant-text {
-      background-color: transparent;
-      color: var(--wy-button-text-fg);
-      text-transform: uppercase;
-      letter-spacing: var(--wy-button-tracking-architectural);
-      font-weight: 700;
-      font-size: 0.75rem;
-    }
-
-    .button.variant-text::before {
-      background-color: var(--md-sys-color-primary);
-    }
-
-    .button.variant-text.muted {
-      color: var(--wy-button-text-fg-muted);
-    }
-
-    .button.variant-text:hover:not(:disabled) {
-      background-color: var(--wy-button-text-hover-bg);
-      color: var(--wy-button-text-fg);
-    }
-
-    .button.variant-text:hover:not(:disabled)::before {
-      opacity: 0;
-    }
-
-    /* Text variant with leading indicator dot */
-    .button.variant-text .indicator-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background-color: color-mix(in srgb, currentColor 30%, transparent);
-    }
-
-    /* ===== DISABLED STATE ===== */
-    .button:disabled {
-      opacity: var(--md-sys-state-disabled-opacity);
-      cursor: not-allowed;
-      box-shadow: none;
-      transform: none;
-    }
-
-    /* ===== ICON STYLING ===== */
-    .icon {
-      font-family: 'Material Symbols Outlined';
-      font-weight: normal;
-      font-style: normal;
-      line-height: 1;
-      letter-spacing: normal;
-      text-transform: none;
-      display: inline-block;
-      white-space: nowrap;
-      word-wrap: normal;
-      direction: ltr;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      text-rendering: optimizeLegibility;
-      font-feature-settings: 'liga';
-    }
-
-    /* Content wrapper for proper ordering */
-    .content {
-      display: contents;
-    }
-  `);
 customElements.define("wy-button", WyButton);
 
 // components/ui/wy-filter-chip.js
 var WyFilterChip = class extends i4 {
+  createRenderRoot() {
+    return this;
+  }
   render() {
     return b2`
       <span>${this.label}</span>
@@ -1737,9 +627,9 @@ var WyFilterChip = class extends i4 {
     super.disconnectedCallback();
     this.removeEventListener("keydown", this._handleKeydown);
   }
-  _handleKeydown(e9) {
-    if (e9.key === "Enter" || e9.key === " ") {
-      e9.preventDefault();
+  _handleKeydown(e6) {
+    if (e6.key === "Enter" || e6.key === " ") {
+      e6.preventDefault();
       this.click();
     }
   }
@@ -1750,74 +640,13 @@ __publicField(WyFilterChip, "properties", {
   count: { type: Number },
   variant: { type: String, reflect: true }
 });
-__publicField(WyFilterChip, "styles", i`
-    :host {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: var(--wy-filter-chip-padding, 5px 13px);
-      min-height: var(--wy-filter-chip-min-height, 28px);
-      box-sizing: border-box;
-      border-radius: var(--wy-filter-chip-radius, var(--radius-pill, 999px));
-      font-family: var(--wy-filter-chip-font-family, var(--font-sans, 'Inter', sans-serif));
-      font-size: var(--wy-filter-chip-font-size, 11px);
-      font-weight: var(--wy-filter-chip-font-weight, 500);
-      cursor: pointer;
-      transition:
-        background-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard),
-        color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard),
-        transform var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard);
-      
-      /* Opaque background by default; overridden by variant */
-      background-color: var(--wy-filter-chip-bg, var(--md-sys-color-surface));
-      border: 0;
-      color: var(--wy-filter-chip-text, var(--md-sys-color-on-surface));
-      box-shadow: none;
-      
-      user-select: none;
-      white-space: nowrap;
-      flex-shrink: 0;
-      position: relative;
-      overflow: hidden;
-    }
-
-    :host(:hover:not([active])) {
-      background-color: var(--wy-filter-chip-hover-bg, color-mix(in srgb, var(--wy-button-primary-bg, var(--md-sys-color-primary)) 15%, transparent));
-    }
-
-    :host(:focus-visible) {
-      outline: 2px solid var(--wy-filter-chip-focus, var(--md-sys-color-primary, #282828));
-      outline-offset: 2px;
-    }
-
-    :host([active]) {
-      background-color: var(--wy-filter-chip-active-bg, var(--md-sys-color-primary, #282828));
-      color: var(--wy-filter-chip-active-fg, var(--md-sys-color-on-primary, #FFFFFF));
-      border-color: transparent;
-      font-weight: var(--wy-filter-chip-font-weight-active, 500);
-      box-shadow: none;
-    }
-
-    /* Soft variant: no border, Surface Variant background */
-    :host([variant="soft"]) {
-      background-color: var(--wy-filter-chip-soft-bg, var(--md-sys-color-surface-variant));
-      border: none;
-      border-width: 0;
-    }
-
-    .count {
-      opacity: 0.7;
-      font-size: 10px;
-    }
-
-    :host([active]) .count {
-      opacity: 0.85;
-    }
-  `);
 customElements.define("wy-filter-chip", WyFilterChip);
 
 // components/ui/wy-controls-bar.js
 var WyControlsBar = class extends i4 {
+  createRenderRoot() {
+    return this;
+  }
   constructor() {
     super();
     this.viewMode = "grid";
@@ -1862,7 +691,7 @@ var WyControlsBar = class extends i4 {
     this._removeScrollListener();
   }
   _bindChipsTrackScroll() {
-    const track = this.shadowRoot?.querySelector(".chips-track");
+    const track = this.querySelector(".chips-track");
     if (!track || this._boundChipsTrack === track) return;
     this._boundChipsTrack = track;
     track.addEventListener("scroll", () => {
@@ -2012,7 +841,7 @@ var WyControlsBar = class extends i4 {
       if (this._mobileSearchOpen) {
         this.setAttribute("data-mobile-search", "");
         setTimeout(() => {
-          this.shadowRoot?.querySelector(".search-input")?.focus();
+          this.querySelector(".search-input")?.focus();
         }, 260);
       } else {
         this.removeAttribute("data-mobile-search");
@@ -2025,7 +854,7 @@ var WyControlsBar = class extends i4 {
     const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches;
     const showToggles = !this.isScrolled && (!this.hideViewToggle || !this.hideDetailsToggle);
     return b2`
-      <div class="controls-container" part="controls-container">
+      <div class="controls-container">
 
         <div class="search-section ${this.searchValue ? "has-value" : ""}">
           <input
@@ -2127,8 +956,8 @@ var WyControlsBar = class extends i4 {
       </div>
     `;
   }
-  _handleSearch(e9) {
-    this.searchValue = e9.target.value;
+  _handleSearch(e6) {
+    this.searchValue = e6.target.value;
     this._notifyChange();
   }
   _handleSearchFocus() {
@@ -2140,10 +969,10 @@ var WyControlsBar = class extends i4 {
   _clearSearch() {
     this.searchValue = "";
     this._notifyChange();
-    this.shadowRoot?.querySelector(".search-input")?.focus();
+    this.querySelector(".search-input")?.focus();
   }
   dismissSearch({ clear = false } = {}) {
-    const searchInput = this.shadowRoot?.querySelector(".search-input");
+    const searchInput = this.querySelector(".search-input");
     if (clear) {
       this.searchValue = "";
       this._notifyChange();
@@ -2158,8 +987,8 @@ var WyControlsBar = class extends i4 {
     this.viewMode = mode;
     this._notifyChange();
   }
-  _toggleDetails(e9) {
-    e9.preventDefault();
+  _toggleDetails(e6) {
+    e6.preventDefault();
     this.showDetails = !this.showDetails;
     this._notifyChange();
   }
@@ -2211,620 +1040,13 @@ __publicField(WyControlsBar, "properties", {
   scrollState: { type: String, state: true },
   _mobileSearchOpen: { type: Boolean, state: true }
 });
-__publicField(WyControlsBar, "styles", i`
-    :host {
-      display: block;
-      background-color: transparent;
-      padding: var(--s-3, 12px) var(--s-7, 32px);
-      width: 100%;
-      box-sizing: border-box;
-      position: relative;
-
-      --wy-controls-floating-top: 16px;
-      --wy-controls-floating-right: auto;
-      --wy-controls-floating-left: 50%;
-      --wy-controls-floating-z-index: 100;
-      --wy-controls-floating-width: auto;
-      --wy-controls-floating-max-width: min(900px, calc(100% - 32px));
-      --wy-controls-return-duration: var(--dur-1, 150ms);
-      --wy-controls-return-opacity-duration: 140ms;
-      --wy-controls-radius: var(--radius-pill, 999px);
-    }
-
-    /* Bottom hairline */
-    :host::after {
-      content: '';
-      position: absolute;
-      left: var(--wy-controls-rule-inset, var(--s-7, 32px));
-      right: var(--wy-controls-rule-inset, var(--s-7, 32px));
-      bottom: 0;
-      height: 1px;
-      background: var(--paper-edge, #E8E2DA);
-    }
-
-    :host([data-scrolled]) {
-      position: fixed;
-      top: var(--wy-controls-floating-top, 16px);
-      left: var(--wy-controls-floating-left, 50%);
-      transform: var(--wy-controls-floating-transform, translateX(-50%));
-      z-index: var(--wy-controls-floating-z-index, 100);
-      width: var(--wy-controls-floating-width, auto);
-      max-width: var(--wy-controls-floating-max-width, min(900px, calc(100% - 32px)));
-      background: var(--paper, #F7F4EE);
-      border: 0;
-      border-radius: 0;
-      padding: var(--wy-controls-padding-scrolled, var(--s-2, 8px) var(--s-5, 24px));
-      box-shadow: none;
-      transition:
-        top 300ms cubic-bezier(0.2, 0, 0, 1),
-        transform 300ms cubic-bezier(0.2, 0, 0, 1),
-        padding 300ms cubic-bezier(0.2, 0, 0, 1),
-        box-shadow 300ms cubic-bezier(0.2, 0, 0, 1),
-        opacity 200ms cubic-bezier(0.2, 0, 0, 1);
-    }
-
-    :host([data-scrolled])::after {
-      display: none;
-    }
-
-    :host([data-scroll-state="returning"]) {
-      opacity: 0.08;
-      transform: var(--wy-controls-floating-return-transform, translateX(-50%) translateY(-4px) scale(0.995));
-      box-shadow: none;
-      transition:
-        top var(--wy-controls-return-duration, 150ms) cubic-bezier(0.2, 0, 0, 1),
-        transform var(--wy-controls-return-duration, 150ms) cubic-bezier(0.2, 0, 0, 1),
-        padding var(--wy-controls-return-duration, 150ms) cubic-bezier(0.2, 0, 0, 1),
-        box-shadow var(--wy-controls-return-duration, 150ms) cubic-bezier(0.2, 0, 0, 1),
-        opacity var(--wy-controls-return-opacity-duration, 140ms) cubic-bezier(0.2, 0, 0, 1);
-    }
-
-    /* ---- Controls container ---- */
-    .controls-container {
-      display: flex;
-      flex-wrap: nowrap;
-      align-items: center;
-      gap: var(--s-5, 24px);
-      max-width: 1600px;
-      margin: 0 auto;
-    }
-
-    :host([data-scrolled]) .controls-container {
-      gap: var(--s-4, 16px);
-      max-width: 100%;
-    }
-
-    /* ---- Search ---- */
-    .search-section {
-      flex: 0 0 auto;
-      width: 260px;
-      position: relative;
-      transition: width 250ms cubic-bezier(0.2, 0, 0, 1);
-    }
-
-    :host([data-scrolled]) .search-section {
-      width: 280px;
-    }
-
-    .search-input {
-      width: 100%;
-      height: 36px;
-      padding: 0 var(--s-4, 16px) 0 40px;
-      background: transparent;
-      color: var(--ink, #1A1A1A);
-      border: 1px solid var(--paper-edge, #DDD6C8);
-      border-radius: var(--wy-controls-radius, 999px);
-      font-family: var(--ff-sans, 'Inter', system-ui, sans-serif);
-      font-size: 13px;
-      font-weight: 400;
-      outline: none;
-      box-sizing: border-box;
-      transition:
-        background 150ms cubic-bezier(0.2, 0, 0, 1),
-        border-color 150ms cubic-bezier(0.2, 0, 0, 1),
-        box-shadow 150ms cubic-bezier(0.2, 0, 0, 1);
-    }
-
-    .search-input::placeholder {
-      color: var(--ink-mute, #868685);
-      font-weight: 300;
-    }
-
-    .search-input:hover {
-      border-color: var(--ink-soft, #A8A49C);
-    }
-
-    .search-input:focus {
-      background: transparent;
-      border-color: var(--ink, #1A1A1A);
-      box-shadow: none;
-    }
-
-    .search-icon {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-family: 'Material Symbols Outlined';
-      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
-      font-size: 18px;
-      line-height: 1;
-      color: var(--ink-mute, #868685);
-      pointer-events: none;
-      user-select: none;
-      transition: color 150ms cubic-bezier(0.2, 0, 0, 1);
-    }
-
-    .search-section:focus-within .search-icon {
-      color: var(--ink, #282828);
-    }
-
-    .search-clear {
-      position: absolute;
-      right: 8px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 22px;
-      height: 22px;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      background: transparent;
-      border: none;
-      border-radius: 50%;
-      color: var(--ink-mute, #868685);
-      cursor: pointer;
-      padding: 0;
-      font-family: 'Material Symbols Outlined';
-      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
-      font-size: 16px;
-      line-height: 1;
-      transition: background 150ms cubic-bezier(0.2, 0, 0, 1), color 150ms cubic-bezier(0.2, 0, 0, 1);
-    }
-
-    .search-clear:hover {
-      background: color-mix(in srgb, var(--ink, #282828) 8%, transparent);
-      color: var(--ink, #282828);
-    }
-
-    .search-section.has-value .search-clear {
-      display: flex;
-    }
-
-    /* ---- Divider ---- */
-    .divider {
-      width: 1px;
-      height: 20px;
-      background: var(--paper-edge, #E8E2DA);
-      flex-shrink: 0;
-    }
-
-    /* ---- Toggles ---- */
-    .toggle-section {
-      display: flex;
-      align-items: center;
-      gap: var(--s-5, 24px);
-      flex-shrink: 0;
-    }
-
-    :host([data-scrolled]) .toggle-section {
-      display: none;
-    }
-
-    /* View toggle pill */
-    .view-toggle {
-      display: inline-flex;
-      align-items: center;
-      background: transparent;
-      border: 1px solid var(--paper-edge, #DDD6C8);
-      border-radius: var(--wy-controls-radius, 999px);
-      padding: 2px;
-      height: 32px;
-      box-sizing: border-box;
-    }
-
-    .view-btn {
-      width: 26px;
-      height: 26px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: transparent;
-      border: none;
-      border-radius: var(--wy-controls-radius, 999px);
-      color: var(--ink-mute, #868685);
-      cursor: pointer;
-      padding: 0;
-      font-family: 'Material Symbols Outlined';
-      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
-      font-size: 16px;
-      line-height: 1;
-      transition: background 150ms cubic-bezier(0.2, 0, 0, 1), color 150ms cubic-bezier(0.2, 0, 0, 1);
-    }
-
-    .view-btn:hover {
-      color: var(--ink, #282828);
-    }
-
-    .view-btn.active {
-      background: var(--ink, #1A1A1A);
-      color: var(--paper, #F7F4EE);
-      box-shadow: none;
-    }
-
-    /* Details toggle (custom checkbox) */
-    .details-toggle-control {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--s-2, 8px);
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .details-toggle-control input[type="checkbox"] {
-      position: absolute;
-      opacity: 0;
-      width: 0;
-      height: 0;
-      pointer-events: none;
-    }
-
-    .toggle-track {
-      width: 28px;
-      height: 16px;
-      background: var(--paper-edge, #E8E2DA);
-      border-radius: 9999px;
-      position: relative;
-      flex-shrink: 0;
-      transition: background 150ms cubic-bezier(0.2, 0, 0, 1);
-    }
-
-    .toggle-thumb {
-      position: absolute;
-      top: 2px;
-      left: 2px;
-      width: 12px;
-      height: 12px;
-      background: var(--white, #fff);
-      border-radius: 50%;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-      transition: transform 150ms cubic-bezier(0.2, 0, 0, 1);
-    }
-
-    .details-toggle-control.is-on .toggle-track {
-      background: var(--ink, #282828);
-    }
-
-    .details-toggle-control.is-on .toggle-thumb {
-      transform: translateX(12px);
-    }
-
-    .toggle-label {
-      font-family: var(--ff-sans, 'Inter', system-ui, sans-serif);
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--ink-mute, #868685);
-      white-space: nowrap;
-    }
-
-    /* ---- Category chips ---- */
-    .category-section {
-      flex: 1 1 auto;
-      min-width: 0;
-      position: relative;
-      display: flex;
-      align-items: center;
-      gap: var(--s-2, 8px);
-    }
-
-    .chips-track {
-      flex: 1 1 auto;
-      min-width: 0;
-      display: flex;
-      align-items: center;
-      gap: var(--s-2, 8px);
-      overflow-x: auto;
-      padding: 2px 24px 2px 0;
-      scroll-behavior: smooth;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-      -webkit-overflow-scrolling: touch;
-      -webkit-mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
-      mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
-    }
-
-    .chips-track.is-chips-scrolled {
-      -webkit-mask-image: linear-gradient(to right, transparent 0, black 28px, black calc(100% - 28px), transparent 100%);
-      mask-image: linear-gradient(to right, transparent 0, black 28px, black calc(100% - 28px), transparent 100%);
-    }
-
-    .chips-track::-webkit-scrollbar {
-      display: none;
-    }
-
-    :host([data-scrolled]) .category-section {
-      flex: 0 1 auto;
-      max-width: 600px;
-      transition: max-width 300ms cubic-bezier(0.2, 0, 0, 1);
-    }
-
-    .chip {
-      flex-shrink: 0;
-      height: 28px;
-      padding: 0 14px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: transparent;
-      color: var(--ink-mute, #6B6B6A);
-      border: 1px solid var(--paper-edge, #DDD6C8);
-      border-radius: var(--wy-controls-radius, 999px);
-      font-family: var(--ff-sans, 'Inter', system-ui, sans-serif);
-      font-size: 11px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      white-space: nowrap;
-      cursor: pointer;
-      transition:
-        color 150ms cubic-bezier(0.2, 0, 0, 1),
-        background 150ms cubic-bezier(0.2, 0, 0, 1),
-        border-color 150ms cubic-bezier(0.2, 0, 0, 1),
-        transform 150ms cubic-bezier(0.2, 0, 0, 1);
-    }
-
-    .chip:hover {
-      color: var(--ink, #282828);
-      border-color: color-mix(in srgb, var(--ink, #282828) 25%, var(--paper-edge, #E8E2DA));
-      background: color-mix(in srgb, var(--ink, #282828) 3%, transparent);
-    }
-
-    .chip:active {
-      transform: scale(0.98);
-    }
-
-    .chip.active {
-      background: var(--ink, #282828);
-      color: var(--paper, #FFFAF5);
-      border-color: var(--ink, #282828);
-    }
-
-    .chip.active:hover {
-      background: color-mix(in srgb, var(--ink, #282828) 92%, var(--paper, #FFFAF5));
-    }
-
-    /* Featured dot marker */
-    .chip--featured::before {
-      content: '';
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: currentColor;
-      opacity: 0.9;
-      flex-shrink: 0;
-    }
-
-    .chip--hidden::before {
-      content: 'visibility_off';
-      font-family: 'Material Symbols Outlined';
-      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
-      font-size: 14px;
-      line-height: 1;
-      letter-spacing: 0;
-      text-transform: none;
-      flex-shrink: 0;
-    }
-
-    /* ---- Mobile cancel button ---- */
-    .mobile-cancel {
-      flex: 0 0 auto;
-      display: none;
-      height: 36px;
-      padding: 0 var(--s-2, 8px);
-      background: transparent;
-      border: none;
-      font-family: var(--ff-sans, 'Inter', system-ui, sans-serif);
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--ink, #282828);
-      cursor: pointer;
-    }
-
-    /* ---- Mobile (≤768px) ---- */
-    @media (max-width: 768px) {
-      :host {
-        padding: var(--s-3, 12px) var(--s-4, 16px);
-      }
-
-      :host::after {
-        left: var(--s-4, 16px);
-        right: var(--s-4, 16px);
-      }
-
-      :host([data-scrolled]) {
-        position: relative;
-        top: auto;
-        left: auto;
-        transform: none;
-        width: 100%;
-        max-width: 100%;
-        border-radius: 0;
-        padding: var(--s-3, 12px) var(--s-4, 16px);
-        background: transparent;
-        box-shadow: none;
-      }
-
-      :host([data-scrolled])::after {
-        display: block;
-        left: var(--s-4, 16px);
-        right: var(--s-4, 16px);
-      }
-
-      .controls-container {
-        gap: var(--s-3, 12px);
-      }
-
-      .divider,
-      .toggle-section {
-        display: none;
-      }
-
-      /* Collapsed: search is an icon button */
-      .search-section {
-        flex: 0 0 auto;
-        width: 36px;
-        transition:
-          width 250ms cubic-bezier(0.2, 0, 0, 1),
-          flex 250ms cubic-bezier(0.2, 0, 0, 1);
-      }
-
-      .search-input {
-        width: 36px;
-        height: 36px;
-        padding: 0;
-        background: transparent;
-        color: transparent;
-        border-radius: var(--wy-controls-radius, 999px);
-        font-size: 16px;
-        cursor: pointer;
-        transition:
-          width 250ms cubic-bezier(0.2, 0, 0, 1),
-          padding 250ms cubic-bezier(0.2, 0, 0, 1),
-          background 250ms cubic-bezier(0.2, 0, 0, 1),
-          color 150ms cubic-bezier(0.2, 0, 0, 1) 100ms,
-          border-radius 250ms cubic-bezier(0.2, 0, 0, 1),
-          border-color 150ms cubic-bezier(0.2, 0, 0, 1),
-          box-shadow 150ms cubic-bezier(0.2, 0, 0, 1);
-      }
-
-      .search-input::placeholder {
-        color: transparent;
-        transition: color 150ms cubic-bezier(0.2, 0, 0, 1);
-      }
-
-      .search-icon {
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: var(--ink, #282828);
-        transition:
-          left 250ms cubic-bezier(0.2, 0, 0, 1),
-          transform 250ms cubic-bezier(0.2, 0, 0, 1),
-          color 150ms cubic-bezier(0.2, 0, 0, 1);
-      }
-
-      .search-clear {
-        display: none !important;
-      }
-
-      /* Category section: flex fills remaining space */
-      .category-section {
-        flex: 1 1 auto;
-        min-width: 0;
-        transition:
-          opacity 250ms cubic-bezier(0.2, 0, 0, 1),
-          transform 250ms cubic-bezier(0.2, 0, 0, 1),
-          max-width 250ms cubic-bezier(0.2, 0, 0, 1);
-      }
-
-      /* Search open state */
-      :host([data-mobile-search]) .search-section {
-        flex: 1 1 auto;
-        width: auto;
-      }
-
-      :host([data-mobile-search]) .search-input {
-        width: 100%;
-        padding: 0 var(--s-4, 16px) 0 40px;
-        background: transparent;
-        color: var(--ink, #1A1A1A);
-        border: 1px solid var(--paper-edge, #DDD6C8);
-        border-radius: var(--wy-controls-radius, 999px);
-        cursor: text;
-      }
-
-      :host([data-mobile-search]) .search-input::placeholder {
-        color: var(--ink-mute, #868685);
-      }
-
-      :host([data-mobile-search]) .search-icon {
-        left: 14px;
-        transform: translate(0, -50%);
-        color: var(--ink-mute, #868685);
-      }
-
-      :host([data-mobile-search]) .search-section.has-value .search-clear {
-        display: flex !important;
-      }
-
-      :host([data-mobile-search]) .category-section {
-        opacity: 0;
-        max-width: 0;
-        transform: translateX(12px);
-        pointer-events: none;
-        overflow: hidden;
-      }
-
-      :host([data-mobile-search]) .mobile-cancel {
-        display: inline-flex;
-        align-items: center;
-      }
-    }
-
-    /* ---- Tablet narrow (769–900px) ---- */
-    @media (min-width: 769px) and (max-width: 900px) {
-      .controls-container {
-        flex-wrap: wrap;
-        gap: var(--s-2, 8px) var(--s-1, 4px);
-      }
-
-      .search-section {
-        flex: 1 1 auto;
-        width: auto;
-        min-width: 120px;
-        max-width: 240px;
-      }
-
-      .divider { display: none; }
-
-      .toggle-label { display: none; }
-
-      .toggle-section { gap: var(--s-2, 8px); }
-
-      .category-section {
-        flex: 0 0 100%;
-        order: 1;
-      }
-    }
-
-    /* ---- Tablet (901–1023px) ---- */
-    @media (min-width: 901px) and (max-width: 1023px) {
-      :host {
-        padding: var(--s-2, 8px) var(--s-5, 24px);
-      }
-
-      .controls-container {
-        gap: var(--s-2, 8px);
-      }
-
-      .search-section {
-        width: 160px;
-      }
-
-      .toggle-section {
-        gap: var(--s-3, 12px);
-      }
-
-      .toggle-label {
-        display: none;
-      }
-    }
-  `);
 customElements.define("wy-controls-bar", WyControlsBar);
 
 // components/ui/wy-toast.js
 var WyToast = class extends i4 {
+  createRenderRoot() {
+    return this;
+  }
   constructor() {
     super();
     this.message = "";
@@ -2893,258 +1115,13 @@ __publicField(WyToast, "properties", {
   actions: { type: Array },
   dismissible: { type: Boolean }
 });
-__publicField(WyToast, "styles", i`
-    :host {
-      display: block;
-      position: fixed;
-      bottom: calc(32px + env(safe-area-inset-bottom, 0px));
-      left: 50%;
-      transform: translateX(-50%) translateY(16px) scale(0.96);
-      transform-origin: 50% 100%;
-      z-index: 3000;
-      pointer-events: none;
-      transition:
-        transform 380ms cubic-bezier(0.34, 1.56, 0.64, 1),
-        opacity 220ms cubic-bezier(0.2, 0.6, 0.2, 1);
-      opacity: 0;
-      will-change: transform, opacity;
-    }
-
-    :host([show]) {
-      transform: translateX(-50%) translateY(0) scale(1);
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-      .toast-container {
-        background-color: rgba(26, 26, 26, 0.92);
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      :host {
-        transition: opacity 180ms ease;
-        transform: translateX(-50%) translateY(0) scale(1);
-      }
-      :host([show]) {
-        opacity: 1;
-      }
-    }
-
-    .toast-container {
-      background-color: rgba(26, 26, 26, 0.62);
-      backdrop-filter: blur(20px) saturate(140%);
-      -webkit-backdrop-filter: blur(20px) saturate(140%);
-      color: rgba(247, 244, 238, 0.96);
-      padding: 14px 20px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      box-shadow:
-        inset 0 1px 0 rgba(247, 244, 238, 0.10),
-        0 18px 48px -12px rgba(13, 13, 13, 0.45),
-        0 6px 16px -6px rgba(13, 13, 13, 0.28);
-      outline: 1px solid rgba(247, 244, 238, 0.12);
-      outline-offset: -1px;
-      max-width: min(420px, calc(100vw - 32px));
-    }
-
-    .toast-container.has-actions {
-      width: min(420px, calc(100vw - 32px));
-      box-sizing: border-box;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: start;
-      gap: 16px 12px;
-      padding: 16px;
-    }
-
-    .icon {
-      font-family: 'Material Symbols Outlined';
-      font-size: 18px;
-      font-weight: normal;
-      font-style: normal;
-      line-height: 1;
-      letter-spacing: normal;
-      text-transform: none;
-      display: inline-block;
-      white-space: nowrap;
-      word-wrap: normal;
-      direction: ltr;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      text-rendering: optimizeLegibility;
-      font-feature-settings: 'liga';
-      flex-shrink: 0;
-    }
-
-    .icon.variant-success {
-      color: rgba(247, 244, 238, 0.72);
-    }
-
-    .icon.variant-info {
-      color: rgba(247, 244, 238, 0.72);
-    }
-
-    .icon.variant-error {
-      color: #E89B7E;
-    }
-
-    .icon.variant-warning {
-      color: #D9C28A;
-    }
-
-    .message {
-      font-family: var(--ff-sans, var(--font-body, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif));
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 1.4;
-      letter-spacing: 0.005em;
-      color: #FFFFFF;
-    }
-
-    .toast-container.has-actions .icon.variant-success {
-      display: none;
-    }
-
-    .toast-container.has-actions .message {
-      grid-column: 1;
-      grid-row: 1;
-      font-size: 0.875rem;
-      font-weight: 500;
-      line-height: 1.3;
-    }
-
-    .actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .toast-container.has-actions .actions {
-      grid-column: 1 / -1;
-      grid-row: 2;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-      width: 100%;
-    }
-
-    .action {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 36px;
-      padding: 0 14px;
-      border-radius: 0;
-      background: rgba(247, 244, 238, 0.12);
-      color: rgba(247, 244, 238, 0.96);
-      font-family: 'Inter', var(--font-body, sans-serif);
-      font-size: 0.8125rem;
-      font-weight: 600;
-      line-height: 1;
-      text-decoration: none;
-      white-space: nowrap;
-      border: 1px solid rgba(247, 244, 238, 0.16);
-    }
-
-    .toast-container.has-actions .action {
-      min-height: 40px;
-      padding: 0 14px;
-      font-size: 0.8125rem;
-      font-weight: 600;
-      min-width: 0;
-    }
-
-    .action:focus-visible {
-      outline: 2px solid rgba(247, 244, 238, 0.72);
-      outline-offset: 2px;
-    }
-
-    .dismiss {
-      width: 28px;
-      height: 28px;
-      padding: 0;
-      border: 0;
-      border-radius: 0;
-      background: transparent;
-      color: rgba(247, 244, 238, 0.6);
-      cursor: pointer;
-      font: inherit;
-      line-height: 1;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .dismiss:hover {
-      color: rgba(247, 244, 238, 0.96);
-    }
-
-    .dismiss .icon {
-      font-size: 18px;
-    }
-
-    .toast-container.has-actions .dismiss {
-      grid-column: 2;
-      grid-row: 1;
-      align-self: start;
-      justify-self: end;
-      width: 28px;
-      height: 28px;
-      transform: translate(4px, -4px);
-    }
-
-    .dismiss:focus-visible {
-      outline: 2px solid rgba(247, 244, 238, 0.72);
-      outline-offset: 2px;
-    }
-
-    @media (max-width: 480px) {
-      .toast-container {
-        width: calc(100vw - 32px);
-        flex-wrap: wrap;
-        justify-content: center;
-        padding: 14px 16px;
-      }
-
-      .actions {
-        order: 3;
-        width: 100%;
-        justify-content: center;
-      }
-
-      .toast-container.has-actions {
-        width: calc(100vw - 32px);
-        grid-template-columns: 1fr auto;
-        gap: 16px 12px;
-        padding: 16px;
-        justify-content: initial;
-      }
-
-      .toast-container.has-actions .actions {
-        grid-template-columns: 1fr;
-        gap: 10px;
-      }
-
-      .toast-container.has-actions .action {
-        min-height: 44px;
-      }
-
-      .toast-container.has-actions .dismiss {
-        width: 28px;
-        height: 28px;
-        transform: translate(4px, -4px);
-      }
-    }
-  `);
 customElements.define("wy-toast", WyToast);
 
 // components/ui/wy-copy-confirm.js
 var WyCopyConfirm = class extends i4 {
+  createRenderRoot() {
+    return this;
+  }
   constructor() {
     super();
     this.show = false;
@@ -3237,189 +1214,119 @@ __publicField(WyCopyConfirm, "properties", {
   links: { type: Array },
   title: { type: String }
 });
-__publicField(WyCopyConfirm, "styles", i`
-    :host {
-      display: block;
-      position: fixed;
-      left: 50%;
-      width: min(80vw, 420px);
-      bottom: calc(32px + env(safe-area-inset-bottom, 0px));
-      z-index: 3000;
-      pointer-events: none;
-      opacity: 0;
-      transform: translateX(-50%) translateY(16px) scale(0.98);
-      transform-origin: 50% 100%;
-      transition:
-        transform 380ms cubic-bezier(0.34, 1.56, 0.64, 1),
-        opacity 220ms cubic-bezier(0.2, 0.6, 0.2, 1);
-      will-change: transform, opacity;
-    }
-
-    :host([show]) {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0) scale(1);
-      pointer-events: auto;
-    }
-
-    @media (min-width: 640px) {
-      :host {
-        width: min(80vw, 420px);
-      }
-    }
-
-    .container {
-      background-color: var(--ink, #1A1A1A);
-      color: var(--paper, #F7F4EE);
-      padding: 16px;
-      border-radius: 8px;
-      box-shadow:
-        0 18px 48px -12px rgba(13, 13, 13, 0.45),
-        0 6px 16px -6px rgba(13, 13, 13, 0.28);
-    }
-
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      margin-bottom: 18px;
-    }
-
-    .title {
-      margin: 0;
-      color: var(--paper, #F7F4EE);
-      font-family: var(--ff-sans, var(--font-body, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif));
-      font-size: 18px;
-      font-weight: 600;
-      line-height: 1.2;
-      letter-spacing: 0.005em;
-    }
-
-    .close {
-      width: 28px;
-      height: 28px;
-      padding: 0;
-      border: 0;
-      border-radius: 4px;
-      background: transparent;
-      color: var(--paper, #F7F4EE);
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      flex: none;
-      transition: background-color 160ms ease;
-    }
-
-    .close:hover {
-      background-color: color-mix(in srgb, var(--paper, #F7F4EE) 10%, transparent);
-    }
-
-    .close:focus-visible,
-    .chip:focus-visible {
-      outline: 2px solid color-mix(in srgb, var(--paper, #F7F4EE) 62%, transparent);
-      outline-offset: 2px;
-    }
-
-    .ms {
-      font-family: 'Material Symbols Outlined';
-      font-size: 24px;
-      font-weight: normal;
-      font-style: normal;
-      line-height: 1;
-      letter-spacing: normal;
-      text-transform: none;
-      display: inline-flex;
-      font-feature-settings: 'liga';
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    .chips {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    @media (min-width: 640px) {
-      .chips {
-        flex-direction: row;
-        flex-wrap: wrap;
-      }
-
-      .chip {
-        flex: 1 1 0;
-      }
-    }
-
-    .chip {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 52px;
-      box-sizing: border-box;
-      padding: 14px 18px;
-      border: 0;
-      border-radius: 999px;
-      background-color: var(--paper, #F7F4EE);
-      color: var(--ink, #1A1A1A);
-      font-family: var(--ff-sans, var(--font-body, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif));
-      font-size: 16px;
-      font-weight: 500;
-      line-height: 1.2;
-      letter-spacing: 0.04em;
-      text-decoration: none;
-      cursor: pointer;
-      transition:
-        background-color 160ms ease,
-        transform 160ms ease;
-    }
-
-    .chip:hover {
-      background-color: var(--paper-deep, #EEE8DD);
-    }
-
-    .chip:active {
-      transform: scale(0.98);
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      :host {
-        transition: opacity 200ms linear;
-        transform: translateX(-50%) translateY(0) scale(1);
-      }
-    }
-  `);
 customElements.define("wy-copy-confirm", WyCopyConfirm);
+
+// node_modules/lit-html/directive.js
+var t3 = { ATTRIBUTE: 1, CHILD: 2, PROPERTY: 3, BOOLEAN_ATTRIBUTE: 4, EVENT: 5, ELEMENT: 6 };
+var e4 = (t5) => (...e6) => ({ _$litDirective$: t5, values: e6 });
+var i5 = class {
+  constructor(t5) {
+  }
+  get _$AU() {
+    return this._$AM._$AU;
+  }
+  _$AT(t5, e6, i6) {
+    this._$Ct = t5, this._$AM = e6, this._$Ci = i6;
+  }
+  _$AS(t5, e6) {
+    return this.update(t5, e6);
+  }
+  update(t5, e6) {
+    return this.render(...e6);
+  }
+};
+
+// node_modules/lit-html/directives/unsafe-html.js
+var e5 = class extends i5 {
+  constructor(i6) {
+    if (super(i6), this.it = A, i6.type !== t3.CHILD) throw Error(this.constructor.directiveName + "() can only be used in child bindings");
+  }
+  render(r5) {
+    if (r5 === A || null == r5) return this._t = void 0, this.it = r5;
+    if (r5 === E) return r5;
+    if ("string" != typeof r5) throw Error(this.constructor.directiveName + "() called with a non-string value");
+    if (r5 === this.it) return this._t;
+    this.it = r5;
+    const s4 = [r5];
+    return s4.raw = s4, this._t = { _$litType$: this.constructor.resultType, strings: s4, values: [] };
+  }
+};
+e5.directiveName = "unsafeHTML", e5.resultType = 1;
+var o5 = e4(e5);
 
 // components/ui/wy-modal.js
 var WyModal = class extends i4 {
+  createRenderRoot() {
+    return this;
+  }
   constructor() {
     super();
     this.open = false;
     this.heading = "";
     this.maxWidth = "560px";
     this.fullScreen = false;
+    this.bodyHtml = "";
+    this._handleKeyDown = this._handleKeyDown.bind(this);
+  }
+  connectedCallback() {
+    this._captureModalNodes();
+    super.connectedCallback();
+    document.addEventListener("keydown", this._handleKeyDown);
+  }
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    document.removeEventListener("keydown", this._handleKeyDown);
   }
   render() {
+    if (!this.open) return b2``;
     return b2`
-      <md-dialog 
-        ?open="${this.open}"
-        @close="${this._handleClose}"
-        @cancel="${this._handleCancel}"
-        style="--md-dialog-container-max-width: ${this.maxWidth}"
-      >
-        <div slot="headline" class="headline-text">
-          ${this.heading}
+      <div class="modal-overlay" @click="${this._handleOverlayClick}">
+        <div
+          class="dialog"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="wyModalHeading"
+          style="max-width: ${this.maxWidth}"
+        >
+          <h2 class="headline-text" id="wyModalHeading">${this.heading}</h2>
+          <form method="dialog" class="modal-content">${this.bodyHtml ? o5(this.bodyHtml) : ""}</form>
+          <div class="footer-actions"></div>
         </div>
-        <form slot="content" method="dialog" class="modal-content">
-          <slot></slot>
-        </form>
-        <div slot="actions" class="footer-actions">
-          <slot name="actions"></slot>
-        </div>
-      </md-dialog>
+      </div>
     `;
+  }
+  willUpdate(changedProperties) {
+    if (changedProperties.has("open") && this.open) {
+      this._captureModalNodes();
+    }
+  }
+  firstUpdated() {
+    this._projectModalNodes();
+  }
+  updated() {
+    this._projectModalNodes();
+  }
+  _projectModalNodes() {
+    const body = this.querySelector(".modal-content");
+    const actions = this.querySelector(".footer-actions");
+    if (!this.bodyHtml && body && !body.childNodes.length && this._bodyNodes?.length) body.append(...this._bodyNodes);
+    if (actions && !actions.childNodes.length && this._actionNodes?.length) actions.append(...this._actionNodes);
+  }
+  _captureModalNodes() {
+    const children = Array.from(this.childNodes).filter((node) => {
+      if (node.nodeType === Node.COMMENT_NODE) return false;
+      if (node.nodeType === Node.TEXT_NODE && !node.textContent.trim()) return false;
+      return !(node.nodeType === Node.ELEMENT_NODE && node.classList.contains("modal-overlay"));
+    });
+    if (!children.length) return;
+    this._actionNodes = children.filter(
+      (node) => node.nodeType === Node.ELEMENT_NODE && node.getAttribute("slot") === "actions"
+    );
+    this._bodyNodes = children.filter(
+      (node) => !(node.nodeType === Node.ELEMENT_NODE && node.getAttribute("slot") === "actions")
+    );
+    this._actionNodes.forEach((node) => node.removeAttribute("slot"));
+    children.forEach((node) => node.remove());
   }
   show() {
     this.open = true;
@@ -3427,141 +1334,52 @@ var WyModal = class extends i4 {
   close() {
     this.open = false;
   }
-  _handleClose(e9) {
+  _handleClose(e6) {
     this.open = false;
     this.dispatchEvent(new CustomEvent("close", {
-      detail: e9.detail,
+      detail: e6?.detail,
       bubbles: true,
       composed: true
     }));
   }
-  _handleCancel(e9) {
-    this.open = false;
+  _handleOverlayClick(e6) {
+    if (e6.target === e6.currentTarget) this._handleClose(e6);
+  }
+  _handleKeyDown(e6) {
+    if (e6.key === "Escape" && this.open) this._handleClose(e6);
   }
 };
 __publicField(WyModal, "properties", {
   open: { type: Boolean, reflect: true },
   heading: { type: String },
   maxWidth: { type: String, attribute: "max-width" },
-  fullScreen: { type: Boolean, attribute: "full-screen" }
+  fullScreen: { type: Boolean, attribute: "full-screen" },
+  bodyHtml: { type: String, attribute: false }
 });
-__publicField(WyModal, "styles", i`
-    /* Serif headings use --ff-serif (Lora), loaded globally via tokens.css. */
-
-    :host {
-      display: block;
-    }
-
-    /* Wrap md-dialog to override its internals if needed,
-       but primarily use CSS variables for styling. */
-    md-dialog {
-      --md-dialog-container-color: var(--md-sys-color-surface);
-      --md-dialog-container-shape: 28px;
-      --md-dialog-container-max-height: min(90vh, calc(100% - 48px));
-    }
-
-    /* Soft Modernism Detail: Surface border instead of heavy shadow */
-    md-dialog::part(container) {
-      border: 1px solid var(--md-sys-color-outline-variant);
-    }
-
-    /* Custom slide-up animation overrides for md-dialog */
-    /* Note: md-dialog uses standard M3 transitions, 
-       we'll inject specific timing for 'Soft Modernism' */
-    
-    
-    /* Use more specific selector instead of !important */
-    ::slotted(.headline-text) {
-      font-family: var(--ff-serif, 'Lora', Georgia, serif);
-      font-size: 1.75rem;
-      color: var(--md-sys-color-text-heading);
-      margin: 0;
-      padding-top: 24px;
-      padding-bottom: 8px;
-      display: block;
-    }
-    
-    /* Ensure specificity overrides any conflicting styles */
-    md-dialog::slotted(.headline-text) {
-      font-family: var(--ff-serif, 'Lora', Georgia, serif);
-      font-size: 1.75rem;
-      color: var(--md-sys-color-text-heading);
-      margin: 0;
-      padding-top: 24px;
-      padding-bottom: 8px;
-      display: block;
-    }
-
-    .modal-content {
-      padding: 12px 4px 24px 4px;
-      font-family: var(--font-body);
-      color: var(--md-sys-color-on-surface-variant);
-      line-height: 1.6;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      flex: 1;
-      min-height: 0;
-      overflow-y: auto;
-    }
-
-    .footer-actions {
-      display: flex;
-      gap: 12px;
-      justify-content: flex-end;
-      width: 100%;
-      padding-bottom: 16px;
-      padding-top: 8px;
-      flex-shrink: 0;
-    }
-
-    /* Mobile button label utility class */
-    ::slotted(.btn-label) {
-      display: inline;
-    }
-
-    /* Ensure buttons in footer are capsule-shaped */
-    ::slotted(md-filled-button),
-    ::slotted(md-outlined-button),
-    ::slotted(md-text-button) {
-      /* Radius is already global, but ensure layout space */
-    }
-
-    @media (max-width: 600px) {
-      md-dialog {
-        --md-dialog-container-max-width: 100vw;
-        --md-dialog-container-max-height: 100vh;
-        --md-dialog-container-shape: 28px 28px 0 0;
-        margin: 0;
-        align-self: flex-end;
-      }
-
-      .footer-actions {
-        padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-        gap: 8px;
-      }
-
-      /* Hide button labels on mobile */
-      ::slotted(.btn-label) {
-        display: none;
-      }
-    }
-  `);
 customElements.define("wy-modal", WyModal);
 
 // components/ui/wy-tabs.js
 var WyTabs = class extends i4 {
+  createRenderRoot() {
+    return this;
+  }
+  connectedCallback() {
+    if (!this._capturedTabNodes) {
+      this._tabNodes = Array.from(this.childNodes);
+      this._tabNodes.forEach((node) => node.remove());
+      this._capturedTabNodes = true;
+    }
+    super.connectedCallback();
+  }
   render() {
     return b2`
-      <div class="tabs-list" role="tablist">
-        <slot></slot>
-      </div>
+      <div class="tabs-list" role="tablist"></div>
     `;
   }
   constructor() {
     super();
-    this.addEventListener("click", (e9) => {
-      const tabBtn = e9.target.closest('[role="tab"]');
+    this.addEventListener("click", (e6) => {
+      const tabBtn = e6.target.closest('[role="tab"]');
       if (tabBtn) {
         const tabValue = tabBtn.getAttribute("data-tab");
         this.activeTab = tabValue;
@@ -3575,9 +1393,19 @@ var WyTabs = class extends i4 {
     });
   }
   updated(changedProperties) {
+    this._projectTabs();
     if (changedProperties.has("activeTab")) {
       this._updateTabs();
     }
+  }
+  firstUpdated() {
+    this._projectTabs();
+    this._updateTabs();
+  }
+  _projectTabs() {
+    const target = this.querySelector(".tabs-list");
+    if (!target || target.childNodes.length || !this._tabNodes?.length) return;
+    target.append(...this._tabNodes);
   }
   _updateTabs() {
     const tabs = this.querySelectorAll('[role="tab"]');
@@ -3593,59 +1421,6 @@ var WyTabs = class extends i4 {
 __publicField(WyTabs, "properties", {
   activeTab: { type: String, attribute: "active-tab" }
 });
-__publicField(WyTabs, "styles", i`
-    :host {
-      display: block;
-      border-bottom: 1px solid var(--md-sys-color-outline-variant);
-    }
-
-    .tabs-list {
-      display: flex;
-      gap: 32px; /* Wider gap for cleaner look */
-      padding: 0 32px; /* Align with modal content padding */
-    }
-
-    .tab-item {
-      padding: 12px 0 16px 0; /* More bottom padding for visual balance */
-      font-family: var(--font-body);
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: var(--md-sys-color-on-surface-variant);
-      cursor: pointer;
-      position: relative;
-      transition: color 0.2s;
-      background: none;
-      border: none;
-      margin: 0;
-    }
-
-    .tab-item:hover {
-      color: var(--md-sys-color-text-heading);
-    }
-
-    .tab-item.active {
-      color: var(--md-sys-color-text-heading);
-      font-weight: 700;
-    }
-
-    .tab-item.active::after {
-      content: '';
-      position: absolute;
-      bottom: -1px; /* Overlap the border-bottom */
-      left: 0;
-      right: 0;
-      height: 2px;
-      background-color: var(--md-sys-color-primary);
-    }
-
-    /* Responsive padding to match page/modal gutters */
-    @media (max-width: 600px) {
-      .tabs-list {
-        padding: 0 16px;
-        gap: 24px;
-      }
-    }
-  `);
 customElements.define("wy-tabs", WyTabs);
 
 // components/ui/wy-dropdown.js
@@ -3692,8 +1467,8 @@ var WyDropdown = class extends i4 {
                                 class="item ${option.value === this.value ? "selected" : ""} ${i6 === this._focusedIndex ? "focused" : ""}"
                                 role="option"
                                 aria-selected="${option.value === this.value}"
-                                @mousedown="${(e9) => {
-      e9.preventDefault();
+                                @mousedown="${(e6) => {
+      e6.preventDefault();
       this._select(option.value);
     }}"
                                 @mouseenter="${() => this._focusedIndex = i6}"
@@ -3717,40 +1492,40 @@ var WyDropdown = class extends i4 {
       this._showDropdown = false;
     }, 150);
   }
-  _handleKeyDown(e9) {
+  _handleKeyDown(e6) {
     if (this.disabled) return;
-    if (e9.key === "ArrowDown") {
-      e9.preventDefault();
+    if (e6.key === "ArrowDown") {
+      e6.preventDefault();
       if (!this._showDropdown) {
         this._showDropdown = true;
         this._focusedIndex = this.options.findIndex((opt) => opt.value === this.value);
       } else {
         this._focusedIndex = Math.min(this._focusedIndex + 1, this.options.length - 1);
       }
-    } else if (e9.key === "ArrowUp") {
-      e9.preventDefault();
+    } else if (e6.key === "ArrowUp") {
+      e6.preventDefault();
       if (this._showDropdown) {
         this._focusedIndex = Math.max(this._focusedIndex - 1, 0);
       }
-    } else if (e9.key === "Enter" || e9.key === " ") {
-      e9.preventDefault();
+    } else if (e6.key === "Enter" || e6.key === " ") {
+      e6.preventDefault();
       if (!this._showDropdown) {
         this._showDropdown = true;
         this._focusedIndex = this.options.findIndex((opt) => opt.value === this.value);
       } else if (this._focusedIndex >= 0 && this.options[this._focusedIndex]) {
         this._select(this.options[this._focusedIndex].value);
       }
-    } else if (e9.key === "Escape") {
-      e9.preventDefault();
+    } else if (e6.key === "Escape") {
+      e6.preventDefault();
       this._showDropdown = false;
       this.renderRoot.querySelector(".selector")?.blur();
-    } else if (e9.key === "Home") {
-      e9.preventDefault();
+    } else if (e6.key === "Home") {
+      e6.preventDefault();
       if (this._showDropdown) {
         this._focusedIndex = 0;
       }
-    } else if (e9.key === "End") {
-      e9.preventDefault();
+    } else if (e6.key === "End") {
+      e6.preventDefault();
       if (this._showDropdown) {
         this._focusedIndex = this.options.length - 1;
       }
@@ -3783,20 +1558,43 @@ customElements.define("wy-dropdown", WyDropdown);
 
 // components/ui/wy-info-panel.js
 var WyInfoPanel = class extends i4 {
+  createRenderRoot() {
+    return this;
+  }
   constructor() {
     super();
     this.content = "";
     this.variant = "default";
     this.heading = "";
   }
+  connectedCallback() {
+    if (!this._capturedContentNodes) {
+      this._contentNodes = Array.from(this.childNodes);
+      this._contentNodes.forEach((node) => node.remove());
+      this._capturedContentNodes = true;
+    }
+    super.connectedCallback();
+  }
   render() {
     const panelClass = this.variant === "compact" ? "panel compact" : "panel";
     return b2`
             <div class="${panelClass}">
                 ${this.heading ? b2`<h3 class="panel-heading">${this.heading}</h3>` : ""}
-                ${this.content ? b2`<p>${this.content}</p>` : b2`<slot></slot>`}
+                ${this.content ? b2`<p>${this.content}</p>` : b2`<div class="panel-content"></div>`}
             </div>
         `;
+  }
+  firstUpdated() {
+    this._projectContent();
+  }
+  updated() {
+    this._projectContent();
+  }
+  _projectContent() {
+    if (this.content) return;
+    const target = this.querySelector(".panel-content");
+    if (!target || target.childNodes.length || !this._contentNodes?.length) return;
+    target.append(...this._contentNodes);
   }
 };
 __publicField(WyInfoPanel, "properties", {
@@ -3804,68 +1602,6 @@ __publicField(WyInfoPanel, "properties", {
   variant: { type: String },
   heading: { type: String }
 });
-__publicField(WyInfoPanel, "styles", i`
-        /* Type resolves to Lora/Inter via tokens.css (The Nineteenth). */
-
-        :host {
-            display: block;
-            /* CSS custom properties for theming - can be overridden by parent component */
-            --wy-info-panel-bg: var(--md-sys-color-background, #FDFBF7);
-            --wy-info-panel-border: var(--md-sys-color-surface-container-highest, #D7D3C8);
-            --wy-info-panel-text-color: #52525B;
-            --wy-info-panel-compact-bg: var(--md-sys-color-secondary-container, #E8DDD7);
-            --wy-info-panel-compact-border: var(--md-sys-color-outline-variant, #DDD);
-            --wy-info-panel-padding: var(--spacing-lg, 24px);
-            --wy-info-panel-compact-padding: var(--spacing-md, 16px);
-            --wy-info-panel-font-size: var(--md-sys-typescale-body-medium-size, 0.875rem);
-        }
-        
-        .panel {
-            background-color: var(--wy-info-panel-bg);
-            border-radius: var(--md-sys-shape-corner-medium, 16px);
-            padding: var(--wy-info-panel-padding);
-            color: var(--wy-info-panel-text-color);
-            font-family: var(--font-sans, 'Inter', sans-serif);
-            font-size: var(--wy-info-panel-font-size);
-            line-height: 1.6;
-            transition: background-color var(--md-sys-motion-duration-short4, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-        }
-        
-        .panel p {
-            margin: 0;
-        }
-        
-        .panel p + p {
-            margin-top: var(--spacing-md, 16px);
-        }
-        
-        .panel.compact {
-            padding: var(--wy-info-panel-compact-padding);
-            background-color: var(--wy-info-panel-compact-bg);
-        }
-        
-        .panel-heading {
-            font-family: var(--font-serif, 'Lora', Georgia, serif);
-            font-size: var(--md-sys-typescale-title-medium-size, 1rem);
-            color: var(--md-sys-color-on-surface);
-            margin: 0;
-            font-weight: 500;
-        }
-        
-    /* Support for slotted content */
-    ::slotted(*) {
-        color: var(--wy-info-panel-text-color);
-        font-family: var(--font-sans, 'Inter', sans-serif);
-    }
-    
-    ::slotted(p) {
-        margin: 0;
-    }
-    
-    ::slotted(p + p) {
-        margin-top: var(--spacing-md, 16px);
-    }
-    `);
 customElements.define("wy-info-panel", WyInfoPanel);
 
 // components/ui/wy-option-toggle.js
@@ -4074,24 +1810,24 @@ var WyImageUpload = class extends i4 {
   createRenderRoot() {
     return this;
   }
-  _handleDragOver(e9) {
-    e9.preventDefault();
+  _handleDragOver(e6) {
+    e6.preventDefault();
     this._isDragging = true;
   }
-  _handleDragLeave(e9) {
-    e9.preventDefault();
+  _handleDragLeave(e6) {
+    e6.preventDefault();
     this._isDragging = false;
   }
-  _handleDrop(e9) {
-    e9.preventDefault();
+  _handleDrop(e6) {
+    e6.preventDefault();
     this._isDragging = false;
-    const files = e9.dataTransfer?.files;
+    const files = e6.dataTransfer?.files;
     if (files && files.length > 0) {
       this._handleFile(files[0]);
     }
   }
-  _handleFileSelect(e9) {
-    const files = e9.target.files;
+  _handleFileSelect(e6) {
+    const files = e6.target.files;
     if (files && files.length > 0) {
       this._handleFile(files[0]);
     }
@@ -4120,8 +1856,8 @@ var WyImageUpload = class extends i4 {
       composed: true
     }));
   }
-  _handleRemove(e9) {
-    e9.stopPropagation();
+  _handleRemove(e6) {
+    e6.stopPropagation();
     this.value = "";
     this.dispatchEvent(new CustomEvent("remove", {
       detail: {},
@@ -4207,16 +1943,16 @@ var WyCodeTextarea = class extends i4 {
   createRenderRoot() {
     return this;
   }
-  _handleInput(e9) {
-    this.value = e9.target.value;
+  _handleInput(e6) {
+    this.value = e6.target.value;
     this.dispatchEvent(new CustomEvent("value-input", {
       detail: { value: this.value },
       bubbles: true,
       composed: true
     }));
   }
-  _handleChange(e9) {
-    this.value = e9.target.value;
+  _handleChange(e6) {
+    this.value = e6.target.value;
     this.dispatchEvent(new CustomEvent("value-change", {
       detail: { value: this.value },
       bubbles: true,
@@ -4353,7 +2089,7 @@ var WyVariableEditor = class extends i4 {
                                 <input
                                     type="text"
                                     .value="${variable.name || ""}"
-                                    @input="${(e9) => this._updateVariable(index, "name", e9.target.value)}"
+                                    @input="${(e6) => this._updateVariable(index, "name", e6.target.value)}"
                                     placeholder="variable-name"
                                 >
                             </div>
@@ -4362,7 +2098,7 @@ var WyVariableEditor = class extends i4 {
                                 <input
                                     type="text"
                                     .value="${variable.label || ""}"
-                                    @input="${(e9) => this._updateVariable(index, "label", e9.target.value)}"
+                                    @input="${(e6) => this._updateVariable(index, "label", e6.target.value)}"
                                     placeholder="Display Label"
                                 >
                             </div>
@@ -4371,7 +2107,7 @@ var WyVariableEditor = class extends i4 {
                                 <input
                                     type="text"
                                     .value="${variable.placeholder || ""}"
-                                    @input="${(e9) => this._updateVariable(index, "placeholder", e9.target.value)}"
+                                    @input="${(e6) => this._updateVariable(index, "placeholder", e6.target.value)}"
                                     placeholder="Helper text"
                                 >
                             </div>
@@ -4379,7 +2115,7 @@ var WyVariableEditor = class extends i4 {
                                 <label class="field-label">Input Type</label>
                                 <select
                                     .value="${variable.inputType || "text"}"
-                                    @change="${(e9) => this._updateVariable(index, "inputType", e9.target.value)}"
+                                    @change="${(e6) => this._updateVariable(index, "inputType", e6.target.value)}"
                                 >
                                     <option value="text">Text</option>
                                     <option value="toggle">Toggle</option>
@@ -4392,9 +2128,9 @@ var WyVariableEditor = class extends i4 {
                                         <input
                                             type="text"
                                             .value="${variable.options?.[0] || ""}"
-                                            @input="${(e9) => {
+                                            @input="${(e6) => {
       const newOptions = [...variable.options || ["", ""]];
-      newOptions[0] = e9.target.value;
+      newOptions[0] = e6.target.value;
       this._updateVariable(index, "options", newOptions);
     }}"
                                             placeholder="Value when off"
@@ -4405,9 +2141,9 @@ var WyVariableEditor = class extends i4 {
                                         <input
                                             type="text"
                                             .value="${variable.options?.[1] || ""}"
-                                            @input="${(e9) => {
+                                            @input="${(e6) => {
       const newOptions = [...variable.options || ["", ""]];
-      newOptions[1] = e9.target.value;
+      newOptions[1] = e6.target.value;
       this._updateVariable(index, "options", newOptions);
     }}"
                                             placeholder="Value when on"
@@ -4483,9 +2219,9 @@ var WyReferenceImageEditor = class extends i4 {
     ];
     this._emitChange();
   }
-  _handleImageChange(e9, index) {
-    e9.stopPropagation();
-    const { file } = e9.detail;
+  _handleImageChange(e6, index) {
+    e6.stopPropagation();
+    const { file } = e6.detail;
     this.dispatchEvent(new CustomEvent("reference-image-upload", {
       detail: { file, index },
       bubbles: true,
@@ -4522,7 +2258,7 @@ var WyReferenceImageEditor = class extends i4 {
                                             type="text"
                                             class="${isInvalid ? "invalid" : ""}"
                                             .value="${ref.variable || ""}"
-                                            @input="${(e9) => this._updateItem(index, "variable", e9.target.value)}"
+                                            @input="${(e6) => this._updateItem(index, "variable", e6.target.value)}"
                                             placeholder="style_ref"
                                         >
                                         ${isInvalid ? b2`
@@ -4534,7 +2270,7 @@ var WyReferenceImageEditor = class extends i4 {
                                         <input
                                             type="text"
                                             .value="${ref.label || ""}"
-                                            @input="${(e9) => this._updateItem(index, "label", e9.target.value)}"
+                                            @input="${(e6) => this._updateItem(index, "label", e6.target.value)}"
                                             placeholder="Style Reference"
                                         >
                                     </div>
@@ -4547,7 +2283,7 @@ var WyReferenceImageEditor = class extends i4 {
                                         <label class="field-label">Copy Instructions</label>
                                         <textarea
                                             .value="${ref.instructions || ""}"
-                                            @input="${(e9) => this._updateItem(index, "instructions", e9.target.value)}"
+                                            @input="${(e6) => this._updateItem(index, "instructions", e6.target.value)}"
                                             placeholder="Follow the composition in the provided reference image, which is available at [URL]"
                                         ></textarea>
                                         <span class="placeholder-hint">
@@ -4569,7 +2305,7 @@ var WyReferenceImageEditor = class extends i4 {
                                 <wy-image-upload
                                     label="${ref.label || "Reference Image"}"
                                     .value="${ref.path || ""}"
-                                    @change="${(e9) => this._handleImageChange(e9, index)}"
+                                    @change="${(e6) => this._handleImageChange(e6, index)}"
                                     @remove="${() => this._handleImageRemove(index)}"
                                 ></wy-image-upload>
                             </div>
@@ -4631,16 +2367,16 @@ var WyVariationEditor = class extends i4 {
     }));
   }
   // --- Drag reorder (selector list) ---
-  _onDragStart(e9, index) {
+  _onDragStart(e6, index) {
     this._dragIndex = index;
-    e9.dataTransfer.effectAllowed = "move";
+    e6.dataTransfer.effectAllowed = "move";
   }
-  _onDragOver(e9) {
-    e9.preventDefault();
-    e9.dataTransfer.dropEffect = "move";
+  _onDragOver(e6) {
+    e6.preventDefault();
+    e6.dataTransfer.dropEffect = "move";
   }
-  _onDrop(e9, index) {
-    e9.preventDefault();
+  _onDrop(e6, index) {
+    e6.preventDefault();
     const from = this._dragIndex;
     this._dragIndex = null;
     if (from === null || from === index) return;
@@ -4688,8 +2424,8 @@ var WyVariationEditor = class extends i4 {
     }
     this._notifyChange(updatedVariations);
   }
-  _handleStepChange(variationIndex, e9) {
-    const { index: stepIndex, step } = e9.detail;
+  _handleStepChange(variationIndex, e6) {
+    const { index: stepIndex, step } = e6.detail;
     const updatedVariations = [...this.variations];
     const variation = updatedVariations[variationIndex];
     if (variation.steps) {
@@ -4697,8 +2433,8 @@ var WyVariationEditor = class extends i4 {
       this._notifyChange(updatedVariations);
     }
   }
-  _handleStepDelete(variationIndex, e9) {
-    const { index: stepIndex } = e9.detail;
+  _handleStepDelete(variationIndex, e6) {
+    const { index: stepIndex } = e6.detail;
     const updatedVariations = [...this.variations];
     const variation = updatedVariations[variationIndex];
     if (variation.steps && variation.steps.length > 1) {
@@ -4708,24 +2444,24 @@ var WyVariationEditor = class extends i4 {
       this._notifyToast("Cannot delete the last step. Convert to template mode instead.", "warning");
     }
   }
-  _handleStepMoveUp(variationIndex, e9) {
-    const { index: stepIndex } = e9.detail;
+  _handleStepMoveUp(variationIndex, e6) {
+    const { index: stepIndex } = e6.detail;
     if (stepIndex === 0) return;
     const updatedVariations = [...this.variations];
     const steps = updatedVariations[variationIndex].steps;
     [steps[stepIndex - 1], steps[stepIndex]] = [steps[stepIndex], steps[stepIndex - 1]];
     this._notifyChange(updatedVariations);
   }
-  _handleStepMoveDown(variationIndex, e9) {
-    const { index: stepIndex } = e9.detail;
+  _handleStepMoveDown(variationIndex, e6) {
+    const { index: stepIndex } = e6.detail;
     const updatedVariations = [...this.variations];
     const steps = updatedVariations[variationIndex].steps;
     if (stepIndex === steps.length - 1) return;
     [steps[stepIndex], steps[stepIndex + 1]] = [steps[stepIndex + 1], steps[stepIndex]];
     this._notifyChange(updatedVariations);
   }
-  _handleStepToggle(variationIndex, e9) {
-    const { index: stepIndex } = e9.detail;
+  _handleStepToggle(variationIndex, e6) {
+    const { index: stepIndex } = e6.detail;
     const currentExpanded = this._expandedStepsByVariation[variationIndex] || [];
     const stepIndexInArray = currentExpanded.indexOf(stepIndex);
     if (stepIndexInArray > -1) {
@@ -4755,15 +2491,15 @@ var WyVariationEditor = class extends i4 {
     });
     this._notifyChange(updatedVariations);
   }
-  _handleVariableChange(variationIndex, e9) {
-    this._handleFieldChange(variationIndex, "variables", e9.detail.variables);
+  _handleVariableChange(variationIndex, e6) {
+    this._handleFieldChange(variationIndex, "variables", e6.detail.variables);
   }
-  _handleTemplateChange(variationIndex, e9) {
-    this._handleFieldChange(variationIndex, "template", e9.detail.value);
+  _handleTemplateChange(variationIndex, e6) {
+    this._handleFieldChange(variationIndex, "template", e6.detail.value);
   }
-  _handleImageChange(variationIndex, e9) {
-    e9.stopPropagation();
-    const { file } = e9.detail;
+  _handleImageChange(variationIndex, e6) {
+    e6.stopPropagation();
+    const { file } = e6.detail;
     this.dispatchEvent(new CustomEvent("image-upload", {
       detail: { file, target: "variation", variationIndex, variationId: this.variations[variationIndex]?.id },
       bubbles: true,
@@ -4778,27 +2514,27 @@ var WyVariationEditor = class extends i4 {
       composed: true
     }));
   }
-  _handleRefImageChange(variationIndex, e9) {
-    e9.stopPropagation();
-    const { file, index } = e9.detail;
+  _handleRefImageChange(variationIndex, e6) {
+    e6.stopPropagation();
+    const { file, index } = e6.detail;
     this.dispatchEvent(new CustomEvent("reference-image-upload", {
       detail: { file, index, variationIndex, variationId: this.variations[variationIndex]?.id },
       bubbles: true,
       composed: true
     }));
   }
-  _handleRefImageRemove(variationIndex, e9) {
-    e9.stopPropagation();
-    const { index, path } = e9.detail;
+  _handleRefImageRemove(variationIndex, e6) {
+    e6.stopPropagation();
+    const { index, path } = e6.detail;
     this.dispatchEvent(new CustomEvent("reference-image-remove", {
       detail: { index, path, variationIndex, variationId: this.variations[variationIndex]?.id },
       bubbles: true,
       composed: true
     }));
   }
-  _handleRefImageListChange(variationIndex, e9) {
-    if (!Array.isArray(e9.detail?.referenceImages)) return;
-    this._handleFieldChange(variationIndex, "referenceImages", e9.detail.referenceImages);
+  _handleRefImageListChange(variationIndex, e6) {
+    if (!Array.isArray(e6.detail?.referenceImages)) return;
+    this._handleFieldChange(variationIndex, "referenceImages", e6.detail.referenceImages);
   }
   _handleMoveUp(index) {
     if (index === 0) return;
@@ -4897,7 +2633,7 @@ This action cannot be undone.`;
                             id="variation-name-${index}"
                             type="text"
                             .value="${variation.name || ""}"
-                            @input="${(e9) => this._handleFieldChange(index, "name", e9.target.value)}"
+                            @input="${(e6) => this._handleFieldChange(index, "name", e6.target.value)}"
                             placeholder="e.g., Tina Barney Style Photo"
                         >
                     </div>
@@ -4910,7 +2646,7 @@ This action cannot be undone.`;
                             id="variation-id-${index}"
                             type="text"
                             .value="${variation.id || ""}"
-                            @input="${(e9) => this._handleFieldChange(index, "id", e9.target.value)}"
+                            @input="${(e6) => this._handleFieldChange(index, "id", e6.target.value)}"
                             placeholder="e.g., tina-barney"
                         >
                     </div>
@@ -4923,7 +2659,7 @@ This action cannot be undone.`;
                             id="variation-description-${index}"
                             rows="3"
                             .value="${variation.description || ""}"
-                            @input="${(e9) => this._handleFieldChange(index, "description", e9.target.value)}"
+                            @input="${(e6) => this._handleFieldChange(index, "description", e6.target.value)}"
                             placeholder="e.g., 18th Century Hand Colored Plan"
                         ></textarea>
                     </div>
@@ -4936,7 +2672,7 @@ This action cannot be undone.`;
                             id="variation-instructions-${index}"
                             rows="4"
                             .value="${variation.instructions || ""}"
-                            @input="${(e9) => this._handleFieldChange(index, "instructions", e9.target.value)}"
+                            @input="${(e6) => this._handleFieldChange(index, "instructions", e6.target.value)}"
                             placeholder="e.g., Upload with this variant:&#10;1. Your artwork&#10;2. The reference image"
                         ></textarea>
                     </div>
@@ -4945,7 +2681,7 @@ This action cannot be undone.`;
                         <wy-image-upload
                             label="Variation Image"
                             .value="${variation.image || ""}"
-                            @change="${(e9) => this._handleImageChange(index, e9)}"
+                            @change="${(e6) => this._handleImageChange(index, e6)}"
                             @remove="${() => this._handleImageRemove(index)}"
                         ></wy-image-upload>
                     </div>
@@ -4986,7 +2722,7 @@ This action cannot be undone.`;
                             </p>
                             <wy-variable-editor
                                 .variables="${variation.variables || []}"
-                                @change="${(e9) => this._handleVariableChange(index, e9)}"
+                                @change="${(e6) => this._handleVariableChange(index, e6)}"
                             ></wy-variable-editor>
                         </div>
 
@@ -4998,9 +2734,9 @@ This action cannot be undone.`;
                             </p>
                             <wy-reference-image-editor
                                 .referenceImages="${variation.referenceImages || []}"
-                                @change="${(e9) => this._handleRefImageListChange(index, e9)}"
-                                @reference-image-upload="${(e9) => this._handleRefImageChange(index, e9)}"
-                                @reference-image-remove="${(e9) => this._handleRefImageRemove(index, e9)}"
+                                @change="${(e6) => this._handleRefImageListChange(index, e6)}"
+                                @reference-image-upload="${(e6) => this._handleRefImageChange(index, e6)}"
+                                @reference-image-remove="${(e6) => this._handleRefImageRemove(index, e6)}"
                             ></wy-reference-image-editor>
                         </div>
 
@@ -5015,7 +2751,7 @@ This action cannot be undone.`;
                                 .variables="${variableNames}"
                                 placeholder="Enter your prompt template here..."
                                 rows="12"
-                                @value-input="${(e9) => this._handleTemplateChange(index, e9)}"
+                                @value-input="${(e6) => this._handleTemplateChange(index, e6)}"
                             ></wy-code-textarea>
                         </div>
                     ` : ""}
@@ -5039,11 +2775,11 @@ This action cannot be undone.`;
                                         .index="${stepIndex}"
                                         .total="${variation.steps.length}"
                                         .expanded="${isExpanded}"
-                                        @step-change="${(e9) => this._handleStepChange(index, e9)}"
-                                        @step-delete="${(e9) => this._handleStepDelete(index, e9)}"
-                                        @step-move-up="${(e9) => this._handleStepMoveUp(index, e9)}"
-                                        @step-move-down="${(e9) => this._handleStepMoveDown(index, e9)}"
-                                        @step-toggle="${(e9) => this._handleStepToggle(index, e9)}"
+                                        @step-change="${(e6) => this._handleStepChange(index, e6)}"
+                                        @step-delete="${(e6) => this._handleStepDelete(index, e6)}"
+                                        @step-move-up="${(e6) => this._handleStepMoveUp(index, e6)}"
+                                        @step-move-down="${(e6) => this._handleStepMoveDown(index, e6)}"
+                                        @step-toggle="${(e6) => this._handleStepToggle(index, e6)}"
                                     ></wy-step-editor>
                                 `;
     })}
@@ -5124,9 +2860,9 @@ This action cannot be undone.`;
                                 role="option"
                                 aria-selected="${index === selectedIndex ? "true" : "false"}"
                                 draggable="${this.allowReorder ? "true" : "false"}"
-                                @dragstart="${(e9) => this._onDragStart(e9, index)}"
+                                @dragstart="${(e6) => this._onDragStart(e6, index)}"
                                 @dragover="${this._onDragOver}"
-                                @drop="${(e9) => this._onDrop(e9, index)}"
+                                @drop="${(e6) => this._onDrop(e6, index)}"
                                 @dragend="${this._onDragEnd}"
                                 @click="${() => this._selectVariation(index)}"
                             >
@@ -5404,8 +3140,8 @@ ${subjectPrompt}`
     };
     this._markDirty();
   }
-  _handleImageChange(e9) {
-    const { file } = e9.detail;
+  _handleImageChange(e6) {
+    const { file } = e6.detail;
     this.dispatchEvent(new CustomEvent("image-upload", {
       detail: { file, promptId: this._editedPrompt?.id, target: "prompt" },
       bubbles: true,
@@ -5429,34 +3165,34 @@ ${subjectPrompt}`
       this._markDirty();
     }
   }
-  _handleRefImageUpload(e9) {
-    const { file, index } = e9.detail;
+  _handleRefImageUpload(e6) {
+    const { file, index } = e6.detail;
     this.dispatchEvent(new CustomEvent("reference-image-upload", {
       detail: { file, promptId: this._editedPrompt?.id, index },
       bubbles: true,
       composed: true
     }));
   }
-  _handleRefImageRemove(e9) {
-    const { index, path } = e9.detail;
+  _handleRefImageRemove(e6) {
+    const { index, path } = e6.detail;
     this.dispatchEvent(new CustomEvent("reference-image-remove", {
       detail: { promptId: this._editedPrompt?.id, index, path },
       bubbles: true,
       composed: true
     }));
   }
-  _handleVariationRefImageUpload(e9) {
-    e9.stopPropagation();
-    const { file, index, variationIndex, variationId } = e9.detail;
+  _handleVariationRefImageUpload(e6) {
+    e6.stopPropagation();
+    const { file, index, variationIndex, variationId } = e6.detail;
     this.dispatchEvent(new CustomEvent("reference-image-upload", {
       detail: { file, promptId: this._editedPrompt?.id, index, variationIndex, variationId },
       bubbles: true,
       composed: true
     }));
   }
-  _handleVariationRefImageRemove(e9) {
-    e9.stopPropagation();
-    const { index, path, variationIndex, variationId } = e9.detail;
+  _handleVariationRefImageRemove(e6) {
+    e6.stopPropagation();
+    const { index, path, variationIndex, variationId } = e6.detail;
     this.dispatchEvent(new CustomEvent("reference-image-remove", {
       detail: { promptId: this._editedPrompt?.id, index, path, variationIndex, variationId },
       bubbles: true,
@@ -5475,21 +3211,21 @@ ${subjectPrompt}`
       this._markDirty();
     }
   }
-  _handleHeroProviderChange(e9) {
-    this._heroProvider = e9.target.value;
+  _handleHeroProviderChange(e6) {
+    this._heroProvider = e6.target.value;
     this._heroError = "";
   }
-  _handleHeroQualityChange(e9) {
-    this._heroQuality = e9.target.value;
+  _handleHeroQualityChange(e6) {
+    this._heroQuality = e6.target.value;
     this._heroError = "";
   }
-  _handleHeroPromptInput(e9) {
-    this._heroPrompt = e9.target.value;
+  _handleHeroPromptInput(e6) {
+    this._heroPrompt = e6.target.value;
     this._heroPromptDirty = true;
     this._heroError = "";
   }
-  _handleHeroGeneratorToggle(e9) {
-    this._heroGeneratorOpen = e9.currentTarget.open;
+  _handleHeroGeneratorToggle(e6) {
+    this._heroGeneratorOpen = e6.currentTarget.open;
   }
   _handleResetHeroPrompt() {
     this._heroPrompt = this._buildHeroImagePrompt();
@@ -5572,27 +3308,27 @@ ${subjectPrompt}`
     this._heroMessage = "";
     this._heroError = "";
   }
-  _handleVariationImageChange(e9) {
-    e9.stopPropagation();
-    const { file, target, variationIndex, variationId } = e9.detail;
+  _handleVariationImageChange(e6) {
+    e6.stopPropagation();
+    const { file, target, variationIndex, variationId } = e6.detail;
     this.dispatchEvent(new CustomEvent("image-upload", {
       detail: { file, promptId: this._editedPrompt?.id, target, variationIndex, variationId },
       bubbles: true,
       composed: true
     }));
   }
-  _handleVariationImageRemove(e9) {
-    e9.stopPropagation();
-    const { target, variationIndex, variationId } = e9.detail;
+  _handleVariationImageRemove(e6) {
+    e6.stopPropagation();
+    const { target, variationIndex, variationId } = e6.detail;
     this.dispatchEvent(new CustomEvent("image-remove", {
       detail: { promptId: this._editedPrompt?.id, target, variationIndex, variationId },
       bubbles: true,
       composed: true
     }));
   }
-  _handleVariationsChange(e9) {
-    if (!Array.isArray(e9.detail?.variations)) return;
-    this._handleFieldChange("variations", e9.detail.variations);
+  _handleVariationsChange(e6) {
+    if (!Array.isArray(e6.detail?.variations)) return;
+    this._handleFieldChange("variations", e6.detail.variations);
   }
   _handleVariationSelectorChange(enabled) {
     if (!this._editedPrompt) return;
@@ -5696,14 +3432,14 @@ ${subjectPrompt}`
     this._markDirty();
     this.requestUpdate();
   }
-  _handleStepChange(e9) {
-    const { index, step } = e9.detail;
+  _handleStepChange(e6) {
+    const { index, step } = e6.detail;
     this._editedPrompt.steps[index] = step;
     this._markDirty();
     this.requestUpdate();
   }
-  _handleStepDelete(e9) {
-    const { index } = e9.detail;
+  _handleStepDelete(e6) {
+    const { index } = e6.detail;
     if (this._editedPrompt.steps.length === 1) {
       this._notifyToast("Cannot delete the last step. Convert to single-step mode instead.", "warning");
       return;
@@ -5720,8 +3456,8 @@ ${subjectPrompt}`
       composed: true
     }));
   }
-  _handleStepMoveUp(e9) {
-    const { index } = e9.detail;
+  _handleStepMoveUp(e6) {
+    const { index } = e6.detail;
     if (index === 0) return;
     const steps = this._editedPrompt.steps;
     [steps[index - 1], steps[index]] = [steps[index], steps[index - 1]];
@@ -5735,8 +3471,8 @@ ${subjectPrompt}`
     this._markDirty();
     this.requestUpdate();
   }
-  _handleStepMoveDown(e9) {
-    const { index } = e9.detail;
+  _handleStepMoveDown(e6) {
+    const { index } = e6.detail;
     if (index === this._editedPrompt.steps.length - 1) return;
     const steps = this._editedPrompt.steps;
     [steps[index], steps[index + 1]] = [steps[index + 1], steps[index]];
@@ -5750,8 +3486,8 @@ ${subjectPrompt}`
     this._markDirty();
     this.requestUpdate();
   }
-  _handleStepToggle(e9) {
-    const { index } = e9.detail;
+  _handleStepToggle(e6) {
+    const { index } = e6.detail;
     const expandedIndex = this._expandedSteps.indexOf(index);
     if (expandedIndex > -1) {
       this._expandedSteps.splice(expandedIndex, 1);
@@ -5907,8 +3643,8 @@ ${subjectPrompt}`
             </div>
         `;
   }
-  _handleVariationExpand(e9) {
-    this._openVariationIndex = e9.detail?.index ?? -1;
+  _handleVariationExpand(e6) {
+    this._openVariationIndex = e6.detail?.index ?? -1;
   }
   _handleWindowScroll() {
     if (!this._editedPrompt) return;
@@ -6097,8 +3833,8 @@ ${subjectPrompt}`
                     <!-- Header -->
                     <div class="editor-header">
                         <nav class="breadcrumbs">
-                            <a href="#" @click="${(e9) => {
-      e9.preventDefault();
+                            <a href="#" @click="${(e6) => {
+      e6.preventDefault();
       window.location.hash = "";
     }}">← Back to prompts list</a>
                         </nav>
@@ -6121,7 +3857,7 @@ ${subjectPrompt}`
                                 type="text"
                                 id="title"
                                 .value="${this._editedPrompt.title || ""}"
-                                @input="${(e9) => this._handleFieldChange("title", e9.target.value)}"
+                                @input="${(e6) => this._handleFieldChange("title", e6.target.value)}"
                                 ?disabled="${this.readonly}"
                             >
                         </div>
@@ -6132,7 +3868,7 @@ ${subjectPrompt}`
                                 type="text"
                                 id="slug"
                                 .value="${this._editedPrompt.slug || ""}"
-                                @input="${(e9) => this._handleFieldChange("slug", e9.target.value)}"
+                                @input="${(e6) => this._handleFieldChange("slug", e6.target.value)}"
                                 ?disabled="${this.readonly}"
                             >
                         </div>
@@ -6153,7 +3889,7 @@ ${subjectPrompt}`
                                 id="description"
                                 rows="3"
                                 .value="${this._editedPrompt.description || ""}"
-                                @input="${(e9) => this._handleFieldChange("description", e9.target.value)}"
+                                @input="${(e6) => this._handleFieldChange("description", e6.target.value)}"
                                 ?disabled="${this.readonly}"
                             ></textarea>
                         </div>
@@ -6164,7 +3900,7 @@ ${subjectPrompt}`
                                 id="instructions"
                                 rows="4"
                                 .value="${this._editedPrompt.instructions || ""}"
-                                @input="${(e9) => this._handleFieldChange("instructions", e9.target.value)}"
+                                @input="${(e6) => this._handleFieldChange("instructions", e6.target.value)}"
                                 ?disabled="${this.readonly}"
                             ></textarea>
                         </div>
@@ -6180,7 +3916,7 @@ ${subjectPrompt}`
                                 type="text"
                                 id="icon"
                                 .value="${this._editedPrompt.icon || ""}"
-                                @input="${(e9) => this._handleFieldChange("icon", e9.target.value)}"
+                                @input="${(e6) => this._handleFieldChange("icon", e6.target.value)}"
                                 placeholder="icon_name"
                                 ?disabled="${this.readonly}"
                             >
@@ -6189,7 +3925,7 @@ ${subjectPrompt}`
                             label="Category"
                             .value="${this._editedPrompt.category || ""}"
                             .options="${categoryOptions}"
-                            @change="${(e9) => this._handleFieldChange("category", e9.detail.value)}"
+                            @change="${(e6) => this._handleFieldChange("category", e6.detail.value)}"
                         ></wy-dropdown>
                         ${this._renderPromptImageControl()}
                         ${this._renderHeroImageGenerator()}
@@ -6228,7 +3964,7 @@ ${subjectPrompt}`
                                         .options="${["dropdown", "visual"]}"
                                         .labels="${["Off", "On"]}"
                                         .value="${this._editedPrompt.variationSelector === "visual" ? "visual" : "dropdown"}"
-                                        @change="${(e9) => this._handleVariationSelectorChange(e9.detail.value === "visual")}"
+                                        @change="${(e6) => this._handleVariationSelectorChange(e6.detail.value === "visual")}"
                                     ></wy-option-toggle>
                                     ${this._editedPrompt.variationSelector === "visual" ? b2`
                                         <wy-option-toggle
@@ -6238,7 +3974,7 @@ ${subjectPrompt}`
                                             .options="${["thumbnail", "details"]}"
                                             .labels="${["Thumbnail only", "Title + description"]}"
                                             .value="${this._editedPrompt.variationSelectorTileMode === "details" ? "details" : "thumbnail"}"
-                                            @change="${(e9) => this._handleVariationTileModeChange(e9.detail.value)}"
+                                            @change="${(e6) => this._handleVariationTileModeChange(e6.detail.value)}"
                                         ></wy-option-toggle>
                                     ` : ""}
                                 </div>
@@ -6274,7 +4010,7 @@ ${subjectPrompt}`
                                         name="mode" 
                                         value="single" 
                                         ?checked="${this._promptMode === "single"}"
-                                        @click="${(e9) => this._handleModeChange(e9, "single")}"
+                                        @click="${(e6) => this._handleModeChange(e6, "single")}"
                                     >
                                     Single Step
                                 </label>
@@ -6284,7 +4020,7 @@ ${subjectPrompt}`
                                         name="mode" 
                                         value="multi" 
                                         ?checked="${this._promptMode === "multi"}"
-                                        @click="${(e9) => this._handleModeChange(e9, "multi")}"
+                                        @click="${(e6) => this._handleModeChange(e6, "multi")}"
                                     >
                                     Multi-Step
                                 </label>
@@ -6298,7 +4034,7 @@ ${subjectPrompt}`
                                 <h2 class="card-title" data-eyebrow="Section 04">Variables</h2>
                                 <wy-variable-editor
                                     .variables="${this._editedPrompt.variables || []}"
-                                    @change="${(e9) => this._handleFieldChange("variables", e9.detail.variables)}"
+                                    @change="${(e6) => this._handleFieldChange("variables", e6.detail.variables)}"
                                 ></wy-variable-editor>
                             </div>
 
@@ -6308,7 +4044,7 @@ ${subjectPrompt}`
                                 <p class="card-description">Upload images and reference them in your template with {{variable_name}}. Their public URLs are substituted when the prompt is copied.</p>
                                 <wy-reference-image-editor
                                     .referenceImages="${this._editedPrompt.referenceImages || []}"
-                                    @change="${(e9) => this._handleFieldChange("referenceImages", e9.detail.referenceImages)}"
+                                    @change="${(e6) => this._handleFieldChange("referenceImages", e6.detail.referenceImages)}"
                                     @reference-image-upload="${this._handleRefImageUpload}"
                                     @reference-image-remove="${this._handleRefImageRemove}"
                                 ></wy-reference-image-editor>
@@ -6323,7 +4059,7 @@ ${subjectPrompt}`
                                     .variables="${variableNames}"
                                     placeholder="Enter your prompt template here. Use {{variable-name}} for substitutions."
                                     rows="12"
-                                    @value-input="${(e9) => this._handleFieldChange("template", e9.detail.value)}"
+                                    @value-input="${(e6) => this._handleFieldChange("template", e6.detail.value)}"
                                 ></wy-code-textarea>
                             </div>
                         ` : ""}
@@ -6377,7 +4113,7 @@ ${subjectPrompt}`
                                     .options="${["false", "true"]}"
                                     .labels="${["Off", "On"]}"
                                     .value="${this._editedPrompt.featured ? "true" : "false"}"
-                                    @change="${(e9) => this._handleFieldChange("featured", e9.detail.checked)}"
+                                    @change="${(e6) => this._handleFieldChange("featured", e6.detail.checked)}"
                                 ></wy-option-toggle>
                             </div>
                             <div class="visibility-setting archive">
@@ -6392,7 +4128,7 @@ ${subjectPrompt}`
                                     .options="${["false", "true"]}"
                                     .labels="${["Off", "On"]}"
                                     .value="${this._editedPrompt.archived ? "true" : "false"}"
-                                    @change="${(e9) => this._handleFieldChange("archived", e9.detail.checked)}"
+                                    @change="${(e6) => this._handleFieldChange("archived", e6.detail.checked)}"
                                 ></wy-option-toggle>
                             </div>
                             <div class="visibility-setting">
@@ -6407,7 +4143,7 @@ ${subjectPrompt}`
                                     .options="${["false", "true"]}"
                                     .labels="${["Off", "On"]}"
                                     .value="${this._editedPrompt.showPalette ? "true" : "false"}"
-                                    @change="${(e9) => this._handleFieldChange("showPalette", e9.detail.checked)}"
+                                    @change="${(e6) => this._handleFieldChange("showPalette", e6.detail.checked)}"
                                 ></wy-option-toggle>
                             </div>
                         </div>
@@ -6478,11 +4214,11 @@ var WyStepEditor = class extends i4 {
       composed: true
     }));
   }
-  _handleVariableChange(e9) {
-    this._handleFieldChange("variables", e9.detail.variables);
+  _handleVariableChange(e6) {
+    this._handleFieldChange("variables", e6.detail.variables);
   }
-  _handleTemplateChange(e9) {
-    this._handleFieldChange("template", e9.detail.value);
+  _handleTemplateChange(e6) {
+    this._handleFieldChange("template", e6.detail.value);
   }
   _handleMoveUp() {
     this.dispatchEvent(new CustomEvent("step-move-up", {
@@ -6541,7 +4277,7 @@ This action cannot be undone.`;
                                     type="text"
                                     id="step-name-${this.index}"
                                     .value="${this.step.name || ""}"
-                                    @input="${(e9) => this._handleFieldChange("name", e9.target.value)}"
+                                    @input="${(e6) => this._handleFieldChange("name", e6.target.value)}"
                                     placeholder="e.g., Conceptual Decomposition"
                                 >
                             </div>
@@ -6558,7 +4294,7 @@ This action cannot be undone.`;
                                     type="text"
                                     id="step-id-${this.index}"
                                     .value="${this.step.id || ""}"
-                                    @input="${(e9) => this._handleFieldChange("id", e9.target.value)}"
+                                    @input="${(e6) => this._handleFieldChange("id", e6.target.value)}"
                                     placeholder="e.g., decomposition"
                                 >
                             </div>
@@ -6574,7 +4310,7 @@ This action cannot be undone.`;
                                 <textarea
                                     id="step-instructions-${this.index}"
                                     .value="${this.step.instructions || ""}"
-                                    @input="${(e9) => this._handleFieldChange("instructions", e9.target.value)}"
+                                    @input="${(e6) => this._handleFieldChange("instructions", e6.target.value)}"
                                     placeholder="e.g., Start by entering your topic. This step will identify three distinct conceptual pillars..."
                                 ></textarea>
                             </div>
@@ -6651,49 +4387,31 @@ __publicField(WyStepEditor, "properties", {
 customElements.define("wy-step-editor", WyStepEditor);
 
 // node_modules/lit-html/directive-helpers.js
-var { I: t5 } = j;
-var r6 = (o8) => void 0 === o8.strings;
+var { I: t4 } = j;
+var r4 = (o6) => void 0 === o6.strings;
 var m2 = {};
-var p3 = (o8, t6 = m2) => o8._$AH = t6;
+var p3 = (o6, t5 = m2) => o6._$AH = t5;
 
 // node_modules/lit-html/directives/live.js
-var l3 = e6(class extends i5 {
-  constructor(r7) {
-    if (super(r7), r7.type !== t4.PROPERTY && r7.type !== t4.ATTRIBUTE && r7.type !== t4.BOOLEAN_ATTRIBUTE) throw Error("The `live` directive is not allowed on child or event bindings");
-    if (!r6(r7)) throw Error("`live` bindings can only contain a single expression");
+var l3 = e4(class extends i5 {
+  constructor(r5) {
+    if (super(r5), r5.type !== t3.PROPERTY && r5.type !== t3.ATTRIBUTE && r5.type !== t3.BOOLEAN_ATTRIBUTE) throw Error("The `live` directive is not allowed on child or event bindings");
+    if (!r4(r5)) throw Error("`live` bindings can only contain a single expression");
   }
-  render(r7) {
-    return r7;
+  render(r5) {
+    return r5;
   }
-  update(i6, [t6]) {
-    if (t6 === E || t6 === A) return t6;
-    const o8 = i6.element, l6 = i6.name;
-    if (i6.type === t4.PROPERTY) {
-      if (t6 === o8[l6]) return E;
-    } else if (i6.type === t4.BOOLEAN_ATTRIBUTE) {
-      if (!!t6 === o8.hasAttribute(l6)) return E;
-    } else if (i6.type === t4.ATTRIBUTE && o8.getAttribute(l6) === t6 + "") return E;
-    return p3(i6), t6;
+  update(i6, [t5]) {
+    if (t5 === E || t5 === A) return t5;
+    const o6 = i6.element, l6 = i6.name;
+    if (i6.type === t3.PROPERTY) {
+      if (t5 === o6[l6]) return E;
+    } else if (i6.type === t3.BOOLEAN_ATTRIBUTE) {
+      if (!!t5 === o6.hasAttribute(l6)) return E;
+    } else if (i6.type === t3.ATTRIBUTE && o6.getAttribute(l6) === t5 + "") return E;
+    return p3(i6), t5;
   }
 });
-
-// node_modules/lit-html/directives/unsafe-html.js
-var e8 = class extends i5 {
-  constructor(i6) {
-    if (super(i6), this.it = A, i6.type !== t4.CHILD) throw Error(this.constructor.directiveName + "() can only be used in child bindings");
-  }
-  render(r7) {
-    if (r7 === A || null == r7) return this._t = void 0, this.it = r7;
-    if (r7 === E) return r7;
-    if ("string" != typeof r7) throw Error(this.constructor.directiveName + "() called with a non-string value");
-    if (r7 === this.it) return this._t;
-    this.it = r7;
-    const s4 = [r7];
-    return s4.raw = s4, this._t = { _$litType$: this.constructor.resultType, strings: s4, values: [] };
-  }
-};
-e8.directiveName = "unsafeHTML", e8.resultType = 1;
-var o7 = e6(e8);
 
 // node_modules/marked/lib/marked.esm.js
 function M2() {
@@ -6705,18 +4423,18 @@ function N2(l6) {
 }
 var _2 = { exec: () => null };
 function E2(l6) {
-  let e9 = [];
-  return (t6) => {
-    let n5 = Math.max(0, Math.min(3, t6 - 1)), s4 = e9[n5];
-    return s4 || (s4 = l6(n5), e9[n5] = s4), s4;
+  let e6 = [];
+  return (t5) => {
+    let n4 = Math.max(0, Math.min(3, t5 - 1)), s4 = e6[n4];
+    return s4 || (s4 = l6(n4), e6[n4] = s4), s4;
   };
 }
-function d3(l6, e9 = "") {
-  let t6 = typeof l6 == "string" ? l6 : l6.source, n5 = { replace: (s4, r7) => {
-    let i6 = typeof r7 == "string" ? r7 : r7.source;
-    return i6 = i6.replace(m3.caret, "$1"), t6 = t6.replace(s4, i6), n5;
-  }, getRegex: () => new RegExp(t6, e9) };
-  return n5;
+function d3(l6, e6 = "") {
+  let t5 = typeof l6 == "string" ? l6 : l6.source, n4 = { replace: (s4, r5) => {
+    let i6 = typeof r5 == "string" ? r5 : r5.source;
+    return i6 = i6.replace(m3.caret, "$1"), t5 = t5.replace(s4, i6), n4;
+  }, getRegex: () => new RegExp(t5, e6) };
+  return n4;
 }
 var Te = ((l6 = "") => {
   try {
@@ -6790,8 +4508,8 @@ var D2 = { normal: W, gfm: Ee, pedantic: Ie };
 var A2 = { normal: J, gfm: Q, breaks: nt, pedantic: tt };
 var rt = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
 var ge = (l6) => rt[l6];
-function O(l6, e9) {
-  if (e9) {
+function O(l6, e6) {
+  if (e6) {
     if (m3.escapeTest.test(l6)) return l6.replace(m3.escapeReplace, ge);
   } else if (m3.escapeTestNoEncode.test(l6)) return l6.replace(m3.escapeReplaceNoEncode, ge);
   return l6;
@@ -6804,171 +4522,171 @@ function V2(l6) {
   }
   return l6;
 }
-function Y(l6, e9) {
-  let t6 = l6.replace(m3.findPipe, (r7, i6, o8) => {
+function Y(l6, e6) {
+  let t5 = l6.replace(m3.findPipe, (r5, i6, o6) => {
     let u3 = false, a3 = i6;
-    for (; --a3 >= 0 && o8[a3] === "\\"; ) u3 = !u3;
+    for (; --a3 >= 0 && o6[a3] === "\\"; ) u3 = !u3;
     return u3 ? "|" : " |";
-  }), n5 = t6.split(m3.splitPipe), s4 = 0;
-  if (n5[0].trim() || n5.shift(), n5.length > 0 && !n5.at(-1)?.trim() && n5.pop(), e9) if (n5.length > e9) n5.splice(e9);
-  else for (; n5.length < e9; ) n5.push("");
-  for (; s4 < n5.length; s4++) n5[s4] = n5[s4].trim().replace(m3.slashPipe, "|");
-  return n5;
+  }), n4 = t5.split(m3.splitPipe), s4 = 0;
+  if (n4[0].trim() || n4.shift(), n4.length > 0 && !n4.at(-1)?.trim() && n4.pop(), e6) if (n4.length > e6) n4.splice(e6);
+  else for (; n4.length < e6; ) n4.push("");
+  for (; s4 < n4.length; s4++) n4[s4] = n4[s4].trim().replace(m3.slashPipe, "|");
+  return n4;
 }
-function $2(l6, e9, t6) {
-  let n5 = l6.length;
-  if (n5 === 0) return "";
+function $2(l6, e6, t5) {
+  let n4 = l6.length;
+  if (n4 === 0) return "";
   let s4 = 0;
-  for (; s4 < n5; ) {
-    let r7 = l6.charAt(n5 - s4 - 1);
-    if (r7 === e9 && !t6) s4++;
-    else if (r7 !== e9 && t6) s4++;
+  for (; s4 < n4; ) {
+    let r5 = l6.charAt(n4 - s4 - 1);
+    if (r5 === e6 && !t5) s4++;
+    else if (r5 !== e6 && t5) s4++;
     else break;
   }
-  return l6.slice(0, n5 - s4);
+  return l6.slice(0, n4 - s4);
 }
 function ee(l6) {
-  let e9 = l6.split(`
-`), t6 = e9.length - 1;
-  for (; t6 >= 0 && m3.blankLine.test(e9[t6]); ) t6--;
-  return e9.length - t6 <= 2 ? l6 : e9.slice(0, t6 + 1).join(`
+  let e6 = l6.split(`
+`), t5 = e6.length - 1;
+  for (; t5 >= 0 && m3.blankLine.test(e6[t5]); ) t5--;
+  return e6.length - t5 <= 2 ? l6 : e6.slice(0, t5 + 1).join(`
 `);
 }
-function fe(l6, e9) {
-  if (l6.indexOf(e9[1]) === -1) return -1;
-  let t6 = 0;
-  for (let n5 = 0; n5 < l6.length; n5++) if (l6[n5] === "\\") n5++;
-  else if (l6[n5] === e9[0]) t6++;
-  else if (l6[n5] === e9[1] && (t6--, t6 < 0)) return n5;
-  return t6 > 0 ? -2 : -1;
+function fe(l6, e6) {
+  if (l6.indexOf(e6[1]) === -1) return -1;
+  let t5 = 0;
+  for (let n4 = 0; n4 < l6.length; n4++) if (l6[n4] === "\\") n4++;
+  else if (l6[n4] === e6[0]) t5++;
+  else if (l6[n4] === e6[1] && (t5--, t5 < 0)) return n4;
+  return t5 > 0 ? -2 : -1;
 }
-function me(l6, e9 = 0) {
-  let t6 = e9, n5 = "";
+function me(l6, e6 = 0) {
+  let t5 = e6, n4 = "";
   for (let s4 of l6) if (s4 === "	") {
-    let r7 = 4 - t6 % 4;
-    n5 += " ".repeat(r7), t6 += r7;
-  } else n5 += s4, t6++;
-  return n5;
+    let r5 = 4 - t5 % 4;
+    n4 += " ".repeat(r5), t5 += r5;
+  } else n4 += s4, t5++;
+  return n4;
 }
-function xe(l6, e9, t6, n5, s4) {
-  let r7 = e9.href, i6 = e9.title || null, o8 = l6[1].replace(s4.other.outputLinkReplace, "$1");
-  n5.state.inLink = true;
-  let u3 = { type: l6[0].charAt(0) === "!" ? "image" : "link", raw: t6, href: r7, title: i6, text: o8, tokens: n5.inlineTokens(o8) };
-  return n5.state.inLink = false, u3;
+function xe(l6, e6, t5, n4, s4) {
+  let r5 = e6.href, i6 = e6.title || null, o6 = l6[1].replace(s4.other.outputLinkReplace, "$1");
+  n4.state.inLink = true;
+  let u3 = { type: l6[0].charAt(0) === "!" ? "image" : "link", raw: t5, href: r5, title: i6, text: o6, tokens: n4.inlineTokens(o6) };
+  return n4.state.inLink = false, u3;
 }
-function st(l6, e9, t6) {
-  let n5 = l6.match(t6.other.indentCodeCompensation);
-  if (n5 === null) return e9;
-  let s4 = n5[1];
-  return e9.split(`
-`).map((r7) => {
-    let i6 = r7.match(t6.other.beginningSpace);
-    if (i6 === null) return r7;
-    let [o8] = i6;
-    return o8.length >= s4.length ? r7.slice(s4.length) : r7;
+function st(l6, e6, t5) {
+  let n4 = l6.match(t5.other.indentCodeCompensation);
+  if (n4 === null) return e6;
+  let s4 = n4[1];
+  return e6.split(`
+`).map((r5) => {
+    let i6 = r5.match(t5.other.beginningSpace);
+    if (i6 === null) return r5;
+    let [o6] = i6;
+    return o6.length >= s4.length ? r5.slice(s4.length) : r5;
   }).join(`
 `);
 }
 var w2 = class {
-  constructor(e9) {
+  constructor(e6) {
     __publicField(this, "options");
     __publicField(this, "rules");
     __publicField(this, "lexer");
-    this.options = e9 || T2;
+    this.options = e6 || T2;
   }
-  space(e9) {
-    let t6 = this.rules.block.newline.exec(e9);
-    if (t6 && t6[0].length > 0) return { type: "space", raw: t6[0] };
+  space(e6) {
+    let t5 = this.rules.block.newline.exec(e6);
+    if (t5 && t5[0].length > 0) return { type: "space", raw: t5[0] };
   }
-  code(e9) {
-    let t6 = this.rules.block.code.exec(e9);
-    if (t6) {
-      let n5 = this.options.pedantic ? t6[0] : ee(t6[0]), s4 = n5.replace(this.rules.other.codeRemoveIndent, "");
-      return { type: "code", raw: n5, codeBlockStyle: "indented", text: s4 };
+  code(e6) {
+    let t5 = this.rules.block.code.exec(e6);
+    if (t5) {
+      let n4 = this.options.pedantic ? t5[0] : ee(t5[0]), s4 = n4.replace(this.rules.other.codeRemoveIndent, "");
+      return { type: "code", raw: n4, codeBlockStyle: "indented", text: s4 };
     }
   }
-  fences(e9) {
-    let t6 = this.rules.block.fences.exec(e9);
-    if (t6) {
-      let n5 = t6[0], s4 = st(n5, t6[3] || "", this.rules);
-      return { type: "code", raw: n5, lang: t6[2] ? t6[2].trim().replace(this.rules.inline.anyPunctuation, "$1") : t6[2], text: s4 };
+  fences(e6) {
+    let t5 = this.rules.block.fences.exec(e6);
+    if (t5) {
+      let n4 = t5[0], s4 = st(n4, t5[3] || "", this.rules);
+      return { type: "code", raw: n4, lang: t5[2] ? t5[2].trim().replace(this.rules.inline.anyPunctuation, "$1") : t5[2], text: s4 };
     }
   }
-  heading(e9) {
-    let t6 = this.rules.block.heading.exec(e9);
-    if (t6) {
-      let n5 = t6[2].trim();
-      if (this.rules.other.endingHash.test(n5)) {
-        let s4 = $2(n5, "#");
-        (this.options.pedantic || !s4 || this.rules.other.endingSpaceChar.test(s4)) && (n5 = s4.trim());
+  heading(e6) {
+    let t5 = this.rules.block.heading.exec(e6);
+    if (t5) {
+      let n4 = t5[2].trim();
+      if (this.rules.other.endingHash.test(n4)) {
+        let s4 = $2(n4, "#");
+        (this.options.pedantic || !s4 || this.rules.other.endingSpaceChar.test(s4)) && (n4 = s4.trim());
       }
-      return { type: "heading", raw: $2(t6[0], `
-`), depth: t6[1].length, text: n5, tokens: this.lexer.inline(n5) };
+      return { type: "heading", raw: $2(t5[0], `
+`), depth: t5[1].length, text: n4, tokens: this.lexer.inline(n4) };
     }
   }
-  hr(e9) {
-    let t6 = this.rules.block.hr.exec(e9);
-    if (t6) return { type: "hr", raw: $2(t6[0], `
+  hr(e6) {
+    let t5 = this.rules.block.hr.exec(e6);
+    if (t5) return { type: "hr", raw: $2(t5[0], `
 `) };
   }
-  blockquote(e9) {
-    let t6 = this.rules.block.blockquote.exec(e9);
-    if (t6) {
-      let n5 = $2(t6[0], `
+  blockquote(e6) {
+    let t5 = this.rules.block.blockquote.exec(e6);
+    if (t5) {
+      let n4 = $2(t5[0], `
 `).split(`
-`), s4 = "", r7 = "", i6 = [];
-      for (; n5.length > 0; ) {
-        let o8 = false, u3 = [], a3;
-        for (a3 = 0; a3 < n5.length; a3++) if (this.rules.other.blockquoteStart.test(n5[a3])) u3.push(n5[a3]), o8 = true;
-        else if (!o8) u3.push(n5[a3]);
+`), s4 = "", r5 = "", i6 = [];
+      for (; n4.length > 0; ) {
+        let o6 = false, u3 = [], a3;
+        for (a3 = 0; a3 < n4.length; a3++) if (this.rules.other.blockquoteStart.test(n4[a3])) u3.push(n4[a3]), o6 = true;
+        else if (!o6) u3.push(n4[a3]);
         else break;
-        n5 = n5.slice(a3);
+        n4 = n4.slice(a3);
         let c4 = u3.join(`
 `), p4 = c4.replace(this.rules.other.blockquoteSetextReplace, `
     $1`).replace(this.rules.other.blockquoteSetextReplace2, "");
         s4 = s4 ? `${s4}
-${c4}` : c4, r7 = r7 ? `${r7}
+${c4}` : c4, r5 = r5 ? `${r5}
 ${p4}` : p4;
         let k2 = this.lexer.state.top;
-        if (this.lexer.state.top = true, this.lexer.blockTokens(p4, i6, true), this.lexer.state.top = k2, n5.length === 0) break;
+        if (this.lexer.state.top = true, this.lexer.blockTokens(p4, i6, true), this.lexer.state.top = k2, n4.length === 0) break;
         let h3 = i6.at(-1);
         if (h3?.type === "code") break;
         if (h3?.type === "blockquote") {
           let R2 = h3, f3 = R2.raw + `
-` + n5.join(`
+` + n4.join(`
 `), S3 = this.blockquote(f3);
-          i6[i6.length - 1] = S3, s4 = s4.substring(0, s4.length - R2.raw.length) + S3.raw, r7 = r7.substring(0, r7.length - R2.text.length) + S3.text;
+          i6[i6.length - 1] = S3, s4 = s4.substring(0, s4.length - R2.raw.length) + S3.raw, r5 = r5.substring(0, r5.length - R2.text.length) + S3.text;
           break;
         } else if (h3?.type === "list") {
           let R2 = h3, f3 = R2.raw + `
-` + n5.join(`
+` + n4.join(`
 `), S3 = this.list(f3);
-          i6[i6.length - 1] = S3, s4 = s4.substring(0, s4.length - h3.raw.length) + S3.raw, r7 = r7.substring(0, r7.length - R2.raw.length) + S3.raw, n5 = f3.substring(i6.at(-1).raw.length).split(`
+          i6[i6.length - 1] = S3, s4 = s4.substring(0, s4.length - h3.raw.length) + S3.raw, r5 = r5.substring(0, r5.length - R2.raw.length) + S3.raw, n4 = f3.substring(i6.at(-1).raw.length).split(`
 `);
           continue;
         }
       }
-      return { type: "blockquote", raw: s4, tokens: i6, text: r7 };
+      return { type: "blockquote", raw: s4, tokens: i6, text: r5 };
     }
   }
-  list(e9) {
-    let t6 = this.rules.block.list.exec(e9);
-    if (t6) {
-      let n5 = t6[1].trim(), s4 = n5.length > 1, r7 = { type: "list", raw: "", ordered: s4, start: s4 ? +n5.slice(0, -1) : "", loose: false, items: [] };
-      n5 = s4 ? `\\d{1,9}\\${n5.slice(-1)}` : `\\${n5}`, this.options.pedantic && (n5 = s4 ? n5 : "[*+-]");
-      let i6 = this.rules.other.listItemRegex(n5), o8 = false;
-      for (; e9; ) {
+  list(e6) {
+    let t5 = this.rules.block.list.exec(e6);
+    if (t5) {
+      let n4 = t5[1].trim(), s4 = n4.length > 1, r5 = { type: "list", raw: "", ordered: s4, start: s4 ? +n4.slice(0, -1) : "", loose: false, items: [] };
+      n4 = s4 ? `\\d{1,9}\\${n4.slice(-1)}` : `\\${n4}`, this.options.pedantic && (n4 = s4 ? n4 : "[*+-]");
+      let i6 = this.rules.other.listItemRegex(n4), o6 = false;
+      for (; e6; ) {
         let a3 = false, c4 = "", p4 = "";
-        if (!(t6 = i6.exec(e9)) || this.rules.block.hr.test(e9)) break;
-        c4 = t6[0], e9 = e9.substring(c4.length);
-        let k2 = me(t6[2].split(`
-`, 1)[0], t6[1].length), h3 = e9.split(`
+        if (!(t5 = i6.exec(e6)) || this.rules.block.hr.test(e6)) break;
+        c4 = t5[0], e6 = e6.substring(c4.length);
+        let k2 = me(t5[2].split(`
+`, 1)[0], t5[1].length), h3 = e6.split(`
 `, 1)[0], R2 = !k2.trim(), f3 = 0;
-        if (this.options.pedantic ? (f3 = 2, p4 = k2.trimStart()) : R2 ? f3 = t6[1].length + 1 : (f3 = k2.search(this.rules.other.nonSpaceChar), f3 = f3 > 4 ? 1 : f3, p4 = k2.slice(f3), f3 += t6[1].length), R2 && this.rules.other.blankLine.test(h3) && (c4 += h3 + `
-`, e9 = e9.substring(h3.length + 1), a3 = true), !a3) {
+        if (this.options.pedantic ? (f3 = 2, p4 = k2.trimStart()) : R2 ? f3 = t5[1].length + 1 : (f3 = k2.search(this.rules.other.nonSpaceChar), f3 = f3 > 4 ? 1 : f3, p4 = k2.slice(f3), f3 += t5[1].length), R2 && this.rules.other.blankLine.test(h3) && (c4 += h3 + `
+`, e6 = e6.substring(h3.length + 1), a3 = true), !a3) {
           let S3 = this.rules.other.nextBulletRegex(f3), te = this.rules.other.hrRegex(f3), ne = this.rules.other.fencesBeginRegex(f3), re = this.rules.other.headingBeginRegex(f3), be = this.rules.other.htmlBeginRegex(f3), Re = this.rules.other.blockquoteBeginRegex(f3);
-          for (; e9; ) {
-            let G = e9.split(`
+          for (; e6; ) {
+            let G = e6.split(`
 `, 1)[0], C2;
             if (h3 = G, this.options.pedantic ? (h3 = h3.replace(this.rules.other.listReplaceNesting, "  "), C2 = h3) : C2 = h3.replace(this.rules.other.tabCharGlobal, "    "), ne.test(h3) || re.test(h3) || be.test(h3) || Re.test(h3) || S3.test(h3) || te.test(h3)) break;
             if (C2.search(this.rules.other.nonSpaceChar) >= f3 || !h3.trim()) p4 += `
@@ -6979,16 +4697,16 @@ ${p4}` : p4;
 ` + h3;
             }
             R2 = !h3.trim(), c4 += G + `
-`, e9 = e9.substring(G.length + 1), k2 = C2.slice(f3);
+`, e6 = e6.substring(G.length + 1), k2 = C2.slice(f3);
           }
         }
-        r7.loose || (o8 ? r7.loose = true : this.rules.other.doubleBlankLine.test(c4) && (o8 = true)), r7.items.push({ type: "list_item", raw: c4, task: !!this.options.gfm && this.rules.other.listIsTask.test(p4), loose: false, text: p4, tokens: [] }), r7.raw += c4;
+        r5.loose || (o6 ? r5.loose = true : this.rules.other.doubleBlankLine.test(c4) && (o6 = true)), r5.items.push({ type: "list_item", raw: c4, task: !!this.options.gfm && this.rules.other.listIsTask.test(p4), loose: false, text: p4, tokens: [] }), r5.raw += c4;
       }
-      let u3 = r7.items.at(-1);
+      let u3 = r5.items.at(-1);
       if (u3) u3.raw = u3.raw.trimEnd(), u3.text = u3.text.trimEnd();
       else return;
-      r7.raw = r7.raw.trimEnd();
-      for (let a3 of r7.items) {
+      r5.raw = r5.raw.trimEnd();
+      for (let a3 of r5.items) {
         this.lexer.state.top = false, a3.tokens = this.lexer.blockTokens(a3.text, []);
         let c4 = a3.tokens[0];
         if (a3.task && (c4?.type === "text" || c4?.type === "paragraph")) {
@@ -7000,120 +4718,120 @@ ${p4}` : p4;
           let p4 = this.rules.other.listTaskCheckbox.exec(a3.raw);
           if (p4) {
             let k2 = { type: "checkbox", raw: p4[0] + " ", checked: p4[0] !== "[ ]" };
-            a3.checked = k2.checked, r7.loose ? a3.tokens[0] && ["paragraph", "text"].includes(a3.tokens[0].type) && "tokens" in a3.tokens[0] && a3.tokens[0].tokens ? (a3.tokens[0].raw = k2.raw + a3.tokens[0].raw, a3.tokens[0].text = k2.raw + a3.tokens[0].text, a3.tokens[0].tokens.unshift(k2)) : a3.tokens.unshift({ type: "paragraph", raw: k2.raw, text: k2.raw, tokens: [k2] }) : a3.tokens.unshift(k2);
+            a3.checked = k2.checked, r5.loose ? a3.tokens[0] && ["paragraph", "text"].includes(a3.tokens[0].type) && "tokens" in a3.tokens[0] && a3.tokens[0].tokens ? (a3.tokens[0].raw = k2.raw + a3.tokens[0].raw, a3.tokens[0].text = k2.raw + a3.tokens[0].text, a3.tokens[0].tokens.unshift(k2)) : a3.tokens.unshift({ type: "paragraph", raw: k2.raw, text: k2.raw, tokens: [k2] }) : a3.tokens.unshift(k2);
           }
         } else a3.task && (a3.task = false);
-        if (!r7.loose) {
+        if (!r5.loose) {
           let p4 = a3.tokens.filter((h3) => h3.type === "space"), k2 = p4.length > 0 && p4.some((h3) => this.rules.other.anyLine.test(h3.raw));
-          r7.loose = k2;
+          r5.loose = k2;
         }
       }
-      if (r7.loose) for (let a3 of r7.items) {
+      if (r5.loose) for (let a3 of r5.items) {
         a3.loose = true;
         for (let c4 of a3.tokens) c4.type === "text" && (c4.type = "paragraph");
       }
-      return r7;
+      return r5;
     }
   }
-  html(e9) {
-    let t6 = this.rules.block.html.exec(e9);
-    if (t6) {
-      let n5 = ee(t6[0]);
-      return { type: "html", block: true, raw: n5, pre: t6[1] === "pre" || t6[1] === "script" || t6[1] === "style", text: n5 };
+  html(e6) {
+    let t5 = this.rules.block.html.exec(e6);
+    if (t5) {
+      let n4 = ee(t5[0]);
+      return { type: "html", block: true, raw: n4, pre: t5[1] === "pre" || t5[1] === "script" || t5[1] === "style", text: n4 };
     }
   }
-  def(e9) {
-    let t6 = this.rules.block.def.exec(e9);
-    if (t6) {
-      let n5 = t6[1].toLowerCase().replace(this.rules.other.multipleSpaceGlobal, " "), s4 = t6[2] ? t6[2].replace(this.rules.other.hrefBrackets, "$1").replace(this.rules.inline.anyPunctuation, "$1") : "", r7 = t6[3] ? t6[3].substring(1, t6[3].length - 1).replace(this.rules.inline.anyPunctuation, "$1") : t6[3];
-      return { type: "def", tag: n5, raw: $2(t6[0], `
-`), href: s4, title: r7 };
+  def(e6) {
+    let t5 = this.rules.block.def.exec(e6);
+    if (t5) {
+      let n4 = t5[1].toLowerCase().replace(this.rules.other.multipleSpaceGlobal, " "), s4 = t5[2] ? t5[2].replace(this.rules.other.hrefBrackets, "$1").replace(this.rules.inline.anyPunctuation, "$1") : "", r5 = t5[3] ? t5[3].substring(1, t5[3].length - 1).replace(this.rules.inline.anyPunctuation, "$1") : t5[3];
+      return { type: "def", tag: n4, raw: $2(t5[0], `
+`), href: s4, title: r5 };
     }
   }
-  table(e9) {
-    let t6 = this.rules.block.table.exec(e9);
-    if (!t6 || !this.rules.other.tableDelimiter.test(t6[2])) return;
-    let n5 = Y(t6[1]), s4 = t6[2].replace(this.rules.other.tableAlignChars, "").split("|"), r7 = t6[3]?.trim() ? t6[3].replace(this.rules.other.tableRowBlankLine, "").split(`
-`) : [], i6 = { type: "table", raw: $2(t6[0], `
+  table(e6) {
+    let t5 = this.rules.block.table.exec(e6);
+    if (!t5 || !this.rules.other.tableDelimiter.test(t5[2])) return;
+    let n4 = Y(t5[1]), s4 = t5[2].replace(this.rules.other.tableAlignChars, "").split("|"), r5 = t5[3]?.trim() ? t5[3].replace(this.rules.other.tableRowBlankLine, "").split(`
+`) : [], i6 = { type: "table", raw: $2(t5[0], `
 `), header: [], align: [], rows: [] };
-    if (n5.length === s4.length) {
-      for (let o8 of s4) this.rules.other.tableAlignRight.test(o8) ? i6.align.push("right") : this.rules.other.tableAlignCenter.test(o8) ? i6.align.push("center") : this.rules.other.tableAlignLeft.test(o8) ? i6.align.push("left") : i6.align.push(null);
-      for (let o8 = 0; o8 < n5.length; o8++) i6.header.push({ text: n5[o8], tokens: this.lexer.inline(n5[o8]), header: true, align: i6.align[o8] });
-      for (let o8 of r7) i6.rows.push(Y(o8, i6.header.length).map((u3, a3) => ({ text: u3, tokens: this.lexer.inline(u3), header: false, align: i6.align[a3] })));
+    if (n4.length === s4.length) {
+      for (let o6 of s4) this.rules.other.tableAlignRight.test(o6) ? i6.align.push("right") : this.rules.other.tableAlignCenter.test(o6) ? i6.align.push("center") : this.rules.other.tableAlignLeft.test(o6) ? i6.align.push("left") : i6.align.push(null);
+      for (let o6 = 0; o6 < n4.length; o6++) i6.header.push({ text: n4[o6], tokens: this.lexer.inline(n4[o6]), header: true, align: i6.align[o6] });
+      for (let o6 of r5) i6.rows.push(Y(o6, i6.header.length).map((u3, a3) => ({ text: u3, tokens: this.lexer.inline(u3), header: false, align: i6.align[a3] })));
       return i6;
     }
   }
-  lheading(e9) {
-    let t6 = this.rules.block.lheading.exec(e9);
-    if (t6) {
-      let n5 = t6[1].trim();
-      return { type: "heading", raw: $2(t6[0], `
-`), depth: t6[2].charAt(0) === "=" ? 1 : 2, text: n5, tokens: this.lexer.inline(n5) };
+  lheading(e6) {
+    let t5 = this.rules.block.lheading.exec(e6);
+    if (t5) {
+      let n4 = t5[1].trim();
+      return { type: "heading", raw: $2(t5[0], `
+`), depth: t5[2].charAt(0) === "=" ? 1 : 2, text: n4, tokens: this.lexer.inline(n4) };
     }
   }
-  paragraph(e9) {
-    let t6 = this.rules.block.paragraph.exec(e9);
-    if (t6) {
-      let n5 = t6[1].charAt(t6[1].length - 1) === `
-` ? t6[1].slice(0, -1) : t6[1];
-      return { type: "paragraph", raw: t6[0], text: n5, tokens: this.lexer.inline(n5) };
+  paragraph(e6) {
+    let t5 = this.rules.block.paragraph.exec(e6);
+    if (t5) {
+      let n4 = t5[1].charAt(t5[1].length - 1) === `
+` ? t5[1].slice(0, -1) : t5[1];
+      return { type: "paragraph", raw: t5[0], text: n4, tokens: this.lexer.inline(n4) };
     }
   }
-  text(e9) {
-    let t6 = this.rules.block.text.exec(e9);
-    if (t6) return { type: "text", raw: t6[0], text: t6[0], tokens: this.lexer.inline(t6[0]) };
+  text(e6) {
+    let t5 = this.rules.block.text.exec(e6);
+    if (t5) return { type: "text", raw: t5[0], text: t5[0], tokens: this.lexer.inline(t5[0]) };
   }
-  escape(e9) {
-    let t6 = this.rules.inline.escape.exec(e9);
-    if (t6) return { type: "escape", raw: t6[0], text: t6[1] };
+  escape(e6) {
+    let t5 = this.rules.inline.escape.exec(e6);
+    if (t5) return { type: "escape", raw: t5[0], text: t5[1] };
   }
-  tag(e9) {
-    let t6 = this.rules.inline.tag.exec(e9);
-    if (t6) return !this.lexer.state.inLink && this.rules.other.startATag.test(t6[0]) ? this.lexer.state.inLink = true : this.lexer.state.inLink && this.rules.other.endATag.test(t6[0]) && (this.lexer.state.inLink = false), !this.lexer.state.inRawBlock && this.rules.other.startPreScriptTag.test(t6[0]) ? this.lexer.state.inRawBlock = true : this.lexer.state.inRawBlock && this.rules.other.endPreScriptTag.test(t6[0]) && (this.lexer.state.inRawBlock = false), { type: "html", raw: t6[0], inLink: this.lexer.state.inLink, inRawBlock: this.lexer.state.inRawBlock, block: false, text: t6[0] };
+  tag(e6) {
+    let t5 = this.rules.inline.tag.exec(e6);
+    if (t5) return !this.lexer.state.inLink && this.rules.other.startATag.test(t5[0]) ? this.lexer.state.inLink = true : this.lexer.state.inLink && this.rules.other.endATag.test(t5[0]) && (this.lexer.state.inLink = false), !this.lexer.state.inRawBlock && this.rules.other.startPreScriptTag.test(t5[0]) ? this.lexer.state.inRawBlock = true : this.lexer.state.inRawBlock && this.rules.other.endPreScriptTag.test(t5[0]) && (this.lexer.state.inRawBlock = false), { type: "html", raw: t5[0], inLink: this.lexer.state.inLink, inRawBlock: this.lexer.state.inRawBlock, block: false, text: t5[0] };
   }
-  link(e9) {
-    let t6 = this.rules.inline.link.exec(e9);
-    if (t6) {
-      let n5 = t6[2].trim();
-      if (!this.options.pedantic && this.rules.other.startAngleBracket.test(n5)) {
-        if (!this.rules.other.endAngleBracket.test(n5)) return;
-        let i6 = $2(n5.slice(0, -1), "\\");
-        if ((n5.length - i6.length) % 2 === 0) return;
+  link(e6) {
+    let t5 = this.rules.inline.link.exec(e6);
+    if (t5) {
+      let n4 = t5[2].trim();
+      if (!this.options.pedantic && this.rules.other.startAngleBracket.test(n4)) {
+        if (!this.rules.other.endAngleBracket.test(n4)) return;
+        let i6 = $2(n4.slice(0, -1), "\\");
+        if ((n4.length - i6.length) % 2 === 0) return;
       } else {
-        let i6 = fe(t6[2], "()");
+        let i6 = fe(t5[2], "()");
         if (i6 === -2) return;
         if (i6 > -1) {
-          let u3 = (t6[0].indexOf("!") === 0 ? 5 : 4) + t6[1].length + i6;
-          t6[2] = t6[2].substring(0, i6), t6[0] = t6[0].substring(0, u3).trim(), t6[3] = "";
+          let u3 = (t5[0].indexOf("!") === 0 ? 5 : 4) + t5[1].length + i6;
+          t5[2] = t5[2].substring(0, i6), t5[0] = t5[0].substring(0, u3).trim(), t5[3] = "";
         }
       }
-      let s4 = t6[2], r7 = "";
+      let s4 = t5[2], r5 = "";
       if (this.options.pedantic) {
         let i6 = this.rules.other.pedanticHrefTitle.exec(s4);
-        i6 && (s4 = i6[1], r7 = i6[3]);
-      } else r7 = t6[3] ? t6[3].slice(1, -1) : "";
-      return s4 = s4.trim(), this.rules.other.startAngleBracket.test(s4) && (this.options.pedantic && !this.rules.other.endAngleBracket.test(n5) ? s4 = s4.slice(1) : s4 = s4.slice(1, -1)), xe(t6, { href: s4 && s4.replace(this.rules.inline.anyPunctuation, "$1"), title: r7 && r7.replace(this.rules.inline.anyPunctuation, "$1") }, t6[0], this.lexer, this.rules);
+        i6 && (s4 = i6[1], r5 = i6[3]);
+      } else r5 = t5[3] ? t5[3].slice(1, -1) : "";
+      return s4 = s4.trim(), this.rules.other.startAngleBracket.test(s4) && (this.options.pedantic && !this.rules.other.endAngleBracket.test(n4) ? s4 = s4.slice(1) : s4 = s4.slice(1, -1)), xe(t5, { href: s4 && s4.replace(this.rules.inline.anyPunctuation, "$1"), title: r5 && r5.replace(this.rules.inline.anyPunctuation, "$1") }, t5[0], this.lexer, this.rules);
     }
   }
-  reflink(e9, t6) {
-    let n5;
-    if ((n5 = this.rules.inline.reflink.exec(e9)) || (n5 = this.rules.inline.nolink.exec(e9))) {
-      let s4 = (n5[2] || n5[1]).replace(this.rules.other.multipleSpaceGlobal, " "), r7 = t6[s4.toLowerCase()];
-      if (!r7) {
-        let i6 = n5[0].charAt(0);
+  reflink(e6, t5) {
+    let n4;
+    if ((n4 = this.rules.inline.reflink.exec(e6)) || (n4 = this.rules.inline.nolink.exec(e6))) {
+      let s4 = (n4[2] || n4[1]).replace(this.rules.other.multipleSpaceGlobal, " "), r5 = t5[s4.toLowerCase()];
+      if (!r5) {
+        let i6 = n4[0].charAt(0);
         return { type: "text", raw: i6, text: i6 };
       }
-      return xe(n5, r7, n5[0], this.lexer, this.rules);
+      return xe(n4, r5, n4[0], this.lexer, this.rules);
     }
   }
-  emStrong(e9, t6, n5 = "") {
-    let s4 = this.rules.inline.emStrongLDelim.exec(e9);
-    if (!s4 || !s4[1] && !s4[2] && !s4[3] && !s4[4] || s4[4] && n5.match(this.rules.other.unicodeAlphaNumeric)) return;
-    if (!(s4[1] || s4[3] || "") || !n5 || this.rules.inline.punctuation.exec(n5)) {
-      let i6 = [...s4[0]].length - 1, o8, u3, a3 = i6, c4 = 0, p4 = s4[0][0] === "*" ? this.rules.inline.emStrongRDelimAst : this.rules.inline.emStrongRDelimUnd;
-      for (p4.lastIndex = 0, t6 = t6.slice(-1 * e9.length + i6); (s4 = p4.exec(t6)) !== null; ) {
-        if (o8 = s4[1] || s4[2] || s4[3] || s4[4] || s4[5] || s4[6], !o8) continue;
-        if (u3 = [...o8].length, s4[3] || s4[4]) {
+  emStrong(e6, t5, n4 = "") {
+    let s4 = this.rules.inline.emStrongLDelim.exec(e6);
+    if (!s4 || !s4[1] && !s4[2] && !s4[3] && !s4[4] || s4[4] && n4.match(this.rules.other.unicodeAlphaNumeric)) return;
+    if (!(s4[1] || s4[3] || "") || !n4 || this.rules.inline.punctuation.exec(n4)) {
+      let i6 = [...s4[0]].length - 1, o6, u3, a3 = i6, c4 = 0, p4 = s4[0][0] === "*" ? this.rules.inline.emStrongRDelimAst : this.rules.inline.emStrongRDelimUnd;
+      for (p4.lastIndex = 0, t5 = t5.slice(-1 * e6.length + i6); (s4 = p4.exec(t5)) !== null; ) {
+        if (o6 = s4[1] || s4[2] || s4[3] || s4[4] || s4[5] || s4[6], !o6) continue;
+        if (u3 = [...o6].length, s4[3] || s4[4]) {
           a3 += u3;
           continue;
         } else if ((s4[5] || s4[6]) && i6 % 3 && !((i6 + u3) % 3)) {
@@ -7122,7 +4840,7 @@ ${p4}` : p4;
         }
         if (a3 -= u3, a3 > 0) continue;
         u3 = Math.min(u3, u3 + a3 + c4);
-        let k2 = [...s4[0]][0].length, h3 = e9.slice(0, i6 + s4.index + k2 + u3);
+        let k2 = [...s4[0]][0].length, h3 = e6.slice(0, i6 + s4.index + k2 + u3);
         if (Math.min(i6, u3) % 2) {
           let f3 = h3.slice(1, -1);
           return { type: "em", raw: h3, text: f3, tokens: this.lexer.inlineTokens(f3) };
@@ -7132,615 +4850,615 @@ ${p4}` : p4;
       }
     }
   }
-  codespan(e9) {
-    let t6 = this.rules.inline.code.exec(e9);
-    if (t6) {
-      let n5 = t6[2].replace(this.rules.other.newLineCharGlobal, " "), s4 = this.rules.other.nonSpaceChar.test(n5), r7 = this.rules.other.startingSpaceChar.test(n5) && this.rules.other.endingSpaceChar.test(n5);
-      return s4 && r7 && (n5 = n5.substring(1, n5.length - 1)), { type: "codespan", raw: t6[0], text: n5 };
+  codespan(e6) {
+    let t5 = this.rules.inline.code.exec(e6);
+    if (t5) {
+      let n4 = t5[2].replace(this.rules.other.newLineCharGlobal, " "), s4 = this.rules.other.nonSpaceChar.test(n4), r5 = this.rules.other.startingSpaceChar.test(n4) && this.rules.other.endingSpaceChar.test(n4);
+      return s4 && r5 && (n4 = n4.substring(1, n4.length - 1)), { type: "codespan", raw: t5[0], text: n4 };
     }
   }
-  br(e9) {
-    let t6 = this.rules.inline.br.exec(e9);
-    if (t6) return { type: "br", raw: t6[0] };
+  br(e6) {
+    let t5 = this.rules.inline.br.exec(e6);
+    if (t5) return { type: "br", raw: t5[0] };
   }
-  del(e9, t6, n5 = "") {
-    let s4 = this.rules.inline.delLDelim.exec(e9);
+  del(e6, t5, n4 = "") {
+    let s4 = this.rules.inline.delLDelim.exec(e6);
     if (!s4) return;
-    if (!(s4[1] || "") || !n5 || this.rules.inline.punctuation.exec(n5)) {
-      let i6 = [...s4[0]].length - 1, o8, u3, a3 = i6, c4 = this.rules.inline.delRDelim;
-      for (c4.lastIndex = 0, t6 = t6.slice(-1 * e9.length + i6); (s4 = c4.exec(t6)) !== null; ) {
-        if (o8 = s4[1] || s4[2] || s4[3] || s4[4] || s4[5] || s4[6], !o8 || (u3 = [...o8].length, u3 !== i6)) continue;
+    if (!(s4[1] || "") || !n4 || this.rules.inline.punctuation.exec(n4)) {
+      let i6 = [...s4[0]].length - 1, o6, u3, a3 = i6, c4 = this.rules.inline.delRDelim;
+      for (c4.lastIndex = 0, t5 = t5.slice(-1 * e6.length + i6); (s4 = c4.exec(t5)) !== null; ) {
+        if (o6 = s4[1] || s4[2] || s4[3] || s4[4] || s4[5] || s4[6], !o6 || (u3 = [...o6].length, u3 !== i6)) continue;
         if (s4[3] || s4[4]) {
           a3 += u3;
           continue;
         }
         if (a3 -= u3, a3 > 0) continue;
         u3 = Math.min(u3, u3 + a3);
-        let p4 = [...s4[0]][0].length, k2 = e9.slice(0, i6 + s4.index + p4 + u3), h3 = k2.slice(i6, -i6);
+        let p4 = [...s4[0]][0].length, k2 = e6.slice(0, i6 + s4.index + p4 + u3), h3 = k2.slice(i6, -i6);
         return { type: "del", raw: k2, text: h3, tokens: this.lexer.inlineTokens(h3) };
       }
     }
   }
-  autolink(e9) {
-    let t6 = this.rules.inline.autolink.exec(e9);
-    if (t6) {
-      let n5, s4;
-      return t6[2] === "@" ? (n5 = t6[1], s4 = "mailto:" + n5) : (n5 = t6[1], s4 = n5), { type: "link", raw: t6[0], text: n5, href: s4, tokens: [{ type: "text", raw: n5, text: n5 }] };
+  autolink(e6) {
+    let t5 = this.rules.inline.autolink.exec(e6);
+    if (t5) {
+      let n4, s4;
+      return t5[2] === "@" ? (n4 = t5[1], s4 = "mailto:" + n4) : (n4 = t5[1], s4 = n4), { type: "link", raw: t5[0], text: n4, href: s4, tokens: [{ type: "text", raw: n4, text: n4 }] };
     }
   }
-  url(e9) {
-    let t6;
-    if (t6 = this.rules.inline.url.exec(e9)) {
-      let n5, s4;
-      if (t6[2] === "@") n5 = t6[0], s4 = "mailto:" + n5;
+  url(e6) {
+    let t5;
+    if (t5 = this.rules.inline.url.exec(e6)) {
+      let n4, s4;
+      if (t5[2] === "@") n4 = t5[0], s4 = "mailto:" + n4;
       else {
-        let r7;
+        let r5;
         do
-          r7 = t6[0], t6[0] = this.rules.inline._backpedal.exec(t6[0])?.[0] ?? "";
-        while (r7 !== t6[0]);
-        n5 = t6[0], t6[1] === "www." ? s4 = "http://" + t6[0] : s4 = t6[0];
+          r5 = t5[0], t5[0] = this.rules.inline._backpedal.exec(t5[0])?.[0] ?? "";
+        while (r5 !== t5[0]);
+        n4 = t5[0], t5[1] === "www." ? s4 = "http://" + t5[0] : s4 = t5[0];
       }
-      return { type: "link", raw: t6[0], text: n5, href: s4, tokens: [{ type: "text", raw: n5, text: n5 }] };
+      return { type: "link", raw: t5[0], text: n4, href: s4, tokens: [{ type: "text", raw: n4, text: n4 }] };
     }
   }
-  inlineText(e9) {
-    let t6 = this.rules.inline.text.exec(e9);
-    if (t6) {
-      let n5 = this.lexer.state.inRawBlock;
-      return { type: "text", raw: t6[0], text: t6[0], escaped: n5 };
+  inlineText(e6) {
+    let t5 = this.rules.inline.text.exec(e6);
+    if (t5) {
+      let n4 = this.lexer.state.inRawBlock;
+      return { type: "text", raw: t5[0], text: t5[0], escaped: n4 };
     }
   }
 };
 var x2 = class l4 {
-  constructor(e9) {
+  constructor(e6) {
     __publicField(this, "tokens");
     __publicField(this, "options");
     __publicField(this, "state");
     __publicField(this, "inlineQueue");
     __publicField(this, "tokenizer");
-    this.tokens = [], this.tokens.links = /* @__PURE__ */ Object.create(null), this.options = e9 || T2, this.options.tokenizer = this.options.tokenizer || new w2(), this.tokenizer = this.options.tokenizer, this.tokenizer.options = this.options, this.tokenizer.lexer = this, this.inlineQueue = [], this.state = { inLink: false, inRawBlock: false, top: true };
-    let t6 = { other: m3, block: D2.normal, inline: A2.normal };
-    this.options.pedantic ? (t6.block = D2.pedantic, t6.inline = A2.pedantic) : this.options.gfm && (t6.block = D2.gfm, this.options.breaks ? t6.inline = A2.breaks : t6.inline = A2.gfm), this.tokenizer.rules = t6;
+    this.tokens = [], this.tokens.links = /* @__PURE__ */ Object.create(null), this.options = e6 || T2, this.options.tokenizer = this.options.tokenizer || new w2(), this.tokenizer = this.options.tokenizer, this.tokenizer.options = this.options, this.tokenizer.lexer = this, this.inlineQueue = [], this.state = { inLink: false, inRawBlock: false, top: true };
+    let t5 = { other: m3, block: D2.normal, inline: A2.normal };
+    this.options.pedantic ? (t5.block = D2.pedantic, t5.inline = A2.pedantic) : this.options.gfm && (t5.block = D2.gfm, this.options.breaks ? t5.inline = A2.breaks : t5.inline = A2.gfm), this.tokenizer.rules = t5;
   }
   static get rules() {
     return { block: D2, inline: A2 };
   }
-  static lex(e9, t6) {
-    return new l4(t6).lex(e9);
+  static lex(e6, t5) {
+    return new l4(t5).lex(e6);
   }
-  static lexInline(e9, t6) {
-    return new l4(t6).inlineTokens(e9);
+  static lexInline(e6, t5) {
+    return new l4(t5).inlineTokens(e6);
   }
-  lex(e9) {
-    e9 = e9.replace(m3.carriageReturn, `
-`), this.blockTokens(e9, this.tokens);
-    for (let t6 = 0; t6 < this.inlineQueue.length; t6++) {
-      let n5 = this.inlineQueue[t6];
-      this.inlineTokens(n5.src, n5.tokens);
+  lex(e6) {
+    e6 = e6.replace(m3.carriageReturn, `
+`), this.blockTokens(e6, this.tokens);
+    for (let t5 = 0; t5 < this.inlineQueue.length; t5++) {
+      let n4 = this.inlineQueue[t5];
+      this.inlineTokens(n4.src, n4.tokens);
     }
     return this.inlineQueue = [], this.tokens;
   }
-  blockTokens(e9, t6 = [], n5 = false) {
-    this.tokenizer.lexer = this, this.options.pedantic && (e9 = e9.replace(m3.tabCharGlobal, "    ").replace(m3.spaceLine, ""));
+  blockTokens(e6, t5 = [], n4 = false) {
+    this.tokenizer.lexer = this, this.options.pedantic && (e6 = e6.replace(m3.tabCharGlobal, "    ").replace(m3.spaceLine, ""));
     let s4 = 1 / 0;
-    for (; e9; ) {
-      if (e9.length < s4) s4 = e9.length;
+    for (; e6; ) {
+      if (e6.length < s4) s4 = e6.length;
       else {
-        this.infiniteLoopError(e9.charCodeAt(0));
+        this.infiniteLoopError(e6.charCodeAt(0));
         break;
       }
-      let r7;
-      if (this.options.extensions?.block?.some((o8) => (r7 = o8.call({ lexer: this }, e9, t6)) ? (e9 = e9.substring(r7.raw.length), t6.push(r7), true) : false)) continue;
-      if (r7 = this.tokenizer.space(e9)) {
-        e9 = e9.substring(r7.raw.length);
-        let o8 = t6.at(-1);
-        r7.raw.length === 1 && o8 !== void 0 ? o8.raw += `
-` : t6.push(r7);
+      let r5;
+      if (this.options.extensions?.block?.some((o6) => (r5 = o6.call({ lexer: this }, e6, t5)) ? (e6 = e6.substring(r5.raw.length), t5.push(r5), true) : false)) continue;
+      if (r5 = this.tokenizer.space(e6)) {
+        e6 = e6.substring(r5.raw.length);
+        let o6 = t5.at(-1);
+        r5.raw.length === 1 && o6 !== void 0 ? o6.raw += `
+` : t5.push(r5);
         continue;
       }
-      if (r7 = this.tokenizer.code(e9)) {
-        e9 = e9.substring(r7.raw.length);
-        let o8 = t6.at(-1);
-        o8?.type === "paragraph" || o8?.type === "text" ? (o8.raw += (o8.raw.endsWith(`
+      if (r5 = this.tokenizer.code(e6)) {
+        e6 = e6.substring(r5.raw.length);
+        let o6 = t5.at(-1);
+        o6?.type === "paragraph" || o6?.type === "text" ? (o6.raw += (o6.raw.endsWith(`
 `) ? "" : `
-`) + r7.raw, o8.text += `
-` + r7.text, this.inlineQueue.at(-1).src = o8.text) : t6.push(r7);
+`) + r5.raw, o6.text += `
+` + r5.text, this.inlineQueue.at(-1).src = o6.text) : t5.push(r5);
         continue;
       }
-      if (r7 = this.tokenizer.fences(e9)) {
-        e9 = e9.substring(r7.raw.length), t6.push(r7);
+      if (r5 = this.tokenizer.fences(e6)) {
+        e6 = e6.substring(r5.raw.length), t5.push(r5);
         continue;
       }
-      if (r7 = this.tokenizer.heading(e9)) {
-        e9 = e9.substring(r7.raw.length), t6.push(r7);
+      if (r5 = this.tokenizer.heading(e6)) {
+        e6 = e6.substring(r5.raw.length), t5.push(r5);
         continue;
       }
-      if (r7 = this.tokenizer.hr(e9)) {
-        e9 = e9.substring(r7.raw.length), t6.push(r7);
+      if (r5 = this.tokenizer.hr(e6)) {
+        e6 = e6.substring(r5.raw.length), t5.push(r5);
         continue;
       }
-      if (r7 = this.tokenizer.blockquote(e9)) {
-        e9 = e9.substring(r7.raw.length), t6.push(r7);
+      if (r5 = this.tokenizer.blockquote(e6)) {
+        e6 = e6.substring(r5.raw.length), t5.push(r5);
         continue;
       }
-      if (r7 = this.tokenizer.list(e9)) {
-        e9 = e9.substring(r7.raw.length), t6.push(r7);
+      if (r5 = this.tokenizer.list(e6)) {
+        e6 = e6.substring(r5.raw.length), t5.push(r5);
         continue;
       }
-      if (r7 = this.tokenizer.html(e9)) {
-        e9 = e9.substring(r7.raw.length), t6.push(r7);
+      if (r5 = this.tokenizer.html(e6)) {
+        e6 = e6.substring(r5.raw.length), t5.push(r5);
         continue;
       }
-      if (r7 = this.tokenizer.def(e9)) {
-        e9 = e9.substring(r7.raw.length);
-        let o8 = t6.at(-1);
-        o8?.type === "paragraph" || o8?.type === "text" ? (o8.raw += (o8.raw.endsWith(`
+      if (r5 = this.tokenizer.def(e6)) {
+        e6 = e6.substring(r5.raw.length);
+        let o6 = t5.at(-1);
+        o6?.type === "paragraph" || o6?.type === "text" ? (o6.raw += (o6.raw.endsWith(`
 `) ? "" : `
-`) + r7.raw, o8.text += `
-` + r7.raw, this.inlineQueue.at(-1).src = o8.text) : this.tokens.links[r7.tag] || (this.tokens.links[r7.tag] = { href: r7.href, title: r7.title }, t6.push(r7));
+`) + r5.raw, o6.text += `
+` + r5.raw, this.inlineQueue.at(-1).src = o6.text) : this.tokens.links[r5.tag] || (this.tokens.links[r5.tag] = { href: r5.href, title: r5.title }, t5.push(r5));
         continue;
       }
-      if (r7 = this.tokenizer.table(e9)) {
-        e9 = e9.substring(r7.raw.length), t6.push(r7);
+      if (r5 = this.tokenizer.table(e6)) {
+        e6 = e6.substring(r5.raw.length), t5.push(r5);
         continue;
       }
-      if (r7 = this.tokenizer.lheading(e9)) {
-        e9 = e9.substring(r7.raw.length), t6.push(r7);
+      if (r5 = this.tokenizer.lheading(e6)) {
+        e6 = e6.substring(r5.raw.length), t5.push(r5);
         continue;
       }
-      let i6 = e9;
+      let i6 = e6;
       if (this.options.extensions?.startBlock) {
-        let o8 = 1 / 0, u3 = e9.slice(1), a3;
+        let o6 = 1 / 0, u3 = e6.slice(1), a3;
         this.options.extensions.startBlock.forEach((c4) => {
-          a3 = c4.call({ lexer: this }, u3), typeof a3 == "number" && a3 >= 0 && (o8 = Math.min(o8, a3));
-        }), o8 < 1 / 0 && o8 >= 0 && (i6 = e9.substring(0, o8 + 1));
+          a3 = c4.call({ lexer: this }, u3), typeof a3 == "number" && a3 >= 0 && (o6 = Math.min(o6, a3));
+        }), o6 < 1 / 0 && o6 >= 0 && (i6 = e6.substring(0, o6 + 1));
       }
-      if (this.state.top && (r7 = this.tokenizer.paragraph(i6))) {
-        let o8 = t6.at(-1);
-        n5 && o8?.type === "paragraph" ? (o8.raw += (o8.raw.endsWith(`
+      if (this.state.top && (r5 = this.tokenizer.paragraph(i6))) {
+        let o6 = t5.at(-1);
+        n4 && o6?.type === "paragraph" ? (o6.raw += (o6.raw.endsWith(`
 `) ? "" : `
-`) + r7.raw, o8.text += `
-` + r7.text, this.inlineQueue.pop(), this.inlineQueue.at(-1).src = o8.text) : t6.push(r7), n5 = i6.length !== e9.length, e9 = e9.substring(r7.raw.length);
+`) + r5.raw, o6.text += `
+` + r5.text, this.inlineQueue.pop(), this.inlineQueue.at(-1).src = o6.text) : t5.push(r5), n4 = i6.length !== e6.length, e6 = e6.substring(r5.raw.length);
         continue;
       }
-      if (r7 = this.tokenizer.text(e9)) {
-        e9 = e9.substring(r7.raw.length);
-        let o8 = t6.at(-1);
-        o8?.type === "text" ? (o8.raw += (o8.raw.endsWith(`
+      if (r5 = this.tokenizer.text(e6)) {
+        e6 = e6.substring(r5.raw.length);
+        let o6 = t5.at(-1);
+        o6?.type === "text" ? (o6.raw += (o6.raw.endsWith(`
 `) ? "" : `
-`) + r7.raw, o8.text += `
-` + r7.text, this.inlineQueue.pop(), this.inlineQueue.at(-1).src = o8.text) : t6.push(r7);
+`) + r5.raw, o6.text += `
+` + r5.text, this.inlineQueue.pop(), this.inlineQueue.at(-1).src = o6.text) : t5.push(r5);
         continue;
       }
-      if (e9) {
-        this.infiniteLoopError(e9.charCodeAt(0));
+      if (e6) {
+        this.infiniteLoopError(e6.charCodeAt(0));
         break;
       }
     }
-    return this.state.top = true, t6;
+    return this.state.top = true, t5;
   }
-  inline(e9, t6 = []) {
-    return this.inlineQueue.push({ src: e9, tokens: t6 }), t6;
+  inline(e6, t5 = []) {
+    return this.inlineQueue.push({ src: e6, tokens: t5 }), t5;
   }
-  inlineTokens(e9, t6 = []) {
+  inlineTokens(e6, t5 = []) {
     this.tokenizer.lexer = this;
-    let n5 = e9, s4 = null;
+    let n4 = e6, s4 = null;
     if (this.tokens.links) {
       let a3 = Object.keys(this.tokens.links);
-      if (a3.length > 0) for (; (s4 = this.tokenizer.rules.inline.reflinkSearch.exec(n5)) !== null; ) a3.includes(s4[0].slice(s4[0].lastIndexOf("[") + 1, -1)) && (n5 = n5.slice(0, s4.index) + "[" + "a".repeat(s4[0].length - 2) + "]" + n5.slice(this.tokenizer.rules.inline.reflinkSearch.lastIndex));
+      if (a3.length > 0) for (; (s4 = this.tokenizer.rules.inline.reflinkSearch.exec(n4)) !== null; ) a3.includes(s4[0].slice(s4[0].lastIndexOf("[") + 1, -1)) && (n4 = n4.slice(0, s4.index) + "[" + "a".repeat(s4[0].length - 2) + "]" + n4.slice(this.tokenizer.rules.inline.reflinkSearch.lastIndex));
     }
-    for (; (s4 = this.tokenizer.rules.inline.anyPunctuation.exec(n5)) !== null; ) n5 = n5.slice(0, s4.index) + "++" + n5.slice(this.tokenizer.rules.inline.anyPunctuation.lastIndex);
-    let r7;
-    for (; (s4 = this.tokenizer.rules.inline.blockSkip.exec(n5)) !== null; ) r7 = s4[2] ? s4[2].length : 0, n5 = n5.slice(0, s4.index + r7) + "[" + "a".repeat(s4[0].length - r7 - 2) + "]" + n5.slice(this.tokenizer.rules.inline.blockSkip.lastIndex);
-    n5 = this.options.hooks?.emStrongMask?.call({ lexer: this }, n5) ?? n5;
-    let i6 = false, o8 = "", u3 = 1 / 0;
-    for (; e9; ) {
-      if (e9.length < u3) u3 = e9.length;
+    for (; (s4 = this.tokenizer.rules.inline.anyPunctuation.exec(n4)) !== null; ) n4 = n4.slice(0, s4.index) + "++" + n4.slice(this.tokenizer.rules.inline.anyPunctuation.lastIndex);
+    let r5;
+    for (; (s4 = this.tokenizer.rules.inline.blockSkip.exec(n4)) !== null; ) r5 = s4[2] ? s4[2].length : 0, n4 = n4.slice(0, s4.index + r5) + "[" + "a".repeat(s4[0].length - r5 - 2) + "]" + n4.slice(this.tokenizer.rules.inline.blockSkip.lastIndex);
+    n4 = this.options.hooks?.emStrongMask?.call({ lexer: this }, n4) ?? n4;
+    let i6 = false, o6 = "", u3 = 1 / 0;
+    for (; e6; ) {
+      if (e6.length < u3) u3 = e6.length;
       else {
-        this.infiniteLoopError(e9.charCodeAt(0));
+        this.infiniteLoopError(e6.charCodeAt(0));
         break;
       }
-      i6 || (o8 = ""), i6 = false;
+      i6 || (o6 = ""), i6 = false;
       let a3;
-      if (this.options.extensions?.inline?.some((p4) => (a3 = p4.call({ lexer: this }, e9, t6)) ? (e9 = e9.substring(a3.raw.length), t6.push(a3), true) : false)) continue;
-      if (a3 = this.tokenizer.escape(e9)) {
-        e9 = e9.substring(a3.raw.length), t6.push(a3);
+      if (this.options.extensions?.inline?.some((p4) => (a3 = p4.call({ lexer: this }, e6, t5)) ? (e6 = e6.substring(a3.raw.length), t5.push(a3), true) : false)) continue;
+      if (a3 = this.tokenizer.escape(e6)) {
+        e6 = e6.substring(a3.raw.length), t5.push(a3);
         continue;
       }
-      if (a3 = this.tokenizer.tag(e9)) {
-        e9 = e9.substring(a3.raw.length), t6.push(a3);
+      if (a3 = this.tokenizer.tag(e6)) {
+        e6 = e6.substring(a3.raw.length), t5.push(a3);
         continue;
       }
-      if (a3 = this.tokenizer.link(e9)) {
-        e9 = e9.substring(a3.raw.length), t6.push(a3);
+      if (a3 = this.tokenizer.link(e6)) {
+        e6 = e6.substring(a3.raw.length), t5.push(a3);
         continue;
       }
-      if (a3 = this.tokenizer.reflink(e9, this.tokens.links)) {
-        e9 = e9.substring(a3.raw.length);
-        let p4 = t6.at(-1);
-        a3.type === "text" && p4?.type === "text" ? (p4.raw += a3.raw, p4.text += a3.text) : t6.push(a3);
+      if (a3 = this.tokenizer.reflink(e6, this.tokens.links)) {
+        e6 = e6.substring(a3.raw.length);
+        let p4 = t5.at(-1);
+        a3.type === "text" && p4?.type === "text" ? (p4.raw += a3.raw, p4.text += a3.text) : t5.push(a3);
         continue;
       }
-      if (a3 = this.tokenizer.emStrong(e9, n5, o8)) {
-        e9 = e9.substring(a3.raw.length), t6.push(a3);
+      if (a3 = this.tokenizer.emStrong(e6, n4, o6)) {
+        e6 = e6.substring(a3.raw.length), t5.push(a3);
         continue;
       }
-      if (a3 = this.tokenizer.codespan(e9)) {
-        e9 = e9.substring(a3.raw.length), t6.push(a3);
+      if (a3 = this.tokenizer.codespan(e6)) {
+        e6 = e6.substring(a3.raw.length), t5.push(a3);
         continue;
       }
-      if (a3 = this.tokenizer.br(e9)) {
-        e9 = e9.substring(a3.raw.length), t6.push(a3);
+      if (a3 = this.tokenizer.br(e6)) {
+        e6 = e6.substring(a3.raw.length), t5.push(a3);
         continue;
       }
-      if (a3 = this.tokenizer.del(e9, n5, o8)) {
-        e9 = e9.substring(a3.raw.length), t6.push(a3);
+      if (a3 = this.tokenizer.del(e6, n4, o6)) {
+        e6 = e6.substring(a3.raw.length), t5.push(a3);
         continue;
       }
-      if (a3 = this.tokenizer.autolink(e9)) {
-        e9 = e9.substring(a3.raw.length), t6.push(a3);
+      if (a3 = this.tokenizer.autolink(e6)) {
+        e6 = e6.substring(a3.raw.length), t5.push(a3);
         continue;
       }
-      if (!this.state.inLink && (a3 = this.tokenizer.url(e9))) {
-        e9 = e9.substring(a3.raw.length), t6.push(a3);
+      if (!this.state.inLink && (a3 = this.tokenizer.url(e6))) {
+        e6 = e6.substring(a3.raw.length), t5.push(a3);
         continue;
       }
-      let c4 = e9;
+      let c4 = e6;
       if (this.options.extensions?.startInline) {
-        let p4 = 1 / 0, k2 = e9.slice(1), h3;
+        let p4 = 1 / 0, k2 = e6.slice(1), h3;
         this.options.extensions.startInline.forEach((R2) => {
           h3 = R2.call({ lexer: this }, k2), typeof h3 == "number" && h3 >= 0 && (p4 = Math.min(p4, h3));
-        }), p4 < 1 / 0 && p4 >= 0 && (c4 = e9.substring(0, p4 + 1));
+        }), p4 < 1 / 0 && p4 >= 0 && (c4 = e6.substring(0, p4 + 1));
       }
       if (a3 = this.tokenizer.inlineText(c4)) {
-        e9 = e9.substring(a3.raw.length), a3.raw.slice(-1) !== "_" && (o8 = a3.raw.slice(-1)), i6 = true;
-        let p4 = t6.at(-1);
-        p4?.type === "text" ? (p4.raw += a3.raw, p4.text += a3.text) : t6.push(a3);
+        e6 = e6.substring(a3.raw.length), a3.raw.slice(-1) !== "_" && (o6 = a3.raw.slice(-1)), i6 = true;
+        let p4 = t5.at(-1);
+        p4?.type === "text" ? (p4.raw += a3.raw, p4.text += a3.text) : t5.push(a3);
         continue;
       }
-      if (e9) {
-        this.infiniteLoopError(e9.charCodeAt(0));
+      if (e6) {
+        this.infiniteLoopError(e6.charCodeAt(0));
         break;
       }
     }
-    return t6;
+    return t5;
   }
-  infiniteLoopError(e9) {
-    let t6 = "Infinite loop on byte: " + e9;
-    if (this.options.silent) console.error(t6);
-    else throw new Error(t6);
+  infiniteLoopError(e6) {
+    let t5 = "Infinite loop on byte: " + e6;
+    if (this.options.silent) console.error(t5);
+    else throw new Error(t5);
   }
 };
 var y3 = class {
-  constructor(e9) {
+  constructor(e6) {
     __publicField(this, "options");
     __publicField(this, "parser");
-    this.options = e9 || T2;
+    this.options = e6 || T2;
   }
-  space(e9) {
+  space(e6) {
     return "";
   }
-  code({ text: e9, lang: t6, escaped: n5 }) {
-    let s4 = (t6 || "").match(m3.notSpaceStart)?.[0], r7 = e9.replace(m3.endingNewline, "") + `
+  code({ text: e6, lang: t5, escaped: n4 }) {
+    let s4 = (t5 || "").match(m3.notSpaceStart)?.[0], r5 = e6.replace(m3.endingNewline, "") + `
 `;
-    return s4 ? '<pre><code class="language-' + O(s4) + '">' + (n5 ? r7 : O(r7, true)) + `</code></pre>
-` : "<pre><code>" + (n5 ? r7 : O(r7, true)) + `</code></pre>
+    return s4 ? '<pre><code class="language-' + O(s4) + '">' + (n4 ? r5 : O(r5, true)) + `</code></pre>
+` : "<pre><code>" + (n4 ? r5 : O(r5, true)) + `</code></pre>
 `;
   }
-  blockquote({ tokens: e9 }) {
+  blockquote({ tokens: e6 }) {
     return `<blockquote>
-${this.parser.parse(e9)}</blockquote>
+${this.parser.parse(e6)}</blockquote>
 `;
   }
-  html({ text: e9 }) {
-    return e9;
+  html({ text: e6 }) {
+    return e6;
   }
-  def(e9) {
+  def(e6) {
     return "";
   }
-  heading({ tokens: e9, depth: t6 }) {
-    return `<h${t6}>${this.parser.parseInline(e9)}</h${t6}>
+  heading({ tokens: e6, depth: t5 }) {
+    return `<h${t5}>${this.parser.parseInline(e6)}</h${t5}>
 `;
   }
-  hr(e9) {
+  hr(e6) {
     return `<hr>
 `;
   }
-  list(e9) {
-    let t6 = e9.ordered, n5 = e9.start, s4 = "";
-    for (let o8 = 0; o8 < e9.items.length; o8++) {
-      let u3 = e9.items[o8];
+  list(e6) {
+    let t5 = e6.ordered, n4 = e6.start, s4 = "";
+    for (let o6 = 0; o6 < e6.items.length; o6++) {
+      let u3 = e6.items[o6];
       s4 += this.listitem(u3);
     }
-    let r7 = t6 ? "ol" : "ul", i6 = t6 && n5 !== 1 ? ' start="' + n5 + '"' : "";
-    return "<" + r7 + i6 + `>
-` + s4 + "</" + r7 + `>
+    let r5 = t5 ? "ol" : "ul", i6 = t5 && n4 !== 1 ? ' start="' + n4 + '"' : "";
+    return "<" + r5 + i6 + `>
+` + s4 + "</" + r5 + `>
 `;
   }
-  listitem(e9) {
-    return `<li>${this.parser.parse(e9.tokens)}</li>
+  listitem(e6) {
+    return `<li>${this.parser.parse(e6.tokens)}</li>
 `;
   }
-  checkbox({ checked: e9 }) {
-    return "<input " + (e9 ? 'checked="" ' : "") + 'disabled="" type="checkbox"> ';
+  checkbox({ checked: e6 }) {
+    return "<input " + (e6 ? 'checked="" ' : "") + 'disabled="" type="checkbox"> ';
   }
-  paragraph({ tokens: e9 }) {
-    return `<p>${this.parser.parseInline(e9)}</p>
+  paragraph({ tokens: e6 }) {
+    return `<p>${this.parser.parseInline(e6)}</p>
 `;
   }
-  table(e9) {
-    let t6 = "", n5 = "";
-    for (let r7 = 0; r7 < e9.header.length; r7++) n5 += this.tablecell(e9.header[r7]);
-    t6 += this.tablerow({ text: n5 });
+  table(e6) {
+    let t5 = "", n4 = "";
+    for (let r5 = 0; r5 < e6.header.length; r5++) n4 += this.tablecell(e6.header[r5]);
+    t5 += this.tablerow({ text: n4 });
     let s4 = "";
-    for (let r7 = 0; r7 < e9.rows.length; r7++) {
-      let i6 = e9.rows[r7];
-      n5 = "";
-      for (let o8 = 0; o8 < i6.length; o8++) n5 += this.tablecell(i6[o8]);
-      s4 += this.tablerow({ text: n5 });
+    for (let r5 = 0; r5 < e6.rows.length; r5++) {
+      let i6 = e6.rows[r5];
+      n4 = "";
+      for (let o6 = 0; o6 < i6.length; o6++) n4 += this.tablecell(i6[o6]);
+      s4 += this.tablerow({ text: n4 });
     }
     return s4 && (s4 = `<tbody>${s4}</tbody>`), `<table>
 <thead>
-` + t6 + `</thead>
+` + t5 + `</thead>
 ` + s4 + `</table>
 `;
   }
-  tablerow({ text: e9 }) {
+  tablerow({ text: e6 }) {
     return `<tr>
-${e9}</tr>
+${e6}</tr>
 `;
   }
-  tablecell(e9) {
-    let t6 = this.parser.parseInline(e9.tokens), n5 = e9.header ? "th" : "td";
-    return (e9.align ? `<${n5} align="${e9.align}">` : `<${n5}>`) + t6 + `</${n5}>
+  tablecell(e6) {
+    let t5 = this.parser.parseInline(e6.tokens), n4 = e6.header ? "th" : "td";
+    return (e6.align ? `<${n4} align="${e6.align}">` : `<${n4}>`) + t5 + `</${n4}>
 `;
   }
-  strong({ tokens: e9 }) {
-    return `<strong>${this.parser.parseInline(e9)}</strong>`;
+  strong({ tokens: e6 }) {
+    return `<strong>${this.parser.parseInline(e6)}</strong>`;
   }
-  em({ tokens: e9 }) {
-    return `<em>${this.parser.parseInline(e9)}</em>`;
+  em({ tokens: e6 }) {
+    return `<em>${this.parser.parseInline(e6)}</em>`;
   }
-  codespan({ text: e9 }) {
-    return `<code>${O(e9, true)}</code>`;
+  codespan({ text: e6 }) {
+    return `<code>${O(e6, true)}</code>`;
   }
-  br(e9) {
+  br(e6) {
     return "<br>";
   }
-  del({ tokens: e9 }) {
-    return `<del>${this.parser.parseInline(e9)}</del>`;
+  del({ tokens: e6 }) {
+    return `<del>${this.parser.parseInline(e6)}</del>`;
   }
-  link({ href: e9, title: t6, tokens: n5 }) {
-    let s4 = this.parser.parseInline(n5), r7 = V2(e9);
-    if (r7 === null) return s4;
-    e9 = r7;
-    let i6 = '<a href="' + e9 + '"';
-    return t6 && (i6 += ' title="' + O(t6) + '"'), i6 += ">" + s4 + "</a>", i6;
+  link({ href: e6, title: t5, tokens: n4 }) {
+    let s4 = this.parser.parseInline(n4), r5 = V2(e6);
+    if (r5 === null) return s4;
+    e6 = r5;
+    let i6 = '<a href="' + e6 + '"';
+    return t5 && (i6 += ' title="' + O(t5) + '"'), i6 += ">" + s4 + "</a>", i6;
   }
-  image({ href: e9, title: t6, text: n5, tokens: s4 }) {
-    s4 && (n5 = this.parser.parseInline(s4, this.parser.textRenderer));
-    let r7 = V2(e9);
-    if (r7 === null) return O(n5);
-    e9 = r7;
-    let i6 = `<img src="${e9}" alt="${O(n5)}"`;
-    return t6 && (i6 += ` title="${O(t6)}"`), i6 += ">", i6;
+  image({ href: e6, title: t5, text: n4, tokens: s4 }) {
+    s4 && (n4 = this.parser.parseInline(s4, this.parser.textRenderer));
+    let r5 = V2(e6);
+    if (r5 === null) return O(n4);
+    e6 = r5;
+    let i6 = `<img src="${e6}" alt="${O(n4)}"`;
+    return t5 && (i6 += ` title="${O(t5)}"`), i6 += ">", i6;
   }
-  text(e9) {
-    return "tokens" in e9 && e9.tokens ? this.parser.parseInline(e9.tokens) : "escaped" in e9 && e9.escaped ? e9.text : O(e9.text);
+  text(e6) {
+    return "tokens" in e6 && e6.tokens ? this.parser.parseInline(e6.tokens) : "escaped" in e6 && e6.escaped ? e6.text : O(e6.text);
   }
 };
 var L2 = class {
-  strong({ text: e9 }) {
-    return e9;
+  strong({ text: e6 }) {
+    return e6;
   }
-  em({ text: e9 }) {
-    return e9;
+  em({ text: e6 }) {
+    return e6;
   }
-  codespan({ text: e9 }) {
-    return e9;
+  codespan({ text: e6 }) {
+    return e6;
   }
-  del({ text: e9 }) {
-    return e9;
+  del({ text: e6 }) {
+    return e6;
   }
-  html({ text: e9 }) {
-    return e9;
+  html({ text: e6 }) {
+    return e6;
   }
-  text({ text: e9 }) {
-    return e9;
+  text({ text: e6 }) {
+    return e6;
   }
-  link({ text: e9 }) {
-    return "" + e9;
+  link({ text: e6 }) {
+    return "" + e6;
   }
-  image({ text: e9 }) {
-    return "" + e9;
+  image({ text: e6 }) {
+    return "" + e6;
   }
   br() {
     return "";
   }
-  checkbox({ raw: e9 }) {
-    return e9;
+  checkbox({ raw: e6 }) {
+    return e6;
   }
 };
 var b3 = class l5 {
-  constructor(e9) {
+  constructor(e6) {
     __publicField(this, "options");
     __publicField(this, "renderer");
     __publicField(this, "textRenderer");
-    this.options = e9 || T2, this.options.renderer = this.options.renderer || new y3(), this.renderer = this.options.renderer, this.renderer.options = this.options, this.renderer.parser = this, this.textRenderer = new L2();
+    this.options = e6 || T2, this.options.renderer = this.options.renderer || new y3(), this.renderer = this.options.renderer, this.renderer.options = this.options, this.renderer.parser = this, this.textRenderer = new L2();
   }
-  static parse(e9, t6) {
-    return new l5(t6).parse(e9);
+  static parse(e6, t5) {
+    return new l5(t5).parse(e6);
   }
-  static parseInline(e9, t6) {
-    return new l5(t6).parseInline(e9);
+  static parseInline(e6, t5) {
+    return new l5(t5).parseInline(e6);
   }
-  parse(e9) {
+  parse(e6) {
     this.renderer.parser = this;
-    let t6 = "";
-    for (let n5 = 0; n5 < e9.length; n5++) {
-      let s4 = e9[n5];
+    let t5 = "";
+    for (let n4 = 0; n4 < e6.length; n4++) {
+      let s4 = e6[n4];
       if (this.options.extensions?.renderers?.[s4.type]) {
-        let i6 = s4, o8 = this.options.extensions.renderers[i6.type].call({ parser: this }, i6);
-        if (o8 !== false || !["space", "hr", "heading", "code", "table", "blockquote", "list", "html", "def", "paragraph", "text"].includes(i6.type)) {
-          t6 += o8 || "";
+        let i6 = s4, o6 = this.options.extensions.renderers[i6.type].call({ parser: this }, i6);
+        if (o6 !== false || !["space", "hr", "heading", "code", "table", "blockquote", "list", "html", "def", "paragraph", "text"].includes(i6.type)) {
+          t5 += o6 || "";
           continue;
         }
       }
-      let r7 = s4;
-      switch (r7.type) {
+      let r5 = s4;
+      switch (r5.type) {
         case "space": {
-          t6 += this.renderer.space(r7);
+          t5 += this.renderer.space(r5);
           break;
         }
         case "hr": {
-          t6 += this.renderer.hr(r7);
+          t5 += this.renderer.hr(r5);
           break;
         }
         case "heading": {
-          t6 += this.renderer.heading(r7);
+          t5 += this.renderer.heading(r5);
           break;
         }
         case "code": {
-          t6 += this.renderer.code(r7);
+          t5 += this.renderer.code(r5);
           break;
         }
         case "table": {
-          t6 += this.renderer.table(r7);
+          t5 += this.renderer.table(r5);
           break;
         }
         case "blockquote": {
-          t6 += this.renderer.blockquote(r7);
+          t5 += this.renderer.blockquote(r5);
           break;
         }
         case "list": {
-          t6 += this.renderer.list(r7);
+          t5 += this.renderer.list(r5);
           break;
         }
         case "checkbox": {
-          t6 += this.renderer.checkbox(r7);
+          t5 += this.renderer.checkbox(r5);
           break;
         }
         case "html": {
-          t6 += this.renderer.html(r7);
+          t5 += this.renderer.html(r5);
           break;
         }
         case "def": {
-          t6 += this.renderer.def(r7);
+          t5 += this.renderer.def(r5);
           break;
         }
         case "paragraph": {
-          t6 += this.renderer.paragraph(r7);
+          t5 += this.renderer.paragraph(r5);
           break;
         }
         case "text": {
-          t6 += this.renderer.text(r7);
+          t5 += this.renderer.text(r5);
           break;
         }
         default: {
-          let i6 = 'Token with "' + r7.type + '" type was not found.';
+          let i6 = 'Token with "' + r5.type + '" type was not found.';
           if (this.options.silent) return console.error(i6), "";
           throw new Error(i6);
         }
       }
     }
-    return t6;
+    return t5;
   }
-  parseInline(e9, t6 = this.renderer) {
+  parseInline(e6, t5 = this.renderer) {
     this.renderer.parser = this;
-    let n5 = "";
-    for (let s4 = 0; s4 < e9.length; s4++) {
-      let r7 = e9[s4];
-      if (this.options.extensions?.renderers?.[r7.type]) {
-        let o8 = this.options.extensions.renderers[r7.type].call({ parser: this }, r7);
-        if (o8 !== false || !["escape", "html", "link", "image", "strong", "em", "codespan", "br", "del", "text"].includes(r7.type)) {
-          n5 += o8 || "";
+    let n4 = "";
+    for (let s4 = 0; s4 < e6.length; s4++) {
+      let r5 = e6[s4];
+      if (this.options.extensions?.renderers?.[r5.type]) {
+        let o6 = this.options.extensions.renderers[r5.type].call({ parser: this }, r5);
+        if (o6 !== false || !["escape", "html", "link", "image", "strong", "em", "codespan", "br", "del", "text"].includes(r5.type)) {
+          n4 += o6 || "";
           continue;
         }
       }
-      let i6 = r7;
+      let i6 = r5;
       switch (i6.type) {
         case "escape": {
-          n5 += t6.text(i6);
+          n4 += t5.text(i6);
           break;
         }
         case "html": {
-          n5 += t6.html(i6);
+          n4 += t5.html(i6);
           break;
         }
         case "link": {
-          n5 += t6.link(i6);
+          n4 += t5.link(i6);
           break;
         }
         case "image": {
-          n5 += t6.image(i6);
+          n4 += t5.image(i6);
           break;
         }
         case "checkbox": {
-          n5 += t6.checkbox(i6);
+          n4 += t5.checkbox(i6);
           break;
         }
         case "strong": {
-          n5 += t6.strong(i6);
+          n4 += t5.strong(i6);
           break;
         }
         case "em": {
-          n5 += t6.em(i6);
+          n4 += t5.em(i6);
           break;
         }
         case "codespan": {
-          n5 += t6.codespan(i6);
+          n4 += t5.codespan(i6);
           break;
         }
         case "br": {
-          n5 += t6.br(i6);
+          n4 += t5.br(i6);
           break;
         }
         case "del": {
-          n5 += t6.del(i6);
+          n4 += t5.del(i6);
           break;
         }
         case "text": {
-          n5 += t6.text(i6);
+          n4 += t5.text(i6);
           break;
         }
         default: {
-          let o8 = 'Token with "' + i6.type + '" type was not found.';
-          if (this.options.silent) return console.error(o8), "";
-          throw new Error(o8);
+          let o6 = 'Token with "' + i6.type + '" type was not found.';
+          if (this.options.silent) return console.error(o6), "";
+          throw new Error(o6);
         }
       }
     }
-    return n5;
+    return n4;
   }
 };
 var _a;
 var P2 = (_a = class {
-  constructor(e9) {
+  constructor(e6) {
     __publicField(this, "options");
     __publicField(this, "block");
-    this.options = e9 || T2;
+    this.options = e6 || T2;
   }
-  preprocess(e9) {
-    return e9;
+  preprocess(e6) {
+    return e6;
   }
-  postprocess(e9) {
-    return e9;
+  postprocess(e6) {
+    return e6;
   }
-  processAllTokens(e9) {
-    return e9;
+  processAllTokens(e6) {
+    return e6;
   }
-  emStrongMask(e9) {
-    return e9;
+  emStrongMask(e6) {
+    return e6;
   }
-  provideLexer(e9 = this.block) {
-    return e9 ? x2.lex : x2.lexInline;
+  provideLexer(e6 = this.block) {
+    return e6 ? x2.lex : x2.lexInline;
   }
-  provideParser(e9 = this.block) {
-    return e9 ? b3.parse : b3.parseInline;
+  provideParser(e6 = this.block) {
+    return e6 ? b3.parse : b3.parseInline;
   }
 }, __publicField(_a, "passThroughHooks", /* @__PURE__ */ new Set(["preprocess", "postprocess", "processAllTokens", "emStrongMask"])), __publicField(_a, "passThroughHooksRespectAsync", /* @__PURE__ */ new Set(["preprocess", "postprocess", "processAllTokens"])), _a);
 var q = class {
-  constructor(...e9) {
+  constructor(...e6) {
     __publicField(this, "defaults", M2());
     __publicField(this, "options", this.setOptions);
     __publicField(this, "parse", this.parseMarkdown(true));
@@ -7751,158 +5469,158 @@ var q = class {
     __publicField(this, "Lexer", x2);
     __publicField(this, "Tokenizer", w2);
     __publicField(this, "Hooks", P2);
-    this.use(...e9);
+    this.use(...e6);
   }
-  walkTokens(e9, t6) {
-    let n5 = [];
-    for (let s4 of e9) switch (n5 = n5.concat(t6.call(this, s4)), s4.type) {
+  walkTokens(e6, t5) {
+    let n4 = [];
+    for (let s4 of e6) switch (n4 = n4.concat(t5.call(this, s4)), s4.type) {
       case "table": {
-        let r7 = s4;
-        for (let i6 of r7.header) n5 = n5.concat(this.walkTokens(i6.tokens, t6));
-        for (let i6 of r7.rows) for (let o8 of i6) n5 = n5.concat(this.walkTokens(o8.tokens, t6));
+        let r5 = s4;
+        for (let i6 of r5.header) n4 = n4.concat(this.walkTokens(i6.tokens, t5));
+        for (let i6 of r5.rows) for (let o6 of i6) n4 = n4.concat(this.walkTokens(o6.tokens, t5));
         break;
       }
       case "list": {
-        let r7 = s4;
-        n5 = n5.concat(this.walkTokens(r7.items, t6));
+        let r5 = s4;
+        n4 = n4.concat(this.walkTokens(r5.items, t5));
         break;
       }
       default: {
-        let r7 = s4;
-        this.defaults.extensions?.childTokens?.[r7.type] ? this.defaults.extensions.childTokens[r7.type].forEach((i6) => {
-          let o8 = r7[i6].flat(1 / 0);
-          n5 = n5.concat(this.walkTokens(o8, t6));
-        }) : r7.tokens && (n5 = n5.concat(this.walkTokens(r7.tokens, t6)));
+        let r5 = s4;
+        this.defaults.extensions?.childTokens?.[r5.type] ? this.defaults.extensions.childTokens[r5.type].forEach((i6) => {
+          let o6 = r5[i6].flat(1 / 0);
+          n4 = n4.concat(this.walkTokens(o6, t5));
+        }) : r5.tokens && (n4 = n4.concat(this.walkTokens(r5.tokens, t5)));
       }
     }
-    return n5;
+    return n4;
   }
-  use(...e9) {
-    let t6 = this.defaults.extensions || { renderers: {}, childTokens: {} };
-    return e9.forEach((n5) => {
-      let s4 = { ...n5 };
-      if (s4.async = this.defaults.async || s4.async || false, n5.extensions && (n5.extensions.forEach((r7) => {
-        if (!r7.name) throw new Error("extension name required");
-        if ("renderer" in r7) {
-          let i6 = t6.renderers[r7.name];
-          i6 ? t6.renderers[r7.name] = function(...o8) {
-            let u3 = r7.renderer.apply(this, o8);
-            return u3 === false && (u3 = i6.apply(this, o8)), u3;
-          } : t6.renderers[r7.name] = r7.renderer;
+  use(...e6) {
+    let t5 = this.defaults.extensions || { renderers: {}, childTokens: {} };
+    return e6.forEach((n4) => {
+      let s4 = { ...n4 };
+      if (s4.async = this.defaults.async || s4.async || false, n4.extensions && (n4.extensions.forEach((r5) => {
+        if (!r5.name) throw new Error("extension name required");
+        if ("renderer" in r5) {
+          let i6 = t5.renderers[r5.name];
+          i6 ? t5.renderers[r5.name] = function(...o6) {
+            let u3 = r5.renderer.apply(this, o6);
+            return u3 === false && (u3 = i6.apply(this, o6)), u3;
+          } : t5.renderers[r5.name] = r5.renderer;
         }
-        if ("tokenizer" in r7) {
-          if (!r7.level || r7.level !== "block" && r7.level !== "inline") throw new Error("extension level must be 'block' or 'inline'");
-          let i6 = t6[r7.level];
-          i6 ? i6.unshift(r7.tokenizer) : t6[r7.level] = [r7.tokenizer], r7.start && (r7.level === "block" ? t6.startBlock ? t6.startBlock.push(r7.start) : t6.startBlock = [r7.start] : r7.level === "inline" && (t6.startInline ? t6.startInline.push(r7.start) : t6.startInline = [r7.start]));
+        if ("tokenizer" in r5) {
+          if (!r5.level || r5.level !== "block" && r5.level !== "inline") throw new Error("extension level must be 'block' or 'inline'");
+          let i6 = t5[r5.level];
+          i6 ? i6.unshift(r5.tokenizer) : t5[r5.level] = [r5.tokenizer], r5.start && (r5.level === "block" ? t5.startBlock ? t5.startBlock.push(r5.start) : t5.startBlock = [r5.start] : r5.level === "inline" && (t5.startInline ? t5.startInline.push(r5.start) : t5.startInline = [r5.start]));
         }
-        "childTokens" in r7 && r7.childTokens && (t6.childTokens[r7.name] = r7.childTokens);
-      }), s4.extensions = t6), n5.renderer) {
-        let r7 = this.defaults.renderer || new y3(this.defaults);
-        for (let i6 in n5.renderer) {
-          if (!(i6 in r7)) throw new Error(`renderer '${i6}' does not exist`);
+        "childTokens" in r5 && r5.childTokens && (t5.childTokens[r5.name] = r5.childTokens);
+      }), s4.extensions = t5), n4.renderer) {
+        let r5 = this.defaults.renderer || new y3(this.defaults);
+        for (let i6 in n4.renderer) {
+          if (!(i6 in r5)) throw new Error(`renderer '${i6}' does not exist`);
           if (["options", "parser"].includes(i6)) continue;
-          let o8 = i6, u3 = n5.renderer[o8], a3 = r7[o8];
-          r7[o8] = (...c4) => {
-            let p4 = u3.apply(r7, c4);
-            return p4 === false && (p4 = a3.apply(r7, c4)), p4 || "";
+          let o6 = i6, u3 = n4.renderer[o6], a3 = r5[o6];
+          r5[o6] = (...c4) => {
+            let p4 = u3.apply(r5, c4);
+            return p4 === false && (p4 = a3.apply(r5, c4)), p4 || "";
           };
         }
-        s4.renderer = r7;
+        s4.renderer = r5;
       }
-      if (n5.tokenizer) {
-        let r7 = this.defaults.tokenizer || new w2(this.defaults);
-        for (let i6 in n5.tokenizer) {
-          if (!(i6 in r7)) throw new Error(`tokenizer '${i6}' does not exist`);
+      if (n4.tokenizer) {
+        let r5 = this.defaults.tokenizer || new w2(this.defaults);
+        for (let i6 in n4.tokenizer) {
+          if (!(i6 in r5)) throw new Error(`tokenizer '${i6}' does not exist`);
           if (["options", "rules", "lexer"].includes(i6)) continue;
-          let o8 = i6, u3 = n5.tokenizer[o8], a3 = r7[o8];
-          r7[o8] = (...c4) => {
-            let p4 = u3.apply(r7, c4);
-            return p4 === false && (p4 = a3.apply(r7, c4)), p4;
+          let o6 = i6, u3 = n4.tokenizer[o6], a3 = r5[o6];
+          r5[o6] = (...c4) => {
+            let p4 = u3.apply(r5, c4);
+            return p4 === false && (p4 = a3.apply(r5, c4)), p4;
           };
         }
-        s4.tokenizer = r7;
+        s4.tokenizer = r5;
       }
-      if (n5.hooks) {
-        let r7 = this.defaults.hooks || new P2();
-        for (let i6 in n5.hooks) {
-          if (!(i6 in r7)) throw new Error(`hook '${i6}' does not exist`);
+      if (n4.hooks) {
+        let r5 = this.defaults.hooks || new P2();
+        for (let i6 in n4.hooks) {
+          if (!(i6 in r5)) throw new Error(`hook '${i6}' does not exist`);
           if (["options", "block"].includes(i6)) continue;
-          let o8 = i6, u3 = n5.hooks[o8], a3 = r7[o8];
-          P2.passThroughHooks.has(i6) ? r7[o8] = (c4) => {
+          let o6 = i6, u3 = n4.hooks[o6], a3 = r5[o6];
+          P2.passThroughHooks.has(i6) ? r5[o6] = (c4) => {
             if (this.defaults.async && P2.passThroughHooksRespectAsync.has(i6)) return (async () => {
-              let k2 = await u3.call(r7, c4);
-              return a3.call(r7, k2);
+              let k2 = await u3.call(r5, c4);
+              return a3.call(r5, k2);
             })();
-            let p4 = u3.call(r7, c4);
-            return a3.call(r7, p4);
-          } : r7[o8] = (...c4) => {
+            let p4 = u3.call(r5, c4);
+            return a3.call(r5, p4);
+          } : r5[o6] = (...c4) => {
             if (this.defaults.async) return (async () => {
-              let k2 = await u3.apply(r7, c4);
-              return k2 === false && (k2 = await a3.apply(r7, c4)), k2;
+              let k2 = await u3.apply(r5, c4);
+              return k2 === false && (k2 = await a3.apply(r5, c4)), k2;
             })();
-            let p4 = u3.apply(r7, c4);
-            return p4 === false && (p4 = a3.apply(r7, c4)), p4;
+            let p4 = u3.apply(r5, c4);
+            return p4 === false && (p4 = a3.apply(r5, c4)), p4;
           };
         }
-        s4.hooks = r7;
+        s4.hooks = r5;
       }
-      if (n5.walkTokens) {
-        let r7 = this.defaults.walkTokens, i6 = n5.walkTokens;
-        s4.walkTokens = function(o8) {
+      if (n4.walkTokens) {
+        let r5 = this.defaults.walkTokens, i6 = n4.walkTokens;
+        s4.walkTokens = function(o6) {
           let u3 = [];
-          return u3.push(i6.call(this, o8)), r7 && (u3 = u3.concat(r7.call(this, o8))), u3;
+          return u3.push(i6.call(this, o6)), r5 && (u3 = u3.concat(r5.call(this, o6))), u3;
         };
       }
       this.defaults = { ...this.defaults, ...s4 };
     }), this;
   }
-  setOptions(e9) {
-    return this.defaults = { ...this.defaults, ...e9 }, this;
+  setOptions(e6) {
+    return this.defaults = { ...this.defaults, ...e6 }, this;
   }
-  lexer(e9, t6) {
-    return x2.lex(e9, t6 ?? this.defaults);
+  lexer(e6, t5) {
+    return x2.lex(e6, t5 ?? this.defaults);
   }
-  parser(e9, t6) {
-    return b3.parse(e9, t6 ?? this.defaults);
+  parser(e6, t5) {
+    return b3.parse(e6, t5 ?? this.defaults);
   }
-  parseMarkdown(e9) {
-    return (n5, s4) => {
-      let r7 = { ...s4 }, i6 = { ...this.defaults, ...r7 }, o8 = this.onError(!!i6.silent, !!i6.async);
-      if (this.defaults.async === true && r7.async === false) return o8(new Error("marked(): The async option was set to true by an extension. Remove async: false from the parse options object to return a Promise."));
-      if (typeof n5 > "u" || n5 === null) return o8(new Error("marked(): input parameter is undefined or null"));
-      if (typeof n5 != "string") return o8(new Error("marked(): input parameter is of type " + Object.prototype.toString.call(n5) + ", string expected"));
-      if (i6.hooks && (i6.hooks.options = i6, i6.hooks.block = e9), i6.async) return (async () => {
-        let u3 = i6.hooks ? await i6.hooks.preprocess(n5) : n5, c4 = await (i6.hooks ? await i6.hooks.provideLexer(e9) : e9 ? x2.lex : x2.lexInline)(u3, i6), p4 = i6.hooks ? await i6.hooks.processAllTokens(c4) : c4;
+  parseMarkdown(e6) {
+    return (n4, s4) => {
+      let r5 = { ...s4 }, i6 = { ...this.defaults, ...r5 }, o6 = this.onError(!!i6.silent, !!i6.async);
+      if (this.defaults.async === true && r5.async === false) return o6(new Error("marked(): The async option was set to true by an extension. Remove async: false from the parse options object to return a Promise."));
+      if (typeof n4 > "u" || n4 === null) return o6(new Error("marked(): input parameter is undefined or null"));
+      if (typeof n4 != "string") return o6(new Error("marked(): input parameter is of type " + Object.prototype.toString.call(n4) + ", string expected"));
+      if (i6.hooks && (i6.hooks.options = i6, i6.hooks.block = e6), i6.async) return (async () => {
+        let u3 = i6.hooks ? await i6.hooks.preprocess(n4) : n4, c4 = await (i6.hooks ? await i6.hooks.provideLexer(e6) : e6 ? x2.lex : x2.lexInline)(u3, i6), p4 = i6.hooks ? await i6.hooks.processAllTokens(c4) : c4;
         i6.walkTokens && await Promise.all(this.walkTokens(p4, i6.walkTokens));
-        let h3 = await (i6.hooks ? await i6.hooks.provideParser(e9) : e9 ? b3.parse : b3.parseInline)(p4, i6);
+        let h3 = await (i6.hooks ? await i6.hooks.provideParser(e6) : e6 ? b3.parse : b3.parseInline)(p4, i6);
         return i6.hooks ? await i6.hooks.postprocess(h3) : h3;
-      })().catch(o8);
+      })().catch(o6);
       try {
-        i6.hooks && (n5 = i6.hooks.preprocess(n5));
-        let a3 = (i6.hooks ? i6.hooks.provideLexer(e9) : e9 ? x2.lex : x2.lexInline)(n5, i6);
+        i6.hooks && (n4 = i6.hooks.preprocess(n4));
+        let a3 = (i6.hooks ? i6.hooks.provideLexer(e6) : e6 ? x2.lex : x2.lexInline)(n4, i6);
         i6.hooks && (a3 = i6.hooks.processAllTokens(a3)), i6.walkTokens && this.walkTokens(a3, i6.walkTokens);
-        let p4 = (i6.hooks ? i6.hooks.provideParser(e9) : e9 ? b3.parse : b3.parseInline)(a3, i6);
+        let p4 = (i6.hooks ? i6.hooks.provideParser(e6) : e6 ? b3.parse : b3.parseInline)(a3, i6);
         return i6.hooks && (p4 = i6.hooks.postprocess(p4)), p4;
       } catch (u3) {
-        return o8(u3);
+        return o6(u3);
       }
     };
   }
-  onError(e9, t6) {
-    return (n5) => {
-      if (n5.message += `
-Please report this to https://github.com/markedjs/marked.`, e9) {
-        let s4 = "<p>An error occurred:</p><pre>" + O(n5.message + "", true) + "</pre>";
-        return t6 ? Promise.resolve(s4) : s4;
+  onError(e6, t5) {
+    return (n4) => {
+      if (n4.message += `
+Please report this to https://github.com/markedjs/marked.`, e6) {
+        let s4 = "<p>An error occurred:</p><pre>" + O(n4.message + "", true) + "</pre>";
+        return t5 ? Promise.resolve(s4) : s4;
       }
-      if (t6) return Promise.reject(n5);
-      throw n5;
+      if (t5) return Promise.reject(n4);
+      throw n4;
     };
   }
 };
 var z2 = new q();
-function g2(l6, e9) {
-  return z2.parse(l6, e9);
+function g2(l6, e6) {
+  return z2.parse(l6, e6);
 }
 g2.options = g2.setOptions = function(l6) {
   return z2.setOptions(l6), g2.defaults = z2.defaults, N2(g2.defaults), g2;
@@ -7912,8 +5630,8 @@ g2.defaults = T2;
 g2.use = function(...l6) {
   return z2.use(...l6), g2.defaults = z2.defaults, N2(g2.defaults), g2;
 };
-g2.walkTokens = function(l6, e9) {
-  return z2.walkTokens(l6, e9);
+g2.walkTokens = function(l6, e6) {
+  return z2.walkTokens(l6, e6);
 };
 g2.parseInline = z2.parseInline;
 g2.Parser = b3;
@@ -7935,6 +5653,9 @@ var Yt = x2.lex;
 
 // components/ui/wy-prompt-modal.js
 var WyPromptModal = class extends i4 {
+  createRenderRoot() {
+    return this;
+  }
   constructor() {
     super();
     this.open = false;
@@ -8076,12 +5797,12 @@ var WyPromptModal = class extends i4 {
       <div class="title-group">
           <h2 @click="${this._toggleDescription}">${this.title}</h2>
           ${showDescription ? b2`
-            <div class="description-text ${this.descriptionExpanded ? "expanded" : ""}">${o7(this._renderDescriptionMarkdown(this.description))}</div>
+            <div class="description-text ${this.descriptionExpanded ? "expanded" : ""}">${o5(this._renderDescriptionMarkdown(this.description))}</div>
           ` : ""}
           ${this.instructions ? b2`
             <wy-info-panel class="prompt-instructions-panel">
               <p class="prompt-instructions-heading">Instructions</p>
-              <div class="prompt-instructions-copy">${o7(this._renderDescriptionMarkdown(this.instructions))}</div>
+              <div class="prompt-instructions-copy">${o5(this._renderDescriptionMarkdown(this.instructions))}</div>
             </wy-info-panel>
           ` : ""}
       </div>
@@ -8136,7 +5857,7 @@ var WyPromptModal = class extends i4 {
           ${step.variables.map((v3) => this._renderVariable(v3))}
         </div>
       ` : b2`
-        <div class="preview-area">${o7(g2.parse(compiledPrompt, { breaks: true }))}</div>
+        <div class="preview-area">${o5(g2.parse(compiledPrompt, { breaks: true }))}</div>
       `}
     `;
   }
@@ -8167,7 +5888,7 @@ var WyPromptModal = class extends i4 {
             <figcaption>N&ordm; 01 &mdash; Example output</figcaption>
           </figure>
         ` : ""}
-        <div class="overview-lead">${o7(this._renderDescriptionMarkdown(this.description))}</div>
+        <div class="overview-lead">${o5(this._renderDescriptionMarkdown(this.description))}</div>
       </div>
     `;
   }
@@ -8215,12 +5936,12 @@ var WyPromptModal = class extends i4 {
           ${this.variationDetailsExpanded ? b2`
             <div class="variation-details">
               ${activeVariation?.description ? b2`
-                <div class="variation-description-copy">${o7(this._renderDescriptionMarkdown(activeVariation.description))}</div>
+                <div class="variation-description-copy">${o5(this._renderDescriptionMarkdown(activeVariation.description))}</div>
               ` : ""}
               ${activeVariation?.instructions ? b2`
                 <div class="variation-meta-section">
                   <p class="variation-description-heading">Instructions</p>
-                  <div class="variation-description-copy">${o7(this._renderDescriptionMarkdown(activeVariation.instructions))}</div>
+                  <div class="variation-description-copy">${o5(this._renderDescriptionMarkdown(activeVariation.instructions))}</div>
                 </div>
               ` : ""}
             </div>
@@ -8268,12 +5989,12 @@ var WyPromptModal = class extends i4 {
           ${this.variationDetailsExpanded ? b2`
             <div class="variation-details">
               ${activeVariation?.description ? b2`
-                <div class="variation-description-copy">${o7(this._renderDescriptionMarkdown(activeVariation.description))}</div>
+                <div class="variation-description-copy">${o5(this._renderDescriptionMarkdown(activeVariation.description))}</div>
               ` : ""}
               ${activeVariation?.instructions ? b2`
                 <div class="variation-meta-section">
                   <p class="variation-description-heading">Instructions</p>
-                  <div class="variation-description-copy">${o7(this._renderDescriptionMarkdown(activeVariation.instructions))}</div>
+                  <div class="variation-description-copy">${o5(this._renderDescriptionMarkdown(activeVariation.instructions))}</div>
                 </div>
               ` : ""}
             </div>
@@ -8309,7 +6030,7 @@ var WyPromptModal = class extends i4 {
                 </span>
               `}
               <span class="visual-variation-copy">
-                <span class="visual-variation-name">${name}</span>
+                <span class="visual-variation-name">${name}${selected ? b2`<span class="visual-variation-mark" aria-hidden="true"></span>` : ""}</span>
                 ${showTileDetails && description ? b2`<span class="visual-variation-description">${description}</span>` : ""}
               </span>
             </button>
@@ -8397,7 +6118,7 @@ var WyPromptModal = class extends i4 {
           ${this._renderSelectedVariationPanel(activeVariation)}
 
           <div class="tabs-container">
-              <wy-tabs active-tab="${standardActiveTab}" @tab-change="${(e9) => this.activeTab = e9.detail.tab}">
+              <wy-tabs active-tab="${standardActiveTab}" @tab-change="${(e6) => this.activeTab = e6.detail.tab}">
                 <button class="tab-item ${standardActiveTab === (hasVariables ? "variables" : "overview") ? "active" : ""}" role="tab" data-tab="${hasVariables ? "variables" : "overview"}">${hasVariables ? "Variables" : "Overview"}</button>
                 <button class="tab-item ${standardActiveTab === "preview" ? "active" : ""}" role="tab" data-tab="preview">Full prompt</button>
               </wy-tabs>
@@ -8408,7 +6129,7 @@ var WyPromptModal = class extends i4 {
 
           <div class="body">
             ${standardActiveTab === "preview" ? b2`
-              <div class="preview-area">${o7(g2.parse(compiledPrompt, { breaks: true }))}</div>
+              <div class="preview-area">${o5(g2.parse(compiledPrompt, { breaks: true }))}</div>
             ` : hasVariables ? b2`
               <div class="variables-grid">
                 ${this.variables.map((v3) => this._renderVariable(v3))}
@@ -8502,7 +6223,7 @@ var WyPromptModal = class extends i4 {
                 </div>
 
                 <div class="tabs-container">
-                    <wy-tabs active-tab="${standardActiveTab}" @tab-change="${(e9) => this.activeTab = e9.detail.tab}">
+                    <wy-tabs active-tab="${standardActiveTab}" @tab-change="${(e6) => this.activeTab = e6.detail.tab}">
                       <button class="tab-item ${standardActiveTab === (hasVariables ? "variables" : "overview") ? "active" : ""}" role="tab" data-tab="${hasVariables ? "variables" : "overview"}">${hasVariables ? "Variables" : "Overview"}</button>
                       <button class="tab-item ${standardActiveTab === "preview" ? "active" : ""}" role="tab" data-tab="preview">Full prompt</button>
                     </wy-tabs>
@@ -8517,7 +6238,7 @@ var WyPromptModal = class extends i4 {
 
                 <div class="body">
                   ${standardActiveTab === "preview" ? b2`
-                    <div class="preview-area">${o7(g2.parse(compiledPrompt, { breaks: true }))}</div>
+                    <div class="preview-area">${o5(g2.parse(compiledPrompt, { breaks: true }))}</div>
                   ` : hasVariables ? b2`
                     <div class="variables-grid">
                       ${this.variables.map((v3) => this._renderVariable(v3))}
@@ -8537,7 +6258,7 @@ var WyPromptModal = class extends i4 {
               <textarea 
                 class="editor-area" 
                 .value="${this.template}"
-                @input="${(e9) => this.template = e9.target.value}"
+                @input="${(e6) => this.template = e6.target.value}"
               ></textarea>
             </div>
           `}
@@ -8575,7 +6296,7 @@ var WyPromptModal = class extends i4 {
             size="${size}"
             variant="switch"
             show-selected-value-text
-            @change="${(e9) => this._handleInput(v3.name, e9.detail.value)}"
+            @change="${(e6) => this._handleInput(v3.name, e6.detail.value)}"
           ></wy-option-toggle>
         </div>
       `;
@@ -8586,7 +6307,7 @@ var WyPromptModal = class extends i4 {
           <label>${v3.label}</label>
           <textarea
             placeholder="${v3.placeholder || ""}"
-            @input="${(e9) => this._handleInput(v3.name, e9.target.value)}"
+            @input="${(e6) => this._handleInput(v3.name, e6.target.value)}"
             .value="${this._values[v3.name] || ""}"
             rows="4"
           ></textarea>
@@ -8600,7 +6321,7 @@ var WyPromptModal = class extends i4 {
         <input
           type="text"
           placeholder="${v3.placeholder || ""}"
-          @input="${(e9) => this._handleInput(v3.name, e9.target.value)}"
+          @input="${(e6) => this._handleInput(v3.name, e6.target.value)}"
           .value="${this._values[v3.name] || ""}"
         >
       </div>
@@ -8627,8 +6348,8 @@ var WyPromptModal = class extends i4 {
     }));
     this.requestUpdate();
   }
-  _handleVariationChange(e9) {
-    const index = parseInt(e9.target.value);
+  _handleVariationChange(e6) {
+    const index = parseInt(e6.target.value);
     this.activeVariationIndex = index;
     this.dispatchEvent(new CustomEvent("variation-change", {
       detail: { index, variation: this.variations[index] },
@@ -8636,12 +6357,12 @@ var WyPromptModal = class extends i4 {
       composed: true
     }));
   }
-  _handleVariationDropdownChange(e9) {
-    const selectedId = e9.detail.value;
+  _handleVariationDropdownChange(e6) {
+    const selectedId = e6.detail.value;
     this._setVariationById(selectedId);
   }
-  _handleVariationSelectChange(e9) {
-    this._setVariationById(e9.target.value);
+  _handleVariationSelectChange(e6) {
+    this._setVariationById(e6.target.value);
   }
   _setVariationById(selectedId) {
     const index = this.variations.findIndex((v3) => v3.id === selectedId);
@@ -8673,8 +6394,8 @@ var WyPromptModal = class extends i4 {
     });
     return compiled;
   }
-  _setActiveTab(e9) {
-    const tab = e9.target.dataset.tab || e9.target.closest("[data-tab]")?.dataset.tab;
+  _setActiveTab(e6) {
+    const tab = e6.target.dataset.tab || e6.target.closest("[data-tab]")?.dataset.tab;
     if (tab) {
       this.activeTab = tab;
     }
@@ -8877,1421 +6598,13 @@ __publicField(WyPromptModal, "properties", {
   variationDetailsExpanded: { type: Boolean, attribute: "variation-details-expanded" },
   showPalette: { type: Boolean, attribute: "show-palette" }
 });
-__publicField(WyPromptModal, "styles", i`
-    /* Type (Lora serif / Inter sans) loads globally via tokens.css per The Nineteenth.
-       Material Symbols should be loaded in the consuming page <head>:
-       <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
-    */
-
-    /* Material Symbols base styling */
-    .material-symbols-outlined {
-      font-family: 'Material Symbols Outlined';
-      font-weight: normal;
-      font-style: normal;
-      font-size: 24px;
-      line-height: 1;
-      letter-spacing: normal;
-      text-transform: none;
-      display: inline-block;
-      white-space: nowrap;
-      word-wrap: normal;
-      direction: ltr;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      text-rendering: optimizeLegibility;
-      font-feature-settings: 'liga';
-    }
-
-    :host {
-      display: block;
-      position: fixed;
-      inset: 0;
-      z-index: 2000;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.25s ease;
-    }
-
-    :host([open]) {
-      pointer-events: auto;
-      opacity: 1;
-    }
-
-    .scrim {
-      position: absolute;
-      inset: 0;
-      background: rgba(40, 40, 40, 0.6); /* Solid ink scrim — no blur per Nineteenth */
-    }
-
-    .modal-container {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 90%;
-      max-width: 800px;
-      max-height: 90vh;
-      background: var(--wy-prompt-modal-surface, var(--paper, #F7F4EE));
-      border-radius: 0;
-      box-shadow: var(--shadow-modal);
-      transform: translate(-50%, -50%) scale(0.95);
-      transition: transform 0.3s cubic-bezier(0.2, 0, 0.2, 1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden; /* Clip content to border-radius */
-      border: 1px solid var(--paper-edge, #DDD6C8);
-      font-family: var(--ff-sans, 'Inter', sans-serif);
-    }
-
-    .modal-container.visual-selector-modal {
-      width: min(94vw, 1120px);
-      max-width: 1120px;
-    }
-
-    :host([open]) .modal-container {
-      transform: translate(-50%, -50%) scale(1);
-    }
-
-    /* HEADER STYLES */
-    .header {
-      padding: var(--spacing-xl, 32px) var(--spacing-xl, 32px) var(--spacing-sm, 8px);
-      display: flex;
-      flex-direction: column;
-      gap: var(--spacing-md, 16px);
-      flex-shrink: 0; /* Header stays fixed, doesn't shrink */
-    }
-
-    .header-top {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        position: relative;
-        gap: 12px;
-    }
-
-    .header-actions-left {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        flex: 0 0 auto;
-    }
-
-    .header-actions {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        flex: 0 0 auto;
-    }
-
-    /* Icon Button - Perfect circle with centered icon */
-    .icon-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        border: none;
-        cursor: pointer;
-        padding: 0;
-        transition: background-color 0.2s, transform 0.15s;
-    }
-
-    .icon-btn.filled {
-        background: transparent;
-        color: var(--ink, #1A1A1A);
-        border: 1px solid var(--paper-edge, #DDD6C8);
-        border-radius: 0;
-    }
-
-    .icon-btn.filled:hover {
-        background: var(--ink, #1A1A1A);
-        color: var(--paper, #F7F4EE);
-    }
-
-    .icon-btn.primary {
-        background: var(--ink, #1A1A1A);
-        color: var(--paper, #F7F4EE);
-        border-radius: 0;
-    }
-
-    .icon-btn.primary:hover {
-        opacity: 0.9;
-        transform: scale(1.05);
-    }
-
-    .icon-btn:disabled {
-        opacity: 0.38;
-        cursor: not-allowed;
-    }
-
-    .icon-btn:disabled:hover {
-        transform: none;
-    }
-
-    .icon-btn .material-symbols-outlined {
-        font-size: 20px;
-        line-height: 1;
-    }
-
-    /* Labeled Button - Icon with text label */
-    .labeled-btn {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        height: 40px;
-        padding: 0 16px 0 12px;
-        border-radius: 0;
-        border: none;
-        cursor: pointer;
-        font-family: var(--font-sans);
-        font-size: 14px;
-        font-weight: 500;
-        transition: background-color 0.2s, transform 0.15s;
-    }
-
-    .labeled-btn.primary {
-        background: var(--ink, #1A1A1A);
-        color: var(--paper, #F7F4EE);
-        border-radius: 0;
-        text-transform: uppercase;
-        letter-spacing: 0.18em;
-        font-size: 12px;
-    }
-
-    .labeled-btn.primary:hover {
-        opacity: 0.9;
-        transform: scale(1.02);
-    }
-
-    .labeled-btn .material-symbols-outlined {
-        font-size: 18px;
-        line-height: 1;
-    }
-
-    .header-main {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
-        gap: 24px;
-        margin-bottom: var(--spacing-lg, 24px);
-    }
-
-    /* Header-main inside content (for multi-step prompts) */
-    .content > .header-main {
-        padding: var(--spacing-xl, 32px) var(--spacing-xl, 32px) var(--spacing-lg, 24px);
-    }
-
-    .badge {
-      display: none; /* Hidden on all screen sizes */
-      padding: 4px 0;
-      background: transparent;
-      color: var(--ink-mute, #6B6B6A);
-      border-radius: 0;
-      font-family: var(--ff-serif, 'Lora', serif);
-      font-style: italic;
-      font-size: 0.875rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.15em; /* Wider tracking */
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      pointer-events: none; /* Prevent badge from blocking clicks */
-    }
-
-    .title-group h2 {
-      font-family: var(--ff-serif, 'Lora', serif);
-      font-size: 2.5rem; /* Larger Title */
-      font-weight: 500;
-      letter-spacing: -0.015em;
-      margin: 0 0 12px 0;
-      color: var(--md-sys-color-text-heading);
-      line-height: 1.1;
-    }
-
-    .description-text {
-      font-family: var(--ff-sans);
-      font-size: 1rem;
-      font-weight: 300;
-      line-height: 1.6;
-      color: var(--md-sys-color-text-muted);
-      margin: 0;
-    }
-
-    .description-text p { margin: 0 0 0.5em; }
-    .description-text p:last-child { margin-bottom: 0; }
-
-    .description-text ol,
-    .description-text ul {
-      margin: 2px 0 0;
-      padding-left: 1.4em;
-    }
-
-    .description-text li + li {
-      margin-top: 2px;
-    }
-
-    .customize-btn {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        background: var(--ink, #1A1A1A);
-        color: var(--paper, #F7F4EE);
-        border: none;
-        padding: 10px 20px;
-        border-radius: 0;
-        font-family: var(--ff-sans, 'Inter', sans-serif);
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 0.18em;
-        font-weight: 500;
-        cursor: pointer;
-        transition: background 0.2s;
-        white-space: nowrap;
-    }
-
-    .customize-btn:hover {
-        opacity: 0.9;
-    }
-
-    /* TABS */
-    .tabs-container {
-        padding: 0 var(--spacing-xl, 32px);
-        display: flex;
-        align-items: center;
-        gap: var(--spacing-xl, 32px);
-        flex-shrink: 0; /* Tabs stay fixed, don't shrink */
-    }
-
-    .tabs-container wy-tabs {
-        flex: 1;
-    }
-
-    .clear-btn {
-        background: none;
-        border: none;
-        color: var(--md-sys-color-text-heading);
-        font-family: var(--ff-sans);
-        font-size: 0.875rem;
-        font-weight: 500;
-        cursor: pointer;
-        padding: 8px 16px;
-        border-radius: 0;
-        transition: background 0.2s;
-        white-space: nowrap;
-    }
-
-    .clear-btn:hover {
-        background: var(--md-sys-color-surface-container-high);
-    }
-
-    .clear-btn:focus-visible {
-        outline: 3px solid var(--wy-prompt-modal-focus-ring, color-mix(in srgb, var(--md-sys-color-primary) 18%, transparent));
-        outline-offset: 2px;
-    }
-
-    .tab-item {
-        background: none;
-        border: none;
-        padding: 12px 0 16px 0;
-        font-family: var(--ff-sans);
-        font-size: 0.875rem;
-        font-weight: 500;
-        color: var(--md-sys-color-on-surface-variant);
-        cursor: pointer;
-        position: relative;
-        transition: color 0.2s;
-        margin: 0;
-        border-bottom: 2px solid transparent;
-    }
-
-    .tab-item:hover {
-        color: var(--md-sys-color-text-heading);
-    }
-
-    .tab-item.active {
-        color: var(--md-sys-color-text-heading);
-        font-weight: 700;
-        border-bottom-color: var(--md-sys-color-text-heading);
-    }
-    
-    /* CONTENT */
-    .content {
-      flex: 1;
-      min-height: 0;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .body {
-        padding: var(--spacing-xl, 32px);
-        flex: 1;
-    }
-
-    .variation-selector-container {
-        margin: var(--spacing-xl, 32px) var(--spacing-xl, 32px) 0;
-        padding: var(--spacing-lg, 24px);
-        display: flex;
-        flex-direction: column;
-        gap: var(--spacing-lg, 24px);
-        background-color: var(--md-sys-color-surface-container-low);
-        border: 1px solid var(--paper-edge, #DDD6C8);
-        border-radius: var(--md-sys-shape-corner-medium, 0);
-    }
-
-    .variation-selector-container wy-dropdown {
-        width: 100%;
-    }
-
-    .body > .variation-selector-container {
-        margin: var(--spacing-xl, 32px) 0 0;
-    }
-
-    .visual-selector-layout {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(220px, 280px);
-        gap: var(--spacing-lg, 24px);
-        padding: 0 var(--spacing-xl, 32px) var(--spacing-xl, 32px);
-        align-items: start;
-    }
-
-    .visual-selector-main {
-        min-width: 0;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .visual-selector-main .header-main {
-        margin-bottom: var(--spacing-md, 16px);
-    }
-
-    .visual-selector-main .tabs-container {
-        padding-left: 0;
-        padding-right: 0;
-    }
-
-    .visual-selector-main .body {
-        padding: var(--spacing-lg, 24px) 0 0;
-    }
-
-    .visual-selected-panel {
-        display: flex;
-        flex-direction: column;
-        gap: var(--spacing-lg, 24px);
-        margin-top: var(--spacing-sm, 8px);
-        margin-bottom: var(--spacing-lg, 24px);
-    }
-
-    .visual-selector-rail {
-        position: sticky;
-        top: var(--spacing-md, 16px);
-        display: flex;
-        flex-direction: column;
-        gap: var(--spacing-sm, 12px);
-        max-height: calc(90vh - 128px);
-        overflow: auto;
-        padding: var(--spacing-md, 16px);
-        background-color: var(--md-sys-color-surface-container-low);
-        border: 1px solid var(--paper-edge, #DDD6C8);
-        border-radius: var(--md-sys-shape-corner-medium, 0);
-    }
-
-    .variation-select-native {
-        appearance: none;
-        -webkit-appearance: none;
-        width: 100%;
-        min-height: 56px;
-        padding: 0 calc(var(--spacing-xl, 32px) + 20px) 0 var(--spacing-lg, 24px);
-        border: 1px solid var(--paper-edge, #DDD6C8);
-        border-radius: 0;
-        background-color: var(--md-sys-color-surface-container-lowest, #FDFBF7);
-        color: var(--md-sys-color-on-surface, #1D1B20);
-        font-family: var(--ff-sans);
-        font-size: 0.9375rem;
-        font-weight: 500;
-        cursor: pointer;
-    }
-
-    .variation-select-wrap {
-        position: relative;
-    }
-
-    .variation-select-wrap .material-symbols-outlined {
-        position: absolute;
-        right: var(--spacing-md, 16px);
-        top: 50%;
-        transform: translateY(-50%);
-        color: var(--md-sys-color-on-surface-variant, #49454E);
-        pointer-events: none;
-        font-size: 22px;
-    }
-
-    .variation-select-native:focus-visible {
-        outline: 3px solid var(--wy-prompt-modal-focus-ring, color-mix(in srgb, var(--md-sys-color-primary) 18%, transparent));
-        outline-offset: 2px;
-    }
-
-    .visual-variation-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(138px, 1fr));
-        gap: var(--spacing-sm, 12px);
-    }
-
-    .visual-selector-rail .visual-variation-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .visual-variation-tile {
-        display: flex;
-        flex-direction: column;
-        min-width: 0;
-        min-height: 100%;
-        padding: 0;
-        background: transparent;
-        color: var(--md-sys-color-on-surface, #1D1B20);
-        border-radius: 0;
-        cursor: pointer;
-        position: relative;
-        text-align: left;
-        transition:
-            border-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
-            box-shadow var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-    }
-
-    .visual-variation-tile:focus-visible {
-        outline: 3px solid var(--wy-prompt-modal-focus-ring, color-mix(in srgb, var(--md-sys-color-primary) 18%, transparent));
-        outline-offset: 2px;
-    }
-
-    /* Selected = 1px ink frame on the plate (img can't host ::after, so frame the border) */
-    .visual-variation-tile.selected .visual-variation-media,
-    .visual-variation-tile.selected .visual-variation-text-tile {
-        border-color: var(--ink, #1A1A1A);
-        box-shadow: 0 0 0 1px var(--ink, #1A1A1A);
-    }
-
-    .visual-variation-media {
-        position: relative;
-        display: block;
-        width: 100%;
-        aspect-ratio: 16 / 9;
-        object-fit: cover;
-        background: linear-gradient(150deg, #E6E0D4, #CDC4B2);
-        border: 1px solid var(--paper-edge, #DDD6C8);
-        transition: opacity var(--dur-2, 350ms) var(--ease, cubic-bezier(0.2, 0.6, 0.2, 1));
-    }
-
-    .visual-variation-tile:hover .visual-variation-media {
-        opacity: 0.9;
-    }
-
-    .visual-variation-text-tile {
-        display: flex;
-        flex: 1;
-        min-height: 104px;
-        align-items: center;
-        justify-content: center;
-        padding: var(--spacing-md, 16px);
-        background: linear-gradient(150deg, #E6E0D4, #CDC4B2);
-        border: 1px solid var(--paper-edge, #DDD6C8);
-    }
-
-    .visual-variation-text-tile .material-symbols-outlined {
-        color: color-mix(in srgb, var(--md-sys-color-primary, #282828) 46%, transparent);
-        font-size: 30px;
-    }
-
-    .visual-variation-copy {
-        display: flex;
-        flex-direction: column;
-        gap: var(--spacing-xs, 4px);
-        padding: var(--spacing-sm, 12px);
-        padding-top: 8px;
-        margin-top: 10px;
-        border-top: 1px solid var(--paper-edge, #DDD6C8);
-        min-width: 0;
-    }
-
-    .visual-variation-name {
-        color: var(--ink, #1A1A1A);
-        font-family: var(--ff-serif);
-        font-style: italic;
-        font-weight: 500;
-        font-size: 1rem;
-        line-height: 1.2;
-        overflow-wrap: anywhere;
-    }
-
-    .visual-variation-description {
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        color: var(--ink-mute, #6B6B6A);
-        font-family: var(--ff-sans);
-        font-size: 0.75rem;
-        line-height: 1.45;
-    }
-
-    .visual-variation-tile.thumbnail-only.has-image .visual-variation-copy {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        margin: -1px;
-        padding: 0;
-        overflow: hidden;
-        clip: rect(0 0 0 0);
-        clip-path: inset(50%);
-        white-space: nowrap;
-    }
-
-    .variation-description-panel {
-        margin-top: 0;
-        --wy-info-panel-bg: transparent;
-        --wy-info-panel-padding: 0;
-        --wy-info-panel-font-size: var(--md-sys-typescale-body-small-size, 0.875rem);
-    }
-
-    .variation-image {
-        margin: 0;
-    }
-
-    .variation-image img {
-        display: block;
-        width: 100%;
-        aspect-ratio: 16 / 9;
-        object-fit: cover;
-        border: 1px solid var(--paper-edge, #DDD6C8);
-    }
-
-    .variation-image figcaption {
-        margin: 8px 0 0;
-        color: var(--ink-mute, #6B6B6A);
-        font-family: var(--ff-serif, 'Lora', serif);
-        font-size: 0.8125rem;
-        font-style: italic;
-        line-height: 1.35;
-        text-align: right;
-    }
-
-    .reference-images-panel {
-        margin: 0;
-        --wy-info-panel-bg: transparent;
-        --wy-info-panel-padding: 0;
-        --wy-info-panel-font-size: var(--md-sys-typescale-body-small-size, 0.875rem);
-    }
-
-    .reference-images-list {
-        display: flex;
-        flex-direction: column;
-        border: 1px solid var(--paper-edge, #DDD6C8);
-        background: var(--paper, #F7F4EE);
-    }
-
-    .reference-image-row {
-        display: grid;
-        grid-template-columns: 72px minmax(0, 1fr) auto;
-        align-items: center;
-        gap: var(--spacing-md, 16px);
-        min-height: 96px;
-        padding: var(--spacing-md, 16px);
-    }
-
-    .reference-image-row + .reference-image-row {
-        border-top: 1px solid var(--paper-edge, #DDD6C8);
-    }
-
-    .reference-image-thumb {
-        display: block;
-        width: 72px;
-        height: 72px;
-        object-fit: cover;
-        border: 1px solid var(--paper-edge, #DDD6C8);
-        background: var(--white, #FFFFFF);
-    }
-
-    .reference-image-meta {
-        min-width: 0;
-        padding-right: var(--spacing-xs, 8px);
-    }
-
-    .reference-image-label {
-        color: var(--ink, #1A1A1A);
-        font-family: var(--ff-sans);
-        font-size: 0.875rem;
-        font-weight: 600;
-        line-height: 1.2;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .reference-image-url {
-        display: -webkit-box;
-        margin-top: 6px;
-        color: var(--ink-mute, #6B6B6A);
-        font-family: var(--ff-sans);
-        font-size: 0.75rem;
-        line-height: 1.45;
-        overflow: hidden;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-        white-space: pre-line;
-    }
-
-    .reference-variable {
-        display: inline-block;
-        margin-top: 6px;
-        color: var(--ink-soft, #A8A49C);
-        font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
-        font-size: 0.6875rem;
-        line-height: 1.35;
-        max-width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .reference-image-actions {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        flex-wrap: wrap;
-        gap: 6px;
-    }
-
-    .reference-image-copy {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        min-height: 36px;
-        padding: 0 10px;
-        border: 1px solid var(--paper-edge, #DDD6C8);
-        border-radius: 0;
-        background: transparent;
-        color: var(--ink, #1A1A1A);
-        font-family: var(--ff-sans);
-        font-size: 0.6875rem;
-        font-weight: 600;
-        line-height: 1.1;
-        white-space: nowrap;
-        cursor: pointer;
-        transition: background-color var(--dur-1, 150ms) var(--ease, ease),
-          color var(--dur-1, 150ms) var(--ease, ease);
-    }
-
-    .reference-image-copy:hover {
-        background: var(--ink, #1A1A1A);
-        color: var(--paper, #F7F4EE);
-    }
-
-    .reference-image-copy:focus-visible {
-        outline: 3px solid var(--wy-prompt-modal-focus-ring, color-mix(in srgb, var(--md-sys-color-primary) 18%, transparent));
-        outline-offset: 2px;
-    }
-
-    .reference-image-copy .material-symbols-outlined {
-        font-size: 18px;
-        line-height: 1;
-    }
-
-    .variation-meta-section + .variation-meta-section {
-        margin-top: var(--spacing-md, 16px);
-        padding-top: var(--spacing-md, 16px);
-        border-top: 1px solid var(--paper-edge, #DDD6C8);
-    }
-
-    .prompt-instructions-panel {
-        margin-top: 16px;
-        --wy-info-panel-bg: transparent;
-        --wy-info-panel-padding: 0;
-        --wy-info-panel-font-size: var(--md-sys-typescale-body-small-size, 0.875rem);
-    }
-
-    .prompt-instructions-heading {
-        margin: 0 0 var(--spacing-xxs, 4px);
-        font-family: var(--ff-sans);
-        font-size: 0.6875rem;
-        font-weight: 600;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        color: var(--ink-soft, #A8A49C);
-    }
-
-    .prompt-instructions-copy {
-        margin: 0;
-    }
-
-    .prompt-instructions-copy p { margin: 0 0 0.5em; }
-    .prompt-instructions-copy p:last-child { margin-bottom: 0; }
-
-    .prompt-instructions-copy ol,
-    .prompt-instructions-copy ul {
-        margin: 2px 0 0;
-        padding-left: 1.4em;
-    }
-
-    .prompt-instructions-copy li + li {
-        margin-top: 2px;
-    }
-
-    .variation-description-heading {
-        margin: 0 0 var(--spacing-xxs, 4px);
-        font-family: var(--ff-sans);
-        font-size: 0.6875rem;
-        font-weight: 600;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        color: var(--ink-soft, #A8A49C);
-    }
-
-    .variation-name {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: var(--spacing-sm, 8px);
-        width: 100%;
-        margin: 0;
-        padding: 0;
-        background: transparent;
-        border: 0;
-        font-family: var(--ff-serif, 'Lora', serif);
-        font-size: 1.125rem;
-        font-weight: 500;
-        line-height: 1.25;
-        color: var(--md-sys-color-text-heading);
-        letter-spacing: 0;
-        text-align: left;
-        cursor: pointer;
-    }
-
-    .variation-name:focus-visible {
-        outline: 3px solid var(--wy-prompt-modal-focus-ring, color-mix(in srgb, var(--md-sys-color-primary) 18%, transparent));
-        outline-offset: 4px;
-    }
-
-    .variation-name .material-symbols-outlined {
-        flex: 0 0 auto;
-        font-size: 20px;
-        transition: transform 0.2s;
-    }
-
-    .variation-name[aria-expanded="true"] .material-symbols-outlined {
-        transform: rotate(180deg);
-    }
-
-    .variation-details {
-        margin-top: var(--spacing-sm, 8px);
-    }
-
-    .variation-description-copy {
-        margin: 0;
-        font-size: 0.9375rem;
-        line-height: 1.6;
-        color: var(--md-sys-color-text-muted);
-    }
-
-    .variation-description-copy p { margin: 0 0 0.5em; }
-    .variation-description-copy p:last-child { margin-bottom: 0; }
-
-    /* Legacy selector styles (kept for backwards compatibility) */
-    .variation-selector {
-        margin: 0 var(--spacing-xl, 32px) var(--spacing-md, 16px);
-        padding: var(--spacing-sm, 12px);
-        background: var(--md-sys-color-surface-container-low);
-        border-radius: var(--md-sys-shape-corner-small, 8px);
-        display: flex;
-        align-items: center;
-        gap: var(--spacing-sm, 12px);
-    }
-
-    .variation-label {
-        font-family: var(--ff-sans);
-        font-size: 0.75rem;
-        font-weight: 600;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-        color: var(--md-sys-color-on-surface-variant);
-    }
-
-    .variation-select {
-        font-family: var(--ff-sans);
-        font-size: 0.875rem;
-        color: var(--md-sys-color-on-surface);
-        background: transparent;
-        border: 1px solid var(--paper-edge, #DDD6C8);
-        border-radius: 0;
-        padding: 6px 12px;
-    }
-
-    /* FORMS */
-    .variables-grid {
-        display: flex;
-        flex-direction: column;
-        gap: var(--spacing-lg, 24px);
-    }
-
-    .form-group label {
-        display: block;
-        font-family: var(--ff-sans);
-        font-size: 0.75rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        color: var(--md-sys-color-text-heading);
-        margin-bottom: 8px;
-    }
-
-    .form-group input, .form-group textarea {
-        width: 100%;
-        box-sizing: border-box;
-        padding: 16px; /* Increased padding for breathing room */
-        border: 1px solid var(--md-sys-color-outline-variant);
-        border-radius: 0;
-        font-family: var(--ff-sans);
-        font-size: 1rem;
-        color: var(--md-sys-color-on-surface);
-        background: var(--md-sys-color-surface-container-lowest);
-        transition: all 0.2s;
-    }
-
-    .form-group input:focus, .form-group textarea:focus {
-        outline: none;
-        border-color: var(--md-sys-color-primary);
-        box-shadow: 0 0 0 2px var(--wy-prompt-modal-focus-ring, color-mix(in srgb, var(--md-sys-color-primary) 18%, transparent));
-    }
-
-    .helper-text {
-        display: block;
-        text-align: right;
-        font-size: 0.75rem;
-        color: var(--md-sys-color-text-muted);
-        margin-top: 4px;
-    }
-
-    .form-group wy-option-toggle {
-      --md-sys-typescale-body-medium: 500 1rem/1.45 var(--ff-sans);
-      display: block;
-      width: 100%;
-    }
-
-    .form-group wy-option-toggle .label {
-      margin: 0 0 var(--spacing-xs, 4px) 0;
-      color: var(--md-sys-color-primary);
-      font-family: var(--ff-sans);
-      font-size: 0.875rem;
-      font-weight: 700;
-      line-height: 1.2;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-    }
-
-    .form-group wy-option-toggle .description {
-      margin: 0;
-      max-width: 36rem;
-      color: color-mix(in srgb, var(--md-sys-color-primary) 70%, transparent);
-      font-family: var(--ff-sans);
-      font-size: var(--md-sys-typescale-body-small-size, 0.875rem);
-      font-weight: 400;
-      line-height: 1.8;
-    }
-
-    .form-group wy-option-toggle .switch-row {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      align-items: center;
-      gap: var(--spacing-md, 16px);
-      min-height: 38px;
-    }
-
-    .form-group wy-option-toggle .switch-copy {
-      min-width: 0;
-    }
-
-    .form-group wy-option-toggle .switch-control {
-      display: flex;
-      align-items: center;
-      gap: var(--spacing-sm, 8px);
-      justify-self: end;
-    }
-
-    .form-group wy-option-toggle .switch-state {
-      min-width: 2.5rem;
-      text-align: right;
-      font-family: var(--ff-sans);
-      font-size: 0.625rem;
-      font-weight: 700;
-      line-height: 1.1;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--md-sys-color-primary);
-      transition: color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-      user-select: none;
-    }
-
-    .form-group wy-option-toggle .switch-button {
-      appearance: none;
-      position: relative;
-      overflow: hidden;
-      border: 0;
-      padding: 0;
-      flex: 0 0 auto;
-      width: 52px;
-      height: 30px;
-      border-radius: var(--md-sys-shape-corner-full, 9999px);
-      background: var(--wy-option-toggle-off-bg, var(--paper-deep));
-      cursor: pointer;
-      transition: background-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-    }
-
-    .form-group wy-option-toggle .switch-button.checked {
-      background: var(--md-sys-color-primary);
-    }
-
-    .form-group wy-option-toggle .switch-button::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: currentColor;
-      opacity: 0;
-      transition: opacity var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-      pointer-events: none;
-    }
-
-    .form-group wy-option-toggle .switch-button:hover::after {
-      opacity: var(--md-sys-state-hover-opacity, 0.08);
-    }
-
-    .form-group wy-option-toggle .switch-button:focus-visible {
-      outline: 2px solid var(--md-sys-color-primary);
-      outline-offset: 2px;
-    }
-
-    .form-group wy-option-toggle .switch-thumb {
-      position: absolute;
-      top: 3px;
-      left: 3px;
-      width: 24px;
-      height: 24px;
-      border-radius: var(--md-sys-shape-corner-full, 9999px);
-      background: var(--md-sys-color-primary);
-      transition:
-        transform var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
-        background-color var(--md-sys-motion-duration-short2, 200ms) var(--md-sys-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
-    }
-
-    .form-group wy-option-toggle .switch-button.checked .switch-thumb {
-      transform: translateX(22px);
-      background: var(--md-sys-color-surface);
-    }
-
-    .form-group wy-option-toggle .selected-value-text {
-      margin: var(--spacing-sm, 8px) 0 0 0;
-      color: color-mix(in srgb, var(--md-sys-color-on-surface) 86%, transparent);
-      font-family: var(--ff-sans);
-      font-size: var(--md-sys-typescale-body-small-size, 0.875rem);
-      font-weight: 400;
-      line-height: 1.7;
-    }
-
-    .preview-area {
-      background: var(--md-sys-color-surface-container-highest);
-      border-radius: 0;
-      padding: 24px;
-      font-family: var(--ff-sans);
-      font-size: 1rem;
-      line-height: 1.7;
-      color: var(--md-sys-color-on-surface);
-      border: 1px solid var(--md-sys-color-outline-variant);
-    }
-
-    /* Markdown element styles within preview-area */
-    .preview-area p { margin: 0 0 1em; }
-    .preview-area p:last-child { margin-bottom: 0; }
-    .preview-area h1, .preview-area h2, .preview-area h3,
-    .preview-area h4, .preview-area h5, .preview-area h6 {
-      font-family: var(--ff-sans);
-      font-weight: 600;
-      line-height: 1.3;
-      margin: 1.2em 0 0.4em;
-      color: var(--md-sys-color-on-surface);
-    }
-    .preview-area h1:first-child, .preview-area h2:first-child,
-    .preview-area h3:first-child { margin-top: 0; }
-    .preview-area h1 { font-size: 1.4rem; }
-    .preview-area h2 { font-size: 1.2rem; }
-    .preview-area h3 { font-size: 1.05rem; }
-    .preview-area h4, .preview-area h5, .preview-area h6 { font-size: 1rem; }
-    .preview-area ul, .preview-area ol {
-      margin: 0 0 1em;
-      padding-left: 1.5em;
-    }
-    .preview-area li + li { margin-top: 0.25em; }
-    .preview-area blockquote {
-      margin: 0 0 1em;
-      padding: 0.5em 1em;
-      border-left: 3px solid var(--md-sys-color-outline-variant);
-      color: var(--ink-mute, #6B6760);
-      font-style: italic;
-    }
-    .preview-area code {
-      font-family: 'DM Mono', 'Fira Code', monospace;
-      font-size: 0.875em;
-      background: var(--md-sys-color-surface-container);
-      padding: 0.1em 0.35em;
-      border-radius: 3px;
-    }
-    .preview-area pre {
-      background: var(--md-sys-color-surface-container);
-      padding: 1em;
-      border-radius: 6px;
-      overflow-x: auto;
-      margin: 0 0 1em;
-    }
-    .preview-area pre code {
-      background: none;
-      padding: 0;
-      font-size: 0.875rem;
-    }
-    .preview-area hr {
-      border: none;
-      border-top: 1px solid var(--md-sys-color-outline-variant);
-      margin: 1.2em 0;
-    }
-    .preview-area table {
-      border-collapse: collapse;
-      width: 100%;
-      margin: 0 0 1em;
-      font-size: 0.9rem;
-    }
-    .preview-area th, .preview-area td {
-      text-align: left;
-      padding: 6px 12px;
-      border: 1px solid var(--md-sys-color-outline-variant);
-    }
-    .preview-area th {
-      background: var(--md-sys-color-surface-container);
-      font-weight: 600;
-    }
-    .preview-area a {
-      color: var(--md-sys-color-primary);
-      text-decoration: underline;
-    }
-    .preview-area strong { font-weight: 600; }
-    .preview-area em { font-style: italic; }
-
-    .overview::after {
-      content: '';
-      display: block;
-      clear: both;
-    }
-
-    .overview-eyebrow {
-      display: block;
-      margin-bottom: 14px;
-      color: var(--ink-soft, #A8A49C);
-      font-family: var(--ff-sans);
-      font-size: 0.6875rem;
-      font-weight: 600;
-      letter-spacing: 0.18em;
-      line-height: 1.2;
-      text-transform: uppercase;
-    }
-
-    .overview-figure {
-      float: right;
-      width: 206px;
-      margin: 2px 0 14px 28px;
-    }
-
-    .overview-figure img {
-      display: block;
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      object-fit: cover;
-      border: 1px solid var(--paper-edge, #DDD6C8);
-    }
-
-    .overview-figure figcaption {
-      margin: 8px 0 0;
-      color: var(--ink-mute, #6B6B6A);
-      font-family: var(--ff-serif, 'Lora', serif);
-      font-size: 0.8125rem;
-      font-style: italic;
-      line-height: 1.35;
-      text-align: right;
-    }
-
-    .overview-lead {
-      margin: 0;
-      color: var(--ink, #1A1A1A);
-      font-family: var(--ff-serif, 'Lora', serif);
-      font-size: 1.375rem;
-      font-weight: 400;
-      line-height: 1.5;
-    }
-
-    .overview-lead p { margin: 0 0 0.75em; }
-    .overview-lead p:last-child { margin-bottom: 0; }
-
-    .overview-lead ol,
-    .overview-lead ul {
-      margin: 4px 0 0;
-      padding-left: 1.25em;
-    }
-
-    .editor-area {
-        width: 100%;
-        height: 100%;
-        min-height: 300px;
-        border: none;
-        background: none;
-        resize: none;
-        font-family: monospace;
-        font-size: 0.9rem;
-        color: var(--md-sys-color-on-surface);
-    }
-    .editor-area:focus { outline: none; }
-
-    /* WY-INFO-PANEL THEMING */
-    wy-info-panel {
-        --wy-info-panel-padding: var(--spacing-md, 16px);
-        --wy-info-panel-font-size: var(--md-sys-typescale-body-small-size, 0.875rem);
-    }
-
-    wy-info-panel[variant="compact"],
-    wy-info-panel.step-instructions {
-        --wy-info-panel-compact-bg: var(--md-sys-color-secondary-container, #E8DDD7);
-        --wy-info-panel-compact-border: var(--md-sys-color-outline-variant, #DDD);
-        --wy-info-panel-compact-padding: var(--spacing-md, 16px);
-    }
-
-    /* STEP NAVIGATION BUTTONS (for multi-step prompts) */
-    .secondary-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        background: transparent;
-        border: 1px solid var(--ink, #1A1A1A);
-        color: var(--ink, #1A1A1A);
-        padding: 12px 24px;
-        border-radius: 0;
-        text-transform: uppercase;
-        letter-spacing: 0.18em;
-        font-family: var(--ff-sans);
-        font-size: 0.875rem;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-    .secondary-btn:hover {
-        background: var(--md-sys-color-surface-container-high);
-        border-color: var(--md-sys-color-outline);
-    }
-
-    /* STEPPER STYLES */
-    .stepper-container {
-      position: sticky;
-      top: 0;
-      background: var(--wy-prompt-modal-surface, var(--md-sys-color-surface));
-      z-index: 10;
-      margin-bottom: var(--spacing-md, 16px);
-    }
-
-    .stepper-progress {
-      height: 4px;
-      background: var(--md-sys-color-surface-container-highest);
-      border-radius: var(--radius-0);
-      overflow: hidden;
-      margin-bottom: var(--spacing-md, 16px);
-    }
-
-    .stepper-progress-bar {
-      height: 100%;
-      background: var(--md-sys-color-primary);
-      transition: width var(--md-sys-motion-duration-medium2, 300ms) var(--md-sys-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1));
-    }
-
-    .stepper-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .stepper-label {
-      font-family: var(--ff-sans);
-      font-size: var(--md-sys-typescale-label-medium-size, 0.75rem);
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      color: var(--md-sys-color-primary);
-      font-weight: 500;
-    }
-
-    .stepper-nav {
-      display: flex;
-      gap: var(--spacing-xs, 4px);
-    }
-
-    .step-instructions {
-      margin-bottom: var(--spacing-lg, 24px);
-    }
-
-    .tabs-header {
-      display: flex;
-      gap: 24px;
-      padding-top: var(--spacing-xl, 32px);
-      padding-bottom: 0;
-      padding-left: 0;
-      padding-right: 0;
-      border-bottom: 1px solid var(--md-sys-color-outline-variant);
-      margin-bottom: var(--spacing-lg, 24px);
-    }
-
-    .tab-item {
-      background: none;
-      border: none;
-      padding: 8px 0;
-      font-family: var(--ff-sans);
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: var(--md-sys-color-on-surface-variant);
-      cursor: pointer;
-      position: relative;
-      transition: color 0.2s;
-      border-bottom: 2px solid transparent;
-    }
-
-    .tab-item:hover {
-      color: var(--md-sys-color-primary);
-    }
-
-    .tab-item.active {
-      color: var(--md-sys-color-primary);
-      font-weight: 700;
-      border-bottom-color: var(--md-sys-color-primary);
-    }
-
-    @media (max-width: 600px) {
-      .modal-container {
-        width: 100%;
-        height: 100%;
-        max-height: 100%;
-        border-radius: 0;
-      }
-      .header { padding: var(--spacing-lg, 24px) var(--spacing-md, 16px) var(--spacing-sm, 8px); }
-      .header-top { align-items: flex-start; }
-      .header-main { flex-direction: column; align-items: flex-start; gap: var(--spacing-sm, 8px); margin-bottom: var(--spacing-sm, 8px); }
-      .header-actions-left { flex-wrap: wrap; }
-      .labeled-btn { min-width: 0; }
-      .labeled-btn.primary { padding-right: 12px; }
-      .reference-image-row {
-        grid-template-columns: 56px minmax(0, 1fr);
-        min-height: 72px;
-        gap: var(--spacing-sm, 12px);
-        padding: var(--spacing-sm, 12px);
-      }
-      .reference-image-thumb {
-        width: 56px;
-        height: 56px;
-      }
-      .reference-image-meta {
-        padding-right: 0;
-      }
-      .reference-image-actions {
-        grid-column: 1 / -1;
-        justify-content: flex-start;
-      }
-      .title-group h2 { font-size: 1.75rem; }
-      .tabs-container { padding: 0; } /* wy-tabs handles its own mobile padding */
-      .variation-selector-container {
-        margin: var(--spacing-sm, 8px) var(--spacing-md, 16px) 0;
-        padding: var(--spacing-sm, 12px);
-        gap: var(--spacing-sm, 8px);
-      }
-      .visual-selector-layout {
-        display: flex;
-        flex-direction: column;
-        gap: var(--spacing-md, 16px);
-        padding: 0 var(--spacing-md, 16px) var(--spacing-md, 16px);
-      }
-      .visual-selector-rail {
-        position: static;
-        order: -1;
-        max-height: none;
-        overflow: visible;
-        padding: var(--spacing-sm, 12px);
-      }
-      .visual-selector-rail .visual-variation-grid {
-        grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
-      }
-      .visual-selector-main .body {
-        padding-top: var(--spacing-md, 16px);
-      }
-      .visual-variation-grid {
-        grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
-      }
-      .visual-variation-text-tile {
-        min-height: 86px;
-      }
-      .visual-variation-copy {
-        padding: var(--spacing-xs, 8px);
-      }
-      .variation-description-heading {
-        font-size: 0.6875rem;
-      }
-      .body { padding: var(--spacing-md, 16px); }
-      
-      /* Tighter button spacing on mobile */
-      .header-actions-left {
-        gap: 4px;
-      }
-
-      .overview-figure {
-        float: none;
-        width: 100%;
-        margin: 0 0 var(--spacing-md, 16px);
-      }
-
-      .overview-figure img {
-        aspect-ratio: 16 / 9;
-        max-height: 220px;
-      }
-
-      .overview-lead {
-        font-size: 1.125rem;
-      }
-
-      /* Mobile description toggle */
-      .title-group h2 {
-        cursor: pointer;
-      }
-      
-      .description-text {
-        display: none;
-      }
-      
-      .description-text.expanded {
-        display: block;
-      }
-      
-      /* Step navigation styles (for multi-step prompts) */
-      .step-navigation {
-        flex-direction: row;
-        gap: 12px;
-      }
-      .step-navigation .secondary-btn {
-        flex: 1;
-        min-width: 0;
-      }
-    }
-    `);
 customElements.define("wy-prompt-modal", WyPromptModal);
 
 // components/ui/wy-links-modal.js
 var WyLinksModal = class extends i4 {
+  createRenderRoot() {
+    return this;
+  }
   constructor() {
     super();
     this.open = false;
@@ -10324,14 +6637,14 @@ var WyLinksModal = class extends i4 {
   }
   _focusFirstElement() {
     requestAnimationFrame(() => {
-      const closeButton = this.shadowRoot?.querySelector(".close-button");
+      const closeButton = this.querySelector(".close-button");
       if (closeButton) {
         closeButton.focus();
       }
     });
   }
-  _handleEscKey(e9) {
-    if (e9.key === "Escape" && this.open) {
+  _handleEscKey(e6) {
+    if (e6.key === "Escape" && this.open) {
       if (this.openDropdownId) {
         this.openDropdownId = "";
         return;
@@ -10374,7 +6687,7 @@ var WyLinksModal = class extends i4 {
                   </button>
                 </div>
               ` : ""}
-              ${!this.links || this.links.length === 0 ? b2`<p style="color: var(--md-sys-color-on-surface-variant); text-align: center; padding: 2rem;">No links available.</p>` : this.links.map((category, categoryIndex) => b2`
+              ${!this.links || this.links.length === 0 ? b2`<p style="color: var(--ink-mute); text-align: center; padding: 2rem;">No links available.</p>` : this.links.map((category, categoryIndex) => b2`
                   <section class="section">
                     <h2 class="section-header">${category.category}</h2>
                     <div class="chips-container">
@@ -10395,16 +6708,16 @@ var WyLinksModal = class extends i4 {
       composed: true
     }));
   }
-  _handleOverlayClick(e9) {
-    if (e9.target === e9.currentTarget) {
+  _handleOverlayClick(e6) {
+    if (e6.target === e6.currentTarget) {
       this._handleClose();
     }
   }
-  _handleContainerClick(e9) {
-    if (!e9.composedPath().some((element) => element?.classList?.contains("link-dropdown"))) {
+  _handleContainerClick(e6) {
+    if (!e6.composedPath().some((element) => element?.classList?.contains("link-dropdown"))) {
       this.openDropdownId = "";
     }
-    e9.stopPropagation();
+    e6.stopPropagation();
   }
   _handleClose() {
     this.open = false;
@@ -10413,7 +6726,7 @@ var WyLinksModal = class extends i4 {
       composed: true
     }));
   }
-  _handleLinkClick(e9, link) {
+  _handleLinkClick(e6, link) {
     window.open(link.url, "_blank", "noopener,noreferrer");
     this.dispatchEvent(new CustomEvent("link-click", {
       detail: { link },
@@ -10428,7 +6741,7 @@ var WyLinksModal = class extends i4 {
         <div class="link-dropdown">
           <button
             class="link-chip link-chip--dropdown"
-            @click="${(e9) => this._handleDropdownToggle(e9, dropdownId)}"
+            @click="${(e6) => this._handleDropdownToggle(e6, dropdownId)}"
             aria-label="Open ${link.name} options"
             aria-haspopup="menu"
             aria-expanded="${isOpen ? "true" : "false"}"
@@ -10443,7 +6756,7 @@ var WyLinksModal = class extends i4 {
                 <button
                   class="link-menu__item"
                   role="menuitem"
-                  @click="${(e9) => this._handleLinkClick(e9, option)}"
+                  @click="${(e6) => this._handleLinkClick(e6, option)}"
                   aria-label="Open ${option.name}"
                 >
                   ${option.name}
@@ -10457,15 +6770,15 @@ var WyLinksModal = class extends i4 {
     return b2`
       <button
         class="link-chip"
-        @click="${(e9) => this._handleLinkClick(e9, link)}"
+        @click="${(e6) => this._handleLinkClick(e6, link)}"
         aria-label="Open ${link.name}"
       >
         ${link.name}
       </button>
     `;
   }
-  _handleDropdownToggle(e9, dropdownId) {
-    e9.stopPropagation();
+  _handleDropdownToggle(e6, dropdownId) {
+    e6.stopPropagation();
     this.openDropdownId = this.openDropdownId === dropdownId ? "" : dropdownId;
   }
   show() {
@@ -10482,403 +6795,6 @@ __publicField(WyLinksModal, "properties", {
   showPaletteEntry: { type: Boolean, attribute: "show-palette-entry" },
   openDropdownId: { type: String, state: true }
 });
-__publicField(WyLinksModal, "styles", i`
-    :host {
-      display: block;
-      position: relative;
-    }
-
-    /* Material Symbols */
-    .material-symbols-outlined {
-      font-family: 'Material Symbols Outlined';
-      font-weight: normal;
-      font-style: normal;
-      font-size: 24px;
-      line-height: 1;
-      letter-spacing: normal;
-      text-transform: none;
-      display: inline-block;
-      white-space: nowrap;
-      word-wrap: normal;
-      direction: ltr;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      text-rendering: optimizeLegibility;
-      font-feature-settings: 'liga';
-    }
-
-    /* Modal overlay - matches mockup backdrop */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 9%, transparent);
-      backdrop-filter: blur(16px) saturate(180%);
-      -webkit-backdrop-filter: blur(16px) saturate(180%);
-      z-index: 2000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem; /* p-4 from mockup */
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-      transition: opacity var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard),
-                  visibility var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
-    }
-
-    :host([open]) .modal-overlay {
-      opacity: 1;
-      visibility: visible;
-      pointer-events: auto;
-    }
-
-    :host([open]) {
-      display: block;
-    }
-
-    /* Modal container - matches mockup exactly */
-    .modal-container {
-      position: relative;
-      width: 100%;
-      max-width: 56rem; /* max-w-4xl = 896px */
-      max-height: 90vh; /* Constrain height to enable scrolling */
-      background: var(--paper, #F7F4EE);
-      border: 1px solid var(--paper-edge, #DDD6C8);
-      border-radius: 0;
-      box-shadow: var(--shadow-modal); /* shadow-2xl */
-      overflow: hidden;
-      border: 1px solid color-mix(in srgb, var(--md-sys-color-on-surface) 5%, transparent); /* border-black/5 */
-      transform: scale(0.95) translateY(20px);
-      opacity: 0;
-      transition: transform var(--md-sys-motion-duration-long2) var(--md-sys-motion-easing-spring),
-                  opacity var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
-      display: flex;
-      flex-direction: column;
-    }
-
-    :host([open]) .modal-container {
-      transform: scale(1) translateY(0);
-      opacity: 1;
-    }
-
-    /* Content wrapper with padding - matches mockup p-8 */
-    .modal-content {
-      padding: var(--spacing-xl, 2rem);
-      padding-bottom: calc(var(--spacing-xl, 2rem) + env(safe-area-inset-bottom, 0px));
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-      min-height: 0; /* Allow shrinking below content size for scroll */
-      overflow-y: auto;
-      overflow-x: hidden;
-    }
-
-    @media (max-width: 600px) {
-      .modal-overlay {
-        padding: 0;
-        align-items: flex-end;
-      }
-
-      .modal-container {
-        max-width: 100%;
-        max-height: 100%;
-        height: 100%;
-        border-radius: 0;
-      }
-
-      .modal-content {
-        padding: var(--spacing-lg, 1.5rem);
-        /* Extra padding for mobile browser controls (toolbar, home indicator) */
-        padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
-        height: 100%;
-        box-sizing: border-box;
-      }
-
-      .close-button {
-        top: var(--spacing-lg, 1.5rem);
-        right: var(--spacing-lg, 1.5rem);
-      }
-
-      .modal-title {
-        font-size: 1.75rem;
-      }
-
-      .title-wrapper {
-        margin-bottom: var(--spacing-xl, 2rem);
-      }
-
-      .sections-container {
-        gap: 2rem;
-      }
-    }
-
-    /* Close button - matches mockup exactly */
-    .close-button {
-      position: absolute;
-      top: var(--spacing-xl, 2rem);
-      right: var(--spacing-xl, 2rem);
-      background: none;
-      border: none;
-      padding: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: var(--wy-links-modal-close-color, #A8A29E); /* stone-400 from reference */
-      transition: color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
-      overflow: hidden;
-      z-index: 10;
-      border-radius: 50%;
-    }
-
-    .close-button::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-color: var(--md-sys-color-primary);
-      opacity: 0;
-      transition: opacity var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
-      pointer-events: none;
-    }
-
-    .close-button:hover::before {
-      opacity: var(--md-sys-state-hover-opacity);
-    }
-
-    .close-button:hover {
-      color: var(--md-sys-color-text-heading); /* hover:text-primary */
-    }
-
-    .close-button:focus-visible {
-      outline: 3px solid var(--md-sys-color-primary);
-      outline-offset: 2px;
-    }
-
-    .close-button .material-symbols-outlined {
-      font-size: 2rem; /* text-2xl */
-      position: relative;
-      z-index: 1;
-    }
-
-    /* Title wrapper with mb-12 */
-    .title-wrapper {
-      margin-bottom: var(--spacing-2xl, 3rem);
-      flex-shrink: 0; /* Title stays fixed, doesn't shrink */
-    }
-
-    /* Title - matches mockup exactly */
-    .modal-title {
-      font-family: var(--font-serif); /* Lora */
-      font-size: 2.25rem; /* text-4xl = 36px */
-      font-weight: 500; /* font-medium */
-      line-height: 1.2;
-      color: var(--wy-links-modal-title-color, #1C1917); /* stone-900 from reference */
-      margin: 0;
-    }
-
-    /* Sections container - matches space-y-10 */
-    .sections-container {
-      display: flex;
-      flex-direction: column;
-      gap: 2.5rem; /* 40px = 2.5rem */
-    }
-
-    /* Section */
-    .section {
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Section header - matches mockup exactly */
-    .section-header {
-      font-family: var(--font-serif); /* Lora */
-      font-size: 1.25rem; /* text-xl = 20px */
-      font-weight: 500; /* font-medium */
-      line-height: 1.2;
-      color: var(--wy-links-modal-header-color, #292524); /* stone-800 from reference */
-      margin: 0 0 1.25rem 0; /* 20px = 1.25rem */
-    }
-
-    /* Chips container - matches flex flex-wrap gap-3 */
-    .chips-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: calc(var(--spacing-sm, 0.5rem) * 1.5); /* 12px = 1.5 * 8px */
-    }
-
-    /* Link chip button - matches mockup exactly */
-    .link-chip {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: calc(var(--spacing-sm, 0.5rem) * 1.25) var(--spacing-lg, 1.5rem); /* 10px 24px = 1.25 * 8px, 24px */
-      border-radius: 0;
-      font-family: var(--ff-sans, 'Inter', sans-serif);
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      font-size: 0.875rem; /* text-sm = 14px */
-      font-weight: 500; /* font-medium */
-      cursor: pointer;
-      border: none;
-      background-color: var(--md-sys-color-surface-container-lowest);
-      color: var(--wy-links-modal-chip-text-color, #44403C); /* stone-700 from reference */
-      text-decoration: none;
-      transition: transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Chip hover state layer */
-    .link-chip::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-color: color-mix(in srgb, var(--wy-button-primary-bg, var(--md-sys-color-primary)) 15%, transparent);
-      opacity: 0;
-      transition: opacity var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
-      pointer-events: none;
-    }
-
-    .link-chip:hover::before {
-      opacity: 1;
-    }
-
-    /* Chip pressed state */
-    .link-chip:active {
-      transform: scale(0.97);
-    }
-
-    /* Focus state */
-    .link-chip:focus-visible {
-      outline: 3px solid var(--md-sys-color-primary);
-      outline-offset: 2px;
-    }
-
-    .link-dropdown {
-      position: relative;
-      display: inline-flex;
-    }
-
-    .link-chip--dropdown {
-      gap: var(--spacing-xs, 0.25rem);
-      padding-right: var(--spacing-md, 1rem);
-    }
-
-    .link-chip__label,
-    .link-chip__icon {
-      position: relative;
-      z-index: 1;
-    }
-
-    .link-chip__icon {
-      font-size: 1.25rem;
-      transition: transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
-    }
-
-    .link-chip--dropdown[aria-expanded="true"] .link-chip__icon {
-      transform: rotate(180deg);
-    }
-
-    .link-menu {
-      position: absolute;
-      top: calc(100% + var(--spacing-xs, 0.25rem));
-      left: 0;
-      z-index: 20;
-      min-width: 15rem;
-      padding: var(--spacing-xs, 0.25rem);
-      border: 1px solid var(--paper-edge, #DDD6C8);
-      background: var(--paper, #F7F4EE);
-      box-shadow: var(--shadow-modal);
-    }
-
-    .link-menu__item {
-      display: flex;
-      width: 100%;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 2.75rem;
-      padding: var(--spacing-sm, 0.5rem) var(--spacing-md, 1rem);
-      border: none;
-      border-radius: 0;
-      background: transparent;
-      color: var(--wy-links-modal-chip-text-color, #44403C);
-      cursor: pointer;
-      font-family: var(--ff-sans, 'Inter', sans-serif);
-      font-size: 0.875rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      line-height: 1.2;
-      text-align: left;
-      text-transform: uppercase;
-      transition: background-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
-    }
-
-    .link-menu__item:hover {
-      background: color-mix(in srgb, var(--wy-button-primary-bg, var(--md-sys-color-primary)) 12%, transparent);
-    }
-
-    .link-menu__item:focus-visible {
-      outline: 3px solid var(--md-sys-color-primary);
-      outline-offset: -3px;
-    }
-
-    @media (max-width: 600px) {
-      .link-dropdown {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .link-menu {
-        position: static;
-        width: max-content;
-        min-width: 0;
-        max-width: calc(100vw - (var(--spacing-md, 1rem) * 2));
-        margin-top: var(--spacing-xs, 0.25rem);
-      }
-    }
-
-    /* Palette entry */
-    .palette-entry-section {
-      padding-bottom: var(--spacing-lg, 24px);
-      border-bottom: 1px solid color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
-      margin-bottom: var(--spacing-lg, 24px);
-    }
-
-    .palette-entry-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--spacing-sm, 8px);
-      height: 40px;
-      padding: 0 var(--spacing-md, 16px) 0 var(--spacing-sm, 8px);
-      border: 1px solid color-mix(in srgb, var(--md-sys-color-on-surface) 14%, transparent);
-      border-radius: 20px;
-      background: transparent;
-      color: var(--md-sys-color-on-surface, #1A1A1A);
-      font-family: var(--ff-sans, 'Inter', sans-serif);
-      font-size: 0.9375rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 120ms ease;
-    }
-
-    .palette-entry-btn:hover {
-      background: color-mix(in srgb, var(--md-sys-color-on-surface) 6%, transparent);
-    }
-
-    .palette-entry-btn:focus-visible {
-      outline: 3px solid var(--md-sys-color-primary);
-      outline-offset: 2px;
-    }
-
-    .palette-entry-btn .material-symbols-outlined {
-      font-size: 20px;
-      opacity: 0.7;
-    }
-
-  `);
 if (!WyLinksModal) {
   console.error("[wy-links-modal] Component class is undefined");
   throw new Error("WyLinksModal class is undefined");
@@ -10900,6 +6816,9 @@ try {
 
 // components/ui/wy-color-palette.js
 var WyColorPalette = class extends i4 {
+  createRenderRoot() {
+    return this;
+  }
   constructor() {
     super();
     this.open = false;
@@ -10994,11 +6913,11 @@ var WyColorPalette = class extends i4 {
     this.open = false;
     this.dispatchEvent(new CustomEvent("close", { bubbles: true, composed: true }));
   }
-  _handleScrimClick(e9) {
-    if (e9.target === e9.currentTarget) this.close();
+  _handleScrimClick(e6) {
+    if (e6.target === e6.currentTarget) this.close();
   }
-  _handleDocKeyDown(e9) {
-    if (e9.key === "Escape" && this.open) this.close();
+  _handleDocKeyDown(e6) {
+    if (e6.key === "Escape" && this.open) this.close();
   }
   render() {
     return b2`
@@ -11034,7 +6953,7 @@ var WyColorPalette = class extends i4 {
                         class="copy-palette-btn"
                         title="Copy palette as text"
                         aria-label="Copy ${palette.paletteName} palette"
-                        @click="${(e9) => this._copyPalette(palette, e9.currentTarget)}"
+                        @click="${(e6) => this._copyPalette(palette, e6.currentTarget)}"
                     >
                         <span class="ms sm">content_copy</span>
                     </button>
@@ -11046,7 +6965,7 @@ var WyColorPalette = class extends i4 {
                             style="background-color: ${c4.hex};"
                             title="${c4.name} — ${c4.hex}"
                             aria-label="Copy ${c4.name} (${c4.hex})"
-                            @click="${(e9) => this._copyHex(c4.hex, e9.currentTarget)}"
+                            @click="${(e6) => this._copyHex(c4.hex, e6.currentTarget)}"
                         ></button>
                     `)}
                 </div>
@@ -11060,279 +6979,20 @@ __publicField(WyColorPalette, "properties", {
   _loading: { state: true },
   _error: { state: true }
 });
-__publicField(WyColorPalette, "styles", i`
-        :host {
-            display: block;
-            position: fixed;
-            inset: 0;
-            width: 100dvw;
-            height: 100dvh;
-            z-index: var(--wy-color-palette-z-index, 3000);
-            pointer-events: none;
-            font-family: var(--ff-sans, 'Inter', sans-serif);
-        }
-
-        :host([open]) {
-            pointer-events: auto;
-        }
-
-        .scrim {
-            position: fixed;
-            inset: 0;
-            background: transparent;
-            pointer-events: none;
-        }
-
-        :host([open]) .scrim {
-            pointer-events: auto;
-        }
-
-        .panel {
-            position: fixed;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            width: 320px;
-            max-width: 100vw;
-            background: var(--paper, #F7F4EE);
-            border-left: 1px solid var(--paper-edge, #DDD6C8);
-            box-shadow: var(--shadow-modal, -4px 0 32px rgba(0,0,0,0.14));
-            display: flex;
-            flex-direction: column;
-            transform: translateX(100%);
-            transition: transform var(--dur-2, 350ms) var(--ease, cubic-bezier(0.2, 0.6, 0.2, 1));
-            pointer-events: auto;
-            overflow: hidden;
-        }
-
-        :host([open]) .panel {
-            transform: translateX(0);
-        }
-
-        .panel-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: var(--s-3, 12px) var(--s-4, 16px) var(--s-3, 12px) var(--s-5, 24px);
-            border-bottom: 1px solid var(--paper-edge, #DDD6C8);
-            flex-shrink: 0;
-        }
-
-        .panel-title {
-            font-family: var(--ff-serif, 'Lora', serif);
-            font-style: italic;
-            font-size: var(--fs-body-l, 16px);
-            font-weight: 500;
-            color: var(--ink, #1A1A1A);
-            margin: 0;
-        }
-
-        .close-btn {
-            width: 32px;
-            height: 32px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: var(--radius-pill, 9999px);
-            color: var(--ink-mute, #6B6B6A);
-            position: relative;
-            overflow: hidden;
-            transition: color var(--dur-1, 150ms) var(--ease, cubic-bezier(0.2, 0.6, 0.2, 1));
-            flex-shrink: 0;
-        }
-
-        .close-btn::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: var(--ink, #1A1A1A);
-            opacity: 0;
-            transition: opacity var(--dur-1, 150ms) var(--ease, cubic-bezier(0.2, 0.6, 0.2, 1));
-            border-radius: inherit;
-            pointer-events: none;
-        }
-
-        .close-btn:hover::before { opacity: 0.06; }
-        .close-btn:hover { color: var(--ink, #1A1A1A); }
-
-        .close-btn:focus-visible {
-            outline: 2px solid var(--ink, #1A1A1A);
-            outline-offset: 2px;
-        }
-
-        .panel-body {
-            flex: 1;
-            overflow-y: auto;
-            padding: var(--s-4, 16px) var(--s-5, 24px);
-            display: flex;
-            flex-direction: column;
-            gap: var(--s-5, 24px);
-        }
-
-        .palette-row {
-            display: flex;
-            flex-direction: column;
-            gap: var(--s-2, 8px);
-        }
-
-        .palette-row-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: var(--s-2, 8px);
-        }
-
-        .palette-name {
-            font-size: var(--fs-body-s, 13px);
-            font-weight: 500;
-            color: var(--ink, #1A1A1A);
-            margin: 0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .copy-palette-btn {
-            width: 28px;
-            height: 28px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: var(--radius-pill, 9999px);
-            color: var(--ink-soft, #A8A49C);
-            position: relative;
-            overflow: hidden;
-            transition: color var(--dur-1, 150ms) var(--ease, cubic-bezier(0.2, 0.6, 0.2, 1));
-            flex-shrink: 0;
-        }
-
-        .copy-palette-btn::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: var(--ink, #1A1A1A);
-            opacity: 0;
-            transition: opacity var(--dur-1, 150ms) var(--ease, cubic-bezier(0.2, 0.6, 0.2, 1));
-            border-radius: inherit;
-            pointer-events: none;
-        }
-
-        .copy-palette-btn:hover::before { opacity: 0.06; }
-        .copy-palette-btn:hover { color: var(--ink, #1A1A1A); }
-
-        .copy-palette-btn:focus-visible {
-            outline: 2px solid var(--ink, #1A1A1A);
-            outline-offset: 2px;
-        }
-
-        .copy-palette-btn.copied {
-            color: var(--ok, #386A20);
-        }
-
-        .chips-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--s-1, 4px);
-        }
-
-        .chip {
-            width: 20px;
-            height: 20px;
-            border-radius: var(--radius-1, 2px);
-            border: 1px solid rgba(26, 26, 26, 0.12);
-            cursor: pointer;
-            flex-shrink: 0;
-            position: relative;
-            background: transparent;
-            padding: 0;
-            transition: transform var(--dur-1, 150ms) var(--ease, cubic-bezier(0.2, 0.6, 0.2, 1));
-        }
-
-        .chip:hover {
-            transform: scale(1.3);
-            z-index: 1;
-        }
-
-        .chip:active {
-            transform: scale(1.1);
-        }
-
-        .chip:focus-visible {
-            outline: 2px solid var(--ink, #1A1A1A);
-            outline-offset: 2px;
-        }
-
-        .chip.copied {
-            outline: 2px solid var(--ok, #386A20);
-            outline-offset: 2px;
-        }
-
-        .ms {
-            font-family: 'Material Symbols Outlined';
-            font-size: 18px;
-            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
-            line-height: 1;
-            display: inline-flex;
-            user-select: none;
-        }
-
-        .ms.sm {
-            font-size: 16px;
-        }
-
-        .state-msg {
-            text-align: center;
-            padding: var(--s-7, 48px) var(--s-4, 16px);
-            color: var(--ink-mute, #6B6B6A);
-            font-size: var(--fs-body-s, 13px);
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .panel { transition: none; }
-            .chip  { transition: none; }
-        }
-
-        @media (max-width: 480px) {
-            .panel {
-                top: auto;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                width: 100%;
-                height: 65vh;
-                transform: translateY(100%);
-                border-left: none;
-                border-top: 1px solid var(--paper-edge, #DDD6C8);
-                border-radius: var(--radius-3, 16px) var(--radius-3, 16px) 0 0;
-                box-shadow: 0 -4px 32px rgba(0,0,0,0.12);
-            }
-            :host([open]) .panel {
-                transform: translateY(0);
-            }
-        }
-    `);
 customElements.define("wy-color-palette", WyColorPalette);
 
 // components/ui/index.js
 console.log("[prompts-library] Local web components registered");
 /*! Bundled license information:
 
-@lit/reactive-element/decorators/custom-element.js:
+@lit/reactive-element/css-tag.js:
+  (**
+   * @license
+   * Copyright 2019 Google LLC
+   * SPDX-License-Identifier: BSD-3-Clause
+   *)
+
 @lit/reactive-element/reactive-element.js:
-@lit/reactive-element/decorators/property.js:
-@lit/reactive-element/decorators/state.js:
-@lit/reactive-element/decorators/event-options.js:
-@lit/reactive-element/decorators/base.js:
-@lit/reactive-element/decorators/query.js:
-@lit/reactive-element/decorators/query-all.js:
-@lit/reactive-element/decorators/query-async.js:
-@lit/reactive-element/decorators/query-assigned-nodes.js:
 lit-html/lit-html.js:
 lit-element/lit-element.js:
 lit-html/directive.js:
@@ -11343,70 +7003,11 @@ lit-html/directives/unsafe-html.js:
    * SPDX-License-Identifier: BSD-3-Clause
    *)
 
-@lit/reactive-element/css-tag.js:
-  (**
-   * @license
-   * Copyright 2019 Google LLC
-   * SPDX-License-Identifier: BSD-3-Clause
-   *)
-
-@lit/reactive-element/decorators/query-assigned-elements.js:
-  (**
-   * @license
-   * Copyright 2021 Google LLC
-   * SPDX-License-Identifier: BSD-3-Clause
-   *)
-
 lit-html/is-server.js:
   (**
    * @license
    * Copyright 2022 Google LLC
    * SPDX-License-Identifier: BSD-3-Clause
-   *)
-
-@material/web/icon/internal/icon.js:
-@material/web/icon/icon.js:
-  (**
-   * @license
-   * Copyright 2022 Google LLC
-   * SPDX-License-Identifier: Apache-2.0
-   *)
-
-@material/web/icon/internal/icon-styles.js:
-@material/web/divider/internal/divider-styles.js:
-@material/web/dialog/internal/dialog-styles.js:
-  (**
-   * @license
-   * Copyright 2024 Google LLC
-   * SPDX-License-Identifier: Apache-2.0
-   *)
-
-@material/web/divider/internal/divider.js:
-@material/web/divider/divider.js:
-@material/web/internal/aria/aria.js:
-@material/web/internal/aria/delegate.js:
-@material/web/dialog/internal/animations.js:
-@material/web/dialog/internal/dialog.js:
-@material/web/dialog/dialog.js:
-  (**
-   * @license
-   * Copyright 2023 Google LLC
-   * SPDX-License-Identifier: Apache-2.0
-   *)
-
-lit-html/directives/class-map.js:
-  (**
-   * @license
-   * Copyright 2018 Google LLC
-   * SPDX-License-Identifier: BSD-3-Clause
-   *)
-
-@material/web/internal/events/redispatch-event.js:
-@material/web/internal/motion/animation.js:
-  (**
-   * @license
-   * Copyright 2021 Google LLC
-   * SPDX-License-Identifier: Apache-2.0
    *)
 
 lit-html/directive-helpers.js:
