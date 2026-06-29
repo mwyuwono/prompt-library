@@ -1960,6 +1960,26 @@
     ]
   },
   {
+    "id": "topographic-site-plan-map",
+    "title": "Topographic Site Plan",
+    "description": "Recreates an uploaded map, satellite view, or site-plan screenshot as a hand-colored historical topographic site plan using a fixed manuscript-map style reference.",
+    "category": "Art",
+    "icon": "map",
+    "featured": false,
+    "slug": "topographic-site-plan-map",
+    "instructions": "Upload an overhead map, satellite view, or site-plan screenshot as the Site Reference. The permanent Style Reference is attached below.",
+    "image": "public/images/topographic-site-plan-style-reference.png",
+    "template": "I have uploaded an image labeled or intended as the Site Reference: an overhead map, satellite view, or site plan of a real area. Recreate that site as a hand-colored historical topographic site plan, using the uploaded Site Reference as the sole geographic reference and the permanent Style Reference at {{topographic_site_plan_style}} as the sole stylistic reference.\n\nPreserve the actual modern site relationships from the Site Reference: land parcel boundaries, primary building footprints, neighboring building masses, street alignments, adjacent streets, curb geometry, sidewalk and paved open areas, planted or residual open spaces, and the relative spacing between all major elements. Preserve road geometry exactly, including irregular curves, bends, offsets, dead ends, cul-de-sacs, angled intersections, and non-parallel alignments; do not simplify winding streets into clean loops or regularized diagram shapes. If elevation, slope, shoreline, landscape edges, or grade relationships are legible in the Site Reference, express them with restrained brown contour, hachure, or wash cues; otherwise do not invent topography. Do not invent a different plan, change the site layout, regularize irregular streets, or replace the real urban relationships with generic map geometry.\n\nTranslate the site into an early nineteenth-century manuscript plan aesthetic. Use pale cream laid paper with subtle age toning, faint edge wear, and a thin hand-ruled border. Draw all geometry in fine black-brown ink with slight hand irregularity, measured linework, and restrained archival softness.\n\nApply transparent watercolor washes: muted rose-pink for surrounding blocks or building fields, warm ivory for streets and open ground, pale gray-blue only for paved roadway areas where it improves hierarchy, and restrained green for planted or open residual spaces. Keep color flat, translucent, softly uneven, and subordinate to the plan drawing.\n\nRepresent the primary site, parcel, or building as the central mapped subject with a clean measured footprint, light ochre or cream fill, darker ink outline, and a small handwritten label. Label major streets in delicate slanted cursive handwriting. Add sparse cartographic annotations, small directional arrows, parcel edges, curb lines, path edges, and tiny tree, bollard, or planting marks only where they clarify the site. Include a small page number, archival stamp, and faint catalog notation in the margins.\n\nMaintain plan-view orthographic logic, flattened perspective, measured spacing, and readable hierarchy. The final image should feel like a historically plausible archival manuscript plan of the actual uploaded site, not a decorative fantasy map.\n\nAvoid modern map symbols, pins, app labels, UI colors, satellite imagery, photorealism, heavy texture, crisp vector perfection, decorative fantasy elements, excessive aging, fictional landmarks, ornate compass roses, 3D perspective, and any geographic changes that contradict the Site Reference.",
+    "variables": [],
+    "referenceImages": [
+      {
+        "variable": "topographic_site_plan_style",
+        "label": "Style Reference",
+        "path": "public/images/topographic-site-plan-style-reference.png"
+      }
+    ]
+  },
+  {
     "id": "untitled-prompt-1780450694735",
     "title": "Miniature Portrait",
     "description": "",
