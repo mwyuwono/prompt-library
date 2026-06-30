@@ -2333,6 +2333,7 @@ wy-controls-bar {
     wy-prompt-modal .variation-description-panel {
         margin-top: 0;
         --wy-info-panel-bg: transparent;
+        --wy-info-panel-border: transparent;
         --wy-info-panel-padding: 0;
         --wy-info-panel-font-size: var(--fs-body-s, 0.875rem);
     }
@@ -2490,6 +2491,7 @@ wy-controls-bar {
     wy-prompt-modal .prompt-instructions-panel {
         margin-top: 16px;
         --wy-info-panel-bg: transparent;
+        --wy-info-panel-border: transparent;
         --wy-info-panel-padding: 0;
         --wy-info-panel-font-size: var(--fs-body-s, 0.875rem);
     }
@@ -2538,10 +2540,10 @@ wy-controls-bar {
         gap: var(--spacing-sm, 8px);
         width: 100%;
         margin: 0;
-        min-height: 48px;
-        padding: 0 var(--spacing-md, 16px);
-        background: var(--white, #FDFBF7);
-        border: 1px solid var(--paper-edge, #DDD6C8);
+        min-height: 40px;
+        padding: 0;
+        background: none;
+        border: 0;
         font-family: var(--ff-sans, 'Inter', sans-serif);
         font-size: 0.875rem;
         font-weight: 600;
