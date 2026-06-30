@@ -1,8 +1,7 @@
 /**
  * Project-owned Web Components entry point.
  *
- * The component sources in this folder were snapshotted from the former shared
- * design system and are now maintained locally by prompts-library.
+ * The component sources in this folder are maintained locally by prompts-library.
  */
 
 // Local wy-* components used by the public, private, and admin interfaces.

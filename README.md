@@ -149,9 +149,9 @@ This project owns its component and styling system locally. See [CLAUDE.md](CLAU
 
 **Key rules:**
 - Edit tokens and base utilities in `tokens.css`
-- Edit Web Component source in `components/ui/`
-- Run `npm run build:components` after changing `components/ui/`
-- Avoid `::part()` for structural layout; prefer component source or custom properties
+- Edit shared/public component CSS in `components.css`
+- Edit admin editor component CSS in `admin.css`
+- Edit Web Component markup or logic in `components/ui/`, then run `npm run build:components`
 - Use local design tokens, not hardcoded values
 
 ## Deployment
@@ -183,5 +183,5 @@ There is also a local macOS launcher at `rb-fabric-collection/Robert Brown Lookb
 | [docs/admin-system-plan.md](docs/admin-system-plan.md) | Admin interface API and components |
 | [docs/prompt-authoring.md](docs/prompt-authoring.md) | Guidelines for writing prompts |
 | [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) | Documentation standards |
-| [docs/ARCHIVE.md](docs/ARCHIVE.md) | Historical implementation notes |
+| [docs/backlog.md](docs/backlog.md) | Short list of known follow-up tasks |
 | [skills/](skills/) | Agent Skills for AI-assisted development |

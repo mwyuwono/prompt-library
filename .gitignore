@@ -21,6 +21,5 @@ node_modules/
 private-prompts.source.json
 private-passcode.txt
 
-# Local design system builds (use CDN instead)
-web-components.js
+# Generated source maps
 web-components.js.map

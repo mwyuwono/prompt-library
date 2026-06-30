@@ -7,11 +7,11 @@ description: Architecture-specific guidance for the Prompt Library project. Use 
 
 ## Project Identity
 
-This is a **vanilla JavaScript prompt management tool** with zero dependencies and no build process. Users can store, customize, and copy reusable AI prompts with variable substitution using `{{variable}}` syntax.
+This is a **vanilla JavaScript prompt management tool** with a committed local Web Component bundle and no runtime build step. Users can store, customize, and copy reusable AI prompts with variable substitution using `{{variable}}` syntax.
 
 ## Core Design Principles
 
-1. **Vanilla JavaScript only** - No frameworks, no build tools, no npm dependencies
+1. **Vanilla JavaScript runtime** - Static pages plus local Web Components
 2. **Session-only edits** - Template modifications don't persist across page reloads
 3. **Single-user context** - No authentication, database, or server-side logic
 4. **Static deployment** - Deploys to Vercel automatically on push to main
@@ -22,15 +22,17 @@ This is a **vanilla JavaScript prompt management tool** with zero dependencies a
 /
 ├── index.html       # Main HTML structure
 ├── app.js          # Single PromptLibrary class orchestrating everything
-├── styles.css      # All styling using Material Design 3 tokens
-├── tokens.css      # Design system variables
+├── styles.css      # Public site styles
+├── components.css  # Shared/public light-DOM component styles
+├── admin.css       # Admin layout and editor component styles
+├── tokens.css      # Local design tokens and base utilities
 ├── prompts.json    # Prompt data source
 ├── links.js        # AI tools external links management
 ├── links.json      # AI tools links data
 ├── CLAUDE.md       # Project documentation and coding standards
 └── skills/         # Agent Skills directory
     ├── vanilla-js-development/
-    ├── material-design-css/
+    ├── prompt-image-creator/
     └── prompt-library-architecture/
 ```
 
@@ -295,27 +297,27 @@ getActiveTemplate(prompt) {
 ## CSS Architecture
 
 ### Design System
-Uses CSS custom properties defined in `tokens.css` and `styles.css`:
+Uses project-owned CSS custom properties defined in `tokens.css`, with page styling in `styles.css`, shared component styling in `components.css`, and admin editor component styling in `admin.css`:
 
 ```css
 :root {
   /* Colors */
-  --color-page-background: #fafafa;
-  --color-card-surface: #ffffff;
-  --color-text-primary: rgba(0, 0, 0, 0.87);
-  --color-action-primary: #6750a4;
+  --paper: #F7F4EE;
+  --ink: #1A1A1A;
+  --ink-mute: #6B6B6A;
+  --accent-terracotta: #C18A4D;
 
   /* Motion */
-  --md-sys-motion-duration-short4: 200ms;
-  --md-sys-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --dur-1: 150ms;
+  --ease: cubic-bezier(0.2, 0.6, 0.2, 1);
 
   /* State layers */
-  --md-sys-state-hover-opacity: 0.08;
+  --state-hover-opacity: 0.05;
 
   /* Category colors */
-  --color-category-productivity: #4285f4;
-  --color-category-expertise: #9c27b0;
-  --color-category-travel: #0f9d58;
+  --wy-color-productivity: var(--ink-mute);
+  --wy-color-expertise: var(--ink-mute);
+  --wy-color-travel: var(--ink-mute);
 }
 ```
 
@@ -339,12 +341,12 @@ Uses CSS custom properties defined in `tokens.css` and `styles.css`:
   inset: 0;
   background-color: var(--color-action-primary);
   opacity: 0;
-  transition: opacity var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+  transition: opacity var(--dur-1) var(--ease);
   pointer-events: none;
 }
 
 .interactive:hover::before {
-  opacity: var(--md-sys-state-hover-opacity);
+  opacity: var(--state-hover-opacity);
 }
 ```
 
@@ -507,7 +509,7 @@ When making significant changes:
 
 ❌ **Do not use this skill for:**
 - General vanilla JavaScript questions (use vanilla-js-development skill)
-- CSS/styling questions (use material-design-css skill)
+- Unrelated projects
 - Unrelated projects
 
 ## Quick Reference

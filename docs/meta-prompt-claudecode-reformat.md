@@ -6,11 +6,9 @@ The modal renderer now supports full markdown via marked.js with breaks:true (si
 
 ## Steps
 
-1. `cp prompts.json prompts.json.bak`
+1. Read prompts.json (flat array).
 
-2. Read prompts.json (54 prompts, flat array).
-
-3. Reformat these fields on every prompt and every object in variations[]:
+2. Reformat these fields on every prompt and every object in variations[]:
    - template
    - description
    - instructions (when present)
@@ -25,14 +23,14 @@ The modal renderer now supports full markdown via marked.js with breaks:true (si
    - Do not add markdown where prose already reads cleanly
    - Do not invent, reword, or truncate any content
 
-4. Never modify: id, title, name, category, icon, promptImage, archived, the variables[] array, variations[].id, variations[].name.
+3. Never modify: id, title, name, category, icon, promptImage, archived, the variables[] array, variations[].id, variations[].name.
 
-5. Preserve all {{variable_name}} placeholders exactly — do not escape, wrap in backticks, or alter them.
+4. Preserve all {{variable_name}} placeholders exactly — do not escape, wrap in backticks, or alter them.
 
-6. Write the reformatted array back to prompts.json.
+5. Write the reformatted array back to prompts.json.
 
-7. Run `node validate-prompts.js` and fix any reported failures before proceeding.
+6. Run `node validate-prompts.js` and fix any reported failures before proceeding.
 
-8. `git add prompts.json && git commit -m "reformat prompt templates with markdown"`
+7. `git add prompts.json && git commit -m "reformat prompt templates with markdown"`
 
 Do not push. Stop after commit.

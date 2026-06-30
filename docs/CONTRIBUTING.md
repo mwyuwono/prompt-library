@@ -10,7 +10,7 @@ All documentation in this project follows a high-density standard. Prefer concis
 
 2. **No Redundant Text** - If a concept is already documented in one place, reference it rather than restating it. One source of truth per topic.
 
-3. **Utility over History** - Document what the system *is* and how to *use* it, not the story of how it was built. Implementation logs and session summaries go in `docs/ARCHIVE.md`.
+3. **Utility over History** - Document what the system *is* and how to *use* it, not the story of how it was built. Delete implementation logs and session summaries when work is complete.
 
 4. **Anti-Bloat** - If a document feels repetitive, condense it. A 10-line technical summary beats a 50-line narrative. Tables beat paragraphs for structured data. Code examples should be minimal and purposeful.
 
@@ -23,16 +23,16 @@ All documentation in this project follows a high-density standard. Prefer concis
 | `docs/admin-system-plan.md` | Admin API reference and components | Admin system |
 | `docs/prompt-authoring.md` | How to write prompts | Content authors |
 | `docs/CONTRIBUTING.md` | This file - documentation standards | Meta |
-| `docs/ARCHIVE.md` | Historical implementation notes | Read-only reference |
+| `docs/backlog.md` | Short-lived known follow-up tasks | Maintainers |
 | `skills/` | Agent Skills for AI-assisted dev | AI tools |
 
 ### Rules
 
-- **Never create root-level status reports** (e.g., `FIX-COMPLETE.md`, `SESSION-SUMMARY.md`). Completed work goes in `docs/ARCHIVE.md` as a condensed entry.
+- **Never create root-level status reports** (e.g., `FIX-COMPLETE.md`, `SESSION-SUMMARY.md`). Completed work should live in git history and the changed source files.
 - **Never duplicate the data model.** It's defined in `README.md`. Reference it, don't copy it.
 - **Keep CLAUDE.md focused** on rules and constraints for AI tools, not on explaining what the project does (that's `README.md`).
-- **For web-component styling rules, defer to `CLAUDE.md`.** It includes the shadow-DOM/local design-system boundaries that local CSS must respect.
-- **Completed checklists are dead weight.** Remove them or move to archive. Only keep checklists that describe *future* verification steps.
+- **For web-component styling rules, defer to `CLAUDE.md`.** It documents the local light-DOM component boundaries and canonical style guide.
+- **Completed checklists are dead weight.** Remove them. Only keep checklists that describe *future* verification steps.
 - **No emojis in documentation** unless explicitly requested.
 
 ### When to Update Documentation

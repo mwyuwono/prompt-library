@@ -18,6 +18,8 @@ A vanilla JavaScript prompt management tool with a committed local Web Component
 - When marking a plan "done" or completing a test, remove the documentation created along the way
 - Don't create detailed summaries upon completion unless they provide information not already in the code or elsewhere
 - Resist the urge to document what the code already shows clearly
+- Prefer deleting completed migration plans, handoff docs, one-off test scripts, and temporary audit reports instead of archiving them in the repo
+- Historical context should live in git history unless it is needed to operate the current system
 
 ## Running the Application
 
@@ -45,7 +47,9 @@ This is a separate React/Vite site deployed by its own Vercel project to https:/
 
 This project is now self-contained. The former shared design-system sources were snapshotted into this repository and are maintained here.
 
-> **Repository override (supersedes global rules).** This repository does **not** consume an external design system (e.g. `m3-design-v2`). For this repo, this clause **supersedes** the global "Design System as the Default Execution Path" rule and the global shadow-DOM / `::part()` guidance. The local `wy-*` components render in light DOM with tag-scoped CSS in either `components.css` (shared/public components) or `admin.css` (admin editor components), so design changes can be made directly in the appropriate stylesheet without a shadow-boundary workaround.
+> **Repository override (supersedes global rules).** This repository does **not** consume a shared external design-system repo. The local `wy-*` components render in light DOM with tag-scoped CSS in either `components.css` (shared/public components) or `admin.css` (admin editor components), so design changes should be made directly in the appropriate local stylesheet.
+
+Do not reintroduce external design-system packages, source paths, or migration docs. `web-components.js` is a committed generated bundle; `web-components.js.map` is ignored.
 
 ### Light-DOM Components
 
@@ -89,6 +93,12 @@ npm run build:components
 ### Bundle Completeness Check
 
 Every `wy-*` tag used by `index.html`, `private.html`, `admin.html`, or their scripts must be registered from `components/ui/index.js`. When adding or removing components, update `components/ui/index.js`, run `npm run build:components`, and verify `customElements.get('wy-component-name')` resolves in the browser.
+
+### Prompt Validation
+
+Use `node validate-prompts.js` or `npm run validate:prompts` to validate `prompts.json`. The validator does not require a backup file and should remain aligned with current prompt features: prompt-level variables, variation-level variables, step-level variables, `referenceImages`, and literal `{{...}}` examples inside prompt text.
+
+Warnings for literal placeholder examples are acceptable when the placeholder is intentionally instructional text rather than a runtime variable.
 
 ### Styling Rules
 
@@ -267,8 +277,8 @@ See [docs/admin-system-plan.md](docs/admin-system-plan.md) for complete API refe
 | [docs/admin-system-plan.md](docs/admin-system-plan.md) | Admin API reference and components |
 | [docs/prompt-authoring.md](docs/prompt-authoring.md) | Prompt writing guidelines |
 | [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) | Documentation standards |
-| [docs/ARCHIVE.md](docs/ARCHIVE.md) | Historical implementation notes |
-| [skills/visual-qa/SKILL.md](skills/visual-qa/SKILL.md) | Screenshot testing after CSS changes |
+| [docs/backlog.md](docs/backlog.md) | Short list of known follow-up tasks |
+| [skills/README.md](skills/README.md) | Available project skills |
 
 **Repository:** https://github.com/mwyuwono/prompt-library
 **Live Site:** https://p.weaver-yuwono.com

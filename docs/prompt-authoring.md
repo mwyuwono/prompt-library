@@ -104,7 +104,7 @@ topographic-site-plan-base-fort-sewall-satellite.png
 
 | Type | Config |
 |------|--------|
-| Text (default) | Omit `inputType` |
+| Text (default) | Omit `inputType` or use `"inputType": "text"` |
 | Textarea | `"inputType": "textarea"`, optional `"rows"` |
 | Toggle | `"inputType": "toggle"`, `"options": ["OFF text", "ON text"]` |
 
@@ -130,9 +130,9 @@ Before committing public prompt changes to `prompts.json`:
 - No manual placeholders like `[Describe...]`
 - Variation descriptions state only what makes that variant different
 - Variable `name` matches placeholder exactly
-- `inputType` is omitted, `"textarea"`, or `"toggle"` only
-- JSON validates with `node validate-prompts.js` when `prompts.json.bak` is available
-- If `validate-prompts.js` fails because CommonJS `require` is incompatible with the package's ESM setting, validate prompt JSON with `jq empty prompts.json` plus targeted checks for image path existence and preview dimensions until the script is fixed
+- `inputType` is omitted, `"text"`, `"textarea"`, or `"toggle"` only
+- JSON validates with `node validate-prompts.js`
+- Validation warnings are acceptable only for intentional literal examples or known unused helper variables
 - Test in UI: variables render, preview compiles, copy works
 
 ### Image Preview Validation
