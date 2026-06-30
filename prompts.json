@@ -1059,9 +1059,120 @@
             "instructions": ""
           }
         ]
+      },
+      {
+        "id": "neoclassical-atelier-lithograph",
+        "name": "Neoclassical Atelier Lithograph",
+        "description": "Academic graphite lithograph figure plate.",
+        "instructions": "Upload a source image to transform, then choose whether person likeness should be preserved.\nCreated with [Synthesize Style Image Prompts](/Users/mwy/.codex/skills/synthesize-style-image-prompts/SKILL.md)",
+        "template": "Transform the uploaded source image into a new artwork in the synthesized style defined by the attached style references.\n\nAttached style references:\n- {{atelier_back_study_reference}}\n- {{atelier_profile_bust_reference}}\n- {{atelier_frontal_bust_reference}}\n- {{atelier_upturned_profile_reference}}\n\nSource image priority:\n- Preserve the source image's core subject, composition, proportions, spatial relationships, and important factual details.\n- Likeness instruction: {{preserve_likeness}}\n\nStyle reference priority:\n- Use the attached style references as the visual source of truth for medium, palette, surface, mark-making, edge behavior, lighting, texture, density, mood, and level of finish.\n- Synthesize their shared traits rather than copying one reference literally.\n\nSynthesized style direction:\nSynthesize the style as a neoclassical atelier lithograph or academic drawing plate on warm aged ivory paper. The image should feel like a nineteenth-century figure-study print made from close observation of antique sculpture and living anatomy: quiet, disciplined, sculptural, and formally composed.\n\nUse graphite-gray to black linework with slight sepia warmth from the paper. Build form through precise contour drawing, fine parallel hatching, crosshatching, stippled graphite accumulation, soft rubbed tonal passages, and selective dark masses. The darkest passages should gather in hair, eye sockets, cast shadows, and background accents; broad skin or stone-like planes should remain pale, luminous, and breathable.\n\nTreat the subject with classical restraint: idealized but anatomically specific proportions, clean profile or bust-like silhouette, elegant neck and shoulder transitions, carefully modeled facial planes, and hair rendered as flowing ribbon-like locks with many nested contour lines. Preserve a hand-drawn irregularity in pressure, line weight, paper absorption, and small registration imperfections.\n\nCompose the image as an archival study sheet or lithographic plate with generous blank negative space, warm paper grain, faint foxing, soft edge wear, and no modern setting. The surface should look tactile and printed or drawn, not digitally smooth. The mood should be contemplative, museum-like, and rigorous rather than dramatic.\n\nFlexible zones:\n- The source image may be simplified into a more classical study-sheet composition.\n- Backgrounds may become blank warm paper, faint plate tone, or a restrained hatched shadow mass when that supports the subject.\n- Color should collapse toward graphite, black ink, sepia-gray, and aged ivory unless a factual color cue is essential to the source image.\n- Fine details may be translated into hatching, contour, or tonal wash, but the subject's readable identity and structure should remain clear.\n\nAvoid:\nAvoid photorealism, glossy digital painting, saturated color, modern fashion styling, cinematic lighting, plastic skin, airbrushed gradients, fantasy ornament, cluttered backgrounds, hard posterized contrast, vector-clean outlines, cartoon anatomy, over-literal copying of any single reference, captions, labels, watermarks, frames, or UI artifacts.\n\nOutput a single finished image. Do not include labels, captions, watermarks, UI, borders, or process notes.",
+        "variables": [
+          {
+            "name": "preserve_likeness",
+            "label": "Preserve Person Likeness",
+            "inputType": "toggle",
+            "options": [
+              "If the uploaded source image includes a person, preserve general identity cues only when they are central to the source image; otherwise prioritize the synthesized style and composition.",
+              "If the uploaded source image includes a person, preserve recognizable likeness: facial structure, feature placement, age cues, expression, distinctive asymmetries, and identity-defining details must remain intact while the style changes."
+            ],
+            "value": ""
+          }
+        ],
+        "referenceImages": [
+          {
+            "variable": "atelier_back_study_reference",
+            "label": "Back Study Reference",
+            "path": "public/images/style-references/neoclassical-atelier-lithograph-back-study.jpeg",
+            "instructions": "Use the Back Study Reference for the academic figure-study posture, sculptural anatomy, warm paper tone, dark hatched background mass, and charcoal-lithograph tonal depth."
+          },
+          {
+            "variable": "atelier_profile_bust_reference",
+            "label": "Profile Bust Reference",
+            "path": "public/images/style-references/neoclassical-atelier-lithograph-profile-bust.png",
+            "instructions": "Use the Profile Bust Reference for clean neoclassical profile structure, ribbon-like hair linework, sparse negative space, and measured antiquarian plate presentation."
+          },
+          {
+            "variable": "atelier_frontal_bust_reference",
+            "label": "Frontal Bust Reference",
+            "path": "public/images/style-references/neoclassical-atelier-lithograph-frontal-bust.png",
+            "instructions": "Use the Frontal Bust Reference for marble-bust modeling, pale graphite washes, restrained inscription-like plate atmosphere, and dense controlled hatching around the eyes and neck."
+          },
+          {
+            "variable": "atelier_upturned_profile_reference",
+            "label": "Upturned Profile Reference",
+            "path": "public/images/style-references/neoclassical-atelier-lithograph-upturned-profile.png",
+            "instructions": "Use the Upturned Profile Reference for elegant upward profile, luminous blank paper field, fine parallel contour hatching, dark hair mass, and long sculptural neck treatment."
+          }
+        ]
       }
     ],
     "showPalette": true
+  },
+  {
+    "id": "new-subject-same-style",
+    "title": "New Subject, Same Style",
+    "description": "Creates new images in a synthesized style derived from multiple attached artwork references.",
+    "category": "Art",
+    "icon": "palette",
+    "featured": false,
+    "slug": "new-subject-same-style",
+    "instructions": "Use a variant with its attached style reference images. Optionally describe the desired subject or leave the field blank to let the prompt choose a subject suited to the style.",
+    "template": "Create a new image in a synthesized style defined by attached style references.\n\nSubject instructions, if provided:\n{{subject_instructions}}\n\nIf the subject instructions are blank, choose a subject that feels native to the style references and demonstrates their shared visual language clearly.\n\nUse the attached style references as the visual source of truth for medium, palette, surface, mark-making, edge behavior, lighting, texture, density, mood, and level of finish. Synthesize the shared traits rather than copying one reference literally.\n\nAvoid generic styling, photorealism unless explicitly present in the references, modern digital gloss, watermarks, captions, borders, UI, or text artifacts.\n\nOutput a single finished image.",
+    "variables": [
+      {
+        "name": "subject_instructions",
+        "label": "Subject Instructions",
+        "placeholder": "Optional: describe the subject, setting, composition, aspect ratio, mood, or constraints for the new image.",
+        "value": "",
+        "inputType": "textarea",
+        "rows": 5
+      }
+    ],
+    "variations": [
+      {
+        "id": "neoclassical-atelier-lithograph",
+        "name": "Neoclassical Atelier Lithograph",
+        "description": "Academic graphite lithograph figure plate.",
+        "instructions": "Created with [Synthesize Style Image Prompts](/Users/mwy/.codex/skills/synthesize-style-image-prompts/SKILL.md)",
+        "template": "Create a new image in the synthesized style defined by the attached style references.\n\nAttached style references:\n- {{atelier_back_study_reference}}\n- {{atelier_profile_bust_reference}}\n- {{atelier_frontal_bust_reference}}\n- {{atelier_upturned_profile_reference}}\n\nSubject instructions, if provided:\n{{subject_instructions}}\n\nIf the subject instructions are blank, create a classical bust, head study, or upper-torso figure study that feels native to the style references and demonstrates the synthesized visual language clearly.\n\nStyle reference priority:\n- Use the attached style references as the visual source of truth for medium, palette, surface, mark-making, edge behavior, lighting, texture, density, mood, and level of finish.\n- Synthesize their shared traits rather than copying one reference literally.\n\nSynthesized style direction:\nSynthesize the style as a neoclassical atelier lithograph or academic drawing plate on warm aged ivory paper. The image should feel like a nineteenth-century figure-study print made from close observation of antique sculpture and living anatomy: quiet, disciplined, sculptural, and formally composed.\n\nUse graphite-gray to black linework with slight sepia warmth from the paper. Build form through precise contour drawing, fine parallel hatching, crosshatching, stippled graphite accumulation, soft rubbed tonal passages, and selective dark masses. The darkest passages should gather in hair, eye sockets, cast shadows, and background accents; broad skin or stone-like planes should remain pale, luminous, and breathable.\n\nTreat the subject with classical restraint: idealized but anatomically specific proportions, clean profile or bust-like silhouette, elegant neck and shoulder transitions, carefully modeled facial planes, and hair rendered as flowing ribbon-like locks with many nested contour lines. Preserve a hand-drawn irregularity in pressure, line weight, paper absorption, and small registration imperfections.\n\nCompose the image as an archival study sheet or lithographic plate with generous blank negative space, warm paper grain, faint foxing, soft edge wear, and no modern setting. The surface should look tactile and printed or drawn, not digitally smooth. The mood should be contemplative, museum-like, and rigorous rather than dramatic.\n\nComposition and output:\nFavor a single subject presented as a bust, profile, three-quarter head, back study, or upper torso study on a spacious archival sheet. Use generous negative space, controlled asymmetry, pale paper field, and carefully weighted dark passages. Let the drawing feel finished enough to be collectible but still visibly made by hand through contour, hatching, and tonal drawing.\n\nAvoid:\nAvoid photorealism, glossy digital painting, saturated color, modern fashion styling, cinematic lighting, plastic skin, airbrushed gradients, fantasy ornament, cluttered backgrounds, hard posterized contrast, vector-clean outlines, cartoon anatomy, over-literal copying of any single reference, captions, labels, watermarks, frames, or UI artifacts.\n\nOutput a single finished image. Do not include labels, captions, watermarks, UI, borders, or process notes.",
+        "variables": [
+          {
+            "name": "subject_instructions",
+            "label": "Subject Instructions",
+            "placeholder": "Optional: describe the subject, setting, composition, aspect ratio, mood, or constraints for the new image.",
+            "value": "",
+            "inputType": "textarea",
+            "rows": 5
+          }
+        ],
+        "referenceImages": [
+          {
+            "variable": "atelier_back_study_reference",
+            "label": "Back Study Reference",
+            "path": "public/images/style-references/neoclassical-atelier-lithograph-back-study.jpeg",
+            "instructions": "Use the Back Study Reference for the academic figure-study posture, sculptural anatomy, warm paper tone, dark hatched background mass, and charcoal-lithograph tonal depth."
+          },
+          {
+            "variable": "atelier_profile_bust_reference",
+            "label": "Profile Bust Reference",
+            "path": "public/images/style-references/neoclassical-atelier-lithograph-profile-bust.png",
+            "instructions": "Use the Profile Bust Reference for clean neoclassical profile structure, ribbon-like hair linework, sparse negative space, and measured antiquarian plate presentation."
+          },
+          {
+            "variable": "atelier_frontal_bust_reference",
+            "label": "Frontal Bust Reference",
+            "path": "public/images/style-references/neoclassical-atelier-lithograph-frontal-bust.png",
+            "instructions": "Use the Frontal Bust Reference for marble-bust modeling, pale graphite washes, restrained inscription-like plate atmosphere, and dense controlled hatching around the eyes and neck."
+          },
+          {
+            "variable": "atelier_upturned_profile_reference",
+            "label": "Upturned Profile Reference",
+            "path": "public/images/style-references/neoclassical-atelier-lithograph-upturned-profile.png",
+            "instructions": "Use the Upturned Profile Reference for elegant upward profile, luminous blank paper field, fine parallel contour hatching, dark hair mass, and long sculptural neck treatment."
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "prompt-builder",

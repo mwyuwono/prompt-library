@@ -555,7 +555,7 @@ export class WyPromptEditor extends LitElement {
             return;
         }
 
-        const { variationSelector, variationSelectorTileMode, ...promptWithoutSelector } = this._editedPrompt;
+        const { variationSelector, variationSelectorTileMode, fullScreenModal, ...promptWithoutSelector } = this._editedPrompt;
         this._editedPrompt = promptWithoutSelector;
         this._markDirty();
         this.requestUpdate();
@@ -679,6 +679,7 @@ export class WyPromptEditor extends LitElement {
         delete this._editedPrompt.variations;
         delete this._editedPrompt.variationSelector;
         delete this._editedPrompt.variationSelectorTileMode;
+        delete this._editedPrompt.fullScreenModal;
         this._markDirty();
         this.requestUpdate();
     }
@@ -1265,6 +1266,17 @@ export class WyPromptEditor extends LitElement {
                                             .labels="${['Thumbnail only', 'Title + description']}"
                                             .value="${this._editedPrompt.variationSelectorTileMode === 'details' ? 'details' : 'thumbnail'}"
                                             @change="${(e) => this._handleVariationTileModeChange(e.detail.value)}"
+                                        ></wy-option-toggle>
+
+                                        <wy-option-toggle
+                                            variant="switch"
+                                            size="compact"
+                                            label="Full-screen modal"
+                                            description="Expands modal to fill the browser window. Recommended for prompts with many visual variants."
+                                            .options="${[false, true]}"
+                                            .labels="${['Off', 'On']}"
+                                            .value="${this._editedPrompt.fullScreenModal === true}"
+                                            @change="${(e) => this._handleFieldChange('fullScreenModal', e.detail.value === true)}"
                                         ></wy-option-toggle>
                                     ` : ''}
                                 </div>

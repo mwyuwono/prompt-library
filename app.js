@@ -1600,6 +1600,7 @@ Server will start on http://localhost:3001`;
                 activeStepIndex: 0,
                 variationSelector: prompt.variationSelector || '',
                 variationSelectorTileMode: prompt.variationSelectorTileMode || 'thumbnail',
+                fullScreenModal: prompt.fullScreenModal === true,
                 activeVariationIndex: variationIndex >= 0 ? variationIndex : 0,
                 variationDetailsExpanded: false,
                 mode: prompt.locked !== false ? 'locked' : 'edit',
@@ -1765,6 +1766,7 @@ Server will start on http://localhost:3001`;
             variations: [],
             variationSelector: '',
             variationSelectorTileMode: 'thumbnail',
+            fullScreenModal: false,
             steps: [],
             
             // Indices

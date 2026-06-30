@@ -3336,7 +3336,7 @@ ${subjectPrompt}`
       this._handleFieldChange("variationSelector", "visual");
       return;
     }
-    const { variationSelector, variationSelectorTileMode, ...promptWithoutSelector } = this._editedPrompt;
+    const { variationSelector, variationSelectorTileMode, fullScreenModal, ...promptWithoutSelector } = this._editedPrompt;
     this._editedPrompt = promptWithoutSelector;
     this._markDirty();
     this.requestUpdate();
@@ -3429,6 +3429,7 @@ ${subjectPrompt}`
     delete this._editedPrompt.variations;
     delete this._editedPrompt.variationSelector;
     delete this._editedPrompt.variationSelectorTileMode;
+    delete this._editedPrompt.fullScreenModal;
     this._markDirty();
     this.requestUpdate();
   }
@@ -3975,6 +3976,17 @@ ${subjectPrompt}`
                                             .labels="${["Thumbnail only", "Title + description"]}"
                                             .value="${this._editedPrompt.variationSelectorTileMode === "details" ? "details" : "thumbnail"}"
                                             @change="${(e6) => this._handleVariationTileModeChange(e6.detail.value)}"
+                                        ></wy-option-toggle>
+
+                                        <wy-option-toggle
+                                            variant="switch"
+                                            size="compact"
+                                            label="Full-screen modal"
+                                            description="Expands modal to fill the browser window. Recommended for prompts with many visual variants."
+                                            .options="${[false, true]}"
+                                            .labels="${["Off", "On"]}"
+                                            .value="${this._editedPrompt.fullScreenModal === true}"
+                                            @change="${(e6) => this._handleFieldChange("fullScreenModal", e6.detail.value === true)}"
                                         ></wy-option-toggle>
                                     ` : ""}
                                 </div>
@@ -5672,6 +5684,7 @@ var WyPromptModal = class extends i4 {
     this.variations = [];
     this.variationSelector = "";
     this.variationSelectorTileMode = "thumbnail";
+    this.fullScreenModal = false;
     this.activeVariationIndex = 0;
     this.mode = "locked";
     this.activeTab = "variables";
@@ -6157,7 +6170,7 @@ var WyPromptModal = class extends i4 {
     const useVisualSelector = this._usesVisualVariationSelector();
     return b2`
       <div class="scrim" @click="${this._close}"></div>
-      <div class="modal-container ${useVisualSelector ? "visual-selector-modal" : ""}">
+      <div class="modal-container ${useVisualSelector ? "visual-selector-modal" : ""} ${this.fullScreenModal ? "fullscreen" : ""}">
         
         <!-- HEADER -->
         <header class="header">
@@ -6584,6 +6597,7 @@ __publicField(WyPromptModal, "properties", {
   variations: { type: Array },
   variationSelector: { type: String, attribute: "variation-selector" },
   variationSelectorTileMode: { type: String, attribute: "variation-selector-tile-mode" },
+  fullScreenModal: { type: Boolean, attribute: "full-screen", reflect: true },
   activeVariationIndex: { type: Number, attribute: "active-variation-index" },
   mode: { type: String },
   // 'locked' or 'edit'

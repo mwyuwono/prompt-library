@@ -1817,6 +1817,34 @@ wy-controls-bar {
       transform: translate(-50%, -50%) scale(1);
     }
 
+    wy-prompt-modal .modal-container.fullscreen {
+      position: fixed;
+      inset: 0;
+      top: auto; left: auto; /* override centering offsets */
+      width: 100vw;
+      height: 100vh;
+      max-width: none;
+      max-height: none;
+      border: 0;
+      box-shadow: none;
+      border-radius: 0;
+      transform: translateY(4%);
+    }
+
+    wy-prompt-modal[open] .modal-container.fullscreen {
+      transform: translateY(0);
+    }
+
+    /* the modal IS the screen — suppress the scrim beneath it */
+    wy-prompt-modal:has(.modal-container.fullscreen) .scrim {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    wy-prompt-modal .modal-container.fullscreen .header {
+      padding: var(--spacing-2xl, 40px) var(--spacing-2xl, 48px) var(--spacing-sm, 8px);
+    }
+
     /* HEADER STYLES */
     wy-prompt-modal .header {
       /* Inset the header to match the body/title padding (--spacing-xl) so the
@@ -2172,6 +2200,27 @@ wy-controls-bar {
         background-color: var(--paper);
         border: 1px solid var(--paper-edge, #DDD6C8);
         border-radius: var(--radius-2, 0);
+    }
+
+    /* cap the reading column; let the rail stretch to fill what's left */
+    wy-prompt-modal .modal-container.fullscreen .visual-selector-layout,
+    wy-prompt-modal .modal-container.fullscreen.visual-selector-modal .visual-selector-layout {
+        grid-template-columns: minmax(0, clamp(560px, 42vw, 860px)) minmax(280px, 1fr);
+        padding: 0 var(--spacing-2xl, 48px) var(--spacing-2xl, 48px);
+    }
+
+    wy-prompt-modal .modal-container.fullscreen .visual-selector-rail {
+        max-height: calc(100vh - 96px);
+    }
+
+    wy-prompt-modal .modal-container.fullscreen .variation-image img {
+        max-height: 38vh;
+        object-fit: cover;
+    }
+
+    /* tiles reflow to fill the rail's available width rather than a fixed column count */
+    wy-prompt-modal .modal-container.fullscreen .visual-selector-rail .visual-variation-grid {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     }
 
     wy-prompt-modal .variation-select-native {

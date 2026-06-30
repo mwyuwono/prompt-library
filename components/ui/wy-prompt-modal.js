@@ -23,6 +23,7 @@ export class WyPromptModal extends LitElement {
     variations: { type: Array },
     variationSelector: { type: String, attribute: 'variation-selector' },
     variationSelectorTileMode: { type: String, attribute: 'variation-selector-tile-mode' },
+    fullScreenModal: { type: Boolean, attribute: 'full-screen', reflect: true },
     activeVariationIndex: { type: Number, attribute: 'active-variation-index' },
     mode: { type: String }, // 'locked' or 'edit'
     activeTab: { type: String }, // 'variables' or 'preview'
@@ -49,6 +50,7 @@ export class WyPromptModal extends LitElement {
     this.variations = [];
     this.variationSelector = '';
     this.variationSelectorTileMode = 'thumbnail';
+    this.fullScreenModal = false;
     this.activeVariationIndex = 0;
     this.mode = 'locked';
     this.activeTab = 'variables';
@@ -605,7 +607,7 @@ export class WyPromptModal extends LitElement {
 
     return html`
       <div class="scrim" @click="${this._close}"></div>
-      <div class="modal-container ${useVisualSelector ? 'visual-selector-modal' : ''}">
+      <div class="modal-container ${useVisualSelector ? 'visual-selector-modal' : ''} ${this.fullScreenModal ? 'fullscreen' : ''}">
         
         <!-- HEADER -->
         <header class="header">
