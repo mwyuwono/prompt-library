@@ -1819,7 +1819,9 @@ wy-controls-bar {
 
     /* HEADER STYLES */
     wy-prompt-modal .header {
-      padding: 0 0 var(--spacing-sm, 8px);
+      /* Inset the header to match the body/title padding (--spacing-xl) so the
+         action buttons aren't flush to the modal's top-left corner. */
+      padding: var(--spacing-xl, 32px) var(--spacing-xl, 32px) var(--spacing-sm, 8px);
       display: flex;
       flex-direction: column;
       gap: var(--spacing-md, 16px);
@@ -1833,6 +1835,14 @@ wy-controls-bar {
         position: relative;
         gap: 12px;
         padding: 0;
+        /* Neutralize masthead-only styles leaking from the page `.header-top`
+           (styles.css). In the modal this is not a sticky page header. */
+        top: auto;
+        z-index: auto;
+        background: none;
+        border-bottom: 0;
+        color: inherit;
+        font-size: inherit;
     }
 
     wy-prompt-modal .header-actions-left {

@@ -212,7 +212,16 @@
 
 .backup-status-button.status-in-sync {
     --backup-status-color: var(--ok);
-    --backup-status-fg: var(--paper);
+    --backup-status-fg: var(--white);
+    /* The shared gradient lightens the top stop with white, which is exactly
+       where the label sits — on the mid-tone --ok green that drops legibility.
+       Bias the in-sync fill toward ink so text always sits on a deep green. */
+    background:
+        linear-gradient(
+            135deg,
+            var(--ok),
+            color-mix(in srgb, var(--ok) 80%, var(--ink))
+        );
 }
 
 .backup-status-button.status-needs-pull {
