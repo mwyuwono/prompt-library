@@ -1106,7 +1106,10 @@
         ]
       }
     ],
-    "showPalette": true
+    "showPalette": true,
+    "variationSelector": "visual",
+    "variationSelectorTileMode": "details",
+    "fullScreenModal": true
   },
   {
     "id": "new-subject-same-style",
