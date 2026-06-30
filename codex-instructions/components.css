@@ -1,0 +1,165 @@
+/* ==========================================================================
+   COMPONENTS.CSS — light-DOM wy-* component styles
+   
+   Import AFTER tokens.css in every HTML page that uses wy-* components:
+     <link rel="stylesheet" href="tokens.css">
+     <link rel="stylesheet" href="components.css">
+   
+   Scoped by element tag name. Same pattern as admin.css editor styles.
+   ========================================================================== */
+
+
+/* ── wy-modal ───────────────────────────────────────────────────────────── */
+
+wy-modal .wy-modal-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(26, 26, 26, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+wy-modal .wy-modal-box {
+  background: var(--paper);
+  border: 1px solid var(--paper-edge);
+  box-shadow: var(--shadow-modal);
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  /* max-width set inline by the component via style attr */
+}
+
+wy-modal .wy-modal-header {
+  padding: 32px 32px 24px;
+  border-bottom: 1px solid var(--paper-edge);
+  flex-shrink: 0;
+}
+
+wy-modal .wy-modal-heading {
+  font-family: var(--ff-serif);
+  font-size: 1.75rem;
+  font-weight: 500;
+  letter-spacing: var(--tr-display);
+  line-height: var(--lh-snug);
+  margin: 0;
+  color: var(--ink);
+}
+
+wy-modal .wy-modal-body {
+  padding: 24px 32px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-s);
+  color: var(--ink-mute);
+  line-height: var(--lh-normal);
+}
+
+wy-modal .wy-modal-footer {
+  padding: 16px 32px 28px;
+  border-top: 1px solid var(--paper-edge);
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+  wy-modal .wy-modal-scrim {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  wy-modal .wy-modal-box {
+    max-height: 92vh;
+  }
+
+  wy-modal .wy-modal-header {
+    padding: 24px 24px 20px;
+  }
+
+  wy-modal .wy-modal-body {
+    padding: 20px 24px;
+  }
+
+  wy-modal .wy-modal-footer {
+    padding: 12px 24px calc(24px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+
+/* ── wy-info-panel ──────────────────────────────────────────────────────── */
+/* Token defaults that were previously in :host {} — doesn't cascade in light DOM */
+
+wy-info-panel {
+  --wy-info-panel-bg:              var(--paper-deep);
+  --wy-info-panel-border:          var(--paper-edge);
+  --wy-info-panel-text-color:      var(--ink-mute);
+  --wy-info-panel-compact-bg:      var(--paper-edge);
+  --wy-info-panel-compact-border:  var(--paper-edge);
+  --wy-info-panel-padding:         var(--s-5, 24px);
+  --wy-info-panel-compact-padding: var(--s-4, 16px);
+  --wy-info-panel-font-size:       var(--fs-body-s);
+}
+
+wy-info-panel .panel {
+  border-radius: 0;
+  border: 1px solid var(--wy-info-panel-border);
+  font-family: var(--ff-sans);
+}
+
+wy-info-panel .panel-heading {
+  font-family: var(--ff-serif);
+}
+
+
+/* ── wy-toast ───────────────────────────────────────────────────────────── */
+
+wy-toast .toast-container {
+  border-radius: 0;
+}
+
+
+/* ── wy-copy-confirm ────────────────────────────────────────────────────── */
+
+wy-copy-confirm .container {
+  border-radius: 0;
+}
+
+wy-copy-confirm .close {
+  border-radius: 0;
+}
+
+
+/* ── wy-filter-chip ─────────────────────────────────────────────────────── */
+/* Note: :host styles in the component are preferred for LitElement.
+   These are fallback overrides for light-DOM rendering. */
+
+wy-filter-chip {
+  border: 1px solid var(--wy-filter-chip-border, var(--paper-edge)) !important;
+}
+
+wy-filter-chip:hover:not([active]) {
+  background: color-mix(in srgb, var(--ink) 6%, transparent);
+  border-color: color-mix(in srgb, var(--ink) 25%, var(--paper-edge));
+}
+
+wy-filter-chip[active] {
+  border-color: var(--wy-filter-chip-active-bg, var(--ink));
+}
+
+
+/* ── wy-tabs ────────────────────────────────────────────────────────────── */
+/* Override MD color token references with canonical tokens */
+/* Applied via light-DOM: the tab items are slotted in light DOM */
+
+wy-tabs {
+  border-bottom-color: var(--paper-edge);
+}

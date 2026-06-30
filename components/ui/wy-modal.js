@@ -38,19 +38,14 @@ export class WyModal extends LitElement {
 
   render() {
     if (!this.open) return html``;
-
     return html`
-      <div class="modal-overlay" @click="${this._handleOverlayClick}">
-        <div
-          class="dialog"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="wyModalHeading"
-          style="--wy-modal-max-width: ${this.maxWidth}"
-        >
-          <h2 class="headline-text" id="wyModalHeading">${this.heading}</h2>
-          <form method="dialog" class="modal-content">${this.bodyHtml ? unsafeHTML(this.bodyHtml) : ''}</form>
-          <div class="footer-actions"></div>
+      <div class="wy-modal-scrim" @click="${this._handleOverlayClick}">
+        <div class="wy-modal-box" style="max-width: ${this.maxWidth}">
+          <header class="wy-modal-header">
+            <h2 class="wy-modal-heading">${this.heading}</h2>
+          </header>
+          <div class="wy-modal-body">${this.bodyHtml ? unsafeHTML(this.bodyHtml) : ''}</div>
+          <footer class="wy-modal-footer"></footer>
         </div>
       </div>
     `;
@@ -71,8 +66,8 @@ export class WyModal extends LitElement {
   }
 
   _projectModalNodes() {
-    const body = this.querySelector('.modal-content');
-    const actions = this.querySelector('.footer-actions');
+    const body = this.querySelector('.wy-modal-body');
+    const actions = this.querySelector('.wy-modal-footer');
     if (!this.bodyHtml && body && !body.childNodes.length && this._bodyNodes?.length) body.append(...this._bodyNodes);
     if (actions && !actions.childNodes.length && this._actionNodes?.length) actions.append(...this._actionNodes);
   }
@@ -81,7 +76,7 @@ export class WyModal extends LitElement {
     const children = Array.from(this.childNodes).filter(node => {
       if (node.nodeType === Node.COMMENT_NODE) return false;
       if (node.nodeType === Node.TEXT_NODE && !node.textContent.trim()) return false;
-      return !(node.nodeType === Node.ELEMENT_NODE && node.classList.contains('modal-overlay'));
+      return !(node.nodeType === Node.ELEMENT_NODE && node.classList.contains('wy-modal-scrim'));
     });
     if (!children.length) return;
     this._actionNodes = children.filter(node =>
@@ -105,14 +100,19 @@ export class WyModal extends LitElement {
   _handleClose(e) {
     this.open = false;
     this.dispatchEvent(new CustomEvent('close', {
-      detail: e?.detail,
       bubbles: true,
       composed: true
     }));
   }
 
+  _handleCancel(e) {
+    this.open = false;
+  }
+
   _handleOverlayClick(e) {
-    if (e.target === e.currentTarget) this._handleClose(e);
+    if (e.target === e.currentTarget) {
+      this.close();
+    }
   }
 
   _handleKeyDown(e) {

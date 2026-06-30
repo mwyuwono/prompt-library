@@ -34,7 +34,7 @@ wy-copy-confirm {
       background-color: var(--ink, #1A1A1A);
       color: var(--paper, #F7F4EE);
       padding: 16px;
-      border-radius: 8px;
+      border-radius: 0;
       box-shadow:
         0 18px 48px -12px rgba(13, 13, 13, 0.45),
         0 6px 16px -6px rgba(13, 13, 13, 0.28);
@@ -63,7 +63,7 @@ wy-copy-confirm {
       height: 28px;
       padding: 0;
       border: 0;
-      border-radius: 4px;
+      border-radius: 0;
       background: transparent;
       color: var(--paper, #F7F4EE);
       cursor: pointer;
@@ -173,7 +173,7 @@ wy-filter-chip {
       
       /* Opaque background by default; overridden by variant */
       background-color: var(--wy-filter-chip-bg, var(--paper));
-      border: 0;
+      border: 1px solid var(--wy-filter-chip-border, var(--paper-edge, #DDD6C8));
       color: var(--wy-filter-chip-text, var(--ink));
       box-shadow: none;
       
@@ -185,7 +185,8 @@ wy-filter-chip {
     }
 
     wy-filter-chip:hover:not([active]) {
-      background-color: var(--wy-filter-chip-hover-bg, color-mix(in srgb, var(--wy-button-primary-bg, var(--ink)) 15%, transparent));
+      background-color: color-mix(in srgb, var(--ink, #1A1A1A) 6%, transparent);
+      border-color: color-mix(in srgb, var(--ink, #1A1A1A) 25%, var(--paper-edge, #DDD6C8));
     }
 
     wy-filter-chip:focus-visible {
@@ -196,7 +197,7 @@ wy-filter-chip {
     wy-filter-chip[active] {
       background-color: var(--wy-filter-chip-active-bg, var(--ink, #282828));
       color: var(--wy-filter-chip-active-fg, var(--paper, #FFFFFF));
-      border-color: transparent;
+      border-color: var(--wy-filter-chip-active-bg, var(--ink, #1A1A1A));
       font-weight: var(--wy-filter-chip-font-weight-active, 500);
       box-shadow: none;
     }
@@ -519,7 +520,7 @@ wy-toast {
       -webkit-backdrop-filter: blur(20px) saturate(140%);
       color: rgba(247, 244, 238, 0.96);
       padding: 14px 20px;
-      border-radius: 8px;
+      border-radius: 0;
       display: flex;
       align-items: center;
       gap: 12px;
@@ -786,11 +787,10 @@ wy-links-modal {
       max-width: 56rem; /* max-w-4xl = 896px */
       max-height: 90vh; /* Constrain height to enable scrolling */
       background: var(--paper, #F7F4EE);
-      border: 1px solid var(--paper-edge, #DDD6C8);
       border-radius: 0;
       box-shadow: var(--shadow-modal); /* shadow-2xl */
       overflow: hidden;
-      border: 1px solid color-mix(in srgb, var(--ink) 5%, transparent); /* border-black/5 */
+      border: 1px solid var(--paper-edge, #DDD6C8);
       transform: scale(0.95) translateY(20px);
       opacity: 0;
       transition: transform var(--dur-3) var(--ease),
@@ -969,11 +969,13 @@ wy-links-modal {
       font-size: 0.875rem; /* text-sm = 14px */
       font-weight: 500; /* font-medium */
       cursor: pointer;
-      border: none;
-      background-color: var(--white);
+      border: 1px solid var(--paper-edge, #DDD6C8);
+      background-color: transparent;
       color: var(--wy-links-modal-chip-text-color, #44403C); /* stone-700 from reference */
       text-decoration: none;
-      transition: transform var(--dur-1) var(--ease);
+      transition:
+        transform var(--dur-1) var(--ease),
+        border-color var(--dur-1) var(--ease);
       position: relative;
       overflow: hidden;
     }
@@ -991,6 +993,10 @@ wy-links-modal {
 
     wy-links-modal .link-chip:hover::before {
       opacity: 1;
+    }
+
+    wy-links-modal .link-chip:hover {
+      border-color: color-mix(in srgb, var(--ink, #1A1A1A) 40%, var(--paper-edge, #DDD6C8));
     }
 
     /* Chip pressed state */
@@ -1101,7 +1107,7 @@ wy-links-modal {
       height: 40px;
       padding: 0 var(--spacing-md, 16px) 0 var(--spacing-sm, 8px);
       border: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
-      border-radius: 20px;
+      border-radius: var(--radius-pill, 999px);
       background: transparent;
       color: var(--ink, #1A1A1A);
       font-family: var(--ff-sans, 'Inter', sans-serif);
@@ -1429,6 +1435,7 @@ wy-controls-bar {
       min-width: 0;
       position: relative;
       display: flex;
+      flex-direction: row;
       align-items: center;
       gap: var(--s-2, 8px);
     }
@@ -1812,7 +1819,7 @@ wy-controls-bar {
 
     /* HEADER STYLES */
     wy-prompt-modal .header {
-      padding: var(--spacing-xl, 32px) var(--spacing-xl, 32px) var(--spacing-sm, 8px);
+      padding: 0 0 var(--spacing-sm, 8px);
       display: flex;
       flex-direction: column;
       gap: var(--spacing-md, 16px);
@@ -1825,6 +1832,7 @@ wy-controls-bar {
         align-items: center;
         position: relative;
         gap: 12px;
+        padding: 0;
     }
 
     wy-prompt-modal .header-actions-left {
@@ -2070,7 +2078,7 @@ wy-controls-bar {
 
     wy-prompt-modal .tab-item.active {
         color: var(--ink);
-        font-weight: 700;
+        font-weight: 600;
         border-bottom-color: var(--ink);
     }
     
@@ -2209,13 +2217,14 @@ wy-controls-bar {
         padding: 0;
         background: transparent;
         color: var(--ink, #1D1B20);
+        border: 0;
         border-radius: 0;
         cursor: pointer;
         position: relative;
         text-align: left;
+        appearance: none;
         transition:
-            border-color var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1)),
-            box-shadow var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
+            opacity var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
     }
 
     wy-prompt-modal .visual-variation-tile:focus-visible {
@@ -2223,9 +2232,8 @@ wy-controls-bar {
         outline-offset: 2px;
     }
 
-    /* Selected = 1px ink frame on the plate (img can't host ::after, so frame the border) */
     wy-prompt-modal .visual-variation-tile.selected .visual-variation-media {
-        border-color: var(--ink, #1A1A1A);
+        opacity: 1;
     }
 
     wy-prompt-modal .visual-variation-media {
@@ -2235,7 +2243,7 @@ wy-controls-bar {
         aspect-ratio: 16 / 9;
         object-fit: cover;
         background: linear-gradient(150deg, #E6E0D4, #CDC4B2);
-        border: 1px solid var(--paper-edge, #DDD6C8);
+        border: 0;
         transition: opacity var(--dur-2, 350ms) var(--ease, cubic-bezier(0.2, 0.6, 0.2, 1));
     }
 
@@ -2251,7 +2259,7 @@ wy-controls-bar {
         justify-content: center;
         padding: var(--spacing-md, 16px);
         background: linear-gradient(150deg, #E6E0D4, #CDC4B2);
-        border: 1px solid var(--paper-edge, #DDD6C8);
+        border: 0;
     }
 
     wy-prompt-modal .visual-variation-text-tile .material-symbols-outlined {
@@ -2520,15 +2528,17 @@ wy-controls-bar {
         gap: var(--spacing-sm, 8px);
         width: 100%;
         margin: 0;
-        padding: 0;
-        background: transparent;
-        border: 0;
-        font-family: var(--ff-serif, 'Lora', serif);
-        font-size: 1.125rem;
-        font-weight: 500;
-        line-height: 1.25;
+        min-height: 48px;
+        padding: 0 var(--spacing-md, 16px);
+        background: var(--white, #FDFBF7);
+        border: 1px solid var(--paper-edge, #DDD6C8);
+        font-family: var(--ff-sans, 'Inter', sans-serif);
+        font-size: 0.875rem;
+        font-weight: 600;
+        line-height: 1.2;
         color: var(--ink);
-        letter-spacing: 0;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
         text-align: left;
         cursor: pointer;
     }
@@ -2541,6 +2551,7 @@ wy-controls-bar {
     wy-prompt-modal .variation-name .material-symbols-outlined {
         flex: 0 0 auto;
         font-size: 20px;
+        color: var(--ink-mute, #49454E);
         transition: transform 0.2s;
     }
 
@@ -3160,23 +3171,23 @@ wy-prompt-modal .stepper-progress-bar {
 
         wy-info-panel {
             display: block;
-            /* CSS custom properties for theming - can be overridden by parent component */
-            --wy-info-panel-bg: var(--paper, #FDFBF7);
-            --wy-info-panel-border: var(--paper-edge, #D7D3C8);
-            --wy-info-panel-text-color: #52525B;
-            --wy-info-panel-compact-bg: var(--paper-edge, #E8DDD7);
+            --wy-info-panel-bg: var(--paper-deep);
+            --wy-info-panel-border: var(--paper-edge);
+            --wy-info-panel-text-color: var(--ink-mute);
+            --wy-info-panel-compact-bg: var(--paper-edge);
             --wy-info-panel-compact-border: var(--paper-edge, #DDD);
-            --wy-info-panel-padding: var(--spacing-lg, 24px);
-            --wy-info-panel-compact-padding: var(--spacing-md, 16px);
-            --wy-info-panel-font-size: var(--fs-body, 0.875rem);
+            --wy-info-panel-padding: var(--s-5, 24px);
+            --wy-info-panel-compact-padding: var(--s-4, 16px);
+            --wy-info-panel-font-size: var(--fs-body-s);
         }
         
         wy-info-panel .panel {
             background-color: var(--wy-info-panel-bg);
-            border-radius: var(--radius-2, 16px);
+            border: 1px solid var(--wy-info-panel-border, var(--paper-edge, #DDD6C8));
+            border-radius: 0;
             padding: var(--wy-info-panel-padding);
             color: var(--wy-info-panel-text-color);
-            font-family: var(--font-sans, 'Inter', sans-serif);
+            font-family: var(--ff-sans, 'Inter', sans-serif);
             font-size: var(--wy-info-panel-font-size);
             line-height: 1.6;
             transition: background-color var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
@@ -3193,10 +3204,11 @@ wy-prompt-modal .stepper-progress-bar {
         wy-info-panel .panel.compact {
             padding: var(--wy-info-panel-compact-padding);
             background-color: var(--wy-info-panel-compact-bg);
+            border-color: var(--wy-info-panel-compact-border, var(--paper-edge, #DDD6C8));
         }
         
         wy-info-panel .panel-heading {
-            font-family: var(--font-serif, 'Lora', Georgia, serif);
+            font-family: var(--ff-serif, 'Lora', 'Playfair Display', serif);
             font-size: var(--fs-body, 1rem);
             color: var(--ink);
             margin: 0;
@@ -3204,9 +3216,9 @@ wy-prompt-modal .stepper-progress-bar {
         }
         
     /* Support for slotted content */
-    * {
+    wy-info-panel * {
         color: var(--wy-info-panel-text-color);
-        font-family: var(--font-sans, 'Inter', sans-serif);
+        font-family: var(--ff-sans, 'Inter', sans-serif);
     }
     
     wy-info-panel p {
@@ -3231,7 +3243,7 @@ wy-tabs {
 
     wy-tabs .tab-item {
       padding: 12px 0 16px 0; /* More bottom padding for visual balance */
-      font-family: var(--font-body);
+      font-family: var(--ff-sans, 'Inter', sans-serif);
       font-size: 0.875rem;
       font-weight: 500;
       color: var(--ink-mute);
@@ -3249,7 +3261,9 @@ wy-tabs {
 
     wy-tabs .tab-item.active {
       color: var(--ink);
-      font-weight: 700;
+      font-family: var(--ff-sans, 'Inter', sans-serif);
+      font-style: normal;
+      font-weight: 600;
     }
 
     wy-tabs .tab-item.active::after {
@@ -3303,6 +3317,9 @@ wy-tabs {
       text-decoration: none;
       font-family: var(--font-sans);
       font-weight: var(--wy-button-font-weight, 500);
+      text-transform: uppercase;
+      letter-spacing: var(--wy-button-tracking-architectural, 0.18em);
+      font-size: 0.75rem;
       border-radius: var(--wy-button-radius, var(--radius-pill, 999px));
       transition: 
         transform var(--dur-1) var(--ease),
@@ -3323,7 +3340,7 @@ wy-tabs {
 
     /* Focus visible outline */
     wy-button .button:focus-visible {
-      outline: 3px solid var(--ink);
+      outline: 2px solid var(--ink, #1A1A1A);
       outline-offset: 2px;
     }
 
@@ -3441,10 +3458,7 @@ wy-tabs {
     wy-button .button.variant-text {
       background-color: transparent;
       color: var(--wy-button-text-fg);
-      text-transform: uppercase;
-      letter-spacing: var(--wy-button-tracking-architectural);
       font-weight: 700;
-      font-size: 0.75rem;
     }
 
     wy-button .button.variant-text::before {
@@ -3508,108 +3522,84 @@ wy-modal {
       display: block;
     }
 
-    wy-modal .modal-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 3000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: var(--s-5, 24px);
-      background: color-mix(in srgb, var(--ink) 12%, transparent);
-      backdrop-filter: blur(var(--modal-blur-amount, 8px)) saturate(var(--modal-blur-saturation, 120%));
-      -webkit-backdrop-filter: blur(var(--modal-blur-amount, 8px)) saturate(var(--modal-blur-saturation, 120%));
-      animation: wy-modal-overlay-in var(--dur-2, 350ms) var(--ease) both;
-    }
+wy-modal .wy-modal-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(26, 26, 26, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
 
-wy-modal .dialog {
+wy-modal .wy-modal-box {
+  background: var(--paper);
+  border: 1px solid var(--paper-edge);
+  box-shadow: var(--shadow-modal);
   width: 100%;
-  max-width: var(--wy-modal-max-width, 560px);
-  max-height: min(90vh, calc(100dvh - 48px));
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      background: var(--paper);
-      border: 1px solid var(--paper-edge);
-      border-radius: var(--radius-3);
-      box-shadow: var(--shadow-modal);
-      padding: var(--s-5, 24px);
-      animation: wy-modal-dialog-in var(--dur-2, 350ms) var(--ease) both;
-    }
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
 
-    @keyframes wy-modal-overlay-in {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
+wy-modal .wy-modal-header {
+  padding: 32px 32px 24px;
+  border-bottom: 1px solid var(--paper-edge);
+  flex-shrink: 0;
+}
 
-    @keyframes wy-modal-dialog-in {
-      from { opacity: 0; transform: translateY(8px) scale(0.98); }
-      to   { opacity: 1; transform: translateY(0) scale(1); }
-    }
+wy-modal .wy-modal-heading {
+  font-family: var(--ff-serif);
+  font-size: 1.75rem;
+  font-weight: 500;
+  letter-spacing: var(--tr-display);
+  line-height: var(--lh-snug);
+  margin: 0;
+  color: var(--ink);
+}
 
-    @media (prefers-reduced-motion: reduce) {
-      wy-modal .modal-overlay,
-      wy-modal .dialog {
-        animation: none;
-      }
-    }
+wy-modal .wy-modal-body {
+  padding: 24px 32px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-s);
+  color: var(--ink-mute);
+  line-height: var(--lh-normal);
+}
 
-    wy-modal .headline-text {
-      font-family: var(--ff-serif, 'Lora', Georgia, serif);
-      font-size: 1.75rem;
-      color: var(--ink);
-      margin: 0;
-      padding: 0 0 var(--s-2, 8px);
-      display: block;
-      line-height: var(--lh-snug);
-    }
+wy-modal .wy-modal-footer {
+  padding: 16px 32px 28px;
+  border-top: 1px solid var(--paper-edge);
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-shrink: 0;
+}
 
-    wy-modal .modal-content {
-      padding: var(--s-3, 12px) var(--s-1, 4px) var(--s-5, 24px);
-      font-family: var(--font-body);
-      color: var(--ink-mute);
-      line-height: 1.6;
-      display: flex;
-      flex-direction: column;
-      gap: var(--s-5, 24px);
-      flex: 1;
-      min-height: 0;
-      overflow-y: auto;
-    }
+@media (max-width: 600px) {
+  wy-modal .wy-modal-scrim {
+    padding: 0;
+    align-items: flex-end;
+  }
 
-    wy-modal .footer-actions {
-      display: flex;
-      gap: var(--s-3, 12px);
-      justify-content: flex-end;
-      width: 100%;
-      padding-top: var(--s-2, 8px);
-      flex-shrink: 0;
-    }
+  wy-modal .wy-modal-box {
+    max-height: 92vh;
+  }
 
-    wy-modal .btn-label {
-      display: inline;
-    }
+  wy-modal .wy-modal-header {
+    padding: 24px 24px 20px;
+  }
 
-    @media (max-width: 600px) {
-      wy-modal .modal-overlay {
-        align-items: flex-end;
-        padding: 0;
-      }
+  wy-modal .wy-modal-body {
+    padding: 20px 24px;
+  }
 
-      wy-modal .dialog {
-        max-width: 100vw;
-        max-height: 100dvh;
-        border-radius: var(--radius-3) var(--radius-3) 0 0;
-        padding: var(--s-5, 24px);
-        padding-bottom: calc(var(--s-5, 24px) + env(safe-area-inset-bottom, 0px));
-      }
-
-      wy-modal .footer-actions {
-        gap: var(--s-2, 8px);
-      }
-
-      wy-modal .btn-label {
-        display: none;
-      }
-    }
+  wy-modal .wy-modal-footer {
+    padding: 12px 24px calc(24px + env(safe-area-inset-bottom, 0px));
+  }
+}

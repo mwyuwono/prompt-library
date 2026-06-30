@@ -412,6 +412,11 @@ body.modal-open {
 }
 @media (min-width: 769px) { .controls-bar { --wy-controls-container-padding-desktop: 0; } }
 
+.controls-bar .category-section {
+    border-top: 0;
+    padding-top: 0;
+}
+
 .prompt-card, .prompt-list-item, .category-section {
     transition: opacity var(--dur-1) var(--ease), transform var(--dur-1) var(--ease);
 }
