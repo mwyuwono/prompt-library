@@ -959,7 +959,8 @@
             "path": "public/images/architectural-rendering-old-master-oil-panel-style-reference.png",
             "instructions": "Use this reference for old-master oil-on-panel handling: warm umber imprimatura, thin glazes, dry-brushed highlights, aged varnish, and the restrained warm daylight and brick/masonry texture of 17th-century Dutch architectural painting. Do not copy the reference's specific building, courtyard, bench, fence, or trees unless present in the uploaded source."
           }
-        ]
+        ],
+        "image": "public/images/architectural-rendering-old-master-oil-panel.png"
       }
     ],
     "featured": false,
