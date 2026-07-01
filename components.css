@@ -2201,25 +2201,31 @@ wy-controls-bar {
         border-radius: var(--radius-2, 0);
     }
 
-    /* cap the reading column; let the rail stretch to fill what's left */
-    wy-prompt-modal .modal-container.fullscreen .visual-selector-layout,
-    wy-prompt-modal .modal-container.fullscreen.visual-selector-modal .visual-selector-layout {
-        grid-template-columns: minmax(0, clamp(560px, 42vw, 860px)) minmax(280px, 1fr);
-        padding: 0 var(--spacing-2xl, 48px) var(--spacing-2xl, 48px);
-    }
+    /* cap the reading column; let the rail stretch to fill what's left.
+       Scoped to widths above the mobile breakpoint (600px) — these selectors
+       are more specific than the `@media (max-width: 600px)` stacked-layout
+       rules below, so without this guard they'd win on mobile too and force
+       the two-column grid into a viewport too narrow to hold it. */
+    @media (min-width: 601px) {
+        wy-prompt-modal .modal-container.fullscreen .visual-selector-layout,
+        wy-prompt-modal .modal-container.fullscreen.visual-selector-modal .visual-selector-layout {
+            grid-template-columns: minmax(0, clamp(560px, 42vw, 860px)) minmax(280px, 1fr);
+            padding: 0 var(--spacing-2xl, 48px) var(--spacing-2xl, 48px);
+        }
 
-    wy-prompt-modal .modal-container.fullscreen .visual-selector-rail {
-        max-height: calc(100vh - 96px);
-    }
+        wy-prompt-modal .modal-container.fullscreen .visual-selector-rail {
+            max-height: calc(100dvh - 96px);
+        }
 
-    wy-prompt-modal .modal-container.fullscreen .variation-image img {
-        max-height: 38vh;
-        object-fit: cover;
-    }
+        wy-prompt-modal .modal-container.fullscreen .variation-image img {
+            max-height: 38vh;
+            object-fit: cover;
+        }
 
-    /* tiles reflow to fill the rail's available width rather than a fixed column count */
-    wy-prompt-modal .modal-container.fullscreen .visual-selector-rail .visual-variation-grid {
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        /* tiles reflow to fill the rail's available width rather than a fixed column count */
+        wy-prompt-modal .modal-container.fullscreen .visual-selector-rail .visual-variation-grid {
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        }
     }
 
     wy-prompt-modal .variation-select-native {
@@ -3122,7 +3128,7 @@ wy-prompt-modal .stepper-progress-bar {
       wy-prompt-modal .header { padding: var(--spacing-lg, 24px) var(--spacing-md, 16px) var(--spacing-sm, 8px); }
       wy-prompt-modal .header-top { align-items: flex-start; }
       wy-prompt-modal .header-main { flex-direction: column; align-items: flex-start; gap: var(--spacing-sm, 8px); margin-bottom: var(--spacing-sm, 8px); }
-      wy-prompt-modal .header-actions-left { flex-wrap: wrap; }
+      wy-prompt-modal .header-actions-left { flex: 1 1 auto; min-width: 0; flex-wrap: wrap; }
       wy-prompt-modal .labeled-btn { min-width: 0; }
       wy-prompt-modal .labeled-btn.primary { padding-right: 12px; }
       wy-prompt-modal .reference-image-row {
