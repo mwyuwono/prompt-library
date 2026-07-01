@@ -50,7 +50,8 @@
       "Bash(grep:*)",
       "Bash(./scripts/deploy.sh:*)",
       "Bash(npm run *)",
-      "Bash(git checkout *)"
+      "Bash(git checkout *)",
+      "Bash(cp \"/root/.claude/uploads/fac0a070-e69c-5c21-a991-5ee2918f5384/8bc36ed5-A3C09043EBAE4E7090C7460C59FAD38D.png\" \"/home/user/prompt-library/public/images/architectural-rendering-old-master-oil-panel-style-reference.png\" && ls -la /home/user/prompt-library/public/images/architectural-rendering-old-master-oil-panel-style-reference.png)"
     ],
     "deny": [],
     "ask": [],
