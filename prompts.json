@@ -1071,6 +1071,21 @@
         "image": "public/images/image-restyle-moody-modernist-oil-preview.png"
       },
       {
+        "id": "milton-avery-oil",
+        "name": "Milton Avery Oil Painting",
+        "description": "Loose early-modernist oil painting inspired by Milton Avery and mid-century figurative expressionism.",
+        "template": "Convert the provided image to a loose early-modernist oil painting in a style similar to Milton Avery and mid-century figurative expressionism, consistent with the Style Reference at {{avery_style_reference}}. Use broad, wet, visibly hand-worked brushstrokes; simplified silhouettes; flattened spatial depth; soft-edged contouring; and painterly blocks of muted color rather than crisp realism.\n\nPreserve the source image's essential composition, subject relationships, scale, and emotional hierarchy, but reduce fine detail into gestural masses, imperfect outlines, and expressive tonal patches.\n\nUse a restrained palette of deep olive green, smoky blue-gray, warm cream, charcoal, ochre, earth brown, and one or two saturated accent colors. Keep lighting diffuse and atmospheric, with minimal cast shadow, and define form through color temperature, opacity, and brush direction rather than modeled shading.\n\nFaces, textures, and secondary elements should remain deliberately understated and almost anonymous. The final image should feel intimate, quiet, nostalgic, and tenderly melancholy, with the raw immediacy of a freshly painted canvas rather than a polished illustration or photorealistic rendering.\n\nIn your response, remind the user they can upload a Style Reference image to align the style more closely.",
+        "variables": [],
+        "referenceImages": [
+          {
+            "variable": "avery_style_reference",
+            "label": "Style Reference",
+            "path": "public/images/milton-avery-oil-style-reference.png",
+            "instructions": "Use this reference for the loose early-modernist oil handling, muted olive/blue-gray/cream/ochre palette, flattened figurative forms, soft-edged contouring, and quiet, melancholy mood."
+          }
+        ]
+      },
+      {
         "id": "variation-9",
         "name": "Impressionist Print",
         "description": "Inspired by late 19th-century Impressionist printmaking and Japanese ukiyo-e woodblock prints",
