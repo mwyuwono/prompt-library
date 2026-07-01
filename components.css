@@ -1820,9 +1820,8 @@ wy-controls-bar {
     wy-prompt-modal .modal-container.fullscreen {
       position: fixed;
       inset: 0;
-      top: auto; left: auto; /* override centering offsets */
-      width: 100vw;
-      height: 100vh;
+      width: 100dvw;
+      height: 100dvh;
       max-width: none;
       max-height: none;
       border: 0;
@@ -1842,7 +1841,7 @@ wy-controls-bar {
     }
 
     wy-prompt-modal .modal-container.fullscreen .header {
-      padding: var(--spacing-2xl, 40px) var(--spacing-2xl, 48px) var(--spacing-sm, 8px);
+      padding: calc(var(--spacing-2xl, 40px) + env(safe-area-inset-top, 0px)) var(--spacing-2xl, 48px) var(--spacing-sm, 8px);
     }
 
     /* HEADER STYLES */
