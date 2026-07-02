@@ -1,5 +1,6 @@
 import Carbon
 import SwiftUI
+import UniformTypeIdentifiers
 
 @main
 struct QuickTextApp: App {
@@ -109,15 +110,21 @@ struct ContentView: View {
                     Label("Settings", systemImage: "slider.horizontal.3")
                 }
                 .buttonStyle(.glass)
+                // Popover (not sheet) so clicking outside dismisses it — no Done button needed.
+                .popover(isPresented: $showingSettings) {
+                    SettingsEditor()
+                        .environmentObject(store)
+                }
             }
 
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 10) {
                     ForEach(Array(store.filteredPhrases.enumerated()), id: \.element.id) { index, phrase in
+                        let category = store.category(for: phrase.categoryId)
                         TileView(
                             phrase: phrase,
-                            backgroundColor: store.color(for: phrase.color ?? store.corpus.settings.defaultTileColor),
-                            textColor: store.color(for: phrase.textColor ?? store.corpus.settings.defaultTextColor),
+                            backgroundColor: store.color(for: phrase.color ?? category?.color ?? store.corpus.settings.defaultTileColor),
+                            textColor: store.color(for: phrase.textColor ?? category?.textColor ?? store.corpus.settings.defaultTextColor),
                             fontSize: store.corpus.settings.defaultFontSize,
                             fontFamily: store.corpus.settings.defaultFontFamily,
                             cardWidth: cardWidth,
@@ -135,6 +142,13 @@ struct ContentView: View {
                             Button("Duplicate") { store.duplicate(phrase) }
                             Button("Delete", role: .destructive) { store.delete(phrase) }
                         }
+                        // Drag-to-reorder: live-reorders `corpus.phrases` while dragging
+                        // (mirrors List's onMove), then persists on drop.
+                        .onDrag {
+                            store.draggedPhraseID = phrase.id
+                            return NSItemProvider(object: phrase.id as NSString)
+                        }
+                        .onDrop(of: [.text], delegate: PhraseDropDelegate(target: phrase, store: store))
                     }
                 }
                 .padding(.vertical, 2)
@@ -161,10 +175,6 @@ struct ContentView: View {
         }
         .sheet(item: $store.editingPhrase) { phrase in
             PhraseEditor(phrase: phrase)
-                .environmentObject(store)
-        }
-        .sheet(isPresented: $showingSettings) {
-            SettingsEditor()
                 .environmentObject(store)
         }
         .toolbar {
@@ -283,6 +293,25 @@ struct CopiedBadge: View {
     }
 }
 
+/// Live-reorders the grid while dragging (mirrors List's onMove UX), then
+/// persists the new order to disk once the drop completes.
+struct PhraseDropDelegate: DropDelegate {
+    let target: Phrase
+    let store: CorpusStore
+
+    func dropEntered(info: DropInfo) {
+        guard let draggedID = store.draggedPhraseID, draggedID != target.id else { return }
+        withAnimation(.default) {
+            store.movePhrase(draggedID, before: target.id)
+        }
+    }
+
+    func performDrop(info: DropInfo) -> Bool {
+        store.finishReorder()
+        return true
+    }
+}
+
 struct TileView: View {
     let phrase: Phrase
     let backgroundColor: Color
@@ -304,11 +333,6 @@ struct TileView: View {
                 .foregroundStyle(textColor)
                 .lineLimit(4)
                 .minimumScaleFactor(0.72)
-            if let atoms = phrase.atoms, !atoms.isEmpty {
-                Circle()
-                    .fill(textColor.opacity(0.55))
-                    .frame(width: 6, height: 6)
-            }
             Spacer(minLength: 0)
         }
         .frame(maxWidth: .infinity, alignment: .topLeading)
@@ -321,7 +345,7 @@ struct TileView: View {
         )
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .overlay {
-            CopiedBadge(isVisible: isCopied, color: textColor)
+            CopiedBadge(isVisible: isCopied, color: backgroundColor)
         }
     }
 
@@ -559,7 +583,6 @@ struct SelectableTextEditor: NSViewRepresentable {
 /// no Save button, so text size, card size, colors, and font apply live.
 struct SettingsEditor: View {
     @EnvironmentObject private var store: CorpusStore
-    @Environment(\.dismiss) private var dismiss
     @State private var editingColorTarget: ColorEditTarget?
     @State private var didCopyPath = false
 
@@ -619,16 +642,14 @@ struct SettingsEditor: View {
                 .buttonStyle(.glass)
                 .help("Copies the path to quick-text.json, for handing off to a coding agent for bulk edits.")
 
-                HStack {
-                    Spacer()
-                    Button("Done") { dismiss() }
-                        .buttonStyle(.glassProminent)
+                Section("Categories") {
+                    CategoryManagerSection()
                 }
             }
             .padding()
         }
-        .frame(width: 520)
-        .frame(minHeight: 300, maxHeight: 600)
+        .frame(width: 560)
+        .frame(minHeight: 300, maxHeight: 680)
     }
 
     private func colorEditingBinding(for target: ColorEditTarget) -> Binding<Bool> {
@@ -645,6 +666,100 @@ struct SettingsEditor: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + CorpusStore.copyFeedbackDuration) {
             didCopyPath = false
         }
+    }
+}
+
+/// Lists every category with inline rename/color/delete, plus an add-row.
+/// Category colors are a fallback tier between a phrase's own color and the
+/// global default (see `CorpusStore.color(for:)`), so editing one here
+/// re-tints every card in that category that hasn't set its own color.
+struct CategoryManagerSection: View {
+    @EnvironmentObject private var store: CorpusStore
+    @State private var newCategoryName = ""
+
+    var body: some View {
+        ForEach(store.corpus.categories.sorted { $0.sortOrder < $1.sortOrder }) { category in
+            CategoryRow(category: category)
+        }
+        HStack(spacing: 8) {
+            TextField("New category", text: $newCategoryName)
+                .textFieldStyle(.plain)
+                .onSubmit(addCategory)
+            Button("Add", action: addCategory)
+                .buttonStyle(.glass)
+                .disabled(newCategoryName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+        }
+    }
+
+    private func addCategory() {
+        let name = newCategoryName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !name.isEmpty else { return }
+        store.addCategory(name: name)
+        newCategoryName = ""
+    }
+}
+
+struct CategoryRow: View {
+    @EnvironmentObject private var store: CorpusStore
+    let category: Category
+    @State private var editingColorTarget: ColorEditTarget?
+
+    var body: some View {
+        HStack(spacing: 8) {
+            TextField("Name", text: nameBinding)
+                .textFieldStyle(.plain)
+                .frame(minWidth: 90)
+            ColorSwatchField(
+                title: "BG",
+                selection: colorBinding,
+                colors: store.palette.colors,
+                isEditing: colorEditingBinding(for: .background)
+            )
+            .frame(width: 140)
+            ColorSwatchField(
+                title: "Text",
+                selection: textColorBinding,
+                colors: store.palette.colors,
+                isEditing: colorEditingBinding(for: .text)
+            )
+            .frame(width: 140)
+            Button {
+                store.deleteCategory(category.id)
+            } label: {
+                Image(systemName: "trash")
+            }
+            .buttonStyle(.glass)
+            .disabled(store.corpus.categories.count <= 1)
+            .help(store.corpus.categories.count <= 1 ? "At least one category is required" : "Delete category (its cards move to another category)")
+        }
+    }
+
+    private var nameBinding: Binding<String> {
+        Binding(
+            get: { category.name },
+            set: { store.renameCategory(category.id, name: $0) }
+        )
+    }
+
+    private var colorBinding: Binding<String> {
+        Binding(
+            get: { category.color ?? store.corpus.settings.defaultTileColor },
+            set: { store.updateCategoryColor(category.id, color: $0) }
+        )
+    }
+
+    private var textColorBinding: Binding<String> {
+        Binding(
+            get: { category.textColor ?? store.corpus.settings.defaultTextColor },
+            set: { store.updateCategoryTextColor(category.id, textColor: $0) }
+        )
+    }
+
+    private func colorEditingBinding(for target: ColorEditTarget) -> Binding<Bool> {
+        Binding(
+            get: { editingColorTarget == target },
+            set: { editingColorTarget = $0 ? target : (editingColorTarget == target ? nil : editingColorTarget) }
+        )
     }
 }
 
@@ -780,6 +895,7 @@ struct ExpandedCardView: View {
     @State private var isHoveringCloseIcon = false
     @State private var selectedAtomIDs: Set<String> = []
     @State private var shiftReleaseMonitor: Any?
+    @State private var isPulsingAllAtoms = false
 
     private var hasAtoms: Bool { !(phrase.atoms ?? []).isEmpty }
 
@@ -798,7 +914,7 @@ struct ExpandedCardView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 10) {
                         Spacer(minLength: 0)
-                        linesBlock
+                        linesBlock(maxWidth: geometry.size.width)
                             .frame(maxWidth: .infinity, alignment: .center)
                         Spacer(minLength: 0)
                     }
@@ -812,10 +928,10 @@ struct ExpandedCardView: View {
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .shadow(color: .black.opacity(0.4), radius: 40, y: 16)
         .overlay(alignment: .topTrailing) { iconsOverlay }
-        .overlay { CopiedBadge(isVisible: isCopied, color: Self.textColor) }
+        .overlay { CopiedBadge(isVisible: isCopied, color: Self.background) }
         .contentShape(Rectangle())
         .onHover { hovering in isHoveringCard = hovering }
-        .onTapGesture { onCopyFull() }
+        .onTapGesture { copyFull() }
         .onAppear {
             // Releasing shift should drop the multiselect highlight immediately,
             // not just on the next click, so watch modifier-key changes directly.
@@ -834,13 +950,13 @@ struct ExpandedCardView: View {
         }
     }
 
-    private var linesBlock: some View {
+    private func linesBlock(maxWidth: CGFloat) -> some View {
         let content = VStack(alignment: .leading, spacing: 10) {
             ForEach(Array(lines.enumerated()), id: \.offset) { _, line in
                 FlowLayout(spacing: 6) {
                     ForEach(line) { segment in
                         if segment.atom != nil {
-                            atomChip(segment)
+                            atomChip(segment, maxWidth: maxWidth)
                         } else {
                             // Matches the atom chips' minHeight so punctuation/filler
                             // text doesn't shift vertically relative to neighboring chips.
@@ -873,7 +989,7 @@ struct ExpandedCardView: View {
     private var iconsOverlay: some View {
         HStack(spacing: 12) {
             if isHoveringCard, !isHoveringAtomsBlock {
-                iconButton(systemName: "doc.on.doc", isHovering: isHoveringCopyIcon, action: onCopyFull) { hovering in
+                iconButton(systemName: "doc.on.doc", isHovering: isHoveringCopyIcon, action: copyFull) { hovering in
                     isHoveringCopyIcon = hovering
                 }
             }
@@ -897,9 +1013,17 @@ struct ExpandedCardView: View {
             .onTapGesture(perform: action)
     }
 
-    private func atomChip(_ segment: LineSegment) -> some View {
-        let isHighlighted = selectedAtomIDs.contains(segment.id) || hoveredAtomID == segment.id
-        return Button(segment.text) { handleAtomTap(segment.atom!) }
+    /// `maxWidth` caps the chip so a long atom (spanning a whole sentence, say)
+    /// wraps internally instead of running off the card uncut — FlowLayout only
+    /// wraps between subviews, so a single Text needs its own width ceiling.
+    private func atomChip(_ segment: LineSegment, maxWidth: CGFloat) -> some View {
+        let isHighlighted = selectedAtomIDs.contains(segment.id) || hoveredAtomID == segment.id || isPulsingAllAtoms
+        return Button { handleAtomTap(segment.atom!) } label: {
+            Text(segment.text)
+                .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: maxWidth, alignment: .leading)
+        }
             .buttonStyle(.plain)
             .font(.system(size: bodyFontSize, weight: .bold))
             .padding(.horizontal, 16)
@@ -924,6 +1048,18 @@ struct ExpandedCardView: View {
         } else {
             selectedAtomIDs = [atom.id]
             onCopyAtom(atom)
+        }
+    }
+
+    /// Full-card copy (background tap or the copy icon): pulses every atom chip
+    /// to the highlight color in sync with the "Copied" badge, since the whole
+    /// value — including every atom's text — just got copied.
+    private func copyFull() {
+        onCopyFull()
+        guard hasAtoms else { return }
+        withAnimation(.easeOut(duration: 0.12)) { isPulsingAllAtoms = true }
+        DispatchQueue.main.asyncAfter(deadline: .now() + CorpusStore.copyFeedbackDuration) {
+            withAnimation(.easeOut(duration: 0.22)) { isPulsingAllAtoms = false }
         }
     }
 
@@ -1093,6 +1229,7 @@ final class CorpusStore: ObservableObject {
     @Published var copiedPhraseID: String?
     @Published var editingPhrase: Phrase?
     @Published var expandedPhraseID: String?
+    @Published var draggedPhraseID: String?
 
     var expandedPhrase: Phrase? {
         guard let id = expandedPhraseID else { return nil }
@@ -1251,6 +1388,25 @@ final class CorpusStore: ObservableObject {
         writeCorpus()
     }
 
+    /// Live grid-reorder while dragging: moves the dragged phrase to sit just
+    /// before `targetID` in the underlying array (the array order *is* the
+    /// display/persisted order). Doesn't write to disk — call `finishReorder()`
+    /// once the drag ends so mid-drag jitter isn't hammering the corpus file.
+    func movePhrase(_ id: String, before targetID: String) {
+        guard id != targetID,
+              let fromIndex = corpus.phrases.firstIndex(where: { $0.id == id }),
+              corpus.phrases.contains(where: { $0.id == targetID }) else { return }
+        let item = corpus.phrases.remove(at: fromIndex)
+        let toIndex = corpus.phrases.firstIndex(where: { $0.id == targetID }) ?? corpus.phrases.count
+        corpus.phrases.insert(item, at: toIndex)
+    }
+
+    func finishReorder() {
+        draggedPhraseID = nil
+        corpus.updatedAt = Date()
+        writeCorpus()
+    }
+
     func moveSelection(_ delta: Int) {
         let phrases = filteredPhrases
         guard !phrases.isEmpty else { return }
@@ -1263,10 +1419,73 @@ final class CorpusStore: ObservableObject {
         corpus.categories.first { $0.id == id }?.name ?? ""
     }
 
+    func category(for id: String) -> Category? {
+        corpus.categories.first { $0.id == id }
+    }
+
     func color(for id: String?) -> Color {
         let fallback = corpus.settings.defaultTileColor
         let hex = palette.colors.first { $0.id == (id ?? fallback) }?.hex ?? "#D2BEB1"
         return Color(hex: hex)
+    }
+
+    func addCategory(name: String) {
+        let id = uniqueCategoryID(from: name)
+        let nextSort = (corpus.categories.map(\.sortOrder).max() ?? 0) + 10
+        corpus.categories.append(Category(id: id, name: name, sortOrder: nextSort))
+        corpus.updatedAt = Date()
+        writeCorpus()
+    }
+
+    func renameCategory(_ id: String, name: String) {
+        guard let index = corpus.categories.firstIndex(where: { $0.id == id }) else { return }
+        corpus.categories[index].name = name
+        corpus.updatedAt = Date()
+        writeCorpus()
+    }
+
+    func updateCategoryColor(_ id: String, color: String) {
+        guard let index = corpus.categories.firstIndex(where: { $0.id == id }) else { return }
+        corpus.categories[index].color = color
+        corpus.updatedAt = Date()
+        writeCorpus()
+    }
+
+    func updateCategoryTextColor(_ id: String, textColor: String) {
+        guard let index = corpus.categories.firstIndex(where: { $0.id == id }) else { return }
+        corpus.categories[index].textColor = textColor
+        corpus.updatedAt = Date()
+        writeCorpus()
+    }
+
+    /// Refuses to delete the last remaining category; reassigns any phrases in
+    /// the deleted category to the next-lowest-sortOrder survivor.
+    func deleteCategory(_ id: String) {
+        guard corpus.categories.count > 1, let index = corpus.categories.firstIndex(where: { $0.id == id }) else { return }
+        corpus.categories.remove(at: index)
+        if let fallback = corpus.categories.sorted(by: { $0.sortOrder < $1.sortOrder }).first {
+            for i in corpus.phrases.indices where corpus.phrases[i].categoryId == id {
+                corpus.phrases[i].categoryId = fallback.id
+            }
+        }
+        if activeCategoryID == id { activeCategoryID = "all" }
+        corpus.updatedAt = Date()
+        writeCorpus()
+    }
+
+    private func uniqueCategoryID(from name: String) -> String {
+        let base = name.lowercased()
+            .replacingOccurrences(of: "[^a-z0-9]+", with: "-", options: .regularExpression)
+            .trimmingCharacters(in: CharacterSet(charactersIn: "-"))
+        let fallback = base.isEmpty ? "category" : base
+        var candidate = fallback
+        var suffix = 2
+        let existing = Set(corpus.categories.map(\.id))
+        while existing.contains(candidate) {
+            candidate = "\(fallback)-\(suffix)"
+            suffix += 1
+        }
+        return candidate
     }
 
     private func writeCorpus() {
@@ -1330,6 +1549,10 @@ struct Category: Codable, Identifiable {
     var id: String
     var name: String
     var sortOrder: Int
+    // Optional so existing corpus.json files without these keys still decode.
+    // Sits between a phrase's own color and the global settings default.
+    var color: String? = nil
+    var textColor: String? = nil
 }
 
 struct Phrase: Codable, Identifiable {
