@@ -1,9 +1,9 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 6.2
 import PackageDescription
 
 let package = Package(
     name: "QuickTextApp",
-    platforms: [.macOS(.v14)],
+    platforms: [.macOS(.v26)],
     products: [
         .executable(name: "QuickTextApp", targets: ["QuickTextApp"])
     ],
@@ -11,5 +11,5 @@ let package = Package(
     targets: [
         .executableTarget(name: "QuickTextApp")
     ],
-    swiftLanguageVersions: [.v5]
+    swiftLanguageModes: [.v5]
 )

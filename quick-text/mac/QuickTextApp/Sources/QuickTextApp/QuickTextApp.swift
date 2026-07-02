@@ -104,11 +104,11 @@ struct ContentView: View {
                 Button(action: { store.beginNewPhrase() }) {
                     Label("New", systemImage: "plus")
                 }
-                .buttonStyle(PillButtonStyle())
+                .buttonStyle(.glass)
                 Button(action: { showingSettings = true }) {
                     Label("Settings", systemImage: "slider.horizontal.3")
                 }
-                .buttonStyle(PillButtonStyle())
+                .buttonStyle(.glass)
             }
 
             ScrollView {
@@ -164,7 +164,7 @@ struct ContentView: View {
                 .environmentObject(store)
         }
         .sheet(isPresented: $showingSettings) {
-            SettingsEditor(settings: store.corpus.settings)
+            SettingsEditor()
                 .environmentObject(store)
         }
         .toolbar {
@@ -208,11 +208,7 @@ struct ContentView: View {
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 7)
-        .background(Color.secondary.opacity(0.12))
-        .clipShape(Capsule())
-        .overlay(
-            Capsule().stroke(searchFocused ? Color.primary.opacity(0.35) : Color.secondary.opacity(0.18), lineWidth: 1)
-        )
+        .glassEffect(.regular, in: Capsule())
     }
 
     /// Expands the window to ~80% of the display when a card expands, since the
@@ -238,8 +234,13 @@ struct ContentView: View {
     private var categoryTabs: some View {
         HStack(spacing: 6) {
             ForEach(store.tabs, id: \.id) { tab in
-                Button(tab.name) { store.activeCategoryID = tab.id }
-                    .buttonStyle(CategoryTabStyle(active: store.activeCategoryID == tab.id))
+                if store.activeCategoryID == tab.id {
+                    Button(tab.name) { store.activeCategoryID = tab.id }
+                        .buttonStyle(.glassProminent)
+                } else {
+                    Button(tab.name) { store.activeCategoryID = tab.id }
+                        .buttonStyle(.glass)
+                }
             }
         }
     }
@@ -264,13 +265,21 @@ struct CopiedBadge: View {
     var color: Color = .primary
 
     var body: some View {
-        Text("Copied")
-            .font(.system(size: 40, weight: .heavy, design: .rounded))
-            .foregroundStyle(color)
-            .scaleEffect(isVisible ? 1 : 0.5)
-            .opacity(isVisible ? 1 : 0)
-            .animation(isVisible ? .spring(response: 0.16, dampingFraction: 0.6) : .easeOut(duration: 0.22), value: isVisible)
-            .allowsHitTesting(false)
+        VStack {
+            Spacer(minLength: 0)
+            Text("Copied")
+                .font(.system(size: 40, weight: .heavy, design: .rounded))
+                .foregroundStyle(color)
+                .padding(.horizontal, 26)
+                .padding(.vertical, 12)
+                .glassEffect(.regular, in: Capsule())
+                .scaleEffect(isVisible ? 1 : 0.5)
+                .opacity(isVisible ? 1 : 0)
+                .animation(isVisible ? .spring(response: 0.16, dampingFraction: 0.6) : .easeOut(duration: 0.22), value: isVisible)
+                .padding(.bottom, 18)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .allowsHitTesting(false)
     }
 }
 
@@ -352,35 +361,6 @@ struct TileView: View {
     .padding()
 }
 
-struct CategoryTabStyle: ButtonStyle {
-    let active: Bool
-
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .font(.system(size: 13, weight: .semibold))
-            .foregroundStyle(active ? Color.white : Color.primary)
-            .padding(.horizontal, 14)
-            .padding(.vertical, 7)
-            .background(active ? Color.primary : Color.secondary.opacity(0.14))
-            .clipShape(Capsule())
-            .opacity(configuration.isPressed ? 0.82 : 1)
-    }
-}
-
-/// Shared pill treatment for header actions (New, Settings) so they read as a
-/// matched set with the capsule search field and category chips.
-struct PillButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .font(.system(size: 13, weight: .semibold))
-            .padding(.horizontal, 14)
-            .padding(.vertical, 8)
-            .background(Color.secondary.opacity(0.14))
-            .clipShape(Capsule())
-            .opacity(configuration.isPressed ? 0.75 : 1)
-    }
-}
-
 struct PhraseEditor: View {
     @EnvironmentObject private var store: CorpusStore
     @Environment(\.dismiss) private var dismiss
@@ -433,12 +413,14 @@ struct PhraseEditor: View {
                 }
                 HStack {
                     Button("Cancel") { dismiss() }
+                        .buttonStyle(.glass)
                     Spacer()
                     Button("Save") {
                         phrase.atoms = atoms.isEmpty ? nil : atoms
                         store.save(phrase)
                         dismiss()
                     }
+                    .buttonStyle(.glassProminent)
                     .disabled(phrase.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || phrase.value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
             }
@@ -570,32 +552,42 @@ struct SelectableTextEditor: NSViewRepresentable {
         .environmentObject(PreviewData.store)
 }
 
+/// Every control here writes straight through to `store.corpus.settings` on
+/// change (via `settings`, a computed `Binding`) — there's no draft state and
+/// no Save button, so text size, card size, colors, and font apply live.
 struct SettingsEditor: View {
     @EnvironmentObject private var store: CorpusStore
     @Environment(\.dismiss) private var dismiss
-    @State var settings: Settings
     @State private var editingColorTarget: ColorEditTarget?
+    @State private var didCopyPath = false
+
+    private var settings: Binding<Settings> {
+        Binding(
+            get: { store.corpus.settings },
+            set: { store.saveSettings($0) }
+        )
+    }
 
     var body: some View {
         ScrollView {
             Form {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Text size: \(settings.defaultFontSize)").font(.caption).foregroundStyle(.secondary)
+                    Text("Text size: \(settings.wrappedValue.defaultFontSize)").font(.caption).foregroundStyle(.secondary)
                     Slider(
                         value: Binding(
-                            get: { Double(settings.defaultFontSize) },
-                            set: { settings.defaultFontSize = Int($0.rounded()) }
+                            get: { Double(settings.wrappedValue.defaultFontSize) },
+                            set: { settings.wrappedValue.defaultFontSize = Int($0.rounded()) }
                         ),
                         in: 14...44,
                         step: 1
                     )
                 }
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Card size: \(Int(settings.cardWidth ?? Settings.defaultCardWidth))").font(.caption).foregroundStyle(.secondary)
+                    Text("Card size: \(Int(settings.wrappedValue.cardWidth ?? Settings.defaultCardWidth))").font(.caption).foregroundStyle(.secondary)
                     Slider(
                         value: Binding(
-                            get: { settings.cardWidth ?? Settings.defaultCardWidth },
-                            set: { settings.cardWidth = $0 }
+                            get: { settings.wrappedValue.cardWidth ?? Settings.defaultCardWidth },
+                            set: { settings.wrappedValue.cardWidth = $0 }
                         ),
                         in: 120...320,
                         step: 4
@@ -603,27 +595,32 @@ struct SettingsEditor: View {
                 }
                 ColorSwatchField(
                     title: "Default background",
-                    selection: $settings.defaultTileColor,
+                    selection: settings.defaultTileColor,
                     colors: store.palette.colors,
                     isEditing: colorEditingBinding(for: .background)
                 )
                 ColorSwatchField(
                     title: "Default text",
-                    selection: $settings.defaultTextColor,
+                    selection: settings.defaultTextColor,
                     colors: store.palette.colors,
                     isEditing: colorEditingBinding(for: .text)
                 )
-                Picker("Font", selection: $settings.defaultFontFamily) {
+                Picker("Font", selection: settings.defaultFontFamily) {
                     Text("Sans").tag("sans")
                     Text("Serif").tag("serif")
                 }
+                Button {
+                    copyCorpusPath()
+                } label: {
+                    Label(didCopyPath ? "Path copied" : "Copy corpus file path", systemImage: didCopyPath ? "checkmark" : "doc.on.doc")
+                }
+                .buttonStyle(.glass)
+                .help("Copies the path to quick-text.json, for handing off to a coding agent for bulk edits.")
+
                 HStack {
-                    Button("Cancel") { dismiss() }
                     Spacer()
-                    Button("Save") {
-                        store.saveSettings(settings)
-                        dismiss()
-                    }
+                    Button("Done") { dismiss() }
+                        .buttonStyle(.glassProminent)
                 }
             }
             .padding()
@@ -637,6 +634,15 @@ struct SettingsEditor: View {
             get: { editingColorTarget == target },
             set: { editingColorTarget = $0 ? target : (editingColorTarget == target ? nil : editingColorTarget) }
         )
+    }
+
+    private func copyCorpusPath() {
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(store.corpusPath, forType: .string)
+        didCopyPath = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + CorpusStore.copyFeedbackDuration) {
+            didCopyPath = false
+        }
     }
 }
 
@@ -677,7 +683,7 @@ struct ColorSwatchField: View {
             }
             .contentShape(Rectangle())
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.glass)
         .popover(isPresented: $isEditing, arrowEdge: .bottom) {
             SwatchPicker(title: title, selection: $selection, colors: colors)
                 .padding()
@@ -771,6 +777,7 @@ struct ExpandedCardView: View {
     @State private var isHoveringCopyIcon = false
     @State private var isHoveringCloseIcon = false
     @State private var selectedAtomIDs: Set<String> = []
+    @State private var shiftReleaseMonitor: Any?
 
     private var hasAtoms: Bool { !(phrase.atoms ?? []).isEmpty }
 
@@ -807,6 +814,22 @@ struct ExpandedCardView: View {
         .contentShape(Rectangle())
         .onHover { hovering in isHoveringCard = hovering }
         .onTapGesture { onCopyFull() }
+        .onAppear {
+            // Releasing shift should drop the multiselect highlight immediately,
+            // not just on the next click, so watch modifier-key changes directly.
+            shiftReleaseMonitor = NSEvent.addLocalMonitorForEvents(matching: .flagsChanged) { event in
+                if !event.modifierFlags.contains(.shift) {
+                    selectedAtomIDs = []
+                }
+                return event
+            }
+        }
+        .onDisappear {
+            if let monitor = shiftReleaseMonitor {
+                NSEvent.removeMonitor(monitor)
+                shiftReleaseMonitor = nil
+            }
+        }
     }
 
     private var linesBlock: some View {
@@ -1077,6 +1100,9 @@ final class CorpusStore: ObservableObject {
     private var corpusURL: URL { Self.resolveCorpusURL(named: "quick-text.json") }
     private var paletteURL: URL { Self.resolveCorpusURL(named: "palette.json") }
 
+    /// Absolute path to the corpus JSON, for handing off to a coding agent for bulk edits.
+    var corpusPath: String { corpusURL.path }
+
     var tabs: [Category] {
         var result = [Category(id: "all", name: "All", sortOrder: 0)]
         result.append(contentsOf: corpus.categories.sorted { $0.sortOrder < $1.sortOrder })
@@ -1157,7 +1183,7 @@ final class CorpusStore: ObservableObject {
                 guard atom.start >= 0, atom.end <= characters.count, atom.end > atom.start else { return nil }
                 return String(characters[atom.start..<atom.end])
             }
-            .joined()
+            .joined(separator: " ")
         copyText(text, feedbackFor: phrase.id, autoClose: false)
     }
 
