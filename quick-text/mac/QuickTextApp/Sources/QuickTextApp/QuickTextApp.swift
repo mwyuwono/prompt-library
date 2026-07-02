@@ -74,11 +74,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 }
 
+#Preview("Content View") {
+    ContentView()
+        .environmentObject(PreviewData.store)
+        .frame(width: 720, height: 520)
+}
+
 struct ContentView: View {
     @EnvironmentObject private var store: CorpusStore
     @FocusState private var searchFocused: Bool
-    @State private var previewPhrase: Phrase?
     @State private var showingSettings = false
+    @State private var savedWindowFrame: NSRect?
 
     private var columns: [GridItem] {
         [GridItem(.adaptive(minimum: 164), spacing: 10)]
@@ -89,10 +95,7 @@ struct ContentView: View {
             categoryTabs
 
             HStack(spacing: 8) {
-                TextField("Search", text: $store.searchTerm)
-                    .textFieldStyle(.roundedBorder)
-                    .focused($searchFocused)
-                    .onSubmit { copySelected() }
+                searchField
 
                 Button(action: { store.beginNewPhrase() }) {
                     Label("New", systemImage: "plus")
@@ -116,11 +119,11 @@ struct ContentView: View {
                         )
                         .onTapGesture {
                             store.selectedPhraseID = phrase.id
-                            store.copy(phrase)
+                            store.activate(phrase)
                         }
                         .contextMenu {
                             Button("Copy") { store.copy(phrase) }
-                            Button("Preview") { previewPhrase = phrase }
+                            Button("Preview") { store.expandedPhraseID = phrase.id }
                             Button("Edit") { store.beginEditing(phrase) }
                             Button("Duplicate") { store.duplicate(phrase) }
                             Button("Delete", role: .destructive) { store.delete(phrase) }
@@ -133,21 +136,24 @@ struct ContentView: View {
         .padding(14)
         .background(Color(nsColor: .windowBackgroundColor))
         .onAppear { store.load() }
-        .onExitCommand { NSApp.keyWindow?.orderOut(nil) }
+        .onExitCommand {
+            if store.expandedPhraseID != nil {
+                store.collapseExpanded()
+            } else {
+                NSApp.keyWindow?.orderOut(nil)
+            }
+        }
         .onKeyPress(.downArrow) { moveSelection(1) }
         .onKeyPress(.rightArrow) { moveSelection(1) }
         .onKeyPress(.upArrow) { moveSelection(-1) }
         .onKeyPress(.leftArrow) { moveSelection(-1) }
         .onKeyPress(.space) {
-            if let phrase = store.selectedPhrase { previewPhrase = phrase }
+            if let phrase = store.selectedPhrase { store.expandedPhraseID = phrase.id }
             return .handled
         }
         .sheet(item: $store.editingPhrase) { phrase in
             PhraseEditor(phrase: phrase)
                 .environmentObject(store)
-        }
-        .sheet(item: $previewPhrase) { phrase in
-            PreviewView(phrase: phrase)
         }
         .sheet(isPresented: $showingSettings) {
             SettingsEditor(settings: store.corpus.settings)
@@ -162,6 +168,61 @@ struct ContentView: View {
                 Label("Copy", systemImage: "doc.on.doc")
             }
             .keyboardShortcut("c", modifiers: .command)
+        }
+        .overlay {
+            if let phrase = store.expandedPhrase {
+                ExpandedOverlayView(store: store, phrase: phrase)
+            }
+        }
+        .onChange(of: store.expandedPhraseID) { _, newValue in
+            resizeWindowForExpansion(expanding: newValue != nil)
+        }
+    }
+
+    private var searchField: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "magnifyingglass")
+                .foregroundStyle(.secondary)
+            TextField("Search", text: $store.searchTerm)
+                .textFieldStyle(.plain)
+                .focused($searchFocused)
+                .focusEffectDisabled()
+                .onSubmit { copySelected() }
+            if !store.searchTerm.isEmpty {
+                Button {
+                    store.searchTerm = ""
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(.secondary)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 7)
+        .background(Color.secondary.opacity(0.12))
+        .clipShape(Capsule())
+        .overlay(
+            Capsule().stroke(searchFocused ? Color.primary.opacity(0.35) : Color.secondary.opacity(0.18), lineWidth: 1)
+        )
+    }
+
+    /// Expands the window to ~80% of the display when a card expands, since the
+    /// expanded card overlay fills the window rather than floating independently.
+    private func resizeWindowForExpansion(expanding: Bool) {
+        guard let window = NSApp.keyWindow ?? NSApp.windows.first else { return }
+        if expanding {
+            guard savedWindowFrame == nil else { return }
+            savedWindowFrame = window.frame
+            if let screen = window.screen ?? NSScreen.main {
+                let visible = screen.visibleFrame
+                let size = NSSize(width: visible.width * 0.8, height: visible.height * 0.8)
+                let origin = NSPoint(x: visible.midX - size.width / 2, y: visible.midY - size.height / 2)
+                window.setFrame(NSRect(origin: origin, size: size), display: true, animate: true)
+            }
+        } else if let frame = savedWindowFrame {
+            window.setFrame(frame, display: true, animate: true)
+            savedWindowFrame = nil
         }
     }
 
@@ -181,7 +242,7 @@ struct ContentView: View {
 
     private func copySelected() {
         if let phrase = store.selectedPhrase {
-            store.copy(phrase)
+            store.activate(phrase)
         }
     }
 }
@@ -197,12 +258,19 @@ struct TileView: View {
 
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
-            Text(phrase.summary?.isEmpty == false ? phrase.summary! : phrase.title)
-                .font(tileFont)
-                .foregroundStyle(textColor)
-                .lineLimit(4)
-                .minimumScaleFactor(0.72)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            HStack(alignment: .firstTextBaseline, spacing: 6) {
+                Text(phrase.summary?.isEmpty == false ? phrase.summary! : phrase.title)
+                    .font(tileFont)
+                    .foregroundStyle(textColor)
+                    .lineLimit(4)
+                    .minimumScaleFactor(0.72)
+                if let atoms = phrase.atoms, !atoms.isEmpty {
+                    Circle()
+                        .fill(textColor.opacity(0.55))
+                        .frame(width: 6, height: 6)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
             if isCopied {
                 Text("Copied")
                     .font(.caption.bold())
@@ -227,6 +295,34 @@ struct TileView: View {
     }
 }
 
+#Preview("Tile - Plain") {
+    TileView(
+        phrase: PreviewData.plainPhrase,
+        backgroundColor: Color(hex: "#2E301D"),
+        textColor: Color(hex: "#E2D6CF"),
+        fontSize: 18,
+        fontFamily: "sans",
+        isSelected: false,
+        isCopied: false
+    )
+    .frame(width: 200, height: 112)
+    .padding()
+}
+
+#Preview("Tile - Atomic") {
+    TileView(
+        phrase: PreviewData.addressPhrase,
+        backgroundColor: Color(hex: "#2E301D"),
+        textColor: Color(hex: "#E2D6CF"),
+        fontSize: 18,
+        fontFamily: "sans",
+        isSelected: false,
+        isCopied: false
+    )
+    .frame(width: 200, height: 112)
+    .padding()
+}
+
 struct CategoryTabStyle: ButtonStyle {
     let active: Bool
 
@@ -246,71 +342,283 @@ struct PhraseEditor: View {
     @EnvironmentObject private var store: CorpusStore
     @Environment(\.dismiss) private var dismiss
     @State var phrase: Phrase
+    @State private var atoms: [Atom] = []
+    @State private var selectedRange = NSRange(location: 0, length: 0)
+    @State private var editingColorTarget: ColorEditTarget?
 
     var body: some View {
-        Form {
-            TextField("Title", text: $phrase.title)
-            TextField("Summary", text: stringBinding($phrase.summary, replacingNilWith: ""))
-            Picker("Category", selection: $phrase.categoryId) {
-                ForEach(store.corpus.categories) { category in
-                    Text(category.name).tag(category.id)
+        ScrollView {
+            Form {
+                TextField("Title", text: $phrase.title)
+                TextField("Summary", text: stringBinding($phrase.summary, replacingNilWith: ""))
+                Picker("Category", selection: $phrase.categoryId) {
+                    ForEach(store.corpus.categories) { category in
+                        Text(category.name).tag(category.id)
+                    }
+                }
+
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Value").font(.caption).foregroundStyle(.secondary)
+                    SelectableTextEditor(text: $phrase.value, selectedRange: $selectedRange)
+                        .frame(minHeight: 140)
+                        .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.secondary.opacity(0.3)))
+                }
+
+                atomsSection
+
+                ColorSwatchField(
+                    title: "Background",
+                    selection: stringBinding($phrase.color, replacingNilWith: store.corpus.settings.defaultTileColor),
+                    colors: store.palette.colors,
+                    isEditing: colorEditingBinding(for: .background)
+                )
+                ColorSwatchField(
+                    title: "Text",
+                    selection: stringBinding($phrase.textColor, replacingNilWith: store.corpus.settings.defaultTextColor),
+                    colors: store.palette.colors,
+                    isEditing: colorEditingBinding(for: .text)
+                )
+                TextField("Tags", text: Binding(
+                    get: { phrase.tags.joined(separator: ", ") },
+                    set: { phrase.tags = $0.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty } }
+                ))
+                Toggle("Favorite", isOn: $phrase.favorite)
+                Picker("Visibility", selection: $phrase.visibility) {
+                    ForEach(Visibility.allCases, id: \.self) { visibility in
+                        Text(visibility.rawValue).tag(visibility)
+                    }
+                }
+                HStack {
+                    Button("Cancel") { dismiss() }
+                    Spacer()
+                    Button("Save") {
+                        phrase.atoms = atoms.isEmpty ? nil : atoms
+                        store.save(phrase)
+                        dismiss()
+                    }
+                    .disabled(phrase.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || phrase.value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
             }
-            TextEditor(text: $phrase.value)
-                .frame(minHeight: 140)
-            SwatchPicker(title: "Background", selection: stringBinding($phrase.color, replacingNilWith: store.corpus.settings.defaultTileColor), colors: store.palette.colors)
-            SwatchPicker(title: "Text", selection: stringBinding($phrase.textColor, replacingNilWith: store.corpus.settings.defaultTextColor), colors: store.palette.colors)
-            TextField("Tags", text: Binding(
-                get: { phrase.tags.joined(separator: ", ") },
-                set: { phrase.tags = $0.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty } }
-            ))
-            Toggle("Favorite", isOn: $phrase.favorite)
-            Picker("Visibility", selection: $phrase.visibility) {
-                ForEach(Visibility.allCases, id: \.self) { visibility in
-                    Text(visibility.rawValue).tag(visibility)
+            .padding()
+        }
+        .frame(width: 520)
+        .frame(minHeight: 400, maxHeight: 720)
+        .onAppear { atoms = phrase.atoms ?? [] }
+    }
+
+    private func colorEditingBinding(for target: ColorEditTarget) -> Binding<Bool> {
+        Binding(
+            get: { editingColorTarget == target },
+            set: { editingColorTarget = $0 ? target : (editingColorTarget == target ? nil : editingColorTarget) }
+        )
+    }
+
+    private var atomsSection: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Atoms (select text above, then Add atom)").font(.caption).foregroundStyle(.secondary)
+
+            Button("Add atom from selection") { addAtomFromSelection() }
+                .disabled(selectedRange.length == 0)
+
+            if atoms.isEmpty {
+                Text("No atoms yet. This card copies as a single unit.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } else {
+                FlowLayout(spacing: 6) {
+                    ForEach(atoms) { atom in
+                        atomChip(atom)
+                    }
                 }
-            }
-            HStack {
-                Button("Cancel") { dismiss() }
-                Spacer()
-                Button("Save") {
-                    store.save(phrase)
-                    dismiss()
-                }
-                .disabled(phrase.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || phrase.value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             }
         }
-        .padding()
-        .frame(width: 520)
-        .frame(minHeight: 560)
     }
+
+    private func atomChip(_ atom: Atom) -> some View {
+        HStack(spacing: 6) {
+            Text(atomPreview(atom))
+                .font(.caption)
+                .lineLimit(1)
+                .truncationMode(.tail)
+            Button {
+                atoms.removeAll { $0.id == atom.id }
+            } label: {
+                Image(systemName: "xmark.circle.fill")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(Color.secondary.opacity(0.14))
+        .clipShape(Capsule())
+    }
+
+    private func atomPreview(_ atom: Atom) -> String {
+        let characters = Array(phrase.value)
+        guard atom.start >= 0, atom.end <= characters.count, atom.end > atom.start else { return "(invalid range)" }
+        return String(characters[atom.start..<atom.end])
+    }
+
+    private func addAtomFromSelection() {
+        guard selectedRange.length > 0,
+              let range = Range(selectedRange, in: phrase.value) else { return }
+        let start = phrase.value.distance(from: phrase.value.startIndex, to: range.lowerBound)
+        let end = phrase.value.distance(from: phrase.value.startIndex, to: range.upperBound)
+        guard end > start else { return }
+        atoms.removeAll { end <= $0.start || start >= $0.end }
+        atoms.append(Atom(id: "atom-\(Int(Date().timeIntervalSince1970 * 1000))", start: start, end: end, label: nil))
+        atoms.sort { $0.start < $1.start }
+    }
+}
+
+/// AppKit-backed text editor exposing the live NSTextView selection, since SwiftUI's
+/// TextEditor does not surface selection ranges on this project's deployment target.
+/// Used by PhraseEditor so admins can select a substring of Value and turn it into an atom.
+struct SelectableTextEditor: NSViewRepresentable {
+    @Binding var text: String
+    @Binding var selectedRange: NSRange
+
+    func makeNSView(context: Context) -> NSScrollView {
+        let textView = NSTextView()
+        textView.isRichText = false
+        textView.isEditable = true
+        textView.isSelectable = true
+        textView.font = .systemFont(ofSize: 13)
+        textView.textContainerInset = NSSize(width: 6, height: 6)
+        textView.string = text
+        textView.delegate = context.coordinator
+
+        let scrollView = NSScrollView()
+        scrollView.hasVerticalScroller = true
+        scrollView.documentView = textView
+        scrollView.drawsBackground = false
+        return scrollView
+    }
+
+    func updateNSView(_ nsView: NSScrollView, context: Context) {
+        guard let textView = nsView.documentView as? NSTextView else { return }
+        if textView.string != text {
+            textView.string = text
+        }
+    }
+
+    func makeCoordinator() -> Coordinator { Coordinator(self) }
+
+    final class Coordinator: NSObject, NSTextViewDelegate {
+        var parent: SelectableTextEditor
+        init(_ parent: SelectableTextEditor) { self.parent = parent }
+
+        func textDidChange(_ notification: Notification) {
+            guard let textView = notification.object as? NSTextView else { return }
+            parent.text = textView.string
+        }
+
+        func textViewDidChangeSelection(_ notification: Notification) {
+            guard let textView = notification.object as? NSTextView else { return }
+            parent.selectedRange = textView.selectedRange()
+        }
+    }
+}
+
+#Preview("Phrase Editor - Atomic") {
+    PhraseEditor(phrase: PreviewData.addressPhrase)
+        .environmentObject(PreviewData.store)
 }
 
 struct SettingsEditor: View {
     @EnvironmentObject private var store: CorpusStore
     @Environment(\.dismiss) private var dismiss
     @State var settings: Settings
+    @State private var editingColorTarget: ColorEditTarget?
 
     var body: some View {
-        Form {
-            Stepper("Text size: \(settings.defaultFontSize)", value: $settings.defaultFontSize, in: 14...44)
-            SwatchPicker(title: "Default background", selection: $settings.defaultTileColor, colors: store.palette.colors)
-            SwatchPicker(title: "Default text", selection: $settings.defaultTextColor, colors: store.palette.colors)
-            Picker("Font", selection: $settings.defaultFontFamily) {
-                Text("Sans").tag("sans")
-                Text("Serif").tag("serif")
-            }
-            HStack {
-                Button("Cancel") { dismiss() }
-                Spacer()
-                Button("Save") {
-                    store.saveSettings(settings)
-                    dismiss()
+        ScrollView {
+            Form {
+                Stepper("Text size: \(settings.defaultFontSize)", value: $settings.defaultFontSize, in: 14...44)
+                ColorSwatchField(
+                    title: "Default background",
+                    selection: $settings.defaultTileColor,
+                    colors: store.palette.colors,
+                    isEditing: colorEditingBinding(for: .background)
+                )
+                ColorSwatchField(
+                    title: "Default text",
+                    selection: $settings.defaultTextColor,
+                    colors: store.palette.colors,
+                    isEditing: colorEditingBinding(for: .text)
+                )
+                Picker("Font", selection: $settings.defaultFontFamily) {
+                    Text("Sans").tag("sans")
+                    Text("Serif").tag("serif")
+                }
+                HStack {
+                    Button("Cancel") { dismiss() }
+                    Spacer()
+                    Button("Save") {
+                        store.saveSettings(settings)
+                        dismiss()
+                    }
                 }
             }
+            .padding()
         }
-        .padding()
         .frame(width: 520)
+        .frame(minHeight: 300, maxHeight: 600)
+    }
+
+    private func colorEditingBinding(for target: ColorEditTarget) -> Binding<Bool> {
+        Binding(
+            get: { editingColorTarget == target },
+            set: { editingColorTarget = $0 ? target : (editingColorTarget == target ? nil : editingColorTarget) }
+        )
+    }
+}
+
+enum ColorEditTarget {
+    case background
+    case text
+}
+
+/// Collapsed color field: shows the current swatch, expands into a `SwatchPicker`
+/// popover on click. SwiftUI popovers dismiss automatically on an outside click,
+/// and only one of a pair (background/text) is ever open since callers share a
+/// single `editingColorTarget` state.
+struct ColorSwatchField: View {
+    let title: String
+    @Binding var selection: String
+    let colors: [PaletteColor]
+    @Binding var isEditing: Bool
+
+    private var currentColor: PaletteColor? { colors.first { $0.id == selection } }
+
+    var body: some View {
+        Button {
+            isEditing.toggle()
+        } label: {
+            HStack(spacing: 8) {
+                Circle()
+                    .fill(currentColor.map { Color(hex: $0.hex) } ?? Color.secondary)
+                    .frame(width: 18, height: 18)
+                    .overlay(Circle().stroke(Color.black.opacity(0.18), lineWidth: 1))
+                Text(title)
+                Spacer()
+                Text(currentColor?.name ?? "Select")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Image(systemName: "chevron.down")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .popover(isPresented: $isEditing, arrowEdge: .bottom) {
+            SwatchPicker(title: title, selection: $selection, colors: colors)
+                .padding()
+                .frame(width: 240)
+        }
     }
 }
 
@@ -349,21 +657,277 @@ struct SwatchPicker: View {
     }
 }
 
-struct PreviewView: View {
+struct ExpandedOverlayView: View {
+    @ObservedObject var store: CorpusStore
     let phrase: Phrase
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(phrase.title).font(.headline)
+        ZStack {
+            Rectangle()
+                .fill(.ultraThinMaterial)
+                .ignoresSafeArea()
+                .contentShape(Rectangle())
+                .onTapGesture { store.collapseExpanded() }
+
+            ExpandedCardView(
+                phrase: phrase,
+                fontSize: store.corpus.settings.defaultFontSize,
+                fontFamily: store.corpus.settings.defaultFontFamily,
+                isCopied: store.copiedPhraseID == phrase.id,
+                onCopyAtom: { atom in store.copyAtom(atom, in: phrase) },
+                onCopyFull: { store.copyFullFromExpandedCard(phrase) }
+            )
+            .padding(24)
+        }
+    }
+}
+
+/// Preview mechanism for every card, atomic or plain: fills ~80% of the display
+/// (see `ContentView.resizeWindowForExpansion`) so the full item text can be read
+/// at a glance. Hovering the card body (not an atom chip) surfaces a copy icon in
+/// the top-right corner using the same text/highlight colors as the atom chips;
+/// hovering a chip instead highlights that chip since it becomes the copy target.
+struct ExpandedCardView: View {
+    let phrase: Phrase
+    let fontSize: Int
+    let fontFamily: String
+    let isCopied: Bool
+    let onCopyAtom: (Atom) -> Void
+    let onCopyFull: () -> Void
+
+    @State private var hoveredAtomID: String?
+    @State private var isHoveringCard = false
+    @State private var isHoveringCopyIcon = false
+
+    private static let background = Color(hex: "#22201B")
+    private static let textColor = Color(hex: "#F4EDE0")
+    private static let chipColor = Color(hex: "#F1E6D3")
+    private static let chipHoverColor = Color(hex: "#E2725B")
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 22) {
+            Text(phrase.title.uppercased())
+                .font(.callout.bold())
+                .foregroundStyle(Self.textColor.opacity(0.6))
+
             ScrollView {
-                Text(phrase.value)
-                    .textSelection(.enabled)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                VStack(alignment: .leading, spacing: 10) {
+                    ForEach(Array(lines.enumerated()), id: \.offset) { _, line in
+                        FlowLayout(spacing: 6) {
+                            ForEach(line) { segment in
+                                if segment.atom != nil {
+                                    atomChip(segment)
+                                } else {
+                                    Text(segment.text)
+                                        .font(bodyFont)
+                                        .foregroundStyle(Self.textColor)
+                                }
+                            }
+                        }
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
-        .padding()
-        .frame(width: 520, height: 360)
+        .padding(40)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+        .background(Self.background)
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .shadow(color: .black.opacity(0.4), radius: 40, y: 16)
+        .overlay(alignment: .topTrailing) {
+            if isHoveringCard, hoveredAtomID == nil {
+                copyIcon
+            }
+        }
+        .overlay(alignment: .topTrailing) {
+            if isCopied {
+                Text("Copied")
+                    .font(.callout.bold())
+                    .foregroundStyle(Self.textColor.opacity(0.85))
+                    .padding(.top, 24)
+                    .padding(.trailing, 62)
+            }
+        }
+        .contentShape(Rectangle())
+        .onHover { hovering in isHoveringCard = hovering }
+        .onTapGesture { onCopyFull() }
     }
+
+    private var copyIcon: some View {
+        Image(systemName: "doc.on.doc")
+            .font(.system(size: 15, weight: .semibold))
+            .foregroundStyle(isHoveringCopyIcon ? .white : Self.textColor)
+            .padding(10)
+            .background(isHoveringCopyIcon ? Self.chipHoverColor : Self.chipColor.opacity(0.16))
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(Self.chipHoverColor, lineWidth: 1.4)
+            )
+            .padding(.top, 22)
+            .padding(.trailing, 22)
+            .onHover { hovering in isHoveringCopyIcon = hovering }
+            .onTapGesture { onCopyFull() }
+    }
+
+    private func atomChip(_ segment: LineSegment) -> some View {
+        Button(segment.text) { onCopyAtom(segment.atom!) }
+            .buttonStyle(.plain)
+            .font(.system(size: bodyFontSize, weight: .bold))
+            .padding(.horizontal, 16)
+            .padding(.vertical, 10)
+            .frame(minHeight: 44)
+            .background(hoveredAtomID == segment.id ? Self.chipHoverColor : Self.chipColor)
+            .foregroundStyle(hoveredAtomID == segment.id ? .white : Self.background)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .onHover { hovering in hoveredAtomID = hovering ? segment.id : nil }
+    }
+
+    private var bodyFontSize: CGFloat { CGFloat(fontSize) * 1.5 }
+
+    private var bodyFont: Font {
+        fontFamily == "serif" ? .custom("Palatino", size: bodyFontSize) : .system(size: bodyFontSize)
+    }
+
+    private var lines: [[LineSegment]] {
+        LineSegment.lines(value: phrase.value, atoms: phrase.atoms ?? [])
+    }
+}
+
+struct LineSegment: Identifiable {
+    let id: String
+    let text: String
+    let atom: Atom?
+
+    static func lines(value: String, atoms: [Atom]) -> [[LineSegment]] {
+        let characters = Array(value)
+        let sorted = atoms
+            .filter { $0.start >= 0 && $0.end > $0.start && $0.end <= characters.count }
+            .sorted { $0.start < $1.start }
+
+        var flat: [LineSegment] = []
+        var cursor = 0
+        var counter = 0
+        func nextID() -> String { counter += 1; return "seg-\(counter)" }
+
+        for atom in sorted {
+            guard atom.start >= cursor else { continue }
+            if atom.start > cursor {
+                flat.append(LineSegment(id: nextID(), text: String(characters[cursor..<atom.start]), atom: nil))
+            }
+            flat.append(LineSegment(id: atom.id, text: String(characters[atom.start..<atom.end]), atom: atom))
+            cursor = atom.end
+        }
+        if cursor < characters.count {
+            flat.append(LineSegment(id: nextID(), text: String(characters[cursor...]), atom: nil))
+        }
+
+        var lines: [[LineSegment]] = [[]]
+        for segment in flat {
+            if segment.atom != nil {
+                lines[lines.count - 1].append(segment)
+                continue
+            }
+            let parts = segment.text.components(separatedBy: "\n")
+            for (index, part) in parts.enumerated() {
+                if !part.isEmpty {
+                    lines[lines.count - 1].append(LineSegment(id: nextID(), text: part, atom: nil))
+                }
+                if index < parts.count - 1 {
+                    lines.append([])
+                }
+            }
+        }
+        return lines
+    }
+}
+
+/// Minimal left-to-right wrapping layout for a run of text/chip views.
+struct FlowLayout: Layout {
+    var spacing: CGFloat = 4
+
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let maxWidth = proposal.width ?? .infinity
+        var width: CGFloat = 0
+        var height: CGFloat = 0
+        var lineWidth: CGFloat = 0
+        var lineHeight: CGFloat = 0
+        for subview in subviews {
+            let size = subview.sizeThatFits(.unspecified)
+            if lineWidth > 0, lineWidth + size.width > maxWidth {
+                width = max(width, lineWidth)
+                height += lineHeight + spacing
+                lineWidth = 0
+                lineHeight = 0
+            }
+            lineWidth += size.width + spacing
+            lineHeight = max(lineHeight, size.height)
+        }
+        width = max(width, lineWidth)
+        height += lineHeight
+        return CGSize(width: min(width, maxWidth), height: max(height, 0))
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        var x = bounds.minX
+        var y = bounds.minY
+        var lineHeight: CGFloat = 0
+        for subview in subviews {
+            let size = subview.sizeThatFits(.unspecified)
+            if x > bounds.minX, x + size.width > bounds.maxX {
+                x = bounds.minX
+                y += lineHeight + spacing
+                lineHeight = 0
+            }
+            subview.place(at: CGPoint(x: x, y: y), proposal: ProposedViewSize(size))
+            x += size.width + spacing
+            lineHeight = max(lineHeight, size.height)
+        }
+    }
+}
+
+#Preview("Expanded Card - Atomic") {
+    ExpandedCardView(
+        phrase: PreviewData.addressPhrase,
+        fontSize: 18,
+        fontFamily: "sans",
+        isCopied: false,
+        onCopyAtom: { _ in },
+        onCopyFull: {}
+    )
+    .frame(width: 900, height: 500)
+    .padding(40)
+}
+
+#Preview("Expanded Card - Plain") {
+    ExpandedCardView(
+        phrase: PreviewData.plainPhrase,
+        fontSize: 18,
+        fontFamily: "sans",
+        isCopied: false,
+        onCopyAtom: { _ in },
+        onCopyFull: {}
+    )
+    .frame(width: 900, height: 500)
+    .padding(40)
+}
+
+#Preview("Expanded Card - Copied") {
+    ExpandedCardView(
+        phrase: PreviewData.addressPhrase,
+        fontSize: 18,
+        fontFamily: "sans",
+        isCopied: true,
+        onCopyAtom: { _ in },
+        onCopyFull: {}
+    )
+    .frame(width: 900, height: 500)
+    .padding(40)
+}
+
+#Preview("Expanded Overlay") {
+    ExpandedOverlayView(store: PreviewData.store, phrase: PreviewData.addressPhrase)
+        .frame(width: 900, height: 600)
 }
 
 final class CorpusStore: ObservableObject {
@@ -374,6 +938,12 @@ final class CorpusStore: ObservableObject {
     @Published var selectedPhraseID: String?
     @Published var copiedPhraseID: String?
     @Published var editingPhrase: Phrase?
+    @Published var expandedPhraseID: String?
+
+    var expandedPhrase: Phrase? {
+        guard let id = expandedPhraseID else { return nil }
+        return corpus.phrases.first { $0.id == id }
+    }
 
     private var corpusURL: URL { Self.resolveCorpusURL(named: "quick-text.json") }
     private var paletteURL: URL { Self.resolveCorpusURL(named: "palette.json") }
@@ -438,6 +1008,42 @@ final class CorpusStore: ObservableObject {
             if self?.copiedPhraseID == phrase.id {
                 self?.copiedPhraseID = nil
             }
+        }
+    }
+
+    /// Tile click entry point: expands atomic cards instead of copying immediately.
+    func activate(_ phrase: Phrase) {
+        guard let atoms = phrase.atoms, !atoms.isEmpty else {
+            copy(phrase)
+            return
+        }
+        expandedPhraseID = phrase.id
+    }
+
+    func collapseExpanded() {
+        expandedPhraseID = nil
+    }
+
+    func copyAtom(_ atom: Atom, in phrase: Phrase) {
+        let characters = Array(phrase.value)
+        guard atom.start >= 0, atom.end <= characters.count, atom.end > atom.start else { return }
+        let text = String(characters[atom.start..<atom.end])
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(text, forType: .string)
+        finishAtomicCopy(phrase)
+    }
+
+    func copyFullFromExpandedCard(_ phrase: Phrase) {
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(phrase.value, forType: .string)
+        finishAtomicCopy(phrase)
+    }
+
+    private func finishAtomicCopy(_ phrase: Phrase) {
+        copiedPhraseID = phrase.id
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.65) { [weak self] in
+            if self?.copiedPhraseID == phrase.id { self?.copiedPhraseID = nil }
+            if self?.expandedPhraseID == phrase.id { self?.expandedPhraseID = nil }
         }
     }
 
@@ -580,10 +1186,9 @@ struct Phrase: Codable, Identifiable {
     var tags: [String]
     var createdAt: Date
     var updatedAt: Date
-    // Atomic phrase cards (see web/quick-text-component/quick-text.js). Decoded/encoded
-    // here only to round-trip losslessly; the Mac app does not yet render expandable
-    // atom chips or per-atom copy. TODO: add expand-on-click + atom chip UI + editor
-    // support to match the web component before treating this as feature-complete.
+    // Atomic phrase cards (see web/quick-text-component/quick-text.js). Tile tap expands
+    // into ExpandedOverlayView/ExpandedCardView below. PhraseEditor lets admins add/remove
+    // atoms from a text selection in the Value field (see SelectableTextEditor).
     var atoms: [Atom]?
 }
 
@@ -665,4 +1270,67 @@ extension String {
         }
         return result
     }
+}
+
+/// Sample data for #Preview canvases only. Not used at runtime.
+enum PreviewData {
+    static let plainPhrase = Phrase(
+        id: "preview-plain",
+        categoryId: "personal",
+        title: "Agent Brief",
+        summary: "Direct task brief",
+        value: "Act as a pragmatic local-first coding agent.",
+        color: "brown-13",
+        textColor: "brown-22",
+        fontSize: nil,
+        favorite: true,
+        visibility: .public,
+        tags: ["agent"],
+        createdAt: Date(),
+        updatedAt: Date(),
+        atoms: nil
+    )
+
+    static let addressPhrase = Phrase(
+        id: "preview-address",
+        categoryId: "personal",
+        title: "Home",
+        summary: "Home",
+        value: "20 Mechanic Square, No. 5\nMarblehead, MA 01945 ",
+        color: "brown-13",
+        textColor: "brown-22",
+        fontSize: nil,
+        favorite: false,
+        visibility: .localOnly,
+        tags: ["address"],
+        createdAt: Date(),
+        updatedAt: Date(),
+        atoms: [
+            Atom(id: "atom-street", start: 0, end: 18, label: nil),
+            Atom(id: "atom-unit", start: 20, end: 25, label: nil),
+            Atom(id: "atom-city", start: 26, end: 36, label: nil),
+            Atom(id: "atom-state", start: 38, end: 40, label: nil),
+            Atom(id: "atom-zip", start: 41, end: 46, label: nil)
+        ]
+    )
+
+    static let store: CorpusStore = {
+        let store = CorpusStore()
+        store.corpus = QuickTextCorpus(
+            version: 1,
+            updatedAt: Date(),
+            settings: Settings(defaultFontSize: 18, defaultTileColor: "brown-13", defaultTextColor: "brown-22", defaultFontFamily: "sans", paletteSource: "Robert Brown Fabric Collection"),
+            categories: [Category(id: "personal", name: "Personal", sortOrder: 10)],
+            phrases: [plainPhrase, addressPhrase]
+        )
+        store.palette = Palette(
+            name: "Robert Brown Fabric Collection",
+            source: "",
+            colors: [
+                PaletteColor(id: "brown-13", name: "Invisible Green 56", hex: "#2E301D"),
+                PaletteColor(id: "brown-22", name: "Sand Trap Lifted Midtone", hex: "#E2D6CF")
+            ]
+        )
+        return store
+    }()
 }
