@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "updatedAt": "2026-07-02T00:00:00-04:00",
+  "settings": {
+    "defaultFontSize": 18,
+    "defaultTileColor": "brown-13",
+    "defaultTextColor": "brown-22",
+    "defaultFontFamily": "sans",
+    "paletteSource": "Robert Brown Fabric Collection"
+  },
+  "categories": [
+    { "id": "elbridge", "name": "Elbridge", "sortOrder": 10 },
+    { "id": "ai", "name": "AI", "sortOrder": 20 },
+    { "id": "personal", "name": "Personal", "sortOrder": 30 }
+  ],
+  "phrases": [
+    {
+      "id": "elbridge-hoa-members",
+      "categoryId": "elbridge",
+      "title": "HOA Members",
+      "summary": "HOA Members",
+      "value": "Greg Swalwell, Adam Maffei, and Stanton Yuwono",
+      "favorite": true,
+      "visibility": "private",
+      "tags": ["hoa", "members"],
+      "createdAt": "2026-07-02T00:00:00-04:00",
+      "updatedAt": "2026-07-02T00:00:00-04:00"
+    },
+    {
+      "id": "ai-agent-brief",
+      "categoryId": "ai",
+      "title": "Agent Brief",
+      "summary": "Direct task brief",
+      "value": "Act as a pragmatic local-first coding agent. Inspect the repository first, preserve existing conventions, make the smallest coherent change, and verify the result before summarizing.",
+      "favorite": true,
+      "visibility": "public",
+      "tags": ["agent", "instructions"],
+      "createdAt": "2026-07-02T00:00:00-04:00",
+      "updatedAt": "2026-07-02T00:00:00-04:00"
+    },
+    {
+      "id": "personal-address-placeholder",
+      "categoryId": "personal",
+      "title": "Home Address",
+      "summary": "Home address",
+      "value": "Add local-only address text here.",
+      "favorite": false,
+      "visibility": "local-only",
+      "tags": ["address"],
+      "createdAt": "2026-07-02T00:00:00-04:00",
+      "updatedAt": "2026-07-02T00:00:00-04:00"
+    }
+  ]
+}

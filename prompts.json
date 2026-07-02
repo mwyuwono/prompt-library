@@ -2290,5 +2290,22 @@
         "path": "public/images/1780451009194.jpg"
       }
     ]
+  },
+  {
+    "id": "untitled-prompt-1783014432546",
+    "title": "Color Shift",
+    "description": "",
+    "instructions": "",
+    "category": "Art",
+    "template": "Use the attached image as the structural and stylistic source of truth. Recolor the image so that its overall color language becomes complementary to the target palette below, while preserving the original composition, subject matter, drawing, lighting logic, texture, brushwork, grain, and material character.\n\nTarget palette:\n{{target-palette}}\n\nObjective:\nCreate a sophisticated color translation, not a monochrome tint. The final image should feel organically recolored into a new palette family while still retaining believable secondary colors, natural material variation, and the original image’s depth.\n\nColor direction:\n- Use the target palette as the dominant design system, not as a flat overlay.\n- Preserve a broad but controlled range of hues so the image does not feel simply tinted.\n- Let key palette colors appear selectively in the image where they make visual sense: skies, shadows, reflections, fabric, foliage accents, architectural details, atmospheric haze, or other naturally suitable areas.\n- Keep complementary and residual local colors where needed to preserve realism, richness, and painterly nuance.\n- Avoid washing the whole image in one color.\n\nValue mapping:\n- Preserve the original value structure, contrast, and depth.\n- Map highlights to the lightest tones in the target palette.\n- Map midtones to muted or softened versions of the palette’s core colors.\n- Map deep shadows to the darkest palette colors.\n- Keep shadow areas rich and dimensional rather than flat.\n- Maintain readable separation between foreground, midground, and background.\n\nStyle preservation:\n- Do not change the composition, crop, subject placement, geometry, silhouettes, lines, figures, objects, or spatial relationships.\n- Do not modernize, redraw, simplify, sharpen, stylize, or reinterpret the image.\n- Preserve the original medium, surface texture, brushwork, patina, grain, craquelure, edge softness, and atmospheric quality.\n- Preserve small details and the original visual hierarchy.\n\nRecoloring behavior:\n- Rebalance the image globally and locally, as a professional colorist would.\n- Shift the palette gently but holistically across the scene.\n- Allow warm, neutral, green, brown, gray, or other natural notes to remain when they support the image.\n- Introduce target-palette colors with restraint, especially in highlights, reflected light, ambient shadows, and accent areas.\n- Maintain a cohesive, believable mood.\n\nAvoid:\n- Monochrome tinting\n- Duotone posterization\n- Flat color replacement\n- Over-saturated palette colors\n- Loss of texture or painterly detail\n- Changed composition or invented elements\n- Generic “blue filter” or “brand overlay” effects\n\nOutput:\nA source-faithful recolored version of the attached image that feels designed around the target palette, yet remains visually rich, natural, and materially consistent with the original.",
+    "variables": [
+      {
+        "name": "target-palette",
+        "label": "Target Palette",
+        "placeholder": "",
+        "inputType": "text"
+      }
+    ],
+    "slug": "color-shift"
   }
 ]

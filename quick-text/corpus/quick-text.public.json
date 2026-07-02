@@ -1,0 +1,35 @@
+{
+  "categories": [
+    {
+      "id": "ai",
+      "name": "AI",
+      "sortOrder": 20
+    }
+  ],
+  "phrases": [
+    {
+      "categoryId": "ai",
+      "createdAt": "2026-07-02T04:00:00Z",
+      "favorite": true,
+      "id": "ai-agent-brief",
+      "summary": "Direct task brief",
+      "tags": [
+        "agent",
+        "instructions"
+      ],
+      "title": "Agent Brief",
+      "updatedAt": "2026-07-02T04:00:00Z",
+      "value": "Act as a pragmatic local-first coding agent. Inspect the repository first, preserve existing conventions, make the smallest coherent change, and verify the result before summarizing.",
+      "visibility": "public"
+    }
+  ],
+  "settings": {
+    "defaultFontFamily": "sans",
+    "defaultFontSize": 18,
+    "defaultTextColor": "brown-22",
+    "defaultTileColor": "brown-13",
+    "paletteSource": "Robert Brown Fabric Collection"
+  },
+  "updatedAt": "2026-07-02T18:59:10.409Z",
+  "version": 1
+}

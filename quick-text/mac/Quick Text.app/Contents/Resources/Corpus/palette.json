@@ -1,0 +1,29 @@
+{
+  "name": "Robert Brown Fabric Collection",
+  "source": "https://p.weaver-yuwono.com/fabric-palette/palette.html",
+  "extractedAt": "2026-07-02T00:00:00-04:00",
+  "colors": [
+    { "id": "brown-01", "name": "Blush 267", "hex": "#B48D82" },
+    { "id": "brown-02", "name": "El Cajon Clay 1260", "hex": "#654946" },
+    { "id": "brown-03", "name": "Sand Trap SW 6066", "hex": "#D2BEB1" },
+    { "id": "brown-04", "name": "Saint Martin Sand 2164-50", "hex": "#D1BBA5" },
+    { "id": "brown-05", "name": "Rolling Fog Dark 160", "hex": "#B4A08A" },
+    { "id": "brown-06", "name": "Tavern Taupe SW 7508", "hex": "#968576" },
+    { "id": "brown-07", "name": "Edgewood Rocks 1056", "hex": "#A68B66" },
+    { "id": "brown-08", "name": "Wheat Penny SW 7705", "hex": "#9E7058" },
+    { "id": "brown-09", "name": "Saddle Soap 2110-30", "hex": "#8E7060" },
+    { "id": "brown-10", "name": "Brainstorm Bronze SW 7033", "hex": "#766B5A" },
+    { "id": "brown-11", "name": "Cobble Brown SW 6082", "hex": "#796154" },
+    { "id": "brown-12", "name": "Bancha No. 298", "hex": "#5E6445" },
+    { "id": "brown-13", "name": "Invisible Green 56", "hex": "#2E301D" },
+    { "id": "brown-14", "name": "Studio Green No. 93", "hex": "#3E433E" },
+    { "id": "brown-15", "name": "Worsted No. 284", "hex": "#9B9891" },
+    { "id": "brown-16", "name": "Summit Gray SW 7669", "hex": "#979792" },
+    { "id": "brown-17", "name": "Silt 40", "hex": "#827E6E" },
+    { "id": "brown-18", "name": "Urbane Bronze SW 7048", "hex": "#54504A" },
+    { "id": "brown-19", "name": "Pitch Black No. 256", "hex": "#3C3D3D" },
+    { "id": "brown-20", "name": "Web Gray SW 7075", "hex": "#61686D" },
+    { "id": "brown-21", "name": "Hopper Head No. 305", "hex": "#53535B" },
+    { "id": "brown-22", "name": "Sand Trap Lifted Midtone", "hex": "#E2D6CF" }
+  ]
+}
