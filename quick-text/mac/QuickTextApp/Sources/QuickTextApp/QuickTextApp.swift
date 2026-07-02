@@ -86,23 +86,29 @@ struct ContentView: View {
     @State private var showingSettings = false
     @State private var savedWindowFrame: NSRect?
 
+    private var cardWidth: CGFloat {
+        CGFloat(store.corpus.settings.cardWidth ?? Settings.defaultCardWidth)
+    }
+
     private var columns: [GridItem] {
-        [GridItem(.adaptive(minimum: 164), spacing: 10)]
+        [GridItem(.adaptive(minimum: cardWidth), spacing: 10)]
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             categoryTabs
 
-            HStack(spacing: 8) {
+            HStack(spacing: 10) {
                 searchField
 
                 Button(action: { store.beginNewPhrase() }) {
                     Label("New", systemImage: "plus")
                 }
+                .buttonStyle(PillButtonStyle())
                 Button(action: { showingSettings = true }) {
                     Label("Settings", systemImage: "slider.horizontal.3")
                 }
+                .buttonStyle(PillButtonStyle())
             }
 
             ScrollView {
@@ -114,6 +120,7 @@ struct ContentView: View {
                             textColor: store.color(for: phrase.textColor ?? store.corpus.settings.defaultTextColor),
                             fontSize: store.corpus.settings.defaultFontSize,
                             fontFamily: store.corpus.settings.defaultFontFamily,
+                            cardWidth: cardWidth,
                             isSelected: store.selectedPhraseID == phrase.id,
                             isCopied: store.copiedPhraseID == phrase.id
                         )
@@ -132,6 +139,7 @@ struct ContentView: View {
                 }
                 .padding(.vertical, 2)
             }
+            .padding(.top, 10)
         }
         .padding(14)
         .background(Color(nsColor: .windowBackgroundColor))
@@ -209,7 +217,7 @@ struct ContentView: View {
 
     /// Expands the window to ~80% of the display when a card expands, since the
     /// expanded card overlay fills the window rather than floating independently.
-    /// Restoring is unanimated so dismissing (click-out or Escape) feels instant.
+    /// Unanimated both ways so expand/collapse feel instant rather than laggy.
     private func resizeWindowForExpansion(expanding: Bool) {
         guard let window = NSApp.keyWindow ?? NSApp.windows.first else { return }
         if expanding {
@@ -219,7 +227,7 @@ struct ContentView: View {
                 let visible = screen.visibleFrame
                 let size = NSSize(width: visible.width * 0.8, height: visible.height * 0.8)
                 let origin = NSPoint(x: visible.midX - size.width / 2, y: visible.midY - size.height / 2)
-                window.setFrame(NSRect(origin: origin, size: size), display: true, animate: true)
+                window.setFrame(NSRect(origin: origin, size: size), display: true, animate: false)
             }
         } else if let frame = savedWindowFrame {
             window.setFrame(frame, display: true, animate: false)
@@ -272,8 +280,13 @@ struct TileView: View {
     let textColor: Color
     let fontSize: Int
     let fontFamily: String
+    var cardWidth: CGFloat = Settings.defaultCardWidth
     let isSelected: Bool
     let isCopied: Bool
+
+    // Keeps the tile's proportions consistent as the card-size slider changes
+    // (112/164 matches the original fixed tile dimensions).
+    private var tileMinHeight: CGFloat { cardWidth * (112.0 / 164.0) }
 
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 6) {
@@ -291,7 +304,7 @@ struct TileView: View {
         }
         .frame(maxWidth: .infinity, alignment: .topLeading)
         .padding(12)
-        .frame(minHeight: 112, alignment: .topLeading)
+        .frame(minHeight: tileMinHeight, alignment: .topLeading)
         .background(backgroundColor)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
@@ -346,11 +359,25 @@ struct CategoryTabStyle: ButtonStyle {
         configuration.label
             .font(.system(size: 13, weight: .semibold))
             .foregroundStyle(active ? Color.white : Color.primary)
-            .padding(.horizontal, 11)
+            .padding(.horizontal, 14)
             .padding(.vertical, 7)
-            .background(active ? Color.primary : Color.secondary.opacity(0.16))
-            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .background(active ? Color.primary : Color.secondary.opacity(0.14))
+            .clipShape(Capsule())
             .opacity(configuration.isPressed ? 0.82 : 1)
+    }
+}
+
+/// Shared pill treatment for header actions (New, Settings) so they read as a
+/// matched set with the capsule search field and category chips.
+struct PillButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.system(size: 13, weight: .semibold))
+            .padding(.horizontal, 14)
+            .padding(.vertical, 8)
+            .background(Color.secondary.opacity(0.14))
+            .clipShape(Capsule())
+            .opacity(configuration.isPressed ? 0.75 : 1)
     }
 }
 
@@ -552,7 +579,28 @@ struct SettingsEditor: View {
     var body: some View {
         ScrollView {
             Form {
-                Stepper("Text size: \(settings.defaultFontSize)", value: $settings.defaultFontSize, in: 14...44)
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Text size: \(settings.defaultFontSize)").font(.caption).foregroundStyle(.secondary)
+                    Slider(
+                        value: Binding(
+                            get: { Double(settings.defaultFontSize) },
+                            set: { settings.defaultFontSize = Int($0.rounded()) }
+                        ),
+                        in: 14...44,
+                        step: 1
+                    )
+                }
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Card size: \(Int(settings.cardWidth ?? Settings.defaultCardWidth))").font(.caption).foregroundStyle(.secondary)
+                    Slider(
+                        value: Binding(
+                            get: { settings.cardWidth ?? Settings.defaultCardWidth },
+                            set: { settings.cardWidth = $0 }
+                        ),
+                        in: 120...320,
+                        step: 4
+                    )
+                }
                 ColorSwatchField(
                     title: "Default background",
                     selection: $settings.defaultTileColor,
@@ -719,9 +767,12 @@ struct ExpandedCardView: View {
 
     @State private var hoveredAtomID: String?
     @State private var isHoveringCard = false
+    @State private var isHoveringAtomsBlock = false
     @State private var isHoveringCopyIcon = false
     @State private var isHoveringCloseIcon = false
     @State private var selectedAtomIDs: Set<String> = []
+
+    private var hasAtoms: Bool { !(phrase.atoms ?? []).isEmpty }
 
     private static let background = Color(hex: "#22201B")
     private static let textColor = Color(hex: "#F4EDE0")
@@ -759,26 +810,44 @@ struct ExpandedCardView: View {
     }
 
     private var linesBlock: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        let content = VStack(alignment: .leading, spacing: 10) {
             ForEach(Array(lines.enumerated()), id: \.offset) { _, line in
                 FlowLayout(spacing: 6) {
                     ForEach(line) { segment in
                         if segment.atom != nil {
                             atomChip(segment)
                         } else {
+                            // Matches the atom chips' minHeight so punctuation/filler
+                            // text doesn't shift vertically relative to neighboring chips.
                             Text(segment.text)
                                 .font(bodyFont)
                                 .foregroundStyle(Self.textColor)
+                                .frame(minHeight: 44)
                         }
                     }
                 }
+            }
+        }
+        // Bounding box around the whole atom cluster: while the cursor is anywhere
+        // inside it (including gaps/punctuation between chips), the full-card copy
+        // icon stays hidden so it doesn't flicker as the cursor crosses those gaps.
+        return Group {
+            if hasAtoms {
+                content
+                    .contentShape(Rectangle())
+                    .onHover { hovering in isHoveringAtomsBlock = hovering }
+                    // Absorbs taps in the gaps between chips so only an explicit chip
+                    // click copies; the card's full-copy tap only fires outside this box.
+                    .onTapGesture {}
+            } else {
+                content
             }
         }
     }
 
     private var iconsOverlay: some View {
         HStack(spacing: 12) {
-            if isHoveringCard, hoveredAtomID == nil {
+            if isHoveringCard, !isHoveringAtomsBlock {
                 iconButton(systemName: "doc.on.doc", isHovering: isHoveringCopyIcon, action: onCopyFull) { hovering in
                     isHoveringCopyIcon = hovering
                 }
@@ -880,8 +949,12 @@ struct LineSegment: Identifiable {
             }
             let parts = segment.text.components(separatedBy: "\n")
             for (index, part) in parts.enumerated() {
-                if !part.isEmpty {
-                    lines[lines.count - 1].append(LineSegment(id: nextID(), text: part, atom: nil))
+                // FlowLayout only wraps between subviews, not inside one, so a long
+                // run of plain text has to be split into word tokens for word wrap
+                // to work; FlowLayout's own spacing supplies the gap between words.
+                let words = part.split(separator: " ")
+                for word in words {
+                    lines[lines.count - 1].append(LineSegment(id: nextID(), text: String(word), atom: nil))
                 }
                 if index < parts.count - 1 {
                     lines.append([])
@@ -1219,6 +1292,10 @@ struct Settings: Codable {
     var defaultTextColor: String
     var defaultFontFamily: String
     var paletteSource: String
+    // Optional so existing corpus.json files without this key still decode.
+    var cardWidth: Double? = nil
+
+    static let defaultCardWidth: Double = 164
 }
 
 struct Category: Codable, Identifiable {
