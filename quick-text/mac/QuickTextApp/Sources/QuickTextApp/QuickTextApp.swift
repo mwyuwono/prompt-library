@@ -119,7 +119,7 @@ struct ContentView: View {
                         )
                         .onTapGesture {
                             store.selectedPhraseID = phrase.id
-                            store.activate(phrase)
+                            store.expandedPhraseID = phrase.id
                         }
                         .contextMenu {
                             Button("Copy") { store.copy(phrase) }
@@ -209,6 +209,7 @@ struct ContentView: View {
 
     /// Expands the window to ~80% of the display when a card expands, since the
     /// expanded card overlay fills the window rather than floating independently.
+    /// Restoring is unanimated so dismissing (click-out or Escape) feels instant.
     private func resizeWindowForExpansion(expanding: Bool) {
         guard let window = NSApp.keyWindow ?? NSApp.windows.first else { return }
         if expanding {
@@ -221,7 +222,7 @@ struct ContentView: View {
                 window.setFrame(NSRect(origin: origin, size: size), display: true, animate: true)
             }
         } else if let frame = savedWindowFrame {
-            window.setFrame(frame, display: true, animate: true)
+            window.setFrame(frame, display: true, animate: false)
             savedWindowFrame = nil
         }
     }
@@ -242,8 +243,26 @@ struct ContentView: View {
 
     private func copySelected() {
         if let phrase = store.selectedPhrase {
-            store.activate(phrase)
+            store.copy(phrase)
         }
+    }
+}
+
+/// Shared "Copied" feedback for every copy action in the app (tiles, atom chips,
+/// expanded-card copies): pops in fast, then fades out rapidly. Whole interaction
+/// stays under `CorpusStore.copyFeedbackDuration` plus this animation's tail.
+struct CopiedBadge: View {
+    let isVisible: Bool
+    var color: Color = .primary
+
+    var body: some View {
+        Text("Copied")
+            .font(.system(size: 40, weight: .heavy, design: .rounded))
+            .foregroundStyle(color)
+            .scaleEffect(isVisible ? 1 : 0.5)
+            .opacity(isVisible ? 1 : 0)
+            .animation(isVisible ? .spring(response: 0.16, dampingFraction: 0.6) : .easeOut(duration: 0.22), value: isVisible)
+            .allowsHitTesting(false)
     }
 }
 
@@ -257,26 +276,20 @@ struct TileView: View {
     let isCopied: Bool
 
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
-            HStack(alignment: .firstTextBaseline, spacing: 6) {
-                Text(phrase.summary?.isEmpty == false ? phrase.summary! : phrase.title)
-                    .font(tileFont)
-                    .foregroundStyle(textColor)
-                    .lineLimit(4)
-                    .minimumScaleFactor(0.72)
-                if let atoms = phrase.atoms, !atoms.isEmpty {
-                    Circle()
-                        .fill(textColor.opacity(0.55))
-                        .frame(width: 6, height: 6)
-                }
+        HStack(alignment: .firstTextBaseline, spacing: 6) {
+            Text(phrase.summary?.isEmpty == false ? phrase.summary! : phrase.title)
+                .font(tileFont)
+                .foregroundStyle(textColor)
+                .lineLimit(4)
+                .minimumScaleFactor(0.72)
+            if let atoms = phrase.atoms, !atoms.isEmpty {
+                Circle()
+                    .fill(textColor.opacity(0.55))
+                    .frame(width: 6, height: 6)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            if isCopied {
-                Text("Copied")
-                    .font(.caption.bold())
-                    .foregroundStyle(textColor.opacity(0.82))
-            }
+            Spacer(minLength: 0)
         }
+        .frame(maxWidth: .infinity, alignment: .topLeading)
         .padding(12)
         .frame(minHeight: 112, alignment: .topLeading)
         .background(backgroundColor)
@@ -285,6 +298,9 @@ struct TileView: View {
                 .stroke(isSelected ? Color.primary : backgroundColor.opacity(0.5), lineWidth: isSelected ? 2 : 1)
         )
         .clipShape(RoundedRectangle(cornerRadius: 8))
+        .overlay {
+            CopiedBadge(isVisible: isCopied, color: textColor)
+        }
     }
 
     private var tileFont: Font {
@@ -675,9 +691,11 @@ struct ExpandedOverlayView: View {
                 fontFamily: store.corpus.settings.defaultFontFamily,
                 isCopied: store.copiedPhraseID == phrase.id,
                 onCopyAtom: { atom in store.copyAtom(atom, in: phrase) },
-                onCopyFull: { store.copyFullFromExpandedCard(phrase) }
+                onCopySelection: { atoms in store.copyAtomSelection(atoms, in: phrase) },
+                onCopyFull: { store.copyFullFromExpandedCard(phrase) },
+                onClose: { store.collapseExpanded() }
             )
-            .padding(24)
+            .padding(64)
         }
     }
 }
@@ -687,17 +705,23 @@ struct ExpandedOverlayView: View {
 /// at a glance. Hovering the card body (not an atom chip) surfaces a copy icon in
 /// the top-right corner using the same text/highlight colors as the atom chips;
 /// hovering a chip instead highlights that chip since it becomes the copy target.
+/// Shift-click on atoms multiselects (highlighted, clipboard updated in document
+/// order on every change); a plain click reverts to single-atom copy.
 struct ExpandedCardView: View {
     let phrase: Phrase
     let fontSize: Int
     let fontFamily: String
     let isCopied: Bool
     let onCopyAtom: (Atom) -> Void
+    let onCopySelection: ([Atom]) -> Void
     let onCopyFull: () -> Void
+    let onClose: () -> Void
 
     @State private var hoveredAtomID: String?
     @State private var isHoveringCard = false
     @State private var isHoveringCopyIcon = false
+    @State private var isHoveringCloseIcon = false
+    @State private var selectedAtomIDs: Set<String> = []
 
     private static let background = Color(hex: "#22201B")
     private static let textColor = Color(hex: "#F4EDE0")
@@ -710,77 +734,103 @@ struct ExpandedCardView: View {
                 .font(.callout.bold())
                 .foregroundStyle(Self.textColor.opacity(0.6))
 
-            ScrollView {
-                VStack(alignment: .leading, spacing: 10) {
-                    ForEach(Array(lines.enumerated()), id: \.offset) { _, line in
-                        FlowLayout(spacing: 6) {
-                            ForEach(line) { segment in
-                                if segment.atom != nil {
-                                    atomChip(segment)
-                                } else {
-                                    Text(segment.text)
-                                        .font(bodyFont)
-                                        .foregroundStyle(Self.textColor)
-                                }
-                            }
-                        }
+            GeometryReader { geometry in
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Spacer(minLength: 0)
+                        linesBlock
+                            .frame(maxWidth: .infinity, alignment: .center)
+                        Spacer(minLength: 0)
                     }
+                    .frame(minHeight: geometry.size.height)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
-        .padding(40)
+        .padding(46)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         .background(Self.background)
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .shadow(color: .black.opacity(0.4), radius: 40, y: 16)
-        .overlay(alignment: .topTrailing) {
-            if isHoveringCard, hoveredAtomID == nil {
-                copyIcon
-            }
-        }
-        .overlay(alignment: .topTrailing) {
-            if isCopied {
-                Text("Copied")
-                    .font(.callout.bold())
-                    .foregroundStyle(Self.textColor.opacity(0.85))
-                    .padding(.top, 24)
-                    .padding(.trailing, 62)
-            }
-        }
+        .overlay(alignment: .topTrailing) { iconsOverlay }
+        .overlay { CopiedBadge(isVisible: isCopied, color: Self.textColor) }
         .contentShape(Rectangle())
         .onHover { hovering in isHoveringCard = hovering }
         .onTapGesture { onCopyFull() }
     }
 
-    private var copyIcon: some View {
-        Image(systemName: "doc.on.doc")
-            .font(.system(size: 15, weight: .semibold))
-            .foregroundStyle(isHoveringCopyIcon ? .white : Self.textColor)
-            .padding(10)
-            .background(isHoveringCopyIcon ? Self.chipHoverColor : Self.chipColor.opacity(0.16))
-            .clipShape(RoundedRectangle(cornerRadius: 8))
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(Self.chipHoverColor, lineWidth: 1.4)
-            )
-            .padding(.top, 22)
-            .padding(.trailing, 22)
-            .onHover { hovering in isHoveringCopyIcon = hovering }
-            .onTapGesture { onCopyFull() }
+    private var linesBlock: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            ForEach(Array(lines.enumerated()), id: \.offset) { _, line in
+                FlowLayout(spacing: 6) {
+                    ForEach(line) { segment in
+                        if segment.atom != nil {
+                            atomChip(segment)
+                        } else {
+                            Text(segment.text)
+                                .font(bodyFont)
+                                .foregroundStyle(Self.textColor)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private var iconsOverlay: some View {
+        HStack(spacing: 12) {
+            if isHoveringCard, hoveredAtomID == nil {
+                iconButton(systemName: "doc.on.doc", isHovering: isHoveringCopyIcon, action: onCopyFull) { hovering in
+                    isHoveringCopyIcon = hovering
+                }
+            }
+            iconButton(systemName: "xmark", isHovering: isHoveringCloseIcon, action: onClose) { hovering in
+                isHoveringCloseIcon = hovering
+            }
+        }
+        .padding(.top, 26)
+        .padding(.trailing, 26)
+    }
+
+    /// No background or border by design; the larger glyph plus a wider invisible
+    /// hit area (44x44) compensate for the lost touch target.
+    private func iconButton(systemName: String, isHovering: Bool, action: @escaping () -> Void, onHoverChange: @escaping (Bool) -> Void) -> some View {
+        Image(systemName: systemName)
+            .font(.system(size: 26, weight: .semibold))
+            .foregroundStyle(isHovering ? Self.chipHoverColor : Self.textColor)
+            .frame(width: 44, height: 44)
+            .contentShape(Rectangle())
+            .onHover(perform: onHoverChange)
+            .onTapGesture(perform: action)
     }
 
     private func atomChip(_ segment: LineSegment) -> some View {
-        Button(segment.text) { onCopyAtom(segment.atom!) }
+        let isHighlighted = selectedAtomIDs.contains(segment.id) || hoveredAtomID == segment.id
+        return Button(segment.text) { handleAtomTap(segment.atom!) }
             .buttonStyle(.plain)
             .font(.system(size: bodyFontSize, weight: .bold))
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
             .frame(minHeight: 44)
-            .background(hoveredAtomID == segment.id ? Self.chipHoverColor : Self.chipColor)
-            .foregroundStyle(hoveredAtomID == segment.id ? .white : Self.background)
+            .background(isHighlighted ? Self.chipHoverColor : Self.chipColor)
+            .foregroundStyle(isHighlighted ? .white : Self.background)
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .onHover { hovering in hoveredAtomID = hovering ? segment.id : nil }
+    }
+
+    private func handleAtomTap(_ atom: Atom) {
+        if NSEvent.modifierFlags.contains(.shift) {
+            if selectedAtomIDs.contains(atom.id) {
+                selectedAtomIDs.remove(atom.id)
+            } else {
+                selectedAtomIDs.insert(atom.id)
+            }
+            let selected = (phrase.atoms ?? []).filter { selectedAtomIDs.contains($0.id) }
+            guard !selected.isEmpty else { return }
+            onCopySelection(selected)
+        } else {
+            selectedAtomIDs = [atom.id]
+            onCopyAtom(atom)
+        }
     }
 
     private var bodyFontSize: CGFloat { CGFloat(fontSize) * 1.5 }
@@ -893,7 +943,9 @@ struct FlowLayout: Layout {
         fontFamily: "sans",
         isCopied: false,
         onCopyAtom: { _ in },
-        onCopyFull: {}
+        onCopySelection: { _ in },
+        onCopyFull: {},
+        onClose: {}
     )
     .frame(width: 900, height: 500)
     .padding(40)
@@ -906,7 +958,9 @@ struct FlowLayout: Layout {
         fontFamily: "sans",
         isCopied: false,
         onCopyAtom: { _ in },
-        onCopyFull: {}
+        onCopySelection: { _ in },
+        onCopyFull: {},
+        onClose: {}
     )
     .frame(width: 900, height: 500)
     .padding(40)
@@ -919,7 +973,9 @@ struct FlowLayout: Layout {
         fontFamily: "sans",
         isCopied: true,
         onCopyAtom: { _ in },
-        onCopyFull: {}
+        onCopySelection: { _ in },
+        onCopyFull: {},
+        onClose: {}
     )
     .frame(width: 900, height: 500)
     .padding(40)
@@ -999,25 +1055,12 @@ final class CorpusStore: ObservableObject {
         writeCorpus()
     }
 
-    func copy(_ phrase: Phrase) {
-        NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(phrase.value, forType: .string)
-        selectedPhraseID = phrase.id
-        copiedPhraseID = phrase.id
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [weak self] in
-            if self?.copiedPhraseID == phrase.id {
-                self?.copiedPhraseID = nil
-            }
-        }
-    }
+    /// Shared timing for the "Copied" pop/fade feedback, used by every copy path.
+    static let copyFeedbackDuration: TimeInterval = 0.55
 
-    /// Tile click entry point: expands atomic cards instead of copying immediately.
-    func activate(_ phrase: Phrase) {
-        guard let atoms = phrase.atoms, !atoms.isEmpty else {
-            copy(phrase)
-            return
-        }
-        expandedPhraseID = phrase.id
+    func copy(_ phrase: Phrase) {
+        selectedPhraseID = phrase.id
+        copyText(phrase.value, feedbackFor: phrase.id, autoClose: false)
     }
 
     func collapseExpanded() {
@@ -1027,23 +1070,35 @@ final class CorpusStore: ObservableObject {
     func copyAtom(_ atom: Atom, in phrase: Phrase) {
         let characters = Array(phrase.value)
         guard atom.start >= 0, atom.end <= characters.count, atom.end > atom.start else { return }
-        let text = String(characters[atom.start..<atom.end])
-        NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(text, forType: .string)
-        finishAtomicCopy(phrase)
+        copyText(String(characters[atom.start..<atom.end]), feedbackFor: phrase.id, autoClose: true)
+    }
+
+    /// Shift-multiselect copy: concatenates the selected atoms in document order
+    /// (not click order) and keeps the expanded card open for further selection.
+    func copyAtomSelection(_ atoms: [Atom], in phrase: Phrase) {
+        guard !atoms.isEmpty else { return }
+        let characters = Array(phrase.value)
+        let text = atoms
+            .sorted { $0.start < $1.start }
+            .compactMap { atom -> String? in
+                guard atom.start >= 0, atom.end <= characters.count, atom.end > atom.start else { return nil }
+                return String(characters[atom.start..<atom.end])
+            }
+            .joined()
+        copyText(text, feedbackFor: phrase.id, autoClose: false)
     }
 
     func copyFullFromExpandedCard(_ phrase: Phrase) {
-        NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(phrase.value, forType: .string)
-        finishAtomicCopy(phrase)
+        copyText(phrase.value, feedbackFor: phrase.id, autoClose: true)
     }
 
-    private func finishAtomicCopy(_ phrase: Phrase) {
-        copiedPhraseID = phrase.id
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.65) { [weak self] in
-            if self?.copiedPhraseID == phrase.id { self?.copiedPhraseID = nil }
-            if self?.expandedPhraseID == phrase.id { self?.expandedPhraseID = nil }
+    private func copyText(_ text: String, feedbackFor phraseID: String, autoClose: Bool) {
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(text, forType: .string)
+        copiedPhraseID = phraseID
+        DispatchQueue.main.asyncAfter(deadline: .now() + Self.copyFeedbackDuration) { [weak self] in
+            if self?.copiedPhraseID == phraseID { self?.copiedPhraseID = nil }
+            if autoClose, self?.expandedPhraseID == phraseID { self?.expandedPhraseID = nil }
         }
     }
 
