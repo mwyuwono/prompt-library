@@ -492,7 +492,9 @@ struct PhraseEditor: View {
         let start = phrase.value.distance(from: phrase.value.startIndex, to: range.lowerBound)
         let end = phrase.value.distance(from: phrase.value.startIndex, to: range.upperBound)
         guard end > start else { return }
-        atoms.removeAll { end <= $0.start || start >= $0.end }
+        // Evict only existing atoms whose range overlaps the new selection;
+        // non-overlapping atoms must survive so multiple atoms can accumulate.
+        atoms.removeAll { !(end <= $0.start || start >= $0.end) }
         atoms.append(Atom(id: "atom-\(Int(Date().timeIntervalSince1970 * 1000))", start: start, end: end, label: nil))
         atoms.sort { $0.start < $1.start }
     }
