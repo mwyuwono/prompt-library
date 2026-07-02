@@ -24,12 +24,12 @@
     }
   ],
   "settings": {
-    "defaultFontFamily": "sans",
-    "defaultFontSize": 18,
+    "defaultFontFamily": "serif",
+    "defaultFontSize": 21,
     "defaultTextColor": "brown-22",
     "defaultTileColor": "brown-13",
     "paletteSource": "Robert Brown Fabric Collection"
   },
-  "updatedAt": "2026-07-02T18:59:10.409Z",
+  "updatedAt": "2026-07-02T21:07:10.561Z",
   "version": 1
 }

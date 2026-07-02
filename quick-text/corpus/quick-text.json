@@ -1,101 +1,321 @@
 {
-  "categories" : [
-    {
-      "id" : "elbridge",
-      "name" : "Elbridge",
-      "sortOrder" : 10
-    },
-    {
-      "id" : "ai",
-      "name" : "AI",
-      "sortOrder" : 20
-    },
-    {
-      "id" : "personal",
-      "name" : "Personal",
-      "sortOrder" : 30
-    }
-  ],
-  "phrases" : [
-    {
-      "categoryId" : "elbridge",
-      "createdAt" : "2026-07-02T04:00:00Z",
-      "favorite" : true,
-      "id" : "elbridge-hoa-members",
-      "summary" : "HOA Members",
-      "tags" : [
-        "hoa",
-        "members"
-      ],
-      "title" : "HOA Members",
-      "updatedAt" : "2026-07-02T04:00:00Z",
-      "value" : "Greg Swalwell, Adam Maffei, and Stanton Yuwono",
-      "visibility" : "private"
-    },
-    {
-      "categoryId" : "ai",
-      "createdAt" : "2026-07-02T04:00:00Z",
-      "favorite" : true,
-      "id" : "ai-agent-brief",
-      "summary" : "Direct task brief",
-      "tags" : [
-        "agent",
-        "instructions"
-      ],
-      "title" : "Agent Brief",
-      "updatedAt" : "2026-07-02T04:00:00Z",
-      "value" : "Act as a pragmatic local-first coding agent. Inspect the repository first, preserve existing conventions, make the smallest coherent change, and verify the result before summarizing.",
-      "visibility" : "public"
-    },
-    {
-      "atoms" : [
+    "categories": [
         {
-          "end" : 18,
-          "id" : "atom-street",
-          "start" : 0
+            "id": "elbridge",
+            "name": "Elbridge",
+            "sortOrder": 10
         },
         {
-          "end" : 25,
-          "id" : "atom-unit",
-          "start" : 20
+            "id": "ai",
+            "name": "AI",
+            "sortOrder": 20
         },
         {
-          "end" : 36,
-          "id" : "atom-city",
-          "start" : 26
+            "id": "personal",
+            "name": "Personal",
+            "sortOrder": 30
         },
         {
-          "end" : 40,
-          "id" : "atom-state",
-          "start" : 38
+            "id": "prompt-reuse",
+            "name": "Prompt Reuse",
+            "sortOrder": 40
         },
         {
-          "end" : 46,
-          "id" : "atom-zip",
-          "start" : 41
+            "id": "instruction-editing",
+            "name": "Instruction Editing",
+            "sortOrder": 50
+        },
+        {
+            "id": "response-style",
+            "name": "Response Style",
+            "sortOrder": 60
+        },
+        {
+            "id": "workflow-commands",
+            "name": "Workflow Commands",
+            "sortOrder": 70
+        },
+        {
+            "id": "image-quality",
+            "name": "Image Quality",
+            "sortOrder": 80
         }
-      ],
-      "categoryId" : "personal",
-      "createdAt" : "2026-07-02T04:00:00Z",
-      "favorite" : false,
-      "id" : "personal-address-placeholder",
-      "summary" : "Home",
-      "tags" : [
-        "address"
-      ],
-      "title" : "Home",
-      "updatedAt" : "2026-07-02T19:16:44Z",
-      "value" : "20 Mechanic Square, No. 5\nMarblehead, MA 01945 ",
-      "visibility" : "local-only"
-    }
-  ],
-  "settings" : {
-    "defaultFontFamily" : "sans",
-    "defaultFontSize" : 18,
-    "defaultTextColor" : "brown-22",
-    "defaultTileColor" : "brown-13",
-    "paletteSource" : "Robert Brown Fabric Collection"
-  },
-  "updatedAt" : "2026-07-02T19:16:44Z",
-  "version" : 1
+    ],
+    "phrases": [
+        {
+            "categoryId": "elbridge",
+            "createdAt": "2026-07-02T04:00:00Z",
+            "favorite": true,
+            "id": "elbridge-hoa-members",
+            "summary": "HOA Members",
+            "tags": [
+                "hoa",
+                "members"
+            ],
+            "title": "HOA Members",
+            "updatedAt": "2026-07-02T04:00:00Z",
+            "value": "Greg Swalwell, Adam Maffei, and Stanton Yuwono",
+            "visibility": "private"
+        },
+        {
+            "categoryId": "ai",
+            "createdAt": "2026-07-02T04:00:00Z",
+            "favorite": true,
+            "id": "ai-agent-brief",
+            "summary": "Direct task brief",
+            "tags": [
+                "agent",
+                "instructions"
+            ],
+            "title": "Agent Brief",
+            "updatedAt": "2026-07-02T04:00:00Z",
+            "value": "Act as a pragmatic local-first coding agent. Inspect the repository first, preserve existing conventions, make the smallest coherent change, and verify the result before summarizing.",
+            "visibility": "public"
+        },
+        {
+            "atoms": [
+                {
+                    "end": 18,
+                    "id": "atom-street",
+                    "start": 0
+                },
+                {
+                    "end": 25,
+                    "id": "atom-unit",
+                    "start": 20
+                },
+                {
+                    "end": 36,
+                    "id": "atom-city",
+                    "start": 26
+                },
+                {
+                    "end": 40,
+                    "id": "atom-state",
+                    "start": 38
+                },
+                {
+                    "end": 46,
+                    "id": "atom-zip",
+                    "start": 41
+                }
+            ],
+            "categoryId": "personal",
+            "createdAt": "2026-07-02T04:00:00Z",
+            "favorite": false,
+            "id": "personal-address-placeholder",
+            "summary": "Home",
+            "tags": [
+                "address"
+            ],
+            "title": "Home",
+            "updatedAt": "2026-07-02T19:40:39Z",
+            "value": "20 Mechanic Square, No. 5\nMarblehead, MA 01945 ",
+            "visibility": "local-only"
+        },
+        {
+            "categoryId": "prompt-reuse",
+            "createdAt": "2026-07-02T21:07:02Z",
+            "favorite": false,
+            "id": "prompt-reuse-llmsum",
+            "tags": [
+                "llmsum"
+            ],
+            "title": "Session Meta-Prompt",
+            "updatedAt": "2026-07-02T21:07:02Z",
+            "value": "Create a concise, LLM-optimized meta-prompt that captures the effective instructions, constraints, decisions, and workflow patterns from this session so they can be reused in a new chat. Keep it generic and portable. Refer to external materials only with indirect labels such as \"the attached image,\" \"the reference document,\" or \"the provided file.\" Optimize for density, clarity, and faithful replication of the setup.",
+            "visibility": "private"
+        },
+        {
+            "categoryId": "prompt-reuse",
+            "createdAt": "2026-07-02T21:07:02Z",
+            "favorite": false,
+            "id": "prompt-reuse-llmmeta",
+            "tags": [
+                "llmmeta"
+            ],
+            "title": "Zero-Context Meta-Prompt",
+            "updatedAt": "2026-07-02T21:07:02Z",
+            "value": "Create a concise, high-performance meta-prompt for starting a new zero-context chat. Write directly for an LLM using imperative language, without conversational filler or explanation. Keep it generic and portable. Refer to external materials only with indirect labels such as \"the reference document,\" \"the provided image,\" or \"the attached file.\" Optimize for density, clarity, and reliability.",
+            "visibility": "private"
+        },
+        {
+            "categoryId": "prompt-reuse",
+            "createdAt": "2026-07-02T21:07:02Z",
+            "favorite": false,
+            "id": "prompt-reuse-subjectagnostic",
+            "tags": [
+                "subjectagnostic"
+            ],
+            "title": "Subject-Agnostic Prompt",
+            "updatedAt": "2026-07-02T21:07:02Z",
+            "value": "Refine this reusable prompt so it remains subject-agnostic across different use cases. Preserve the intended behavior, but remove or generalize details that depend on a specific subject, context, file, person, project, or conversation.",
+            "visibility": "private"
+        },
+        {
+            "categoryId": "prompt-reuse",
+            "createdAt": "2026-07-02T21:07:02Z",
+            "favorite": false,
+            "id": "prompt-reuse-samefiles",
+            "tags": [
+                "samefiles"
+            ],
+            "title": "Same Attachments",
+            "updatedAt": "2026-07-02T21:07:02Z",
+            "value": "Assume the same attachments or reference materials will be provided when this prompt is reused.",
+            "visibility": "private"
+        },
+        {
+            "categoryId": "instruction-editing",
+            "createdAt": "2026-07-02T21:07:02Z",
+            "favorite": false,
+            "id": "instruction-editing-llmformat",
+            "tags": [
+                "llmformat"
+            ],
+            "title": "Instruction Tightener",
+            "updatedAt": "2026-07-02T21:07:02Z",
+            "value": "Rewrite these instructions for concision and clarity without changing their meaning. Write for an LLM audience, using direct imperative language and removing human-oriented explanation or filler.",
+            "visibility": "private"
+        },
+        {
+            "categoryId": "instruction-editing",
+            "createdAt": "2026-07-02T21:07:02Z",
+            "favorite": false,
+            "id": "instruction-editing-noneg",
+            "tags": [
+                "noneg"
+            ],
+            "title": "Positive Requirements",
+            "updatedAt": "2026-07-02T21:07:02Z",
+            "value": "Rewrite the instructions using positive, action-oriented requirements. Define what to do, what to produce, and how to perform the task using direct affirmative language.",
+            "visibility": "private"
+        },
+        {
+            "categoryId": "instruction-editing",
+            "createdAt": "2026-07-02T21:07:02Z",
+            "favorite": false,
+            "id": "instruction-editing-nofiles",
+            "tags": [
+                "nofiles"
+            ],
+            "title": "Portable References",
+            "updatedAt": "2026-07-02T21:07:02Z",
+            "value": "Make the output self-contained and portable for reuse in a new context. Refer to provided materials indirectly, using labels such as \"the document,\" \"the subject,\" \"the image,\" or \"the reference material.\" Do not include filenames, system paths, chat-specific labels, or environment-specific references.",
+            "visibility": "private"
+        },
+        {
+            "categoryId": "response-style",
+            "createdAt": "2026-07-02T21:07:02Z",
+            "favorite": false,
+            "id": "response-style-nocontext",
+            "tags": [
+                "nocontext"
+            ],
+            "title": "Self-Contained Response",
+            "updatedAt": "2026-07-02T21:07:02Z",
+            "value": "Generate a self-contained response that can be understood without prior conversation context. Include any necessary assumptions or framing directly in the response, and avoid references to earlier messages.",
+            "visibility": "private"
+        },
+        {
+            "categoryId": "response-style",
+            "createdAt": "2026-07-02T21:07:02Z",
+            "favorite": false,
+            "id": "response-style-nointro",
+            "tags": [
+                "nointro"
+            ],
+            "title": "No Intro",
+            "updatedAt": "2026-07-02T21:07:02Z",
+            "value": "Provide only the requested output. Omit introductions, acknowledgments, setup commentary, and closing remarks.",
+            "visibility": "private"
+        },
+        {
+            "categoryId": "response-style",
+            "createdAt": "2026-07-02T21:07:02Z",
+            "favorite": false,
+            "id": "response-style-ptext",
+            "tags": [
+                "ptext"
+            ],
+            "title": "Prose Only",
+            "updatedAt": "2026-07-02T21:07:02Z",
+            "value": "Respond in polished prose only, with no lists, tables, headers, or bullet points. Write naturally for spoken readability.",
+            "visibility": "private"
+        },
+        {
+            "categoryId": "workflow-commands",
+            "createdAt": "2026-07-02T21:07:02Z",
+            "favorite": false,
+            "id": "workflow-commands-llmapprove",
+            "tags": [
+                "llmapprove"
+            ],
+            "title": "Proceed Approval",
+            "updatedAt": "2026-07-02T21:07:02Z",
+            "value": "I approve the proposed action. Proceed.",
+            "visibility": "private"
+        },
+        {
+            "categoryId": "workflow-commands",
+            "createdAt": "2026-07-02T21:07:02Z",
+            "favorite": false,
+            "id": "workflow-commands-llmlearn",
+            "tags": [
+                "llmlearn"
+            ],
+            "title": "Durable Learnings",
+            "updatedAt": "2026-07-02T21:07:02Z",
+            "value": "Review this session for durable learnings worth preserving: user preferences, reusable instructions, architecture decisions, debugging insights, project knowledge, workflow improvements, documentation updates, tests, runbooks, or backlog items. Propose exact additions or changes. Exclude temporary, speculative, redundant, or low-value details.",
+            "visibility": "private"
+        },
+        {
+            "categoryId": "workflow-commands",
+            "createdAt": "2026-07-02T21:07:02Z",
+            "favorite": false,
+            "id": "workflow-commands-bfwf",
+            "tags": [
+                "bfwf"
+            ],
+            "title": "Bullfinch Watch Folder",
+            "updatedAt": "2026-07-02T21:07:02Z",
+            "value": "Add this material to the Bullfinch Watch Folder in Google Drive. Include a concise note explaining the relevant context, source, and intended follow-up.",
+            "visibility": "private"
+        },
+        {
+            "categoryId": "workflow-commands",
+            "createdAt": "2026-07-02T21:07:02Z",
+            "favorite": false,
+            "id": "workflow-commands-compush",
+            "tags": [
+                "compush"
+            ],
+            "title": "Commit, Push, Merge",
+            "updatedAt": "2026-07-02T21:07:02Z",
+            "value": "Commit all changes and push them to the remote. If working on a branch other than main, merge the branch into main after validation, push main, then delete the merged branch locally and remotely.",
+            "visibility": "private"
+        },
+        {
+            "categoryId": "image-quality",
+            "createdAt": "2026-07-02T21:07:02Z",
+            "favorite": false,
+            "id": "image-quality-llmnoise",
+            "tags": [
+                "llmnoise"
+            ],
+            "title": "Realistic Texture",
+            "updatedAt": "2026-07-02T21:07:02Z",
+            "value": "Avoid digital AI artifacts, moire patterns, pixel jitter, procedural noise grids, and repetitive synthetic textures. Ensure all textures, surfaces, and visual details match the physical realism of the requested medium, using organic variation, natural lens behavior, or authentic material-specific marks.",
+            "visibility": "private"
+        }
+    ],
+    "settings": {
+        "defaultFontFamily": "serif",
+        "defaultFontSize": 21,
+        "defaultTextColor": "brown-22",
+        "defaultTileColor": "brown-13",
+        "paletteSource": "Robert Brown Fabric Collection"
+    },
+    "updatedAt": "2026-07-02T21:07:02Z",
+    "version": 1
 }
