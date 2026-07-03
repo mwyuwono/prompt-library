@@ -85,6 +85,8 @@ struct ContentView: View {
     @EnvironmentObject private var store: CorpusStore
     @FocusState private var searchFocused: Bool
     @State private var showingSettings = false
+    @State private var settingsPanelOffset = CGSize.zero
+    @State private var settingsPanelDragOffset = CGSize.zero
     @State private var savedWindowFrame: NSRect?
 
     private var cardWidth: CGFloat {
@@ -110,11 +112,6 @@ struct ContentView: View {
                     Label("Settings", systemImage: "slider.horizontal.3")
                 }
                 .buttonStyle(.glass)
-                // Popover (not sheet) so clicking outside dismisses it — no Done button needed.
-                .popover(isPresented: $showingSettings) {
-                    SettingsEditor()
-                        .environmentObject(store)
-                }
             }
 
             ScrollView {
@@ -156,7 +153,7 @@ struct ContentView: View {
             .padding(.top, 10)
         }
         .padding(14)
-        .background(Color(nsColor: .windowBackgroundColor))
+        .background(store.gridBackgroundColor)
         .onAppear { store.load() }
         .onExitCommand {
             if store.expandedPhraseID != nil {
@@ -170,6 +167,7 @@ struct ContentView: View {
         .onKeyPress(.upArrow) { moveSelection(-1) }
         .onKeyPress(.leftArrow) { moveSelection(-1) }
         .onKeyPress(.space) {
+            guard canUseGridKeyboard else { return .ignored }
             if let phrase = store.selectedPhrase { store.expandedPhraseID = phrase.id }
             return .handled
         }
@@ -190,6 +188,29 @@ struct ContentView: View {
         .overlay {
             if let phrase = store.expandedPhrase {
                 ExpandedOverlayView(store: store, phrase: phrase)
+            }
+        }
+        .overlay(alignment: .topTrailing) {
+            if showingSettings {
+                FloatingSettingsPanel(
+                    onClose: { showingSettings = false },
+                    onDragEnded: {
+                        settingsPanelOffset.width += settingsPanelDragOffset.width
+                        settingsPanelOffset.height += settingsPanelDragOffset.height
+                        settingsPanelDragOffset = .zero
+                    },
+                    dragOffset: $settingsPanelDragOffset
+                ) {
+                    SettingsEditor()
+                        .environmentObject(store)
+                }
+                .offset(
+                    x: settingsPanelOffset.width + settingsPanelDragOffset.width,
+                    y: settingsPanelOffset.height + settingsPanelDragOffset.height
+                )
+                .padding(.top, 54)
+                .padding(.trailing, 8)
+                .zIndex(2)
             }
         }
         .onChange(of: store.expandedPhraseID) { _, newValue in
@@ -244,18 +265,20 @@ struct ContentView: View {
     private var categoryTabs: some View {
         HStack(spacing: 6) {
             ForEach(store.tabs, id: \.id) { tab in
-                if store.activeCategoryID == tab.id {
-                    Button(tab.name) { store.activeCategoryID = tab.id }
-                        .buttonStyle(.glassProminent)
-                } else {
-                    Button(tab.name) { store.activeCategoryID = tab.id }
-                        .buttonStyle(.glass)
+                CategoryTabButton(
+                    title: tab.name,
+                    isSelected: store.activeCategoryID == tab.id,
+                    background: store.categoryTabBackground(for: tab),
+                    textColor: store.categoryTabTextColor(for: tab)
+                ) {
+                    store.activeCategoryID = tab.id
                 }
             }
         }
     }
 
     private func moveSelection(_ delta: Int) -> KeyPress.Result {
+        guard canUseGridKeyboard else { return .ignored }
         store.moveSelection(delta)
         return .handled
     }
@@ -264,6 +287,85 @@ struct ContentView: View {
         if let phrase = store.selectedPhrase {
             store.copy(phrase)
         }
+    }
+
+    private var isEditingText: Bool {
+        return NSApp.keyWindow?.firstResponder is NSTextView
+    }
+
+    private var canUseGridKeyboard: Bool {
+        !showingSettings && store.editingPhrase == nil && !searchFocused && !isEditingText
+    }
+}
+
+struct CategoryTabButton: View {
+    let title: String
+    let isSelected: Bool
+    let background: Color
+    let textColor: Color
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Text(title)
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(isSelected ? textColor : .primary)
+                .lineLimit(1)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 7)
+                .background {
+                    Capsule()
+                        .fill(isSelected ? background.opacity(0.78) : Color(nsColor: .windowBackgroundColor).opacity(0.18))
+                        .background(.ultraThinMaterial, in: Capsule())
+                }
+                .overlay {
+                    Capsule()
+                        .stroke(isSelected ? textColor.opacity(0.32) : Color.primary.opacity(0.12), lineWidth: 1)
+                }
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+struct FloatingSettingsPanel<Content: View>: View {
+    let onClose: () -> Void
+    let onDragEnded: () -> Void
+    @Binding var dragOffset: CGSize
+    @ViewBuilder let content: Content
+
+    var body: some View {
+        VStack(spacing: 0) {
+            HStack(spacing: 8) {
+                Image(systemName: "slider.horizontal.3")
+                    .foregroundStyle(.secondary)
+                Text("Settings")
+                    .font(.headline)
+                Spacer()
+                Button(action: onClose) {
+                    Image(systemName: "xmark")
+                        .frame(width: 28, height: 28)
+                }
+                .buttonStyle(.plain)
+                .help("Close")
+            }
+            .padding(.horizontal, 14)
+            .padding(.vertical, 10)
+            .contentShape(Rectangle())
+            .gesture(
+                DragGesture()
+                    .onChanged { dragOffset = $0.translation }
+                    .onEnded { _ in onDragEnded() }
+            )
+
+            Divider()
+            content
+        }
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 14))
+        .overlay(
+            RoundedRectangle(cornerRadius: 14)
+                .stroke(Color.primary.opacity(0.12), lineWidth: 1)
+        )
+        .shadow(color: .black.opacity(0.28), radius: 24, y: 12)
     }
 }
 
@@ -618,22 +720,14 @@ struct SettingsEditor: View {
                         step: 4
                     )
                 }
-                ColorSwatchField(
-                    title: "Default background",
-                    selection: settings.defaultTileColor,
-                    colors: store.palette.colors,
-                    isEditing: colorEditingBinding(for: .background)
-                )
-                ColorSwatchField(
-                    title: "Default text",
-                    selection: settings.defaultTextColor,
-                    colors: store.palette.colors,
-                    isEditing: colorEditingBinding(for: .text)
-                )
                 Picker("Font", selection: settings.defaultFontFamily) {
                     Text("Sans").tag("sans")
                     Text("Serif").tag("serif")
                 }
+                Toggle("Close card automatically after copying", isOn: Binding(
+                    get: { settings.wrappedValue.closeCardOnCopy ?? Settings.defaultCloseCardOnCopy },
+                    set: { settings.wrappedValue.closeCardOnCopy = $0 }
+                ))
                 Button {
                     copyCorpusPath()
                 } label: {
@@ -641,6 +735,75 @@ struct SettingsEditor: View {
                 }
                 .buttonStyle(.glass)
                 .help("Copies the path to quick-text.json, for handing off to a coding agent for bulk edits.")
+
+                Section("Colors") {
+                    ColorSwatchField(
+                        title: "Default tile background",
+                        selection: settings.defaultTileColor,
+                        colors: store.palette.colors,
+                        isEditing: colorEditingBinding(for: .background)
+                    )
+                    ColorSwatchField(
+                        title: "Default tile text",
+                        selection: settings.defaultTextColor,
+                        colors: store.palette.colors,
+                        isEditing: colorEditingBinding(for: .text)
+                    )
+                    ColorSwatchField(
+                        title: "Highlight",
+                        selection: Binding(
+                            get: { settings.wrappedValue.highlightColor ?? Settings.defaultHighlightColor },
+                            set: { settings.wrappedValue.highlightColor = $0 }
+                        ),
+                        colors: store.palette.colors,
+                        isEditing: colorEditingBinding(for: .highlight)
+                    )
+                    .help("Atom-chip selection, copy pulses, and hover tints on both atomic and plain cards.")
+                    HStack(spacing: 8) {
+                        ColorSwatchField(
+                            title: "Grid background",
+                            selection: Binding(
+                                get: { store.corpus.settings.gridBackgroundColor ?? "" },
+                                set: { settings.wrappedValue.gridBackgroundColor = $0 }
+                            ),
+                            colors: store.palette.colors,
+                            isEditing: colorEditingBinding(for: .gridBackground)
+                        )
+                        if store.corpus.settings.gridBackgroundColor != nil {
+                            Button("Use system default") {
+                                settings.wrappedValue.gridBackgroundColor = nil
+                            }
+                            .buttonStyle(.glass)
+                        }
+                    }
+                    ColorSwatchField(
+                        title: "Expanded card background",
+                        selection: Binding(
+                            get: { settings.wrappedValue.expandedCardBackgroundColor ?? Settings.defaultExpandedCardBackgroundColor },
+                            set: { settings.wrappedValue.expandedCardBackgroundColor = $0 }
+                        ),
+                        colors: store.palette.colors,
+                        isEditing: colorEditingBinding(for: .expandedCardBackground)
+                    )
+                    ColorSwatchField(
+                        title: "Expanded card text",
+                        selection: Binding(
+                            get: { settings.wrappedValue.expandedCardTextColor ?? Settings.defaultExpandedCardTextColor },
+                            set: { settings.wrappedValue.expandedCardTextColor = $0 }
+                        ),
+                        colors: store.palette.colors,
+                        isEditing: colorEditingBinding(for: .expandedCardText)
+                    )
+                    ColorSwatchField(
+                        title: "Expanded card chip",
+                        selection: Binding(
+                            get: { settings.wrappedValue.expandedCardChipColor ?? Settings.defaultExpandedCardChipColor },
+                            set: { settings.wrappedValue.expandedCardChipColor = $0 }
+                        ),
+                        colors: store.palette.colors,
+                        isEditing: colorEditingBinding(for: .expandedCardChip)
+                    )
+                }
 
                 Section("Categories") {
                     CategoryManagerSection()
@@ -766,6 +929,11 @@ struct CategoryRow: View {
 enum ColorEditTarget {
     case background
     case text
+    case highlight
+    case gridBackground
+    case expandedCardBackground
+    case expandedCardText
+    case expandedCardChip
 }
 
 /// Collapsed color field: shows the current swatch, expands into a `SwatchPicker`
@@ -779,6 +947,7 @@ struct ColorSwatchField: View {
     @Binding var isEditing: Bool
 
     private var currentColor: PaletteColor? { colors.first { $0.id == selection } }
+    private var isCustomHex: Bool { PaletteColor.isHex(selection) }
 
     var body: some View {
         Button {
@@ -786,12 +955,12 @@ struct ColorSwatchField: View {
         } label: {
             HStack(spacing: 8) {
                 Circle()
-                    .fill(currentColor.map { Color(hex: $0.hex) } ?? Color.secondary)
+                    .fill(isCustomHex ? Color(hex: selection) : (currentColor.map { Color(hex: $0.hex) } ?? Color.secondary))
                     .frame(width: 18, height: 18)
                     .overlay(Circle().stroke(Color.black.opacity(0.18), lineWidth: 1))
                 Text(title)
                 Spacer()
-                Text(currentColor?.name ?? "Select")
+                Text(isCustomHex ? selection.uppercased() : (currentColor?.name ?? "Select"))
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Image(systemName: "chevron.down")
@@ -813,6 +982,8 @@ struct SwatchPicker: View {
     let title: String
     @Binding var selection: String
     let colors: [PaletteColor]
+
+    @State private var hexDraft: String = ""
 
     private let columns = [GridItem(.adaptive(minimum: 28), spacing: 8)]
 
@@ -840,7 +1011,49 @@ struct SwatchPicker: View {
                     .help(item.name)
                 }
             }
+            Divider()
+            Text("Custom hex").font(.caption).foregroundStyle(.secondary)
+            HStack(spacing: 8) {
+                Circle()
+                    .fill(PaletteColor.isHex(hexDraft) ? Color(hex: hexDraft) : Color.secondary.opacity(0.2))
+                    .frame(width: 20, height: 20)
+                    .overlay(Circle().stroke(Color.black.opacity(0.18), lineWidth: 1))
+                TextField("#RRGGBB", text: $hexDraft)
+                    .textFieldStyle(.plain)
+                    .font(.system(.caption, design: .monospaced))
+                    .onSubmit(applyHex)
+                Button("Apply", action: applyHex)
+                    .buttonStyle(.glass)
+                    .disabled(!PaletteColor.isHex(hexDraft))
+            }
+            Divider()
+            // Opens the system color panel — palettes, crayons, sliders, and the
+            // magnifier/eyedropper — as another way in, alongside the presets above.
+            ColorPicker("System color panel", selection: systemPickerBinding, supportsOpacity: false)
+                .font(.caption)
         }
+        .onAppear {
+            if PaletteColor.isHex(selection) { hexDraft = selection }
+        }
+    }
+
+    private var systemPickerBinding: Binding<Color> {
+        Binding(
+            get: {
+                if PaletteColor.isHex(selection) { return Color(hex: selection) }
+                return colors.first { $0.id == selection }.map { Color(hex: $0.hex) } ?? Color.secondary
+            },
+            set: { newColor in
+                let hex = newColor.hexString
+                selection = hex
+                hexDraft = hex
+            }
+        )
+    }
+
+    private func applyHex() {
+        guard PaletteColor.isHex(hexDraft) else { return }
+        selection = hexDraft.uppercased()
     }
 }
 
@@ -861,6 +1074,10 @@ struct ExpandedOverlayView: View {
                 fontSize: store.corpus.settings.defaultFontSize,
                 fontFamily: store.corpus.settings.defaultFontFamily,
                 isCopied: store.copiedPhraseID == phrase.id,
+                background: store.expandedCardBackgroundColor,
+                textColor: store.expandedCardTextColor,
+                chipColor: store.expandedCardChipColor,
+                highlightColor: store.highlightColor,
                 onCopyAtom: { atom in store.copyAtom(atom, in: phrase) },
                 onCopySelection: { atoms in store.copyAtomSelection(atoms, in: phrase) },
                 onCopyFull: { store.copyFullFromExpandedCard(phrase) },
@@ -883,6 +1100,12 @@ struct ExpandedCardView: View {
     let fontSize: Int
     let fontFamily: String
     let isCopied: Bool
+    // Defaulted so #Preview call sites below don't need to specify a full
+    // palette; ExpandedOverlayView passes the live, settings-resolved values.
+    var background: Color = Color(hex: Settings.defaultExpandedCardBackgroundColor)
+    var textColor: Color = Color(hex: Settings.defaultExpandedCardTextColor)
+    var chipColor: Color = Color(hex: Settings.defaultExpandedCardChipColor)
+    var highlightColor: Color = Color(hex: Settings.defaultHighlightColor)
     let onCopyAtom: (Atom) -> Void
     let onCopySelection: ([Atom]) -> Void
     let onCopyFull: () -> Void
@@ -894,21 +1117,32 @@ struct ExpandedCardView: View {
     @State private var isHoveringCopyIcon = false
     @State private var isHoveringCloseIcon = false
     @State private var selectedAtomIDs: Set<String> = []
+    @State private var singleCopiedAtomID: String?
     @State private var shiftReleaseMonitor: Any?
     @State private var isPulsingAllAtoms = false
+    @State private var isPulsingCardBackground = false
 
     private var hasAtoms: Bool { !(phrase.atoms ?? []).isEmpty }
 
-    private static let background = Color(hex: "#22201B")
-    private static let textColor = Color(hex: "#F4EDE0")
-    private static let chipColor = Color(hex: "#F1E6D3")
-    private static let chipHoverColor = Color(hex: "#E2725B")
+    /// True over the same area that reveals the copy icon (hovering the card but
+    /// not an atom chip/gap) — a tap right now copies the whole card, so the
+    /// background gets a subtle tint to signal that instead of leaving it
+    /// ambiguous with the dead space between chips.
+    private var isHoveringCopyAllZone: Bool { isHoveringCard && !isHoveringAtomsBlock }
+
+    private var showsCopyAllTint: Bool { isHoveringCopyAllZone || isAllAtomsMultiselected }
+
+    private var isAllAtomsMultiselected: Bool {
+        guard hasAtoms else { return false }
+        let atomIDs = Set((phrase.atoms ?? []).map(\.id))
+        return selectedAtomIDs == atomIDs
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 22) {
             Text(phrase.title.uppercased())
                 .font(.callout.bold())
-                .foregroundStyle(Self.textColor.opacity(0.6))
+                .foregroundStyle(textColor.opacity(0.6))
 
             GeometryReader { geometry in
                 ScrollView {
@@ -924,11 +1158,19 @@ struct ExpandedCardView: View {
         }
         .padding(46)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-        .background(Self.background)
+        .background(
+            ZStack {
+                isPulsingCardBackground ? highlightColor : background
+                if showsCopyAllTint {
+                    highlightColor.opacity(0.06)
+                }
+            }
+            .animation(.easeInOut(duration: 0.25), value: showsCopyAllTint)
+        )
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .shadow(color: .black.opacity(0.4), radius: 40, y: 16)
         .overlay(alignment: .topTrailing) { iconsOverlay }
-        .overlay { CopiedBadge(isVisible: isCopied, color: Self.background) }
+        .overlay { CopiedBadge(isVisible: isCopied, color: background) }
         .contentShape(Rectangle())
         .onHover { hovering in isHoveringCard = hovering }
         .onTapGesture { copyFull() }
@@ -962,7 +1204,7 @@ struct ExpandedCardView: View {
                             // text doesn't shift vertically relative to neighboring chips.
                             Text(segment.text)
                                 .font(bodyFont)
-                                .foregroundStyle(Self.textColor)
+                                .foregroundStyle(textColor)
                                 .frame(minHeight: 44)
                         }
                     }
@@ -1006,7 +1248,7 @@ struct ExpandedCardView: View {
     private func iconButton(systemName: String, isHovering: Bool, action: @escaping () -> Void, onHoverChange: @escaping (Bool) -> Void) -> some View {
         Image(systemName: systemName)
             .font(.system(size: 26, weight: .semibold))
-            .foregroundStyle(isHovering ? Self.chipHoverColor : Self.textColor)
+            .foregroundStyle(isHovering ? highlightColor : textColor)
             .frame(width: 44, height: 44)
             .contentShape(Rectangle())
             .onHover(perform: onHoverChange)
@@ -1017,7 +1259,8 @@ struct ExpandedCardView: View {
     /// wraps internally instead of running off the card uncut — FlowLayout only
     /// wraps between subviews, so a single Text needs its own width ceiling.
     private func atomChip(_ segment: LineSegment, maxWidth: CGFloat) -> some View {
-        let isHighlighted = selectedAtomIDs.contains(segment.id) || hoveredAtomID == segment.id || isPulsingAllAtoms
+        let isHighlighted = selectedAtomIDs.contains(segment.id) || hoveredAtomID == segment.id
+            || isPulsingAllAtoms || singleCopiedAtomID == segment.id || isHoveringCopyAllZone
         return Button { handleAtomTap(segment.atom!) } label: {
             Text(segment.text)
                 .multilineTextAlignment(.leading)
@@ -1029,8 +1272,8 @@ struct ExpandedCardView: View {
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
             .frame(minHeight: 44)
-            .background(isHighlighted ? Self.chipHoverColor : Self.chipColor)
-            .foregroundStyle(isHighlighted ? .white : Self.background)
+            .background(isHighlighted ? highlightColor : chipColor)
+            .foregroundStyle(isHighlighted ? .white : background)
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .onHover { hovering in hoveredAtomID = hovering ? segment.id : nil }
     }
@@ -1046,17 +1289,36 @@ struct ExpandedCardView: View {
             guard !selected.isEmpty else { return }
             onCopySelection(selected)
         } else {
-            selectedAtomIDs = [atom.id]
+            selectedAtomIDs = []
+            flashSingleCopiedAtom(atom.id)
             onCopyAtom(atom)
         }
     }
 
+    /// Single-atom copy highlight: unlike shift-multiselect (which persists until
+    /// shift releases), this should pop and fade back on its own, matching the
+    /// full-card pulse's timing instead of sticking until the next tap.
+    private func flashSingleCopiedAtom(_ id: String) {
+        withAnimation(.easeOut(duration: 0.12)) { singleCopiedAtomID = id }
+        DispatchQueue.main.asyncAfter(deadline: .now() + CorpusStore.copyFeedbackDuration) {
+            guard singleCopiedAtomID == id else { return }
+            withAnimation(.easeOut(duration: 0.22)) { singleCopiedAtomID = nil }
+        }
+    }
+
     /// Full-card copy (background tap or the copy icon): pulses every atom chip
-    /// to the highlight color in sync with the "Copied" badge, since the whole
-    /// value — including every atom's text — just got copied.
+    /// (or, for plain cards with no chips, the whole card background) to the
+    /// highlight color in sync with the "Copied" badge, since the whole value —
+    /// including every atom's text — just got copied.
     private func copyFull() {
         onCopyFull()
-        guard hasAtoms else { return }
+        guard hasAtoms else {
+            withAnimation(.easeOut(duration: 0.12)) { isPulsingCardBackground = true }
+            DispatchQueue.main.asyncAfter(deadline: .now() + CorpusStore.copyFeedbackDuration) {
+                withAnimation(.easeOut(duration: 0.22)) { isPulsingCardBackground = false }
+            }
+            return
+        }
         withAnimation(.easeOut(duration: 0.12)) { isPulsingAllAtoms = true }
         DispatchQueue.main.asyncAfter(deadline: .now() + CorpusStore.copyFeedbackDuration) {
             withAnimation(.easeOut(duration: 0.22)) { isPulsingAllAtoms = false }
@@ -1130,22 +1392,46 @@ struct LineSegment: Identifiable {
 struct FlowLayout: Layout {
     var spacing: CGFloat = 4
 
+    /// A subview whose natural single-line width fits the container flows inline
+    /// like any other token (short atom chips, words). One whose natural width
+    /// would overflow — a long atom chip — is measured at the container's width
+    /// instead (so it reports its true wrapped height) and always starts on its
+    /// own line, so its wrapped block doesn't sit half-inline with neighbors.
+    private struct Item {
+        let size: CGSize
+        let startsNewLine: Bool
+    }
+
+    private func items(for subviews: Subviews, maxWidth: CGFloat) -> [Item] {
+        subviews.map { subview in
+            let natural = subview.sizeThatFits(.unspecified)
+            guard natural.width > maxWidth else { return Item(size: natural, startsNewLine: false) }
+            let wrapped = subview.sizeThatFits(ProposedViewSize(width: maxWidth, height: nil))
+            return Item(size: wrapped, startsNewLine: true)
+        }
+    }
+
     func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
         let maxWidth = proposal.width ?? .infinity
         var width: CGFloat = 0
         var height: CGFloat = 0
         var lineWidth: CGFloat = 0
         var lineHeight: CGFloat = 0
-        for subview in subviews {
-            let size = subview.sizeThatFits(.unspecified)
-            if lineWidth > 0, lineWidth + size.width > maxWidth {
+        for item in items(for: subviews, maxWidth: maxWidth) {
+            if lineWidth > 0, item.startsNewLine || lineWidth + item.size.width > maxWidth {
                 width = max(width, lineWidth)
                 height += lineHeight + spacing
                 lineWidth = 0
                 lineHeight = 0
             }
-            lineWidth += size.width + spacing
-            lineHeight = max(lineHeight, size.height)
+            lineWidth += item.size.width + spacing
+            lineHeight = max(lineHeight, item.size.height)
+            if item.startsNewLine {
+                width = max(width, lineWidth)
+                height += lineHeight + spacing
+                lineWidth = 0
+                lineHeight = 0
+            }
         }
         width = max(width, lineWidth)
         height += lineHeight
@@ -1156,16 +1442,20 @@ struct FlowLayout: Layout {
         var x = bounds.minX
         var y = bounds.minY
         var lineHeight: CGFloat = 0
-        for subview in subviews {
-            let size = subview.sizeThatFits(.unspecified)
-            if x > bounds.minX, x + size.width > bounds.maxX {
+        for (subview, item) in zip(subviews, items(for: subviews, maxWidth: bounds.width)) {
+            if x > bounds.minX, item.startsNewLine || x + item.size.width > bounds.maxX {
                 x = bounds.minX
                 y += lineHeight + spacing
                 lineHeight = 0
             }
-            subview.place(at: CGPoint(x: x, y: y), proposal: ProposedViewSize(size))
-            x += size.width + spacing
-            lineHeight = max(lineHeight, size.height)
+            subview.place(at: CGPoint(x: x, y: y), proposal: ProposedViewSize(item.size))
+            x += item.size.width + spacing
+            lineHeight = max(lineHeight, item.size.height)
+            if item.startsNewLine {
+                x = bounds.minX
+                y += lineHeight + spacing
+                lineHeight = 0
+            }
         }
     }
 }
@@ -1305,10 +1595,15 @@ final class CorpusStore: ObservableObject {
         expandedPhraseID = nil
     }
 
+    /// Whether copying from the expanded card should auto-close it, per user setting.
+    private var closesCardOnCopy: Bool {
+        corpus.settings.closeCardOnCopy ?? Settings.defaultCloseCardOnCopy
+    }
+
     func copyAtom(_ atom: Atom, in phrase: Phrase) {
         let characters = Array(phrase.value)
         guard atom.start >= 0, atom.end <= characters.count, atom.end > atom.start else { return }
-        copyText(String(characters[atom.start..<atom.end]), feedbackFor: phrase.id, autoClose: true)
+        copyText(String(characters[atom.start..<atom.end]), feedbackFor: phrase.id, autoClose: closesCardOnCopy)
     }
 
     /// Shift-multiselect copy: concatenates the selected atoms in document order
@@ -1327,7 +1622,7 @@ final class CorpusStore: ObservableObject {
     }
 
     func copyFullFromExpandedCard(_ phrase: Phrase) {
-        copyText(phrase.value, feedbackFor: phrase.id, autoClose: true)
+        copyText(phrase.value, feedbackFor: phrase.id, autoClose: closesCardOnCopy)
     }
 
     private func copyText(_ text: String, feedbackFor phraseID: String, autoClose: Bool) {
@@ -1425,8 +1720,39 @@ final class CorpusStore: ObservableObject {
 
     func color(for id: String?) -> Color {
         let fallback = corpus.settings.defaultTileColor
-        let hex = palette.colors.first { $0.id == (id ?? fallback) }?.hex ?? "#D2BEB1"
+        let value = id ?? fallback
+        if PaletteColor.isHex(value) { return Color(hex: value) }
+        let hex = palette.colors.first { $0.id == value }?.hex ?? "#D2BEB1"
         return Color(hex: hex)
+    }
+
+    /// The one accent used everywhere something is "selected/about to be
+    /// copied": atom-chip highlight, full-card copy pulse, and hover tints —
+    /// on both atomic and non-atomic cards.
+    var highlightColor: Color { color(for: corpus.settings.highlightColor ?? Settings.defaultHighlightColor) }
+    var expandedCardBackgroundColor: Color { color(for: corpus.settings.expandedCardBackgroundColor ?? Settings.defaultExpandedCardBackgroundColor) }
+    var expandedCardTextColor: Color { color(for: corpus.settings.expandedCardTextColor ?? Settings.defaultExpandedCardTextColor) }
+    var expandedCardChipColor: Color { color(for: corpus.settings.expandedCardChipColor ?? Settings.defaultExpandedCardChipColor) }
+
+    /// Unlike the other card colors, nil here means "follow the system window
+    /// background" rather than a fixed hex default.
+    var gridBackgroundColor: Color {
+        guard let value = corpus.settings.gridBackgroundColor else { return Color(nsColor: .windowBackgroundColor) }
+        return color(for: value)
+    }
+
+    func categoryTabBackground(for tab: Category) -> Color {
+        if let category = category(for: tab.id) {
+            return color(for: category.color ?? corpus.settings.defaultTileColor)
+        }
+        return color(for: corpus.settings.defaultTileColor)
+    }
+
+    func categoryTabTextColor(for tab: Category) -> Color {
+        if let category = category(for: tab.id) {
+            return color(for: category.textColor ?? corpus.settings.defaultTextColor)
+        }
+        return color(for: corpus.settings.defaultTextColor)
     }
 
     func addCategory(name: String) {
@@ -1541,8 +1867,25 @@ struct Settings: Codable {
     var paletteSource: String
     // Optional so existing corpus.json files without this key still decode.
     var cardWidth: Double? = nil
+    // Optional so existing corpus.json files without this key still decode.
+    // Whether copying from the expanded card auto-closes it.
+    var closeCardOnCopy: Bool? = nil
+
+    // Optional so existing corpus.json files without these keys still decode.
+    // Each stores either a palette swatch id or a literal "#RRGGBB" hex string
+    // (see PaletteColor.isHex). nil falls back to the matching default below.
+    var highlightColor: String? = nil
+    var gridBackgroundColor: String? = nil
+    var expandedCardBackgroundColor: String? = nil
+    var expandedCardTextColor: String? = nil
+    var expandedCardChipColor: String? = nil
 
     static let defaultCardWidth: Double = 164
+    static let defaultCloseCardOnCopy = false
+    static let defaultHighlightColor = "#E2725B"
+    static let defaultExpandedCardBackgroundColor = "#22201B"
+    static let defaultExpandedCardTextColor = "#F4EDE0"
+    static let defaultExpandedCardChipColor = "#F1E6D3"
 }
 
 struct Category: Codable, Identifiable {
@@ -1600,6 +1943,13 @@ struct PaletteColor: Codable, Identifiable {
     var id: String
     var name: String
     var hex: String
+
+    /// Color-selection fields (phrase/category/settings) store either a palette
+    /// swatch id or a literal "#RRGGBB" hex string directly — this tells the two apart.
+    static func isHex(_ value: String) -> Bool {
+        guard value.hasPrefix("#"), value.count == 7 else { return false }
+        return value.dropFirst().allSatisfy(\.isHexDigit)
+    }
 }
 
 extension JSONDecoder {
@@ -1642,6 +1992,16 @@ extension Color {
         let green = Double((int >> 8) & 0xff) / 255
         let blue = Double(int & 0xff) / 255
         self.init(red: red, green: green, blue: blue)
+    }
+
+    /// For round-tripping a `ColorPicker` selection (including the system color
+    /// panel's palettes/crayons/sliders tabs) back into our hex-string storage.
+    var hexString: String {
+        let rgb = NSColor(self).usingColorSpace(.deviceRGB) ?? NSColor(self)
+        let r = Int((rgb.redComponent * 255).rounded())
+        let g = Int((rgb.greenComponent * 255).rounded())
+        let b = Int((rgb.blueComponent * 255).rounded())
+        return String(format: "#%02X%02X%02X", r, g, b)
     }
 }
 
