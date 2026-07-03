@@ -2,13 +2,6 @@
   "categories" : [
     {
       "color" : "brown-20",
-      "id" : "elbridge",
-      "name" : "Elbridge",
-      "sortOrder" : 10,
-      "textColor" : "#E8DED8"
-    },
-    {
-      "color" : "brown-20",
       "id" : "personal",
       "name" : "Personal Details",
       "sortOrder" : 30,
@@ -47,6 +40,13 @@
       "name" : "Bullfinch",
       "sortOrder" : 90,
       "textColor" : "#E8DED8"
+    },
+    {
+      "color" : "brown-19",
+      "id" : "elbridge",
+      "name" : "Elbridge",
+      "sortOrder" : 100,
+      "textColor" : "brown-07"
     }
   ],
   "phrases" : [
@@ -78,7 +78,7 @@
         "members"
       ],
       "title" : "HOA Members",
-      "updatedAt" : "2026-07-02T22:26:09Z",
+      "updatedAt" : "2026-07-03T05:42:28Z",
       "value" : "Greg Swalwell, Adam Maffei, and Stanton Yuwono",
       "visibility" : "private"
     },
@@ -114,7 +114,7 @@
         "address"
       ],
       "title" : "Elbridge Address",
-      "updatedAt" : "2026-07-03T00:58:25Z",
+      "updatedAt" : "2026-07-03T05:42:36Z",
       "value" : "The Elbridge Condominium\n20 Mechanic Square\n50 Elm Street\nMarblehead, MA 01945",
       "visibility" : "private"
     },
@@ -141,7 +141,7 @@
         "draft"
       ],
       "title" : "Trustee Draft",
-      "updatedAt" : "2026-07-02T22:28:07Z",
+      "updatedAt" : "2026-07-03T05:42:50Z",
       "value" : "Draft a concise trustee-facing Elbridge message to Greg, Adam, and Stanton. Keep it action-oriented, with clear asks and no extra explanation. Use gmail.",
       "visibility" : "private"
     },
@@ -156,7 +156,7 @@
         "sources"
       ],
       "title" : "Consult governing documents",
-      "updatedAt" : "2026-07-02T22:28:22Z",
+      "updatedAt" : "2026-07-03T05:42:44Z",
       "value" : "Ground this in the Elbridge Master Deed and Declaration of Trust before answering. Include source links for any Drive files used.",
       "visibility" : "private"
     },
@@ -171,7 +171,7 @@
         "planning"
       ],
       "title" : "Review assessment drivers",
-      "updatedAt" : "2026-07-02T22:28:52Z",
+      "updatedAt" : "2026-07-03T05:42:56Z",
       "value" : "Summarize Elbridge near-term assessment drivers from Bullfinch: claim repairs, HVAC, railings, landscaping, signage, security cameras, fire\/life-safety, gutters, and developer-defect contingencies.",
       "visibility" : "private"
     },
@@ -235,8 +235,8 @@
         "llmmeta"
       ],
       "title" : "Write a prompt that...",
-      "updatedAt" : "2026-07-03T02:14:44Z",
-      "value" : "My goal is below. Create a concise, high-performance meta-prompt for a new zero-context chat. Write directly for an LLM using imperative language, without conversational filler or explanation. Keep it generic and portable. Refer to external materials with indirect labels such as \"the attached image” rather than specific filenames. Goal: ",
+      "updatedAt" : "2026-07-03T04:00:58Z",
+      "value" : "Create a concise, high-performance meta-prompt to achieve my goal in a new zero-context chat. Write directly for an LLM using imperative language, without conversational filler or explanation. Keep it generic and portable. Refer to external materials with indirect labels such as \"the attached image” rather than specific filenames. \n\nGoal: ",
       "visibility" : "private"
     },
     {
@@ -518,7 +518,7 @@
         "address"
       ],
       "title" : "Elbridge Address Copy",
-      "updatedAt" : "2026-07-03T01:21:59Z",
+      "updatedAt" : "2026-07-03T05:43:03Z",
       "value" : "The Elbridge Condominium\n20 Mechanic Square\n50 Elm Street\nMarblehead, MA 01945",
       "visibility" : "private"
     }
@@ -535,6 +535,6 @@
     "gridBackgroundColor" : "#2F2D29",
     "paletteSource" : "Robert Brown Fabric Collection"
   },
-  "updatedAt" : "2026-07-03T02:19:55Z",
+  "updatedAt" : "2026-07-03T05:43:15Z",
   "version" : 1
 }
