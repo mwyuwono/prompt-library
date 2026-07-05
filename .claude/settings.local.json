@@ -51,7 +51,9 @@
       "Bash(./scripts/deploy.sh:*)",
       "Bash(npm run *)",
       "Bash(git checkout *)",
-      "Bash(cp \"/root/.claude/uploads/fac0a070-e69c-5c21-a991-5ee2918f5384/8bc36ed5-A3C09043EBAE4E7090C7460C59FAD38D.png\" \"/home/user/prompt-library/public/images/architectural-rendering-old-master-oil-panel-style-reference.png\" && ls -la /home/user/prompt-library/public/images/architectural-rendering-old-master-oil-panel-style-reference.png)"
+      "Bash(cp \"/root/.claude/uploads/fac0a070-e69c-5c21-a991-5ee2918f5384/8bc36ed5-A3C09043EBAE4E7090C7460C59FAD38D.png\" \"/home/user/prompt-library/public/images/architectural-rendering-old-master-oil-panel-style-reference.png\" && ls -la /home/user/prompt-library/public/images/architectural-rendering-old-master-oil-panel-style-reference.png)",
+      "Read(//root/.claude/uploads/26667871-99fa-50fe-be42-a083aae6c385/**)",
+      "Bash(cp \"/root/.claude/uploads/26667871-99fa-50fe-be42-a083aae6c385/a21ba722-IMG_0260.jpeg\" /home/user/prompt-library/public/images/plein-air-watercolor-style-reference.jpeg)"
     ],
     "deny": [],
     "ask": [],
