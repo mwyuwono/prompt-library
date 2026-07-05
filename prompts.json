@@ -1102,6 +1102,21 @@
         ]
       },
       {
+        "id": "plein-air-watercolor",
+        "name": "Plein-Air Watercolor Study",
+        "description": "Loose painterly plein-air study in opaque watercolor or gouache.",
+        "template": "Convert the provided image to a loose, painterly plein-air study in opaque watercolor or gouache, with broad broken brushstrokes, abbreviated forms, soft-edged geometry, and selective detail only where light or focal emphasis requires it. Preserve the subject but simplify it into masses of warm light and cool shadow, using a restrained natural palette of warm ochres, creams, umbers, charcoal grays, muted blues, and small notes of saturated accent color. Emphasize strong raking sunlight, high-value contrast, reflective highlights, and atmospheric shadow rather than precise realism. The finish should feel intimate, quiet, observational, and slightly nostalgic, like a rapid artist's study made from life: confident, economical, tactile, and emotionally warm. Avoid photorealism, hard outlines, digital smoothness, excessive detail, or decorative polish. Style reference: similar in spirit to late 19th-century impressionist watercolor and gouache studies, with the immediacy of John Singer Sargent's handling and the tonal restraint of a quiet interior sketch. Refer to style reference: {{plein_air_style_reference}}",
+        "variables": [],
+        "referenceImages": [
+          {
+            "variable": "plein_air_style_reference",
+            "label": "Style Reference",
+            "path": "public/images/plein-air-watercolor-style-reference.jpeg",
+            "instructions": "Use this reference for the loose opaque watercolor/gouache handling, broken brushstrokes, warm-light/cool-shadow massing, and restrained ochre-umber-charcoal-blue palette."
+          }
+        ]
+      },
+      {
         "id": "neoclassical-atelier-lithograph",
         "name": "Neoclassical Atelier Lithograph",
         "description": "Academic graphite lithograph figure plate.",
