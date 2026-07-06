@@ -711,47 +711,80 @@ struct PhraseEditor: View {
 
     var body: some View {
         ScrollView {
-            Form {
-                TextField("Title", text: $phrase.title)
-                TextField("Summary", text: stringBinding($phrase.summary, replacingNilWith: ""))
-                TextField("Preview image (16:9 path or URL)", text: stringBinding($phrase.image, replacingNilWith: ""))
-                Picker("Category", selection: $phrase.categoryId) {
-                    ForEach(store.corpus.categories) { category in
-                        Text(category.name).tag(category.id)
-                    }
+            VStack(alignment: .leading, spacing: 16) {
+                field("Title") {
+                    TextField("Title", text: $phrase.title)
+                        .textFieldStyle(.roundedBorder)
                 }
 
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("Value").font(.caption).foregroundStyle(.secondary)
+                field("Summary") {
+                    TextField("Summary", text: stringBinding($phrase.summary, replacingNilWith: ""))
+                        .textFieldStyle(.roundedBorder)
+                }
+
+                field("Preview image (16:9 path or URL)") {
+                    TextField("Preview image (16:9 path or URL)", text: stringBinding($phrase.image, replacingNilWith: ""))
+                        .textFieldStyle(.roundedBorder)
+                }
+
+                field("Category") {
+                    Picker("Category", selection: $phrase.categoryId) {
+                        ForEach(store.corpus.categories) { category in
+                            Text(category.name).tag(category.id)
+                        }
+                    }
+                    .labelsHidden()
+                    .frame(maxWidth: 320, alignment: .leading)
+                }
+
+                field("Value") {
                     SelectableTextEditor(text: $phrase.value, selectedRange: $selectedRange)
-                        .frame(minHeight: 140)
+                        .frame(minHeight: 180)
                         .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.secondary.opacity(0.3)))
                 }
 
-                atomsSection
+                editorSection {
+                    atomsSection
+                    Divider()
+                    variablesSection
+                }
 
-                ColorSwatchField(
-                    title: "Background",
-                    selection: stringBinding($phrase.color, replacingNilWith: store.corpus.settings.defaultTileColor),
-                    colors: store.palette.colors,
-                    isEditing: colorEditingBinding(for: .background)
-                )
-                ColorSwatchField(
-                    title: "Text",
-                    selection: stringBinding($phrase.textColor, replacingNilWith: store.corpus.settings.defaultTextColor),
-                    colors: store.palette.colors,
-                    isEditing: colorEditingBinding(for: .text)
-                )
-                TextField("Tags", text: Binding(
-                    get: { phrase.tags.joined(separator: ", ") },
-                    set: { phrase.tags = $0.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty } }
-                ))
-                Toggle("Favorite", isOn: $phrase.favorite)
-                Picker("Visibility", selection: $phrase.visibility) {
-                    ForEach(Visibility.allCases, id: \.self) { visibility in
-                        Text(visibility.rawValue).tag(visibility)
+                HStack(alignment: .top, spacing: 14) {
+                    ColorSwatchField(
+                        title: "Background",
+                        selection: stringBinding($phrase.color, replacingNilWith: store.corpus.settings.defaultTileColor),
+                        colors: store.palette.colors,
+                        isEditing: colorEditingBinding(for: .background)
+                    )
+                    ColorSwatchField(
+                        title: "Text",
+                        selection: stringBinding($phrase.textColor, replacingNilWith: store.corpus.settings.defaultTextColor),
+                        colors: store.palette.colors,
+                        isEditing: colorEditingBinding(for: .text)
+                    )
+                }
+
+                field("Tags") {
+                    TextField("Tags", text: Binding(
+                        get: { phrase.tags.joined(separator: ", ") },
+                        set: { phrase.tags = $0.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty } }
+                    ))
+                    .textFieldStyle(.roundedBorder)
+                }
+
+                HStack(alignment: .center, spacing: 18) {
+                    Toggle("Favorite", isOn: $phrase.favorite)
+                    field("Visibility") {
+                        Picker("Visibility", selection: $phrase.visibility) {
+                            ForEach(Visibility.allCases, id: \.self) { visibility in
+                                Text(visibility.rawValue).tag(visibility)
+                            }
+                        }
+                        .labelsHidden()
+                        .frame(maxWidth: 180, alignment: .leading)
                     }
                 }
+
                 HStack {
                     Button("Cancel") { dismiss() }
                         .buttonStyle(.glass)
@@ -765,11 +798,31 @@ struct PhraseEditor: View {
                     .disabled(phrase.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || phrase.value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
             }
-            .padding()
+            .padding(24)
         }
-        .frame(width: 520)
-        .frame(minHeight: 400, maxHeight: 720)
+        .frame(minWidth: 560, idealWidth: editorWidth, maxWidth: editorWidth)
+        .frame(minHeight: 500, idealHeight: 680, maxHeight: 760)
         .onAppear { atoms = phrase.atoms ?? [] }
+    }
+
+    private var editorWidth: CGFloat {
+        let candidate = (NSApp.mainWindow?.contentLayoutRect.width ?? 800) * 0.9
+        return min(max(candidate, 640), 980)
+    }
+
+    private func field<Content: View>(_ title: String, @ViewBuilder content: () -> Content) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(title).font(.caption).foregroundStyle(.secondary)
+            content()
+        }
+    }
+
+    private func editorSection<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            content()
+        }
+        .padding(12)
+        .background(Color(nsColor: .windowBackgroundColor).opacity(0.22), in: RoundedRectangle(cornerRadius: 10))
     }
 
     private func colorEditingBinding(for target: ColorEditTarget) -> Binding<Bool> {
@@ -797,6 +850,45 @@ struct PhraseEditor: View {
                     }
                 }
             }
+        }
+    }
+
+    private var variablesSection: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Variables").font(.caption).foregroundStyle(.secondary)
+            let variables = detectedVariables
+            if variables.isEmpty {
+                Text("No variables detected. Use {{setting}} or {{option one/option two}}.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } else {
+                FlowLayout(spacing: 6) {
+                    ForEach(variables, id: \.self) { variable in
+                        Text(variable)
+                            .font(.caption)
+                            .lineLimit(1)
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 6)
+                            .background(Color.secondary.opacity(0.14))
+                            .clipShape(Capsule())
+                    }
+                }
+            }
+        }
+    }
+
+    private var detectedVariables: [String] {
+        let pattern = #"\{\{([^{}]+)\}\}"#
+        guard let regex = try? NSRegularExpression(pattern: pattern) else { return [] }
+        let text = phrase.value
+        let nsRange = NSRange(text.startIndex..<text.endIndex, in: text)
+        var seen = Set<String>()
+        return regex.matches(in: text, range: nsRange).compactMap { match in
+            guard let range = Range(match.range(at: 1), in: text) else { return nil }
+            let value = String(text[range]).trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !value.isEmpty, !seen.contains(value) else { return nil }
+            seen.insert(value)
+            return value
         }
     }
 

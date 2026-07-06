@@ -537,6 +537,39 @@
       "updatedAt" : "2026-07-06T15:37:03Z",
       "value" : "A classical swimmer’s physique: athletic, broad-shouldered, and naturally powerful, with smooth, voluminous musculature defined by rounded anatomical forms rather than sharp striations. Prioritize continuous sculptural flow, natural proportions, a refined waist, proportionate trapezius muscles, and an elegant V-shaped silhouette. Avoid hyper-vascularity, exaggerated definition, or bodybuilding aesthetics. Render the anatomy with soft tonal transitions and sculptural volume, evoking polished Greco-Roman marble while remaining fully integrated into the source artwork’s medium, lighting, and level of abstraction. Use classical chiaroscuro to emphasize form through luminous highlights and deep, velvety shadows.",
       "visibility" : "private"
+    },
+    {
+      "categoryId" : "prompt-reuse",
+      "color" : "brown-18",
+      "createdAt" : "2026-07-06T20:52:13Z",
+      "favorite" : false,
+      "id" : "phrase-1783371056",
+      "image" : "",
+      "summary" : "",
+      "tags" : [
+
+      ],
+      "textColor" : "brown-22",
+      "title" : "Ask questions before proceeding",
+      "updatedAt" : "2026-07-06T20:52:13Z",
+      "value" : "Before you proceed, ask any questions needed for clarification. If you don’t have questions, proceed. ",
+      "visibility" : "public"
+    },
+    {
+      "categoryId" : "image-quality",
+      "color" : "brown-18",
+      "createdAt" : "2026-07-06T20:56:20Z",
+      "favorite" : false,
+      "id" : "phrase-1783371344",
+      "summary" : "",
+      "tags" : [
+
+      ],
+      "textColor" : "brown-22",
+      "title" : "Noise & artifacts",
+      "updatedAt" : "2026-07-06T20:56:20Z",
+      "value" : "Avoid digital AI artifacts, moire patterns, pixel jitter, or procedural noise grids. All textures and surfaces must strictly adhere to the physical realism of the requested medium, using organic details, natural lens behaviors, or authentic physical brushstrokes rather than tight, repetitive digital patterns. ",
+      "visibility" : "private"
     }
   ],
   "settings" : {
@@ -551,6 +584,17 @@
     "gridBackgroundColor" : "#2F2D29",
     "paletteSource" : "Robert Brown Fabric Collection"
   },
-  "updatedAt" : "2026-07-06T15:37:03Z",
+  "updatedAt" : "2026-07-06T20:56:20Z",
+  "variables" : [
+    {
+      "id" : "var-setting",
+      "name" : "setting",
+      "options" : [
+        "sailing through a storm",
+        "wrecked on shore",
+        "docked peacefully at sunset"
+      ]
+    }
+  ],
   "version" : 1
 }

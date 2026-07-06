@@ -86,6 +86,16 @@ A phrase can optionally carry an `atoms` array so part of its `value` can be cop
 - **Offset semantics differ slightly by platform**: the web component indexes UTF-16 code units (native JS string indexing); the Mac app indexes `Character` (grapheme cluster) counts via `Array(value)`. These match for ASCII text (the only atomic phrase in the corpus today), but a value with emoji or combining characters could get different atom slices on each surface. Worth normalizing before adding a non-ASCII atomic phrase.
 - Editing `atoms` by hand: offsets are into the *current* `value` exactly as stored (including trailing whitespace/newlines) — if you edit `value`, existing atom offsets are not automatically remapped on either surface, so re-derive them after significant text edits.
 
+## Variable placeholders
+
+Quick Text phrase text may include literal `{{...}}` placeholders. The Mac phrase editor detects and lists placeholders while editing, including option-style placeholders such as `{{option one/option two}}`, so authors can see where a phrase expects user-provided context.
+
+Current boundary:
+
+- Placeholder detection is advisory only. Copy actions still copy the phrase `value` exactly as stored; there is no fill-in modal or copy-time substitution yet.
+- The corpus currently tolerates a top-level `variables` array for future/shared metadata, but the Mac app and web component do not use it as a runtime contract.
+- Atom ranges are independent of placeholders. If a phrase mixes atoms and `{{...}}`, atom offsets still refer to the raw stored `value`, braces included.
+
 ## Environment notes for future sessions
 
 - The Cowork/agent sandbox used to edit this repo has no Swift toolchain, so Mac app changes can only be syntax-eyeballed there, not compiled. Build and reinstall on the actual Mac:
