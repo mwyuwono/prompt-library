@@ -55,8 +55,8 @@
       {
         "id": "image-generation",
         "name": "Image Generation",
-        "instructions": "Attach the same reference images from Step 1, then paste the synthesized prompt from Step 1.",
-        "template": "Use the attached reference images together with the prompt below.\n\nSynthesized prompt:\n{{synthesized_prompt}}\n\nTreat the prompt as the authoritative description of the visual language extracted from the references.\n\nUse the reference images only to reinforce that shared visual language—not to reproduce any individual artwork.\n\nConvert the uploaded image to the extracted style, color & light, surface qualities, design language, mood, and technical execution.\n\nAvoid borrowing poses, layouts, cropping, perspective, object placement, or identifiable compositions from any reference image.\n\nThe resulting artwork should feel like a newly discovered work created within the same artistic vocabulary rather than a reinterpretation of any supplied image.\n\nAfter presenting the image, invite the user to iterate on the composition if desired. Future revisions should preserve the established visual language and modify only compositional aspects unless the user explicitly requests changes to the style itself.",
+        "instructions": "Attach the same reference images from Step 1, choose whether to restyle an uploaded image or create new artwork, then paste the synthesized prompt from Step 1.",
+        "template": "Use the attached reference images together with the prompt below.\n\nSynthesized prompt:\n{{synthesized_prompt}}\n\nTreat the prompt as the authoritative description of the visual language extracted from the references.\n\nUse the reference images only to reinforce that shared visual language—not to reproduce any individual artwork.\n\nGeneration mode:\n{{generation_mode}}\n\nAvoid borrowing poses, layouts, cropping, perspective, object placement, or identifiable compositions from any reference image.\n\nThe resulting artwork should feel like a newly discovered work created within the same artistic vocabulary rather than a reinterpretation of any supplied image.\n\nAfter presenting the image, invite the user to iterate on the composition if desired. Future revisions should preserve the established visual language and modify only compositional aspects unless the user explicitly requests changes to the style itself.",
         "variables": [
           {
             "name": "synthesized_prompt",
@@ -65,6 +65,25 @@
             "value": "",
             "inputType": "textarea",
             "rows": 10
+          },
+          {
+            "name": "generation_mode",
+            "label": "Generation Mode",
+            "description": "Choose whether Step 2 should restyle an uploaded image or create a new composition.",
+            "inputType": "toggle",
+            "labels": [
+              "Restyle Uploaded Image",
+              "New Artwork"
+            ],
+            "options": [
+              "Convert the uploaded image to the extracted style, color & light, surface qualities, design language, mood, and technical execution. Preserve the uploaded image's core subject identity and essential content while translating its visual treatment into the synthesized style.",
+              "Create an entirely original composition. Develop new subject matter, new spatial organization, new narrative, and new visual relationships while faithfully preserving the extracted style, color & light, surface qualities, design language, mood, and technical execution."
+            ],
+            "optionDescriptions": [
+              "Use when supplying a target image to transform into the synthesized style.",
+              "Use when generating a new image from the synthesized style rather than transforming a target image."
+            ],
+            "value": "Create an entirely original composition. Develop new subject matter, new spatial organization, new narrative, and new visual relationships while faithfully preserving the extracted style, color & light, surface qualities, design language, mood, and technical execution."
           }
         ]
       }
