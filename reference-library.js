@@ -1,10 +1,17 @@
 let assets = [];
 let searchTerm = '';
 let busy = false;
+let uploadMode = 'api';
+
+const S3_BUCKET = 'prompt-library-assets-009019643313';
+const S3_PREFIX = 'reference-images/';
+const S3_PUBLIC_BASE_URL = `https://${S3_BUCKET}.s3.amazonaws.com/${S3_PREFIX.replace(/\/$/, '')}`;
+const S3_LIST_URL = `https://${S3_BUCKET}.s3.amazonaws.com/?list-type=2&prefix=${encodeURIComponent(S3_PREFIX)}`;
 
 const grid = document.getElementById('assetGrid');
 const statusText = document.getElementById('statusText');
 const searchInput = document.getElementById('searchInput');
+const uploadButton = document.getElementById('uploadButton');
 const uploadInput = document.getElementById('uploadInput');
 const refreshButton = document.getElementById('refreshButton');
 const toast = document.getElementById('toast');
@@ -55,6 +62,21 @@ function getFilteredAssets() {
         asset.key?.toLowerCase().includes(normalized) ||
         asset.url?.toLowerCase().includes(normalized)
     ));
+}
+
+function getMimeTypeFromKey(key = '') {
+    const normalized = key.toLowerCase();
+    if (normalized.endsWith('.jpg') || normalized.endsWith('.jpeg')) return 'image/jpeg';
+    if (normalized.endsWith('.png')) return 'image/png';
+    if (normalized.endsWith('.webp')) return 'image/webp';
+    if (normalized.endsWith('.gif')) return 'image/gif';
+    if (normalized.endsWith('.svg')) return 'image/svg+xml';
+    return 'application/octet-stream';
+}
+
+function getUrlFromS3Key(key = '') {
+    const relativeKey = key.replace(new RegExp(`^${S3_PREFIX}`), '');
+    return `${S3_PUBLIC_BASE_URL}/${relativeKey.split('/').map(encodeURIComponent).join('/')}`;
 }
 
 async function copyUrl(url) {
@@ -118,12 +140,12 @@ async function loadAssets() {
     busy = true;
     renderAssets();
     try {
-        const response = await fetch('/api/reference-assets');
-        const data = await response.json().catch(() => ({}));
-        if (!response.ok || !data.success) {
-            throw new Error(data.error || 'Failed to load reference assets');
-        }
-        assets = (data.assets || []).filter(asset => asset.type === 'image');
+        const data = await loadAssetsFromApi().catch(async error => {
+            console.warn('Reference asset API unavailable, using S3 listing:', error);
+            return await loadAssetsFromS3();
+        });
+        assets = data.assets.filter(asset => asset.type === 'image');
+        uploadMode = data.source === 'api' ? 'api' : 'console';
         renderAssets();
     } catch (error) {
         console.error('Reference asset load failed:', error);
@@ -134,6 +156,55 @@ async function loadAssets() {
         busy = false;
         renderAssets();
     }
+}
+
+async function loadAssetsFromApi() {
+    const response = await fetch('/api/reference-assets');
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Failed to load reference assets');
+    }
+    return {
+        source: 'api',
+        assets: data.assets || []
+    };
+}
+
+async function loadAssetsFromS3() {
+    const response = await fetch(S3_LIST_URL);
+    if (!response.ok) {
+        throw new Error(`S3 listing failed with HTTP ${response.status}`);
+    }
+
+    const xmlText = await response.text();
+    const xml = new DOMParser().parseFromString(xmlText, 'application/xml');
+    const parseError = xml.querySelector('parsererror');
+    if (parseError) {
+        throw new Error('S3 listing response could not be parsed');
+    }
+
+    const assets = Array.from(xml.querySelectorAll('Contents'))
+        .map(item => {
+            const key = item.querySelector('Key')?.textContent || '';
+            const filename = key.split('/').pop() || key;
+            const contentType = getMimeTypeFromKey(key);
+            return {
+                key,
+                filename,
+                url: getUrlFromS3Key(key),
+                size: Number(item.querySelector('Size')?.textContent || 0),
+                lastModified: item.querySelector('LastModified')?.textContent || null,
+                contentType,
+                type: contentType.startsWith('image/') ? 'image' : 'file'
+            };
+        })
+        .filter(asset => asset.key && !asset.key.endsWith('/'))
+        .sort((a, b) => String(b.lastModified || '').localeCompare(String(a.lastModified || '')));
+
+    return {
+        source: 's3',
+        assets
+    };
 }
 
 async function uploadAsset(file) {
@@ -150,6 +221,14 @@ async function uploadAsset(file) {
     }
     return data.asset;
 }
+
+uploadButton.addEventListener('click', event => {
+    if (uploadMode === 'api') {
+        event.preventDefault();
+        uploadInput.click();
+        return;
+    }
+});
 
 uploadInput.addEventListener('change', async () => {
     const file = uploadInput.files?.[0];

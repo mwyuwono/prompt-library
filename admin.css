@@ -889,11 +889,12 @@
     font: inherit;
 }
 
-.reference-upload-button input {
+.reference-upload-input {
     position: absolute;
-    inset: 0;
+    width: 1px;
+    height: 1px;
     opacity: 0;
-    cursor: pointer;
+    pointer-events: none;
 }
 
 .reference-library-status {

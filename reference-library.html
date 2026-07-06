@@ -35,11 +35,17 @@
                 <span class="material-symbols-outlined" aria-hidden="true">search</span>
                 <input id="searchInput" type="search" placeholder="Search reference images" autocomplete="off">
             </label>
-            <label class="reference-upload-button">
+            <a
+                id="uploadButton"
+                class="reference-upload-button"
+                href="https://s3.console.aws.amazon.com/s3/buckets/prompt-library-assets-009019643313?region=us-east-1&prefix=reference-images%2F&showversions=false"
+                target="_blank"
+                rel="noopener"
+            >
                 <span class="material-symbols-outlined" aria-hidden="true">upload</span>
                 Add Reference Image
-                <input id="uploadInput" type="file" accept="image/*">
-            </label>
+            </a>
+            <input id="uploadInput" class="reference-upload-input" type="file" accept="image/*">
         </section>
 
         <div id="statusText" class="reference-library-status">Loading reference images...</div>
