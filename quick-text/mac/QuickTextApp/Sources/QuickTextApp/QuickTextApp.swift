@@ -56,6 +56,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         if let window = NSApp.windows.first {
             window.makeKeyAndOrderFront(nil)
         }
+        NotificationCenter.default.post(name: .quickTextFocusSearch, object: nil)
     }
 
     private func registerHotKey() {
@@ -75,6 +76,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 }
 
+extension Notification.Name {
+    static let quickTextFocusSearch = Notification.Name("quickTextFocusSearch")
+}
+
 #Preview("Content View") {
     ContentView()
         .environmentObject(PreviewData.store)
@@ -88,9 +93,17 @@ struct ContentView: View {
     @State private var settingsPanelOffset = CGSize.zero
     @State private var settingsPanelDragOffset = CGSize.zero
     @State private var savedWindowFrame: NSRect?
+    @State private var gridWidth: CGFloat = 0
+    @State private var keyMonitor: Any?
+
+    private let gridSpacing: CGFloat = 10
 
     private var cardWidth: CGFloat {
         CGFloat(store.corpus.settings.cardWidth ?? Settings.defaultCardWidth)
+    }
+
+    private var gridColumnCount: Int {
+        max(Int((max(gridWidth, cardWidth) + gridSpacing) / (cardWidth + gridSpacing)), 1)
     }
 
     var body: some View {
@@ -110,63 +123,76 @@ struct ContentView: View {
                 .buttonStyle(.glass)
             }
 
-            ScrollView {
-                MasonryGrid(columnWidth: cardWidth, spacing: 10) {
-                    ForEach(Array(store.filteredPhrases.enumerated()), id: \.element.id) { index, phrase in
-                        let category = store.category(for: phrase.categoryId)
-                        TileView(
-                            phrase: phrase,
-                            imageURL: store.imageURL(for: phrase.image),
-                            backgroundColor: store.color(for: phrase.color ?? category?.color ?? store.corpus.settings.defaultTileColor),
-                            textColor: store.color(for: phrase.textColor ?? category?.textColor ?? store.corpus.settings.defaultTextColor),
-                            fontSize: store.corpus.settings.defaultFontSize,
-                            fontFamily: store.corpus.settings.defaultFontFamily,
-                            cardWidth: cardWidth,
-                            isSelected: store.selectedPhraseID == phrase.id,
-                            isCopied: store.copiedPhraseID == phrase.id
-                        )
-                        .onTapGesture {
-                            store.selectedPhraseID = phrase.id
-                            store.expandedPhraseID = phrase.id
+            GeometryReader { geometry in
+                ScrollView {
+                    MasonryGrid(columnWidth: cardWidth, spacing: gridSpacing) {
+                        ForEach(Array(store.filteredPhrases.enumerated()), id: \.element.id) { index, phrase in
+                            let category = store.category(for: phrase.categoryId)
+                            TileView(
+                                phrase: phrase,
+                                imageURL: store.imageURL(for: phrase.image),
+                                backgroundColor: store.color(for: phrase.color ?? category?.color ?? store.corpus.settings.defaultTileColor),
+                                textColor: store.color(for: phrase.textColor ?? category?.textColor ?? store.corpus.settings.defaultTextColor),
+                                fontSize: store.corpus.settings.defaultFontSize,
+                                fontFamily: store.corpus.settings.defaultFontFamily,
+                                cardWidth: cardWidth,
+                                isSelected: store.selectedPhraseID == phrase.id,
+                                isCopied: store.copiedPhraseID == phrase.id
+                            )
+                            .onTapGesture {
+                                store.selectedPhraseID = phrase.id
+                                store.expandedPhraseID = phrase.id
+                                store.exitCategoryFocus()
+                            }
+                            .contextMenu {
+                                Button("Copy") { store.copy(phrase) }
+                                Button("Preview") { store.expandedPhraseID = phrase.id }
+                                Button("Edit") { store.beginEditing(phrase) }
+                                Button("Duplicate") { store.duplicate(phrase) }
+                                Button("Delete", role: .destructive) { store.delete(phrase) }
+                            }
+                            // Drag-to-reorder: live-reorders `corpus.phrases` while dragging
+                            // (mirrors List's onMove), then persists on drop.
+                            .onDrag {
+                                store.draggedPhraseID = phrase.id
+                                return NSItemProvider(object: phrase.id as NSString)
+                            }
+                            .onDrop(of: [.text], delegate: PhraseDropDelegate(target: phrase, store: store))
                         }
-                        .contextMenu {
-                            Button("Copy") { store.copy(phrase) }
-                            Button("Preview") { store.expandedPhraseID = phrase.id }
-                            Button("Edit") { store.beginEditing(phrase) }
-                            Button("Duplicate") { store.duplicate(phrase) }
-                            Button("Delete", role: .destructive) { store.delete(phrase) }
-                        }
-                        // Drag-to-reorder: live-reorders `corpus.phrases` while dragging
-                        // (mirrors List's onMove), then persists on drop.
-                        .onDrag {
-                            store.draggedPhraseID = phrase.id
-                            return NSItemProvider(object: phrase.id as NSString)
-                        }
-                        .onDrop(of: [.text], delegate: PhraseDropDelegate(target: phrase, store: store))
                     }
+                    .padding(.vertical, 2)
                 }
-                .padding(.vertical, 2)
+                .onAppear { gridWidth = geometry.size.width }
+                .onChange(of: geometry.size.width) { _, width in gridWidth = width }
             }
             .padding(.top, 10)
             .contextMenu { gridContextMenu }
         }
         .padding(14)
         .background(store.gridBackgroundColor)
-        .onAppear { store.load() }
-        .onExitCommand {
-            if store.expandedPhraseID != nil {
-                store.collapseExpanded()
-            } else {
-                NSApp.keyWindow?.orderOut(nil)
-            }
+        .onAppear {
+            store.load()
+            installKeyMonitor()
+            focusSearchSoon()
         }
-        .onKeyPress(.downArrow) { moveSelection(1) }
+        .onDisappear { removeKeyMonitor() }
+        .onReceive(NotificationCenter.default.publisher(for: .quickTextFocusSearch)) { _ in
+            guard store.editingPhrase == nil, !showingSettings else { return }
+            focusSearchSoon()
+        }
+        .onChange(of: store.searchTerm) { _, _ in
+            store.searchTermDidChange()
+        }
+        .onExitCommand {
+            handleEscape()
+        }
+        .onKeyPress(.downArrow) { moveSelection(gridColumnCount) }
         .onKeyPress(.rightArrow) { moveSelection(1) }
-        .onKeyPress(.upArrow) { moveSelection(-1) }
+        .onKeyPress(.upArrow) { moveSelection(-gridColumnCount) }
         .onKeyPress(.leftArrow) { moveSelection(-1) }
         .onKeyPress(.space) {
             guard canUseGridKeyboard else { return .ignored }
-            if let phrase = store.selectedPhrase { store.expandedPhraseID = phrase.id }
+            openSelected()
             return .handled
         }
         .sheet(item: $store.editingPhrase) { phrase in
@@ -227,16 +253,20 @@ struct ContentView: View {
                 .onSubmit { copySelected() }
             if !store.searchTerm.isEmpty {
                 Button {
-                    store.searchTerm = ""
+                    store.clearSearch()
                 } label: {
                     Image(systemName: "xmark.circle.fill")
                         .foregroundStyle(.secondary)
+                        .font(.system(size: 17, weight: .semibold))
+                        .frame(width: 34, height: 34)
+                        .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
             }
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 7)
+        .padding(.horizontal, 14)
+        .padding(.vertical, 10)
+        .frame(minHeight: 44)
         .glassEffect(.regular, in: Capsule())
     }
 
@@ -265,10 +295,10 @@ struct ContentView: View {
             ForEach(store.tabs, id: \.id) { tab in
                 CategoryTabButton(
                     title: tab.name,
-                    isSelected: store.activeCategoryID == tab.id,
-                    background: store.categoryTabBackground(for: tab, isSelected: store.activeCategoryID == tab.id)
+                    isSelected: store.isTabSelected(tab.id),
+                    background: store.categoryTabBackground(for: tab, isSelected: store.isTabSelected(tab.id))
                 ) {
-                    store.activeCategoryID = tab.id
+                    store.selectTab(tab.id)
                 }
             }
         }
@@ -278,6 +308,13 @@ struct ContentView: View {
         guard canUseGridKeyboard else { return .ignored }
         store.moveSelection(delta)
         return .handled
+    }
+
+    private func openSelected() {
+        if let phrase = store.selectedPhrase {
+            store.expandedPhraseID = phrase.id
+            store.exitCategoryFocus()
+        }
     }
 
     private func copySelected() {
@@ -302,7 +339,80 @@ struct ContentView: View {
     }
 
     private var canUseGridKeyboard: Bool {
-        !showingSettings && store.editingPhrase == nil && !searchFocused && !isEditingText
+        store.expandedPhraseID == nil && !showingSettings && store.editingPhrase == nil && !searchFocused && !isEditingText
+    }
+
+    private func focusSearchSoon() {
+        DispatchQueue.main.async {
+            searchFocused = true
+        }
+    }
+
+    private func installKeyMonitor() {
+        guard keyMonitor == nil else { return }
+        keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+            handleKeyEvent(event)
+        }
+    }
+
+    private func removeKeyMonitor() {
+        if let keyMonitor {
+            NSEvent.removeMonitor(keyMonitor)
+            self.keyMonitor = nil
+        }
+    }
+
+    private func handleKeyEvent(_ event: NSEvent) -> NSEvent? {
+        guard store.editingPhrase == nil, !showingSettings else { return event }
+        guard event.modifierFlags.intersection([.command, .option, .control]).isEmpty else { return event }
+        guard store.expandedPhraseID == nil else { return event }
+
+        switch event.keyCode {
+        case 48:
+            store.advanceCategoryFocus(reverse: event.modifierFlags.contains(.shift))
+            searchFocused = false
+            return nil
+        case 53:
+            handleEscape()
+            return nil
+        case 123:
+            guard canUseGridKeyboard else { return event }
+            store.moveSelection(-1)
+            return nil
+        case 124:
+            guard canUseGridKeyboard else { return event }
+            store.moveSelection(1)
+            return nil
+        case 125:
+            guard canUseGridKeyboard else { return event }
+            store.moveSelection(gridColumnCount)
+            return nil
+        case 126:
+            guard canUseGridKeyboard else { return event }
+            store.moveSelection(-gridColumnCount)
+            return nil
+        case 49:
+            guard canUseGridKeyboard else { return event }
+            openSelected()
+            return nil
+        case 36, 76:
+            guard canUseGridKeyboard else { return event }
+            copySelected()
+            return nil
+        default:
+            return event
+        }
+    }
+
+    private func handleEscape() {
+        if store.expandedPhraseID != nil {
+            store.collapseExpanded()
+        } else if !store.searchTerm.isEmpty {
+            store.clearSearch()
+            searchFocused = true
+        } else if store.categoryFocusMode {
+            store.exitCategoryFocus()
+        }
     }
 }
 
@@ -1259,13 +1369,17 @@ struct ExpandedCardView: View {
     @State private var isHoveringAtomsBlock = false
     @State private var isHoveringCopyIcon = false
     @State private var isHoveringCloseIcon = false
+    @State private var focusedAtomID: String?
+    @State private var selectedAtomAnchorID: String?
     @State private var selectedAtomIDs: Set<String> = []
+    @State private var keyMonitor: Any?
     @State private var singleCopiedAtomID: String?
     @State private var shiftReleaseMonitor: Any?
     @State private var isPulsingAllAtoms = false
     @State private var isPulsingCardBackground = false
 
     private var hasAtoms: Bool { !(phrase.atoms ?? []).isEmpty }
+    private var sortedAtoms: [Atom] { (phrase.atoms ?? []).sorted { $0.start < $1.start } }
 
     /// True over the same area that reveals the copy icon (hovering the card but
     /// not an atom chip/gap) — a tap right now copies the whole card, so the
@@ -1318,16 +1432,23 @@ struct ExpandedCardView: View {
         .onHover { hovering in isHoveringCard = hovering }
         .onTapGesture { copyFull() }
         .onAppear {
+            keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+                handleKeyEvent(event)
+            }
             // Releasing shift should drop the multiselect highlight immediately,
             // not just on the next click, so watch modifier-key changes directly.
             shiftReleaseMonitor = NSEvent.addLocalMonitorForEvents(matching: .flagsChanged) { event in
                 if !event.modifierFlags.contains(.shift) {
-                    selectedAtomIDs = []
+                    clearAtomSelection()
                 }
                 return event
             }
         }
         .onDisappear {
+            if let keyMonitor {
+                NSEvent.removeMonitor(keyMonitor)
+                self.keyMonitor = nil
+            }
             if let monitor = shiftReleaseMonitor {
                 NSEvent.removeMonitor(monitor)
                 shiftReleaseMonitor = nil
@@ -1428,14 +1549,87 @@ struct ExpandedCardView: View {
             } else {
                 selectedAtomIDs.insert(atom.id)
             }
+            focusedAtomID = atom.id
+            selectedAtomAnchorID = selectedAtomAnchorID ?? atom.id
             let selected = (phrase.atoms ?? []).filter { selectedAtomIDs.contains($0.id) }
             guard !selected.isEmpty else { return }
             onCopySelection(selected)
         } else {
-            selectedAtomIDs = []
+            clearAtomSelection()
             flashSingleCopiedAtom(atom.id)
             onCopyAtom(atom)
         }
+    }
+
+    private func handleKeyEvent(_ event: NSEvent) -> NSEvent? {
+        guard event.modifierFlags.intersection([.command, .option, .control]).isEmpty else { return event }
+        let extending = event.modifierFlags.contains(.shift)
+        switch event.keyCode {
+        case 53:
+            onClose()
+            return nil
+        case 49:
+            copyFull()
+            return nil
+        case 36, 76:
+            copySelectedAtomsOrFull()
+            return nil
+        case 123, 126:
+            moveAtomSelection(delta: -1, extending: extending)
+            return nil
+        case 124, 125:
+            moveAtomSelection(delta: 1, extending: extending)
+            return nil
+        default:
+            return event
+        }
+    }
+
+    private func moveAtomSelection(delta: Int, extending: Bool) {
+        let atoms = sortedAtoms
+        guard !atoms.isEmpty else { return }
+        let currentIndex = focusedAtomID.flatMap { id in atoms.firstIndex { $0.id == id } }
+        let nextIndex: Int
+        if let currentIndex {
+            nextIndex = min(max(currentIndex + delta, 0), atoms.count - 1)
+        } else {
+            nextIndex = delta < 0 ? atoms.count - 1 : 0
+        }
+        let nextAtom = atoms[nextIndex]
+        focusedAtomID = nextAtom.id
+        singleCopiedAtomID = nil
+
+        if extending {
+            let anchorID = selectedAtomAnchorID ?? selectedAtomIDs.first ?? atoms[currentIndex ?? nextIndex].id
+            selectedAtomAnchorID = anchorID
+            guard let anchorIndex = atoms.firstIndex(where: { $0.id == anchorID }) else {
+                selectedAtomIDs = [nextAtom.id]
+                return
+            }
+            let range = min(anchorIndex, nextIndex)...max(anchorIndex, nextIndex)
+            selectedAtomIDs = Set(atoms[range].map(\.id))
+        } else {
+            selectedAtomAnchorID = nextAtom.id
+            selectedAtomIDs = [nextAtom.id]
+        }
+    }
+
+    private func copySelectedAtomsOrFull() {
+        let selected = sortedAtoms.filter { selectedAtomIDs.contains($0.id) }
+        if selected.isEmpty {
+            copyFull()
+        } else if selected.count == 1, let atom = selected.first {
+            flashSingleCopiedAtom(atom.id)
+            onCopyAtom(atom)
+        } else {
+            onCopySelection(selected)
+        }
+    }
+
+    private func clearAtomSelection() {
+        focusedAtomID = nil
+        selectedAtomAnchorID = nil
+        selectedAtomIDs = []
     }
 
     /// Single-atom copy highlight: unlike shift-multiselect (which persists until
@@ -1653,10 +1847,18 @@ struct FlowLayout: Layout {
         .frame(width: 900, height: 600)
 }
 
+enum SearchScope {
+    case all
+    case category
+}
+
 final class CorpusStore: ObservableObject {
     @Published var corpus = QuickTextCorpus.empty
     @Published var palette = Palette.empty
     @Published var activeCategoryID = "all"
+    @Published var searchScope: SearchScope = .all
+    @Published var categoryFocusMode = false
+    @Published var focusedCategoryID: String?
     @Published var searchTerm = ""
     @Published var selectedPhraseID: String?
     @Published var copiedPhraseID: String?
@@ -1687,7 +1889,7 @@ final class CorpusStore: ObservableObject {
     var filteredPhrases: [Phrase] {
         let term = searchTerm.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         let result = corpus.phrases.filter { phrase in
-            activeCategoryID == "all" || phrase.categoryId == activeCategoryID || (activeCategoryID == "favorites" && phrase.favorite)
+            searchScope == .all || activeCategoryID == "all" || phrase.categoryId == activeCategoryID || (activeCategoryID == "favorites" && phrase.favorite)
         }.filter { phrase in
             if term.isEmpty { return true }
             return [phrase.title, phrase.summary ?? "", phrase.value, phrase.tags.joined(separator: " ")]
@@ -1695,7 +1897,6 @@ final class CorpusStore: ObservableObject {
                 .lowercased()
                 .contains(term)
         }
-        if selectedPhraseID == nil { selectedPhraseID = result.first?.id }
         return result
     }
 
@@ -1731,6 +1932,7 @@ final class CorpusStore: ObservableObject {
 
     func copy(_ phrase: Phrase) {
         selectedPhraseID = phrase.id
+        exitCategoryFocus()
         copyText(phrase.value, feedbackFor: phrase.id, autoClose: false)
     }
 
@@ -1766,6 +1968,68 @@ final class CorpusStore: ObservableObject {
 
     func copyFullFromExpandedCard(_ phrase: Phrase) {
         copyText(phrase.value, feedbackFor: phrase.id, autoClose: closesCardOnCopy)
+    }
+
+    func searchTermDidChange() {
+        reconcileSelectedPhrase()
+    }
+
+    func clearSearch() {
+        searchTerm = ""
+        searchScope = .all
+        activeCategoryID = "all"
+        categoryFocusMode = false
+        focusedCategoryID = nil
+        reconcileSelectedPhrase()
+    }
+
+    func selectTab(_ id: String) {
+        if id == "all" {
+            searchScope = .all
+            categoryFocusMode = false
+            focusedCategoryID = nil
+            activeCategoryID = "all"
+        } else {
+            searchScope = .category
+            categoryFocusMode = true
+            focusedCategoryID = id
+            activeCategoryID = id
+        }
+        reconcileSelectedPhrase()
+    }
+
+    func isTabSelected(_ id: String) -> Bool {
+        if searchScope == .all { return id == "all" }
+        return activeCategoryID == id
+    }
+
+    func advanceCategoryFocus(reverse: Bool = false) {
+        let categories = corpus.categories.sorted { $0.sortOrder < $1.sortOrder }
+        guard !categories.isEmpty else { return }
+        searchScope = .category
+        categoryFocusMode = true
+
+        let currentID = focusedCategoryID ?? (corpus.categories.contains { $0.id == activeCategoryID } ? activeCategoryID : nil)
+        let currentIndex = currentID.flatMap { id in categories.firstIndex { $0.id == id } }
+        let nextIndex: Int
+        if let currentIndex {
+            nextIndex = (currentIndex + (reverse ? -1 : 1) + categories.count) % categories.count
+        } else {
+            nextIndex = reverse ? categories.count - 1 : 0
+        }
+
+        let nextID = categories[nextIndex].id
+        focusedCategoryID = nextID
+        activeCategoryID = nextID
+        reconcileSelectedPhrase()
+    }
+
+    func exitCategoryFocus() {
+        categoryFocusMode = false
+        focusedCategoryID = nil
+        searchScope = .all
+        activeCategoryID = "all"
+        reconcileSelectedPhrase()
     }
 
     private func copyText(_ text: String, feedbackFor phraseID: String, autoClose: Bool) {
@@ -1856,9 +2120,24 @@ final class CorpusStore: ObservableObject {
     func moveSelection(_ delta: Int) {
         let phrases = filteredPhrases
         guard !phrases.isEmpty else { return }
-        let current = phrases.firstIndex { $0.id == selectedPhraseID } ?? 0
+        guard let current = phrases.firstIndex(where: { $0.id == selectedPhraseID }) else {
+            selectedPhraseID = phrases.first?.id
+            return
+        }
         let next = min(max(current + delta, 0), phrases.count - 1)
         selectedPhraseID = phrases[next].id
+    }
+
+    private func reconcileSelectedPhrase() {
+        let phrases = filteredPhrases
+        guard !phrases.isEmpty else {
+            selectedPhraseID = nil
+            return
+        }
+        if let selectedPhraseID, phrases.contains(where: { $0.id == selectedPhraseID }) {
+            return
+        }
+        selectedPhraseID = phrases.first?.id
     }
 
     func categoryName(for id: String) -> String {
