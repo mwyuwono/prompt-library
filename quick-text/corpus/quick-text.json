@@ -521,6 +521,22 @@
       "updatedAt" : "2026-07-03T05:43:03Z",
       "value" : "The Elbridge Condominium\n20 Mechanic Square\n50 Elm Street\nMarblehead, MA 01945",
       "visibility" : "private"
+    },
+    {
+      "categoryId" : "image-quality",
+      "color" : "brown-18",
+      "createdAt" : "2026-07-06T15:37:03Z",
+      "favorite" : false,
+      "id" : "phrase-1783352201",
+      "summary" : "",
+      "tags" : [
+
+      ],
+      "textColor" : "brown-22",
+      "title" : "Swimmer's build",
+      "updatedAt" : "2026-07-06T15:37:03Z",
+      "value" : "A classical swimmer’s physique: athletic, broad-shouldered, and naturally powerful, with smooth, voluminous musculature defined by rounded anatomical forms rather than sharp striations. Prioritize continuous sculptural flow, natural proportions, a refined waist, proportionate trapezius muscles, and an elegant V-shaped silhouette. Avoid hyper-vascularity, exaggerated definition, or bodybuilding aesthetics. Render the anatomy with soft tonal transitions and sculptural volume, evoking polished Greco-Roman marble while remaining fully integrated into the source artwork’s medium, lighting, and level of abstraction. Use classical chiaroscuro to emphasize form through luminous highlights and deep, velvety shadows.",
+      "visibility" : "private"
     }
   ],
   "settings" : {
@@ -535,6 +551,6 @@
     "gridBackgroundColor" : "#2F2D29",
     "paletteSource" : "Robert Brown Fabric Collection"
   },
-  "updatedAt" : "2026-07-03T05:43:15Z",
+  "updatedAt" : "2026-07-06T15:37:03Z",
   "version" : 1
 }

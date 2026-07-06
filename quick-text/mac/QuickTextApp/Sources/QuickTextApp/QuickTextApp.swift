@@ -93,10 +93,6 @@ struct ContentView: View {
         CGFloat(store.corpus.settings.cardWidth ?? Settings.defaultCardWidth)
     }
 
-    private var columns: [GridItem] {
-        [GridItem(.adaptive(minimum: cardWidth), spacing: 10)]
-    }
-
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             categoryTabs
@@ -115,11 +111,12 @@ struct ContentView: View {
             }
 
             ScrollView {
-                LazyVGrid(columns: columns, spacing: 10) {
+                MasonryGrid(columnWidth: cardWidth, spacing: 10) {
                     ForEach(Array(store.filteredPhrases.enumerated()), id: \.element.id) { index, phrase in
                         let category = store.category(for: phrase.categoryId)
                         TileView(
                             phrase: phrase,
+                            imageURL: store.imageURL(for: phrase.image),
                             backgroundColor: store.color(for: phrase.color ?? category?.color ?? store.corpus.settings.defaultTileColor),
                             textColor: store.color(for: phrase.textColor ?? category?.textColor ?? store.corpus.settings.defaultTextColor),
                             fontSize: store.corpus.settings.defaultFontSize,
@@ -151,6 +148,7 @@ struct ContentView: View {
                 .padding(.vertical, 2)
             }
             .padding(.top, 10)
+            .contextMenu { gridContextMenu }
         }
         .padding(14)
         .background(store.gridBackgroundColor)
@@ -268,8 +266,7 @@ struct ContentView: View {
                 CategoryTabButton(
                     title: tab.name,
                     isSelected: store.activeCategoryID == tab.id,
-                    background: store.categoryTabBackground(for: tab),
-                    textColor: store.categoryTabTextColor(for: tab)
+                    background: store.categoryTabBackground(for: tab, isSelected: store.activeCategoryID == tab.id)
                 ) {
                     store.activeCategoryID = tab.id
                 }
@@ -289,6 +286,17 @@ struct ContentView: View {
         }
     }
 
+    @ViewBuilder
+    private var gridContextMenu: some View {
+        Button("New Phrase") { store.beginNewPhrase() }
+        Button("Edit Selected Phrase") { store.beginEditingSelectedPhrase() }
+            .disabled(store.selectedPhrase == nil)
+        Button("Copy Selected") { copySelected() }
+            .disabled(store.selectedPhrase == nil)
+        Divider()
+        Button("Settings") { showingSettings = true }
+    }
+
     private var isEditingText: Bool {
         return NSApp.keyWindow?.firstResponder is NSTextView
     }
@@ -302,14 +310,13 @@ struct CategoryTabButton: View {
     let title: String
     let isSelected: Bool
     let background: Color
-    let textColor: Color
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
             Text(title)
                 .font(.caption.weight(.semibold))
-                .foregroundStyle(isSelected ? textColor : .primary)
+                .foregroundStyle(isSelected ? Color.white : .primary)
                 .lineLimit(1)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 7)
@@ -320,7 +327,7 @@ struct CategoryTabButton: View {
                 }
                 .overlay {
                     Capsule()
-                        .stroke(isSelected ? textColor.opacity(0.32) : Color.primary.opacity(0.12), lineWidth: 1)
+                        .stroke(isSelected ? Color.white.opacity(0.38) : Color.primary.opacity(0.12), lineWidth: 1)
                 }
         }
         .buttonStyle(.plain)
@@ -414,8 +421,55 @@ struct PhraseDropDelegate: DropDelegate {
     }
 }
 
+struct MasonryGrid: Layout {
+    let columnWidth: CGFloat
+    let spacing: CGFloat
+
+    private struct ItemPlacement {
+        let size: CGSize
+        let origin: CGPoint
+    }
+
+    private func layout(in width: CGFloat, subviews: Subviews) -> (placements: [ItemPlacement], size: CGSize) {
+        let availableWidth = max(width, columnWidth)
+        let columnCount = max(Int((availableWidth + spacing) / (columnWidth + spacing)), 1)
+        let actualColumnWidth = (availableWidth - (CGFloat(columnCount - 1) * spacing)) / CGFloat(columnCount)
+        var columnHeights = Array(repeating: CGFloat.zero, count: columnCount)
+        var placements: [ItemPlacement] = []
+
+        for subview in subviews {
+            let size = subview.sizeThatFits(ProposedViewSize(width: actualColumnWidth, height: nil))
+            let columnIndex = columnHeights.enumerated().min { $0.element < $1.element }?.offset ?? 0
+            let origin = CGPoint(
+                x: CGFloat(columnIndex) * (actualColumnWidth + spacing),
+                y: columnHeights[columnIndex]
+            )
+            placements.append(ItemPlacement(size: CGSize(width: actualColumnWidth, height: size.height), origin: origin))
+            columnHeights[columnIndex] += size.height + spacing
+        }
+
+        let height = max((columnHeights.max() ?? 0) - spacing, 0)
+        return (placements, CGSize(width: availableWidth, height: height))
+    }
+
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        layout(in: proposal.width ?? columnWidth, subviews: subviews).size
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        let placements = layout(in: bounds.width, subviews: subviews).placements
+        for (placement, subview) in zip(placements, subviews) {
+            subview.place(
+                at: CGPoint(x: bounds.minX + placement.origin.x, y: bounds.minY + placement.origin.y),
+                proposal: ProposedViewSize(width: placement.size.width, height: placement.size.height)
+            )
+        }
+    }
+}
+
 struct TileView: View {
     let phrase: Phrase
+    let imageURL: URL?
     let backgroundColor: Color
     let textColor: Color
     let fontSize: Int
@@ -429,15 +483,20 @@ struct TileView: View {
     private var tileMinHeight: CGFloat { cardWidth * (112.0 / 164.0) }
 
     var body: some View {
-        HStack(alignment: .firstTextBaseline, spacing: 6) {
-            Text(phrase.summary?.isEmpty == false ? phrase.summary! : phrase.title)
-                .font(tileFont)
-                .foregroundStyle(textColor)
-                .lineLimit(4)
-                .minimumScaleFactor(0.72)
-            Spacer(minLength: 0)
+        VStack(alignment: .leading, spacing: 10) {
+            if let imageURL {
+                PhrasePreviewImage(url: imageURL)
+            }
+            HStack(alignment: .firstTextBaseline, spacing: 6) {
+                Text(phrase.summary?.isEmpty == false ? phrase.summary! : phrase.title)
+                    .font(tileFont)
+                    .foregroundStyle(textColor)
+                    .lineLimit(imageURL == nil ? 4 : 3)
+                    .minimumScaleFactor(0.72)
+                Spacer(minLength: 0)
+            }
+            .frame(maxWidth: .infinity, alignment: .topLeading)
         }
-        .frame(maxWidth: .infinity, alignment: .topLeading)
         .padding(12)
         .frame(minHeight: tileMinHeight, alignment: .topLeading)
         .background(backgroundColor)
@@ -459,9 +518,53 @@ struct TileView: View {
     }
 }
 
+struct PhrasePreviewImage: View {
+    let url: URL
+
+    var body: some View {
+        Group {
+            if url.isFileURL, let image = NSImage(contentsOf: url) {
+                Image(nsImage: image)
+                    .resizable()
+                    .scaledToFill()
+            } else {
+                AsyncImage(url: url) { phase in
+                    switch phase {
+                    case .success(let image):
+                        image.resizable().scaledToFill()
+                    case .failure:
+                        previewFallback(systemName: "photo.badge.exclamationmark")
+                    case .empty:
+                        previewFallback(systemName: "photo")
+                    @unknown default:
+                        previewFallback(systemName: "photo")
+                    }
+                }
+            }
+        }
+        .aspectRatio(16.0 / 9.0, contentMode: .fit)
+        .frame(maxWidth: .infinity)
+        .clipShape(RoundedRectangle(cornerRadius: 6))
+        .overlay(
+            RoundedRectangle(cornerRadius: 6)
+                .stroke(Color.black.opacity(0.16), lineWidth: 1)
+        )
+    }
+
+    private func previewFallback(systemName: String) -> some View {
+        ZStack {
+            Color.black.opacity(0.14)
+            Image(systemName: systemName)
+                .font(.title3)
+                .foregroundStyle(.secondary)
+        }
+    }
+}
+
 #Preview("Tile - Plain") {
     TileView(
         phrase: PreviewData.plainPhrase,
+        imageURL: nil,
         backgroundColor: Color(hex: "#2E301D"),
         textColor: Color(hex: "#E2D6CF"),
         fontSize: 18,
@@ -476,6 +579,7 @@ struct TileView: View {
 #Preview("Tile - Atomic") {
     TileView(
         phrase: PreviewData.addressPhrase,
+        imageURL: nil,
         backgroundColor: Color(hex: "#2E301D"),
         textColor: Color(hex: "#E2D6CF"),
         fontSize: 18,
@@ -500,6 +604,7 @@ struct PhraseEditor: View {
             Form {
                 TextField("Title", text: $phrase.title)
                 TextField("Summary", text: stringBinding($phrase.summary, replacingNilWith: ""))
+                TextField("Preview image (16:9 path or URL)", text: stringBinding($phrase.image, replacingNilWith: ""))
                 Picker("Category", selection: $phrase.categoryId) {
                     ForEach(store.corpus.categories) { category in
                         Text(category.name).tag(category.id)
@@ -697,122 +802,159 @@ struct SettingsEditor: View {
 
     var body: some View {
         ScrollView {
-            Form {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("Text size: \(settings.wrappedValue.defaultFontSize)").font(.caption).foregroundStyle(.secondary)
-                    Slider(
-                        value: Binding(
-                            get: { Double(settings.wrappedValue.defaultFontSize) },
-                            set: { settings.wrappedValue.defaultFontSize = Int($0.rounded()) }
-                        ),
-                        in: 14...44,
-                        step: 1
-                    )
-                }
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("Card size: \(Int(settings.wrappedValue.cardWidth ?? Settings.defaultCardWidth))").font(.caption).foregroundStyle(.secondary)
-                    Slider(
-                        value: Binding(
-                            get: { settings.wrappedValue.cardWidth ?? Settings.defaultCardWidth },
-                            set: { settings.wrappedValue.cardWidth = $0 }
-                        ),
-                        in: 120...320,
-                        step: 4
-                    )
-                }
-                Picker("Font", selection: settings.defaultFontFamily) {
-                    Text("Sans").tag("sans")
-                    Text("Serif").tag("serif")
-                }
-                Toggle("Close card automatically after copying", isOn: Binding(
-                    get: { settings.wrappedValue.closeCardOnCopy ?? Settings.defaultCloseCardOnCopy },
-                    set: { settings.wrappedValue.closeCardOnCopy = $0 }
-                ))
-                Button {
-                    copyCorpusPath()
-                } label: {
-                    Label(didCopyPath ? "Path copied" : "Copy corpus file path", systemImage: didCopyPath ? "checkmark" : "doc.on.doc")
-                }
-                .buttonStyle(.glass)
-                .help("Copies the path to quick-text.json, for handing off to a coding agent for bulk edits.")
+            VStack(alignment: .leading, spacing: 18) {
+                HStack(alignment: .top, spacing: 18) {
+                    VStack(alignment: .leading, spacing: 14) {
+                        settingsSection("Display") {
+                            textSizeControl
+                            cardSizeControl
+                            Picker("Font", selection: settings.defaultFontFamily) {
+                                Text("Sans").tag("sans")
+                                Text("Serif").tag("serif")
+                            }
+                            .frame(maxWidth: 220, alignment: .leading)
+                        }
 
-                Section("Colors") {
-                    ColorSwatchField(
-                        title: "Default tile background",
-                        selection: settings.defaultTileColor,
-                        colors: store.palette.colors,
-                        isEditing: colorEditingBinding(for: .background)
-                    )
-                    ColorSwatchField(
-                        title: "Default tile text",
-                        selection: settings.defaultTextColor,
-                        colors: store.palette.colors,
-                        isEditing: colorEditingBinding(for: .text)
-                    )
-                    ColorSwatchField(
-                        title: "Highlight",
-                        selection: Binding(
-                            get: { settings.wrappedValue.highlightColor ?? Settings.defaultHighlightColor },
-                            set: { settings.wrappedValue.highlightColor = $0 }
-                        ),
-                        colors: store.palette.colors,
-                        isEditing: colorEditingBinding(for: .highlight)
-                    )
-                    .help("Atom-chip selection, copy pulses, and hover tints on both atomic and plain cards.")
-                    HStack(spacing: 8) {
-                        ColorSwatchField(
-                            title: "Grid background",
-                            selection: Binding(
-                                get: { store.corpus.settings.gridBackgroundColor ?? "" },
-                                set: { settings.wrappedValue.gridBackgroundColor = $0 }
-                            ),
-                            colors: store.palette.colors,
-                            isEditing: colorEditingBinding(for: .gridBackground)
-                        )
-                        if store.corpus.settings.gridBackgroundColor != nil {
-                            Button("Use system default") {
-                                settings.wrappedValue.gridBackgroundColor = nil
+                        settingsSection("Behavior") {
+                            Toggle("Close card automatically after copying", isOn: Binding(
+                                get: { settings.wrappedValue.closeCardOnCopy ?? Settings.defaultCloseCardOnCopy },
+                                set: { settings.wrappedValue.closeCardOnCopy = $0 }
+                            ))
+                            Button {
+                                copyCorpusPath()
+                            } label: {
+                                Label(didCopyPath ? "Path copied" : "Copy corpus file path", systemImage: didCopyPath ? "checkmark" : "doc.on.doc")
                             }
                             .buttonStyle(.glass)
+                            .help("Copies the path to quick-text.json, for handing off to a coding agent for bulk edits.")
                         }
                     }
-                    ColorSwatchField(
-                        title: "Expanded card background",
-                        selection: Binding(
-                            get: { settings.wrappedValue.expandedCardBackgroundColor ?? Settings.defaultExpandedCardBackgroundColor },
-                            set: { settings.wrappedValue.expandedCardBackgroundColor = $0 }
-                        ),
-                        colors: store.palette.colors,
-                        isEditing: colorEditingBinding(for: .expandedCardBackground)
-                    )
-                    ColorSwatchField(
-                        title: "Expanded card text",
-                        selection: Binding(
-                            get: { settings.wrappedValue.expandedCardTextColor ?? Settings.defaultExpandedCardTextColor },
-                            set: { settings.wrappedValue.expandedCardTextColor = $0 }
-                        ),
-                        colors: store.palette.colors,
-                        isEditing: colorEditingBinding(for: .expandedCardText)
-                    )
-                    ColorSwatchField(
-                        title: "Expanded card chip",
-                        selection: Binding(
-                            get: { settings.wrappedValue.expandedCardChipColor ?? Settings.defaultExpandedCardChipColor },
-                            set: { settings.wrappedValue.expandedCardChipColor = $0 }
-                        ),
-                        colors: store.palette.colors,
-                        isEditing: colorEditingBinding(for: .expandedCardChip)
-                    )
+                    .frame(width: 320, alignment: .topLeading)
+
+                    settingsSection("Colors") {
+                        colorControls
+                    }
+                    .frame(width: 520, alignment: .topLeading)
                 }
 
-                Section("Categories") {
+                settingsSection("Categories") {
                     CategoryManagerSection()
                 }
             }
-            .padding()
+            .padding(22)
         }
-        .frame(width: 560)
-        .frame(minHeight: 300, maxHeight: 680)
+        .frame(width: 900)
+        .frame(minHeight: 420, maxHeight: 720)
+    }
+
+    private func settingsSection<Content: View>(_ title: String, @ViewBuilder content: () -> Content) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(title)
+                .font(.headline)
+            content()
+        }
+        .padding(14)
+        .background(Color(nsColor: .windowBackgroundColor).opacity(0.24), in: RoundedRectangle(cornerRadius: 10))
+    }
+
+    private var textSizeControl: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Text size: \(settings.wrappedValue.defaultFontSize)").font(.caption).foregroundStyle(.secondary)
+            Slider(
+                value: Binding(
+                    get: { Double(settings.wrappedValue.defaultFontSize) },
+                    set: { settings.wrappedValue.defaultFontSize = Int($0.rounded()) }
+                ),
+                in: 14...44,
+                step: 1
+            )
+        }
+    }
+
+    private var cardSizeControl: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Card size: \(Int(settings.wrappedValue.cardWidth ?? Settings.defaultCardWidth))").font(.caption).foregroundStyle(.secondary)
+            Slider(
+                value: Binding(
+                    get: { settings.wrappedValue.cardWidth ?? Settings.defaultCardWidth },
+                    set: { settings.wrappedValue.cardWidth = $0 }
+                ),
+                in: 120...320,
+                step: 4
+            )
+        }
+    }
+
+    private var colorControls: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            ColorSwatchField(
+                title: "Default tile background",
+                selection: settings.defaultTileColor,
+                colors: store.palette.colors,
+                isEditing: colorEditingBinding(for: .background)
+            )
+            ColorSwatchField(
+                title: "Default tile text",
+                selection: settings.defaultTextColor,
+                colors: store.palette.colors,
+                isEditing: colorEditingBinding(for: .text)
+            )
+            ColorSwatchField(
+                title: "Highlight",
+                selection: Binding(
+                    get: { settings.wrappedValue.highlightColor ?? Settings.defaultHighlightColor },
+                    set: { settings.wrappedValue.highlightColor = $0 }
+                ),
+                colors: store.palette.colors,
+                isEditing: colorEditingBinding(for: .highlight)
+            )
+            .help("Atom-chip selection, copy pulses, hover tints, and the active category chip.")
+            HStack(spacing: 8) {
+                ColorSwatchField(
+                    title: "Grid background",
+                    selection: Binding(
+                        get: { store.corpus.settings.gridBackgroundColor ?? "" },
+                        set: { settings.wrappedValue.gridBackgroundColor = $0 }
+                    ),
+                    colors: store.palette.colors,
+                    isEditing: colorEditingBinding(for: .gridBackground)
+                )
+                if store.corpus.settings.gridBackgroundColor != nil {
+                    Button("System") {
+                        settings.wrappedValue.gridBackgroundColor = nil
+                    }
+                    .buttonStyle(.glass)
+                    .help("Use system default")
+                }
+            }
+            ColorSwatchField(
+                title: "Expanded card background",
+                selection: Binding(
+                    get: { settings.wrappedValue.expandedCardBackgroundColor ?? Settings.defaultExpandedCardBackgroundColor },
+                    set: { settings.wrappedValue.expandedCardBackgroundColor = $0 }
+                ),
+                colors: store.palette.colors,
+                isEditing: colorEditingBinding(for: .expandedCardBackground)
+            )
+            ColorSwatchField(
+                title: "Expanded card text",
+                selection: Binding(
+                    get: { settings.wrappedValue.expandedCardTextColor ?? Settings.defaultExpandedCardTextColor },
+                    set: { settings.wrappedValue.expandedCardTextColor = $0 }
+                ),
+                colors: store.palette.colors,
+                isEditing: colorEditingBinding(for: .expandedCardText)
+            )
+            ColorSwatchField(
+                title: "Expanded card chip",
+                selection: Binding(
+                    get: { settings.wrappedValue.expandedCardChipColor ?? Settings.defaultExpandedCardChipColor },
+                    set: { settings.wrappedValue.expandedCardChipColor = $0 }
+                ),
+                colors: store.palette.colors,
+                isEditing: colorEditingBinding(for: .expandedCardChip)
+            )
+        }
     }
 
     private func colorEditingBinding(for target: ColorEditTarget) -> Binding<Bool> {
@@ -848,6 +990,7 @@ struct CategoryManagerSection: View {
             TextField("New category", text: $newCategoryName)
                 .textFieldStyle(.plain)
                 .onSubmit(addCategory)
+                .frame(minWidth: 240)
             Button("Add", action: addCategory)
                 .buttonStyle(.glass)
                 .disabled(newCategoryName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
@@ -871,21 +1014,21 @@ struct CategoryRow: View {
         HStack(spacing: 8) {
             TextField("Name", text: nameBinding)
                 .textFieldStyle(.plain)
-                .frame(minWidth: 90)
+                .frame(width: 240)
             ColorSwatchField(
                 title: "BG",
                 selection: colorBinding,
                 colors: store.palette.colors,
                 isEditing: colorEditingBinding(for: .background)
             )
-            .frame(width: 140)
+            .frame(width: 240)
             ColorSwatchField(
                 title: "Text",
                 selection: textColorBinding,
                 colors: store.palette.colors,
                 isEditing: colorEditingBinding(for: .text)
             )
-            .frame(width: 140)
+            .frame(width: 240)
             Button {
                 store.deleteCategory(category.id)
             } label: {
@@ -1638,19 +1781,27 @@ final class CorpusStore: ObservableObject {
     func beginNewPhrase() {
         editingPhrase = Phrase(
             id: "phrase-\(Int(Date().timeIntervalSince1970))",
-            categoryId: corpus.categories.first?.id ?? "personal",
+            categoryId: categoryIDForNewPhrase(),
             title: "",
             summary: "",
             value: "",
             color: corpus.settings.defaultTileColor,
             textColor: corpus.settings.defaultTextColor,
             fontSize: nil,
+            image: nil,
             favorite: false,
             visibility: .private,
             tags: [],
             createdAt: Date(),
             updatedAt: Date()
         )
+    }
+
+    private func categoryIDForNewPhrase() -> String {
+        if corpus.categories.contains(where: { $0.id == activeCategoryID }) {
+            return activeCategoryID
+        }
+        return corpus.categories.first?.id ?? "personal"
     }
 
     func beginEditingSelectedPhrase() {
@@ -1741,18 +1892,23 @@ final class CorpusStore: ObservableObject {
         return color(for: value)
     }
 
-    func categoryTabBackground(for tab: Category) -> Color {
-        if let category = category(for: tab.id) {
-            return color(for: category.color ?? corpus.settings.defaultTileColor)
+    func categoryTabBackground(for tab: Category, isSelected: Bool) -> Color {
+        if isSelected {
+            return highlightColor
         }
         return color(for: corpus.settings.defaultTileColor)
     }
 
-    func categoryTabTextColor(for tab: Category) -> Color {
-        if let category = category(for: tab.id) {
-            return color(for: category.textColor ?? corpus.settings.defaultTextColor)
+    func imageURL(for image: String?) -> URL? {
+        guard let image, !image.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return nil }
+        let value = image.trimmingCharacters(in: .whitespacesAndNewlines)
+        if let url = URL(string: value), url.scheme != nil {
+            return url
         }
-        return color(for: corpus.settings.defaultTextColor)
+        if value.hasPrefix("/") {
+            return URL(fileURLWithPath: value)
+        }
+        return corpusURL.deletingLastPathComponent().appendingPathComponent(value).standardizedFileURL
     }
 
     func addCategory(name: String) {
@@ -1907,6 +2063,7 @@ struct Phrase: Codable, Identifiable {
     var color: String?
     var textColor: String?
     var fontSize: Int?
+    var image: String? = nil
     var favorite: Bool
     var visibility: Visibility
     var tags: [String]
@@ -2026,6 +2183,7 @@ enum PreviewData {
         color: "brown-13",
         textColor: "brown-22",
         fontSize: nil,
+        image: nil,
         favorite: true,
         visibility: .public,
         tags: ["agent"],
@@ -2043,6 +2201,7 @@ enum PreviewData {
         color: "brown-13",
         textColor: "brown-22",
         fontSize: nil,
+        image: nil,
         favorite: false,
         visibility: .localOnly,
         tags: ["address"],
