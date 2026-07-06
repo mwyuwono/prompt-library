@@ -98,6 +98,22 @@ For image-generation prompts with multiple variants, save the shared base/refere
 
 When adding or refreshing variant previews later, reuse that same saved base image so the variant thumbnails show standardized outputs from a consistent source. Final project preview images should be exact `1920x1080`.
 
+Prompt execution reference images (`referenceImages[].path`) should use the public S3 asset bucket:
+
+```json
+{
+  "referenceImages": [
+    {
+      "variable": "style_reference",
+      "label": "Style Reference",
+      "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/example-reference.jpg"
+    }
+  ]
+}
+```
+
+Keep these reference images out of Git unless they are also used as prompt preview artwork.
+
 Use descriptive preview filenames:
 
 ```text

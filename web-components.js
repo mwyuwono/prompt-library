@@ -4048,8 +4048,16 @@ ${subjectPrompt}`
 
                             <!-- Reference Images -->
                             <div class="card" data-section="reference-images">
-                                <h2 class="card-title" data-eyebrow="Section 05">Reference Images</h2>
-                                <p class="card-description">Upload images and reference them in your template with {{variable_name}}. Their public URLs are substituted when the prompt is copied.</p>
+                                <div class="card-header-with-action">
+                                    <div>
+                                        <h2 class="card-title" data-eyebrow="Section 05">Reference Images</h2>
+                                        <p class="card-description">Upload images and reference them in your template with {{variable_name}}. Their public URLs are substituted when the prompt is copied.</p>
+                                    </div>
+                                    <a class="button-secondary" href="/reference-library.html" target="_blank" rel="noopener">
+                                        <span class="material-symbols-outlined" aria-hidden="true">image_search</span>
+                                        Browse
+                                    </a>
+                                </div>
                                 <wy-reference-image-editor
                                     .referenceImages="${this._editedPrompt.referenceImages || []}"
                                     @change="${(e6) => this._handleFieldChange("referenceImages", e6.detail.referenceImages)}"

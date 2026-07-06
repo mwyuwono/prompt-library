@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light">
+    <title>Reference Library - Prompt Admin</title>
+    <link rel="icon" href="/public/icons/prompt-admin/favicon.ico" sizes="any">
+    <link rel="stylesheet" href="tokens.css?v=20260319-1532">
+    <link rel="stylesheet" href="components.css?v=20260629-light-dom">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet">
+    <link rel="stylesheet" href="admin.css?v=20260706-reference-library">
+</head>
+<body class="admin-page reference-library-page">
+    <main class="reference-library-shell">
+        <header class="reference-library-header">
+            <div>
+                <p class="reference-library-kicker">Prompt assets</p>
+                <h1>Reference Library</h1>
+            </div>
+            <nav class="reference-library-actions" aria-label="Reference library actions">
+                <a href="/admin.html" class="reference-library-link">
+                    <span class="material-symbols-outlined" aria-hidden="true">edit_note</span>
+                    Admin
+                </a>
+                <button id="refreshButton" class="reference-library-button" type="button">
+                    <span class="material-symbols-outlined" aria-hidden="true">refresh</span>
+                    Refresh
+                </button>
+            </nav>
+        </header>
+
+        <section class="reference-library-toolbar" aria-label="Reference library controls">
+            <label class="reference-search-field">
+                <span class="material-symbols-outlined" aria-hidden="true">search</span>
+                <input id="searchInput" type="search" placeholder="Search reference images" autocomplete="off">
+            </label>
+            <label class="reference-upload-button">
+                <span class="material-symbols-outlined" aria-hidden="true">upload</span>
+                Add Reference Image
+                <input id="uploadInput" type="file" accept="image/*">
+            </label>
+        </section>
+
+        <div id="statusText" class="reference-library-status">Loading reference images...</div>
+        <section id="assetGrid" class="reference-asset-grid" aria-live="polite"></section>
+    </main>
+
+    <wy-toast id="toast"></wy-toast>
+    <script type="module">
+        import './web-components.js?v=20260629-light-dom';
+    </script>
+    <script type="module" src="reference-library.js?v=20260706-reference-library"></script>
+</body>
+</html>

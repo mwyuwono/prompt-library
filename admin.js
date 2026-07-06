@@ -225,6 +225,31 @@ async function uploadImage(file) {
     }
 }
 
+async function uploadReferenceAsset(file) {
+    try {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const response = await fetch('/api/reference-assets/upload', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok || !data.success) {
+            throw new Error(data.error || 'Failed to upload reference image');
+        }
+
+        return {
+            success: true,
+            path: data.asset?.url || data.url
+        };
+    } catch (error) {
+        console.error('Error uploading reference asset:', error);
+        throw error;
+    }
+}
+
 /**
  * Delete image from server
  */
@@ -504,7 +529,7 @@ function setupEventListeners() {
     editor.addEventListener('reference-image-upload', async (e) => {
         try {
             const { file, promptId, index, variationIndex = null, variationId = null } = e.detail;
-            const result = await uploadImage(file);
+            const result = await uploadReferenceAsset(file);
             if (result.success) {
                 const p = prompts.find(p => p.id === promptId);
                 if (p) {
@@ -560,9 +585,6 @@ function setupEventListeners() {
                         } else {
                             editor.prompt = JSON.parse(JSON.stringify(p));
                         }
-                        if (path && !isImageReferenced(path)) {
-                            await deleteImage(path.split('/').pop());
-                        }
                         showToast('Reference image removed', 'success');
                         refreshBackupStatus();
                     }
@@ -572,9 +594,6 @@ function setupEventListeners() {
                         editor.setReferenceImageValue(index, '');
                     } else {
                         editor.prompt = JSON.parse(JSON.stringify(p));
-                    }
-                    if (path && !isImageReferenced(path)) {
-                        await deleteImage(path.split('/').pop());
                     }
                     showToast('Reference image removed', 'success');
                     refreshBackupStatus();

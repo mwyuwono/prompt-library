@@ -140,8 +140,9 @@ npm run encrypt:private
 That re-encrypts the current `private-prompts.source.json` with the new passcode. After that, restart `node server.js` if the admin is already running, then redeploy so the updated `private-prompts.enc.json` is published.
 
 Deploy workflow:
-- Public edits: deploy `prompts.json` and any referenced images
-- Private edits: deploy `private-prompts.enc.json` and any referenced images
+- Public edits: deploy `prompts.json`; prompt preview artwork stays in `public/images/`
+- Prompt execution reference images should use the public S3 bucket under `https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/`
+- Private edits: deploy `private-prompts.enc.json`
 
 ## Local Design System
 

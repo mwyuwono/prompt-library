@@ -20,6 +20,12 @@ const DEFAULT_REMOTE_URL = 'https://github.com/mwyuwono/prompt-library.git';
 const DEFAULT_BRANCH = 'main';
 const REMOTE_NAME = 'origin';
 const GIT_TIMEOUT_MS = 30000;
+const REFERENCE_ASSET_BUCKET = process.env.REFERENCE_ASSET_BUCKET || 'prompt-library-assets-009019643313';
+const REFERENCE_ASSET_PREFIX = (process.env.REFERENCE_ASSET_PREFIX || 'reference-images').replace(/^\/+|\/+$/g, '');
+const REFERENCE_ASSET_REGION = process.env.REFERENCE_ASSET_REGION || 'us-east-1';
+const REFERENCE_ASSET_PROFILE = process.env.REFERENCE_ASSET_PROFILE || process.env.AWS_PROFILE || 'plots-s3-admin-bootstrap';
+const REFERENCE_ASSET_PUBLIC_BASE_URL = (process.env.REFERENCE_ASSET_PUBLIC_BASE_URL ||
+    `https://${REFERENCE_ASSET_BUCKET}.s3.amazonaws.com/${REFERENCE_ASSET_PREFIX}`).replace(/\/+$/g, '');
 let gitAskPassPath = null;
 let cachedGitHubToken = null;
 
@@ -84,6 +90,17 @@ const upload = multer({
         // Accept images only
         if (!file.mimetype.startsWith('image/')) {
             return cb(new Error('Only image files are allowed'), false);
+        }
+        cb(null, true);
+    }
+});
+
+const referenceAssetUpload = multer({
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 25 * 1024 * 1024 },
+    fileFilter: (req, file, cb) => {
+        if (!file.mimetype.startsWith('image/')) {
+            return cb(new Error('Only image reference files are supported in this view'), false);
         }
         cb(null, true);
     }
@@ -191,6 +208,106 @@ function validateHeroImageMasterPrompt(masterPrompt) {
     }
 
     return { ok: true, value: normalized };
+}
+
+function getAwsCliArgs(args = []) {
+    const cliArgs = [];
+    if (REFERENCE_ASSET_PROFILE) {
+        cliArgs.push('--profile', REFERENCE_ASSET_PROFILE);
+    }
+    cliArgs.push(...args);
+    return cliArgs;
+}
+
+function normalizeReferenceAssetKey(filename = '') {
+    const parsed = path.parse(filename);
+    const extension = parsed.ext.toLowerCase();
+    const base = parsed.name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        .slice(0, 80) || 'reference';
+    return `${REFERENCE_ASSET_PREFIX}/${Date.now()}-${base}${extension}`;
+}
+
+function getReferenceAssetUrl(key) {
+    const relativeKey = String(key || '').replace(new RegExp(`^${REFERENCE_ASSET_PREFIX}/?`), '');
+    return `${REFERENCE_ASSET_PUBLIC_BASE_URL}/${relativeKey.split('/').map(encodeURIComponent).join('/')}`;
+}
+
+async function runAwsJson(args, options = {}) {
+    const { stdout } = await execFileAsync('aws', getAwsCliArgs(args), {
+        timeout: options.timeout || 30000,
+        maxBuffer: options.maxBuffer || 10 * 1024 * 1024
+    });
+    return stdout ? JSON.parse(stdout) : {};
+}
+
+async function listReferenceAssets() {
+    const result = await runAwsJson([
+        's3api',
+        'list-objects-v2',
+        '--bucket',
+        REFERENCE_ASSET_BUCKET,
+        '--prefix',
+        `${REFERENCE_ASSET_PREFIX}/`,
+        '--output',
+        'json'
+    ]);
+
+    return (result.Contents || [])
+        .filter(item => item.Key && !item.Key.endsWith('/'))
+        .map(item => {
+            const filename = path.basename(item.Key);
+            const contentType = getMimeTypeFromFilename(filename);
+            return {
+                key: item.Key,
+                filename,
+                url: getReferenceAssetUrl(item.Key),
+                size: item.Size || 0,
+                lastModified: item.LastModified || null,
+                contentType,
+                type: contentType.startsWith('image/') ? 'image' : 'file'
+            };
+        })
+        .sort((a, b) => String(b.lastModified || '').localeCompare(String(a.lastModified || '')));
+}
+
+async function uploadReferenceAsset(file) {
+    const key = normalizeReferenceAssetKey(file.originalname);
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'prompt-reference-'));
+    const tempPath = path.join(tempDir, path.basename(key));
+
+    try {
+        fs.writeFileSync(tempPath, file.buffer);
+        await execFileAsync('aws', getAwsCliArgs([
+            's3',
+            'cp',
+            tempPath,
+            `s3://${REFERENCE_ASSET_BUCKET}/${key}`,
+            '--content-type',
+            file.mimetype || getMimeTypeFromFilename(file.originalname),
+            '--cache-control',
+            'public, max-age=31536000, immutable',
+            '--metadata-directive',
+            'REPLACE',
+            '--no-progress'
+        ]), {
+            timeout: 120000,
+            maxBuffer: 10 * 1024 * 1024
+        });
+
+        return {
+            key,
+            filename: path.basename(key),
+            url: getReferenceAssetUrl(key),
+            size: file.size,
+            contentType: file.mimetype || getMimeTypeFromFilename(file.originalname),
+            type: 'image'
+        };
+    } finally {
+        fs.rmSync(tempDir, { recursive: true, force: true });
+    }
 }
 
 function getPrivatePassphrase() {
@@ -765,6 +882,19 @@ function getImageExtension(mimeType = '') {
     if (normalized.includes('jpeg') || normalized.includes('jpg')) return '.jpg';
     if (normalized.includes('webp')) return '.webp';
     return '.png';
+}
+
+function getMimeTypeFromFilename(filename = '') {
+    const extension = path.extname(filename).toLowerCase();
+    if (extension === '.jpg' || extension === '.jpeg') return 'image/jpeg';
+    if (extension === '.png') return 'image/png';
+    if (extension === '.webp') return 'image/webp';
+    if (extension === '.gif') return 'image/gif';
+    if (extension === '.svg') return 'image/svg+xml';
+    if (extension === '.pdf') return 'application/pdf';
+    if (extension === '.txt' || extension === '.md') return 'text/plain';
+    if (extension === '.json') return 'application/json';
+    return 'application/octet-stream';
 }
 
 function normalizeBase64Image(imageData, fallbackMimeType = 'image/png') {
@@ -1441,6 +1571,50 @@ app.post('/api/images/upload', upload.single('file'), (req, res) => {
     } catch (error) {
         console.error('Error uploading image:', error);
         res.status(500).json({ error: error.message || 'Failed to upload image' });
+    }
+});
+
+/**
+ * GET /api/reference-assets
+ * Lists reusable prompt reference assets from S3.
+ */
+app.get('/api/reference-assets', async (req, res) => {
+    try {
+        const assets = await listReferenceAssets();
+        res.json({
+            success: true,
+            bucket: REFERENCE_ASSET_BUCKET,
+            prefix: REFERENCE_ASSET_PREFIX,
+            publicBaseUrl: REFERENCE_ASSET_PUBLIC_BASE_URL,
+            profile: REFERENCE_ASSET_PROFILE,
+            assets
+        });
+    } catch (error) {
+        console.error('Error listing reference assets:', error);
+        res.status(500).json({
+            success: false,
+            error: error.message || 'Failed to list reference assets',
+            profile: REFERENCE_ASSET_PROFILE,
+            bucket: REFERENCE_ASSET_BUCKET
+        });
+    }
+});
+
+/**
+ * POST /api/reference-assets/upload
+ * Uploads a reusable prompt reference image to S3.
+ */
+app.post('/api/reference-assets/upload', referenceAssetUpload.single('file'), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ success: false, error: 'No file uploaded' });
+        }
+
+        const asset = await uploadReferenceAsset(req.file);
+        res.json({ success: true, asset, url: asset.url });
+    } catch (error) {
+        console.error('Error uploading reference asset:', error);
+        res.status(500).json({ success: false, error: error.message || 'Failed to upload reference asset' });
     }
 });
 

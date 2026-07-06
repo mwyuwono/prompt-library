@@ -213,6 +213,8 @@ Multi-variant prompt previews have two levels: the prompt-level `image` is the h
 
 When an image-generation prompt has multiple variants, save the shared base/reference image used to generate the variant previews in `public/images/` and record it on the prompt as `previewBaseImage`. Use the same saved base image for future variant preview images so the variant set shows standardized results. Add a short `previewBaseImageDescription` when the source or purpose would not be obvious from the filename.
 
+Prompt execution reference images (`referenceImages[].path`) should live in the public S3 asset bucket under `https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/`, not in Git. These URLs are substituted into copied prompts and fetched by the image clipboard action.
+
 When generating or refreshing preview images, existing generated previews may be visually 16:9 but not exact. Normalize final project copies to exact `1920x1080` before final validation.
 
 ### Variable Types
