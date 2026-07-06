@@ -1248,20 +1248,17 @@ export class WyPromptEditor extends LitElement {
                                 </span>
                                 <div class="variation-display-options">
                                     <wy-option-toggle
-                                        variant="switch"
                                         size="compact"
-                                        label="Visual Variant Selector"
-                                        description="Shows image tiles instead of the dropdown selector in the public prompt modal."
+                                        label="Variant Selector"
                                         .options="${['dropdown', 'visual']}"
-                                        .labels="${['Off', 'On']}"
+                                        .labels="${['Dropdown', 'Visual']}"
                                         .value="${this._editedPrompt.variationSelector === 'visual' ? 'visual' : 'dropdown'}"
                                         @change="${(e) => this._handleVariationSelectorChange(e.detail.value === 'visual')}"
                                     ></wy-option-toggle>
                                     ${this._editedPrompt.variationSelector === 'visual' ? html`
                                         <wy-option-toggle
                                             size="compact"
-                                            label="Tile Content"
-                                            description="Choose whether visual selector thumbnails include variant text."
+                                            label="Tiles"
                                             .options="${['thumbnail', 'details']}"
                                             .labels="${['Thumbnail only', 'Title + description']}"
                                             .value="${this._editedPrompt.variationSelectorTileMode === 'details' ? 'details' : 'thumbnail'}"
@@ -1272,7 +1269,7 @@ export class WyPromptEditor extends LitElement {
                                             variant="switch"
                                             size="compact"
                                             label="Full-screen modal"
-                                            description="Expands modal to fill the browser window. Recommended for prompts with many visual variants."
+                                            description="Expands prompts with many visual variants."
                                             .options="${[false, true]}"
                                             .labels="${['Off', 'On']}"
                                             .value="${this._editedPrompt.fullScreenModal === true}"
@@ -1411,7 +1408,7 @@ export class WyPromptEditor extends LitElement {
                                     variant="switch"
                                     size="compact"
                                     label="Featured"
-                                    description="Featured prompts are highlighted and sorted to the top of the library."
+                                    description="Highlights and sorts this prompt first."
                                     .options="${['false', 'true']}"
                                     .labels="${['Off', 'On']}"
                                     .value="${this._editedPrompt.featured ? 'true' : 'false'}"
@@ -1425,7 +1422,7 @@ export class WyPromptEditor extends LitElement {
                                 <wy-option-toggle
                                     variant="switch"
                                     size="compact"
-                                    label="Archive Prompt"
+                                    label="Archived"
                                     description="Archived prompts are hidden from the public site but remain editable here."
                                     .options="${['false', 'true']}"
                                     .labels="${['Off', 'On']}"
@@ -1441,7 +1438,7 @@ export class WyPromptEditor extends LitElement {
                                     variant="switch"
                                     size="compact"
                                     label="Color Palette"
-                                    description="Shows the color palette tool when this prompt is open on the public site."
+                                    description="Shows the palette tool in the prompt modal."
                                     .options="${['false', 'true']}"
                                     .labels="${['Off', 'On']}"
                                     .value="${this._editedPrompt.showPalette ? 'true' : 'false'}"

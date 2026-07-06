@@ -55,6 +55,18 @@ Avoid:
 
 Put common setup, input requirements, and shared usage notes in the parent prompt `description` or `instructions` instead.
 
+## Descriptions And Instructions
+
+Keep all descriptions short. A description should state what the prompt does in language users can scan quickly. Do not put usage instructions, setup steps, or prompt-level instructions in a description.
+
+For multi-step prompts:
+
+- Use the prompt or variation `description` to describe the whole workflow.
+- Put actionable guidance for each step in that step's `instructions`.
+- Avoid prompt-level or variation-level `instructions` that restate the workflow.
+
+Write instructions as readable markdown. If the content is a sequence or checklist, use a numbered or bulleted list instead of one dense paragraph.
+
 ## Prompt Images
 
 Standard prompts can use a prompt-level image:

@@ -259,7 +259,7 @@ export class WyPromptModal extends LitElement {
           class="step-instructions"
           variant="compact"
           heading="${step.name}">
-          ${step.instructions}
+          <div class="step-instructions-copy">${unsafeHTML(this._renderDescriptionMarkdown(step.instructions))}</div>
         </wy-info-panel>
       ` : ''}
       
@@ -718,15 +718,20 @@ export class WyPromptModal extends LitElement {
   }
 
   _getToggleDescription(variable, options) {
-    if (variable.description) return variable.description;
-    if (!Array.isArray(options) || options.length < 2 || options[0] !== '' || !options[1]) return '';
+    return variable.description || '';
+  }
 
-    const enabledText = String(options[1]).trim();
-    const firstSentenceMatch = enabledText.match(/^.*?[.!?](?:\s|$)/);
-    const firstSentence = firstSentenceMatch ? firstSentenceMatch[0].trim() : enabledText;
-    return firstSentence.length > 140
-      ? `${firstSentence.slice(0, 137).trim()}...`
-      : firstSentence;
+  _getToggleVariant(variable, options, labels) {
+    if (variable.control === 'switch' || variable.variant === 'switch') return 'switch';
+    if (variable.control === 'segmented' || variable.variant === 'segmented') return 'segmented';
+
+    const displayLabels = Array.isArray(labels) ? labels : options;
+    const isBooleanInstruction =
+      displayLabels?.[0] === 'Off' &&
+      displayLabels?.[1] === 'On' &&
+      (options?.[0] === '' || options?.[0] === false || options?.[0] === 'false');
+
+    return isBooleanInstruction ? 'switch' : 'segmented';
   }
 
   _renderVariable(v) {
@@ -749,6 +754,7 @@ export class WyPromptModal extends LitElement {
         ? currentValue
         : options[0];
       const toggleDescription = this._getToggleDescription(v, options);
+      const toggleVariant = this._getToggleVariant(v, options, labels);
 
       return html`
         <div class="form-group">
@@ -760,7 +766,7 @@ export class WyPromptModal extends LitElement {
             .valueDescriptions="${valueDescriptions}"
             .value="${toggleValue}"
             size="${size}"
-            variant="switch"
+            variant="${toggleVariant}"
             show-selected-value-text
             @change="${(e) => this._handleInput(v.name, e.detail.value)}"
           ></wy-option-toggle>

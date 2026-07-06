@@ -2741,6 +2741,58 @@ wy-controls-bar {
       line-height: 1.8;
     }
 
+    wy-prompt-modal .form-group wy-option-toggle .group {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--spacing-xxs, 2px);
+      padding: var(--spacing-xxs, 2px);
+      border-radius: var(--radius-pill, 9999px);
+      background: var(--paper-edge, #DDD6C8);
+    }
+
+    wy-prompt-modal .form-group wy-option-toggle .option {
+      position: relative;
+      overflow: hidden;
+      border: 0;
+      border-radius: var(--radius-pill, 9999px);
+      min-height: 34px;
+      padding: var(--spacing-xs, 4px) var(--spacing-md, 16px);
+      background: transparent;
+      color: color-mix(in srgb, var(--ink-mute, #6B6B6A) 84%, transparent);
+      font-family: var(--ff-sans);
+      font-size: var(--fs-body-s, 0.875rem);
+      font-weight: 700;
+      line-height: 1.2;
+      cursor: pointer;
+      transition:
+        background-color var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1)),
+        color var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
+    }
+
+    wy-prompt-modal .form-group wy-option-toggle .option::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: currentColor;
+      opacity: 0;
+      transition: opacity var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
+      pointer-events: none;
+    }
+
+    wy-prompt-modal .form-group wy-option-toggle .option:hover::after {
+      opacity: var(--state-hover-opacity, 0.08);
+    }
+
+    wy-prompt-modal .form-group wy-option-toggle .option.selected {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    wy-prompt-modal .form-group wy-option-toggle .option:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 2px;
+    }
+
     wy-prompt-modal .form-group wy-option-toggle .switch-row {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
@@ -3006,8 +3058,9 @@ wy-controls-bar {
 
     wy-prompt-modal wy-info-panel[variant="compact"],
     wy-prompt-modal wy-info-panel.step-instructions {
-        --wy-info-panel-compact-bg: var(--paper-edge, #E8DDD7);
-        --wy-info-panel-compact-border: var(--paper-edge, #DDD);
+        --wy-info-panel-compact-bg: var(--ink, #26211C);
+        --wy-info-panel-compact-border: var(--ink, #26211C);
+        --wy-info-panel-text-color: var(--paper, #F7F4EE);
         --wy-info-panel-compact-padding: var(--spacing-md, 16px);
     }
 
@@ -3080,7 +3133,32 @@ wy-prompt-modal .stepper-progress-bar {
     }
 
     wy-prompt-modal .step-instructions {
-      margin-bottom: var(--spacing-lg, 24px);
+        margin-bottom: var(--spacing-lg, 24px);
+    }
+
+    wy-prompt-modal .step-instructions .panel-heading {
+        color: var(--paper, #F7F4EE);
+        font-size: 1.5em;
+        line-height: 1.2;
+        margin-bottom: var(--spacing-sm, 8px);
+    }
+
+    wy-prompt-modal .step-instructions-copy p {
+        margin: 0 0 0.65em;
+    }
+
+    wy-prompt-modal .step-instructions-copy p:last-child {
+        margin-bottom: 0;
+    }
+
+    wy-prompt-modal .step-instructions-copy ol,
+    wy-prompt-modal .step-instructions-copy ul {
+        margin: 0.35em 0 0;
+        padding-left: 1.35em;
+    }
+
+    wy-prompt-modal .step-instructions-copy li + li {
+        margin-top: 0.25em;
     }
 
     wy-prompt-modal .tabs-header {

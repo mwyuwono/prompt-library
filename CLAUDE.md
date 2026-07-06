@@ -197,6 +197,14 @@ First variation is default. User input preserved when switching. Variables share
 
 When a variation has a `description`, keep it to the unique differentiator of that variation only. Do not repeat the parent prompt's job, input requirements, or shared usage instructions. For example, use `18th Century Hand Colored Plan` instead of `Recreates an uploaded map, satellite view, or site-plan screenshot as...`.
 
+### Prompt Copy Rules
+
+Keep every prompt `description` as short as possible while still making the prompt's purpose clear to users. Do not put usage instructions, setup steps, or prompt-level instructions in descriptions.
+
+For multi-step prompts, the prompt or variation `description` should describe the entire workflow. Put the actionable instructions for each step in that step's `instructions` field. Do not duplicate the step workflow in prompt-level or variation-level `instructions`.
+
+Format prompt and step instructions for readability. Use markdown lists for numbered or bulleted guidance instead of packing list-like instructions into one paragraph.
+
 ### Prompt Preview Images
 
 Prompt preview artwork should be exact `1920x1080` images, which is a `16:9` landscape aspect ratio. The public grid/card UI renders prompt thumbnails in a 16:9 frame, so normalize generated preview images to exact dimensions before committing rather than relying on images that are only visually close to 16:9.

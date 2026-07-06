@@ -87,9 +87,7 @@ export class WyOptionToggle extends LitElement {
         if (Array.isArray(this.valueDescriptions) && this.valueDescriptions.length === 2 && this.valueDescriptions[index]) {
             return this.valueDescriptions[index];
         }
-        const selectedValue = this._getSelectedValue();
-        if (selectedValue) return selectedValue;
-        return 'No additional prompt instruction will be added.';
+        return '';
     }
 
     _getA11yLabel() {
@@ -164,7 +162,8 @@ export class WyOptionToggle extends LitElement {
         const hasValidOptions = this._hasValidOptions();
         const selectedIndex = this._getSelectedIndex();
         const ariaLabel = this._getA11yLabel();
-        const showSelectedValueText = this.showSelectedValueText && hasValidOptions;
+        const selectedDescription = this._getSelectedDescription();
+        const showSelectedValueText = this.showSelectedValueText && hasValidOptions && selectedDescription;
 
         return html`
             ${this.variant === 'switch' ? html`
@@ -210,7 +209,7 @@ export class WyOptionToggle extends LitElement {
                 </div>
             `}
             ${showSelectedValueText ? html`
-                <p class="selected-value-text">${this._getSelectedDescription()}</p>
+                <p class="selected-value-text">${selectedDescription}</p>
             ` : ''}
         `;
     }

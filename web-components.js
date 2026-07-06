@@ -1666,9 +1666,7 @@ var WyOptionToggle = class extends i4 {
     if (Array.isArray(this.valueDescriptions) && this.valueDescriptions.length === 2 && this.valueDescriptions[index]) {
       return this.valueDescriptions[index];
     }
-    const selectedValue = this._getSelectedValue();
-    if (selectedValue) return selectedValue;
-    return "No additional prompt instruction will be added.";
+    return "";
   }
   _getA11yLabel() {
     return this.ariaLabel || this.label || "Option toggle";
@@ -1729,7 +1727,8 @@ var WyOptionToggle = class extends i4 {
     const hasValidOptions = this._hasValidOptions();
     const selectedIndex = this._getSelectedIndex();
     const ariaLabel = this._getA11yLabel();
-    const showSelectedValueText = this.showSelectedValueText && hasValidOptions;
+    const selectedDescription = this._getSelectedDescription();
+    const showSelectedValueText = this.showSelectedValueText && hasValidOptions && selectedDescription;
     return b2`
             ${this.variant === "switch" ? b2`
                 <div class="switch-row">
@@ -1774,7 +1773,7 @@ var WyOptionToggle = class extends i4 {
                 </div>
             `}
             ${showSelectedValueText ? b2`
-                <p class="selected-value-text">${this._getSelectedDescription()}</p>
+                <p class="selected-value-text">${selectedDescription}</p>
             ` : ""}
         `;
   }
@@ -3958,20 +3957,17 @@ ${subjectPrompt}`
                                 </span>
                                 <div class="variation-display-options">
                                     <wy-option-toggle
-                                        variant="switch"
                                         size="compact"
-                                        label="Visual Variant Selector"
-                                        description="Shows image tiles instead of the dropdown selector in the public prompt modal."
+                                        label="Variant Selector"
                                         .options="${["dropdown", "visual"]}"
-                                        .labels="${["Off", "On"]}"
+                                        .labels="${["Dropdown", "Visual"]}"
                                         .value="${this._editedPrompt.variationSelector === "visual" ? "visual" : "dropdown"}"
                                         @change="${(e6) => this._handleVariationSelectorChange(e6.detail.value === "visual")}"
                                     ></wy-option-toggle>
                                     ${this._editedPrompt.variationSelector === "visual" ? b2`
                                         <wy-option-toggle
                                             size="compact"
-                                            label="Tile Content"
-                                            description="Choose whether visual selector thumbnails include variant text."
+                                            label="Tiles"
                                             .options="${["thumbnail", "details"]}"
                                             .labels="${["Thumbnail only", "Title + description"]}"
                                             .value="${this._editedPrompt.variationSelectorTileMode === "details" ? "details" : "thumbnail"}"
@@ -3982,7 +3978,7 @@ ${subjectPrompt}`
                                             variant="switch"
                                             size="compact"
                                             label="Full-screen modal"
-                                            description="Expands modal to fill the browser window. Recommended for prompts with many visual variants."
+                                            description="Expands prompts with many visual variants."
                                             .options="${[false, true]}"
                                             .labels="${["Off", "On"]}"
                                             .value="${this._editedPrompt.fullScreenModal === true}"
@@ -4121,7 +4117,7 @@ ${subjectPrompt}`
                                     variant="switch"
                                     size="compact"
                                     label="Featured"
-                                    description="Featured prompts are highlighted and sorted to the top of the library."
+                                    description="Highlights and sorts this prompt first."
                                     .options="${["false", "true"]}"
                                     .labels="${["Off", "On"]}"
                                     .value="${this._editedPrompt.featured ? "true" : "false"}"
@@ -4135,7 +4131,7 @@ ${subjectPrompt}`
                                 <wy-option-toggle
                                     variant="switch"
                                     size="compact"
-                                    label="Archive Prompt"
+                                    label="Archived"
                                     description="Archived prompts are hidden from the public site but remain editable here."
                                     .options="${["false", "true"]}"
                                     .labels="${["Off", "On"]}"
@@ -4151,7 +4147,7 @@ ${subjectPrompt}`
                                     variant="switch"
                                     size="compact"
                                     label="Color Palette"
-                                    description="Shows the color palette tool when this prompt is open on the public site."
+                                    description="Shows the palette tool in the prompt modal."
                                     .options="${["false", "true"]}"
                                     .labels="${["Off", "On"]}"
                                     .value="${this._editedPrompt.showPalette ? "true" : "false"}"
@@ -5860,7 +5856,7 @@ var WyPromptModal = class extends i4 {
           class="step-instructions"
           variant="compact"
           heading="${step.name}">
-          ${step.instructions}
+          <div class="step-instructions-copy">${o5(this._renderDescriptionMarkdown(step.instructions))}</div>
         </wy-info-panel>
       ` : ""}
       
@@ -6280,12 +6276,14 @@ var WyPromptModal = class extends i4 {
     `;
   }
   _getToggleDescription(variable, options) {
-    if (variable.description) return variable.description;
-    if (!Array.isArray(options) || options.length < 2 || options[0] !== "" || !options[1]) return "";
-    const enabledText = String(options[1]).trim();
-    const firstSentenceMatch = enabledText.match(/^.*?[.!?](?:\s|$)/);
-    const firstSentence = firstSentenceMatch ? firstSentenceMatch[0].trim() : enabledText;
-    return firstSentence.length > 140 ? `${firstSentence.slice(0, 137).trim()}...` : firstSentence;
+    return variable.description || "";
+  }
+  _getToggleVariant(variable, options, labels) {
+    if (variable.control === "switch" || variable.variant === "switch") return "switch";
+    if (variable.control === "segmented" || variable.variant === "segmented") return "segmented";
+    const displayLabels = Array.isArray(labels) ? labels : options;
+    const isBooleanInstruction = displayLabels?.[0] === "Off" && displayLabels?.[1] === "On" && (options?.[0] === "" || options?.[0] === false || options?.[0] === "false");
+    return isBooleanInstruction ? "switch" : "segmented";
   }
   _renderVariable(v3) {
     const inputType = v3.inputType || v3.type || "text";
@@ -6297,6 +6295,7 @@ var WyPromptModal = class extends i4 {
       const currentValue = this._values[v3.name];
       const toggleValue = currentValue !== void 0 && currentValue !== null ? currentValue : options[0];
       const toggleDescription = this._getToggleDescription(v3, options);
+      const toggleVariant = this._getToggleVariant(v3, options, labels);
       return b2`
         <div class="form-group">
           <wy-option-toggle
@@ -6307,7 +6306,7 @@ var WyPromptModal = class extends i4 {
             .valueDescriptions="${valueDescriptions}"
             .value="${toggleValue}"
             size="${size}"
-            variant="switch"
+            variant="${toggleVariant}"
             show-selected-value-text
             @change="${(e6) => this._handleInput(v3.name, e6.detail.value)}"
           ></wy-option-toggle>
