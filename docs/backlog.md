@@ -7,6 +7,10 @@ Keep this list short and remove items when they are resolved.
 - Review literal placeholder examples in `mochi-cloze-flashcards` and `reusable-prompt-builder`; reword or escape them if they confuse authors.
 - Review the unused `reference_image` variable in the `engraving-conversion` / `fauvist-post-impressionist` variation and remove or wire it if accidental.
 
+## Quick Text reusable variable library
+
+- Not started. The `{{name}}`/`{{a/b}}` placeholders shipped so far are phrase-local only; the original ask was for named variables reusable across many phrases via a shared library, with a `{{@name}}` reference syntax, an admin library UI, and an edit-time "update all vs. fork" prompt. Full confirmed spec is in `quick-text/README.md` under "Planned: reusable variable library" — build against that, don't re-derive the design.
+
 ## Quick Text atomic phrase cards
 
 - Atom `start`/`end` offsets are UTF-16 code units in the web component but `Character` counts in the Mac app (`Array(value)` indexing). Fine for ASCII; would diverge on emoji/combining characters. Pick one convention and align both surfaces if a non-ASCII atomic phrase is ever added.
