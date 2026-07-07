@@ -2352,5 +2352,15 @@
       }
     ],
     "slug": "color-shift"
+  },
+  {
+    "id": "untitled-prompt-1783440435901",
+    "title": "Folder Cleanup",
+    "description": "",
+    "instructions": "",
+    "category": "Architecture",
+    "template": "Scan the current folder (recursively if needed) and report what's in it before changing anything. Specifically flag: (1) build/dependency artifacts — Next.js/Turbopack/webpack chunks, node_modules, .next, Python venvs (site-packages-style dirs, __pycache__), or any other tool output that shouldn't be manually managed; (2) loose files sitting at the root that belong in an existing subfolder by type or topic; (3) empty or near-empty folders. For each category, tell me the count, approximate size, and a few example filenames — don't guess, actually inspect contents. Then propose (don't execute) a specific plan: what to delete outright, what to move where, and — if this is a recurring dev-tool leak — the likely root cause (e.g., a build/output path pointing into a synced folder) so I can fix it at the source. Wait for my go-ahead before deleting or moving anything.",
+    "variables": [],
+    "slug": "folder-cleanup"
   }
 ]
