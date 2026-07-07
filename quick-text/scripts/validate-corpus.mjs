@@ -71,7 +71,10 @@ for (const phrase of corpus.phrases || []) {
 }
 
 // Reusable variable library (see quick-text/README.md "Variable placeholders" ->
-// reusable variable library): { id, name, type: "text" | "choice", options? }.
+// reusable variable library): { id, name, type: "text" | "choice" | "value", options?, value? }.
+// "value" entries carry a fixed, canned `value` string substituted at copy time (the
+// card shows just `name` collapsed, or the full `value` in preview/Expanded display) —
+// distinct from "text"/"choice", which are filled in interactively at copy time.
 // Validated independently of the atom checks above so a schema issue in one
 // doesn't mask errors in the other.
 const libraryVariableIds = new Set();
@@ -89,11 +92,15 @@ for (const variable of corpus.variables || []) {
     libraryVariableNames.add(normalizedName);
   }
 
-  if (variable.type !== 'text' && variable.type !== 'choice') {
+  if (variable.type !== 'text' && variable.type !== 'choice' && variable.type !== 'value') {
     errors.push(`Library variable ${label} has invalid type: ${variable.type}`);
   } else if (variable.type === 'choice') {
     if (!Array.isArray(variable.options) || variable.options.length === 0) {
       errors.push(`Library variable ${label} is type "choice" but has no options.`);
+    }
+  } else if (variable.type === 'value') {
+    if (!variable.value || !variable.value.trim()) {
+      errors.push(`Library variable ${label} is type "value" but has no value.`);
     }
   }
 }

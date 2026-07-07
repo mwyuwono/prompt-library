@@ -86,6 +86,18 @@ extension Notification.Name {
         .frame(width: 720, height: 520)
 }
 
+/// The three top-level keyboard-navigable regions. Tab cycles between these;
+/// arrow keys navigate *within* whichever one is focused.
+private enum FocusModule: Int, CaseIterable {
+    case categories, search, cards
+}
+
+/// Inline neighbors within the search module, navigated with left/right
+/// arrows once the search module has focus.
+private enum SearchInlineItem: Int, CaseIterable {
+    case searchField, newButton, variablesButton, settingsButton
+}
+
 struct ContentView: View {
     @EnvironmentObject private var store: CorpusStore
     @FocusState private var searchFocused: Bool
@@ -98,6 +110,8 @@ struct ContentView: View {
     @State private var savedWindowFrame: NSRect?
     @State private var gridWidth: CGFloat = 0
     @State private var keyMonitor: Any?
+    @State private var focusedModule: FocusModule = .search
+    @State private var searchInlineFocus: SearchInlineItem = .searchField
 
     private let gridSpacing: CGFloat = 10
 
@@ -113,22 +127,7 @@ struct ContentView: View {
         VStack(alignment: .leading, spacing: 12) {
             categoryTabs
 
-            HStack(spacing: 10) {
-                searchField
-
-                Button(action: { store.beginNewPhrase() }) {
-                    Label("New", systemImage: "plus")
-                }
-                .buttonStyle(.glass)
-                Button(action: { showingVariablesLibrary = true }) {
-                    Label("Variables", systemImage: "curlybraces")
-                }
-                .buttonStyle(.glass)
-                Button(action: { showingSettings = true }) {
-                    Label("Settings", systemImage: "slider.horizontal.3")
-                }
-                .buttonStyle(.glass)
-            }
+            searchModuleRow
 
             GeometryReader { geometry in
                 ScrollView {
@@ -144,12 +143,14 @@ struct ContentView: View {
                                 fontFamily: store.corpus.settings.defaultFontFamily,
                                 cardWidth: cardWidth,
                                 isSelected: store.selectedPhraseID == phrase.id,
-                                isCopied: store.copiedPhraseID == phrase.id
+                                isCopied: store.copiedPhraseID == phrase.id,
+                                highlightColor: store.highlightColor
                             )
                             .onTapGesture {
                                 store.selectedPhraseID = phrase.id
                                 store.expandedPhraseID = phrase.id
                                 store.exitCategoryFocus()
+                                setFocusedModule(.cards)
                             }
                             .contextMenu {
                                 Button("Copy") { store.copy(phrase) }
@@ -173,6 +174,10 @@ struct ContentView: View {
                 .onChange(of: geometry.size.width) { _, width in gridWidth = width }
             }
             .padding(.top, 10)
+            .background(
+                RoundedRectangle(cornerRadius: 14)
+                    .fill(focusedModule == .cards ? store.highlightColor.opacity(0.06) : Color.clear)
+            )
             .contextMenu { gridContextMenu }
         }
         .padding(14)
@@ -190,17 +195,14 @@ struct ContentView: View {
         .onChange(of: store.searchTerm) { _, _ in
             store.searchTermDidChange()
         }
+        .onChange(of: searchFocused) { _, focused in
+            if focused {
+                focusedModule = .search
+                searchInlineFocus = .searchField
+            }
+        }
         .onExitCommand {
             handleEscape()
-        }
-        .onKeyPress(.downArrow) { moveSelection(gridColumnCount) }
-        .onKeyPress(.rightArrow) { moveSelection(1) }
-        .onKeyPress(.upArrow) { moveSelection(-gridColumnCount) }
-        .onKeyPress(.leftArrow) { moveSelection(-1) }
-        .onKeyPress(.space) {
-            guard canUseGridKeyboard else { return .ignored }
-            openSelected()
-            return .handled
         }
         .sheet(item: $store.editingPhrase) { phrase in
             PhraseEditor(phrase: phrase)
@@ -300,6 +302,48 @@ struct ContentView: View {
         .padding(.vertical, 10)
         .frame(minHeight: 44)
         .glassEffect(.regular, in: Capsule())
+        .overlay(
+            Capsule()
+                .stroke(searchFocused ? store.highlightColor : Color.primary.opacity(0.15), lineWidth: searchFocused ? 2 : 1)
+        )
+    }
+
+    /// Search field plus its inline neighbors (New/Variables/Settings), treated
+    /// as one keyboard-navigable module — left/right arrows move between them.
+    private var searchModuleRow: some View {
+        HStack(spacing: 10) {
+            searchField
+            moduleButton(icon: "plus", label: "New", item: .newButton) {
+                store.beginNewPhrase()
+            }
+            moduleButton(icon: "curlybraces", label: "Variables", item: .variablesButton) {
+                showingVariablesLibrary = true
+            }
+            moduleButton(icon: "slider.horizontal.3", label: "Settings", item: .settingsButton) {
+                showingSettings = true
+            }
+        }
+        .padding(6)
+        .background(
+            RoundedRectangle(cornerRadius: 14)
+                .fill(focusedModule == .search ? store.highlightColor.opacity(0.06) : Color.clear)
+        )
+    }
+
+    private func moduleButton(icon: String, label: String, item: SearchInlineItem, action: @escaping () -> Void) -> some View {
+        let isFocused = focusedModule == .search && searchInlineFocus == item
+        return Button {
+            action()
+            focusedModule = .search
+            searchInlineFocus = item
+            searchFocused = false
+        } label: {
+            Label(label, systemImage: icon)
+        }
+        .buttonStyle(.glass)
+        .background(
+            Capsule().fill(isFocused ? store.highlightColor.opacity(0.35) : Color.clear)
+        )
     }
 
     /// Expands the window to ~80% of the display when a card expands, since the
@@ -331,15 +375,15 @@ struct ContentView: View {
                     background: store.categoryTabBackground(for: tab, isSelected: store.isTabSelected(tab.id))
                 ) {
                     store.selectTab(tab.id)
+                    setFocusedModule(.categories)
                 }
             }
         }
-    }
-
-    private func moveSelection(_ delta: Int) -> KeyPress.Result {
-        guard canUseGridKeyboard else { return .ignored }
-        store.moveSelection(delta)
-        return .handled
+        .padding(6)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(focusedModule == .categories ? store.highlightColor.opacity(0.12) : Color.clear)
+        )
     }
 
     private func openSelected() {
@@ -377,7 +421,57 @@ struct ContentView: View {
 
     private func focusSearchSoon() {
         DispatchQueue.main.async {
+            setFocusedModule(.search)
+        }
+    }
+
+    /// Switches which of the three top-level regions has keyboard focus,
+    /// applying each module's "entry" default (search field ready to type,
+    /// a card always selected once the grid is focused).
+    private func setFocusedModule(_ module: FocusModule) {
+        focusedModule = module
+        switch module {
+        case .categories:
+            searchFocused = false
+        case .search:
+            searchInlineFocus = .searchField
             searchFocused = true
+        case .cards:
+            searchFocused = false
+            if store.selectedPhraseID == nil || !store.filteredPhrases.contains(where: { $0.id == store.selectedPhraseID }) {
+                store.selectedPhraseID = store.filteredPhrases.first?.id
+            }
+        }
+    }
+
+    private func advanceFocusedModule(reverse: Bool) {
+        let all = FocusModule.allCases
+        guard let index = all.firstIndex(of: focusedModule) else { return }
+        let next = all[(index + (reverse ? -1 : 1) + all.count) % all.count]
+        setFocusedModule(next)
+    }
+
+    private func moveSearchInlineFocus(_ delta: Int) {
+        let all = SearchInlineItem.allCases
+        guard let index = all.firstIndex(of: searchInlineFocus) else { return }
+        let nextIndex = min(max(index + delta, 0), all.count - 1)
+        searchInlineFocus = all[nextIndex]
+        searchFocused = (searchInlineFocus == .searchField)
+    }
+
+    private func activateSearchInlineItem() -> Bool {
+        switch searchInlineFocus {
+        case .searchField:
+            return false
+        case .newButton:
+            store.beginNewPhrase()
+            return true
+        case .variablesButton:
+            showingVariablesLibrary = true
+            return true
+        case .settingsButton:
+            showingSettings = true
+            return true
         }
     }
 
@@ -401,39 +495,93 @@ struct ContentView: View {
         guard store.expandedPhraseID == nil else { return event }
 
         switch event.keyCode {
-        case 48:
-            store.advanceCategoryFocus(reverse: event.modifierFlags.contains(.shift))
-            searchFocused = false
+        case 48: // Tab
+            advanceFocusedModule(reverse: event.modifierFlags.contains(.shift))
             return nil
-        case 53:
+        case 53: // Escape
             handleEscape()
             return nil
-        case 123:
-            guard canUseGridKeyboard else { return event }
-            store.moveSelection(-1)
-            return nil
-        case 124:
-            guard canUseGridKeyboard else { return event }
-            store.moveSelection(1)
-            return nil
-        case 125:
-            guard canUseGridKeyboard else { return event }
-            store.moveSelection(gridColumnCount)
-            return nil
-        case 126:
-            guard canUseGridKeyboard else { return event }
-            store.moveSelection(-gridColumnCount)
-            return nil
-        case 49:
-            guard canUseGridKeyboard else { return event }
-            openSelected()
-            return nil
-        case 36, 76:
-            guard canUseGridKeyboard else { return event }
-            copySelected()
-            return nil
+        case 123: // Left
+            return handleHorizontal(-1) ? nil : event
+        case 124: // Right
+            return handleHorizontal(1) ? nil : event
+        case 125: // Down
+            return handleDown() ? nil : event
+        case 126: // Up
+            return handleUp() ? nil : event
+        case 49: // Space
+            return handleSpace() ? nil : event
+        case 36, 76: // Return
+            return handleReturn() ? nil : event
         default:
             return event
+        }
+    }
+
+    /// Left/right: in-module navigation for categories and the search row;
+    /// left/right selection movement within the cards grid.
+    private func handleHorizontal(_ delta: Int) -> Bool {
+        switch focusedModule {
+        case .categories:
+            store.moveCategoryFocus(delta)
+            return true
+        case .search:
+            // Let the text field own left/right for cursor movement once there's
+            // something to edit; only hijack for inline-item navigation when the
+            // field is empty (nothing for the caret to move through).
+            guard searchInlineFocus != .searchField || store.searchTerm.isEmpty else { return false }
+            moveSearchInlineFocus(delta)
+            return true
+        case .cards:
+            guard canUseGridKeyboard else { return false }
+            store.moveSelection(delta)
+            return true
+        }
+    }
+
+    /// Down always hands off from categories/search to the cards grid;
+    /// within the grid it moves selection down a row.
+    private func handleDown() -> Bool {
+        switch focusedModule {
+        case .categories, .search:
+            setFocusedModule(.cards)
+            return true
+        case .cards:
+            guard canUseGridKeyboard else { return false }
+            store.moveSelection(gridColumnCount)
+            return true
+        }
+    }
+
+    private func handleUp() -> Bool {
+        guard focusedModule == .cards, canUseGridKeyboard else { return false }
+        store.moveSelection(-gridColumnCount)
+        return true
+    }
+
+    private func handleSpace() -> Bool {
+        switch focusedModule {
+        case .categories:
+            return false
+        case .search:
+            return activateSearchInlineItem()
+        case .cards:
+            guard canUseGridKeyboard else { return false }
+            openSelected()
+            return true
+        }
+    }
+
+    private func handleReturn() -> Bool {
+        switch focusedModule {
+        case .categories:
+            return false
+        case .search:
+            return activateSearchInlineItem()
+        case .cards:
+            guard canUseGridKeyboard else { return false }
+            copySelected()
+            return true
         }
     }
 
@@ -442,7 +590,7 @@ struct ContentView: View {
             store.collapseExpanded()
         } else if !store.searchTerm.isEmpty {
             store.clearSearch()
-            searchFocused = true
+            setFocusedModule(.search)
         } else if store.categoryFocusMode {
             store.exitCategoryFocus()
         }
@@ -467,10 +615,6 @@ struct CategoryTabButton: View {
                     Capsule()
                         .fill(isSelected ? background.opacity(0.78) : Color(nsColor: .windowBackgroundColor).opacity(0.18))
                         .background(.ultraThinMaterial, in: Capsule())
-                }
-                .overlay {
-                    Capsule()
-                        .stroke(isSelected ? Color.white.opacity(0.38) : Color.primary.opacity(0.12), lineWidth: 1)
                 }
         }
         .buttonStyle(.plain)
@@ -624,6 +768,7 @@ struct TileView: View {
     var cardWidth: CGFloat = Settings.defaultCardWidth
     let isSelected: Bool
     let isCopied: Bool
+    var highlightColor: Color = Color(hex: Settings.defaultHighlightColor)
 
     // Keeps the tile's proportions consistent as the card-size slider changes
     // (112/164 matches the original fixed tile dimensions).
@@ -649,7 +794,7 @@ struct TileView: View {
         .background(backgroundColor)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
-                .stroke(isSelected ? Color.primary : backgroundColor.opacity(0.5), lineWidth: isSelected ? 2 : 1)
+                .fill(isSelected ? highlightColor.opacity(0.28) : Color.clear)
         )
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .overlay {
@@ -792,8 +937,8 @@ struct PhraseEditor: View {
                                         insertAtCursor("{{@\(variable.name)}}")
                                         showingInsertVariable = false
                                     },
-                                    onCreateAndInsert: { name, type, options in
-                                        let created = store.addLibraryVariable(name: name, type: type, options: options)
+                                    onCreateAndInsert: { name, type, options, value in
+                                        let created = store.addLibraryVariable(name: name, type: type, options: options, value: value)
                                         insertAtCursor("{{@\(created.name)}}")
                                         showingInsertVariable = false
                                     }
@@ -1066,13 +1211,14 @@ private struct InsertVariablePopover: View {
 
     let libraryVariables: [LibraryVariable]
     let onInsertExisting: (LibraryVariable) -> Void
-    let onCreateAndInsert: (_ name: String, _ type: LibraryVariable.Kind, _ options: [String]) -> Void
+    let onCreateAndInsert: (_ name: String, _ type: LibraryVariable.Kind, _ options: [String], _ value: String) -> Void
 
     @State private var mode: Mode = .existing
     @State private var search = ""
     @State private var newName = ""
     @State private var newType: LibraryVariable.Kind = .text
     @State private var newOptionsText = ""
+    @State private var newValueText = ""
 
     private var filtered: [LibraryVariable] {
         let term = search.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
@@ -1093,8 +1239,15 @@ private struct InsertVariablePopover: View {
         newOptionsText.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty }
     }
 
+    private var trimmedNewValue: String { newValueText.trimmingCharacters(in: .whitespacesAndNewlines) }
+
     private var canCreate: Bool {
-        !trimmedNewName.isEmpty && !nameCollides && (newType == .text || !parsedOptions.isEmpty)
+        guard !trimmedNewName.isEmpty, !nameCollides else { return false }
+        switch newType {
+        case .text: return true
+        case .choice: return !parsedOptions.isEmpty
+        case .value: return !trimmedNewValue.isEmpty
+        }
     }
 
     var body: some View {
@@ -1138,7 +1291,7 @@ private struct InsertVariablePopover: View {
                                 HStack {
                                     Text(variable.name)
                                     Spacer()
-                                    Text(variable.type == .choice ? "Choice" : "Text")
+                                    Text(variableTypeLabel(variable.type))
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
                                 }
@@ -1161,11 +1314,18 @@ private struct InsertVariablePopover: View {
             Picker("Type", selection: $newType) {
                 Text("Text").tag(LibraryVariable.Kind.text)
                 Text("Choice").tag(LibraryVariable.Kind.choice)
+                Text("Value").tag(LibraryVariable.Kind.value)
             }
             .pickerStyle(.segmented)
             if newType == .choice {
                 TextField("Options, comma separated", text: $newOptionsText)
                     .textFieldStyle(.roundedBorder)
+            }
+            if newType == .value {
+                TextEditor(text: $newValueText)
+                    .font(.body)
+                    .frame(height: 80)
+                    .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.secondary.opacity(0.3)))
             }
             if nameCollides {
                 Text("A variable named \u{201C}\(trimmedNewName)\u{201D} already exists.")
@@ -1173,10 +1333,18 @@ private struct InsertVariablePopover: View {
                     .foregroundStyle(.red)
             }
             Button("Create & Insert") {
-                onCreateAndInsert(trimmedNewName, newType, parsedOptions)
+                onCreateAndInsert(trimmedNewName, newType, parsedOptions, trimmedNewValue)
             }
             .buttonStyle(.glassProminent)
             .disabled(!canCreate)
+        }
+    }
+
+    private func variableTypeLabel(_ kind: LibraryVariable.Kind) -> String {
+        switch kind {
+        case .choice: return "Choice"
+        case .value: return "Value"
+        case .text: return "Text"
         }
     }
 }
@@ -1221,6 +1389,11 @@ struct SettingsEditor: View {
                                 get: { settings.wrappedValue.closeCardOnCopy ?? Settings.defaultCloseCardOnCopy },
                                 set: { settings.wrappedValue.closeCardOnCopy = $0 }
                             ))
+                            Toggle("Expanded: show full variable values", isOn: Binding(
+                                get: { settings.wrappedValue.expandedChipDisplay ?? Settings.defaultExpandedChipDisplay },
+                                set: { settings.wrappedValue.expandedChipDisplay = $0 }
+                            ))
+                            .help("Shows canned variable values in full instead of their short name on every expanded card.")
                             Button {
                                 copyCorpusPath()
                             } label: {
@@ -1564,7 +1737,7 @@ private struct VariableRow: View {
         HStack(spacing: 8) {
             VStack(alignment: .leading, spacing: 2) {
                 Text(variable.name).fontWeight(.medium)
-                Text(variable.type == .choice ? (variable.options ?? []).joined(separator: " / ") : "Free text")
+                Text(variableRowSubtitle)
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
@@ -1583,6 +1756,14 @@ private struct VariableRow: View {
             .buttonStyle(.glass)
         }
         .padding(.vertical, 4)
+    }
+
+    private var variableRowSubtitle: String {
+        switch variable.type {
+        case .choice: return (variable.options ?? []).joined(separator: " / ")
+        case .value: return variable.value ?? ""
+        case .text: return "Free text"
+        }
     }
 }
 
@@ -1604,6 +1785,7 @@ private struct LibraryVariableEditorSheet: View {
     @State private var name: String = ""
     @State private var type: LibraryVariable.Kind = .text
     @State private var optionsText: String = ""
+    @State private var valueText: String = ""
     @State private var showingPropagationPrompt = false
     @State private var isForking = false
 
@@ -1623,12 +1805,19 @@ private struct LibraryVariableEditorSheet: View {
         optionsText.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty }
     }
 
+    private var trimmedValue: String { valueText.trimmingCharacters(in: .whitespacesAndNewlines) }
+
     private var nameAvailable: Bool {
         store.isLibraryVariableNameAvailable(trimmedName, excludingID: originalVariable?.id)
     }
 
     private var canSave: Bool {
-        !trimmedName.isEmpty && nameAvailable && (type == .text || !parsedOptions.isEmpty)
+        guard !trimmedName.isEmpty, nameAvailable else { return false }
+        switch type {
+        case .text: return true
+        case .choice: return !parsedOptions.isEmpty
+        case .value: return !trimmedValue.isEmpty
+        }
     }
 
     var body: some View {
@@ -1646,12 +1835,23 @@ private struct LibraryVariableEditorSheet: View {
             Picker("Type", selection: $type) {
                 Text("Text").tag(LibraryVariable.Kind.text)
                 Text("Choice").tag(LibraryVariable.Kind.choice)
+                Text("Value").tag(LibraryVariable.Kind.value)
             }
             .pickerStyle(.segmented)
 
             if type == .choice {
                 TextField("Options, comma separated", text: $optionsText)
                     .textFieldStyle(.roundedBorder)
+            }
+
+            if type == .value {
+                Text("Card shows just the name; the full value below is substituted at copy time.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                TextEditor(text: $valueText)
+                    .font(.body)
+                    .frame(height: 100)
+                    .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.secondary.opacity(0.3)))
             }
 
             if isEditing, referenceCount > 0 {
@@ -1676,6 +1876,7 @@ private struct LibraryVariableEditorSheet: View {
                 name = original.name
                 type = original.type
                 optionsText = (original.options ?? []).joined(separator: ", ")
+                valueText = original.value ?? ""
             }
         }
         .confirmationDialog(
@@ -1691,7 +1892,7 @@ private struct LibraryVariableEditorSheet: View {
             ForkVariableSheet(
                 suggestedName: "\(trimmedName) copy",
                 onCreate: { newName in
-                    store.forkLibraryVariable(name: newName, type: type, options: parsedOptions)
+                    store.forkLibraryVariable(name: newName, type: type, options: parsedOptions, value: trimmedValue)
                     isForking = false
                     dismiss()
                 },
@@ -1704,12 +1905,12 @@ private struct LibraryVariableEditorSheet: View {
     private func save() {
         guard canSave else { return }
         guard let original = originalVariable else {
-            store.addLibraryVariable(name: trimmedName, type: type, options: parsedOptions)
+            store.addLibraryVariable(name: trimmedName, type: type, options: parsedOptions, value: trimmedValue)
             dismiss()
             return
         }
         guard referenceCount > 0 else {
-            store.updateLibraryVariableInPlace(original.id, name: trimmedName, type: type, options: parsedOptions)
+            store.updateLibraryVariableInPlace(original.id, name: trimmedName, type: type, options: parsedOptions, value: trimmedValue)
             dismiss()
             return
         }
@@ -1718,7 +1919,7 @@ private struct LibraryVariableEditorSheet: View {
 
     private func applyUpdateAll() {
         guard let original = originalVariable else { return }
-        store.updateLibraryVariableInPlace(original.id, name: trimmedName, type: type, options: parsedOptions)
+        store.updateLibraryVariableInPlace(original.id, name: trimmedName, type: type, options: parsedOptions, value: trimmedValue)
         dismiss()
     }
 }
@@ -1912,6 +2113,7 @@ struct ExpandedOverlayView: View {
                 chipColor: store.expandedCardChipColor,
                 highlightColor: store.highlightColor,
                 libraryVariables: store.libraryVariables,
+                expandedChipDisplay: store.corpus.settings.expandedChipDisplay ?? Settings.defaultExpandedChipDisplay,
                 onCopyAtom: { atom in store.copyAtom(atom, in: phrase) },
                 onCopySelection: { atoms in store.copyAtomSelection(atoms, in: phrase) },
                 onCopyFull: { text in store.copyFullFromExpandedCard(text, phraseID: phrase.id) },
@@ -1946,6 +2148,9 @@ struct ExpandedCardView: View {
     // Resolves `{{@name}}` references against the corpus-level library; defaulted so
     // #Preview call sites below don't need to specify one for inline-only phrases.
     var libraryVariables: [LibraryVariable] = []
+    /// Global display-mode toggle (Settings > Behavior): when on, canned `"value"`-type
+    /// library chips show their full value inline instead of the collapsed `name`.
+    var expandedChipDisplay: Bool = false
     let onCopyAtom: (Atom) -> Void
     let onCopySelection: ([Atom]) -> Void
     /// Receives the phrase value with any filled `{{...}}` variables substituted in.
@@ -2150,6 +2355,8 @@ struct ExpandedCardView: View {
         let variable = segment.variable!
         if variable.isUnresolved {
             unresolvedVariableChip(variable, maxWidth: maxWidth)
+        } else if variable.isCannedValue {
+            cannedValueChip(variable, maxWidth: maxWidth)
         } else {
             let filled = variableValues[variable.key]
             let isHighlighted = isPulsingAllAtoms || isHoveringCopyAllZone
@@ -2181,6 +2388,27 @@ struct ExpandedCardView: View {
                     variableEditorPopover(for: variable, currentValue: filled)
                 }
         }
+    }
+
+    /// A resolved `"value"`-type library reference: nothing to fill in, so it's always
+    /// solid (like an atom chip) rather than dashed. Collapsed shows `name`; Expanded
+    /// display mode (`expandedChipDisplay`) shows the full canned `value` instead. Either
+    /// way, hovering surfaces the full value as a native tooltip — the "preview option"
+    /// without switching modes (see README "Reusable variable library").
+    private func cannedValueChip(_ variable: PhraseVariable, maxWidth: CGFloat) -> some View {
+        let isHighlighted = isPulsingAllAtoms || isHoveringCopyAllZone
+        return Text(expandedChipDisplay ? (variable.libraryValue ?? variable.displayLabel) : variable.displayLabel)
+            .multilineTextAlignment(.leading)
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: maxWidth, alignment: .leading)
+            .font(.system(size: bodyFontSize, weight: .bold))
+            .padding(.horizontal, 16)
+            .padding(.vertical, 10)
+            .frame(minHeight: 44)
+            .background(isHighlighted ? highlightColor : chipColor)
+            .foregroundStyle(isHighlighted ? .white : background)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .help(variable.libraryValue ?? "")
     }
 
     /// A dangling `{{@name}}` — renamed or deleted out of the library. Visually distinct
@@ -2334,8 +2562,18 @@ struct ExpandedCardView: View {
     /// variables into the value, then pulses every chip (or, for plain cards with
     /// no chips, the whole card background) to the highlight color in sync with
     /// the "Copied" badge, since the whole value just got copied.
+    /// Canned `"value"`-type library entries are never stored in `variableValues` (there's
+    /// nothing to fill in), so they're merged in here at copy time instead.
+    private var valuesForSubstitution: [String: String] {
+        var values = variableValues
+        for variable in parsedVariables where variable.isCannedValue {
+            values[variable.key] = variable.libraryValue
+        }
+        return values
+    }
+
     private func copyFull() {
-        onCopyFull(PhraseVariable.substitute(phrase.value, values: variableValues))
+        onCopyFull(PhraseVariable.substitute(phrase.value, values: valuesForSubstitution))
         guard hasChips else {
             withAnimation(.easeOut(duration: 0.12)) { isPulsingCardBackground = true }
             DispatchQueue.main.asyncAfter(deadline: .now() + CorpusStore.copyFeedbackDuration) {
@@ -2770,25 +3008,15 @@ final class CorpusStore: ObservableObject {
         return activeCategoryID == id
     }
 
-    func advanceCategoryFocus(reverse: Bool = false) {
-        let categories = corpus.categories.sorted { $0.sortOrder < $1.sortOrder }
+    /// Moves the keyboard-focused category chip by `delta`, cycling through
+    /// every tab (All, each category, Favorites) in the same order they're
+    /// displayed — no special-casing for All/Favorites.
+    func moveCategoryFocus(_ delta: Int) {
+        let categories = tabs
         guard !categories.isEmpty else { return }
-        searchScope = .category
-        categoryFocusMode = true
-
-        let currentID = focusedCategoryID ?? (corpus.categories.contains { $0.id == activeCategoryID } ? activeCategoryID : nil)
-        let currentIndex = currentID.flatMap { id in categories.firstIndex { $0.id == id } }
-        let nextIndex: Int
-        if let currentIndex {
-            nextIndex = (currentIndex + (reverse ? -1 : 1) + categories.count) % categories.count
-        } else {
-            nextIndex = reverse ? categories.count - 1 : 0
-        }
-
-        let nextID = categories[nextIndex].id
-        focusedCategoryID = nextID
-        activeCategoryID = nextID
-        reconcileSelectedPhrase()
+        let currentIndex = categories.firstIndex { isTabSelected($0.id) } ?? 0
+        let nextIndex = (currentIndex + delta + categories.count) % categories.count
+        selectTab(categories[nextIndex].id)
     }
 
     func exitCategoryFocus() {
@@ -3077,12 +3305,13 @@ extension CorpusStore {
     }
 
     @discardableResult
-    func addLibraryVariable(name: String, type: LibraryVariable.Kind, options: [String]) -> LibraryVariable {
+    func addLibraryVariable(name: String, type: LibraryVariable.Kind, options: [String], value: String = "") -> LibraryVariable {
         let variable = LibraryVariable(
             id: "var-\(Int(Date().timeIntervalSince1970 * 1000))",
             name: name.trimmingCharacters(in: .whitespacesAndNewlines),
             type: type,
-            options: type == .choice ? options : nil
+            options: type == .choice ? options : nil,
+            value: type == .value ? value.trimmingCharacters(in: .whitespacesAndNewlines) : nil
         )
         var vars = corpus.variables ?? []
         vars.append(variable)
@@ -3096,7 +3325,7 @@ extension CorpusStore {
     /// `id` — and, if `name` changed, rewrites every `{{@oldName}}` reference across
     /// `phrases[].value` to `{{@newName}}` so they don't go dangling. Safe to call
     /// unconditionally (including when `referenceCount` is 0, i.e. no prompt was needed).
-    func updateLibraryVariableInPlace(_ id: String, name: String, type: LibraryVariable.Kind, options: [String]) {
+    func updateLibraryVariableInPlace(_ id: String, name: String, type: LibraryVariable.Kind, options: [String], value: String = "") {
         var vars = corpus.variables ?? []
         guard let index = vars.firstIndex(where: { $0.id == id }) else { return }
         let oldName = vars[index].name
@@ -3104,6 +3333,7 @@ extension CorpusStore {
         vars[index].name = trimmedName
         vars[index].type = type
         vars[index].options = type == .choice ? options : nil
+        vars[index].value = type == .value ? value.trimmingCharacters(in: .whitespacesAndNewlines) : nil
         corpus.variables = vars
 
         if oldName.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() != trimmedName.lowercased() {
@@ -3119,8 +3349,8 @@ extension CorpusStore {
     /// phrase pointing at it, completely untouched; creates a brand-new entry that
     /// nothing references yet. The admin inserts `{{@newName}}` wherever it should apply.
     @discardableResult
-    func forkLibraryVariable(name: String, type: LibraryVariable.Kind, options: [String]) -> LibraryVariable {
-        addLibraryVariable(name: name, type: type, options: options)
+    func forkLibraryVariable(name: String, type: LibraryVariable.Kind, options: [String], value: String = "") -> LibraryVariable {
+        addLibraryVariable(name: name, type: type, options: options, value: value)
     }
 
     /// Removing the entry is enough — referencing phrases keep their literal `{{@name}}`
@@ -3162,6 +3392,11 @@ struct Settings: Codable {
     // Optional so existing corpus.json files without this key still decode.
     // Whether copying from the expanded card auto-closes it.
     var closeCardOnCopy: Bool? = nil
+    // Optional so existing corpus.json files without this key still decode.
+    // Global display mode: when true, canned "value"-type library variable chips show
+    // their full value inline instead of the collapsed `name` (see README "Reusable
+    // variable library" and `ExpandedCardView.cannedValueChip`).
+    var expandedChipDisplay: Bool? = nil
 
     // Optional so existing corpus.json files without these keys still decode.
     // Each stores either a palette swatch id or a literal "#RRGGBB" hex string
@@ -3174,6 +3409,7 @@ struct Settings: Codable {
 
     static let defaultCardWidth: Double = 164
     static let defaultCloseCardOnCopy = false
+    static let defaultExpandedChipDisplay = false
     static let defaultHighlightColor = "#E2725B"
     static let defaultExpandedCardBackgroundColor = "#22201B"
     static let defaultExpandedCardTextColor = "#F4EDE0"
@@ -3226,13 +3462,20 @@ struct LibraryVariable: Codable, Identifiable, Equatable {
     enum Kind: String, Codable, CaseIterable {
         case text
         case choice
+        /// A fixed, canned value substituted directly — no fill-in step at copy time.
+        /// The card shows just `name` (collapsed) unless previewed or in Expanded
+        /// display mode, which shows `value` in full (see README "Reusable variable
+        /// library" and `PhraseVariable.libraryValue`).
+        case value
     }
 
     var id: String
     var name: String
     var type: Kind
-    /// Required and non-empty when `type == .choice`; nil/ignored for `.text`.
+    /// Required and non-empty when `type == .choice`; nil/ignored otherwise.
     var options: [String]?
+    /// Required and non-empty when `type == .value`; nil/ignored otherwise.
+    var value: String?
 }
 
 /// A `{{...}}` placeholder occurrence detected in a phrase's `value`, character-indexed
@@ -3269,11 +3512,18 @@ struct PhraseVariable: Identifiable, Equatable {
     let start: Int
     let end: Int
     let kind: Kind
+    /// Non-nil when this resolved to a `"value"`-type library entry — its fixed,
+    /// canned text. Substituted automatically (no fill-in step); the chip shows
+    /// `displayLabel` (the variable's `name`) collapsed, `libraryValue` in
+    /// preview/Expanded display mode (see `ExpandedCardView.variableChip`).
+    let libraryValue: String?
 
     var isLibraryReference: Bool {
         if case .library = kind { return true }
         return false
     }
+
+    var isCannedValue: Bool { libraryValue != nil }
 
     /// True for a `{{@name}}` whose name doesn't match any current library entry —
     /// renamed or deleted out from under this reference.
@@ -3310,13 +3560,14 @@ struct PhraseVariable: Identifiable, Equatable {
                     choices: resolved?.type == .choice ? resolved?.options : nil,
                     start: start,
                     end: end,
-                    kind: .library(name: resolved?.name ?? rawName, libraryVariableID: resolved?.id)
+                    kind: .library(name: resolved?.name ?? rawName, libraryVariableID: resolved?.id),
+                    libraryValue: resolved?.type == .value ? resolved?.value : nil
                 ))
             } else {
                 let choices = inner.contains("/")
                     ? inner.split(separator: "/").map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty }
                     : nil
-                results.append(PhraseVariable(key: inner, displayLabel: inner, choices: choices, start: start, end: end, kind: .inline))
+                results.append(PhraseVariable(key: inner, displayLabel: inner, choices: choices, start: start, end: end, kind: .inline, libraryValue: nil))
             }
         }
         return results
@@ -3577,8 +3828,8 @@ enum PreviewData {
             categories: [Category(id: "personal", name: "Personal", sortOrder: 10)],
             phrases: [plainPhrase, addressPhrase, variablePhrase, libraryVariablePhrase],
             variables: [
-                LibraryVariable(id: "var-customer-name", name: "customer name", type: .text, options: nil),
-                LibraryVariable(id: "var-topic", name: "topic", type: .choice, options: ["billing", "support", "onboarding"])
+                LibraryVariable(id: "var-customer-name", name: "customer name", type: .text, options: nil, value: nil),
+                LibraryVariable(id: "var-topic", name: "topic", type: .choice, options: ["billing", "support", "onboarding"], value: nil)
             ]
         )
         store.palette = Palette(
