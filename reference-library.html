@@ -4,19 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="light">
-    <title>Reference Library - Prompt Admin</title>
+    <title>Reference Files - Prompt Admin</title>
     <link rel="icon" href="/public/icons/prompt-admin/favicon.ico" sizes="any">
     <link rel="stylesheet" href="tokens.css?v=20260319-1532">
     <link rel="stylesheet" href="components.css?v=20260629-light-dom">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet">
-    <link rel="stylesheet" href="admin.css?v=20260706-reference-library">
+    <link rel="stylesheet" href="admin.css?v=20260707-reference-folders">
 </head>
 <body class="admin-page reference-library-page">
     <main class="reference-library-shell">
         <header class="reference-library-header">
             <div>
                 <p class="reference-library-kicker">Prompt assets</p>
-                <h1>Reference Library</h1>
+                <h1>Reference Files</h1>
             </div>
             <nav class="reference-library-actions" aria-label="Reference library actions">
                 <a href="/admin.html" class="reference-library-link">
@@ -30,25 +30,34 @@
             </nav>
         </header>
 
+        <nav id="breadcrumb" class="reference-breadcrumb" aria-label="Folder path"></nav>
+
         <section class="reference-library-toolbar" aria-label="Reference library controls">
             <label class="reference-search-field">
                 <span class="material-symbols-outlined" aria-hidden="true">search</span>
-                <input id="searchInput" type="search" placeholder="Search reference images" autocomplete="off">
+                <input id="searchInput" type="search" placeholder="Search reference files" autocomplete="off">
             </label>
-            <a
-                id="uploadButton"
-                class="reference-upload-button"
-                href="https://s3.console.aws.amazon.com/s3/buckets/prompt-library-assets-009019643313?region=us-east-1&prefix=reference-images%2F&showversions=false"
-                target="_blank"
-                rel="noopener"
-            >
-                <span class="material-symbols-outlined" aria-hidden="true">upload</span>
-                Add Reference Image
-            </a>
-            <input id="uploadInput" class="reference-upload-input" type="file" accept="image/*">
+            <div class="reference-toolbar-actions">
+                <button id="newFolderButton" class="reference-library-button secondary" type="button">
+                    <span class="material-symbols-outlined" aria-hidden="true">create_new_folder</span>
+                    New Folder
+                </button>
+                <a
+                    id="uploadButton"
+                    class="reference-upload-button"
+                    href="https://s3.console.aws.amazon.com/s3/buckets/prompt-library-assets-009019643313?region=us-east-1&prefix=reference-images%2F&showversions=false"
+                    target="_blank"
+                    rel="noopener"
+                >
+                    <span class="material-symbols-outlined" aria-hidden="true">upload</span>
+                    Add Reference File
+                </a>
+                <input id="uploadInput" class="reference-upload-input" type="file">
+            </div>
         </section>
 
-        <div id="statusText" class="reference-library-status">Loading reference images...</div>
+        <div id="statusText" class="reference-library-status">Loading reference files...</div>
+        <section id="folderGrid" class="reference-folder-grid" aria-label="Folders"></section>
         <section id="assetGrid" class="reference-asset-grid" aria-live="polite"></section>
     </main>
 
@@ -56,6 +65,6 @@
     <script type="module">
         import './web-components.js?v=20260629-light-dom';
     </script>
-    <script type="module" src="reference-library.js?v=20260706-reference-library"></script>
+    <script type="module" src="reference-library.js?v=20260707-reference-folders"></script>
 </body>
 </html>

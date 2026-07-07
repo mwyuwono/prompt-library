@@ -761,15 +761,22 @@
 }
 
 /* ---- reference library page ---- */
+/* Overrides .admin-page's sidebar grid: this page has no sidebar, so it
+   must not inherit the 2-column layout (it was collapsing the shell into
+   the 300px sidebar track and zeroing out the left margin). */
 .reference-library-page {
+    display: block;
+    height: auto;
     min-height: 100vh;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .reference-library-shell {
-    width: min(1440px, calc(100vw - 40px));
+    max-width: 1440px;
     margin: 0 auto;
-    padding: 32px 0 48px;
+    padding: 32px 20px 48px;
+    box-sizing: border-box;
 }
 
 .reference-library-header {
@@ -800,7 +807,7 @@
 }
 
 .reference-library-actions,
-.reference-asset-actions {
+.reference-toolbar-actions {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -862,11 +869,48 @@
     font-size: 20px;
 }
 
+.reference-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 18px;
+    color: var(--ink-mute);
+    font-size: 0.86rem;
+}
+
+.reference-breadcrumb-link {
+    padding: 2px 4px;
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--ink-mute);
+    font: inherit;
+    cursor: pointer;
+}
+
+.reference-breadcrumb-link:hover,
+.reference-breadcrumb-link:focus-visible {
+    color: var(--ink);
+    text-decoration: underline;
+}
+
+.reference-breadcrumb-current {
+    padding: 2px 4px;
+    color: var(--ink);
+    font-weight: 700;
+}
+
+.reference-breadcrumb-sep {
+    font-size: 16px;
+    color: var(--ink-mute);
+    opacity: 0.6;
+}
+
 .reference-library-toolbar {
     display: grid;
     grid-template-columns: minmax(240px, 1fr) auto;
     gap: 12px;
-    margin: 24px 0 12px;
+    margin: 16px 0 12px;
 }
 
 .reference-search-field {
@@ -904,6 +948,56 @@
     font-size: 0.9rem;
 }
 
+.reference-folder-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.reference-folder-grid[hidden] {
+    display: none;
+}
+
+.reference-folder-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    padding: 10px 12px;
+    border: 1px solid var(--paper-edge);
+    border-radius: 6px;
+    background: var(--white);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 0.86rem;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+}
+
+.reference-folder-card:hover,
+.reference-folder-card:focus-visible {
+    border-color: var(--ink);
+}
+
+.reference-folder-card:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+}
+
+.reference-folder-card .material-symbols-outlined {
+    flex: none;
+    font-size: 22px;
+    color: var(--ink-mute);
+}
+
+.reference-folder-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .reference-asset-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -912,7 +1006,7 @@
 
 .reference-asset-card {
     display: grid;
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: auto auto;
     gap: 10px;
     min-width: 0;
     padding: 10px;
@@ -921,32 +1015,84 @@
     background: var(--white);
 }
 
-.reference-image-button {
+.reference-asset-thumb {
+    position: relative;
     display: block;
     width: 100%;
     aspect-ratio: 4 / 3;
-    padding: 0;
     overflow: hidden;
     border: 1px solid var(--paper-edge);
     border-radius: 4px;
     background: var(--paper-deep);
-    cursor: pointer;
 }
 
-.reference-image-button img {
+.reference-asset-thumb img {
     display: block;
     width: 100%;
     height: 100%;
     object-fit: contain;
 }
 
-.reference-image-button:hover {
-    border-color: var(--ink);
+.reference-asset-file-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: 40px;
+    color: var(--ink-mute);
 }
 
-.reference-image-button:focus-visible {
-    outline: 2px solid var(--ink);
+.reference-asset-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 6px;
+    padding: 8px;
+    opacity: 0;
+    transition: opacity var(--dur-1, 150ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
+}
+
+.reference-asset-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 55%, color-mix(in srgb, var(--ink) 55%, transparent) 100%);
+    pointer-events: none;
+}
+
+.reference-asset-thumb:hover .reference-asset-overlay,
+.reference-asset-thumb:focus-within .reference-asset-overlay {
+    opacity: 1;
+}
+
+.reference-icon-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: 4px;
+    background: var(--ink);
+    color: var(--paper);
+    cursor: pointer;
+}
+
+.reference-icon-button:hover {
+    background: var(--accent-sage);
+}
+
+.reference-icon-button:focus-visible {
+    outline: 2px solid var(--white);
     outline-offset: 2px;
+}
+
+.reference-icon-button .material-symbols-outlined {
+    font-size: 18px;
 }
 
 .reference-asset-meta {
@@ -985,8 +1131,7 @@
 
 @media (max-width: 720px) {
     .reference-library-shell {
-        width: min(100vw - 24px, 680px);
-        padding-top: 20px;
+        padding: 20px 16px 40px;
     }
 
     .reference-library-header,
@@ -1000,7 +1145,7 @@
     }
 
     .reference-library-actions,
-    .reference-asset-actions {
+    .reference-toolbar-actions {
         width: 100%;
     }
 
@@ -1010,6 +1155,7 @@
         flex: 1 1 auto;
     }
 
+    .reference-folder-grid,
     .reference-asset-grid {
         grid-template-columns: 1fr;
     }

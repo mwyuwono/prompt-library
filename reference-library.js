@@ -1,4 +1,6 @@
 let assets = [];
+let folders = [];
+let currentPath = decodeURIComponent(location.hash.replace(/^#/, ''));
 let searchTerm = '';
 let busy = false;
 let uploadMode = 'api';
@@ -6,15 +8,27 @@ let uploadMode = 'api';
 const S3_BUCKET = 'prompt-library-assets-009019643313';
 const S3_PREFIX = 'reference-images/';
 const S3_PUBLIC_BASE_URL = `https://${S3_BUCKET}.s3.amazonaws.com/${S3_PREFIX.replace(/\/$/, '')}`;
-const S3_LIST_URL = `https://${S3_BUCKET}.s3.amazonaws.com/?list-type=2&prefix=${encodeURIComponent(S3_PREFIX)}`;
 
 const grid = document.getElementById('assetGrid');
+const folderGrid = document.getElementById('folderGrid');
+const breadcrumb = document.getElementById('breadcrumb');
 const statusText = document.getElementById('statusText');
 const searchInput = document.getElementById('searchInput');
 const uploadButton = document.getElementById('uploadButton');
 const uploadInput = document.getElementById('uploadInput');
 const refreshButton = document.getElementById('refreshButton');
+const newFolderButton = document.getElementById('newFolderButton');
 const toast = document.getElementById('toast');
+
+const FILE_ICONS = {
+    image: 'image',
+    audio: 'audio_file',
+    video: 'movie',
+    pdf: 'picture_as_pdf',
+    document: 'description',
+    archive: 'folder_zip',
+    text: 'article'
+};
 
 function showToast(message, variant = 'info') {
     if (toast?.show) {
@@ -64,6 +78,24 @@ function getFilteredAssets() {
     ));
 }
 
+function getFilteredFolders() {
+    const normalized = searchTerm.trim().toLowerCase();
+    if (!normalized) return folders;
+    return folders.filter(folder => folder.name?.toLowerCase().includes(normalized));
+}
+
+function getAssetKind(asset) {
+    const contentType = asset.contentType || '';
+    if (contentType.startsWith('image/')) return 'image';
+    if (contentType.startsWith('audio/')) return 'audio';
+    if (contentType.startsWith('video/')) return 'video';
+    if (contentType === 'application/pdf') return 'pdf';
+    if (contentType.startsWith('text/')) return 'text';
+    if (contentType.includes('zip')) return 'archive';
+    if (contentType.includes('word') || contentType.includes('sheet') || contentType.includes('presentation')) return 'document';
+    return 'document';
+}
+
 function getMimeTypeFromKey(key = '') {
     const normalized = key.toLowerCase();
     if (normalized.endsWith('.jpg') || normalized.endsWith('.jpeg')) return 'image/jpeg';
@@ -79,6 +111,18 @@ function getUrlFromS3Key(key = '') {
     return `${S3_PUBLIC_BASE_URL}/${relativeKey.split('/').map(encodeURIComponent).join('/')}`;
 }
 
+function getPathSegments(pathValue = '') {
+    return pathValue.split('/').map(segment => segment.trim()).filter(Boolean);
+}
+
+function navigateTo(pathValue) {
+    currentPath = getPathSegments(pathValue).join('/');
+    location.hash = currentPath ? encodeURIComponent(currentPath) : '';
+    searchTerm = '';
+    searchInput.value = '';
+    loadAssets();
+}
+
 async function copyUrl(url) {
     try {
         await navigator.clipboard.writeText(url);
@@ -89,45 +133,96 @@ async function copyUrl(url) {
     }
 }
 
-function renderAssets() {
-    const filtered = getFilteredAssets();
-    statusText.textContent = busy
-        ? 'Loading reference images...'
-        : `${filtered.length} image${filtered.length === 1 ? '' : 's'} shown`;
+function renderBreadcrumb() {
+    const segments = getPathSegments(currentPath);
+    const crumbs = [{ label: 'Home', path: '' }];
+    segments.forEach((segment, index) => {
+        crumbs.push({ label: segment, path: segments.slice(0, index + 1).join('/') });
+    });
 
+    breadcrumb.innerHTML = crumbs.map((crumb, index) => {
+        const isLast = index === crumbs.length - 1;
+        const label = escapeHtml(crumb.label);
+        if (isLast) {
+            return `<span class="reference-breadcrumb-current">${label}</span>`;
+        }
+        return `<button type="button" class="reference-breadcrumb-link" data-path="${escapeHtml(crumb.path)}">${label}</button>`;
+    }).join('<span class="reference-breadcrumb-sep material-symbols-outlined" aria-hidden="true">chevron_right</span>');
+
+    breadcrumb.querySelectorAll('[data-path]').forEach(button => {
+        button.addEventListener('click', () => navigateTo(button.dataset.path));
+    });
+}
+
+function renderFolders() {
+    const filtered = getFilteredFolders();
     if (!filtered.length) {
-        grid.innerHTML = `
+        folderGrid.innerHTML = '';
+        folderGrid.hidden = true;
+        return;
+    }
+
+    folderGrid.hidden = false;
+    folderGrid.innerHTML = filtered.map(folder => `
+        <button type="button" class="reference-folder-card" data-folder-path="${escapeHtml(folder.path)}">
+            <span class="material-symbols-outlined" aria-hidden="true">folder</span>
+            <span class="reference-folder-name" title="${escapeHtml(folder.name)}">${escapeHtml(folder.name)}</span>
+        </button>
+    `).join('');
+
+    folderGrid.querySelectorAll('[data-folder-path]').forEach(button => {
+        button.addEventListener('click', () => navigateTo(button.dataset.folderPath));
+    });
+}
+
+function renderAssets() {
+    const filteredFolders = getFilteredFolders();
+    const filteredAssets = getFilteredAssets();
+    const totalCount = filteredFolders.length + filteredAssets.length;
+
+    statusText.textContent = busy
+        ? 'Loading reference files...'
+        : `${totalCount} item${totalCount === 1 ? '' : 's'} shown`;
+
+    renderFolders();
+
+    if (!filteredAssets.length) {
+        grid.innerHTML = filteredFolders.length ? '' : `
             <div class="reference-empty-state">
-                <span class="material-symbols-outlined" aria-hidden="true">image_search</span>
-                <p>No reference images found</p>
+                <span class="material-symbols-outlined" aria-hidden="true">search_off</span>
+                <p>No reference files found</p>
             </div>
         `;
         return;
     }
 
-    grid.innerHTML = filtered.map((asset, index) => `
+    grid.innerHTML = filteredAssets.map((asset, index) => {
+        const kind = getAssetKind(asset);
+        const thumb = kind === 'image'
+            ? `<img src="${escapeHtml(asset.url)}" alt="" loading="lazy">`
+            : `<span class="material-symbols-outlined reference-asset-file-icon" aria-hidden="true">${FILE_ICONS[kind] || 'draft'}</span>`;
+
+        return `
         <article class="reference-asset-card">
-            <button class="reference-image-button" type="button" data-copy-index="${index}" aria-label="Copy URL for ${escapeHtml(asset.filename)}">
-                <img src="${escapeHtml(asset.url)}" alt="${escapeHtml(asset.filename)}" loading="lazy">
-            </button>
+            <div class="reference-asset-thumb">
+                ${thumb}
+                <div class="reference-asset-overlay">
+                    <button class="reference-icon-button" type="button" data-copy-index="${index}" aria-label="Copy URL for ${escapeHtml(asset.filename)}" title="Copy URL">
+                        <span class="material-symbols-outlined" aria-hidden="true">content_copy</span>
+                    </button>
+                    <a class="reference-icon-button" href="${escapeHtml(asset.url)}" target="_blank" rel="noopener" aria-label="Open ${escapeHtml(asset.filename)}" title="Open in new tab">
+                        <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+                    </a>
+                </div>
+            </div>
             <div class="reference-asset-meta">
                 <div class="reference-asset-name" title="${escapeHtml(asset.filename)}">${escapeHtml(asset.filename)}</div>
                 <div class="reference-asset-detail">${formatBytes(asset.size)}${asset.lastModified ? ` · ${formatDate(asset.lastModified)}` : ''}</div>
             </div>
-            <div class="reference-asset-actions">
-                <button class="reference-library-button compact" type="button" data-copy-index="${index}">
-                    <span class="material-symbols-outlined" aria-hidden="true">content_copy</span>
-                    Copy URL
-                </button>
-                <a class="reference-library-button compact secondary" href="${escapeHtml(asset.url)}" target="_blank" rel="noopener">
-                    <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
-                    Open
-                </a>
-            </div>
         </article>
-    `).join('');
+    `;
+    }).join('');
 
-    const filteredAssets = filtered;
     grid.querySelectorAll('[data-copy-index]').forEach(button => {
         button.addEventListener('click', () => {
             const asset = filteredAssets[Number(button.dataset.copyIndex)];
@@ -138,40 +233,46 @@ function renderAssets() {
 
 async function loadAssets() {
     busy = true;
+    renderBreadcrumb();
     renderAssets();
     try {
-        const data = await loadAssetsFromApi().catch(async error => {
+        const data = await loadAssetsFromApi(currentPath).catch(async error => {
             console.warn('Reference asset API unavailable, using S3 listing:', error);
             return await loadAssetsFromS3();
         });
-        assets = data.assets.filter(asset => asset.type === 'image');
+        assets = data.assets || [];
+        folders = data.folders || [];
         uploadMode = data.source === 'api' ? 'api' : 'console';
         renderAssets();
     } catch (error) {
         console.error('Reference asset load failed:', error);
-        statusText.textContent = error.message || 'Failed to load reference images';
+        statusText.textContent = error.message || 'Failed to load reference files';
+        folderGrid.innerHTML = '';
         grid.innerHTML = '';
-        showToast('Failed to load reference images', 'error');
+        showToast('Failed to load reference files', 'error');
     } finally {
         busy = false;
         renderAssets();
     }
 }
 
-async function loadAssetsFromApi() {
-    const response = await fetch('/api/reference-assets');
+async function loadAssetsFromApi(pathValue = '') {
+    const query = pathValue ? `?path=${encodeURIComponent(pathValue)}` : '';
+    const response = await fetch(`/api/reference-assets${query}`);
     const data = await response.json().catch(() => ({}));
     if (!response.ok || !data.success) {
-        throw new Error(data.error || 'Failed to load reference assets');
+        throw new Error(data.error || 'Failed to load reference files');
     }
     return {
         source: 'api',
-        assets: data.assets || []
+        assets: data.assets || [],
+        folders: data.folders || []
     };
 }
 
 async function loadAssetsFromS3() {
-    const response = await fetch(S3_LIST_URL);
+    const listUrl = `https://${S3_BUCKET}.s3.amazonaws.com/?list-type=2&prefix=${encodeURIComponent(S3_PREFIX)}`;
+    const response = await fetch(listUrl);
     if (!response.ok) {
         throw new Error(`S3 listing failed with HTTP ${response.status}`);
     }
@@ -198,18 +299,24 @@ async function loadAssetsFromS3() {
                 type: contentType.startsWith('image/') ? 'image' : 'file'
             };
         })
-        .filter(asset => asset.key && !asset.key.endsWith('/'))
+        .filter(asset => asset.key && !asset.key.endsWith('/'));
+
+    // Fallback mode has no folder support: only surface root-level files.
+    const rootAssets = assets
+        .filter(asset => !asset.key.slice(S3_PREFIX.length).includes('/'))
         .sort((a, b) => String(b.lastModified || '').localeCompare(String(a.lastModified || '')));
 
     return {
         source: 's3',
-        assets
+        assets: rootAssets,
+        folders: []
     };
 }
 
-async function uploadAsset(file) {
+async function uploadAsset(file, pathValue) {
     const formData = new FormData();
     formData.append('file', file);
+    if (pathValue) formData.append('path', pathValue);
 
     const response = await fetch('/api/reference-assets/upload', {
         method: 'POST',
@@ -220,6 +327,19 @@ async function uploadAsset(file) {
         throw new Error(data.error || 'Upload failed');
     }
     return data.asset;
+}
+
+async function createFolder(name) {
+    const response = await fetch('/api/reference-assets/folders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ parentPath: currentPath, name })
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Failed to create folder');
+    }
+    return data.folder;
 }
 
 uploadButton.addEventListener('click', event => {
@@ -235,9 +355,9 @@ uploadInput.addEventListener('change', async () => {
     if (!file) return;
 
     try {
-        statusText.textContent = 'Uploading reference image...';
-        const asset = await uploadAsset(file);
-        showToast('Reference image uploaded', 'success');
+        statusText.textContent = 'Uploading reference file...';
+        const asset = await uploadAsset(file, currentPath);
+        showToast('Reference file uploaded', 'success');
         if (asset?.url) await copyUrl(asset.url);
         await loadAssets();
     } catch (error) {
@@ -248,11 +368,31 @@ uploadInput.addEventListener('change', async () => {
     }
 });
 
+newFolderButton.addEventListener('click', async () => {
+    const name = window.prompt('New folder name');
+    if (!name || !name.trim()) return;
+
+    try {
+        const folder = await createFolder(name.trim());
+        showToast('Folder created', 'success');
+        await loadAssets();
+        if (folder?.path) navigateTo(folder.path);
+    } catch (error) {
+        console.error('Folder creation failed:', error);
+        showToast(error.message || 'Failed to create folder', 'error');
+    }
+});
+
 searchInput.addEventListener('input', event => {
     searchTerm = event.target.value;
     renderAssets();
 });
 
 refreshButton.addEventListener('click', loadAssets);
+
+window.addEventListener('hashchange', () => {
+    currentPath = decodeURIComponent(location.hash.replace(/^#/, ''));
+    loadAssets();
+});
 
 loadAssets();

@@ -10,6 +10,7 @@
     "validate:prompts": "node validate-prompts.js",
     "check": "npm run validate:prompts && npm run build:components",
     "encrypt:private": "node scripts/encrypt-private-prompts.mjs",
+    "migrate:reference-library": "node scripts/migrate-reference-library.mjs",
     "quicktext:validate": "node quick-text/scripts/validate-corpus.mjs",
     "quicktext:export-public": "node quick-text/scripts/export-public-corpus.mjs",
     "quicktext:extract-palette": "node quick-text/scripts/extract-palette.mjs"

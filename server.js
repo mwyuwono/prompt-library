@@ -95,12 +95,26 @@ const upload = multer({
     }
 });
 
+const REFERENCE_ASSET_ALLOWED_MIME_PREFIXES = ['image/', 'audio/', 'video/', 'text/'];
+const REFERENCE_ASSET_ALLOWED_MIME_TYPES = [
+    'application/pdf',
+    'application/json',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    'application/zip'
+];
+
 const referenceAssetUpload = multer({
     storage: multer.memoryStorage(),
     limits: { fileSize: 25 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
-        if (!file.mimetype.startsWith('image/')) {
-            return cb(new Error('Only image reference files are supported in this view'), false);
+        const mimetype = file.mimetype || '';
+        const allowed = REFERENCE_ASSET_ALLOWED_MIME_PREFIXES.some(prefix => mimetype.startsWith(prefix)) ||
+            REFERENCE_ASSET_ALLOWED_MIME_TYPES.includes(mimetype);
+        if (!allowed) {
+            return cb(new Error('This file type is not supported in the reference library'), false);
         }
         cb(null, true);
     }
@@ -219,7 +233,15 @@ function getAwsCliArgs(args = []) {
     return cliArgs;
 }
 
-function normalizeReferenceAssetKey(filename = '') {
+function sanitizeReferenceFolderPath(input = '') {
+    return String(input || '')
+        .split('/')
+        .map(segment => segment.trim().replace(/[^a-zA-Z0-9 _-]+/g, '').trim())
+        .filter(Boolean)
+        .join('/');
+}
+
+function normalizeReferenceAssetKey(filename = '', folderPath = '') {
     const parsed = path.parse(filename);
     const extension = parsed.ext.toLowerCase();
     const base = parsed.name
@@ -227,7 +249,9 @@ function normalizeReferenceAssetKey(filename = '') {
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '')
         .slice(0, 80) || 'reference';
-    return `${REFERENCE_ASSET_PREFIX}/${Date.now()}-${base}${extension}`;
+    const folder = sanitizeReferenceFolderPath(folderPath);
+    const folderSegment = folder ? `${folder}/` : '';
+    return `${REFERENCE_ASSET_PREFIX}/${folderSegment}${Date.now()}-${base}${extension}`;
 }
 
 function getReferenceAssetUrl(key) {
@@ -243,20 +267,37 @@ async function runAwsJson(args, options = {}) {
     return stdout ? JSON.parse(stdout) : {};
 }
 
-async function listReferenceAssets() {
+async function listReferenceAssets(folderPath = '') {
+    const folder = sanitizeReferenceFolderPath(folderPath);
+    const prefix = folder ? `${REFERENCE_ASSET_PREFIX}/${folder}/` : `${REFERENCE_ASSET_PREFIX}/`;
+
     const result = await runAwsJson([
         's3api',
         'list-objects-v2',
         '--bucket',
         REFERENCE_ASSET_BUCKET,
         '--prefix',
-        `${REFERENCE_ASSET_PREFIX}/`,
+        prefix,
+        '--delimiter',
+        '/',
         '--output',
         'json'
     ]);
 
-    return (result.Contents || [])
-        .filter(item => item.Key && !item.Key.endsWith('/'))
+    const folders = (result.CommonPrefixes || [])
+        .map(item => item.Prefix)
+        .filter(Boolean)
+        .map(fullPrefix => {
+            const name = fullPrefix.slice(prefix.length).replace(/\/$/, '');
+            return {
+                name,
+                path: folder ? `${folder}/${name}` : name
+            };
+        })
+        .filter(item => item.name);
+
+    const assets = (result.Contents || [])
+        .filter(item => item.Key && item.Key !== prefix && !item.Key.endsWith('/') && !item.Key.endsWith('/.keep'))
         .map(item => {
             const filename = path.basename(item.Key);
             const contentType = getMimeTypeFromFilename(filename);
@@ -271,10 +312,12 @@ async function listReferenceAssets() {
             };
         })
         .sort((a, b) => String(b.lastModified || '').localeCompare(String(a.lastModified || '')));
+
+    return { path: folder, folders, assets };
 }
 
-async function uploadReferenceAsset(file) {
-    const key = normalizeReferenceAssetKey(file.originalname);
+async function uploadReferenceAsset(file, folderPath = '') {
+    const key = normalizeReferenceAssetKey(file.originalname, folderPath);
     const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'prompt-reference-'));
     const tempPath = path.join(tempDir, path.basename(key));
 
@@ -297,14 +340,45 @@ async function uploadReferenceAsset(file) {
             maxBuffer: 10 * 1024 * 1024
         });
 
+        const contentType = file.mimetype || getMimeTypeFromFilename(file.originalname);
         return {
             key,
             filename: path.basename(key),
             url: getReferenceAssetUrl(key),
             size: file.size,
-            contentType: file.mimetype || getMimeTypeFromFilename(file.originalname),
-            type: 'image'
+            contentType,
+            type: contentType.startsWith('image/') ? 'image' : 'file'
         };
+    } finally {
+        fs.rmSync(tempDir, { recursive: true, force: true });
+    }
+}
+
+async function createReferenceFolder(folderPath) {
+    const folder = sanitizeReferenceFolderPath(folderPath);
+    if (!folder) {
+        throw new Error('Folder name is required');
+    }
+
+    const key = `${REFERENCE_ASSET_PREFIX}/${folder}/.keep`;
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'prompt-reference-folder-'));
+    const tempPath = path.join(tempDir, '.keep');
+
+    try {
+        fs.writeFileSync(tempPath, '');
+        await execFileAsync('aws', getAwsCliArgs([
+            's3',
+            'cp',
+            tempPath,
+            `s3://${REFERENCE_ASSET_BUCKET}/${key}`,
+            '--content-type',
+            'text/plain',
+            '--no-progress'
+        ]), {
+            timeout: 30000
+        });
+
+        return { path: folder, name: folder.split('/').pop() };
     } finally {
         fs.rmSync(tempDir, { recursive: true, force: true });
     }
@@ -1580,13 +1654,15 @@ app.post('/api/images/upload', upload.single('file'), (req, res) => {
  */
 app.get('/api/reference-assets', async (req, res) => {
     try {
-        const assets = await listReferenceAssets();
+        const { path: folderPath, folders, assets } = await listReferenceAssets(req.query.path);
         res.json({
             success: true,
             bucket: REFERENCE_ASSET_BUCKET,
             prefix: REFERENCE_ASSET_PREFIX,
             publicBaseUrl: REFERENCE_ASSET_PUBLIC_BASE_URL,
             profile: REFERENCE_ASSET_PROFILE,
+            path: folderPath,
+            folders,
             assets
         });
     } catch (error) {
@@ -1601,8 +1677,29 @@ app.get('/api/reference-assets', async (req, res) => {
 });
 
 /**
+ * POST /api/reference-assets/folders
+ * Creates a folder (zero-byte marker object) inside the reference assets bucket.
+ */
+app.post('/api/reference-assets/folders', async (req, res) => {
+    try {
+        const parentPath = sanitizeReferenceFolderPath(req.body?.parentPath || '');
+        const name = sanitizeReferenceFolderPath(req.body?.name || '');
+        if (!name) {
+            return res.status(400).json({ success: false, error: 'Folder name is required' });
+        }
+
+        const folderPath = parentPath ? `${parentPath}/${name}` : name;
+        const folder = await createReferenceFolder(folderPath);
+        res.json({ success: true, folder });
+    } catch (error) {
+        console.error('Error creating reference folder:', error);
+        res.status(400).json({ success: false, error: error.message || 'Failed to create folder' });
+    }
+});
+
+/**
  * POST /api/reference-assets/upload
- * Uploads a reusable prompt reference image to S3.
+ * Uploads a reusable prompt reference asset to S3, optionally into a subfolder.
  */
 app.post('/api/reference-assets/upload', referenceAssetUpload.single('file'), async (req, res) => {
     try {
@@ -1610,7 +1707,7 @@ app.post('/api/reference-assets/upload', referenceAssetUpload.single('file'), as
             return res.status(400).json({ success: false, error: 'No file uploaded' });
         }
 
-        const asset = await uploadReferenceAsset(req.file);
+        const asset = await uploadReferenceAsset(req.file, req.body?.path);
         res.json({ success: true, asset, url: asset.url });
     } catch (error) {
         console.error('Error uploading reference asset:', error);

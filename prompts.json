@@ -772,7 +772,7 @@
           {
             "variable": "lequeu_geometry_style_reference",
             "label": "Lequeu Geometry Sheet Style Reference",
-            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/architectural-rendering-lequeu-geometry-style-reference.jpg",
+            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/Images/Matt/architectural-rendering-lequeu-geometry-style-reference.jpg",
             "instructions": "Use this reference for Jean-Jacques Lequeu-style paired-sheet composition, aged paper, fine ruled border, red plate labels, cursive French annotations, watercolor/ink wash handling, section/elevation presentation, and analytical marginal studies. Do not copy the specific temple, dome, globe, starry chamber, captions, or figure numbers unless they are present in the uploaded architectural source."
           }
         ]
@@ -807,7 +807,7 @@
           {
             "variable": "manuscript_watercolor_style_reference",
             "label": "Manuscript Watercolor Style Reference",
-            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/architectural-rendering-manuscript-watercolor-style-reference.jpg",
+            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/Images/Matt/architectural-rendering-manuscript-watercolor-style-reference.jpg",
             "instructions": "Use this reference for early 19th-century manuscript watercolor/gouache handling, pale mineral palette, ruled archival border, aged paper, formal garden context, soft sky, delicate linework, and lower-margin cursive presentation. Do not copy the specific building or caption unless present in the uploaded source."
           }
         ]
@@ -823,13 +823,13 @@
           {
             "variable": "americana_smokehouse_reference",
             "label": "Smokehouse Style Reference",
-            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/architectural-americana-smokehouse-reference.png",
+            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/Images/Matt/architectural-americana-smokehouse-reference.png",
             "instructions": "Use this reference for the wide frontal architectural composition, late-afternoon warmth, mature trees, muted brick and cream palette, and still archival Americana mood."
           },
           {
             "variable": "americana_house_reference",
             "label": "House Style Reference",
-            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/architectural-americana-house-reference.jpeg",
+            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/Images/Matt/architectural-americana-house-reference.jpeg",
             "instructions": "Use this reference for softened painterly edges, simplified planar masses, quiet tonal restraint, cream cloud forms, and Wyeth/Hopper-adjacent stillness."
           }
         ],
@@ -905,13 +905,13 @@
           {
             "variable": "colors_spacing",
             "label": "General Style Reference",
-            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/1782309422024.jpg",
+            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/Images/Matt/1782309422024.jpg",
             "instructions": ""
           },
           {
             "variable": "Composition_Ref",
             "label": "Composition Reference",
-            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/1782309579071.jpg",
+            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/Images/Matt/1782309579071.jpg",
             "instructions": ""
           }
         ]
@@ -973,7 +973,7 @@
           {
             "variable": "oldmaster_reference",
             "label": "Old Master Oil Panel Style Reference",
-            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/architectural-rendering-old-master-oil-panel-style-reference.png",
+            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/Images/Matt/architectural-rendering-old-master-oil-panel-style-reference.png",
             "instructions": "Use this reference for old-master oil-on-panel handling: warm umber imprimatura, thin glazes, dry-brushed highlights, aged varnish, and the restrained warm daylight and brick/masonry texture of 17th-century Dutch architectural painting. Do not copy the reference's specific building, courtyard, bench, fence, or trees unless present in the uploaded source."
           }
         ],
@@ -1043,7 +1043,7 @@
           {
             "variable": "boxer",
             "label": "Style Reference",
-            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/1780434725046.jpg"
+            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/Images/Matt/1780434725046.jpg"
           }
         ]
       },
@@ -1057,7 +1057,7 @@
           {
             "variable": "reference_image",
             "label": "Style Reference",
-            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/fauvist-post-impressionist-style-reference.png",
+            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/Images/Matt/fauvist-post-impressionist-style-reference.png",
             "instructions": "The painting style should be consistent with the style reference at {{reference_image}}."
           }
         ],
@@ -1073,7 +1073,7 @@
           {
             "variable": "gouache-style-reference",
             "label": "Gouache Style Reference",
-            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/gouache-style-reference.jpg",
+            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/Images/Matt/gouache-style-reference.jpg",
             "instructions": "Use this reference for the loose gouache, pastel, dry-brush handling, warm toned paper, muted natural greens, scumbled pigment, and calm open-air landscape-architect concept rendering quality."
           }
         ],
@@ -1097,7 +1097,7 @@
           {
             "variable": "avery_style_reference",
             "label": "Style Reference",
-            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/milton-avery-oil-style-reference.png",
+            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/Images/Matt/milton-avery-oil-style-reference.png",
             "instructions": "Use this reference for the loose early-modernist oil handling, muted olive/blue-gray/cream/ochre palette, flattened figurative forms, soft-edged contouring, and quiet, melancholy mood."
           }
         ]
@@ -1113,7 +1113,7 @@
           {
             "variable": "cassat_print",
             "label": "Cassat Reference Image",
-            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/1782273618012.jpg",
+            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/Images/Matt/1782273618012.jpg",
             "instructions": ""
           }
         ]
@@ -1128,7 +1128,7 @@
           {
             "variable": "plein_air_style_reference",
             "label": "Style Reference",
-            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/plein-air-watercolor-style-reference.jpeg",
+            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/Images/Matt/plein-air-watercolor-style-reference.jpeg",
             "instructions": "Use this reference for the loose opaque watercolor/gouache handling, broken brushstrokes, warm-light/cool-shadow massing, and restrained ochre-umber-charcoal-blue palette."
           }
         ]
@@ -2294,7 +2294,7 @@
           {
             "variable": "topographic_site_plan_style",
             "label": "Manuscript Site Plan Style Reference",
-            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/topographic-site-plan-style-reference.png"
+            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/Images/Matt/topographic-site-plan-style-reference.png"
           }
         ]
       },
@@ -2310,7 +2310,7 @@
           {
             "variable": "balloon_prospect_style_reference",
             "label": "Balloon Prospect Style Reference",
-            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/topographic-balloon-prospect-style-reference.jpg",
+            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/Images/Matt/topographic-balloon-prospect-style-reference.jpg",
             "instructions": "Use this reference for hand-colored engraving texture, cloud banks, dark green land masses, salmon route/path color, aged paper, ruled border, printed caption margin, and antiquarian balloon-prospect presentation. Do not copy its specific geography or caption unless present in the uploaded Site Reference."
           }
         ]
@@ -2332,7 +2332,7 @@
       {
         "variable": "miniature_style",
         "label": "Style Reference",
-        "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/1780451009194.jpg"
+        "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/Images/Matt/1780451009194.jpg"
       }
     ]
   },
