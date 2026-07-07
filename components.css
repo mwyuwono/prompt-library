@@ -2577,6 +2577,50 @@ wy-controls-bar {
         margin-top: 2px;
     }
 
+    wy-prompt-modal .recommended-models {
+        margin-top: 16px;
+    }
+
+    wy-prompt-modal .recommended-models-label {
+        display: block;
+        margin: 0 0 var(--spacing-xxs, 4px);
+        font-family: var(--ff-sans);
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-soft, #A8A49C);
+    }
+
+    wy-prompt-modal .recommended-models-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-xs, 8px);
+    }
+
+    wy-prompt-modal .recommended-model-chip {
+        display: inline-flex;
+        align-items: baseline;
+        gap: 6px;
+        padding: 6px 14px;
+        background: var(--ink);
+        color: var(--white);
+        border-radius: var(--radius-pill);
+        font-family: var(--ff-sans);
+        line-height: 1.2;
+    }
+
+    wy-prompt-modal .recommended-model-name {
+        font-size: 0.8125rem;
+        font-weight: 600;
+    }
+
+    wy-prompt-modal .recommended-model-level {
+        font-size: 0.8125rem;
+        font-weight: 400;
+        color: var(--ink-soft, #A8A49C);
+    }
+
     wy-prompt-modal .variation-description-heading {
         margin: 0 0 var(--spacing-xxs, 4px);
         font-family: var(--ff-sans);

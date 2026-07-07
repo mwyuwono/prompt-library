@@ -203,6 +203,65 @@ export class WyPromptEditor extends LitElement {
         this.requestUpdate();
     }
 
+    static RECOMMENDED_MODEL_VENDORS = [
+        { vendor: 'anthropic', label: 'Anthropic' },
+        { vendor: 'openai', label: 'OpenAI' },
+        { vendor: 'google', label: 'Google Gemini' },
+        { vendor: 'gemma', label: 'Gemma (local)' }
+    ];
+
+    _getRecommendedModelEntry(vendor) {
+        return (this._editedPrompt?.recommendedModels || []).find(m => m.vendor === vendor) || null;
+    }
+
+    _handleRecommendedModelChange(vendor, field, value) {
+        if (!this._editedPrompt) return;
+
+        const existing = this._editedPrompt.recommendedModels || [];
+        const entry = existing.find(m => m.vendor === vendor);
+        let next;
+
+        if (entry) {
+            next = existing.map(m => m.vendor === vendor ? { ...m, [field]: value } : m);
+        } else {
+            next = [...existing, { vendor, model: '', level: '', [field]: value }];
+        }
+
+        // Drop entries with an empty model name so blank rows don't emit chips
+        next = next.filter(m => (m.model || '').trim());
+
+        this._handleFieldChange('recommendedModels', next);
+    }
+
+    _renderRecommendedModelsEditor() {
+        return html`
+            <div class="recommended-models-editor">
+                ${WyPromptEditor.RECOMMENDED_MODEL_VENDORS.map(({ vendor, label }) => {
+                    const entry = this._getRecommendedModelEntry(vendor);
+                    return html`
+                        <div class="recommended-model-row">
+                            <span class="recommended-model-vendor-label">${label}</span>
+                            <input
+                                type="text"
+                                placeholder="Model name"
+                                .value="${entry?.model || ''}"
+                                @input="${(e) => this._handleRecommendedModelChange(vendor, 'model', e.target.value)}"
+                                ?disabled="${this.readonly}"
+                            >
+                            <input
+                                type="text"
+                                placeholder="Thinking level (optional)"
+                                .value="${entry?.level || ''}"
+                                @input="${(e) => this._handleRecommendedModelChange(vendor, 'level', e.target.value)}"
+                                ?disabled="${this.readonly}"
+                            >
+                        </div>
+                    `;
+                })}
+            </div>
+        `;
+    }
+
     _markDirty() {
         if (!this._isDirty) {
             this._isDirty = true;
@@ -1195,6 +1254,15 @@ export class WyPromptEditor extends LitElement {
                                 ?disabled="${this.readonly}"
                             ></textarea>
                         </div>
+                    </div>
+
+                    <!-- Section 1.5: Recommended Models -->
+                    <div class="card" data-section="recommended-models">
+                        <h2 class="card-title" data-eyebrow="Section 01">Recommended Models</h2>
+                        <p class="card-description">
+                            Up to one model per vendor (Anthropic, OpenAI, Google, Gemma). Leave the model field blank to omit a vendor's chip.
+                        </p>
+                        ${this._renderRecommendedModelsEditor()}
                     </div>
 
                     <!-- Section 2: Visuals & Metadata -->

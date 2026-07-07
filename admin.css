@@ -1716,6 +1716,47 @@ wy-variation-editor .form-field [aria-invalid="true"] {
                 inset 0 0 0 1px color-mix(in srgb, var(--err, #B3261E) 32%, transparent),
                 0 0 0 3px color-mix(in srgb, var(--err, #B3261E) 8%, transparent);
         }
+
+wy-prompt-editor .recommended-models-editor {
+            display: flex;
+            flex-direction: column;
+            gap: var(--s-2, 8px);
+        }
+wy-prompt-editor .recommended-model-row {
+            display: grid;
+            grid-template-columns: 140px 1fr 1fr;
+            gap: var(--s-2, 8px);
+            align-items: center;
+        }
+wy-prompt-editor .recommended-model-vendor-label {
+            font-family: var(--font-body, 'Inter', sans-serif);
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--ink-mute, #6B6B6A);
+        }
+wy-prompt-editor .recommended-model-row input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px var(--s-4, 16px);
+            border: 0;
+            border-radius: var(--admin-radius);
+            background: var(--admin-field-bg);
+            font-family: var(--font-body, 'Inter', sans-serif);
+            font-size: 0.9375rem;
+            color: var(--ink, #1A1A1A);
+            box-shadow: inset 0 0 0 1px var(--admin-hairline-soft);
+            transition:
+                box-shadow var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1)),
+                background-color var(--dur-1, 200ms) var(--ease, cubic-bezier(0.2, 0, 0, 1));
+        }
+wy-prompt-editor .recommended-model-row input:focus {
+            outline: none;
+            background: var(--admin-panel-bg);
+            box-shadow:
+                var(--admin-focus-inset),
+                var(--admin-focus-ring);
+        }
+
 wy-prompt-editor .hero-generator {
             display: flex;
             flex-direction: column;
