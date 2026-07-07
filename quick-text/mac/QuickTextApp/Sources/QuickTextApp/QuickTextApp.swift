@@ -855,7 +855,7 @@ struct PhraseEditor: View {
 
     private var variablesSection: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Variables").font(.caption).foregroundStyle(.secondary)
+            Text("Variables (fill in when copying, see the expanded card)").font(.caption).foregroundStyle(.secondary)
             let variables = detectedVariables
             if variables.isEmpty {
                 Text("No variables detected. Use {{setting}} or {{option one/option two}}.")
@@ -863,8 +863,8 @@ struct PhraseEditor: View {
                     .foregroundStyle(.secondary)
             } else {
                 FlowLayout(spacing: 6) {
-                    ForEach(variables, id: \.self) { variable in
-                        Text(variable)
+                    ForEach(variables) { variable in
+                        Text(variable.choices?.joined(separator: " / ") ?? variable.key)
                             .font(.caption)
                             .lineLimit(1)
                             .padding(.horizontal, 10)
@@ -877,19 +877,11 @@ struct PhraseEditor: View {
         }
     }
 
-    private var detectedVariables: [String] {
-        let pattern = #"\{\{([^{}]+)\}\}"#
-        guard let regex = try? NSRegularExpression(pattern: pattern) else { return [] }
-        let text = phrase.value
-        let nsRange = NSRange(text.startIndex..<text.endIndex, in: text)
+    /// Deduplicated by key, since PhraseEditor only needs to list what will be
+    /// fillable at copy time — occurrence offsets don't matter here.
+    private var detectedVariables: [PhraseVariable] {
         var seen = Set<String>()
-        return regex.matches(in: text, range: nsRange).compactMap { match in
-            guard let range = Range(match.range(at: 1), in: text) else { return nil }
-            let value = String(text[range]).trimmingCharacters(in: .whitespacesAndNewlines)
-            guard !value.isEmpty, !seen.contains(value) else { return nil }
-            seen.insert(value)
-            return value
-        }
+        return PhraseVariable.parse(phrase.value).filter { seen.insert($0.key).inserted }
     }
 
     private func atomChip(_ atom: Atom) -> some View {
@@ -1425,9 +1417,12 @@ struct ExpandedOverlayView: View {
                 highlightColor: store.highlightColor,
                 onCopyAtom: { atom in store.copyAtom(atom, in: phrase) },
                 onCopySelection: { atoms in store.copyAtomSelection(atoms, in: phrase) },
-                onCopyFull: { store.copyFullFromExpandedCard(phrase) },
+                onCopyFull: { text in store.copyFullFromExpandedCard(text, phraseID: phrase.id) },
                 onClose: { store.collapseExpanded() }
             )
+            // Resets variable fill-in state when the expanded phrase changes,
+            // rather than carrying stale entries over from the previous card.
+            .id(phrase.id)
             .padding(64)
         }
     }
@@ -1453,7 +1448,8 @@ struct ExpandedCardView: View {
     var highlightColor: Color = Color(hex: Settings.defaultHighlightColor)
     let onCopyAtom: (Atom) -> Void
     let onCopySelection: ([Atom]) -> Void
-    let onCopyFull: () -> Void
+    /// Receives the phrase value with any filled `{{...}}` variables substituted in.
+    let onCopyFull: (String) -> Void
     let onClose: () -> Void
 
     @State private var hoveredAtomID: String?
@@ -1469,12 +1465,19 @@ struct ExpandedCardView: View {
     @State private var shiftReleaseMonitor: Any?
     @State private var isPulsingAllAtoms = false
     @State private var isPulsingCardBackground = false
+    @State private var variableValues: [String: String] = [:]
+    @State private var editingVariableKey: String?
 
     private var hasAtoms: Bool { !(phrase.atoms ?? []).isEmpty }
     private var sortedAtoms: [Atom] { (phrase.atoms ?? []).sorted { $0.start < $1.start } }
+    private var parsedVariables: [PhraseVariable] { PhraseVariable.parse(phrase.value) }
+    private var hasVariables: Bool { !parsedVariables.isEmpty }
+    /// Either kind of chip makes the card interactive rather than a single tap target,
+    /// so atom- and variable-only phrases share the same "gaps absorb taps" behavior.
+    private var hasChips: Bool { hasAtoms || hasVariables }
 
     /// True over the same area that reveals the copy icon (hovering the card but
-    /// not an atom chip/gap) — a tap right now copies the whole card, so the
+    /// not the chips block) — a tap right now copies the whole card, so the
     /// background gets a subtle tint to signal that instead of leaving it
     /// ambiguous with the dead space between chips.
     private var isHoveringCopyAllZone: Bool { isHoveringCard && !isHoveringAtomsBlock }
@@ -1555,6 +1558,8 @@ struct ExpandedCardView: View {
                     ForEach(line) { segment in
                         if segment.atom != nil {
                             atomChip(segment, maxWidth: maxWidth)
+                        } else if segment.variable != nil {
+                            variableChip(segment, maxWidth: maxWidth)
                         } else {
                             // Matches the atom chips' minHeight so punctuation/filler
                             // text doesn't shift vertically relative to neighboring chips.
@@ -1567,11 +1572,11 @@ struct ExpandedCardView: View {
                 }
             }
         }
-        // Bounding box around the whole atom cluster: while the cursor is anywhere
+        // Bounding box around the whole chip cluster: while the cursor is anywhere
         // inside it (including gaps/punctuation between chips), the full-card copy
         // icon stays hidden so it doesn't flicker as the cursor crosses those gaps.
         return Group {
-            if hasAtoms {
+            if hasChips {
                 content
                     .contentShape(Rectangle())
                     .onHover { hovering in isHoveringAtomsBlock = hovering }
@@ -1632,6 +1637,66 @@ struct ExpandedCardView: View {
             .foregroundStyle(isHighlighted ? .white : background)
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .onHover { hovering in hoveredAtomID = hovering ? segment.id : nil }
+    }
+
+    /// Renders a `{{...}}` occurrence as a fill-in chip: unfilled shows a dashed
+    /// outline with the placeholder key as a hint, filled shows a solid chip with
+    /// the entered value. Tapping opens a popover — a text field for free-form
+    /// placeholders, or a list of choices for `{{a/b}}`-style ones.
+    private func variableChip(_ segment: LineSegment, maxWidth: CGFloat) -> some View {
+        let variable = segment.variable!
+        let filled = variableValues[variable.key]
+        let isHighlighted = isPulsingAllAtoms || isHoveringCopyAllZone
+        return Button {
+            editingVariableKey = variable.key
+        } label: {
+            Text(filled ?? variable.key)
+                .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: maxWidth, alignment: .leading)
+                .italic(filled == nil)
+        }
+            .buttonStyle(.plain)
+            .font(.system(size: bodyFontSize, weight: .bold))
+            .padding(.horizontal, 16)
+            .padding(.vertical, 10)
+            .frame(minHeight: 44)
+            .background(isHighlighted ? highlightColor : (filled != nil ? chipColor : Color.clear))
+            .foregroundStyle(isHighlighted ? .white : (filled != nil ? background : textColor))
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .strokeBorder(filled == nil && !isHighlighted ? textColor.opacity(0.4) : .clear, style: StrokeStyle(lineWidth: 1.5, dash: [4, 3]))
+            )
+            .popover(isPresented: Binding(
+                get: { editingVariableKey == variable.key },
+                set: { isPresented in if !isPresented { editingVariableKey = nil } }
+            )) {
+                variableEditorPopover(for: variable, currentValue: filled)
+            }
+    }
+
+    @ViewBuilder
+    private func variableEditorPopover(for variable: PhraseVariable, currentValue: String?) -> some View {
+        if let choices = variable.choices {
+            VStack(alignment: .leading, spacing: 2) {
+                ForEach(choices, id: \.self) { choice in
+                    Button(choice) {
+                        variableValues[variable.key] = choice
+                        editingVariableKey = nil
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+                }
+            }
+            .padding(6)
+        } else {
+            VariableFillPopover(initialValue: currentValue ?? "") { value in
+                variableValues[variable.key] = value
+                editingVariableKey = nil
+            }
+        }
     }
 
     private func handleAtomTap(_ atom: Atom) {
@@ -1735,13 +1800,13 @@ struct ExpandedCardView: View {
         }
     }
 
-    /// Full-card copy (background tap or the copy icon): pulses every atom chip
-    /// (or, for plain cards with no chips, the whole card background) to the
-    /// highlight color in sync with the "Copied" badge, since the whole value —
-    /// including every atom's text — just got copied.
+    /// Full-card copy (background tap or the copy icon): substitutes any filled
+    /// variables into the value, then pulses every chip (or, for plain cards with
+    /// no chips, the whole card background) to the highlight color in sync with
+    /// the "Copied" badge, since the whole value just got copied.
     private func copyFull() {
-        onCopyFull()
-        guard hasAtoms else {
+        onCopyFull(PhraseVariable.substitute(phrase.value, values: variableValues))
+        guard hasChips else {
             withAnimation(.easeOut(duration: 0.12)) { isPulsingCardBackground = true }
             DispatchQueue.main.asyncAfter(deadline: .now() + CorpusStore.copyFeedbackDuration) {
                 withAnimation(.easeOut(duration: 0.22)) { isPulsingCardBackground = false }
@@ -1761,7 +1826,35 @@ struct ExpandedCardView: View {
     }
 
     private var lines: [[LineSegment]] {
-        LineSegment.lines(value: phrase.value, atoms: phrase.atoms ?? [])
+        LineSegment.lines(value: phrase.value, atoms: phrase.atoms ?? [], variables: parsedVariables)
+    }
+}
+
+/// Free-text fill-in popover for a single `{{variable}}` occurrence, shown by
+/// `ExpandedCardView.variableChip`. Choice-style `{{a/b}}` placeholders skip this
+/// in favor of a plain list of buttons.
+private struct VariableFillPopover: View {
+    @State private var text: String
+    @FocusState private var isFocused: Bool
+    let onSubmit: (String) -> Void
+
+    init(initialValue: String, onSubmit: @escaping (String) -> Void) {
+        _text = State(initialValue: initialValue)
+        self.onSubmit = onSubmit
+    }
+
+    var body: some View {
+        HStack(spacing: 8) {
+            TextField("Value", text: $text)
+                .textFieldStyle(.roundedBorder)
+                .frame(width: 220)
+                .focused($isFocused)
+                .onSubmit { onSubmit(text) }
+            Button("Set") { onSubmit(text) }
+                .buttonStyle(.borderedProminent)
+        }
+        .padding(12)
+        .onAppear { isFocused = true }
     }
 }
 
@@ -1769,33 +1862,47 @@ struct LineSegment: Identifiable {
     let id: String
     let text: String
     let atom: Atom?
+    let variable: PhraseVariable?
 
-    static func lines(value: String, atoms: [Atom]) -> [[LineSegment]] {
+    var isChip: Bool { atom != nil || variable != nil }
+
+    /// Merges atom ranges and detected `{{...}}` variable ranges (both character-indexed,
+    /// see `PhraseVariable`/`Atom`) into a single ordered run of chip/plain-text segments.
+    /// A variable range that overlaps an already-placed atom is dropped rather than
+    /// double-rendered; atoms are user-curated so they take priority.
+    static func lines(value: String, atoms: [Atom], variables: [PhraseVariable]) -> [[LineSegment]] {
         let characters = Array(value)
-        let sorted = atoms
-            .filter { $0.start >= 0 && $0.end > $0.start && $0.end <= characters.count }
-            .sorted { $0.start < $1.start }
+        struct ChipRange { let start: Int; let end: Int; let atom: Atom?; let variable: PhraseVariable? }
+        let ranges = (
+            atoms
+                .filter { $0.start >= 0 && $0.end > $0.start && $0.end <= characters.count }
+                .map { ChipRange(start: $0.start, end: $0.end, atom: $0, variable: nil) }
+            + variables
+                .filter { $0.start >= 0 && $0.end > $0.start && $0.end <= characters.count }
+                .map { ChipRange(start: $0.start, end: $0.end, atom: nil, variable: $0) }
+        ).sorted { $0.start < $1.start }
 
         var flat: [LineSegment] = []
         var cursor = 0
         var counter = 0
         func nextID() -> String { counter += 1; return "seg-\(counter)" }
 
-        for atom in sorted {
-            guard atom.start >= cursor else { continue }
-            if atom.start > cursor {
-                flat.append(LineSegment(id: nextID(), text: String(characters[cursor..<atom.start]), atom: nil))
+        for range in ranges {
+            guard range.start >= cursor else { continue }
+            if range.start > cursor {
+                flat.append(LineSegment(id: nextID(), text: String(characters[cursor..<range.start]), atom: nil, variable: nil))
             }
-            flat.append(LineSegment(id: atom.id, text: String(characters[atom.start..<atom.end]), atom: atom))
-            cursor = atom.end
+            let id = range.atom?.id ?? nextID()
+            flat.append(LineSegment(id: id, text: String(characters[range.start..<range.end]), atom: range.atom, variable: range.variable))
+            cursor = range.end
         }
         if cursor < characters.count {
-            flat.append(LineSegment(id: nextID(), text: String(characters[cursor...]), atom: nil))
+            flat.append(LineSegment(id: nextID(), text: String(characters[cursor...]), atom: nil, variable: nil))
         }
 
         var lines: [[LineSegment]] = [[]]
         for segment in flat {
-            if segment.atom != nil {
+            if segment.isChip {
                 lines[lines.count - 1].append(segment)
                 continue
             }
@@ -1806,7 +1913,7 @@ struct LineSegment: Identifiable {
                 // to work; FlowLayout's own spacing supplies the gap between words.
                 let words = part.split(separator: " ")
                 for word in words {
-                    lines[lines.count - 1].append(LineSegment(id: nextID(), text: String(word), atom: nil))
+                    lines[lines.count - 1].append(LineSegment(id: nextID(), text: String(word), atom: nil, variable: nil))
                 }
                 if index < parts.count - 1 {
                     lines.append([])
@@ -1897,7 +2004,7 @@ struct FlowLayout: Layout {
         isCopied: false,
         onCopyAtom: { _ in },
         onCopySelection: { _ in },
-        onCopyFull: {},
+        onCopyFull: { _ in },
         onClose: {}
     )
     .frame(width: 900, height: 500)
@@ -1912,7 +2019,7 @@ struct FlowLayout: Layout {
         isCopied: false,
         onCopyAtom: { _ in },
         onCopySelection: { _ in },
-        onCopyFull: {},
+        onCopyFull: { _ in },
         onClose: {}
     )
     .frame(width: 900, height: 500)
@@ -1927,7 +2034,22 @@ struct FlowLayout: Layout {
         isCopied: true,
         onCopyAtom: { _ in },
         onCopySelection: { _ in },
-        onCopyFull: {},
+        onCopyFull: { _ in },
+        onClose: {}
+    )
+    .frame(width: 900, height: 500)
+    .padding(40)
+}
+
+#Preview("Expanded Card - Variables") {
+    ExpandedCardView(
+        phrase: PreviewData.variablePhrase,
+        fontSize: 18,
+        fontFamily: "sans",
+        isCopied: false,
+        onCopyAtom: { _ in },
+        onCopySelection: { _ in },
+        onCopyFull: { _ in },
         onClose: {}
     )
     .frame(width: 900, height: 500)
@@ -2058,8 +2180,9 @@ final class CorpusStore: ObservableObject {
         copyText(text, feedbackFor: phrase.id, autoClose: false)
     }
 
-    func copyFullFromExpandedCard(_ phrase: Phrase) {
-        copyText(phrase.value, feedbackFor: phrase.id, autoClose: closesCardOnCopy)
+    /// `text` is already variable-substituted by `ExpandedCardView.copyFull()`.
+    func copyFullFromExpandedCard(_ text: String, phraseID: String) {
+        copyText(text, feedbackFor: phraseID, autoClose: closesCardOnCopy)
     }
 
     func searchTermDidChange() {
@@ -2453,6 +2576,61 @@ struct Atom: Codable, Identifiable, Equatable {
     var label: String?
 }
 
+/// A `{{...}}` placeholder occurrence detected in a phrase's `value`, character-indexed
+/// to match `Atom` offset semantics (see quick-text/README.md "Variable placeholders").
+/// Not persisted — parsed fresh from `value` wherever needed, since the corpus has no
+/// schema for these beyond the literal braces.
+struct PhraseVariable: Identifiable, Equatable {
+    var id: String { key }
+    let key: String
+    /// Non-nil for `{{option one/option two}}` style placeholders; each choice is
+    /// offered as a discrete pick instead of free text.
+    let choices: [String]?
+    let start: Int
+    let end: Int
+
+    private static let pattern = #"\{\{([^{}]+)\}\}"#
+
+    static func parse(_ value: String) -> [PhraseVariable] {
+        guard let regex = try? NSRegularExpression(pattern: pattern) else { return [] }
+        let nsRange = NSRange(value.startIndex..<value.endIndex, in: value)
+        var results: [PhraseVariable] = []
+        regex.enumerateMatches(in: value, range: nsRange) { match, _, _ in
+            guard let match,
+                  let fullRange = Range(match.range, in: value),
+                  let innerRange = Range(match.range(at: 1), in: value) else { return }
+            let key = String(value[innerRange]).trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !key.isEmpty else { return }
+            let start = value.distance(from: value.startIndex, to: fullRange.lowerBound)
+            let end = value.distance(from: value.startIndex, to: fullRange.upperBound)
+            let choices = key.contains("/")
+                ? key.split(separator: "/").map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty }
+                : nil
+            results.append(PhraseVariable(key: key, choices: choices, start: start, end: end))
+        }
+        return results
+    }
+
+    /// Replaces every `{{...}}` occurrence whose trimmed key has a filled value;
+    /// occurrences with no fill stay as the literal placeholder text.
+    static func substitute(_ value: String, values: [String: String]) -> String {
+        guard let regex = try? NSRegularExpression(pattern: pattern) else { return value }
+        let nsValue = value as NSString
+        let nsRange = NSRange(location: 0, length: nsValue.length)
+        var result = ""
+        var cursor = 0
+        regex.enumerateMatches(in: value, range: nsRange) { match, _, _ in
+            guard let match else { return }
+            result += nsValue.substring(with: NSRange(location: cursor, length: match.range.location - cursor))
+            let key = nsValue.substring(with: match.range(at: 1)).trimmingCharacters(in: .whitespacesAndNewlines)
+            result += values[key] ?? nsValue.substring(with: match.range)
+            cursor = match.range.location + match.range.length
+        }
+        result += nsValue.substring(from: cursor)
+        return result
+    }
+}
+
 enum Visibility: String, Codable, CaseIterable {
     case `private`
     case `public`
@@ -2587,6 +2765,24 @@ enum PreviewData {
         ]
     )
 
+    static let variablePhrase = Phrase(
+        id: "preview-variable",
+        categoryId: "personal",
+        title: "Follow-up",
+        summary: "Follow-up",
+        value: "Hi {{name}}, following up on {{topic}}. Please respond by {{urgent/end of week}}.",
+        color: "brown-13",
+        textColor: "brown-22",
+        fontSize: nil,
+        image: nil,
+        favorite: false,
+        visibility: .localOnly,
+        tags: ["email"],
+        createdAt: Date(),
+        updatedAt: Date(),
+        atoms: nil
+    )
+
     static let store: CorpusStore = {
         let store = CorpusStore()
         store.corpus = QuickTextCorpus(
@@ -2594,7 +2790,7 @@ enum PreviewData {
             updatedAt: Date(),
             settings: Settings(defaultFontSize: 18, defaultTileColor: "brown-13", defaultTextColor: "brown-22", defaultFontFamily: "sans", paletteSource: "Robert Brown Fabric Collection"),
             categories: [Category(id: "personal", name: "Personal", sortOrder: 10)],
-            phrases: [plainPhrase, addressPhrase]
+            phrases: [plainPhrase, addressPhrase, variablePhrase]
         )
         store.palette = Palette(
             name: "Robert Brown Fabric Collection",

@@ -19,6 +19,8 @@ class QuickTextLauncher extends HTMLElement {
     this.copiedId = null;
     this.expandedPhraseId = null;
     this.highlightedAtomId = null;
+    this.variableValues = {};
+    this.editingVariableKey = null;
   }
 
   connectedCallback() {
@@ -129,7 +131,7 @@ class QuickTextLauncher extends HTMLElement {
           opacity: .82;
         }
         .empty, .loading { padding: 24px; color: var(--qt-muted); }
-        .tile[data-atomic="true"] .tile-title::after {
+        .tile[data-expandable="true"] .tile-title::after {
           content: "";
           display: inline-block;
           width: 6px;
@@ -201,6 +203,70 @@ class QuickTextLauncher extends HTMLElement {
           color: #fff;
           outline: none;
           transform: translateY(-1px);
+        }
+        .var-chip {
+          display: inline-flex;
+          align-items: center;
+          border: 1.5px dashed color-mix(in srgb, var(--qt-atomic-text) 55%, transparent);
+          border-radius: 10px;
+          background: transparent;
+          color: var(--qt-atomic-text);
+          padding: 9px 15px;
+          margin: 3px 2px;
+          font: inherit;
+          font-weight: 700;
+          font-style: italic;
+          cursor: pointer;
+          min-height: 44px;
+          transition: background .12s ease, color .12s ease, border-color .12s ease;
+        }
+        .var-chip[data-filled="true"] {
+          border-style: solid;
+          font-style: normal;
+          background: var(--qt-atomic-chip);
+          color: var(--qt-atomic-chip-text);
+        }
+        .var-chip:hover, .var-chip:focus-visible {
+          border-color: var(--qt-atomic-hover);
+          color: var(--qt-atomic-hover);
+          outline: none;
+        }
+        .var-chip[data-filled="true"]:hover, .var-chip[data-filled="true"]:focus-visible {
+          background: var(--qt-atomic-hover);
+          color: #fff;
+        }
+        .var-editor {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          margin: 3px 2px;
+        }
+        .var-input {
+          font: inherit;
+          font-weight: 700;
+          border: 1.5px solid var(--qt-atomic-hover);
+          border-radius: 10px;
+          padding: 9px 12px;
+          min-height: 44px;
+          background: var(--qt-atomic-chip);
+          color: var(--qt-atomic-chip-text);
+          min-width: 140px;
+        }
+        .var-choice {
+          border: none;
+          border-radius: 10px;
+          background: var(--qt-atomic-chip);
+          color: var(--qt-atomic-chip-text);
+          padding: 9px 14px;
+          min-height: 44px;
+          font: inherit;
+          font-weight: 700;
+          cursor: pointer;
+        }
+        .var-choice:hover, .var-choice:focus-visible {
+          background: var(--qt-atomic-hover);
+          color: #fff;
+          outline: none;
         }
         .atomic-hint {
           margin-top: 22px;
@@ -289,9 +355,9 @@ class QuickTextLauncher extends HTMLElement {
     const textColor = this.resolveColor(phrase.textColor || this.corpus.settings?.defaultTextColor);
     const fontSize = Number(this.corpus.settings?.defaultFontSize || 18);
     const fontFamily = this.fontFamily();
-    const isAtomic = hasAtoms(phrase);
+    const isExpandable = requiresExpansion(phrase);
     return `
-      <button class="tile" type="button" data-index="${index}" data-id="${escapeAttr(phrase.id)}" data-atomic="${isAtomic}" style="--tile-bg:${color};--tile-text:${textColor};--tile-font-size:${fontSize}px;--tile-font-family:${fontFamily}">
+      <button class="tile" type="button" data-index="${index}" data-id="${escapeAttr(phrase.id)}" data-expandable="${isExpandable}" style="--tile-bg:${color};--tile-text:${textColor};--tile-font-size:${fontSize}px;--tile-font-family:${fontFamily}">
         <span class="tile-title">${escapeHtml(phrase.summary || phrase.title)}</span>
         ${this.copiedId === phrase.id ? '<span class="copied">Copied</span>' : ''}
       </button>
@@ -308,16 +374,15 @@ class QuickTextLauncher extends HTMLElement {
     }
     const fontSize = Number(this.corpus.settings?.defaultFontSize || 18);
     const fontFamily = this.fontFamily();
-    const segments = segmentsForValue(phrase.value, phrase.atoms);
+    const variables = parseVariables(phrase.value);
+    const segments = segmentsForValue(phrase.value, phrase.atoms, variables);
     root.innerHTML = `
       <div class="atomic-overlay" data-atomic-backdrop>
         <div class="atomic-card" data-atomic-card style="--tile-font-size:${fontSize}px;--tile-font-family:${fontFamily}">
           ${this.copiedId === phrase.id ? '<span class="atomic-copied">Copied</span>' : ''}
           <div class="atomic-title">${escapeHtml(phrase.title)}</div>
-          <div class="atomic-body" data-atomic-body>${segments.map((segment) => segment.type === 'atom'
-            ? `<button class="atom-chip" type="button" data-atom-id="${escapeAttr(segment.id)}">${escapeHtml(segment.text)}</button>`
-            : escapeHtml(segment.text)).join('')}</div>
-          <div class="atomic-hint">Click a chip to copy it, or click anywhere else to copy the full text.</div>
+          <div class="atomic-body" data-atomic-body>${segments.map((segment) => this.renderSegment(phrase, segment)).join('')}</div>
+          <div class="atomic-hint">Click a chip to copy it, fill in a variable, or click anywhere else to copy the full text.</div>
         </div>
       </div>
     `;
@@ -333,7 +398,64 @@ class QuickTextLauncher extends HTMLElement {
       });
       chip.addEventListener('mouseenter', () => { this.highlightedAtomId = chip.dataset.atomId; });
     });
+    card.querySelectorAll('.var-chip').forEach((chip) => {
+      chip.addEventListener('click', (event) => {
+        event.stopPropagation();
+        this.editingVariableKey = `${phrase.id}::${chip.dataset.varKey}`;
+        this.renderAtomicOverlay();
+      });
+    });
+    card.querySelectorAll('[data-var-editor]').forEach((editor) => {
+      editor.addEventListener('click', (event) => event.stopPropagation());
+    });
+    card.querySelectorAll('.var-choice').forEach((button) => {
+      button.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const key = button.closest('[data-var-editor]').dataset.varEditor;
+        this.variableValues[`${phrase.id}::${key}`] = button.dataset.varChoice;
+        this.editingVariableKey = null;
+        this.renderAtomicOverlay();
+      });
+    });
+    card.querySelectorAll('.var-input').forEach((input) => {
+      const commit = () => {
+        this.variableValues[`${phrase.id}::${input.dataset.varKey}`] = input.value;
+        this.editingVariableKey = null;
+        this.renderAtomicOverlay();
+      };
+      input.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          commit();
+        } else if (event.key === 'Escape') {
+          event.stopPropagation();
+          this.editingVariableKey = null;
+          this.renderAtomicOverlay();
+        }
+      });
+      input.addEventListener('blur', commit);
+      input.focus();
+      input.select();
+    });
     card.addEventListener('click', () => this.copyFullFromCard(phrase));
+  }
+
+  renderSegment(phrase, segment) {
+    if (segment.type === 'atom') {
+      return `<button class="atom-chip" type="button" data-atom-id="${escapeAttr(segment.id)}">${escapeHtml(segment.text)}</button>`;
+    }
+    if (segment.type === 'variable') {
+      const valueKey = `${phrase.id}::${segment.key}`;
+      const filled = this.variableValues[valueKey];
+      if (this.editingVariableKey === valueKey) {
+        if (segment.choices) {
+          return `<span class="var-editor" data-var-editor="${escapeAttr(segment.key)}">${segment.choices.map((choice) => `<button type="button" class="var-choice" data-var-choice="${escapeAttr(choice)}">${escapeHtml(choice)}</button>`).join('')}</span>`;
+        }
+        return `<span class="var-editor" data-var-editor="${escapeAttr(segment.key)}"><input type="text" class="var-input" data-var-key="${escapeAttr(segment.key)}" value="${escapeAttr(filled || '')}"></span>`;
+      }
+      return `<button class="var-chip" type="button" data-var-key="${escapeAttr(segment.key)}" data-filled="${filled ? 'true' : 'false'}">${escapeHtml(filled || segment.key)}</button>`;
+    }
+    return escapeHtml(segment.text);
   }
 
   bindEvents() {
@@ -405,7 +527,7 @@ class QuickTextLauncher extends HTMLElement {
   activatePhrase(id) {
     const phrase = this.corpus.phrases.find((item) => item.id === id);
     if (!phrase) return;
-    if (hasAtoms(phrase)) {
+    if (requiresExpansion(phrase)) {
       this.expandedPhraseId = id;
       this.render();
       return;
@@ -435,7 +557,12 @@ class QuickTextLauncher extends HTMLElement {
   }
 
   async copyFullFromCard(phrase) {
-    await copyText(phrase.value);
+    const prefix = `${phrase.id}::`;
+    const values = {};
+    Object.keys(this.variableValues).forEach((key) => {
+      if (key.startsWith(prefix)) values[key.slice(prefix.length)] = this.variableValues[key];
+    });
+    await copyText(substituteVariables(phrase.value, values));
     this.showAtomicCopied(phrase.id);
   }
 
@@ -452,6 +579,7 @@ class QuickTextLauncher extends HTMLElement {
   collapseAtomic() {
     if (!this.expandedPhraseId) return;
     this.expandedPhraseId = null;
+    this.editingVariableKey = null;
     this.render();
   }
 
@@ -512,6 +640,15 @@ class QuickTextLauncher extends HTMLElement {
                 </li>
               `).join('')}
             </ul>` : '<p style="color:var(--qt-muted);font-size:12px;margin:6px 0 0;">No atoms yet. This card copies as a single unit.</p>'}
+          </div>
+          <div class="row">
+            <span>Variables detected in Value</span>
+            ${(() => {
+              const detected = parseVariables(currentValue);
+              return detected.length
+                ? `<div style="display:flex;flex-wrap:wrap;gap:6px;">${detected.map((variable) => `<span style="padding:4px 8px;border-radius:999px;background:var(--qt-edge);font-size:12px;">${escapeHtml(variable.choices ? variable.choices.join(' / ') : variable.key)}</span>`).join('')}</div>`
+                : '<p style="color:var(--qt-muted);font-size:12px;margin:6px 0 0;">No {{variables}} detected. Use {{setting}} or {{option one/option two}}.</p>';
+            })()}
           </div>
           ${this.swatchRow('Background', 'color', item.color || this.corpus.settings?.defaultTileColor)}
           ${this.swatchRow('Text', 'textColor', item.textColor || this.corpus.settings?.defaultTextColor)}
@@ -700,18 +837,58 @@ function hasAtoms(phrase) {
   return Array.isArray(phrase.atoms) && phrase.atoms.length > 0;
 }
 
-function segmentsForValue(value, atoms) {
+const VARIABLE_PATTERN = /\{\{([^{}]+)\}\}/g;
+
+function parseVariables(value) {
   const text = value || '';
-  const sorted = [...(atoms || [])]
-    .filter((atom) => typeof atom.start === 'number' && typeof atom.end === 'number' && atom.end > atom.start && atom.end <= text.length)
-    .sort((a, b) => a.start - b.start);
+  const pattern = new RegExp(VARIABLE_PATTERN);
+  const results = [];
+  let match;
+  while ((match = pattern.exec(text))) {
+    const key = match[1].trim();
+    if (!key) continue;
+    const start = match.index;
+    const end = start + match[0].length;
+    const choices = key.includes('/') ? key.split('/').map((part) => part.trim()).filter(Boolean) : null;
+    results.push({ key, choices, start, end });
+  }
+  return results;
+}
+
+function hasVariables(phrase) {
+  return parseVariables(phrase.value).length > 0;
+}
+
+function requiresExpansion(phrase) {
+  return hasAtoms(phrase) || hasVariables(phrase);
+}
+
+function substituteVariables(value, values) {
+  return (value || '').replace(new RegExp(VARIABLE_PATTERN), (match, inner) => {
+    const key = inner.trim();
+    return Object.prototype.hasOwnProperty.call(values, key) ? values[key] : match;
+  });
+}
+
+function segmentsForValue(value, atoms, variables) {
+  const text = value || '';
+  const ranges = [
+    ...(atoms || [])
+      .filter((atom) => typeof atom.start === 'number' && typeof atom.end === 'number' && atom.end > atom.start && atom.end <= text.length)
+      .map((atom) => ({ start: atom.start, end: atom.end, kind: 'atom', atom })),
+    ...(variables || []).map((variable) => ({ start: variable.start, end: variable.end, kind: 'variable', variable }))
+  ].sort((a, b) => a.start - b.start);
   const segments = [];
   let cursor = 0;
-  for (const atom of sorted) {
-    if (atom.start < cursor) continue;
-    if (atom.start > cursor) segments.push({ type: 'text', text: text.slice(cursor, atom.start) });
-    segments.push({ type: 'atom', id: atom.id, text: text.slice(atom.start, atom.end) });
-    cursor = atom.end;
+  for (const range of ranges) {
+    if (range.start < cursor) continue;
+    if (range.start > cursor) segments.push({ type: 'text', text: text.slice(cursor, range.start) });
+    if (range.kind === 'atom') {
+      segments.push({ type: 'atom', id: range.atom.id, text: text.slice(range.start, range.end) });
+    } else {
+      segments.push({ type: 'variable', key: range.variable.key, choices: range.variable.choices, text: text.slice(range.start, range.end) });
+    }
+    cursor = range.end;
   }
   if (cursor < text.length) segments.push({ type: 'text', text: text.slice(cursor) });
   return segments;

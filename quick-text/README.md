@@ -88,13 +88,16 @@ A phrase can optionally carry an `atoms` array so part of its `value` can be cop
 
 ## Variable placeholders
 
-Quick Text phrase text may include literal `{{...}}` placeholders. The Mac phrase editor detects and lists placeholders while editing, including option-style placeholders such as `{{option one/option two}}`, so authors can see where a phrase expects user-provided context.
+Quick Text phrase text may include literal `{{...}}` placeholders (e.g. `{{setting}}`), including option-style placeholders such as `{{option one/option two}}`. Placeholders are fillable at copy time on both surfaces:
 
-Current boundary:
-
-- Placeholder detection is advisory only. Copy actions still copy the phrase `value` exactly as stored; there is no fill-in modal or copy-time substitution yet.
-- The corpus currently tolerates a top-level `variables` array for future/shared metadata, but the Mac app and web component do not use it as a runtime contract.
-- Atom ranges are independent of placeholders. If a phrase mixes atoms and `{{...}}`, atom offsets still refer to the raw stored `value`, braces included.
+- A phrase whose `value` contains `{{...}}` placeholders (with or without `atoms`) expands into a card on click, same as an atomic phrase, instead of copying immediately.
+- Each unique placeholder renders as its own chip inside the expanded card: a dashed outline with the placeholder key as a hint when unfilled, a solid chip with the entered value once filled. Clicking an unfilled or filled chip reopens it for editing.
+- `{{a/b}}`-style placeholders (containing `/`) show each option as a discrete choice instead of free text; picking one fills the chip.
+- Clicking the card background (not a chip) copies `value` with every filled placeholder substituted in; any placeholder left unfilled copies through as the literal `{{...}}` text rather than blocking the copy or prompting for the rest. A placeholder that appears more than once in the same `value` shares one fill across all its occurrences.
+- Atoms and variables can coexist in the same phrase and render as distinct chip styles side by side (atom chips solid/bold from the start, variable chips dashed until filled). Atom offsets and atom copy behavior are unaffected by variable fills — copying an atom always copies its literal slice of `value`.
+- Fill-in values are session-only, like everything else client-side here: they are not written back to the corpus and reset when the card is closed (Mac) or the page reloads (web).
+- The corpus still tolerates a top-level `variables` array for possible future metadata, but neither surface reads or writes it — the runtime contract is the regex-driven `{{...}}` detection described above, not a schema.
+- Implemented in both surfaces: `web/quick-text-component/quick-text.js` (`parseVariables`, `substituteVariables`, and the `var-chip`/`var-editor` overlay elements alongside the existing atom chips) and `mac/QuickTextApp` (`PhraseVariable.parse`/`.substitute`, and `ExpandedCardView.variableChip`/`variableEditorPopover` alongside `atomChip`). The Mac phrase editor's `PhraseEditor.detectedVariables` and the web admin editor's "Variables detected" list still just preview what will be fillable — they don't do the filling.
 
 ## Environment notes for future sessions
 
