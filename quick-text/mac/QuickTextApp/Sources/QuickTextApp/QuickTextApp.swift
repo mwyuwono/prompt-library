@@ -798,7 +798,7 @@ struct TileView: View {
         )
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .overlay {
-            CopiedBadge(isVisible: isCopied, color: backgroundColor)
+            CopiedBadge(isVisible: isCopied, color: highlightColor)
         }
     }
 
@@ -1482,7 +1482,7 @@ struct SettingsEditor: View {
                 colors: store.palette.colors,
                 isEditing: colorEditingBinding(for: .highlight)
             )
-            .help("Atom-chip selection, copy pulses, hover tints, and the active category chip.")
+            .help("Atom-chip selection, copy pulses, hover tints, the active category chip, and card/copy-badge selection highlights.")
             HStack(spacing: 8) {
                 ColorSwatchField(
                     title: "Grid background",
@@ -2227,7 +2227,7 @@ struct ExpandedCardView: View {
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .shadow(color: .black.opacity(0.4), radius: 40, y: 16)
         .overlay(alignment: .topTrailing) { iconsOverlay }
-        .overlay { CopiedBadge(isVisible: isCopied, color: background) }
+        .overlay { CopiedBadge(isVisible: isCopied, color: highlightColor) }
         .contentShape(Rectangle())
         .onHover { hovering in isHoveringCard = hovering }
         .onTapGesture { copyFull() }
