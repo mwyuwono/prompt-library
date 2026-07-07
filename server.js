@@ -354,6 +354,70 @@ async function uploadReferenceAsset(file, folderPath = '') {
     }
 }
 
+async function listAllReferenceAssetKeys() {
+    const result = await runAwsJson([
+        's3api',
+        'list-objects-v2',
+        '--bucket',
+        REFERENCE_ASSET_BUCKET,
+        '--prefix',
+        `${REFERENCE_ASSET_PREFIX}/`,
+        '--output',
+        'json'
+    ]);
+    return (result.Contents || []).map(item => item.Key).filter(Boolean);
+}
+
+async function listReferenceFolderPaths() {
+    const keys = await listAllReferenceAssetKeys();
+    const prefixLen = `${REFERENCE_ASSET_PREFIX}/`.length;
+    const folderSet = new Set();
+
+    keys.forEach(key => {
+        const relative = key.slice(prefixLen);
+        const segments = relative.split('/');
+        segments.pop(); // drop the filename (or trailing empty segment for folder markers)
+        const accum = [];
+        segments.forEach(segment => {
+            if (!segment) return;
+            accum.push(segment);
+            folderSet.add(accum.join('/'));
+        });
+    });
+
+    return Array.from(folderSet).sort((a, b) => a.localeCompare(b));
+}
+
+async function moveReferenceAsset(sourceKey, destinationPath = '') {
+    const prefix = `${REFERENCE_ASSET_PREFIX}/`;
+    if (!sourceKey || !String(sourceKey).startsWith(prefix)) {
+        throw new Error('Invalid source file');
+    }
+
+    const filename = path.basename(sourceKey);
+    const destFolder = sanitizeReferenceFolderPath(destinationPath);
+    const destKey = destFolder ? `${prefix}${destFolder}/${filename}` : `${prefix}${filename}`;
+
+    if (destKey === sourceKey) {
+        throw new Error('File is already in that folder');
+    }
+
+    await execFileAsync('aws', getAwsCliArgs([
+        's3',
+        'mv',
+        `s3://${REFERENCE_ASSET_BUCKET}/${sourceKey}`,
+        `s3://${REFERENCE_ASSET_BUCKET}/${destKey}`
+    ]), {
+        timeout: 60000
+    });
+
+    return {
+        key: destKey,
+        filename,
+        url: getReferenceAssetUrl(destKey)
+    };
+}
+
 async function createReferenceFolder(folderPath) {
     const folder = sanitizeReferenceFolderPath(folderPath);
     if (!folder) {
@@ -1673,6 +1737,35 @@ app.get('/api/reference-assets', async (req, res) => {
             profile: REFERENCE_ASSET_PROFILE,
             bucket: REFERENCE_ASSET_BUCKET
         });
+    }
+});
+
+/**
+ * GET /api/reference-assets/folders
+ * Lists every folder path in the reference assets bucket (full tree, not
+ * just the current level) for use in the "move to folder" picker.
+ */
+app.get('/api/reference-assets/folders', async (req, res) => {
+    try {
+        const folders = await listReferenceFolderPaths();
+        res.json({ success: true, folders });
+    } catch (error) {
+        console.error('Error listing reference folders:', error);
+        res.status(500).json({ success: false, error: error.message || 'Failed to list folders' });
+    }
+});
+
+/**
+ * POST /api/reference-assets/move
+ * Moves an existing reference asset into a different folder.
+ */
+app.post('/api/reference-assets/move', async (req, res) => {
+    try {
+        const asset = await moveReferenceAsset(req.body?.key, req.body?.destinationPath || '');
+        res.json({ success: true, asset });
+    } catch (error) {
+        console.error('Error moving reference asset:', error);
+        res.status(400).json({ success: false, error: error.message || 'Failed to move file' });
     }
 });
 

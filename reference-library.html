@@ -23,6 +23,15 @@
                     <span class="material-symbols-outlined" aria-hidden="true">edit_note</span>
                     Admin
                 </a>
+                <a
+                    href="https://s3.console.aws.amazon.com/s3/buckets/prompt-library-assets-009019643313?region=us-east-1&prefix=reference-images%2F&showversions=false"
+                    class="reference-library-link"
+                    target="_blank"
+                    rel="noopener"
+                >
+                    <span class="material-symbols-outlined" aria-hidden="true">cloud</span>
+                    S3
+                </a>
                 <button id="refreshButton" class="reference-library-button" type="button">
                     <span class="material-symbols-outlined" aria-hidden="true">refresh</span>
                     Refresh
@@ -60,6 +69,8 @@
         <section id="folderGrid" class="reference-folder-grid" aria-label="Folders"></section>
         <section id="assetGrid" class="reference-asset-grid" aria-live="polite"></section>
     </main>
+
+    <div id="moveMenu" class="reference-move-menu" role="menu" hidden></div>
 
     <wy-toast id="toast"></wy-toast>
     <script type="module">

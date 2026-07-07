@@ -18,7 +18,10 @@ const uploadButton = document.getElementById('uploadButton');
 const uploadInput = document.getElementById('uploadInput');
 const refreshButton = document.getElementById('refreshButton');
 const newFolderButton = document.getElementById('newFolderButton');
+const moveMenu = document.getElementById('moveMenu');
 const toast = document.getElementById('toast');
+
+let folderOptionsCache = null;
 
 const FILE_ICONS = {
     image: 'image',
@@ -213,6 +216,9 @@ function renderAssets() {
                     <a class="reference-icon-button" href="${escapeHtml(asset.url)}" target="_blank" rel="noopener" aria-label="Open ${escapeHtml(asset.filename)}" title="Open in new tab">
                         <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
                     </a>
+                    <button class="reference-icon-button" type="button" data-move-key="${escapeHtml(asset.key)}" aria-label="Move ${escapeHtml(asset.filename)} to another folder" aria-haspopup="true" title="Move to folder">
+                        <span class="material-symbols-outlined" aria-hidden="true">drive_file_move</span>
+                    </button>
                 </div>
             </div>
             <div class="reference-asset-meta">
@@ -229,7 +235,107 @@ function renderAssets() {
             if (asset?.url) copyUrl(asset.url);
         });
     });
+
+    grid.querySelectorAll('[data-move-key]').forEach(button => {
+        button.addEventListener('click', event => {
+            event.stopPropagation();
+            const asset = filteredAssets.find(item => item.key === button.dataset.moveKey);
+            if (asset) openMoveMenu(button, asset);
+        });
+    });
 }
+
+function getAssetFolder(assetKey = '') {
+    const segments = assetKey.split('/');
+    return segments.slice(1, -1).join('/');
+}
+
+async function getFolderOptions() {
+    if (folderOptionsCache) return folderOptionsCache;
+    const response = await fetch('/api/reference-assets/folders');
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Failed to load folders');
+    }
+    folderOptionsCache = [
+        { path: '', label: 'Home' },
+        ...(data.folders || []).map(folderPath => ({ path: folderPath, label: folderPath.split('/').join(' / ') }))
+    ];
+    return folderOptionsCache;
+}
+
+function closeMoveMenu() {
+    moveMenu.hidden = true;
+    moveMenu.innerHTML = '';
+    delete moveMenu.dataset.assetKey;
+}
+
+function positionMoveMenu(button) {
+    const rect = button.getBoundingClientRect();
+    const menuWidth = 220;
+    moveMenu.style.top = `${rect.bottom + 6}px`;
+    moveMenu.style.left = `${Math.max(8, Math.min(rect.right - menuWidth, window.innerWidth - menuWidth - 8))}px`;
+}
+
+async function openMoveMenu(button, asset) {
+    try {
+        const options = await getFolderOptions();
+        const currentFolder = getAssetFolder(asset.key);
+
+        moveMenu.innerHTML = options.map(option => {
+            const isCurrent = option.path === currentFolder;
+            return `<button type="button" class="reference-move-menu-item" data-dest="${escapeHtml(option.path)}" ${isCurrent ? 'disabled' : ''}>${escapeHtml(option.label)}</button>`;
+        }).join('');
+
+        moveMenu.dataset.assetKey = asset.key;
+        moveMenu.hidden = false;
+        positionMoveMenu(button);
+    } catch (error) {
+        console.error('Failed to load folders for move menu:', error);
+        showToast(error.message || 'Failed to load folders', 'error');
+    }
+}
+
+async function moveAsset(key, destinationPath) {
+    const response = await fetch('/api/reference-assets/move', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key, destinationPath })
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Failed to move file');
+    }
+    return data.asset;
+}
+
+moveMenu.addEventListener('click', async event => {
+    const item = event.target.closest('[data-dest]');
+    if (!item || item.disabled) return;
+
+    const destinationPath = item.dataset.dest;
+    const key = moveMenu.dataset.assetKey;
+    closeMoveMenu();
+
+    try {
+        await moveAsset(key, destinationPath);
+        showToast('File moved', 'success');
+        await loadAssets();
+    } catch (error) {
+        console.error('Move failed:', error);
+        showToast(error.message || 'Failed to move file', 'error');
+    }
+});
+
+document.addEventListener('click', event => {
+    if (moveMenu.hidden) return;
+    if (moveMenu.contains(event.target) || event.target.closest('[data-move-key]')) return;
+    closeMoveMenu();
+});
+
+document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') closeMoveMenu();
+});
 
 async function loadAssets() {
     busy = true;
@@ -374,6 +480,7 @@ newFolderButton.addEventListener('click', async () => {
 
     try {
         const folder = await createFolder(name.trim());
+        folderOptionsCache = null;
         showToast('Folder created', 'success');
         await loadAssets();
         if (folder?.path) navigateTo(folder.path);
