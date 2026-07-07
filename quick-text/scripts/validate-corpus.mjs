@@ -70,10 +70,38 @@ for (const phrase of corpus.phrases || []) {
   }
 }
 
+// Reusable variable library (see quick-text/README.md "Variable placeholders" ->
+// reusable variable library): { id, name, type: "text" | "choice", options? }.
+// Validated independently of the atom checks above so a schema issue in one
+// doesn't mask errors in the other.
+const libraryVariableIds = new Set();
+const libraryVariableNames = new Set();
+for (const variable of corpus.variables || []) {
+  if (!variable.id) errors.push('Library variable missing id.');
+  if (variable.id && libraryVariableIds.has(variable.id)) errors.push(`Duplicate library variable id: ${variable.id}`);
+  if (variable.id) libraryVariableIds.add(variable.id);
+
+  const label = variable.id || variable.name || '(unknown)';
+  if (!variable.name || !variable.name.trim()) errors.push(`Library variable ${label} missing name.`);
+  const normalizedName = (variable.name || '').trim().toLowerCase();
+  if (normalizedName) {
+    if (libraryVariableNames.has(normalizedName)) errors.push(`Duplicate library variable name (case-insensitive): ${variable.name}`);
+    libraryVariableNames.add(normalizedName);
+  }
+
+  if (variable.type !== 'text' && variable.type !== 'choice') {
+    errors.push(`Library variable ${label} has invalid type: ${variable.type}`);
+  } else if (variable.type === 'choice') {
+    if (!Array.isArray(variable.options) || variable.options.length === 0) {
+      errors.push(`Library variable ${label} is type "choice" but has no options.`);
+    }
+  }
+}
+
 if (errors.length) {
   console.error(`Quick Text corpus invalid (${errors.length} error${errors.length === 1 ? '' : 's'}):`);
   for (const error of errors) console.error(`- ${error}`);
   process.exit(1);
 }
 
-console.log(`Quick Text corpus valid: ${(corpus.phrases || []).length} phrases, ${(corpus.categories || []).length} categories.`);
+console.log(`Quick Text corpus valid: ${(corpus.phrases || []).length} phrases, ${(corpus.categories || []).length} categories, ${(corpus.variables || []).length} library variables.`);

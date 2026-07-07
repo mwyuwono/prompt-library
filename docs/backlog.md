@@ -7,9 +7,9 @@ Keep this list short and remove items when they are resolved.
 - Review literal placeholder examples in `mochi-cloze-flashcards` and `reusable-prompt-builder`; reword or escape them if they confuse authors.
 - Review the unused `reference_image` variable in the `engraving-conversion` / `fauvist-post-impressionist` variation and remove or wire it if accidental.
 
-## Quick Text reusable variable library
+## Quick Text reusable variable library — web surface
 
-- Not started. The `{{name}}`/`{{a/b}}` placeholders shipped so far are phrase-local only; the original ask was for named variables reusable across many phrases via a shared library, with a `{{@name}}` reference syntax, an admin library UI, and an edit-time "update all vs. fork" prompt. Full confirmed spec is in `quick-text/README.md` under "Planned: reusable variable library" — build against that, don't re-derive the design.
+- Shipped and manually verified on the Mac app (`{{@name}}` resolution, corpus `variables` schema, "Insert Variable" authoring, "Variables Library" admin surface, update-all/fork edit propagation, unresolved-reference rendering, delete warning — see `quick-text/README.md` "Reusable variable library"). Not yet ported to `web/quick-text-component/quick-text.js`, which still only has phrase-local `{{name}}`/`{{a/b}}` placeholders. Build the web side against the same shipped spec/behavior in the README rather than re-deriving it, and keep the two surfaces' interaction style consistent.
 
 ## Quick Text atomic phrase cards
 

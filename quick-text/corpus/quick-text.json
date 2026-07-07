@@ -570,6 +570,22 @@
       "updatedAt" : "2026-07-06T20:56:20Z",
       "value" : "Avoid digital AI artifacts, moire patterns, pixel jitter, or procedural noise grids. All textures and surfaces must strictly adhere to the physical realism of the requested medium, using organic details, natural lens behaviors, or authentic physical brushstrokes rather than tight, repetitive digital patterns. ",
       "visibility" : "private"
+    },
+    {
+      "categoryId" : "prompt-reuse",
+      "color" : "brown-18",
+      "createdAt" : "2026-07-07T00:50:28Z",
+      "favorite" : false,
+      "id" : "phrase-1783385381",
+      "summary" : "",
+      "tags" : [
+        "etp"
+      ],
+      "textColor" : "brown-22",
+      "title" : "\"Execute the prompt\"",
+      "updatedAt" : "2026-07-07T00:53:10Z",
+      "value" : "Execute the prompt",
+      "visibility" : "public"
     }
   ],
   "settings" : {
@@ -584,16 +600,12 @@
     "gridBackgroundColor" : "#2F2D29",
     "paletteSource" : "Robert Brown Fabric Collection"
   },
-  "updatedAt" : "2026-07-06T20:56:20Z",
+  "updatedAt" : "2026-07-07T04:32:11Z",
   "variables" : [
     {
-      "id" : "var-setting",
-      "name" : "setting",
-      "options" : [
-        "sailing through a storm",
-        "wrecked on shore",
-        "docked peacefully at sunset"
-      ]
+      "id" : "var-1783398724430",
+      "name" : "A classical swimmer’s physique: athletic, broad-shouldered, and naturally powerful, with smooth, voluminous musculature defined by rounded anatomical forms rather than sharp striations. Prioritize continuous sculptural flow, natural proportions, a refined waist, proportionate trapezius muscles, and an elegant V-shaped silhouette. Avoid hyper-vascularity, exaggerated definition, or bodybuilding aesthetics. Render the anatomy with soft tonal transitions and sculptural volume, evoking polished Greco-Roman marble while remaining fully integrated into the source artwork’s medium, lighting, and level of abstraction. Use classical chiaroscuro to emphasize form through luminous highlights and deep, velvety shadows.",
+      "type" : "text"
     }
   ],
   "version" : 1

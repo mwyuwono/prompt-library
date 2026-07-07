@@ -92,6 +92,9 @@ struct ContentView: View {
     @State private var showingSettings = false
     @State private var settingsPanelOffset = CGSize.zero
     @State private var settingsPanelDragOffset = CGSize.zero
+    @State private var showingVariablesLibrary = false
+    @State private var variablesPanelOffset = CGSize.zero
+    @State private var variablesPanelDragOffset = CGSize.zero
     @State private var savedWindowFrame: NSRect?
     @State private var gridWidth: CGFloat = 0
     @State private var keyMonitor: Any?
@@ -115,6 +118,10 @@ struct ContentView: View {
 
                 Button(action: { store.beginNewPhrase() }) {
                     Label("New", systemImage: "plus")
+                }
+                .buttonStyle(.glass)
+                Button(action: { showingVariablesLibrary = true }) {
+                    Label("Variables", systemImage: "curlybraces")
                 }
                 .buttonStyle(.glass)
                 Button(action: { showingSettings = true }) {
@@ -177,7 +184,7 @@ struct ContentView: View {
         }
         .onDisappear { removeKeyMonitor() }
         .onReceive(NotificationCenter.default.publisher(for: .quickTextFocusSearch)) { _ in
-            guard store.editingPhrase == nil, !showingSettings else { return }
+            guard store.editingPhrase == nil, !showingSettings, !showingVariablesLibrary else { return }
             focusSearchSoon()
         }
         .onChange(of: store.searchTerm) { _, _ in
@@ -216,7 +223,7 @@ struct ContentView: View {
         }
         .overlay(alignment: .topTrailing) {
             if showingSettings {
-                FloatingSettingsPanel(
+                FloatingPanel(
                     onClose: { showingSettings = false },
                     onDragEnded: {
                         settingsPanelOffset.width += settingsPanelDragOffset.width
@@ -231,6 +238,31 @@ struct ContentView: View {
                 .offset(
                     x: settingsPanelOffset.width + settingsPanelDragOffset.width,
                     y: settingsPanelOffset.height + settingsPanelDragOffset.height
+                )
+                .padding(.top, 54)
+                .padding(.trailing, 8)
+                .zIndex(2)
+            }
+        }
+        .overlay(alignment: .topTrailing) {
+            if showingVariablesLibrary {
+                FloatingPanel(
+                    title: "Variables Library",
+                    systemImage: "curlybraces",
+                    onClose: { showingVariablesLibrary = false },
+                    onDragEnded: {
+                        variablesPanelOffset.width += variablesPanelDragOffset.width
+                        variablesPanelOffset.height += variablesPanelDragOffset.height
+                        variablesPanelDragOffset = .zero
+                    },
+                    dragOffset: $variablesPanelDragOffset
+                ) {
+                    VariablesLibraryEditor()
+                        .environmentObject(store)
+                }
+                .offset(
+                    x: variablesPanelOffset.width + variablesPanelDragOffset.width,
+                    y: variablesPanelOffset.height + variablesPanelDragOffset.height
                 )
                 .padding(.top, 54)
                 .padding(.trailing, 8)
@@ -331,6 +363,7 @@ struct ContentView: View {
         Button("Copy Selected") { copySelected() }
             .disabled(store.selectedPhrase == nil)
         Divider()
+        Button("Variables Library") { showingVariablesLibrary = true }
         Button("Settings") { showingSettings = true }
     }
 
@@ -339,7 +372,7 @@ struct ContentView: View {
     }
 
     private var canUseGridKeyboard: Bool {
-        store.expandedPhraseID == nil && !showingSettings && store.editingPhrase == nil && !searchFocused && !isEditingText
+        store.expandedPhraseID == nil && !showingSettings && !showingVariablesLibrary && store.editingPhrase == nil && !searchFocused && !isEditingText
     }
 
     private func focusSearchSoon() {
@@ -363,7 +396,7 @@ struct ContentView: View {
     }
 
     private func handleKeyEvent(_ event: NSEvent) -> NSEvent? {
-        guard store.editingPhrase == nil, !showingSettings else { return event }
+        guard store.editingPhrase == nil, !showingSettings, !showingVariablesLibrary else { return event }
         guard event.modifierFlags.intersection([.command, .option, .control]).isEmpty else { return event }
         guard store.expandedPhraseID == nil else { return event }
 
@@ -444,7 +477,11 @@ struct CategoryTabButton: View {
     }
 }
 
-struct FloatingSettingsPanel<Content: View>: View {
+/// Generic floating card used for both the Settings panel and the Variables Library
+/// panel — same header/close/drag chrome, just a different title/icon and content.
+struct FloatingPanel<Content: View>: View {
+    var title: String = "Settings"
+    var systemImage: String = "slider.horizontal.3"
     let onClose: () -> Void
     let onDragEnded: () -> Void
     @Binding var dragOffset: CGSize
@@ -453,9 +490,9 @@ struct FloatingSettingsPanel<Content: View>: View {
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 8) {
-                Image(systemName: "slider.horizontal.3")
+                Image(systemName: systemImage)
                     .foregroundStyle(.secondary)
-                Text("Settings")
+                Text(title)
                     .font(.headline)
                 Spacer()
                 Button(action: onClose) {
@@ -708,6 +745,7 @@ struct PhraseEditor: View {
     @State private var atoms: [Atom] = []
     @State private var selectedRange = NSRange(location: 0, length: 0)
     @State private var editingColorTarget: ColorEditTarget?
+    @State private var showingInsertVariable = false
 
     var body: some View {
         ScrollView {
@@ -738,9 +776,34 @@ struct PhraseEditor: View {
                 }
 
                 field("Value") {
-                    SelectableTextEditor(text: $phrase.value, selectedRange: $selectedRange)
-                        .frame(minHeight: 180)
-                        .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.secondary.opacity(0.3)))
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack {
+                            Spacer()
+                            Button {
+                                showingInsertVariable = true
+                            } label: {
+                                Label("Insert Variable", systemImage: "curlybraces")
+                            }
+                            .buttonStyle(.glass)
+                            .popover(isPresented: $showingInsertVariable, arrowEdge: .top) {
+                                InsertVariablePopover(
+                                    libraryVariables: store.libraryVariables,
+                                    onInsertExisting: { variable in
+                                        insertAtCursor("{{@\(variable.name)}}")
+                                        showingInsertVariable = false
+                                    },
+                                    onCreateAndInsert: { name, type, options in
+                                        let created = store.addLibraryVariable(name: name, type: type, options: options)
+                                        insertAtCursor("{{@\(created.name)}}")
+                                        showingInsertVariable = false
+                                    }
+                                )
+                            }
+                        }
+                        SelectableTextEditor(text: $phrase.value, selectedRange: $selectedRange)
+                            .frame(minHeight: 180)
+                            .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.secondary.opacity(0.3)))
+                    }
                 }
 
                 editorSection {
@@ -858,19 +921,26 @@ struct PhraseEditor: View {
             Text("Variables (fill in when copying, see the expanded card)").font(.caption).foregroundStyle(.secondary)
             let variables = detectedVariables
             if variables.isEmpty {
-                Text("No variables detected. Use {{setting}} or {{option one/option two}}.")
+                Text("No variables detected. Use {{setting}}, {{option one/option two}}, or {{@libraryName}} to reference the Variables Library.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             } else {
                 FlowLayout(spacing: 6) {
                     ForEach(variables) { variable in
-                        Text(variable.choices?.joined(separator: " / ") ?? variable.key)
-                            .font(.caption)
-                            .lineLimit(1)
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 6)
-                            .background(Color.secondary.opacity(0.14))
-                            .clipShape(Capsule())
+                        HStack(spacing: 4) {
+                            Text(variable.choices?.joined(separator: " / ") ?? variable.displayLabel)
+                            if variable.isUnresolved {
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .foregroundStyle(.red)
+                                    .help("No library variable named \u{201C}\(variable.displayLabel)\u{201D} — this copies through as literal text.")
+                            }
+                        }
+                        .font(.caption)
+                        .lineLimit(1)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 6)
+                        .background(variable.isUnresolved ? Color.red.opacity(0.14) : Color.secondary.opacity(0.14))
+                        .clipShape(Capsule())
                     }
                 }
             }
@@ -881,7 +951,20 @@ struct PhraseEditor: View {
     /// fillable at copy time — occurrence offsets don't matter here.
     private var detectedVariables: [PhraseVariable] {
         var seen = Set<String>()
-        return PhraseVariable.parse(phrase.value).filter { seen.insert($0.key).inserted }
+        return PhraseVariable.parse(phrase.value, library: store.libraryVariables).filter { seen.insert($0.key).inserted }
+    }
+
+    /// Inserts `text` at the current cursor position in the Value field (falls back to
+    /// appending if there's no live selection), then moves the cursor to just after it —
+    /// used by "Insert Variable" for both the existing-variable and create-new paths.
+    private func insertAtCursor(_ text: String) {
+        guard let range = Range(selectedRange, in: phrase.value) else {
+            phrase.value += text
+            return
+        }
+        phrase.value.replaceSubrange(range, with: text)
+        let newCursor = selectedRange.location + (text as NSString).length
+        selectedRange = NSRange(location: newCursor, length: 0)
     }
 
     private func atomChip(_ atom: Atom) -> some View {
@@ -970,6 +1053,130 @@ struct SelectableTextEditor: NSViewRepresentable {
         func textViewDidChangeSelection(_ notification: Notification) {
             guard let textView = notification.object as? NSTextView else { return }
             parent.selectedRange = textView.selectedRange()
+        }
+    }
+}
+
+/// Authoring flow for `{{@name}}` (see quick-text/README.md "Variable placeholders" ->
+/// reusable variable library): either insert an existing library variable by name, or
+/// create a new one (name/type/options) and insert it in one step. Typing a plain
+/// `{{name}}`/`{{a/b}}` by hand still needs no library interaction at all.
+private struct InsertVariablePopover: View {
+    enum Mode { case existing, new }
+
+    let libraryVariables: [LibraryVariable]
+    let onInsertExisting: (LibraryVariable) -> Void
+    let onCreateAndInsert: (_ name: String, _ type: LibraryVariable.Kind, _ options: [String]) -> Void
+
+    @State private var mode: Mode = .existing
+    @State private var search = ""
+    @State private var newName = ""
+    @State private var newType: LibraryVariable.Kind = .text
+    @State private var newOptionsText = ""
+
+    private var filtered: [LibraryVariable] {
+        let term = search.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        let sorted = libraryVariables.sorted { $0.name.lowercased() < $1.name.lowercased() }
+        guard !term.isEmpty else { return sorted }
+        return sorted.filter { $0.name.lowercased().contains(term) }
+    }
+
+    private var trimmedNewName: String { newName.trimmingCharacters(in: .whitespacesAndNewlines) }
+
+    private var nameCollides: Bool {
+        let target = trimmedNewName.lowercased()
+        guard !target.isEmpty else { return false }
+        return libraryVariables.contains { $0.name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() == target }
+    }
+
+    private var parsedOptions: [String] {
+        newOptionsText.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty }
+    }
+
+    private var canCreate: Bool {
+        !trimmedNewName.isEmpty && !nameCollides && (newType == .text || !parsedOptions.isEmpty)
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Picker("", selection: $mode) {
+                Text("Existing").tag(Mode.existing)
+                Text("New").tag(Mode.new)
+            }
+            .labelsHidden()
+            .pickerStyle(.segmented)
+
+            if mode == .existing {
+                existingSection
+            } else {
+                newSection
+            }
+        }
+        .padding(14)
+        .frame(width: 280)
+    }
+
+    private var existingSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            TextField("Search variables", text: $search)
+                .textFieldStyle(.roundedBorder)
+            if libraryVariables.isEmpty {
+                Text("No library variables yet. Switch to New to create one.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } else if filtered.isEmpty {
+                Text("No matches.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } else {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 2) {
+                        ForEach(filtered) { variable in
+                            Button {
+                                onInsertExisting(variable)
+                            } label: {
+                                HStack {
+                                    Text(variable.name)
+                                    Spacer()
+                                    Text(variable.type == .choice ? "Choice" : "Text")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                                .contentShape(Rectangle())
+                            }
+                            .buttonStyle(.plain)
+                            .padding(.vertical, 4)
+                        }
+                    }
+                }
+                .frame(maxHeight: 180)
+            }
+        }
+    }
+
+    private var newSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            TextField("Variable name", text: $newName)
+                .textFieldStyle(.roundedBorder)
+            Picker("Type", selection: $newType) {
+                Text("Text").tag(LibraryVariable.Kind.text)
+                Text("Choice").tag(LibraryVariable.Kind.choice)
+            }
+            .pickerStyle(.segmented)
+            if newType == .choice {
+                TextField("Options, comma separated", text: $newOptionsText)
+                    .textFieldStyle(.roundedBorder)
+            }
+            if nameCollides {
+                Text("A variable named \u{201C}\(trimmedNewName)\u{201D} already exists.")
+                    .font(.caption)
+                    .foregroundStyle(.red)
+            }
+            Button("Create & Insert") {
+                onCreateAndInsert(trimmedNewName, newType, parsedOptions)
+            }
+            .buttonStyle(.glassProminent)
+            .disabled(!canCreate)
         }
     }
 }
@@ -1273,6 +1480,295 @@ enum ColorEditTarget {
     case expandedCardChip
 }
 
+/// Admin surface for the reusable variable library (see quick-text/README.md
+/// "Variable placeholders" -> reusable variable library): lists every library
+/// variable, its type/options, and a live reference count (`CorpusStore.referenceCount`
+/// — a fresh scan for `{{@name}}` across `phrases[].value`, not a stored back-reference
+/// list), plus add/edit/delete. Opened from the toolbar button next to Settings.
+struct VariablesLibraryEditor: View {
+    @EnvironmentObject private var store: CorpusStore
+    @State private var editingVariableID: String?
+    @State private var isAddingNew = false
+    @State private var deleteCandidate: LibraryVariable?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            if store.libraryVariables.isEmpty {
+                Text("No library variables yet. Add one below, or use \u{201C}Insert Variable\u{201D} in a phrase's Value field.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } else {
+                VStack(alignment: .leading, spacing: 2) {
+                    ForEach(store.libraryVariables) { variable in
+                        VariableRow(
+                            variable: variable,
+                            referenceCount: store.referenceCount(forLibraryVariableName: variable.name),
+                            onEdit: { editingVariableID = variable.id },
+                            onDelete: { deleteCandidate = variable }
+                        )
+                        Divider()
+                    }
+                }
+            }
+            Button {
+                isAddingNew = true
+            } label: {
+                Label("Add Variable", systemImage: "plus")
+            }
+            .buttonStyle(.glass)
+        }
+        .padding(14)
+        .frame(width: 480)
+        .frame(minHeight: 240, maxHeight: 520)
+        .sheet(item: editingVariableBinding) { variable in
+            LibraryVariableEditorSheet(mode: .edit(variable), referenceCount: store.referenceCount(forLibraryVariableName: variable.name))
+                .environmentObject(store)
+        }
+        .sheet(isPresented: $isAddingNew) {
+            LibraryVariableEditorSheet(mode: .create, referenceCount: 0)
+                .environmentObject(store)
+        }
+        .alert(
+            "Delete \u{201C}\(deleteCandidate?.name ?? "")\u{201D}?",
+            isPresented: Binding(get: { deleteCandidate != nil }, set: { isPresented in if !isPresented { deleteCandidate = nil } }),
+            presenting: deleteCandidate
+        ) { variable in
+            Button("Delete", role: .destructive) {
+                store.deleteLibraryVariable(variable.id)
+                deleteCandidate = nil
+            }
+            Button("Cancel", role: .cancel) { deleteCandidate = nil }
+        } message: { variable in
+            let count = store.referenceCount(forLibraryVariableName: variable.name)
+            Text(count > 0
+                ? "\(count) phrase\(count == 1 ? "" : "s") reference this variable via {{@\(variable.name)}}. They'll keep that literal text, which will then show as unresolved."
+                : "No phrases currently reference this variable.")
+        }
+    }
+
+    private var editingVariableBinding: Binding<LibraryVariable?> {
+        Binding(
+            get: { editingVariableID.flatMap { id in store.libraryVariables.first { $0.id == id } } },
+            set: { editingVariableID = $0?.id }
+        )
+    }
+}
+
+private struct VariableRow: View {
+    let variable: LibraryVariable
+    let referenceCount: Int
+    let onEdit: () -> Void
+    let onDelete: () -> Void
+
+    var body: some View {
+        HStack(spacing: 8) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(variable.name).fontWeight(.medium)
+                Text(variable.type == .choice ? (variable.options ?? []).joined(separator: " / ") : "Free text")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+            }
+            Spacer()
+            Text("\(referenceCount) phrase\(referenceCount == 1 ? "" : "s")")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Button("Edit", action: onEdit)
+                .buttonStyle(.glass)
+            Button {
+                onDelete()
+            } label: {
+                Image(systemName: "trash")
+            }
+            .buttonStyle(.glass)
+        }
+        .padding(.vertical, 4)
+    }
+}
+
+/// Create/edit form for one library variable. Editing a variable that's currently
+/// referenced by >=1 phrase (per `referenceCount`) prompts "Update all" vs. "Fork"
+/// on save (see quick-text/README.md "Edit propagation"); editing an unreferenced one,
+/// or creating a new one, saves directly with no prompt.
+private struct LibraryVariableEditorSheet: View {
+    enum Mode {
+        case create
+        case edit(LibraryVariable)
+    }
+
+    @EnvironmentObject private var store: CorpusStore
+    @Environment(\.dismiss) private var dismiss
+    let mode: Mode
+    let referenceCount: Int
+
+    @State private var name: String = ""
+    @State private var type: LibraryVariable.Kind = .text
+    @State private var optionsText: String = ""
+    @State private var showingPropagationPrompt = false
+    @State private var isForking = false
+
+    private var isEditing: Bool {
+        if case .edit = mode { return true }
+        return false
+    }
+
+    private var originalVariable: LibraryVariable? {
+        if case .edit(let variable) = mode { return variable }
+        return nil
+    }
+
+    private var trimmedName: String { name.trimmingCharacters(in: .whitespacesAndNewlines) }
+
+    private var parsedOptions: [String] {
+        optionsText.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty }
+    }
+
+    private var nameAvailable: Bool {
+        store.isLibraryVariableNameAvailable(trimmedName, excludingID: originalVariable?.id)
+    }
+
+    private var canSave: Bool {
+        !trimmedName.isEmpty && nameAvailable && (type == .text || !parsedOptions.isEmpty)
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text(isEditing ? "Edit Variable" : "New Variable").font(.headline)
+
+            TextField("Name", text: $name)
+                .textFieldStyle(.roundedBorder)
+            if !nameAvailable && !trimmedName.isEmpty {
+                Text("Another variable already uses this name.")
+                    .font(.caption)
+                    .foregroundStyle(.red)
+            }
+
+            Picker("Type", selection: $type) {
+                Text("Text").tag(LibraryVariable.Kind.text)
+                Text("Choice").tag(LibraryVariable.Kind.choice)
+            }
+            .pickerStyle(.segmented)
+
+            if type == .choice {
+                TextField("Options, comma separated", text: $optionsText)
+                    .textFieldStyle(.roundedBorder)
+            }
+
+            if isEditing, referenceCount > 0 {
+                Text("\(referenceCount) phrase\(referenceCount == 1 ? "" : "s") currently reference this variable.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            HStack {
+                Button("Cancel") { dismiss() }
+                    .buttonStyle(.glass)
+                Spacer()
+                Button(isEditing ? "Save" : "Add") { save() }
+                    .buttonStyle(.glassProminent)
+                    .disabled(!canSave)
+            }
+        }
+        .padding(20)
+        .frame(width: 380)
+        .onAppear {
+            if let original = originalVariable {
+                name = original.name
+                type = original.type
+                optionsText = (original.options ?? []).joined(separator: ", ")
+            }
+        }
+        .confirmationDialog(
+            "This variable is referenced by \(referenceCount) phrase\(referenceCount == 1 ? "" : "s"). Update them all, or fork a new variable instead?",
+            isPresented: $showingPropagationPrompt,
+            titleVisibility: .visible
+        ) {
+            Button("Update All") { applyUpdateAll() }
+            Button("Fork Instead") { isForking = true }
+            Button("Cancel", role: .cancel) {}
+        }
+        .sheet(isPresented: $isForking) {
+            ForkVariableSheet(
+                suggestedName: "\(trimmedName) copy",
+                onCreate: { newName in
+                    store.forkLibraryVariable(name: newName, type: type, options: parsedOptions)
+                    isForking = false
+                    dismiss()
+                },
+                onCancel: { isForking = false }
+            )
+            .environmentObject(store)
+        }
+    }
+
+    private func save() {
+        guard canSave else { return }
+        guard let original = originalVariable else {
+            store.addLibraryVariable(name: trimmedName, type: type, options: parsedOptions)
+            dismiss()
+            return
+        }
+        guard referenceCount > 0 else {
+            store.updateLibraryVariableInPlace(original.id, name: trimmedName, type: type, options: parsedOptions)
+            dismiss()
+            return
+        }
+        showingPropagationPrompt = true
+    }
+
+    private func applyUpdateAll() {
+        guard let original = originalVariable else { return }
+        store.updateLibraryVariableInPlace(original.id, name: trimmedName, type: type, options: parsedOptions)
+        dismiss()
+    }
+}
+
+/// "Fork" (see quick-text/README.md "Edit propagation"): the admin picks a new name for
+/// the forked copy — can't collide with the original or any other existing library
+/// variable. The original entry and every phrase referencing it are left untouched.
+private struct ForkVariableSheet: View {
+    @EnvironmentObject private var store: CorpusStore
+    let suggestedName: String
+    /// Creation of the forked entry itself (with whatever type/options were being
+    /// edited at fork time) happens in the caller's closure; this sheet only picks
+    /// the new, non-colliding name.
+    let onCreate: (String) -> Void
+    let onCancel: () -> Void
+
+    @State private var name: String = ""
+
+    private var trimmedName: String { name.trimmingCharacters(in: .whitespacesAndNewlines) }
+    private var nameAvailable: Bool { store.isLibraryVariableNameAvailable(trimmedName) }
+    private var canCreate: Bool { !trimmedName.isEmpty && nameAvailable }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text("Fork Variable").font(.headline)
+            Text("Creates a new, separate variable. Phrases using the original keep pointing at it, unchanged.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            TextField("New variable name", text: $name)
+                .textFieldStyle(.roundedBorder)
+            if !nameAvailable && !trimmedName.isEmpty {
+                Text("Another variable already uses this name.")
+                    .font(.caption)
+                    .foregroundStyle(.red)
+            }
+            HStack {
+                Button("Cancel", action: onCancel)
+                    .buttonStyle(.glass)
+                Spacer()
+                Button("Create Fork") { onCreate(trimmedName) }
+                    .buttonStyle(.glassProminent)
+                    .disabled(!canCreate)
+            }
+        }
+        .padding(20)
+        .frame(width: 340)
+        .onAppear { name = suggestedName }
+    }
+}
+
 /// Collapsed color field: shows the current swatch, expands into a `SwatchPicker`
 /// popover on click. SwiftUI popovers dismiss automatically on an outside click,
 /// and only one of a pair (background/text) is ever open since callers share a
@@ -1415,6 +1911,7 @@ struct ExpandedOverlayView: View {
                 textColor: store.expandedCardTextColor,
                 chipColor: store.expandedCardChipColor,
                 highlightColor: store.highlightColor,
+                libraryVariables: store.libraryVariables,
                 onCopyAtom: { atom in store.copyAtom(atom, in: phrase) },
                 onCopySelection: { atoms in store.copyAtomSelection(atoms, in: phrase) },
                 onCopyFull: { text in store.copyFullFromExpandedCard(text, phraseID: phrase.id) },
@@ -1446,6 +1943,9 @@ struct ExpandedCardView: View {
     var textColor: Color = Color(hex: Settings.defaultExpandedCardTextColor)
     var chipColor: Color = Color(hex: Settings.defaultExpandedCardChipColor)
     var highlightColor: Color = Color(hex: Settings.defaultHighlightColor)
+    // Resolves `{{@name}}` references against the corpus-level library; defaulted so
+    // #Preview call sites below don't need to specify one for inline-only phrases.
+    var libraryVariables: [LibraryVariable] = []
     let onCopyAtom: (Atom) -> Void
     let onCopySelection: ([Atom]) -> Void
     /// Receives the phrase value with any filled `{{...}}` variables substituted in.
@@ -1470,7 +1970,7 @@ struct ExpandedCardView: View {
 
     private var hasAtoms: Bool { !(phrase.atoms ?? []).isEmpty }
     private var sortedAtoms: [Atom] { (phrase.atoms ?? []).sorted { $0.start < $1.start } }
-    private var parsedVariables: [PhraseVariable] { PhraseVariable.parse(phrase.value) }
+    private var parsedVariables: [PhraseVariable] { PhraseVariable.parse(phrase.value, library: libraryVariables) }
     private var hasVariables: Bool { !parsedVariables.isEmpty }
     /// Either kind of chip makes the card interactive rather than a single tap target,
     /// so atom- and variable-only phrases share the same "gaps absorb taps" behavior.
@@ -1640,40 +2140,70 @@ struct ExpandedCardView: View {
     }
 
     /// Renders a `{{...}}` occurrence as a fill-in chip: unfilled shows a dashed
-    /// outline with the placeholder key as a hint, filled shows a solid chip with
-    /// the entered value. Tapping opens a popover — a text field for free-form
-    /// placeholders, or a list of choices for `{{a/b}}`-style ones.
+    /// outline with the placeholder's display label as a hint, filled shows a solid
+    /// chip with the entered value. Tapping opens a popover — a text field for
+    /// free-form placeholders, or a list of choices for `{{a/b}}`-style/`"choice"`-type
+    /// ones. An unresolved `{{@name}}` library reference (see `PhraseVariable.isUnresolved`)
+    /// has nothing to fill, so it renders as a distinct, non-interactive chip instead.
+    @ViewBuilder
     private func variableChip(_ segment: LineSegment, maxWidth: CGFloat) -> some View {
         let variable = segment.variable!
-        let filled = variableValues[variable.key]
-        let isHighlighted = isPulsingAllAtoms || isHoveringCopyAllZone
-        return Button {
-            editingVariableKey = variable.key
-        } label: {
-            Text(filled ?? variable.key)
-                .multilineTextAlignment(.leading)
-                .fixedSize(horizontal: false, vertical: true)
-                .frame(maxWidth: maxWidth, alignment: .leading)
-                .italic(filled == nil)
+        if variable.isUnresolved {
+            unresolvedVariableChip(variable, maxWidth: maxWidth)
+        } else {
+            let filled = variableValues[variable.key]
+            let isHighlighted = isPulsingAllAtoms || isHoveringCopyAllZone
+            Button {
+                editingVariableKey = variable.key
+            } label: {
+                Text(filled ?? variable.displayLabel)
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .frame(maxWidth: maxWidth, alignment: .leading)
+                    .italic(filled == nil)
+            }
+                .buttonStyle(.plain)
+                .font(.system(size: bodyFontSize, weight: .bold))
+                .padding(.horizontal, 16)
+                .padding(.vertical, 10)
+                .frame(minHeight: 44)
+                .background(isHighlighted ? highlightColor : (filled != nil ? chipColor : Color.clear))
+                .foregroundStyle(isHighlighted ? .white : (filled != nil ? background : textColor))
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .strokeBorder(filled == nil && !isHighlighted ? textColor.opacity(0.4) : .clear, style: StrokeStyle(lineWidth: 1.5, dash: [4, 3]))
+                )
+                .popover(isPresented: Binding(
+                    get: { editingVariableKey == variable.key },
+                    set: { isPresented in if !isPresented { editingVariableKey = nil } }
+                )) {
+                    variableEditorPopover(for: variable, currentValue: filled)
+                }
         }
-            .buttonStyle(.plain)
+    }
+
+    /// A dangling `{{@name}}` — renamed or deleted out of the library. Visually distinct
+    /// (red-tinted dashed outline, no fill state) from both a plain unfilled placeholder
+    /// and a resolved one; not tappable, since there's nothing to fill. Still copies
+    /// through as the literal `{{@name}}` text via `PhraseVariable.substitute`'s
+    /// unfilled fallback, since it's never present in `variableValues`.
+    private func unresolvedVariableChip(_ variable: PhraseVariable, maxWidth: CGFloat) -> some View {
+        Text(variable.displayLabel)
+            .multilineTextAlignment(.leading)
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: maxWidth, alignment: .leading)
+            .italic()
             .font(.system(size: bodyFontSize, weight: .bold))
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
             .frame(minHeight: 44)
-            .background(isHighlighted ? highlightColor : (filled != nil ? chipColor : Color.clear))
-            .foregroundStyle(isHighlighted ? .white : (filled != nil ? background : textColor))
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .foregroundStyle(Color.red.opacity(0.85))
             .overlay(
                 RoundedRectangle(cornerRadius: 10)
-                    .strokeBorder(filled == nil && !isHighlighted ? textColor.opacity(0.4) : .clear, style: StrokeStyle(lineWidth: 1.5, dash: [4, 3]))
+                    .strokeBorder(Color.red.opacity(0.55), style: StrokeStyle(lineWidth: 1.5, dash: [4, 3]))
             )
-            .popover(isPresented: Binding(
-                get: { editingVariableKey == variable.key },
-                set: { isPresented in if !isPresented { editingVariableKey = nil } }
-            )) {
-                variableEditorPopover(for: variable, currentValue: filled)
-            }
+            .help("Unresolved variable reference — no library variable named \u{201C}\(variable.displayLabel)\u{201D} was found. Copies through as literal text.")
     }
 
     @ViewBuilder
@@ -2054,6 +2584,28 @@ struct FlowLayout: Layout {
     )
     .frame(width: 900, height: 500)
     .padding(40)
+}
+
+#Preview("Expanded Card - Library Variables") {
+    ExpandedCardView(
+        phrase: PreviewData.libraryVariablePhrase,
+        fontSize: 18,
+        fontFamily: "sans",
+        isCopied: false,
+        libraryVariables: PreviewData.store.libraryVariables,
+        onCopyAtom: { _ in },
+        onCopySelection: { _ in },
+        onCopyFull: { _ in },
+        onClose: {}
+    )
+    .frame(width: 900, height: 500)
+    .padding(40)
+}
+
+#Preview("Variables Library") {
+    VariablesLibraryEditor()
+        .environmentObject(PreviewData.store)
+        .padding()
 }
 
 #Preview("Expanded Overlay") {
@@ -2499,12 +3051,102 @@ final class CorpusStore: ObservableObject {
     }
 }
 
+/// Reusable variable library CRUD and the reverse-index scan behind it (see
+/// quick-text/README.md "Variable placeholders" -> reusable variable library, and
+/// `VariablesLibraryEditor`/`LibraryVariableEditorSheet` below for the admin UI).
+extension CorpusStore {
+    var libraryVariables: [LibraryVariable] { corpus.variables ?? [] }
+
+    /// Live reverse-index: every phrase currently referencing `name` via `{{@name}}`
+    /// (case-insensitive, trimmed), scanned fresh from `phrases[].value` rather than a
+    /// stored back-reference list, so it can never go stale.
+    func phrasesReferencing(libraryVariableName name: String) -> [Phrase] {
+        let target = name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        guard !target.isEmpty else { return [] }
+        return corpus.phrases.filter { PhraseVariable.referencedLibraryNames(in: $0.value).contains(target) }
+    }
+
+    func referenceCount(forLibraryVariableName name: String) -> Int {
+        phrasesReferencing(libraryVariableName: name).count
+    }
+
+    func isLibraryVariableNameAvailable(_ name: String, excludingID: String? = nil) -> Bool {
+        let target = name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        guard !target.isEmpty else { return false }
+        return !libraryVariables.contains { $0.id != excludingID && $0.name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() == target }
+    }
+
+    @discardableResult
+    func addLibraryVariable(name: String, type: LibraryVariable.Kind, options: [String]) -> LibraryVariable {
+        let variable = LibraryVariable(
+            id: "var-\(Int(Date().timeIntervalSince1970 * 1000))",
+            name: name.trimmingCharacters(in: .whitespacesAndNewlines),
+            type: type,
+            options: type == .choice ? options : nil
+        )
+        var vars = corpus.variables ?? []
+        vars.append(variable)
+        corpus.variables = vars
+        corpus.updatedAt = Date()
+        writeCorpus()
+        return variable
+    }
+
+    /// "Update all" (see README "Edit propagation"): mutates the entry in place — same
+    /// `id` — and, if `name` changed, rewrites every `{{@oldName}}` reference across
+    /// `phrases[].value` to `{{@newName}}` so they don't go dangling. Safe to call
+    /// unconditionally (including when `referenceCount` is 0, i.e. no prompt was needed).
+    func updateLibraryVariableInPlace(_ id: String, name: String, type: LibraryVariable.Kind, options: [String]) {
+        var vars = corpus.variables ?? []
+        guard let index = vars.firstIndex(where: { $0.id == id }) else { return }
+        let oldName = vars[index].name
+        let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        vars[index].name = trimmedName
+        vars[index].type = type
+        vars[index].options = type == .choice ? options : nil
+        corpus.variables = vars
+
+        if oldName.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() != trimmedName.lowercased() {
+            for i in corpus.phrases.indices {
+                corpus.phrases[i].value = PhraseVariable.renamingLibraryReferences(in: corpus.phrases[i].value, from: oldName, to: trimmedName)
+            }
+        }
+        corpus.updatedAt = Date()
+        writeCorpus()
+    }
+
+    /// "Fork" (see README "Edit propagation"): leaves the existing entry, and every
+    /// phrase pointing at it, completely untouched; creates a brand-new entry that
+    /// nothing references yet. The admin inserts `{{@newName}}` wherever it should apply.
+    @discardableResult
+    func forkLibraryVariable(name: String, type: LibraryVariable.Kind, options: [String]) -> LibraryVariable {
+        addLibraryVariable(name: name, type: type, options: options)
+    }
+
+    /// Removing the entry is enough — referencing phrases keep their literal `{{@name}}`
+    /// text untouched, which now simply resolves as unresolved on next parse instead of
+    /// silently reverting to a plain inline placeholder.
+    func deleteLibraryVariable(_ id: String) {
+        var vars = corpus.variables ?? []
+        vars.removeAll { $0.id == id }
+        corpus.variables = vars
+        corpus.updatedAt = Date()
+        writeCorpus()
+    }
+}
+
 struct QuickTextCorpus: Codable {
     var version: Int
     var updatedAt: Date
     var settings: Settings
     var categories: [Category]
     var phrases: [Phrase]
+    // Reusable variable library (see quick-text/README.md "Variable placeholders" ->
+    // reusable variable library). `{{@name}}` placeholders in any phrase's `value`
+    // resolve against this list by `name` (case-insensitive, trimmed) instead of being
+    // parsed as a literal, phrase-local placeholder. Optional so existing corpus.json
+    // files without this key still decode.
+    var variables: [LibraryVariable]?
 
     static let empty = QuickTextCorpus(version: 1, updatedAt: Date(), settings: Settings(defaultFontSize: 18, defaultTileColor: "brown-13", defaultTextColor: "brown-22", defaultFontFamily: "sans", paletteSource: "Robert Brown Fabric Collection"), categories: [], phrases: [])
 }
@@ -2576,22 +3218,75 @@ struct Atom: Codable, Identifiable, Equatable {
     var label: String?
 }
 
+/// A reusable, corpus-level variable (see quick-text/README.md "Variable placeholders" ->
+/// reusable variable library). Referenced from any phrase's `value` via `{{@name}}`,
+/// resolved by `name` (case-insensitive, trimmed) at render time. `id` is stable and
+/// never reused, even across a rename — `name` is just the human-facing lookup key.
+struct LibraryVariable: Codable, Identifiable, Equatable {
+    enum Kind: String, Codable, CaseIterable {
+        case text
+        case choice
+    }
+
+    var id: String
+    var name: String
+    var type: Kind
+    /// Required and non-empty when `type == .choice`; nil/ignored for `.text`.
+    var options: [String]?
+}
+
 /// A `{{...}}` placeholder occurrence detected in a phrase's `value`, character-indexed
 /// to match `Atom` offset semantics (see quick-text/README.md "Variable placeholders").
-/// Not persisted — parsed fresh from `value` wherever needed, since the corpus has no
-/// schema for these beyond the literal braces.
+/// Not persisted — parsed fresh from `value` wherever needed. Two forms share the syntax:
+/// a bare `{{name}}`/`{{a/b}}` is phrase-local (`kind == .inline`, exactly as before the
+/// library existed); a `{{@name}}` resolves `name` against `QuickTextCorpus.variables`
+/// instead (`kind == .library`). A library reference whose name doesn't match any current
+/// library entry (renamed or deleted) is `isUnresolved` — it still renders as a chip, but
+/// a visually distinct one, and (since it's never given a fill) copies through as the
+/// literal `{{@name}}` text via the same unfilled-placeholder fallback in `substitute`.
 struct PhraseVariable: Identifiable, Equatable {
+    enum Kind: Equatable {
+        case inline
+        /// `libraryVariableID` is non-nil only when `name` resolved to a live library entry.
+        case library(name: String, libraryVariableID: String?)
+    }
+
     var id: String { key }
+    /// Dictionary key used to share one fill across every occurrence of this placeholder
+    /// within the same phrase. Inline placeholders key off their exact literal text
+    /// (unchanged from before the library existed). Library references key off the
+    /// case-insensitive/trimmed name so `{{@Name}}` and `{{@name}}` in the same phrase
+    /// share one fill.
     let key: String
-    /// Non-nil for `{{option one/option two}}` style placeholders; each choice is
-    /// offered as a discrete pick instead of free text.
+    /// Text shown in the chip before it's filled. Inline placeholders show their literal
+    /// key (unchanged); library references show the human-facing variable name (or the
+    /// dangling name typed, if unresolved).
+    let displayLabel: String
+    /// Non-nil for `{{option one/option two}}` inline placeholders, or a resolved
+    /// `"choice"`-type library entry; each choice is offered as a discrete pick instead
+    /// of free text.
     let choices: [String]?
     let start: Int
     let end: Int
+    let kind: Kind
+
+    var isLibraryReference: Bool {
+        if case .library = kind { return true }
+        return false
+    }
+
+    /// True for a `{{@name}}` whose name doesn't match any current library entry —
+    /// renamed or deleted out from under this reference.
+    var isUnresolved: Bool {
+        if case .library(_, let libraryVariableID) = kind { return libraryVariableID == nil }
+        return false
+    }
 
     private static let pattern = #"\{\{([^{}]+)\}\}"#
 
-    static func parse(_ value: String) -> [PhraseVariable] {
+    /// `library` resolves `{{@name}}` references against the corpus's variable library;
+    /// pass `[]` (the default) to parse only inline placeholders.
+    static func parse(_ value: String, library: [LibraryVariable] = []) -> [PhraseVariable] {
         guard let regex = try? NSRegularExpression(pattern: pattern) else { return [] }
         let nsRange = NSRange(value.startIndex..<value.endIndex, in: value)
         var results: [PhraseVariable] = []
@@ -2599,20 +3294,37 @@ struct PhraseVariable: Identifiable, Equatable {
             guard let match,
                   let fullRange = Range(match.range, in: value),
                   let innerRange = Range(match.range(at: 1), in: value) else { return }
-            let key = String(value[innerRange]).trimmingCharacters(in: .whitespacesAndNewlines)
-            guard !key.isEmpty else { return }
+            let inner = String(value[innerRange]).trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !inner.isEmpty else { return }
             let start = value.distance(from: value.startIndex, to: fullRange.lowerBound)
             let end = value.distance(from: value.startIndex, to: fullRange.upperBound)
-            let choices = key.contains("/")
-                ? key.split(separator: "/").map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty }
-                : nil
-            results.append(PhraseVariable(key: key, choices: choices, start: start, end: end))
+
+            if inner.hasPrefix("@") {
+                let rawName = String(inner.dropFirst()).trimmingCharacters(in: .whitespacesAndNewlines)
+                guard !rawName.isEmpty else { return }
+                let normalizedName = rawName.lowercased()
+                let resolved = library.first { $0.name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() == normalizedName }
+                results.append(PhraseVariable(
+                    key: "@\(normalizedName)",
+                    displayLabel: resolved?.name ?? rawName,
+                    choices: resolved?.type == .choice ? resolved?.options : nil,
+                    start: start,
+                    end: end,
+                    kind: .library(name: resolved?.name ?? rawName, libraryVariableID: resolved?.id)
+                ))
+            } else {
+                let choices = inner.contains("/")
+                    ? inner.split(separator: "/").map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty }
+                    : nil
+                results.append(PhraseVariable(key: inner, displayLabel: inner, choices: choices, start: start, end: end, kind: .inline))
+            }
         }
         return results
     }
 
-    /// Replaces every `{{...}}` occurrence whose trimmed key has a filled value;
-    /// occurrences with no fill stay as the literal placeholder text.
+    /// Replaces every `{{...}}` occurrence whose key has a filled value; occurrences with
+    /// no fill — including any unresolved library reference, which is never fillable —
+    /// stay as the literal placeholder text, same fallback for both placeholder kinds.
     static func substitute(_ value: String, values: [String: String]) -> String {
         guard let regex = try? NSRegularExpression(pattern: pattern) else { return value }
         let nsValue = value as NSString
@@ -2622,8 +3334,60 @@ struct PhraseVariable: Identifiable, Equatable {
         regex.enumerateMatches(in: value, range: nsRange) { match, _, _ in
             guard let match else { return }
             result += nsValue.substring(with: NSRange(location: cursor, length: match.range.location - cursor))
-            let key = nsValue.substring(with: match.range(at: 1)).trimmingCharacters(in: .whitespacesAndNewlines)
+            let inner = nsValue.substring(with: match.range(at: 1)).trimmingCharacters(in: .whitespacesAndNewlines)
+            let key = inner.hasPrefix("@")
+                ? "@\(String(inner.dropFirst()).trimmingCharacters(in: .whitespacesAndNewlines).lowercased())"
+                : inner
             result += values[key] ?? nsValue.substring(with: match.range)
+            cursor = match.range.location + match.range.length
+        }
+        result += nsValue.substring(from: cursor)
+        return result
+    }
+
+    /// Every distinct library-variable name referenced via `{{@name}}` in `value`
+    /// (case-insensitive, trimmed, without the `@`) — a live scan used for the Variables
+    /// Library's reference counts and edit-propagation, rather than a stored
+    /// back-reference list (see README "Variables Library" admin surface).
+    static func referencedLibraryNames(in value: String) -> Set<String> {
+        guard let regex = try? NSRegularExpression(pattern: pattern) else { return [] }
+        let nsRange = NSRange(value.startIndex..<value.endIndex, in: value)
+        var names: Set<String> = []
+        regex.enumerateMatches(in: value, range: nsRange) { match, _, _ in
+            guard let match, let innerRange = Range(match.range(at: 1), in: value) else { return }
+            let inner = String(value[innerRange]).trimmingCharacters(in: .whitespacesAndNewlines)
+            guard inner.hasPrefix("@") else { return }
+            let rawName = String(inner.dropFirst()).trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !rawName.isEmpty else { return }
+            names.insert(rawName.lowercased())
+        }
+        return names
+    }
+
+    /// Rewrites every `{{@oldName}}` occurrence (case-insensitive, trimmed match against
+    /// `oldName`) in `value` to `{{@newName}}` — used by the library's "Update all" flow
+    /// when a referenced variable is renamed, so existing references don't go dangling.
+    static func renamingLibraryReferences(in value: String, from oldName: String, to newName: String) -> String {
+        guard let regex = try? NSRegularExpression(pattern: pattern) else { return value }
+        let target = oldName.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        guard !target.isEmpty else { return value }
+        let nsValue = value as NSString
+        let nsRange = NSRange(location: 0, length: nsValue.length)
+        var result = ""
+        var cursor = 0
+        regex.enumerateMatches(in: value, range: nsRange) { match, _, _ in
+            guard let match else { return }
+            result += nsValue.substring(with: NSRange(location: cursor, length: match.range.location - cursor))
+            let inner = nsValue.substring(with: match.range(at: 1)).trimmingCharacters(in: .whitespacesAndNewlines)
+            if inner.hasPrefix("@") {
+                let rawName = String(inner.dropFirst()).trimmingCharacters(in: .whitespacesAndNewlines)
+                if rawName.lowercased() == target {
+                    result += "{{@\(newName)}}"
+                    cursor = match.range.location + match.range.length
+                    return
+                }
+            }
+            result += nsValue.substring(with: match.range)
             cursor = match.range.location + match.range.length
         }
         result += nsValue.substring(from: cursor)
@@ -2783,6 +3547,27 @@ enum PreviewData {
         atoms: nil
     )
 
+    /// Mixes a resolved `{{@}}` text reference, a resolved `{{@}}` choice reference, and
+    /// a deliberately dangling one (no matching library entry below) to preview
+    /// `ExpandedCardView`'s unresolved-chip styling alongside ordinary inline placeholders.
+    static let libraryVariablePhrase = Phrase(
+        id: "preview-library-variable",
+        categoryId: "personal",
+        title: "Library Greeting",
+        summary: "Library Greeting",
+        value: "Hi {{@customer name}}, thanks for reaching out about {{@topic}}. Status: {{@retired field}}.",
+        color: "brown-13",
+        textColor: "brown-22",
+        fontSize: nil,
+        image: nil,
+        favorite: false,
+        visibility: .localOnly,
+        tags: ["email"],
+        createdAt: Date(),
+        updatedAt: Date(),
+        atoms: nil
+    )
+
     static let store: CorpusStore = {
         let store = CorpusStore()
         store.corpus = QuickTextCorpus(
@@ -2790,7 +3575,11 @@ enum PreviewData {
             updatedAt: Date(),
             settings: Settings(defaultFontSize: 18, defaultTileColor: "brown-13", defaultTextColor: "brown-22", defaultFontFamily: "sans", paletteSource: "Robert Brown Fabric Collection"),
             categories: [Category(id: "personal", name: "Personal", sortOrder: 10)],
-            phrases: [plainPhrase, addressPhrase, variablePhrase]
+            phrases: [plainPhrase, addressPhrase, variablePhrase, libraryVariablePhrase],
+            variables: [
+                LibraryVariable(id: "var-customer-name", name: "customer name", type: .text, options: nil),
+                LibraryVariable(id: "var-topic", name: "topic", type: .choice, options: ["billing", "support", "onboarding"])
+            ]
         )
         store.palette = Palette(
             name: "Robert Brown Fabric Collection",
