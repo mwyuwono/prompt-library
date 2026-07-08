@@ -586,6 +586,23 @@
       "updatedAt" : "2026-07-07T00:53:10Z",
       "value" : "Execute the prompt",
       "visibility" : "public"
+    },
+    {
+      "categoryId" : "prompt-reuse",
+      "color" : "brown-18",
+      "createdAt" : "2026-07-08T14:39:57Z",
+      "favorite" : false,
+      "id" : "phrase-1783521575",
+      "image" : "",
+      "summary" : "",
+      "tags" : [
+
+      ],
+      "textColor" : "brown-22",
+      "title" : "Save tokens",
+      "updatedAt" : "2026-07-08T14:39:57Z",
+      "value" : "Spend tokens on analysis, implementation, and verification rather than chat. Omit conversational filler, praise, apologies, and restatements of my request. Do not narrate routine steps.",
+      "visibility" : "public"
     }
   ],
   "settings" : {
@@ -601,7 +618,7 @@
     "gridBackgroundColor" : "#2F2D29",
     "paletteSource" : "Robert Brown Fabric Collection"
   },
-  "updatedAt" : "2026-07-07T13:27:49Z",
+  "updatedAt" : "2026-07-08T14:39:57Z",
   "variables" : [
     {
       "id" : "var-1783398724430",

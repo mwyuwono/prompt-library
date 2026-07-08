@@ -23,6 +23,14 @@ struct QuickTextApp: App {
                 Button("Edit Selected Phrase") { store.beginEditingSelectedPhrase() }
                     .keyboardShortcut("e", modifiers: .command)
             }
+            CommandGroup(replacing: .help) {
+                Button("Quick Text Glossary") {
+                    AppDelegate.openWindow()
+                    DispatchQueue.main.async {
+                        NotificationCenter.default.post(name: .quickTextShowGlossary, object: nil)
+                    }
+                }
+            }
         }
 
         MenuBarExtra("Quick Text", systemImage: "text.badge.plus") {
@@ -78,6 +86,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
 extension Notification.Name {
     static let quickTextFocusSearch = Notification.Name("quickTextFocusSearch")
+    static let quickTextShowGlossary = Notification.Name("quickTextShowGlossary")
 }
 
 #Preview("Content View") {
@@ -107,6 +116,9 @@ struct ContentView: View {
     @State private var showingVariablesLibrary = false
     @State private var variablesPanelOffset = CGSize.zero
     @State private var variablesPanelDragOffset = CGSize.zero
+    @State private var showingGlossary = false
+    @State private var glossaryPanelOffset = CGSize.zero
+    @State private var glossaryPanelDragOffset = CGSize.zero
     @State private var savedWindowFrame: NSRect?
     @State private var gridWidth: CGFloat = 0
     @State private var keyMonitor: Any?
@@ -189,8 +201,12 @@ struct ContentView: View {
         }
         .onDisappear { removeKeyMonitor() }
         .onReceive(NotificationCenter.default.publisher(for: .quickTextFocusSearch)) { _ in
-            guard store.editingPhrase == nil, !showingSettings, !showingVariablesLibrary else { return }
+            guard store.editingPhrase == nil, !showingSettings, !showingVariablesLibrary, !showingGlossary else { return }
             focusSearchSoon()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .quickTextShowGlossary)) { _ in
+            guard store.editingPhrase == nil else { return }
+            openGlossaryPanel()
         }
         .onChange(of: store.searchTerm) { _, _ in
             store.searchTermDidChange()
@@ -226,7 +242,7 @@ struct ContentView: View {
         .overlay(alignment: .topTrailing) {
             if showingSettings {
                 FloatingPanel(
-                    onClose: { showingSettings = false },
+                    onClose: closeFloatingPanels,
                     onDragEnded: {
                         settingsPanelOffset.width += settingsPanelDragOffset.width
                         settingsPanelOffset.height += settingsPanelDragOffset.height
@@ -251,7 +267,7 @@ struct ContentView: View {
                 FloatingPanel(
                     title: "Variables Library",
                     systemImage: "curlybraces",
-                    onClose: { showingVariablesLibrary = false },
+                    onClose: closeFloatingPanels,
                     onDragEnded: {
                         variablesPanelOffset.width += variablesPanelDragOffset.width
                         variablesPanelOffset.height += variablesPanelDragOffset.height
@@ -269,6 +285,30 @@ struct ContentView: View {
                 .padding(.top, 54)
                 .padding(.trailing, 8)
                 .zIndex(2)
+            }
+        }
+        .overlay(alignment: .topTrailing) {
+            if showingGlossary {
+                FloatingPanel(
+                    title: "Glossary",
+                    systemImage: "questionmark.circle",
+                    onClose: closeFloatingPanels,
+                    onDragEnded: {
+                        glossaryPanelOffset.width += glossaryPanelDragOffset.width
+                        glossaryPanelOffset.height += glossaryPanelDragOffset.height
+                        glossaryPanelDragOffset = .zero
+                    },
+                    dragOffset: $glossaryPanelDragOffset
+                ) {
+                    GlossaryView()
+                }
+                .offset(
+                    x: glossaryPanelOffset.width + glossaryPanelDragOffset.width,
+                    y: glossaryPanelOffset.height + glossaryPanelDragOffset.height
+                )
+                .padding(.top, 54)
+                .padding(.trailing, 8)
+                .zIndex(3)
             }
         }
         .onChange(of: store.expandedPhraseID) { _, newValue in
@@ -317,10 +357,10 @@ struct ContentView: View {
                 store.beginNewPhrase()
             }
             moduleButton(icon: "curlybraces", label: "Variables", item: .variablesButton) {
-                showingVariablesLibrary = true
+                openVariablesPanel()
             }
             moduleButton(icon: "slider.horizontal.3", label: "Settings", item: .settingsButton) {
-                showingSettings = true
+                openSettingsPanel()
             }
         }
         .padding(6)
@@ -407,8 +447,8 @@ struct ContentView: View {
         Button("Copy Selected") { copySelected() }
             .disabled(store.selectedPhrase == nil)
         Divider()
-        Button("Variables Library") { showingVariablesLibrary = true }
-        Button("Settings") { showingSettings = true }
+        Button("Variables Library") { openVariablesPanel() }
+        Button("Settings") { openSettingsPanel() }
     }
 
     private var isEditingText: Bool {
@@ -416,7 +456,31 @@ struct ContentView: View {
     }
 
     private var canUseGridKeyboard: Bool {
-        store.expandedPhraseID == nil && !showingSettings && !showingVariablesLibrary && store.editingPhrase == nil && !searchFocused && !isEditingText
+        store.expandedPhraseID == nil && !showingSettings && !showingVariablesLibrary && !showingGlossary && store.editingPhrase == nil && !searchFocused && !isEditingText
+    }
+
+    private func openSettingsPanel() {
+        showingVariablesLibrary = false
+        showingGlossary = false
+        showingSettings = true
+    }
+
+    private func openVariablesPanel() {
+        showingSettings = false
+        showingGlossary = false
+        showingVariablesLibrary = true
+    }
+
+    private func openGlossaryPanel() {
+        showingSettings = false
+        showingVariablesLibrary = false
+        showingGlossary = true
+    }
+
+    private func closeFloatingPanels() {
+        showingSettings = false
+        showingVariablesLibrary = false
+        showingGlossary = false
     }
 
     private func focusSearchSoon() {
@@ -467,10 +531,10 @@ struct ContentView: View {
             store.beginNewPhrase()
             return true
         case .variablesButton:
-            showingVariablesLibrary = true
+            openVariablesPanel()
             return true
         case .settingsButton:
-            showingSettings = true
+            openSettingsPanel()
             return true
         }
     }
@@ -490,8 +554,15 @@ struct ContentView: View {
     }
 
     private func handleKeyEvent(_ event: NSEvent) -> NSEvent? {
-        guard store.editingPhrase == nil, !showingSettings, !showingVariablesLibrary else { return event }
         guard event.modifierFlags.intersection([.command, .option, .control]).isEmpty else { return event }
+        if event.keyCode == 53 {
+            if showingSettings || showingVariablesLibrary || showingGlossary || store.expandedPhraseID != nil || !store.searchTerm.isEmpty || store.categoryFocusMode {
+                handleEscape()
+                return nil
+            }
+            return event
+        }
+        guard store.editingPhrase == nil, !showingSettings, !showingVariablesLibrary, !showingGlossary else { return event }
         guard store.expandedPhraseID == nil else { return event }
 
         switch event.keyCode {
@@ -586,7 +657,9 @@ struct ContentView: View {
     }
 
     private func handleEscape() {
-        if store.expandedPhraseID != nil {
+        if showingGlossary || showingSettings || showingVariablesLibrary {
+            closeFloatingPanels()
+        } else if store.expandedPhraseID != nil {
             store.collapseExpanded()
         } else if !store.searchTerm.isEmpty {
             store.clearSearch()
@@ -665,6 +738,92 @@ struct FloatingPanel<Content: View>: View {
         )
         .shadow(color: .black.opacity(0.28), radius: 24, y: 12)
     }
+}
+
+struct GlossaryView: View {
+    private let sections: [GlossarySection] = [
+        GlossarySection(
+            title: "Core Objects",
+            terms: [
+                GlossaryTerm(name: "Phrase", definition: "A saved reusable text item. This is the canonical name for what the app stores and copies."),
+                GlossaryTerm(name: "Card", definition: "The visual tile for a phrase in the main grid."),
+                GlossaryTerm(name: "Expanded card", definition: "The large preview and copy surface that opens when a phrase needs atoms, variables, or a full-text preview."),
+                GlossaryTerm(name: "Value", definition: "The full stored text of a phrase. Full-card copy uses the value, with filled variables substituted."),
+                GlossaryTerm(name: "Category", definition: "A group used to filter and color phrases.")
+            ]
+        ),
+        GlossarySection(
+            title: "Copy Parts",
+            terms: [
+                GlossaryTerm(name: "Atom", definition: "A fixed slice of a phrase value that can be copied on its own. Atoms copy literal text and do not change when variables are filled."),
+                GlossaryTerm(name: "Atom chip", definition: "The clickable chip shown for an atom inside an expanded card."),
+                GlossaryTerm(name: "Full copy", definition: "Copying the phrase value as a whole instead of copying one atom or chip.")
+            ]
+        ),
+        GlossarySection(
+            title: "Variables",
+            terms: [
+                GlossaryTerm(name: "Inline variable", definition: "A phrase-local fill-in placeholder written as {{name}}."),
+                GlossaryTerm(name: "Choice variable", definition: "A phrase-local option picker written as {{option one/option two}}."),
+                GlossaryTerm(name: "Library variable", definition: "A shared variable referenced from phrases with {{@name}} and managed in the Variables Library."),
+                GlossaryTerm(name: "Value variable", definition: "A library variable with a fixed stored value that substitutes automatically. Use this term instead of atomic variable."),
+                GlossaryTerm(name: "Variable chip", definition: "The clickable fill-in or display chip for a variable inside an expanded card."),
+                GlossaryTerm(name: "Unresolved variable", definition: "A {{@name}} reference that no longer matches a library variable. It copies through as literal text until fixed.")
+            ]
+        ),
+        GlossarySection(
+            title: "Visibility",
+            terms: [
+                GlossaryTerm(name: "Private", definition: "Kept in the local corpus and not included in the public export."),
+                GlossaryTerm(name: "Public", definition: "Included when generating the public Quick Text corpus."),
+                GlossaryTerm(name: "Favorite", definition: "A phrase pinned into the Favorites tab.")
+            ]
+        )
+    ]
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 18) {
+                Text("Shared terminology for Quick Text authoring and support.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+
+                ForEach(sections) { section in
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text(section.title)
+                            .font(.headline)
+                        ForEach(section.terms) { term in
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(term.name)
+                                    .font(.subheadline.weight(.semibold))
+                                Text(term.definition)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+                            .padding(.vertical, 2)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+            }
+            .padding(18)
+        }
+        .frame(width: 520)
+        .frame(minHeight: 420, maxHeight: 640)
+    }
+}
+
+struct GlossarySection: Identifiable {
+    let id = UUID()
+    let title: String
+    let terms: [GlossaryTerm]
+}
+
+struct GlossaryTerm: Identifiable {
+    let id = UUID()
+    let name: String
+    let definition: String
 }
 
 /// Shared "Copied" feedback for every copy action in the app (tiles, atom chips,
@@ -782,7 +941,7 @@ struct TileView: View {
             HStack(alignment: .firstTextBaseline, spacing: 6) {
                 Text(phrase.summary?.isEmpty == false ? phrase.summary! : phrase.title)
                     .font(tileFont)
-                    .foregroundStyle(textColor)
+                    .foregroundStyle(isSelected ? highlightColor.readableForeground : textColor)
                     .lineLimit(imageURL == nil ? 4 : 3)
                     .minimumScaleFactor(0.72)
                 Spacer(minLength: 0)
@@ -791,10 +950,10 @@ struct TileView: View {
         }
         .padding(12)
         .frame(minHeight: tileMinHeight, alignment: .topLeading)
-        .background(backgroundColor)
+        .background(isSelected ? highlightColor : backgroundColor)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
-                .fill(isSelected ? highlightColor.opacity(0.28) : Color.clear)
+                .stroke(isSelected ? highlightColor : Color.clear, lineWidth: 3)
         )
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .overlay {
@@ -3723,6 +3882,12 @@ extension Color {
         let g = Int((rgb.greenComponent * 255).rounded())
         let b = Int((rgb.blueComponent * 255).rounded())
         return String(format: "#%02X%02X%02X", r, g, b)
+    }
+
+    var readableForeground: Color {
+        let rgb = NSColor(self).usingColorSpace(.deviceRGB) ?? NSColor(self)
+        let luminance = (0.2126 * rgb.redComponent) + (0.7152 * rgb.greenComponent) + (0.0722 * rgb.blueComponent)
+        return luminance > 0.58 ? .black : .white
     }
 }
 

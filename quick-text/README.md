@@ -10,6 +10,12 @@ Shared data:
 - `corpus/quick-text.json`
 - `corpus/palette.json`
 
+Project folders:
+
+- `quick-text/` is the Quick Text project root: shared corpus, scripts, web component, docs, and Mac app.
+- `quick-text/mac/QuickTextApp/` is the Swift package root for building/running the Mac app.
+- The parent `prompts-library/` repo root is still the right place for git operations, shared repo instructions, and work that touches public Prompt Library files.
+
 Commands:
 
 ```bash
@@ -64,6 +70,21 @@ Embed:
 
 Public publishing uses `quick-text.public.json`, generated from phrases where `visibility` is `public`.
 
+## Glossary
+
+The in-app glossary lives in the macOS Help menu as **Quick Text Glossary**. It establishes these canonical terms:
+
+- **Phrase**: a saved reusable text item.
+- **Card**: the grid tile for a phrase.
+- **Expanded card**: the large preview/copy surface.
+- **Value**: the full stored text of a phrase.
+- **Atom**: a fixed slice of a phrase value that can be copied on its own.
+- **Inline variable**: a phrase-local fill-in placeholder, `{{name}}`.
+- **Choice variable**: a phrase-local option picker, `{{option one/option two}}`.
+- **Library variable**: a shared variable referenced with `{{@name}}`.
+- **Value variable**: a library variable with a fixed stored value that substitutes automatically. Use this term instead of `atomic variable`.
+- **Unresolved variable**: a `{{@name}}` reference with no matching library variable.
+
 ## Atomic phrase cards
 
 A phrase can optionally carry an `atoms` array so part of its `value` can be copied on its own (e.g. an address card where you sometimes just need the city). `value` stays the single source of truth for full-copy text and formatting; atoms are offset references into it, not separate strings:
@@ -104,7 +125,7 @@ Everything under "Variable placeholders" above is scoped to one phrase: an inlin
 
 - **Syntax distinguishes inline vs. library by an `@` sigil**: `{{name}}` and `{{a/b}}` keep meaning exactly what they mean above — a one-off, phrase-local placeholder, never touching the library. `{{@name}}` resolves `name` against the shared library instead. Both forms are permanent, coexisting syntaxes — there's no migration step and inline placeholders aren't deprecated.
 - **Corpus schema**: a real top-level `variables` array (replacing the old inert stub — nothing referenced it, so it was dropped rather than migrated), each entry `{ id, name, type: "text" | "choice" | "value", options?: string[], value?: string }` — `id` is stable and never reused; `name` is the human-facing key authors type inside `{{@name}}` and must be unique (case-insensitive) among library entries; `options` is required and non-empty when `type` is `"choice"`; `value` is required and non-empty when `type` is `"value"`. `npm run quicktext:validate` (`quick-text/scripts/validate-corpus.mjs`) checks all of this.
-- **Three types**: `"text"` and `"choice"` are fill-in-at-copy-time — free text or a pick from `options` — same behavior as an inline placeholder, just sourced from a shared library entry. `"value"` is different: it carries a fixed, canned `value` string that's substituted automatically, with nothing to fill in. This is the atomic-variable case — a short `name` (e.g. "Body type") stands in for a long descriptive `value`, so a phrase can read concisely in the UI (`His body is the archetype of {{@Body type}}.`) while copying the full text to the clipboard.
+- **Three types**: `"text"` and `"choice"` are fill-in-at-copy-time — free text or a pick from `options` — same behavior as an inline placeholder, just sourced from a shared library entry. `"value"` is different: it carries a fixed, canned `value` string that's substituted automatically, with nothing to fill in. This is the value-variable case — a short `name` (e.g. "Body type") stands in for a long descriptive `value`, so a phrase can read concisely in the UI (`His body is the archetype of {{@Body type}}.`) while copying the full text to the clipboard.
 - **Resolution**: at render time, `{{@name}}` looks up `variables` by `name` (case-insensitive, trimmed) and renders/fills like the inline chips — free-text popover for `"text"`, choice buttons for `"choice"`, an always-solid non-interactive chip for `"value"` — just sourced from the library entry instead of parsed inline text. A dangling reference (renamed or deleted library entry) renders as a visually distinct, non-interactive "unresolved" chip and copies through as the literal `{{@name}}` text, same fallback precedent as an unfilled placeholder.
 - **Collapsed / preview / expanded display for `"value"`-type chips**: the expanded card shows just `name` by default (collapsed); hovering a chip shows the full `value` as a native tooltip (preview, no mode switch needed); a global "Expanded: show full variable values" toggle in Settings > Behavior (`Settings.expandedChipDisplay`) switches every `"value"`-type chip on every card to show the full `value` text inline instead of `name`. Either way, copying the card (chip tap or background tap) always substitutes the full `value` — display mode never changes what's copied.
 - **Authoring flow**: `PhraseEditor`'s Value field has an "Insert Variable" button that opens a popover to either insert an existing library variable at the cursor by name, or create a new one (name, type, options/value) and insert it in one step. Typing `{{name}}`/`{{a/b}}` by hand for a one-off still needs no library interaction at all. A "Variables Library" toolbar button (next to Settings) opens `VariablesLibraryEditor`, which lists every library variable, lets you add/edit/delete each, and shows how many phrases currently reference it (`CorpusStore.referenceCount(forLibraryVariableName:)` — a live reverse-index scan for `{{@name}}` across `phrases[].value`, not a stored back-reference list).
@@ -112,11 +133,11 @@ Everything under "Variable placeholders" above is scoped to one phrase: an inlin
   - **Update all** (`CorpusStore.updateLibraryVariableInPlace`) — mutates the existing entry in place (same `id`); every `{{@name}}` reference picks up the new options/type/value immediately. If `name` itself changed, this also rewrites `{{@oldName}}` to `{{@newName}}` in every referencing phrase's `value` (`PhraseVariable.renamingLibraryReferences`), since otherwise the rename silently breaks all of them.
   - **Fork** (`CorpusStore.forkLibraryVariable`, via `ForkVariableSheet`) — creates a new entry with a new `id` and a new name chosen by the admin (can't collide with the original or any other existing name). **Phrases that used the old variable stay pointing at the old, unforked entry — nothing about them changes.** The fork starts referenced by nothing; the admin manually inserts `{{@newName}}` into whichever phrases should adopt it going forward.
   - Deleting a library variable (`CorpusStore.deleteLibraryVariable`) that's still referenced warns how many phrases reference it first; afterward those phrases keep their literal `{{@name}}` text, which now resolves as "unresolved" rather than silently reverting to a plain inline placeholder.
-- Implemented on Mac in `mac/QuickTextApp/Sources/QuickTextApp/QuickTextApp.swift`: `LibraryVariable` (corpus model, `Kind.value` + `value` field), `PhraseVariable.Kind`/`.parse(_:library:)`/`.libraryValue`/`.isCannedValue`/`.referencedLibraryNames(in:)`/`.renamingLibraryReferences(in:from:to:)` (parsing/resolution), `ExpandedCardView.cannedValueChip` and `.expandedChipDisplay`/`Settings.expandedChipDisplay` (collapsed/preview/expanded display), the `CorpusStore` library-variable CRUD extension, `InsertVariablePopover` (authoring), and `VariablesLibraryEditor`/`VariableRow`/`LibraryVariableEditorSheet`/`ForkVariableSheet` (admin surface). Not yet compiled/run on the actual Mac from this sandbox (no Swift toolchain here — see "Environment notes" below); build and manually verify on the Mac before relying on this.
+- Implemented on Mac in `mac/QuickTextApp/Sources/QuickTextApp/QuickTextApp.swift`: `LibraryVariable` (corpus model, `Kind.value` + `value` field), `PhraseVariable.Kind`/`.parse(_:library:)`/`.libraryValue`/`.isCannedValue`/`.referencedLibraryNames(in:)`/`.renamingLibraryReferences(in:from:to:)` (parsing/resolution), `ExpandedCardView.cannedValueChip` and `.expandedChipDisplay`/`Settings.expandedChipDisplay` (collapsed/preview/expanded display), the `CorpusStore` library-variable CRUD extension, `InsertVariablePopover` (authoring), and `VariablesLibraryEditor`/`VariableRow`/`LibraryVariableEditorSheet`/`ForkVariableSheet` (admin surface).
 
 ## Environment notes for future sessions
 
-- The Cowork/agent sandbox used to edit this repo has no Swift toolchain, so Mac app changes can only be syntax-eyeballed there, not compiled. Build and reinstall on the actual Mac:
+- Build and reinstall the Mac app after Swift source changes:
   ```bash
   cd quick-text/mac/QuickTextApp
   swift build -c release
