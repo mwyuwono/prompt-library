@@ -23,7 +23,13 @@ struct QuickTextApp: App {
                 Button("Edit Selected Phrase") { store.beginEditingSelectedPhrase() }
                     .keyboardShortcut("e", modifiers: .command)
             }
-            CommandGroup(replacing: .help) {
+            CommandGroup(after: .help) {
+                Button("Keyboard Shortcuts") {
+                    AppDelegate.openWindow()
+                    DispatchQueue.main.async {
+                        NotificationCenter.default.post(name: .quickTextShowKeyboardShortcuts, object: nil)
+                    }
+                }
                 Button("Quick Text Glossary") {
                     AppDelegate.openWindow()
                     DispatchQueue.main.async {
@@ -86,6 +92,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
 extension Notification.Name {
     static let quickTextFocusSearch = Notification.Name("quickTextFocusSearch")
+    static let quickTextShowKeyboardShortcuts = Notification.Name("quickTextShowKeyboardShortcuts")
     static let quickTextShowGlossary = Notification.Name("quickTextShowGlossary")
 }
 
@@ -116,6 +123,9 @@ struct ContentView: View {
     @State private var showingVariablesLibrary = false
     @State private var variablesPanelOffset = CGSize.zero
     @State private var variablesPanelDragOffset = CGSize.zero
+    @State private var showingKeyboardShortcuts = false
+    @State private var shortcutsPanelOffset = CGSize.zero
+    @State private var shortcutsPanelDragOffset = CGSize.zero
     @State private var showingGlossary = false
     @State private var glossaryPanelOffset = CGSize.zero
     @State private var glossaryPanelDragOffset = CGSize.zero
@@ -133,6 +143,28 @@ struct ContentView: View {
 
     private var gridColumnCount: Int {
         max(Int((max(gridWidth, cardWidth) + gridSpacing) / (cardWidth + gridSpacing)), 1)
+    }
+
+    private var currentWindowWidth: CGFloat {
+        NSApp.keyWindow?.contentLayoutRect.width ?? 720
+    }
+
+    private var standardPanelWidth: CGFloat {
+        min(max(currentWindowWidth * 0.6, 420), currentWindowWidth * 0.9)
+    }
+
+    private var settingsPanelWidth: CGFloat {
+        min(max(currentWindowWidth * 0.6, 560), currentWindowWidth * 0.9)
+    }
+
+    private var showVariablesLibraryButton: Bool {
+        store.corpus.settings.showVariablesLibraryButton ?? Settings.defaultShowVariablesLibraryButton
+    }
+
+    private var activeSearchInlineItems: [SearchInlineItem] {
+        SearchInlineItem.allCases.filter { item in
+            item != .variablesButton || showVariablesLibraryButton
+        }
     }
 
     var body: some View {
@@ -201,8 +233,12 @@ struct ContentView: View {
         }
         .onDisappear { removeKeyMonitor() }
         .onReceive(NotificationCenter.default.publisher(for: .quickTextFocusSearch)) { _ in
-            guard store.editingPhrase == nil, !showingSettings, !showingVariablesLibrary, !showingGlossary else { return }
+            guard store.editingPhrase == nil, !showingSettings, !showingVariablesLibrary, !showingKeyboardShortcuts, !showingGlossary else { return }
             focusSearchSoon()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .quickTextShowKeyboardShortcuts)) { _ in
+            guard store.editingPhrase == nil else { return }
+            openKeyboardShortcutsPanel()
         }
         .onReceive(NotificationCenter.default.publisher(for: .quickTextShowGlossary)) { _ in
             guard store.editingPhrase == nil else { return }
@@ -250,7 +286,7 @@ struct ContentView: View {
                     },
                     dragOffset: $settingsPanelDragOffset
                 ) {
-                    SettingsEditor()
+                    SettingsEditor(width: settingsPanelWidth)
                         .environmentObject(store)
                 }
                 .offset(
@@ -288,6 +324,30 @@ struct ContentView: View {
             }
         }
         .overlay(alignment: .topTrailing) {
+            if showingKeyboardShortcuts {
+                FloatingPanel(
+                    title: "Keyboard Shortcuts",
+                    systemImage: "keyboard",
+                    onClose: closeFloatingPanels,
+                    onDragEnded: {
+                        shortcutsPanelOffset.width += shortcutsPanelDragOffset.width
+                        shortcutsPanelOffset.height += shortcutsPanelDragOffset.height
+                        shortcutsPanelDragOffset = .zero
+                    },
+                    dragOffset: $shortcutsPanelDragOffset
+                ) {
+                    KeyboardShortcutsView(width: standardPanelWidth)
+                }
+                .offset(
+                    x: shortcutsPanelOffset.width + shortcutsPanelDragOffset.width,
+                    y: shortcutsPanelOffset.height + shortcutsPanelDragOffset.height
+                )
+                .padding(.top, 54)
+                .padding(.trailing, 8)
+                .zIndex(3)
+            }
+        }
+        .overlay(alignment: .topTrailing) {
             if showingGlossary {
                 FloatingPanel(
                     title: "Glossary",
@@ -300,7 +360,7 @@ struct ContentView: View {
                     },
                     dragOffset: $glossaryPanelDragOffset
                 ) {
-                    GlossaryView()
+                    GlossaryView(width: standardPanelWidth)
                 }
                 .offset(
                     x: glossaryPanelOffset.width + glossaryPanelDragOffset.width,
@@ -308,7 +368,7 @@ struct ContentView: View {
                 )
                 .padding(.top, 54)
                 .padding(.trailing, 8)
-                .zIndex(3)
+                .zIndex(4)
             }
         }
         .onChange(of: store.expandedPhraseID) { _, newValue in
@@ -356,8 +416,10 @@ struct ContentView: View {
             moduleButton(icon: "plus", label: "New", item: .newButton) {
                 store.beginNewPhrase()
             }
-            moduleButton(icon: "curlybraces", label: "Variables", item: .variablesButton) {
-                openVariablesPanel()
+            if showVariablesLibraryButton {
+                moduleButton(icon: "curlybraces", label: "Variables", item: .variablesButton) {
+                    openVariablesPanel()
+                }
             }
             moduleButton(icon: "slider.horizontal.3", label: "Settings", item: .settingsButton) {
                 openSettingsPanel()
@@ -456,30 +518,41 @@ struct ContentView: View {
     }
 
     private var canUseGridKeyboard: Bool {
-        store.expandedPhraseID == nil && !showingSettings && !showingVariablesLibrary && !showingGlossary && store.editingPhrase == nil && !searchFocused && !isEditingText
+        store.expandedPhraseID == nil && !showingSettings && !showingVariablesLibrary && !showingKeyboardShortcuts && !showingGlossary && store.editingPhrase == nil && !searchFocused && !isEditingText
     }
 
     private func openSettingsPanel() {
         showingVariablesLibrary = false
+        showingKeyboardShortcuts = false
         showingGlossary = false
         showingSettings = true
     }
 
     private func openVariablesPanel() {
         showingSettings = false
+        showingKeyboardShortcuts = false
         showingGlossary = false
         showingVariablesLibrary = true
+    }
+
+    private func openKeyboardShortcutsPanel() {
+        showingSettings = false
+        showingVariablesLibrary = false
+        showingGlossary = false
+        showingKeyboardShortcuts = true
     }
 
     private func openGlossaryPanel() {
         showingSettings = false
         showingVariablesLibrary = false
+        showingKeyboardShortcuts = false
         showingGlossary = true
     }
 
     private func closeFloatingPanels() {
         showingSettings = false
         showingVariablesLibrary = false
+        showingKeyboardShortcuts = false
         showingGlossary = false
     }
 
@@ -516,7 +589,7 @@ struct ContentView: View {
     }
 
     private func moveSearchInlineFocus(_ delta: Int) {
-        let all = SearchInlineItem.allCases
+        let all = activeSearchInlineItems
         guard let index = all.firstIndex(of: searchInlineFocus) else { return }
         let nextIndex = min(max(index + delta, 0), all.count - 1)
         searchInlineFocus = all[nextIndex]
@@ -556,13 +629,13 @@ struct ContentView: View {
     private func handleKeyEvent(_ event: NSEvent) -> NSEvent? {
         guard event.modifierFlags.intersection([.command, .option, .control]).isEmpty else { return event }
         if event.keyCode == 53 {
-            if showingSettings || showingVariablesLibrary || showingGlossary || store.expandedPhraseID != nil || !store.searchTerm.isEmpty || store.categoryFocusMode {
+            if showingSettings || showingVariablesLibrary || showingKeyboardShortcuts || showingGlossary || store.expandedPhraseID != nil || !store.searchTerm.isEmpty || store.categoryFocusMode {
                 handleEscape()
                 return nil
             }
             return event
         }
-        guard store.editingPhrase == nil, !showingSettings, !showingVariablesLibrary, !showingGlossary else { return event }
+        guard store.editingPhrase == nil, !showingSettings, !showingVariablesLibrary, !showingKeyboardShortcuts, !showingGlossary else { return event }
         guard store.expandedPhraseID == nil else { return event }
 
         switch event.keyCode {
@@ -657,7 +730,7 @@ struct ContentView: View {
     }
 
     private func handleEscape() {
-        if showingGlossary || showingSettings || showingVariablesLibrary {
+        if showingGlossary || showingKeyboardShortcuts || showingSettings || showingVariablesLibrary {
             closeFloatingPanels()
         } else if store.expandedPhraseID != nil {
             store.collapseExpanded()
@@ -740,7 +813,92 @@ struct FloatingPanel<Content: View>: View {
     }
 }
 
+struct KeyboardShortcutsView: View {
+    let width: CGFloat
+
+    private let sections: [ShortcutSection] = [
+        ShortcutSection(
+            title: "App",
+            shortcuts: [
+                ShortcutItem(keys: "Cmd-Shift-Space", action: "Open Quick Text"),
+                ShortcutItem(keys: "Cmd-N", action: "New phrase"),
+                ShortcutItem(keys: "Cmd-E", action: "Edit selected phrase"),
+                ShortcutItem(keys: "Cmd-F", action: "Focus search"),
+                ShortcutItem(keys: "Cmd-C", action: "Copy selected phrase")
+            ]
+        ),
+        ShortcutSection(
+            title: "Navigation",
+            shortcuts: [
+                ShortcutItem(keys: "Tab / Shift-Tab", action: "Move between categories, search row, and cards"),
+                ShortcutItem(keys: "Arrow keys", action: "Move within the focused area"),
+                ShortcutItem(keys: "Space", action: "Open the selected card"),
+                ShortcutItem(keys: "Return", action: "Copy the selected phrase"),
+                ShortcutItem(keys: "Escape", action: "Close help/settings panels, close expanded cards, or clear search")
+            ]
+        ),
+        ShortcutSection(
+            title: "Expanded Cards",
+            shortcuts: [
+                ShortcutItem(keys: "Click chip", action: "Copy or edit that atom or variable"),
+                ShortcutItem(keys: "Shift-click atoms", action: "Select multiple atoms and copy them in document order"),
+                ShortcutItem(keys: "Space / Return", action: "Copy the full expanded card"),
+                ShortcutItem(keys: "Escape", action: "Close the expanded card")
+            ]
+        )
+    ]
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 18) {
+                Text("Quick reference for keyboard and pointer actions.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+
+                ForEach(sections) { section in
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text(section.title)
+                            .font(.headline)
+                        ForEach(section.shortcuts) { shortcut in
+                            HStack(alignment: .firstTextBaseline, spacing: 12) {
+                                Text(shortcut.keys)
+                                    .font(.caption.monospaced().weight(.semibold))
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 4)
+                                    .background(Color(nsColor: .windowBackgroundColor).opacity(0.32), in: RoundedRectangle(cornerRadius: 6))
+                                    .frame(width: 140, alignment: .leading)
+                                Text(shortcut.action)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+            }
+            .padding(18)
+        }
+        .frame(width: width)
+        .frame(minHeight: 360, maxHeight: 620)
+    }
+}
+
+struct ShortcutSection: Identifiable {
+    let id = UUID()
+    let title: String
+    let shortcuts: [ShortcutItem]
+}
+
+struct ShortcutItem: Identifiable {
+    let id = UUID()
+    let keys: String
+    let action: String
+}
+
 struct GlossaryView: View {
+    let width: CGFloat
+
     private let sections: [GlossarySection] = [
         GlossarySection(
             title: "Core Objects",
@@ -809,7 +967,7 @@ struct GlossaryView: View {
             }
             .padding(18)
         }
-        .frame(width: 520)
+        .frame(width: width)
         .frame(minHeight: 420, maxHeight: 640)
     }
 }
@@ -1518,8 +1676,13 @@ private struct InsertVariablePopover: View {
 /// no Save button, so text size, card size, colors, and font apply live.
 struct SettingsEditor: View {
     @EnvironmentObject private var store: CorpusStore
+    let width: CGFloat
     @State private var editingColorTarget: ColorEditTarget?
     @State private var didCopyPath = false
+
+    private var usesTwoColumns: Bool { width >= 760 }
+    private var primaryColumnWidth: CGFloat { usesTwoColumns ? 320 : width - 44 }
+    private var colorsColumnWidth: CGFloat { usesTwoColumns ? max(width - primaryColumnWidth - 62, 300) : width - 44 }
 
     private var settings: Binding<Settings> {
         Binding(
@@ -1531,43 +1694,21 @@ struct SettingsEditor: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
-                HStack(alignment: .top, spacing: 18) {
-                    VStack(alignment: .leading, spacing: 14) {
-                        settingsSection("Display") {
-                            textSizeControl
-                            cardSizeControl
-                            Picker("Font", selection: settings.defaultFontFamily) {
-                                Text("Sans").tag("sans")
-                                Text("Serif").tag("serif")
-                            }
-                            .frame(maxWidth: 220, alignment: .leading)
-                        }
+                if usesTwoColumns {
+                    HStack(alignment: .top, spacing: 18) {
+                        primarySettingsColumn
+                            .frame(width: primaryColumnWidth, alignment: .topLeading)
 
-                        settingsSection("Behavior") {
-                            Toggle("Close card automatically after copying", isOn: Binding(
-                                get: { settings.wrappedValue.closeCardOnCopy ?? Settings.defaultCloseCardOnCopy },
-                                set: { settings.wrappedValue.closeCardOnCopy = $0 }
-                            ))
-                            Toggle("Expanded: show full variable values", isOn: Binding(
-                                get: { settings.wrappedValue.expandedChipDisplay ?? Settings.defaultExpandedChipDisplay },
-                                set: { settings.wrappedValue.expandedChipDisplay = $0 }
-                            ))
-                            .help("Shows canned variable values in full instead of their short name on every expanded card.")
-                            Button {
-                                copyCorpusPath()
-                            } label: {
-                                Label(didCopyPath ? "Path copied" : "Copy corpus file path", systemImage: didCopyPath ? "checkmark" : "doc.on.doc")
-                            }
-                            .buttonStyle(.glass)
-                            .help("Copies the path to quick-text.json, for handing off to a coding agent for bulk edits.")
+                        settingsSection("Colors") {
+                            colorControls
                         }
+                        .frame(width: colorsColumnWidth, alignment: .topLeading)
                     }
-                    .frame(width: 320, alignment: .topLeading)
-
+                } else {
+                    primarySettingsColumn
                     settingsSection("Colors") {
                         colorControls
                     }
-                    .frame(width: 520, alignment: .topLeading)
                 }
 
                 settingsSection("Categories") {
@@ -1576,8 +1717,46 @@ struct SettingsEditor: View {
             }
             .padding(22)
         }
-        .frame(width: 900)
+        .frame(width: width)
         .frame(minHeight: 420, maxHeight: 720)
+    }
+
+    private var primarySettingsColumn: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            settingsSection("Display") {
+                textSizeControl
+                cardSizeControl
+                Picker("Font", selection: settings.defaultFontFamily) {
+                    Text("Sans").tag("sans")
+                    Text("Serif").tag("serif")
+                }
+                .frame(maxWidth: 220, alignment: .leading)
+            }
+
+            settingsSection("Behavior") {
+                Toggle("Close card automatically after copying", isOn: Binding(
+                    get: { settings.wrappedValue.closeCardOnCopy ?? Settings.defaultCloseCardOnCopy },
+                    set: { settings.wrappedValue.closeCardOnCopy = $0 }
+                ))
+                Toggle("Expanded: show full variable values", isOn: Binding(
+                    get: { settings.wrappedValue.expandedChipDisplay ?? Settings.defaultExpandedChipDisplay },
+                    set: { settings.wrappedValue.expandedChipDisplay = $0 }
+                ))
+                .help("Shows canned variable values in full instead of their short name on every expanded card.")
+                Toggle("Show Variables button in toolbar", isOn: Binding(
+                    get: { settings.wrappedValue.showVariablesLibraryButton ?? Settings.defaultShowVariablesLibraryButton },
+                    set: { settings.wrappedValue.showVariablesLibraryButton = $0 }
+                ))
+                .help("Controls whether the Variables Library button is shown next to Search and Settings.")
+                Button {
+                    copyCorpusPath()
+                } label: {
+                    Label(didCopyPath ? "Path copied" : "Copy corpus file path", systemImage: didCopyPath ? "checkmark" : "doc.on.doc")
+                }
+                .buttonStyle(.glass)
+                .help("Copies the path to quick-text.json, for handing off to a coding agent for bulk edits.")
+            }
+        }
     }
 
     private func settingsSection<Content: View>(_ title: String, @ViewBuilder content: () -> Content) -> some View {
@@ -1830,15 +2009,14 @@ struct VariablesLibraryEditor: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
             } else {
-                VStack(alignment: .leading, spacing: 2) {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 180), spacing: 10)], alignment: .leading, spacing: 10) {
                     ForEach(store.libraryVariables) { variable in
-                        VariableRow(
+                        VariableCard(
                             variable: variable,
                             referenceCount: store.referenceCount(forLibraryVariableName: variable.name),
                             onEdit: { editingVariableID = variable.id },
                             onDelete: { deleteCandidate = variable }
                         )
-                        Divider()
                     }
                 }
             }
@@ -1850,7 +2028,7 @@ struct VariablesLibraryEditor: View {
             .buttonStyle(.glass)
         }
         .padding(14)
-        .frame(width: 480)
+        .frame(width: 520)
         .frame(minHeight: 240, maxHeight: 520)
         .sheet(item: editingVariableBinding) { variable in
             LibraryVariableEditorSheet(mode: .edit(variable), referenceCount: store.referenceCount(forLibraryVariableName: variable.name))
@@ -1886,38 +2064,60 @@ struct VariablesLibraryEditor: View {
     }
 }
 
-private struct VariableRow: View {
+private struct VariableCard: View {
     let variable: LibraryVariable
     let referenceCount: Int
     let onEdit: () -> Void
     let onDelete: () -> Void
+    @State private var isHovering = false
 
     var body: some View {
-        HStack(spacing: 8) {
+        Button(action: onEdit) {
             VStack(alignment: .leading, spacing: 2) {
-                Text(variable.name).fontWeight(.medium)
-                Text(variableRowSubtitle)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(1)
-            }
-            Spacer()
-            Text("\(referenceCount) phrase\(referenceCount == 1 ? "" : "s")")
+                HStack(alignment: .firstTextBaseline, spacing: 6) {
+                    Text(isHovering ? hoverText : variable.name)
+                        .font(.system(size: 18, weight: .bold))
+                        .lineLimit(isHovering ? 5 : 3)
+                        .minimumScaleFactor(0.78)
+                    Spacer(minLength: 0)
+                }
+                Spacer(minLength: 0)
+                HStack(spacing: 6) {
+                    Text(variable.type.rawValue.capitalized)
+                    Text("\(referenceCount) phrase\(referenceCount == 1 ? "" : "s")")
+                }
                 .font(.caption)
                 .foregroundStyle(.secondary)
-            Button("Edit", action: onEdit)
-                .buttonStyle(.glass)
-            Button {
-                onDelete()
-            } label: {
-                Image(systemName: "trash")
             }
-            .buttonStyle(.glass)
+            .padding(12)
+            .frame(minHeight: 112, alignment: .topLeading)
+            .frame(maxWidth: .infinity, alignment: .topLeading)
+            .background(Color(nsColor: .controlBackgroundColor).opacity(isHovering ? 0.96 : 0.74))
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color.primary.opacity(isHovering ? 0.22 : 0.1), lineWidth: 1)
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .contentShape(RoundedRectangle(cornerRadius: 8))
         }
-        .padding(.vertical, 4)
+        .buttonStyle(.plain)
+        .onHover { hovering in
+            withAnimation(.easeInOut(duration: 0.12)) {
+                isHovering = hovering
+            }
+        }
+        .help(hoverText)
+        .contextMenu {
+            Button("Edit", action: onEdit)
+            Button("Delete", role: .destructive, action: onDelete)
+        }
+        .accessibilityLabel(variable.name)
+        .accessibilityValue(hoverText)
+        .accessibilityAction(named: "Edit", onEdit)
+        .accessibilityAction(named: "Delete", onDelete)
     }
 
-    private var variableRowSubtitle: String {
+    private var hoverText: String {
         switch variable.type {
         case .choice: return (variable.options ?? []).joined(separator: " / ")
         case .value: return variable.value ?? ""
@@ -3556,6 +3756,9 @@ struct Settings: Codable {
     // their full value inline instead of the collapsed `name` (see README "Reusable
     // variable library" and `ExpandedCardView.cannedValueChip`).
     var expandedChipDisplay: Bool? = nil
+    // Optional so existing corpus.json files without this key still decode.
+    // Controls whether the top-row Variables Library button is visible.
+    var showVariablesLibraryButton: Bool? = nil
 
     // Optional so existing corpus.json files without these keys still decode.
     // Each stores either a palette swatch id or a literal "#RRGGBB" hex string
@@ -3569,6 +3772,7 @@ struct Settings: Codable {
     static let defaultCardWidth: Double = 164
     static let defaultCloseCardOnCopy = false
     static let defaultExpandedChipDisplay = false
+    static let defaultShowVariablesLibraryButton = true
     static let defaultHighlightColor = "#E2725B"
     static let defaultExpandedCardBackgroundColor = "#22201B"
     static let defaultExpandedCardTextColor = "#F4EDE0"
