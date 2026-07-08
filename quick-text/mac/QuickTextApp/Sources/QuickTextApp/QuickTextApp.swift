@@ -157,6 +157,18 @@ struct ContentView: View {
         min(max(currentWindowWidth * 0.6, 560), currentWindowWidth * 0.9)
     }
 
+    private var variablesPanelWidth: CGFloat {
+        currentWindowWidth * 0.9
+    }
+
+    private var currentWindowHeight: CGFloat {
+        NSApp.keyWindow?.contentLayoutRect.height ?? 520
+    }
+
+    private var variablesPanelHeight: CGFloat {
+        currentWindowHeight * 0.9
+    }
+
     private var showVariablesLibraryButton: Bool {
         store.corpus.settings.showVariablesLibraryButton ?? Settings.defaultShowVariablesLibraryButton
     }
@@ -298,28 +310,36 @@ struct ContentView: View {
                 .zIndex(2)
             }
         }
-        .overlay(alignment: .topTrailing) {
+        .overlay {
             if showingVariablesLibrary {
-                FloatingPanel(
-                    title: "Variables Library",
-                    systemImage: "curlybraces",
-                    onClose: closeFloatingPanels,
-                    onDragEnded: {
-                        variablesPanelOffset.width += variablesPanelDragOffset.width
-                        variablesPanelOffset.height += variablesPanelDragOffset.height
-                        variablesPanelDragOffset = .zero
-                    },
-                    dragOffset: $variablesPanelDragOffset
-                ) {
-                    VariablesLibraryEditor()
-                        .environmentObject(store)
+                ZStack {
+                    Color.clear
+                        .contentShape(Rectangle())
+                        .onTapGesture(perform: closeFloatingPanels)
+
+                    FloatingPanel(
+                        title: "Variables Library",
+                        systemImage: "curlybraces",
+                        onClose: closeFloatingPanels,
+                        onDragEnded: {
+                            variablesPanelOffset.width += variablesPanelDragOffset.width
+                            variablesPanelOffset.height += variablesPanelDragOffset.height
+                            variablesPanelDragOffset = .zero
+                        },
+                        dragOffset: $variablesPanelDragOffset
+                    ) {
+                        VariablesLibraryEditor(
+                            width: variablesPanelWidth,
+                            height: variablesPanelHeight,
+                            onClose: closeFloatingPanels
+                        )
+                            .environmentObject(store)
+                    }
+                    .offset(
+                        x: variablesPanelOffset.width + variablesPanelDragOffset.width,
+                        y: variablesPanelOffset.height + variablesPanelDragOffset.height
+                    )
                 }
-                .offset(
-                    x: variablesPanelOffset.width + variablesPanelDragOffset.width,
-                    y: variablesPanelOffset.height + variablesPanelDragOffset.height
-                )
-                .padding(.top, 54)
-                .padding(.trailing, 8)
                 .zIndex(2)
             }
         }
@@ -1738,16 +1758,6 @@ struct SettingsEditor: View {
                     get: { settings.wrappedValue.closeCardOnCopy ?? Settings.defaultCloseCardOnCopy },
                     set: { settings.wrappedValue.closeCardOnCopy = $0 }
                 ))
-                Toggle("Expanded: show full variable values", isOn: Binding(
-                    get: { settings.wrappedValue.expandedChipDisplay ?? Settings.defaultExpandedChipDisplay },
-                    set: { settings.wrappedValue.expandedChipDisplay = $0 }
-                ))
-                .help("Shows canned variable values in full instead of their short name on every expanded card.")
-                Toggle("Show Variables button in toolbar", isOn: Binding(
-                    get: { settings.wrappedValue.showVariablesLibraryButton ?? Settings.defaultShowVariablesLibraryButton },
-                    set: { settings.wrappedValue.showVariablesLibraryButton = $0 }
-                ))
-                .help("Controls whether the Variables Library button is shown next to Search and Settings.")
                 Button {
                     copyCorpusPath()
                 } label: {
@@ -1998,38 +2008,80 @@ enum ColorEditTarget {
 /// list), plus add/edit/delete. Opened from the toolbar button next to Settings.
 struct VariablesLibraryEditor: View {
     @EnvironmentObject private var store: CorpusStore
+    let width: CGFloat
+    let height: CGFloat
+    let onClose: () -> Void
     @State private var editingVariableID: String?
     @State private var isAddingNew = false
     @State private var deleteCandidate: LibraryVariable?
 
+    private let cardWidth: CGFloat = 180
+    private let cardSpacing: CGFloat = 10
+
+    private var settings: Binding<Settings> {
+        Binding(
+            get: { store.corpus.settings },
+            set: { store.saveSettings($0) }
+        )
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            if store.libraryVariables.isEmpty {
-                Text("No library variables yet. Add one below, or use \u{201C}Insert Variable\u{201D} in a phrase's Value field.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            } else {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 180), spacing: 10)], alignment: .leading, spacing: 10) {
-                    ForEach(store.libraryVariables) { variable in
-                        VariableCard(
-                            variable: variable,
-                            referenceCount: store.referenceCount(forLibraryVariableName: variable.name),
-                            onEdit: { editingVariableID = variable.id },
-                            onDelete: { deleteCandidate = variable }
-                        )
+            HStack(spacing: 8) {
+                Spacer()
+                Menu {
+                    Toggle("Expanded cards show full variable values", isOn: Binding(
+                        get: { settings.wrappedValue.expandedChipDisplay ?? Settings.defaultExpandedChipDisplay },
+                        set: { settings.wrappedValue.expandedChipDisplay = $0 }
+                    ))
+                    Toggle("Show Variables button in toolbar", isOn: Binding(
+                        get: { settings.wrappedValue.showVariablesLibraryButton ?? Settings.defaultShowVariablesLibraryButton },
+                        set: { settings.wrappedValue.showVariablesLibraryButton = $0 }
+                    ))
+                } label: {
+                    Label("Variable Settings", systemImage: "gearshape")
+                }
+                .buttonStyle(.glass)
+
+                Button {
+                    isAddingNew = true
+                } label: {
+                    Label("Add Variable", systemImage: "plus")
+                }
+                .buttonStyle(.glass)
+            }
+
+            ZStack(alignment: .topLeading) {
+                Color.clear
+                    .contentShape(Rectangle())
+                    .onTapGesture(perform: onClose)
+
+                if store.libraryVariables.isEmpty {
+                    Text("No library variables yet. Use Add Variable or Insert Variable in a phrase's Value field.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .padding(.top, 8)
+                        .padding(.horizontal, 4)
+                } else {
+                    ScrollView {
+                        MasonryGrid(columnWidth: cardWidth, spacing: cardSpacing) {
+                            ForEach(store.libraryVariables) { variable in
+                                VariableCard(
+                                    variable: variable,
+                                    referenceCount: store.referenceCount(forLibraryVariableName: variable.name),
+                                    onEdit: { editingVariableID = variable.id },
+                                    onDelete: { deleteCandidate = variable }
+                                )
+                            }
+                        }
+                        .padding(.vertical, 2)
                     }
                 }
             }
-            Button {
-                isAddingNew = true
-            } label: {
-                Label("Add Variable", systemImage: "plus")
-            }
-            .buttonStyle(.glass)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
         .padding(14)
-        .frame(width: 520)
-        .frame(minHeight: 240, maxHeight: 520)
+        .frame(width: width, height: max(height - 50, 240))
         .sheet(item: editingVariableBinding) { variable in
             LibraryVariableEditorSheet(mode: .edit(variable), referenceCount: store.referenceCount(forLibraryVariableName: variable.name))
                 .environmentObject(store)
@@ -3200,7 +3252,7 @@ struct FlowLayout: Layout {
 }
 
 #Preview("Variables Library") {
-    VariablesLibraryEditor()
+    VariablesLibraryEditor(width: 720, height: 520, onClose: {})
         .environmentObject(PreviewData.store)
         .padding()
 }
