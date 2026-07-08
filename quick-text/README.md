@@ -50,12 +50,7 @@ The installed app reads and writes this shared corpus:
 /Users/mwy/Library/Mobile Documents/com~apple~CloudDocs/Projects/prompts-library/quick-text/corpus
 ```
 
-After `quick-text.json` is changed by Bullfinch or another external editor, quit and reopen the app for the new phrases to appear:
-
-```bash
-pkill -x QuickTextApp
-open "/Applications/Quick Text.app"
-```
+The app watches `quick-text.json` for external changes (Bullfinch, coding agents, manual edits) and reloads automatically, preserving the current selection/search/category where still valid. No need to quit and reopen.
 
 Embed:
 

@@ -9,7 +9,12 @@ let package = Package(
     ],
     dependencies: [],
     targets: [
-        .executableTarget(name: "QuickTextApp")
+        .executableTarget(name: "QuickTextApp"),
+        // @testable import of an executable target works on Apple platforms'
+        // toolchains (SwiftPM, macOS) — **verify** on this project's toolchain;
+        // if it doesn't resolve, split QuickTextApp into a library target plus a
+        // thin executable wrapper instead.
+        .testTarget(name: "QuickTextAppTests", dependencies: ["QuickTextApp"])
     ],
     swiftLanguageModes: [.v5]
 )
