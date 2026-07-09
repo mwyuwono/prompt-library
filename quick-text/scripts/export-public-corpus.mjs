@@ -5,7 +5,12 @@ const root = path.resolve(import.meta.dirname, '..');
 const inputPath = process.argv[2] ? path.resolve(process.argv[2]) : path.join(root, 'corpus', 'quick-text.json');
 const outputPath = process.argv[3] ? path.resolve(process.argv[3]) : path.join(root, 'corpus', 'quick-text.public.json');
 const corpus = JSON.parse(fs.readFileSync(inputPath, 'utf8'));
-const publicPhrases = (corpus.phrases || []).filter((phrase) => phrase.visibility === 'public');
+// textReplacement links to the local macOS/iOS Text Replacement store (see
+// docs/text-replacement-sync-plan.md) — private admin metadata, not read by the
+// web component, and irrelevant/leaky outside this machine.
+const publicPhrases = (corpus.phrases || [])
+  .filter((phrase) => phrase.visibility === 'public')
+  .map(({ textReplacement, ...rest }) => rest);
 const publicCategoryIds = new Set(publicPhrases.map((phrase) => phrase.categoryId));
 
 const exported = {

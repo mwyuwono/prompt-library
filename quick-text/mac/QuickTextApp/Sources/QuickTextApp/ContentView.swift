@@ -40,6 +40,9 @@ struct ContentView: View {
     @State private var focusedModule: FocusModule = .search
     @State private var searchInlineFocus: SearchInlineItem = .searchField
     @State private var deleteCandidate: Phrase?
+    private var deleteCandidateIsPresented: Binding<Bool> {
+        Binding(get: { deleteCandidate != nil }, set: { isPresented in if !isPresented { deleteCandidate = nil } })
+    }
 
     private let gridSpacing: CGFloat = 10
 
@@ -315,7 +318,7 @@ struct ContentView: View {
         }
         .alert(
             "Delete \u{201C}\(deleteCandidate?.title ?? "")\u{201D}?",
-            isPresented: Binding(get: { deleteCandidate != nil }, set: { isPresented in if !isPresented { deleteCandidate = nil } }),
+            isPresented: deleteCandidateIsPresented,
             presenting: deleteCandidate
         ) { phrase in
             Button("Delete", role: .destructive) {

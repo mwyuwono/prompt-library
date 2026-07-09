@@ -77,6 +77,10 @@
         "hoa",
         "members"
       ],
+      "textReplacement" : {
+        "shortcut" : "xhoa",
+        "syncEnabled" : true
+      },
       "title" : "HOA Members",
       "updatedAt" : "2026-07-03T05:42:28Z",
       "value" : "Greg Swalwell, Adam Maffei, and Stanton Yuwono",
@@ -140,8 +144,12 @@
         "trustees",
         "draft"
       ],
+      "textReplacement" : {
+        "shortcut" : "xtrust",
+        "syncEnabled" : true
+      },
       "title" : "Trustee Draft",
-      "updatedAt" : "2026-07-03T05:42:50Z",
+      "updatedAt" : "2026-07-09T19:50:19Z",
       "value" : "Draft a concise trustee-facing Elbridge message to Greg, Adam, and Stanton. Keep it action-oriented, with clear asks and no extra explanation. Use gmail.",
       "visibility" : "private"
     },
@@ -155,24 +163,13 @@
         "condo-docs",
         "sources"
       ],
-      "title" : "Consult governing documents",
-      "updatedAt" : "2026-07-03T05:42:44Z",
+      "textReplacement" : {
+        "shortcut" : "xhoadocs",
+        "syncEnabled" : true
+      },
+      "title" : "Elbridge governing docs",
+      "updatedAt" : "2026-07-09T19:51:34Z",
       "value" : "Ground this in the Elbridge Master Deed and Declaration of Trust before answering. Include source links for any Drive files used.",
-      "visibility" : "private"
-    },
-    {
-      "categoryId" : "elbridge",
-      "createdAt" : "2026-07-02T22:22:56Z",
-      "favorite" : false,
-      "id" : "elbridge-assessment-planning",
-      "summary" : "Assessment Planning",
-      "tags" : [
-        "assessment",
-        "planning"
-      ],
-      "title" : "Review assessment drivers",
-      "updatedAt" : "2026-07-03T05:42:56Z",
-      "value" : "Summarize Elbridge near-term assessment drivers from Bullfinch: claim repairs, HVAC, railings, landscaping, signage, security cameras, fire\/life-safety, gutters, and developer-defect contingencies.",
       "visibility" : "private"
     },
     {
@@ -234,9 +231,13 @@
       "tags" : [
         "llmmeta"
       ],
-      "title" : "Write a prompt that...",
-      "updatedAt" : "2026-07-03T04:00:58Z",
-      "value" : "Create a concise, high-performance meta-prompt to achieve my goal in a new zero-context chat. Write directly for an LLM using imperative language, without conversational filler or explanation. Keep it generic and portable. Refer to external materials with indirect labels such as \"the attached image” rather than specific filenames. \n\nGoal: ",
+      "textReplacement" : {
+        "shortcut" : "xmeta",
+        "syncEnabled" : true
+      },
+      "title" : "Provide a meta prompt. Goal:",
+      "updatedAt" : "2026-07-09T19:48:30Z",
+      "value" : "Create a concise, high-performance meta-prompt to achieve my goal in a new chat. Write for an LLM using imperative language, without conversational filler or explanation. Keep it generic and portable, and refer to external materials with indirect labels such as \"the attached image” rather than specific filenames. \n\nGoal: ",
       "visibility" : "private"
     },
     {
@@ -247,10 +248,14 @@
       "tags" : [
         "llmsum"
       ],
+      "textReplacement" : {
+        "shortcut" : "xsum",
+        "syncEnabled" : true
+      },
       "title" : "Summarize all context from this chat",
-      "updatedAt" : "2026-07-03T02:06:26Z",
-      "value" : "Create a concise, LLM-optimized meta-prompt that captures the effective instructions, constraints, decisions, and workflow patterns from this session so they can be reused in a new chat. Keep it generic and portable. Refer to external materials only with indirect labels such as \"the attached image,\" \"the reference document,\" or \"the provided file.\" Optimize for density, clarity, and faithful replication of the setup.",
-      "visibility" : "private"
+      "updatedAt" : "2026-07-09T19:52:50Z",
+      "value" : "Create an LLM-optimized meta-prompt that captures the effective instructions, constraints, decisions, and workflow patterns from this session so they can be reused in a new chat. Keep it generic and portable. Refer to external materials only with indirect labels such as \"the attached image,” rather than specific filenames. Optimize for faithful replication of the setup.",
+      "visibility" : "public"
     },
     {
       "categoryId" : "prompt-reuse",
@@ -260,10 +265,14 @@
       "tags" : [
         "samefiles"
       ],
+      "textReplacement" : {
+        "shortcut" : "xattach",
+        "syncEnabled" : true
+      },
       "title" : "Same attachments provided",
-      "updatedAt" : "2026-07-02T22:06:49Z",
+      "updatedAt" : "2026-07-09T19:53:31Z",
       "value" : "Assume the same attachments or reference materials will be provided in the subsequent chat. ",
-      "visibility" : "private"
+      "visibility" : "public"
     },
     {
       "categoryId" : "prompt-reuse",
@@ -273,10 +282,14 @@
       "tags" : [
         "llmformat"
       ],
-      "title" : "Restate for an LLM",
-      "updatedAt" : "2026-07-03T02:07:51Z",
+      "textReplacement" : {
+        "shortcut" : "xllm",
+        "syncEnabled" : true
+      },
+      "title" : "Rewrite for an LLM",
+      "updatedAt" : "2026-07-09T19:54:41Z",
       "value" : "Rewrite for concision and clarity without changing the meaning or effectiveness. Write for an LLM audience, using direct imperative language and removing human-oriented explanation or filler.",
-      "visibility" : "private"
+      "visibility" : "public"
     },
     {
       "categoryId" : "prompt-reuse",
@@ -287,10 +300,14 @@
       "tags" : [
         "noneg"
       ],
+      "textReplacement" : {
+        "shortcut" : "xpositive",
+        "syncEnabled" : true
+      },
       "title" : "Restate as positive instructions; Avoid negative constructions",
-      "updatedAt" : "2026-07-03T02:08:20Z",
+      "updatedAt" : "2026-07-09T19:55:02Z",
       "value" : "Rewrite the instructions using positive, action-oriented requirements. Define what to do, what to produce, and how to perform the task using direct affirmative language. Avoid negative constructions",
-      "visibility" : "private"
+      "visibility" : "public"
     },
     {
       "categoryId" : "prompt-reuse",
@@ -300,10 +317,14 @@
       "tags" : [
         "nofiles"
       ],
-      "title" : "Responses must be portable",
-      "updatedAt" : "2026-07-03T02:10:32Z",
+      "textReplacement" : {
+        "shortcut" : "xfiles",
+        "syncEnabled" : true
+      },
+      "title" : "Provide a portable response. No file names.",
+      "updatedAt" : "2026-07-09T19:55:58Z",
       "value" : "Make the output self-contained and portable for reuse in a new context. Refer to provided materials indirectly, using labels such as \"the document,\" \"the subject,\" \"the image,\" or \"the reference material.\" Do not include filenames, system paths, chat-specific labels, or environment-specific references.",
-      "visibility" : "private"
+      "visibility" : "public"
     },
     {
       "categoryId" : "response-style",
@@ -313,10 +334,14 @@
       "tags" : [
         "nocontext"
       ],
-      "title" : "Respond with full task context. ",
-      "updatedAt" : "2026-07-02T22:07:44Z",
+      "textReplacement" : {
+        "shortcut" : "xcontext",
+        "syncEnabled" : true
+      },
+      "title" : "Respond with full context",
+      "updatedAt" : "2026-07-09T19:56:45Z",
       "value" : "Generate a self-contained response that can be understood without prior conversation context. Include any necessary assumptions or framing directly in the response, and avoid references to earlier messages.",
-      "visibility" : "private"
+      "visibility" : "public"
     },
     {
       "categoryId" : "response-style",
@@ -326,10 +351,14 @@
       "tags" : [
         "nointro"
       ],
+      "textReplacement" : {
+        "shortcut" : "xintro",
+        "syncEnabled" : true
+      },
       "title" : "Avoid commentary & filler",
-      "updatedAt" : "2026-07-02T21:43:54Z",
+      "updatedAt" : "2026-07-09T19:56:58Z",
       "value" : "Provide only the requested output. Omit introductions, acknowledgments, setup commentary, and closing remarks.",
-      "visibility" : "private"
+      "visibility" : "public"
     },
     {
       "categoryId" : "response-style",
@@ -340,6 +369,10 @@
       "tags" : [
         "ptext"
       ],
+      "textReplacement" : {
+        "shortcut" : "xprose",
+        "syncEnabled" : true
+      },
       "title" : "Prose formatting only. No lists.",
       "updatedAt" : "2026-07-02T21:46:43Z",
       "value" : "Respond in prose only, with no lists, tables, headers, or bullet points. Write naturally for spoken readability.",
@@ -353,8 +386,8 @@
           "start" : 0
         },
         {
-          "end" : 39,
-          "id" : "atom-1783026866607",
+          "end" : 50,
+          "id" : "atom-1F741F44-A7A6-4FA0-8F16-855BBCD77D9D",
           "start" : 31
         }
       ],
@@ -365,10 +398,14 @@
       "tags" : [
         "llmapprove"
       ],
+      "textReplacement" : {
+        "shortcut" : "xapprove",
+        "syncEnabled" : true
+      },
       "title" : "Approve proposed actions",
-      "updatedAt" : "2026-07-02T22:14:57Z",
-      "value" : "I approve the proposed action. Proceed.",
-      "visibility" : "private"
+      "updatedAt" : "2026-07-09T19:58:11Z",
+      "value" : "I approve the proposed action. Execute the prompt.",
+      "visibility" : "public"
     },
     {
       "categoryId" : "workflow-commands",
@@ -378,6 +415,10 @@
       "tags" : [
         "llmlearn"
       ],
+      "textReplacement" : {
+        "shortcut" : "xlearn",
+        "syncEnabled" : true
+      },
       "title" : "Capture durable learnings",
       "updatedAt" : "2026-07-02T22:14:35Z",
       "value" : "Review this session for durable learnings worth preserving: user preferences, reusable instructions, architecture decisions, debugging insights, project knowledge, workflow improvements, documentation updates, tests, runbooks, or backlog items. Propose additions or changes. Exclude temporary, speculative, redundant, or low-value details.",
@@ -391,6 +432,10 @@
       "tags" : [
         "bfwf"
       ],
+      "textReplacement" : {
+        "shortcut" : "xbfwf",
+        "syncEnabled" : true
+      },
       "title" : "Bullfinch Watch Folder",
       "updatedAt" : "2026-07-02T22:14:10Z",
       "value" : "Add this material to the Bullfinch Watch Folder in Google Drive. Include a concise note explaining the relevant context, source, and intended follow-up.",
@@ -416,6 +461,10 @@
       "tags" : [
         "compush"
       ],
+      "textReplacement" : {
+        "shortcut" : "xpush",
+        "syncEnabled" : true
+      },
       "title" : "Github: Commit, Push, Merge",
       "updatedAt" : "2026-07-02T22:15:10Z",
       "value" : "Commit all changes and push them to the remote. If working on a branch other than main, merge the branch into main after validation, push main, then delete the merged branch locally and remotely.",
@@ -429,6 +478,10 @@
       "tags" : [
         "llmnoise"
       ],
+      "textReplacement" : {
+        "shortcut" : "xnoise",
+        "syncEnabled" : true
+      },
       "title" : "Minimize AI artifacts",
       "updatedAt" : "2026-07-02T22:13:01Z",
       "value" : "Avoid digital AI artifacts, moire patterns, pixel jitter, procedural noise grids, and repetitive synthetic textures. Ensure all textures, surfaces, and visual details match the physical realism of the requested medium, using organic variation, natural lens behavior, or authentic material-specific marks.",
@@ -443,6 +496,10 @@
       "tags" : [
         "subjectagnostic"
       ],
+      "textReplacement" : {
+        "shortcut" : "xreuse",
+        "syncEnabled" : true
+      },
       "title" : "Turn a chat into a reusable prompt",
       "updatedAt" : "2026-07-03T01:25:07Z",
       "value" : "Convert this chat into a durable, reusable meta-prompt.\n\nExtract Core Mechanism: Retain the underlying task, transformations, style, tone, constraints, output format, and workflow that made the original prompt effective.\n\nAbstract Specifics: Replace all case-specific details (subjects, places, persons, objects, mediums) with clear variables and static anchors.\n\nPrevent Overfitting: Ensure the generalized prompt functions effectively when applied to entirely different subjects or use cases.\n\nProvide the meta prompt. ",
@@ -574,22 +631,6 @@
     {
       "categoryId" : "prompt-reuse",
       "color" : "brown-18",
-      "createdAt" : "2026-07-07T00:50:28Z",
-      "favorite" : false,
-      "id" : "phrase-1783385381",
-      "summary" : "",
-      "tags" : [
-        "etp"
-      ],
-      "textColor" : "brown-22",
-      "title" : "\"Execute the prompt\"",
-      "updatedAt" : "2026-07-07T00:53:10Z",
-      "value" : "Execute the prompt",
-      "visibility" : "public"
-    },
-    {
-      "categoryId" : "prompt-reuse",
-      "color" : "brown-18",
       "createdAt" : "2026-07-08T14:39:57Z",
       "favorite" : false,
       "id" : "phrase-1783521575",
@@ -616,9 +657,44 @@
     "expandedCardTextColor" : "brown-22",
     "expandedChipDisplay" : false,
     "gridBackgroundColor" : "#2F2D29",
-    "paletteSource" : "Robert Brown Fabric Collection"
+    "managedReplacementShortcuts" : [
+      "bfwf",
+      "compush",
+      "ehoa",
+      "llmapprove",
+      "llmformat",
+      "llmlearn",
+      "llmmeta",
+      "llmnoise",
+      "llmsum",
+      "nocontext",
+      "nofiles",
+      "nointro",
+      "noneg",
+      "ptext",
+      "samefiles",
+      "subjectagnostic",
+      "xapprove",
+      "xbfwf",
+      "xcontext",
+      "xformat",
+      "xhoa",
+      "xlearn",
+      "xmeta",
+      "xnofiles",
+      "xnointro",
+      "xnoise",
+      "xnoneg",
+      "xprose",
+      "xpush",
+      "xreuse",
+      "xsamefiles",
+      "xsum"
+    ],
+    "paletteSource" : "Robert Brown Fabric Collection",
+    "textReplacementLastSyncAt" : "2026-07-09T16:32:55Z"
   },
-  "updatedAt" : "2026-07-08T14:39:57Z",
+  "updatedAt" : "2026-07-09T19:58:11Z",
   "variables" : [
     {
       "id" : "var-1783398724430",

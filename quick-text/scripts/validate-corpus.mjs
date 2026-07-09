@@ -105,6 +105,61 @@ for (const variable of corpus.variables || []) {
   }
 }
 
+// Text Replacement sync (see docs/text-replacement-sync-plan.md): shortcut uniqueness,
+// non-empty when enabled, and no unresolved placeholders when enabled. Mirrors
+// `TextReplacementSupport` in the Mac app so both surfaces enforce the same rules.
+const shortcutConventionPattern = /^x[a-z]{2,11}$/;
+const placeholderPattern = /\{\{([^{}]+)\}\}/g;
+const libraryVariablesByName = new Map(
+  (corpus.variables || []).map((variable) => [(variable.name || '').trim().toLowerCase(), variable])
+);
+
+function hasUnresolvedPlaceholders(value) {
+  for (const match of (value || '').matchAll(placeholderPattern)) {
+    const inner = match[1].trim();
+    if (!inner) continue;
+    if (inner.startsWith('@')) {
+      const name = inner.slice(1).trim().toLowerCase();
+      const variable = libraryVariablesByName.get(name);
+      if (!variable || variable.type !== 'value') return true;
+    } else {
+      return true;
+    }
+  }
+  return false;
+}
+
+const seenShortcuts = new Map();
+for (const phrase of corpus.phrases || []) {
+  const link = phrase.textReplacement;
+  if (!link) continue;
+  const label = phrase.id || phrase.title || '(unknown)';
+  const shortcut = (link.shortcut || '').trim();
+
+  if (link.syncEnabled && !shortcut) {
+    errors.push(`${label} has syncEnabled text replacement but no shortcut.`);
+    continue;
+  }
+  if (!shortcut) continue;
+
+  if (/\s/.test(shortcut)) errors.push(`${label} text replacement shortcut "${shortcut}" contains whitespace.`);
+  if (shortcut.length < 3) console.warn(`Warning: ${label} text replacement shortcut "${shortcut}" is under 3 characters (accidental-expansion risk).`);
+  if (!shortcutConventionPattern.test(shortcut)) {
+    console.warn(`Warning: ${label} text replacement shortcut "${shortcut}" doesn't match the \`x\` + word convention.`);
+  }
+
+  const key = shortcut.toLowerCase();
+  if (seenShortcuts.has(key)) {
+    errors.push(`Duplicate text replacement shortcut "${shortcut}": ${seenShortcuts.get(key)} and ${label}.`);
+  } else {
+    seenShortcuts.set(key, label);
+  }
+
+  if (link.syncEnabled && hasUnresolvedPlaceholders(phrase.value)) {
+    errors.push(`${label} has syncEnabled text replacement but unresolved placeholders in value.`);
+  }
+}
+
 if (errors.length) {
   console.error(`Quick Text corpus invalid (${errors.length} error${errors.length === 1 ? '' : 's'}):`);
   for (const error of errors) console.error(`- ${error}`);

@@ -8,6 +8,8 @@ struct PhraseEditor: View {
     @State private var selectedRange = NSRange(location: 0, length: 0)
     @State private var editingColorTarget: ColorEditTarget?
     @State private var showingInsertVariable = false
+    @FocusState private var shortcutFieldFocused: Bool
+    @State private var pendingShortcutPrompt = false
 
     var body: some View {
         ScrollView {
@@ -97,6 +99,10 @@ struct PhraseEditor: View {
                     .textFieldStyle(.roundedBorder)
                 }
 
+                field("Text Replacement") {
+                    textReplacementSection
+                }
+
                 HStack(alignment: .center, spacing: 18) {
                     Toggle("Favorite", isOn: $phrase.favorite)
                     field("Visibility") {
@@ -120,7 +126,7 @@ struct PhraseEditor: View {
                         dismiss()
                     }
                     .buttonStyle(.glassProminent)
-                    .disabled(phrase.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || phrase.value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || !invalidAtomIDs.isEmpty)
+                    .disabled(phrase.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || phrase.value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || !invalidAtomIDs.isEmpty || textReplacementBlocksSave)
                 }
             }
             .padding(24)
@@ -205,6 +211,137 @@ struct PhraseEditor: View {
                         .clipShape(Capsule())
                     }
                 }
+            }
+        }
+    }
+
+    // MARK: - Text Replacement (see docs/text-replacement-sync-plan.md)
+
+    private var shortcutBinding: Binding<String> {
+        Binding(
+            get: { phrase.textReplacement?.shortcut ?? "" },
+            set: { newValue in
+                var link = phrase.textReplacement ?? TextReplacementLink(shortcut: "", syncEnabled: false)
+                link.shortcut = newValue
+                phrase.textReplacement = link
+                if !newValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    pendingShortcutPrompt = false
+                }
+            }
+        )
+    }
+
+    private var syncEnabledBinding: Binding<Bool> {
+        Binding(
+            get: { phrase.textReplacement?.syncEnabled ?? false },
+            set: { newValue in
+                guard newValue else {
+                    phrase.textReplacement?.syncEnabled = false
+                    pendingShortcutPrompt = false
+                    return
+                }
+                var link = phrase.textReplacement ?? TextReplacementLink(shortcut: "", syncEnabled: false)
+                if link.shortcut.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    if let suggestion = shortcutLikeTag {
+                        link.shortcut = suggestion
+                    } else {
+                        pendingShortcutPrompt = true
+                        shortcutFieldFocused = true
+                    }
+                }
+                link.syncEnabled = !link.shortcut.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                phrase.textReplacement = link
+            }
+        )
+    }
+
+    /// A single-token, space-free existing tag looks like a plausible shortcut default.
+    private var shortcutLikeTag: String? {
+        phrase.tags.first { !$0.contains(" ") && !$0.isEmpty }
+    }
+
+    private var hasUnresolvedVariables: Bool {
+        TextReplacementSupport.hasUnresolvedPlaceholders(phrase, variables: store.libraryVariables)
+    }
+
+    private var trimmedShortcut: String {
+        TextReplacementSupport.normalizedShortcut(shortcutBinding.wrappedValue)
+    }
+
+    private var shortcutHasWhitespace: Bool {
+        trimmedShortcut.contains(where: { $0.isWhitespace })
+    }
+
+    private var shortcutIsDuplicate: Bool {
+        !TextReplacementSupport.isShortcutUnique(trimmedShortcut, among: store.corpus.phrases, excludingPhraseID: phrase.id)
+    }
+
+    private var shortcutConventionSuggestion: String? {
+        guard !trimmedShortcut.isEmpty, !TextReplacementSupport.matchesConvention(trimmedShortcut) else { return nil }
+        return TextReplacementSupport.suggestedConformingShortcut(from: trimmedShortcut)
+    }
+
+    /// Blocks Save when the shorthand as entered can't validly sync — mirrors the
+    /// rules in `TextReplacementSupport`/`validate-corpus.mjs` (uniqueness, whitespace,
+    /// non-empty when enabled, no unresolved placeholders).
+    private var textReplacementBlocksSave: Bool {
+        guard phrase.textReplacement?.syncEnabled == true else { return false }
+        return trimmedShortcut.isEmpty || shortcutHasWhitespace || shortcutIsDuplicate || hasUnresolvedVariables
+    }
+
+    private var syncStatusLine: String? {
+        guard let link = phrase.textReplacement, link.syncEnabled, let lastSyncedAt = link.lastSyncedAt else { return nil }
+        if let lastSyncedValue = link.lastSyncedValue,
+           let resolved = TextReplacementSupport.resolvedReplacementText(for: phrase, variables: store.libraryVariables),
+           lastSyncedValue != resolved {
+            return "Out of sync — value changed since last sync"
+        }
+        let formatter = RelativeDateTimeFormatter()
+        return "Synced \u{2713} \(formatter.localizedString(for: lastSyncedAt, relativeTo: Date()))"
+    }
+
+    private var textReplacementSection: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 10) {
+                TextField("e.g. xsum", text: shortcutBinding)
+                    .textFieldStyle(.roundedBorder)
+                    .font(.system(.body, design: .monospaced))
+                    .focused($shortcutFieldFocused)
+                    .frame(maxWidth: 180)
+                Toggle("Sync to macOS/iOS", isOn: syncEnabledBinding)
+                    .disabled(hasUnresolvedVariables)
+            }
+            if pendingShortcutPrompt {
+                Text("Enter the shorthand to type, e.g. xsum.")
+                    .font(.caption)
+                    .foregroundStyle(.orange)
+            }
+            if hasUnresolvedVariables {
+                Text("Phrases with fill-in variables can't sync as static text replacements.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            if !trimmedShortcut.isEmpty && shortcutHasWhitespace {
+                Text("Shortcut can't contain whitespace.")
+                    .font(.caption)
+                    .foregroundStyle(.red)
+            } else if shortcutIsDuplicate {
+                Text("Another phrase already uses this shortcut.")
+                    .font(.caption)
+                    .foregroundStyle(.red)
+            } else if !trimmedShortcut.isEmpty && trimmedShortcut.count < 3 {
+                Text("Shortcuts under 3 characters risk accidental expansion.")
+                    .font(.caption)
+                    .foregroundStyle(.orange)
+            } else if let suggestion = shortcutConventionSuggestion {
+                Text("Doesn't match the `x` + word convention — consider \u{201C}\(suggestion)\u{201D}.")
+                    .font(.caption)
+                    .foregroundStyle(.orange)
+            }
+            if let syncStatusLine {
+                Text(syncStatusLine)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
         }
     }

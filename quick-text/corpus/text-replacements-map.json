@@ -1,0 +1,1115 @@
+{
+  "generatedAt": "2026-07-09T15:26:06.884Z",
+  "sources": {
+    "macOSTextReplacements": "NSUserDictionaryReplacementItems from global preferences domain",
+    "quickTextCorpus": "quick-text/corpus/quick-text.json"
+  },
+  "summary": {
+    "macOSTextReplacementCount": 33,
+    "quickTextPhraseCount": 28,
+    "overlappingShortcutCount": 22,
+    "tagExactOverlapCount": 15,
+    "unmatchedTextReplacementCount": 11,
+    "unmatchedQuickTextPhraseCount": 11
+  },
+  "matchTypes": {
+    "tag_exact": "macOS text replacement shortcut equals a Quick Text phrase tag",
+    "value_exact": "macOS replacement text exactly equals a Quick Text phrase value after whitespace and quote normalization",
+    "value_contains": "macOS replacement text and Quick Text phrase value contain one another after normalization; review manually before treating as equivalent"
+  },
+  "overlapsByShortcut": [
+    {
+      "shortcut": "bfwf",
+      "replacementText": "Add this to the Bullfinch Watch Folder in Google Drive. Include a note with relevant context. ",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "workflow-commands-bfwf",
+          "phraseTitle": "Bullfinch Watch Folder",
+          "category": "Bullfinch",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "compush",
+      "replacementText": "Commit all changes and push. If the current branch is not main, merge into main, then delete the branch locally and remotely.",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "workflow-commands-compush",
+          "phraseTitle": "Github: Commit, Push, Merge",
+          "category": "Workflows",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "ehoa",
+      "replacementText": "Greg Swalwell, Adam Maffei, and Stanton Yuwono",
+      "quickTextMatches": [
+        {
+          "matchType": "value_exact",
+          "phraseId": "elbridge-hoa-members",
+          "phraseTitle": "HOA Members",
+          "category": "Elbridge",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "llmapprove",
+      "replacementText": "I approve your proposed action. Proceed.",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "workflow-commands-llmapprove",
+          "phraseTitle": "Approve proposed actions",
+          "category": "Workflows",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "llmformat",
+      "replacementText": "Tighten conciseness without materially changing the instructions. Instructions are intended for an LLM not a human, so write accordingly.",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "instruction-editing-llmformat",
+          "phraseTitle": "Restate for an LLM",
+          "category": "Prompting",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "llmlearn",
+      "replacementText": "Reflect on this coding session and identify any durable learnings, instructions, preferences, architecture decisions, debugging insights, project knowledge, or corpus updates that should be preserved for future chats. Propose exact additions to project instructions, docs, memory, tests, runbooks, or backlog; exclude temporary, speculative, redundant, or low-value details.",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "workflow-commands-llmlearn",
+          "phraseTitle": "Capture durable learnings",
+          "category": "Workflows",
+          "visibility": "public"
+        }
+      ]
+    },
+    {
+      "shortcut": "llmmeta",
+      "replacementText": "Provide a concise, high-performance meta-prompt designed to initiate a new, zero-context chat. Write for an LLM audience using direct, imperative language without conversational filler or explanations. If mentioning external materials, use strictly generic, indirect terms like \"the reference document\" or \"the provided image\" instead of specific filenames or system-specific labels. Optimize for density and brevity without degrading performance.",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "prompt-reuse-llmmeta",
+          "phraseTitle": "Write a prompt that...",
+          "category": "Prompting",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "llmnoise",
+      "replacementText": "Avoid digital AI artifacts, moire patterns, pixel jitter, or procedural noise grids. All textures and surfaces must strictly adhere to the physical realism of the requested medium, using organic details, natural lens behaviors, or authentic physical brushstrokes rather than tight, repetitive digital patterns.",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "image-quality-llmnoise",
+          "phraseTitle": "Minimize AI artifacts",
+          "category": "Images",
+          "visibility": "private"
+        },
+        {
+          "matchType": "value_exact",
+          "phraseId": "phrase-1783371344",
+          "phraseTitle": "Noise & artifacts",
+          "category": "Images",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "llmsum",
+      "replacementText": "Provide a concise, LLM-optimized meta-prompt that summarizes all instructions from this session to replicate this exact setup in a a new chat. If mentioning external materials, use generic, indirect terms like \"the a”attached image instead of specific filenames or system-specific labels. Optimize for density and brevity without degrading performance.",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "prompt-reuse-llmsum",
+          "phraseTitle": "Summarize all context from this chat",
+          "category": "Prompting",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "mbh",
+      "replacementText": "Marblehead",
+      "quickTextMatches": [
+        {
+          "matchType": "value_contains",
+          "phraseId": "elbridge-address",
+          "phraseTitle": "Elbridge Address",
+          "category": "Elbridge",
+          "visibility": "private"
+        },
+        {
+          "matchType": "value_contains",
+          "phraseId": "personal-address-placeholder",
+          "phraseTitle": "Home address ",
+          "category": "Personal Details",
+          "visibility": "local-only"
+        },
+        {
+          "matchType": "value_contains",
+          "phraseId": "elbridge-address-copy-1783031489",
+          "phraseTitle": "Elbridge Address Copy",
+          "category": "Elbridge",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "mp",
+      "replacementText": "meta prompt",
+      "quickTextMatches": [
+        {
+          "matchType": "value_contains",
+          "phraseId": "prompt-reuse-subjectagnostic-copy-1783029172",
+          "phraseTitle": "Turn a chat into a reusable prompt",
+          "category": "Workflows",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "mwy",
+      "replacementText": "Matt Weaver-Yuwono",
+      "quickTextMatches": [
+        {
+          "matchType": "value_contains",
+          "phraseId": "personal-address-placeholder",
+          "phraseTitle": "Home address ",
+          "category": "Personal Details",
+          "visibility": "local-only"
+        }
+      ]
+    },
+    {
+      "shortcut": "nocontext",
+      "replacementText": "Generate a self-contained response that requires no prior context and avoids any reference to previous messages in the conversation.",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "response-style-nocontext",
+          "phraseTitle": "Respond with full task context. ",
+          "category": "Prompt Response Rules",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "nofiles",
+      "replacementText": "Constraint: Reference provided materials indirectly (e.g., \"the document,\" \"the subject\") without using filenames or system labels. Ensure the output is entirely self-contained and portable for use in new contexts.",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "instruction-editing-nofiles",
+          "phraseTitle": "Responses must be portable",
+          "category": "Prompting",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "nointro",
+      "replacementText": "Don't include an intro or other commentary. ",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "response-style-nointro",
+          "phraseTitle": "Avoid commentary & filler",
+          "category": "Prompt Response Rules",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "noneg",
+      "replacementText": "Use strictly positive, action-oriented language. Define what things are and how to perform tasks, focusing exclusively on active requirements.",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "instruction-editing-noneg",
+          "phraseTitle": "Restate as positive instructions; Avoid negative constructions",
+          "category": "Prompting",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "ptext",
+      "replacementText": "Respond with prose only—no lists, tables, or headers. Write for the ear, not the eye. ",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "response-style-ptext",
+          "phraseTitle": "Prose formatting only. No lists.",
+          "category": "Prompt Response Rules",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "qsb",
+      "replacementText": "Quick Start Bullfinch. Let's work on ",
+      "quickTextMatches": [
+        {
+          "matchType": "value_contains",
+          "phraseId": "phrase-1783030203",
+          "phraseTitle": "Start Bullfinch",
+          "category": "Bullfinch",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "samefiles",
+      "replacementText": "When I use the provided prompt, I will include the same attachments.",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "prompt-reuse-samefiles",
+          "phraseTitle": "Same attachments provided",
+          "category": "Prompting",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "sb",
+      "replacementText": "Start Bullfinch.",
+      "quickTextMatches": [
+        {
+          "matchType": "value_contains",
+          "phraseId": "phrase-1783030203",
+          "phraseTitle": "Start Bullfinch",
+          "category": "Bullfinch",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "subjectagnostic",
+      "replacementText": "Help me refine this reusable prompt. It is intended to be reused across different subjects, so keep the prompt subject agnostic and avoid mentioned specific details or context that may not be relevant for future uses. ",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "prompt-reuse-subjectagnostic-copy-1783029172",
+          "phraseTitle": "Turn a chat into a reusable prompt",
+          "category": "Workflows",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "w-y",
+      "replacementText": "Weaver-Yuwono",
+      "quickTextMatches": [
+        {
+          "matchType": "value_contains",
+          "phraseId": "personal-address-placeholder",
+          "phraseTitle": "Home address ",
+          "category": "Personal Details",
+          "visibility": "local-only"
+        }
+      ]
+    }
+  ],
+  "textReplacements": [
+    {
+      "shortcut": "20mch",
+      "enabled": true,
+      "replacementText": "20 Mechanic Square, No. 5",
+      "quickTextMatches": []
+    },
+    {
+      "shortcut": "613e",
+      "enabled": true,
+      "replacementText": "613 E 3rd Street",
+      "quickTextMatches": []
+    },
+    {
+      "shortcut": "bfwf",
+      "enabled": true,
+      "replacementText": "Add this to the Bullfinch Watch Folder in Google Drive. Include a note with relevant context. ",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "workflow-commands-bfwf",
+          "phraseTitle": "Bullfinch Watch Folder",
+          "category": "Bullfinch",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "compush",
+      "enabled": true,
+      "replacementText": "Commit all changes and push. If the current branch is not main, merge into main, then delete the branch locally and remotely.",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "workflow-commands-compush",
+          "phraseTitle": "Github: Commit, Push, Merge",
+          "category": "Workflows",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "ehoa",
+      "enabled": true,
+      "replacementText": "Greg Swalwell, Adam Maffei, and Stanton Yuwono",
+      "quickTextMatches": [
+        {
+          "matchType": "value_exact",
+          "phraseId": "elbridge-hoa-members",
+          "phraseTitle": "HOA Members",
+          "category": "Elbridge",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "llmapprove",
+      "enabled": true,
+      "replacementText": "I approve your proposed action. Proceed.",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "workflow-commands-llmapprove",
+          "phraseTitle": "Approve proposed actions",
+          "category": "Workflows",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "llmformat",
+      "enabled": true,
+      "replacementText": "Tighten conciseness without materially changing the instructions. Instructions are intended for an LLM not a human, so write accordingly.",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "instruction-editing-llmformat",
+          "phraseTitle": "Restate for an LLM",
+          "category": "Prompting",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "llmlearn",
+      "enabled": true,
+      "replacementText": "Reflect on this coding session and identify any durable learnings, instructions, preferences, architecture decisions, debugging insights, project knowledge, or corpus updates that should be preserved for future chats. Propose exact additions to project instructions, docs, memory, tests, runbooks, or backlog; exclude temporary, speculative, redundant, or low-value details.",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "workflow-commands-llmlearn",
+          "phraseTitle": "Capture durable learnings",
+          "category": "Workflows",
+          "visibility": "public"
+        }
+      ]
+    },
+    {
+      "shortcut": "llmmeta",
+      "enabled": true,
+      "replacementText": "Provide a concise, high-performance meta-prompt designed to initiate a new, zero-context chat. Write for an LLM audience using direct, imperative language without conversational filler or explanations. If mentioning external materials, use strictly generic, indirect terms like \"the reference document\" or \"the provided image\" instead of specific filenames or system-specific labels. Optimize for density and brevity without degrading performance.",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "prompt-reuse-llmmeta",
+          "phraseTitle": "Write a prompt that...",
+          "category": "Prompting",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "llmnoise",
+      "enabled": true,
+      "replacementText": "Avoid digital AI artifacts, moire patterns, pixel jitter, or procedural noise grids. All textures and surfaces must strictly adhere to the physical realism of the requested medium, using organic details, natural lens behaviors, or authentic physical brushstrokes rather than tight, repetitive digital patterns.",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "image-quality-llmnoise",
+          "phraseTitle": "Minimize AI artifacts",
+          "category": "Images",
+          "visibility": "private"
+        },
+        {
+          "matchType": "value_exact",
+          "phraseId": "phrase-1783371344",
+          "phraseTitle": "Noise & artifacts",
+          "category": "Images",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "llmsum",
+      "enabled": true,
+      "replacementText": "Provide a concise, LLM-optimized meta-prompt that summarizes all instructions from this session to replicate this exact setup in a a new chat. If mentioning external materials, use generic, indirect terms like \"the a”attached image instead of specific filenames or system-specific labels. Optimize for density and brevity without degrading performance.",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "prompt-reuse-llmsum",
+          "phraseTitle": "Summarize all context from this chat",
+          "category": "Prompting",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "m@",
+      "enabled": true,
+      "replacementText": "matt@weaver-yuwono.com",
+      "quickTextMatches": []
+    },
+    {
+      "shortcut": "Mass",
+      "enabled": true,
+      "replacementText": "Massachusetts",
+      "quickTextMatches": []
+    },
+    {
+      "shortcut": "mbh",
+      "enabled": true,
+      "replacementText": "Marblehead",
+      "quickTextMatches": [
+        {
+          "matchType": "value_contains",
+          "phraseId": "elbridge-address",
+          "phraseTitle": "Elbridge Address",
+          "category": "Elbridge",
+          "visibility": "private"
+        },
+        {
+          "matchType": "value_contains",
+          "phraseId": "personal-address-placeholder",
+          "phraseTitle": "Home address ",
+          "category": "Personal Details",
+          "visibility": "local-only"
+        },
+        {
+          "matchType": "value_contains",
+          "phraseId": "elbridge-address-copy-1783031489",
+          "phraseTitle": "Elbridge Address Copy",
+          "category": "Elbridge",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "mbma",
+      "enabled": true,
+      "replacementText": "Marblehead, Massachusetts ",
+      "quickTextMatches": []
+    },
+    {
+      "shortcut": "mp",
+      "enabled": true,
+      "replacementText": "meta prompt",
+      "quickTextMatches": [
+        {
+          "matchType": "value_contains",
+          "phraseId": "prompt-reuse-subjectagnostic-copy-1783029172",
+          "phraseTitle": "Turn a chat into a reusable prompt",
+          "category": "Workflows",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "mwy",
+      "enabled": true,
+      "replacementText": "Matt Weaver-Yuwono",
+      "quickTextMatches": [
+        {
+          "matchType": "value_contains",
+          "phraseId": "personal-address-placeholder",
+          "phraseTitle": "Home address ",
+          "category": "Personal Details",
+          "visibility": "local-only"
+        }
+      ]
+    },
+    {
+      "shortcut": "nocontext",
+      "enabled": true,
+      "replacementText": "Generate a self-contained response that requires no prior context and avoids any reference to previous messages in the conversation.",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "response-style-nocontext",
+          "phraseTitle": "Respond with full task context. ",
+          "category": "Prompt Response Rules",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "nofiles",
+      "enabled": true,
+      "replacementText": "Constraint: Reference provided materials indirectly (e.g., \"the document,\" \"the subject\") without using filenames or system labels. Ensure the output is entirely self-contained and portable for use in new contexts.",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "instruction-editing-nofiles",
+          "phraseTitle": "Responses must be portable",
+          "category": "Prompting",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "nointro",
+      "enabled": true,
+      "replacementText": "Don't include an intro or other commentary. ",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "response-style-nointro",
+          "phraseTitle": "Avoid commentary & filler",
+          "category": "Prompt Response Rules",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "noneg",
+      "enabled": true,
+      "replacementText": "Use strictly positive, action-oriented language. Define what things are and how to perform tasks, focusing exclusively on active requirements.",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "instruction-editing-noneg",
+          "phraseTitle": "Restate as positive instructions; Avoid negative constructions",
+          "category": "Prompting",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "omw",
+      "enabled": true,
+      "replacementText": "On my way!",
+      "quickTextMatches": []
+    },
+    {
+      "shortcut": "pcm",
+      "enabled": true,
+      "replacementText": "Ponce City Market",
+      "quickTextMatches": []
+    },
+    {
+      "shortcut": "ptext",
+      "enabled": true,
+      "replacementText": "Respond with prose only—no lists, tables, or headers. Write for the ear, not the eye. ",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "response-style-ptext",
+          "phraseTitle": "Prose formatting only. No lists.",
+          "category": "Prompt Response Rules",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "qsb",
+      "enabled": true,
+      "replacementText": "Quick Start Bullfinch. Let's work on ",
+      "quickTextMatches": [
+        {
+          "matchType": "value_contains",
+          "phraseId": "phrase-1783030203",
+          "phraseTitle": "Start Bullfinch",
+          "category": "Bullfinch",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "rmg",
+      "enabled": true,
+      "replacementText": "Rome, GA 30161",
+      "quickTextMatches": []
+    },
+    {
+      "shortcut": "s@",
+      "enabled": true,
+      "replacementText": "stanton@weaver-yuwono.com",
+      "quickTextMatches": []
+    },
+    {
+      "shortcut": "samefiles",
+      "enabled": true,
+      "replacementText": "When I use the provided prompt, I will include the same attachments.",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "prompt-reuse-samefiles",
+          "phraseTitle": "Same attachments provided",
+          "category": "Prompting",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "sb",
+      "enabled": true,
+      "replacementText": "Start Bullfinch.",
+      "quickTextMatches": [
+        {
+          "matchType": "value_contains",
+          "phraseId": "phrase-1783030203",
+          "phraseTitle": "Start Bullfinch",
+          "category": "Bullfinch",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "subjectagnostic",
+      "enabled": true,
+      "replacementText": "Help me refine this reusable prompt. It is intended to be reused across different subjects, so keep the prompt subject agnostic and avoid mentioned specific details or context that may not be relevant for future uses. ",
+      "quickTextMatches": [
+        {
+          "matchType": "tag_exact",
+          "phraseId": "prompt-reuse-subjectagnostic-copy-1783029172",
+          "phraseTitle": "Turn a chat into a reusable prompt",
+          "category": "Workflows",
+          "visibility": "private"
+        }
+      ]
+    },
+    {
+      "shortcut": "swy",
+      "enabled": true,
+      "replacementText": "Stanton Weaver-Yuwono",
+      "quickTextMatches": []
+    },
+    {
+      "shortcut": "w-y",
+      "enabled": true,
+      "replacementText": "Weaver-Yuwono",
+      "quickTextMatches": [
+        {
+          "matchType": "value_contains",
+          "phraseId": "personal-address-placeholder",
+          "phraseTitle": "Home address ",
+          "category": "Personal Details",
+          "visibility": "local-only"
+        }
+      ]
+    },
+    {
+      "shortcut": "waud",
+      "enabled": true,
+      "replacementText": "What are you doing?",
+      "quickTextMatches": []
+    }
+  ],
+  "quickTextPhrases": [
+    {
+      "id": "phrase-1783385381",
+      "title": "\"Execute the prompt\"",
+      "category": "Prompting",
+      "visibility": "public",
+      "tags": [
+        "etp"
+      ],
+      "value": "Execute the prompt",
+      "matchingTextReplacementShortcuts": []
+    },
+    {
+      "id": "workflow-commands-llmapprove",
+      "title": "Approve proposed actions",
+      "category": "Workflows",
+      "visibility": "private",
+      "tags": [
+        "llmapprove"
+      ],
+      "value": "I approve the proposed action. Proceed.",
+      "matchingTextReplacementShortcuts": [
+        {
+          "matchType": "tag_exact",
+          "shortcut": "llmapprove"
+        }
+      ]
+    },
+    {
+      "id": "phrase-1783371056",
+      "title": "Ask questions before proceeding",
+      "category": "Prompting",
+      "visibility": "public",
+      "tags": [],
+      "value": "Before you proceed, ask any questions needed for clarification. If you don’t have questions, proceed. ",
+      "matchingTextReplacementShortcuts": []
+    },
+    {
+      "id": "response-style-nointro",
+      "title": "Avoid commentary & filler",
+      "category": "Prompt Response Rules",
+      "visibility": "private",
+      "tags": [
+        "nointro"
+      ],
+      "value": "Provide only the requested output. Omit introductions, acknowledgments, setup commentary, and closing remarks.",
+      "matchingTextReplacementShortcuts": [
+        {
+          "matchType": "tag_exact",
+          "shortcut": "nointro"
+        }
+      ]
+    },
+    {
+      "id": "workflow-commands-bfwf",
+      "title": "Bullfinch Watch Folder",
+      "category": "Bullfinch",
+      "visibility": "private",
+      "tags": [
+        "bfwf"
+      ],
+      "value": "Add this material to the Bullfinch Watch Folder in Google Drive. Include a concise note explaining the relevant context, source, and intended follow-up.",
+      "matchingTextReplacementShortcuts": [
+        {
+          "matchType": "tag_exact",
+          "shortcut": "bfwf"
+        }
+      ]
+    },
+    {
+      "id": "workflow-commands-llmlearn",
+      "title": "Capture durable learnings",
+      "category": "Workflows",
+      "visibility": "public",
+      "tags": [
+        "llmlearn"
+      ],
+      "value": "Review this session for durable learnings worth preserving: user preferences, reusable instructions, architecture decisions, debugging insights, project knowledge, workflow improvements, documentation updates, tests, runbooks, or backlog items. Propose additions or changes. Exclude temporary, speculative, redundant, or low-value details.",
+      "matchingTextReplacementShortcuts": [
+        {
+          "matchType": "tag_exact",
+          "shortcut": "llmlearn"
+        }
+      ]
+    },
+    {
+      "id": "elbridge-condo-docs-check",
+      "title": "Consult governing documents",
+      "category": "Elbridge",
+      "visibility": "private",
+      "tags": [
+        "condo-docs",
+        "sources"
+      ],
+      "value": "Ground this in the Elbridge Master Deed and Declaration of Trust before answering. Include source links for any Drive files used.",
+      "matchingTextReplacementShortcuts": []
+    },
+    {
+      "id": "elbridge-address",
+      "title": "Elbridge Address",
+      "category": "Elbridge",
+      "visibility": "private",
+      "tags": [
+        "address"
+      ],
+      "value": "The Elbridge Condominium\n20 Mechanic Square\n50 Elm Street\nMarblehead, MA 01945",
+      "matchingTextReplacementShortcuts": []
+    },
+    {
+      "id": "elbridge-address-copy-1783031489",
+      "title": "Elbridge Address Copy",
+      "category": "Elbridge",
+      "visibility": "private",
+      "tags": [
+        "address"
+      ],
+      "value": "The Elbridge Condominium\n20 Mechanic Square\n50 Elm Street\nMarblehead, MA 01945",
+      "matchingTextReplacementShortcuts": []
+    },
+    {
+      "id": "workflow-commands-compush",
+      "title": "Github: Commit, Push, Merge",
+      "category": "Workflows",
+      "visibility": "private",
+      "tags": [
+        "compush"
+      ],
+      "value": "Commit all changes and push them to the remote. If working on a branch other than main, merge the branch into main after validation, push main, then delete the merged branch locally and remotely.",
+      "matchingTextReplacementShortcuts": [
+        {
+          "matchType": "tag_exact",
+          "shortcut": "compush"
+        }
+      ]
+    },
+    {
+      "id": "elbridge-hoa-members",
+      "title": "HOA Members",
+      "category": "Elbridge",
+      "visibility": "private",
+      "tags": [
+        "hoa",
+        "members"
+      ],
+      "value": "Greg Swalwell, Adam Maffei, and Stanton Yuwono",
+      "matchingTextReplacementShortcuts": [
+        {
+          "matchType": "value_exact",
+          "shortcut": "ehoa"
+        }
+      ]
+    },
+    {
+      "id": "personal-address-placeholder",
+      "title": "Home address ",
+      "category": "Personal Details",
+      "visibility": "local-only",
+      "tags": [
+        "address"
+      ],
+      "value": "Matt Weaver-Yuwono\nStanton Yuwono \n20 Mechanic Square, Unit 5\nMarblehead, MA 01945 ",
+      "matchingTextReplacementShortcuts": []
+    },
+    {
+      "id": "image-quality-llmnoise",
+      "title": "Minimize AI artifacts",
+      "category": "Images",
+      "visibility": "private",
+      "tags": [
+        "llmnoise"
+      ],
+      "value": "Avoid digital AI artifacts, moire patterns, pixel jitter, procedural noise grids, and repetitive synthetic textures. Ensure all textures, surfaces, and visual details match the physical realism of the requested medium, using organic variation, natural lens behavior, or authentic material-specific marks.",
+      "matchingTextReplacementShortcuts": [
+        {
+          "matchType": "tag_exact",
+          "shortcut": "llmnoise"
+        }
+      ]
+    },
+    {
+      "id": "phrase-1783371344",
+      "title": "Noise & artifacts",
+      "category": "Images",
+      "visibility": "private",
+      "tags": [],
+      "value": "Avoid digital AI artifacts, moire patterns, pixel jitter, or procedural noise grids. All textures and surfaces must strictly adhere to the physical realism of the requested medium, using organic details, natural lens behaviors, or authentic physical brushstrokes rather than tight, repetitive digital patterns. ",
+      "matchingTextReplacementShortcuts": [
+        {
+          "matchType": "value_exact",
+          "shortcut": "llmnoise"
+        }
+      ]
+    },
+    {
+      "id": "response-style-ptext",
+      "title": "Prose formatting only. No lists.",
+      "category": "Prompt Response Rules",
+      "visibility": "private",
+      "tags": [
+        "ptext"
+      ],
+      "value": "Respond in prose only, with no lists, tables, headers, or bullet points. Write naturally for spoken readability.",
+      "matchingTextReplacementShortcuts": [
+        {
+          "matchType": "tag_exact",
+          "shortcut": "ptext"
+        }
+      ]
+    },
+    {
+      "id": "response-style-nocontext",
+      "title": "Respond with full task context. ",
+      "category": "Prompt Response Rules",
+      "visibility": "private",
+      "tags": [
+        "nocontext"
+      ],
+      "value": "Generate a self-contained response that can be understood without prior conversation context. Include any necessary assumptions or framing directly in the response, and avoid references to earlier messages.",
+      "matchingTextReplacementShortcuts": [
+        {
+          "matchType": "tag_exact",
+          "shortcut": "nocontext"
+        }
+      ]
+    },
+    {
+      "id": "instruction-editing-nofiles",
+      "title": "Responses must be portable",
+      "category": "Prompting",
+      "visibility": "private",
+      "tags": [
+        "nofiles"
+      ],
+      "value": "Make the output self-contained and portable for reuse in a new context. Refer to provided materials indirectly, using labels such as \"the document,\" \"the subject,\" \"the image,\" or \"the reference material.\" Do not include filenames, system paths, chat-specific labels, or environment-specific references.",
+      "matchingTextReplacementShortcuts": [
+        {
+          "matchType": "tag_exact",
+          "shortcut": "nofiles"
+        }
+      ]
+    },
+    {
+      "id": "instruction-editing-noneg",
+      "title": "Restate as positive instructions; Avoid negative constructions",
+      "category": "Prompting",
+      "visibility": "private",
+      "tags": [
+        "noneg"
+      ],
+      "value": "Rewrite the instructions using positive, action-oriented requirements. Define what to do, what to produce, and how to perform the task using direct affirmative language. Avoid negative constructions",
+      "matchingTextReplacementShortcuts": [
+        {
+          "matchType": "tag_exact",
+          "shortcut": "noneg"
+        }
+      ]
+    },
+    {
+      "id": "instruction-editing-llmformat",
+      "title": "Restate for an LLM",
+      "category": "Prompting",
+      "visibility": "private",
+      "tags": [
+        "llmformat"
+      ],
+      "value": "Rewrite for concision and clarity without changing the meaning or effectiveness. Write for an LLM audience, using direct imperative language and removing human-oriented explanation or filler.",
+      "matchingTextReplacementShortcuts": [
+        {
+          "matchType": "tag_exact",
+          "shortcut": "llmformat"
+        }
+      ]
+    },
+    {
+      "id": "elbridge-assessment-planning",
+      "title": "Review assessment drivers",
+      "category": "Elbridge",
+      "visibility": "private",
+      "tags": [
+        "assessment",
+        "planning"
+      ],
+      "value": "Summarize Elbridge near-term assessment drivers from Bullfinch: claim repairs, HVAC, railings, landscaping, signage, security cameras, fire/life-safety, gutters, and developer-defect contingencies.",
+      "matchingTextReplacementShortcuts": []
+    },
+    {
+      "id": "prompt-reuse-samefiles",
+      "title": "Same attachments provided",
+      "category": "Prompting",
+      "visibility": "private",
+      "tags": [
+        "samefiles"
+      ],
+      "value": "Assume the same attachments or reference materials will be provided in the subsequent chat. ",
+      "matchingTextReplacementShortcuts": [
+        {
+          "matchType": "tag_exact",
+          "shortcut": "samefiles"
+        }
+      ]
+    },
+    {
+      "id": "phrase-1783521575",
+      "title": "Save tokens",
+      "category": "Prompting",
+      "visibility": "public",
+      "tags": [],
+      "value": "Spend tokens on analysis, implementation, and verification rather than chat. Omit conversational filler, praise, apologies, and restatements of my request. Do not narrate routine steps.",
+      "matchingTextReplacementShortcuts": []
+    },
+    {
+      "id": "phrase-1783030203",
+      "title": "Start Bullfinch",
+      "category": "Bullfinch",
+      "visibility": "private",
+      "tags": [],
+      "value": "Quick start Bullfinch. Let’s work on:",
+      "matchingTextReplacementShortcuts": []
+    },
+    {
+      "id": "prompt-reuse-llmsum",
+      "title": "Summarize all context from this chat",
+      "category": "Prompting",
+      "visibility": "private",
+      "tags": [
+        "llmsum"
+      ],
+      "value": "Create a concise, LLM-optimized meta-prompt that captures the effective instructions, constraints, decisions, and workflow patterns from this session so they can be reused in a new chat. Keep it generic and portable. Refer to external materials only with indirect labels such as \"the attached image,\" \"the reference document,\" or \"the provided file.\" Optimize for density, clarity, and faithful replication of the setup.",
+      "matchingTextReplacementShortcuts": [
+        {
+          "matchType": "tag_exact",
+          "shortcut": "llmsum"
+        }
+      ]
+    },
+    {
+      "id": "phrase-1783352201",
+      "title": "Swimmer's build",
+      "category": "Images",
+      "visibility": "private",
+      "tags": [],
+      "value": "A classical swimmer’s physique: athletic, broad-shouldered, and naturally powerful, with smooth, voluminous musculature defined by rounded anatomical forms rather than sharp striations. Prioritize continuous sculptural flow, natural proportions, a refined waist, proportionate trapezius muscles, and an elegant V-shaped silhouette. Avoid hyper-vascularity, exaggerated definition, or bodybuilding aesthetics. Render the anatomy with soft tonal transitions and sculptural volume, evoking polished Greco-Roman marble while remaining fully integrated into the source artwork’s medium, lighting, and level of abstraction. Use classical chiaroscuro to emphasize form through luminous highlights and deep, velvety shadows.",
+      "matchingTextReplacementShortcuts": []
+    },
+    {
+      "id": "elbridge-trustee-draft",
+      "title": "Trustee Draft",
+      "category": "Elbridge",
+      "visibility": "private",
+      "tags": [
+        "trustees",
+        "draft"
+      ],
+      "value": "Draft a concise trustee-facing Elbridge message to Greg, Adam, and Stanton. Keep it action-oriented, with clear asks and no extra explanation. Use gmail.",
+      "matchingTextReplacementShortcuts": []
+    },
+    {
+      "id": "prompt-reuse-subjectagnostic-copy-1783029172",
+      "title": "Turn a chat into a reusable prompt",
+      "category": "Workflows",
+      "visibility": "private",
+      "tags": [
+        "subjectagnostic"
+      ],
+      "value": "Convert this chat into a durable, reusable meta-prompt.\n\nExtract Core Mechanism: Retain the underlying task, transformations, style, tone, constraints, output format, and workflow that made the original prompt effective.\n\nAbstract Specifics: Replace all case-specific details (subjects, places, persons, objects, mediums) with clear variables and static anchors.\n\nPrevent Overfitting: Ensure the generalized prompt functions effectively when applied to entirely different subjects or use cases.\n\nProvide the meta prompt. ",
+      "matchingTextReplacementShortcuts": [
+        {
+          "matchType": "tag_exact",
+          "shortcut": "subjectagnostic"
+        }
+      ]
+    },
+    {
+      "id": "prompt-reuse-llmmeta",
+      "title": "Write a prompt that...",
+      "category": "Prompting",
+      "visibility": "private",
+      "tags": [
+        "llmmeta"
+      ],
+      "value": "Create a concise, high-performance meta-prompt to achieve my goal in a new zero-context chat. Write directly for an LLM using imperative language, without conversational filler or explanation. Keep it generic and portable. Refer to external materials with indirect labels such as \"the attached image” rather than specific filenames. \n\nGoal: ",
+      "matchingTextReplacementShortcuts": [
+        {
+          "matchType": "tag_exact",
+          "shortcut": "llmmeta"
+        }
+      ]
+    }
+  ]
+}

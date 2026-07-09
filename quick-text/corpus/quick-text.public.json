@@ -1,35 +1,120 @@
 {
   "categories": [
     {
-      "id": "ai",
-      "name": "AI",
-      "sortOrder": 20
+      "color": "brown-15",
+      "id": "prompt-reuse",
+      "name": "Prompting",
+      "sortOrder": 40,
+      "textColor": "#E8DED8"
+    },
+    {
+      "color": "brown-07",
+      "id": "workflow-commands",
+      "name": "Workflows",
+      "sortOrder": 70,
+      "textColor": "#E8DED8"
     }
   ],
   "phrases": [
     {
-      "categoryId": "ai",
-      "createdAt": "2026-07-02T04:00:00Z",
-      "favorite": true,
-      "id": "ai-agent-brief",
-      "summary": "Direct task brief",
+      "categoryId": "workflow-commands",
+      "createdAt": "2026-07-02T21:07:02Z",
+      "favorite": false,
+      "id": "workflow-commands-llmlearn",
       "tags": [
-        "agent",
-        "instructions"
+        "llmlearn"
       ],
-      "title": "Agent Brief",
-      "updatedAt": "2026-07-02T04:00:00Z",
-      "value": "Act as a pragmatic local-first coding agent. Inspect the repository first, preserve existing conventions, make the smallest coherent change, and verify the result before summarizing.",
+      "title": "Capture durable learnings",
+      "updatedAt": "2026-07-02T22:14:35Z",
+      "value": "Review this session for durable learnings worth preserving: user preferences, reusable instructions, architecture decisions, debugging insights, project knowledge, workflow improvements, documentation updates, tests, runbooks, or backlog items. Propose additions or changes. Exclude temporary, speculative, redundant, or low-value details.",
+      "visibility": "public"
+    },
+    {
+      "categoryId": "prompt-reuse",
+      "color": "brown-18",
+      "createdAt": "2026-07-06T20:52:13Z",
+      "favorite": false,
+      "id": "phrase-1783371056",
+      "image": "",
+      "summary": "",
+      "tags": [],
+      "textColor": "brown-22",
+      "title": "Ask questions before proceeding",
+      "updatedAt": "2026-07-06T20:52:13Z",
+      "value": "Before you proceed, ask any questions needed for clarification. If you don’t have questions, proceed. ",
+      "visibility": "public"
+    },
+    {
+      "categoryId": "prompt-reuse",
+      "color": "brown-18",
+      "createdAt": "2026-07-07T00:50:28Z",
+      "favorite": false,
+      "id": "phrase-1783385381",
+      "summary": "",
+      "tags": [
+        "etp"
+      ],
+      "textColor": "brown-22",
+      "title": "\"Execute the prompt\"",
+      "updatedAt": "2026-07-07T00:53:10Z",
+      "value": "Execute the prompt",
+      "visibility": "public"
+    },
+    {
+      "categoryId": "prompt-reuse",
+      "color": "brown-18",
+      "createdAt": "2026-07-08T14:39:57Z",
+      "favorite": false,
+      "id": "phrase-1783521575",
+      "image": "",
+      "summary": "",
+      "tags": [],
+      "textColor": "brown-22",
+      "title": "Save tokens",
+      "updatedAt": "2026-07-08T14:39:57Z",
+      "value": "Spend tokens on analysis, implementation, and verification rather than chat. Omit conversational filler, praise, apologies, and restatements of my request. Do not narrate routine steps.",
       "visibility": "public"
     }
   ],
   "settings": {
+    "cardWidth": 220,
     "defaultFontFamily": "serif",
-    "defaultFontSize": 21,
+    "defaultFontSize": 28,
     "defaultTextColor": "brown-22",
-    "defaultTileColor": "brown-13",
-    "paletteSource": "Robert Brown Fabric Collection"
+    "defaultTileColor": "brown-18",
+    "expandedCardBackgroundColor": "brown-13",
+    "expandedCardChipColor": "brown-10",
+    "expandedCardTextColor": "brown-22",
+    "expandedChipDisplay": false,
+    "gridBackgroundColor": "#2F2D29",
+    "paletteSource": "Robert Brown Fabric Collection",
+    "managedReplacementShortcuts": [
+      "bfwf",
+      "compush",
+      "ehoa",
+      "llmapprove",
+      "llmformat",
+      "llmlearn",
+      "llmmeta",
+      "llmnoise",
+      "llmsum",
+      "nocontext",
+      "nofiles",
+      "nointro",
+      "noneg",
+      "ptext",
+      "samefiles",
+      "subjectagnostic"
+    ]
   },
-  "updatedAt": "2026-07-02T21:07:10.561Z",
+  "updatedAt": "2026-07-09T16:20:52.210Z",
+  "variables": [
+    {
+      "id": "var-1783398724430",
+      "name": "Swimmer's build",
+      "type": "value",
+      "value": "A classical swimmer’s physique: athletic, broad-shouldered, and naturally powerful, with smooth, voluminous musculature defined by rounded anatomical forms rather than sharp striations. Prioritize continuous sculptural flow, natural proportions, a refined waist, proportionate trapezius muscles, and an elegant V-shaped silhouette. Avoid hyper-vascularity, exaggerated definition, or bodybuilding aesthetics. Render the anatomy with soft tonal transitions and sculptural volume, evoking polished Greco-Roman marble while remaining fully integrated into the source artwork’s medium, lighting, and level of abstraction. Use classical chiaroscuro to emphasize form through luminous highlights and deep, velvety shadows."
+    }
+  ],
   "version": 1
 }

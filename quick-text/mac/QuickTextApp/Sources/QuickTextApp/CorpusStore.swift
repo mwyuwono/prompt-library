@@ -643,3 +643,50 @@ extension CorpusStore {
     }
 }
 
+/// Text Replacement sync (see docs/text-replacement-sync-plan.md, TextReplacementSync.swift):
+/// diffing against the system store and applying/persisting the result. `writeCorpus()`
+/// is private to the main type, so this lives in the same file to reach it.
+extension CorpusStore {
+    var managedReplacementShortcuts: [String] { corpus.settings.managedReplacementShortcuts ?? [] }
+
+    var textReplacementLastSyncAt: Date? { corpus.settings.textReplacementLastSyncAt }
+
+    func computeTextReplacementSyncPlan() -> TextReplacementSync.SyncPlan {
+        TextReplacementSync.computePlan(
+            phrases: corpus.phrases,
+            variables: libraryVariables,
+            managedShortcuts: managedReplacementShortcuts,
+            systemReplacements: TextReplacementSync.readSystemReplacements()
+        )
+    }
+
+    /// Applies `plan` to the system store, then updates each synced phrase's
+    /// `lastSyncedAt`/`lastSyncedValue`, `managedReplacementShortcuts`, and
+    /// `textReplacementLastSyncAt` before persisting via the usual `writeCorpus()` path.
+    @discardableResult
+    func applyTextReplacementSync(_ plan: TextReplacementSync.SyncPlan) -> TextReplacementSync.SyncReport {
+        let (report, managedShortcuts) = TextReplacementSync.apply(plan, currentManagedShortcuts: managedReplacementShortcuts)
+
+        // Only record a sync as having happened if it actually landed in the system
+        // store — a fallback (unwritten) or failed attempt leaves corpus state as-is
+        // so the next Sync Now still sees these as pending.
+        guard report.failureReason == nil && !report.usedFallback else {
+            return report
+        }
+
+        let now = Date()
+        for entry in plan.adds + plan.updates + plan.conflicts {
+            guard let phraseID = entry.phraseID,
+                  let index = corpus.phrases.firstIndex(where: { $0.id == phraseID }) else { continue }
+            corpus.phrases[index].textReplacement?.lastSyncedAt = now
+            corpus.phrases[index].textReplacement?.lastSyncedValue = entry.newText
+        }
+
+        corpus.settings.managedReplacementShortcuts = managedShortcuts
+        corpus.settings.textReplacementLastSyncAt = now
+        corpus.updatedAt = now
+        writeCorpus()
+        return report
+    }
+}
+

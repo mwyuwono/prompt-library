@@ -54,6 +54,8 @@ struct SettingsEditor: View {
     let width: CGFloat
     @State private var editingColorTarget: ColorEditTarget?
     @State private var didCopyPath = false
+    @State private var pendingSyncPlan: TextReplacementSync.SyncPlan?
+    @State private var lastSyncReport: TextReplacementSync.SyncReport?
 
     private var usesTwoColumns: Bool { width >= 760 }
     private var primaryColumnWidth: CGFloat { usesTwoColumns ? 320 : width - 44 }
@@ -86,6 +88,10 @@ struct SettingsEditor: View {
                     }
                 }
 
+                settingsSection("Text Replacements") {
+                    textReplacementsSection
+                }
+
                 settingsSection("Categories") {
                     CategoryManagerSection()
                 }
@@ -94,6 +100,64 @@ struct SettingsEditor: View {
         }
         .frame(width: width)
         .frame(minHeight: 420, maxHeight: 720)
+        .sheet(isPresented: Binding(get: { pendingSyncPlan != nil }, set: { if !$0 { pendingSyncPlan = nil } })) {
+            if let plan = pendingSyncPlan {
+                TextReplacementSyncPreviewSheet(
+                    plan: plan,
+                    onCancel: { pendingSyncPlan = nil },
+                    onConfirm: {
+                        lastSyncReport = store.applyTextReplacementSync(plan)
+                        pendingSyncPlan = nil
+                    }
+                )
+            }
+        }
+    }
+
+    // MARK: - Text Replacements (see docs/text-replacement-sync-plan.md)
+
+    private var textReplacementsSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 10) {
+                Button("Sync Now") {
+                    pendingSyncPlan = store.computeTextReplacementSyncPlan()
+                }
+                .buttonStyle(.glassProminent)
+                if let lastSyncReport, lastSyncReport.usedFallback {
+                    Button("Open Text Replacements…") {
+                        TextReplacementSync.openSystemSettingsTextReplacements()
+                    }
+                    .buttonStyle(.glass)
+                }
+            }
+
+            if let lastSyncAt = store.textReplacementLastSyncAt {
+                Text("Last synced \(lastSyncAt.formatted(.relative(presentation: .named))) — \(store.managedReplacementShortcuts.count) managed shortcut\(store.managedReplacementShortcuts.count == 1 ? "" : "s").")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } else {
+                Text("Never synced. \(store.managedReplacementShortcuts.count) managed shortcut\(store.managedReplacementShortcuts.count == 1 ? "" : "s").")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            if let lastSyncReport {
+                Text(lastSyncReport.summaryLine)
+                    .font(.caption)
+                    .foregroundStyle(lastSyncReport.failureReason == nil ? Color.secondary : Color.red)
+
+                if lastSyncReport.usedFallback && !lastSyncReport.manualInstructions.isEmpty {
+                    VStack(alignment: .leading, spacing: 3) {
+                        ForEach(lastSyncReport.manualInstructions, id: \.self) { line in
+                            Text(line)
+                                .font(.caption.monospaced())
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .padding(.top, 2)
+                }
+            }
+        }
     }
 
     private var primarySettingsColumn: some View {
@@ -474,6 +538,76 @@ struct SwatchPicker: View {
     private func applyHex() {
         guard PaletteColor.isHex(hexDraft) else { return }
         selection = hexDraft.uppercased()
+    }
+}
+
+/// Preview sheet for a `TextReplacementSync.SyncPlan` — shown before every write to the
+/// system store so the user always sees what will be added/updated/removed/overwritten
+/// (see docs/text-replacement-sync-plan.md, "Never write without showing the preview").
+struct TextReplacementSyncPreviewSheet: View {
+    let plan: TextReplacementSync.SyncPlan
+    let onCancel: () -> Void
+    let onConfirm: () -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Text("Sync Text Replacements")
+                .font(.headline)
+
+            if plan.isEmpty {
+                Text("Nothing to sync — everything already matches.")
+                    .foregroundStyle(.secondary)
+            } else {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 14) {
+                        group("Add (\(plan.adds.count))", entries: plan.adds, color: .green)
+                        group("Update (\(plan.updates.count))", entries: plan.updates, color: .blue)
+                        group("Overwrite pre-existing (\(plan.conflicts.count))", entries: plan.conflicts, color: .orange)
+                        group("Remove (\(plan.removals.count))", entries: plan.removals, color: .red)
+                    }
+                }
+                .frame(maxHeight: 360)
+            }
+
+            HStack {
+                Button("Cancel", action: onCancel)
+                    .buttonStyle(.glass)
+                Spacer()
+                Button("Confirm", action: onConfirm)
+                    .buttonStyle(.glassProminent)
+                    .disabled(plan.isEmpty)
+            }
+        }
+        .padding(20)
+        .frame(width: 520)
+    }
+
+    @ViewBuilder
+    private func group(_ title: String, entries: [TextReplacementSync.SyncPlan.Entry], color: Color) -> some View {
+        if !entries.isEmpty {
+            VStack(alignment: .leading, spacing: 6) {
+                Text(title).font(.subheadline.bold()).foregroundStyle(color)
+                ForEach(entries) { entry in
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(entry.shortcut)
+                            .font(.system(.body, design: .monospaced))
+                        if let newText = entry.newText {
+                            Text(newText)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                                .lineLimit(2)
+                        } else if let oldText = entry.oldText {
+                            Text(oldText)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                                .lineLimit(2)
+                                .strikethrough()
+                        }
+                    }
+                    .padding(.vertical, 2)
+                }
+            }
+        }
     }
 }
 

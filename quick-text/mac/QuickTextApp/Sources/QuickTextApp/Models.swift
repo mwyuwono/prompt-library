@@ -45,6 +45,15 @@ struct Settings: Codable {
     var expandedCardTextColor: String? = nil
     var expandedCardChipColor: String? = nil
 
+    // Optional so existing corpus.json files without these keys still decode
+    // (see docs/text-replacement-sync-plan.md). Corpus-level bookkeeping for
+    // syncing phrases to macOS/iOS Text Replacements.
+    var textReplacementLastSyncAt: Date? = nil
+    /// Shortcuts this app created/manages in the system store. Needed so sync can
+    /// remove entries after a toggle is switched off or a phrase is deleted,
+    /// without ever touching the user's unmanaged replacements.
+    var managedReplacementShortcuts: [String]? = nil
+
     static let defaultCardWidth: Double = 164
     static let defaultCloseCardOnCopy = false
     static let defaultExpandedChipDisplay = false
@@ -84,6 +93,23 @@ struct Phrase: Codable, Identifiable {
     // into ExpandedOverlayView/ExpandedCardView below. PhraseEditor lets admins add/remove
     // atoms from a text selection in the Value field (see SelectableTextEditor).
     var atoms: [Atom]?
+    // Optional so existing corpus.json files without this key still decode
+    // (see docs/text-replacement-sync-plan.md). Links this phrase to a managed
+    // macOS/iOS Text Replacement shortcut.
+    var textReplacement: TextReplacementLink? = nil
+}
+
+/// Links a phrase to a managed macOS/iOS Text Replacement (System Settings > Keyboard
+/// > Text Replacements) — see docs/text-replacement-sync-plan.md and TextReplacementSync.swift.
+struct TextReplacementLink: Codable, Equatable {
+    /// The shorthand typed to expand, e.g. "xsum". Convention: `^x[a-z]{2,11}$` (warned,
+    /// not enforced — see PhraseEditor's shortcut validation).
+    var shortcut: String
+    var syncEnabled: Bool
+    /// Set by the sync engine after a successful add/update.
+    var lastSyncedAt: Date? = nil
+    /// Resolved phrase value at last sync, for drift detection (see TextReplacementSync).
+    var lastSyncedValue: String? = nil
 }
 
 struct Atom: Codable, Identifiable, Equatable {
