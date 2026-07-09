@@ -1,0 +1,6 @@
+interface:
+  display_name: "Render Brief"
+  short_description: "Brief-driven, self-reviewing image generation for high-fidelity multi-reference renderings"
+
+policy:
+  allow_implicit_invocation: false

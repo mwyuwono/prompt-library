@@ -26,6 +26,10 @@ const REFERENCE_ASSET_REGION = process.env.REFERENCE_ASSET_REGION || 'us-east-1'
 const REFERENCE_ASSET_PROFILE = process.env.REFERENCE_ASSET_PROFILE || process.env.AWS_PROFILE || 'plots-s3-admin-bootstrap';
 const REFERENCE_ASSET_PUBLIC_BASE_URL = (process.env.REFERENCE_ASSET_PUBLIC_BASE_URL ||
     `https://${REFERENCE_ASSET_BUCKET}.s3.amazonaws.com/${REFERENCE_ASSET_PREFIX}`).replace(/\/+$/g, '');
+const SKILL_ROOTS = [
+    path.join(os.homedir(), '.codex', 'skills'),
+    path.join(os.homedir(), '.agents', 'skills')
+];
 let gitAskPassPath = null;
 let cachedGitHubToken = null;
 
@@ -689,6 +693,114 @@ function getToolBySlug(slug) {
     return parseToolsIndex().find(tool => tool.slug === slug);
 }
 
+function parseSkillFrontmatter(content = '') {
+    const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+    const frontmatter = {};
+
+    if (!match) {
+        return frontmatter;
+    }
+
+    match[1].split(/\r?\n/).forEach(line => {
+        const field = line.match(/^([A-Za-z0-9_-]+):\s*(.*)$/);
+        if (!field) return;
+
+        frontmatter[field[1]] = field[2].trim().replace(/^["']|["']$/g, '');
+    });
+
+    return frontmatter;
+}
+
+function parseSkillConfig(skillDir) {
+    const openAiConfigPath = path.join(skillDir, 'agents', 'openai.yaml');
+    const config = {
+        implicitInvocation: null,
+        configPath: fs.existsSync(openAiConfigPath) ? openAiConfigPath : ''
+    };
+
+    if (!fs.existsSync(openAiConfigPath)) {
+        return config;
+    }
+
+    const configText = fs.readFileSync(openAiConfigPath, 'utf8');
+    const implicitMatch = configText.match(/allow_implicit_invocation:\s*(true|false)/i);
+    if (implicitMatch) {
+        config.implicitInvocation = implicitMatch[1].toLowerCase() === 'true';
+    }
+
+    return config;
+}
+
+function getSkillInstallType(rootPath) {
+    if (rootPath.includes(`${path.sep}.agents${path.sep}`)) return 'Agents skill';
+    if (rootPath.includes(`${path.sep}.codex${path.sep}`)) return 'Codex skill';
+    return 'Skill';
+}
+
+function parseInstalledSkills() {
+    const skills = [];
+    const seen = new Map();
+
+    SKILL_ROOTS.forEach(rootPath => {
+        if (!fs.existsSync(rootPath)) return;
+
+        fs.readdirSync(rootPath, { withFileTypes: true })
+            .filter(entry => entry.isDirectory())
+            .forEach(entry => {
+                const folderPath = path.join(rootPath, entry.name);
+                const skillPath = path.join(folderPath, 'SKILL.md');
+                if (!fs.existsSync(skillPath)) return;
+
+                const content = fs.readFileSync(skillPath, 'utf8');
+                const frontmatter = parseSkillFrontmatter(content);
+                const name = frontmatter.name || entry.name;
+                const slug = name;
+                const config = parseSkillConfig(folderPath);
+                const record = {
+                    slug,
+                    title: name,
+                    type: getSkillInstallType(rootPath),
+                    status: 'Active',
+                    overview: frontmatter.description || '',
+                    keyInvocation: `$${name}`,
+                    keySources: [],
+                    usageNotes: config.implicitInvocation === false
+                        ? 'Explicit invocation only. Paste the invocation token into a Codex prompt.'
+                        : 'Can be invoked explicitly by pasting the invocation token into a Codex prompt.',
+                    routing: config.implicitInvocation === false
+                        ? 'Implicit invocation disabled.'
+                        : config.implicitInvocation === true
+                            ? 'Implicit invocation enabled.'
+                            : 'Implicit invocation policy not specified.',
+                    readmePath: skillPath,
+                    folderPath,
+                    sourceIndexPath: rootPath,
+                    implicitInvocation: config.implicitInvocation,
+                    configPath: config.configPath
+                };
+
+                if (seen.has(slug)) {
+                    const existing = seen.get(slug);
+                    existing.type = `${existing.type}, ${record.type}`;
+                    existing.folderPath = `${existing.folderPath}\n${record.folderPath}`;
+                    if (!existing.configPath && record.configPath) {
+                        existing.configPath = record.configPath;
+                    }
+                    return;
+                }
+
+                seen.set(slug, record);
+                skills.push(record);
+            });
+    });
+
+    return skills.sort((a, b) => a.title.localeCompare(b.title));
+}
+
+function getSkillBySlug(slug) {
+    return parseInstalledSkills().find(skill => skill.slug === slug);
+}
+
 function getGitAskPassPath() {
     if (gitAskPassPath && fs.existsSync(gitAskPassPath)) {
         return gitAskPassPath;
@@ -1199,6 +1311,60 @@ app.get('/api/tools/:slug', (req, res) => {
         res.status(500).json({
             success: false,
             error: error.message || 'Failed to load Bullfinch tool'
+        });
+    }
+});
+
+/**
+ * GET /api/skills
+ * Returns installed custom skills from the local Codex and Agents skill roots.
+ */
+app.get('/api/skills', (req, res) => {
+    try {
+        const skills = parseInstalledSkills();
+        const types = [...new Set(skills.map(skill => skill.type).filter(Boolean))].sort();
+        const statuses = [...new Set(skills.map(skill => skill.status).filter(Boolean))].sort();
+
+        res.json({
+            success: true,
+            skills,
+            types,
+            statuses,
+            sourceRoots: SKILL_ROOTS
+        });
+    } catch (error) {
+        console.error('Error loading custom skills:', error);
+        res.status(500).json({
+            success: false,
+            error: error.message || 'Failed to load custom skills'
+        });
+    }
+});
+
+/**
+ * GET /api/skills/:slug
+ * Returns one installed custom skill by slug.
+ */
+app.get('/api/skills/:slug', (req, res) => {
+    try {
+        const skill = getSkillBySlug(req.params.slug);
+
+        if (!skill) {
+            return res.status(404).json({
+                success: false,
+                error: 'Skill not found'
+            });
+        }
+
+        res.json({
+            success: true,
+            skill
+        });
+    } catch (error) {
+        console.error('Error loading custom skill:', error);
+        res.status(500).json({
+            success: false,
+            error: error.message || 'Failed to load custom skill'
         });
     }
 });

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="light">
-    <title>Tools - Prompts Library Admin</title>
+    <title>Tools & Skills - Prompts Library Admin</title>
     <meta name="theme-color" content="#79830c">
     <meta name="application-name" content="Prompt Library Admin">
     <meta name="apple-mobile-web-app-title" content="Prompt Admin">
@@ -30,9 +30,9 @@
     <aside class="prompt-list">
         <div class="sidebar-header">
             <div class="sidebar-title-row">
-                <h2>Tools</h2>
+                <h2>Tools & Skills</h2>
             </div>
-            <p id="toolsSourceStatus" class="dataset-status">Reading active tools from Bullfinch.</p>
+            <p id="toolsSourceStatus" class="dataset-status">Reading local catalogs.</p>
             <div class="sidebar-links">
                 <a href="/admin.html" class="view-public-link">
                     <span class="material-symbols-outlined">edit_note</span>
@@ -51,10 +51,14 @@
 
         <div class="sidebar-search">
             <span class="material-symbols-outlined">search</span>
-            <input type="text" id="toolSearchInput" placeholder="Search tools..." autocomplete="off">
+            <input type="text" id="toolSearchInput" placeholder="Search catalog..." autocomplete="off">
         </div>
 
         <div class="tool-filter-stack">
+            <div class="catalog-view-switch" role="group" aria-label="Catalog type">
+                <button id="toolsCatalogButton" class="dataset-button active" type="button" data-catalog="tools">Tools</button>
+                <button id="skillsCatalogButton" class="dataset-button" type="button" data-catalog="skills">Skills</button>
+            </div>
             <label class="tool-filter-field" for="toolTypeFilter">
                 <span>Type</span>
                 <select id="toolTypeFilter">
@@ -80,8 +84,8 @@
         <section class="tools-shell">
             <header class="tools-header">
                 <div>
-                    <p class="tools-kicker">Bullfinch Registry</p>
-                    <h1>Local Tools</h1>
+                    <p id="catalogKicker" class="tools-kicker">Bullfinch Registry</p>
+                    <h1 id="catalogTitle">Local Tools</h1>
                 </div>
                 <p id="toolsCount" class="tools-count">Loading...</p>
             </header>

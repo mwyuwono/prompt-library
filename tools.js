@@ -1,7 +1,9 @@
 let tools = [];
+let skills = [];
 let filteredTools = [];
 let selectedSlug = null;
 let currentView = 'grid';
+let currentCatalog = 'tools';
 
 const toolSearchInput = document.getElementById('toolSearchInput');
 const toolTypeFilter = document.getElementById('toolTypeFilter');
@@ -14,6 +16,10 @@ const toolsSourceStatus = document.getElementById('toolsSourceStatus');
 const toast = document.getElementById('toast');
 const gridViewButton = document.getElementById('gridViewButton');
 const listViewButton = document.getElementById('listViewButton');
+const toolsCatalogButton = document.getElementById('toolsCatalogButton');
+const skillsCatalogButton = document.getElementById('skillsCatalogButton');
+const catalogKicker = document.getElementById('catalogKicker');
+const catalogTitle = document.getElementById('catalogTitle');
 
 initToolsBrowser();
 
@@ -29,26 +35,39 @@ function setupEventListeners() {
 
     gridViewButton.addEventListener('click', () => setView('grid'));
     listViewButton.addEventListener('click', () => setView('list'));
+    toolsCatalogButton.addEventListener('click', () => setCatalog('tools'));
+    skillsCatalogButton.addEventListener('click', () => setCatalog('skills'));
 }
 
 async function loadTools() {
     try {
-        const response = await fetch('/api/tools');
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
+        const [toolsData, skillsData] = await Promise.all([
+            fetchCatalog('/api/tools', 'tools'),
+            fetchCatalog('/api/skills', 'skills')
+        ]);
 
-        const data = await response.json();
-        tools = data.tools || [];
-        selectedSlug = getSlugFromHash() || tools[0]?.slug || null;
+        tools = toolsData.tools || [];
+        skills = skillsData.skills || [];
+        selectedSlug = getSlugFromHash() || getCurrentItems()[0]?.slug || null;
 
-        populateFilters(data.types || [], data.statuses || []);
-        toolsSourceStatus.textContent = `Reading ${tools.length} active tools from ${data.sourceIndexPath}.`;
         applyFilters();
     } catch (error) {
-        toolsSourceStatus.textContent = 'Unable to read Bullfinch tools.';
+        toolsSourceStatus.textContent = 'Unable to read local catalogs.';
         renderError(error);
     }
+}
+
+async function fetchCatalog(url, key) {
+    const response = await fetch(url);
+    if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return {
+        ...data,
+        [key]: data[key] || []
+    };
 }
 
 function populateFilters(types, statuses) {
@@ -70,11 +89,12 @@ function populateFilters(types, statuses) {
 }
 
 function applyFilters() {
+    const items = getCurrentItems();
     const query = toolSearchInput.value.trim().toLowerCase();
     const type = toolTypeFilter.value;
     const status = toolStatusFilter.value;
 
-    filteredTools = tools.filter(tool => {
+    filteredTools = items.filter(tool => {
         const searchText = [
             tool.title,
             tool.slug,
@@ -100,7 +120,14 @@ function applyFilters() {
 }
 
 function renderTools() {
-    toolsCount.textContent = `${filteredTools.length} of ${tools.length} tools`;
+    const items = getCurrentItems();
+    const noun = getCatalogNoun();
+    populateFiltersFromItems(items);
+    toolSearchInput.placeholder = `Search ${noun.plural.toLowerCase()}...`;
+    toolsSourceStatus.textContent = getCatalogStatusText();
+    catalogKicker.textContent = currentCatalog === 'skills' ? 'Local Skill Roots' : 'Bullfinch Registry';
+    catalogTitle.textContent = currentCatalog === 'skills' ? 'Custom Skills' : 'Local Tools';
+    toolsCount.textContent = `${filteredTools.length} of ${items.length} ${noun.plural.toLowerCase()}`;
     renderSidebarList();
     renderToolCards();
     renderDetail();
@@ -121,10 +148,10 @@ function renderSidebarList() {
     toolListItems.innerHTML = filteredTools.map(tool => `
         <button class="prompt-item tool-sidebar-item ${tool.slug === selectedSlug ? 'active' : ''}" type="button" data-slug="${escapeAttribute(tool.slug)}">
             <span class="material-symbols-outlined">${getToolIcon(tool)}</span>
-            <span class="prompt-item-content">
-                <span class="prompt-item-title">${escapeHtml(tool.title)}</span>
-                <span class="prompt-item-category">${escapeHtml(tool.type || 'Tool')}</span>
-            </span>
+                <span class="prompt-item-content">
+                    <span class="prompt-item-title">${escapeHtml(tool.title)}</span>
+                    <span class="prompt-item-category">${escapeHtml(tool.type || getCatalogNoun().singular)}</span>
+                </span>
         </button>
     `).join('');
 
@@ -148,7 +175,7 @@ function renderToolCards() {
             </div>
             <div class="tool-card-body">
                 <div class="tool-card-meta">
-                    <span>${escapeHtml(tool.type || 'Tool')}</span>
+                    <span>${escapeHtml(tool.type || getCatalogNoun().singular)}</span>
                     <span>${escapeHtml(tool.status || 'Active')}</span>
                 </div>
                 <h2>${escapeHtml(tool.title)}</h2>
@@ -169,8 +196,8 @@ function renderDetail() {
         toolDetail.innerHTML = `
             <div class="tool-empty-detail">
                 <span class="material-symbols-outlined">construction</span>
-                <h2>Select a tool</h2>
-                <p>Choose a tool to view documentation and invocation notes.</p>
+                <h2>Select a ${escapeHtml(getCatalogNoun().singular.toLowerCase())}</h2>
+                <p>Choose a ${escapeHtml(getCatalogNoun().singular.toLowerCase())} to view documentation and invocation notes.</p>
             </div>
         `;
         return;
@@ -181,7 +208,7 @@ function renderDetail() {
     toolDetail.innerHTML = `
         <header class="tool-detail-header">
             <div>
-                <p class="tools-kicker">${escapeHtml(tool.type || 'Tool')}</p>
+                <p class="tools-kicker">${escapeHtml(tool.type || getCatalogNoun().singular)}</p>
                 <h2>${escapeHtml(tool.title)}</h2>
             </div>
             <span class="tool-status-pill">${escapeHtml(tool.status || 'Active')}</span>
@@ -259,12 +286,26 @@ function renderSourceSection(tool) {
 }
 
 function renderPathSection(tool) {
+    const primaryLabel = currentCatalog === 'skills' ? 'SKILL.md' : 'README';
+    const configPath = currentCatalog === 'skills' && tool.configPath
+        ? `<div>
+                <dt>Agent config</dt>
+                <dd>
+                    <code>${escapeHtml(tool.configPath)}</code>
+                    <button class="tool-copy-button compact" type="button" data-copy="${escapeAttribute(tool.configPath)}">
+                        <span class="material-symbols-outlined">content_copy</span>
+                        Copy
+                    </button>
+                </dd>
+            </div>`
+        : '';
+
     return `
         <section class="tool-detail-section">
             <h3>Paths</h3>
             <dl class="tool-paths">
                 <div>
-                    <dt>Tool folder</dt>
+                    <dt>${escapeHtml(getCatalogNoun().singular)} folder</dt>
                     <dd>
                         <code>${escapeHtml(tool.folderPath)}</code>
                         <button class="tool-copy-button compact" type="button" data-copy="${escapeAttribute(tool.folderPath)}">
@@ -274,7 +315,7 @@ function renderPathSection(tool) {
                     </dd>
                 </div>
                 <div>
-                    <dt>README</dt>
+                    <dt>${primaryLabel}</dt>
                     <dd>
                         <code>${escapeHtml(tool.readmePath)}</code>
                         <button class="tool-copy-button compact" type="button" data-copy="${escapeAttribute(tool.readmePath)}">
@@ -283,6 +324,7 @@ function renderPathSection(tool) {
                         </button>
                     </dd>
                 </div>
+                ${configPath}
             </dl>
         </section>
     `;
@@ -293,11 +335,52 @@ function selectTool(slug) {
     renderTools();
 }
 
+function setCatalog(catalog) {
+    if (currentCatalog === catalog) return;
+
+    currentCatalog = catalog;
+    toolTypeFilter.value = '';
+    toolStatusFilter.value = '';
+    selectedSlug = getCurrentItems()[0]?.slug || null;
+    toolsCatalogButton.classList.toggle('active', catalog === 'tools');
+    skillsCatalogButton.classList.toggle('active', catalog === 'skills');
+    applyFilters();
+}
+
 function setView(view) {
     currentView = view;
     gridViewButton.classList.toggle('active', view === 'grid');
     listViewButton.classList.toggle('active', view === 'list');
     renderToolCards();
+}
+
+function getCurrentItems() {
+    return currentCatalog === 'skills' ? skills : tools;
+}
+
+function getCatalogNoun() {
+    return currentCatalog === 'skills'
+        ? { singular: 'Skill', plural: 'Skills' }
+        : { singular: 'Tool', plural: 'Tools' };
+}
+
+function getCatalogStatusText() {
+    if (currentCatalog === 'skills') {
+        return `Reading ${skills.length} custom skills from ~/.codex/skills and ~/.agents/skills.`;
+    }
+
+    return `Reading ${tools.length} active tools from Bullfinch.`;
+}
+
+function populateFiltersFromItems(items) {
+    const selectedType = toolTypeFilter.value;
+    const selectedStatus = toolStatusFilter.value;
+    const types = [...new Set(items.map(item => item.type).filter(Boolean))].sort();
+    const statuses = [...new Set(items.map(item => item.status).filter(Boolean))].sort();
+
+    populateFilters(types, statuses);
+    if (types.includes(selectedType)) toolTypeFilter.value = selectedType;
+    if (statuses.includes(selectedStatus)) toolStatusFilter.value = selectedStatus;
 }
 
 function scoreToolMatch(tool, query) {
@@ -351,6 +434,7 @@ function getSlugFromHash() {
 
 function getToolIcon(tool) {
     const text = `${tool.type} ${tool.title}`.toLowerCase();
+    if (currentCatalog === 'skills') return 'extension';
     if (text.includes('app') || text.includes('dashboard')) return 'dashboard';
     if (text.includes('script') || text.includes('cli') || text.includes('python')) return 'terminal';
     if (text.includes('library') || text.includes('catalog')) return 'inventory_2';
