@@ -253,7 +253,7 @@
         "syncEnabled" : true
       },
       "title" : "Summarize all context from this chat",
-      "updatedAt" : "2026-07-09T19:52:50Z",
+      "updatedAt" : "2026-07-09T22:26:15Z",
       "value" : "Create an LLM-optimized meta-prompt that captures the effective instructions, constraints, decisions, and workflow patterns from this session so they can be reused in a new chat. Keep it generic and portable. Refer to external materials only with indirect labels such as \"the attached image,” rather than specific filenames. Optimize for faithful replication of the setup.",
       "visibility" : "public"
     },
@@ -466,9 +466,9 @@
         "syncEnabled" : true
       },
       "title" : "Github: Commit, Push, Merge",
-      "updatedAt" : "2026-07-02T22:15:10Z",
+      "updatedAt" : "2026-07-09T22:23:21Z",
       "value" : "Commit all changes and push them to the remote. If working on a branch other than main, merge the branch into main after validation, push main, then delete the merged branch locally and remotely.",
-      "visibility" : "private"
+      "visibility" : "public"
     },
     {
       "categoryId" : "image-quality",
@@ -658,43 +658,29 @@
     "expandedChipDisplay" : false,
     "gridBackgroundColor" : "#2F2D29",
     "managedReplacementShortcuts" : [
-      "bfwf",
-      "compush",
-      "ehoa",
-      "llmapprove",
-      "llmformat",
-      "llmlearn",
-      "llmmeta",
-      "llmnoise",
-      "llmsum",
-      "nocontext",
-      "nofiles",
-      "nointro",
-      "noneg",
-      "ptext",
-      "samefiles",
-      "subjectagnostic",
       "xapprove",
+      "xattach",
       "xbfwf",
       "xcontext",
-      "xformat",
+      "xfiles",
       "xhoa",
+      "xhoadocs",
+      "xintro",
       "xlearn",
+      "xllm",
       "xmeta",
-      "xnofiles",
-      "xnointro",
       "xnoise",
-      "xnoneg",
+      "xpositive",
       "xprose",
       "xpush",
       "xreuse",
-      "xsamefiles",
-      "xsum"
+      "xsum",
+      "xtrust"
     ],
     "paletteSource" : "Robert Brown Fabric Collection",
-    "textReplacementLastSyncAt" : "2026-07-09T16:32:55Z"
+    "textReplacementLastSyncAt" : "2026-07-09T20:15:00Z"
   },
-  "updatedAt" : "2026-07-09T19:58:11Z",
+  "updatedAt" : "2026-07-09T22:26:15Z",
   "variables" : [
     {
       "id" : "var-1783398724430",

@@ -99,7 +99,7 @@ Reuse the existing `{{@name}}` resolution logic (see `PhraseVariable.swift` / `E
 
 ### 3a. Reading current system state
 
-Read `NSUserDictionaryReplacementItems` from the global defaults domain (this is how `corpus/text-replacements-map.json` was generated; reads are reliable even though writes are not).
+Read `NSUserDictionaryReplacementItems` from the global defaults domain (this is how `corpus/text-replacements-map.json` was generated; reads are reliable even though writes are not). **Use the any-host domain** — `UserDefaults.standard.array(forKey:)`, not `CFPreferencesCopyValue` with `kCFPreferencesCurrentHost` (the latter always returns `nil` for this key and silently produces an empty array; shipped as a real bug, fixed 2026-07-09). See the "Verify-after-write reliability" note under 3c for a same-process staleness gotcha on the read side.
 
 ### 3b. Diff computation
 
@@ -157,7 +157,9 @@ func ksTransact(add: [(shortcut: String, phrase: String)],
 }
 ```
 
-Reading current state (for diff + verify): `NSUserDefaults` global domain, key `NSUserDictionaryReplacementItems`, entry keys are **`replace`** (shortcut) / **`with`** (phrase) / `on`. This cache updates within ~2s of a successful XPC transaction — use it for verify-after-write (wait ~2s, re-read, confirm every planned change landed).
+Reading current state (for diff + verify): `NSUserDefaults` global domain, key `NSUserDictionaryReplacementItems`, entry keys are **`replace`** (shortcut) / **`with`** (phrase) / `on`.
+
+**Verify-after-write reliability (found 2026-07-09):** the ~2s cache-update estimate below does NOT hold for a re-read from the same process that issued the XPC write — that same-process `UserDefaults`/`CFPreferences` snapshot has been observed staying stale for 60+ seconds, even with polling and an explicit `CFPreferencesAppSynchronize(kCFPreferencesAnyApplication)` call before the read. A **fresh process** (new `defaults read -g` invocation, new script) sees the change correctly and immediately — this looks like an in-process cache/notification gap specific to writes made via this XPC path, not a real system-wide propagation delay. Current code (`applyDirect` in `TextReplacementSync.swift`) polls up to ~10s and then falls back to manual instructions on timeout; this is a **safe false negative** (corpus sync-state is only persisted on confirmed success, so nothing corrupts) but means a real successful write can still surface as "Direct sync unavailable" to the user. If revisiting this: the next thing to try is verifying via a freshly-spawned helper process rather than more same-process polling/synchronize calls, since neither of those reliably closed the gap when tried.
 
 Timeout the completion handler wait (reference uses 3s; use 5–8s) — treat timeout as failure.
 

@@ -43,6 +43,8 @@ npm run dev  # Then open http://127.0.0.1:5173/ and /admin
 
 This is a separate React/Vite site deployed by its own Vercel project to https://rb.weaver-yuwono.com. Its local admin saves to `rb-fabric-collection/src/data/content.json` and uploaded images under `rb-fabric-collection/public/fabrics/`; commit and push those changes to publish. Production must not expose `/admin` or include admin bundle strings. The local macOS launcher lives at `rb-fabric-collection/Robert Brown Lookbook.app`; source is `rb-fabric-collection/launchers/Robert Brown Lookbook Launcher.applescript`.
 
+**Quick Text:** a separate self-contained subproject at `quick-text/` — a SwiftUI Mac phrase launcher plus a buildless web component, sharing a corpus under `quick-text/corpus/`. It is not part of the main Prompt Library app or its design system. Before working in `quick-text/`, read `quick-text/README.md` (architecture, glossary, feature docs including the macOS Text Replacement sync mechanism) and `quick-text/docs/text-replacement-sync-plan.md` (that feature's design doc, kept current with known gotchas like private-API read-domain requirements and a same-process `UserDefaults` verify-after-write staleness issue). See also `npm run quicktext:validate` / `npm run quicktext:export-public`.
+
 ## Local Design System
 
 This project is now self-contained. The former shared design-system sources were snapshotted into this repository and are maintained here.

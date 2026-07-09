@@ -68,15 +68,24 @@ enum TextReplacementSync {
 
     /// Reads `NSUserDictionaryReplacementItems` from the global preferences domain
     /// (equivalent to `defaults read -g NSUserDictionaryReplacementItems`) — a
-    /// read-only operation. This is also how writes are verified: a successful XPC
-    /// transaction is reflected here within ~2s.
+    /// read-only operation. This is also how writes are verified (see `applyDirect`'s
+    /// verify-after-write poll below; same-process reads of a change this process
+    /// itself just wrote via XPC can take much longer than a fresh process would).
+    ///
+    /// Must use `UserDefaults.standard` (any-host global domain), not
+    /// `CFPreferencesCopyValue` with `kCFPreferencesCurrentHost` — text replacements
+    /// are stored in the any-host domain, so a current-host read always returns nil
+    /// here and silently produces an empty array.
+    ///
+    /// `CFPreferencesAppSynchronize` first: this process's own `UserDefaults.standard`
+    /// snapshot does not reliably pick up changes written externally via the
+    /// KeyboardServices XPC path (that write doesn't go through the usual
+    /// `defaults`/CFPreferences write notification this process's cache listens for),
+    /// so without forcing a resync here, a same-process re-read right after our own
+    /// write can go stale for a long, unbounded time.
     static func readSystemReplacements() -> [SystemReplacement] {
-        guard let raw = CFPreferencesCopyValue(
-            "NSUserDictionaryReplacementItems" as CFString,
-            "Apple Global Domain" as CFString,
-            kCFPreferencesCurrentUser,
-            kCFPreferencesCurrentHost
-        ) as? [[String: Any]] else { return [] }
+        CFPreferencesAppSynchronize(kCFPreferencesAnyApplication)
+        guard let raw = UserDefaults.standard.array(forKey: "NSUserDictionaryReplacementItems") as? [[String: Any]] else { return [] }
 
         return raw.compactMap { dict in
             guard let shortcut = dict["replace"] as? String, let phrase = dict["with"] as? String else { return nil }
@@ -274,10 +283,24 @@ enum TextReplacementSync {
         report.removed = plan.removals.map(\.shortcut)
         report.skipped = plan.skips.map(\.shortcut)
 
-        // The defaults cache updates within ~2s of a successful XPC transaction.
-        Thread.sleep(forTimeInterval: 2)
+        // The defaults cache updates within ~2s of a successful XPC transaction in the
+        // common case, but this process's own `UserDefaults.standard` cache (unlike a
+        // freshly-spawned process reading the same domain) has been observed to lag
+        // well past that — up to roughly a minute — after an externally-triggered write
+        // via this XPC path. Poll with a generous budget instead of a single fixed sleep
+        // so a slow-to-propagate success doesn't get misreported as a failed sync; this
+        // only blocks the (already-synchronous, single-action) Sync Now flow, and exits
+        // as soon as the change is observed.
+        var verified = false
+        for _ in 0..<10 {
+            Thread.sleep(forTimeInterval: 1)
+            if verifyAfterWrite(plan) {
+                verified = true
+                break
+            }
+        }
 
-        guard verifyAfterWrite(plan) else {
+        guard verified else {
             report.failureReason = "Verification after write found mismatches — falling back to manual instructions."
             return nil
         }
