@@ -1550,6 +1550,46 @@
                     }
                 ],
                 "image": "public/images/architectural-rendering-old-master-oil-panel.png"
+            },
+            {
+                "id": "french-academic-wash-rendering",
+                "name": "French Academic Wash Rendering",
+                "description": "Pale academic watercolor-and-ink architectural wash.",
+                "instructions": "Upload an architectural source image with this prompt. The fixed French academic wash style references are included automatically.\n\nCreated with [Synthesize Style Image Prompts](/Users/mwy/.codex/skills/synthesize-style-image-prompts/SKILL.md)",
+                "template": "Use the uploaded architectural source image as the factual subject. Use the attached style references and the written synthesis below to transform the source into a French academic architectural watercolor-and-ink rendering.\n\nAttached style references:\n- {{french_wash_dome_reference}}\n- {{french_wash_monument_column_reference}}\n- {{french_wash_facade_reference}}\n- {{french_wash_interior_reference}}\n- {{french_wash_arch_reference}}\n\nSource image priority:\nPreserve the source architecture's identity, massing, proportions, view type, spatial relationships, major silhouette, facade rhythm, openings, roof logic, structural bays, ornament, material cues, and distinctive factual details. If the source is an interior, preserve the room volume, columns, vaults, stairs, railings, openings, and depth relationships. If the source is a monument or exterior, preserve its measured geometry and civic scale. Do not redesign, normalize, modernize, simplify beyond the style's level of finish, or invent a different building.\n\nStyle reference priority:\nUse the attached style references as the visual source of truth for medium, palette, surface, linework, wash behavior, lighting, texture, detail density, mood, and level of finish. Synthesize their shared traits rather than copying any one reference literally.\n\nSynthesized style direction:\nRender the source as an early-19th-century French academic architectural study on aged off-white paper: precise graphite and fine gray-brown ink underdrawing, restrained watercolor and lavis washes, measured but slightly hand-irregular contours, and calm document-like daylight. Use pale stone cream, warm ivory, diluted ochre, gray beige, smoke gray, soft blue-gray sky, olive-gray patinated metal, umber shadow, and occasional muted terracotta-brown accents. Keep broad architectural planes lightly washed and matte, with darker value concentrated in window voids, deep recesses, column shadows, arch soffits, stair undersides, railings, and carved relief.\n\nComposition should feel archival and studied: centered or carefully balanced, orthographic or gently perspectival according to the source, with ample quiet air or interior depth around the subject. Let backgrounds recede through pale washes, soft atmospheric haze, and minimal contextual structures. Ornament should be legible but dry and time-softened: fine hatching, small stippled marks, lightly modeled relief, and transparent wash shadows, not glossy rendering. The paper should show subtle grain, faint foxing, age stains, pigment pooling, and softened edges.\n\nFlexible zones:\nYou may translate modern lighting into flat studio daylight, reduce incidental clutter, soften color saturation, add restrained paper margins or a thin plate edge, and simplify nonessential background detail so the architectural subject reads as a preserved academic plate. Small scale figures may be added only when they help establish scale and remain tiny, subdued, and period-neutral.\n\nAvoid:\nPhotorealism, digital concept art, glossy CGI, saturated color, heavy black outlines, crisp CAD vectors, exaggerated perspective, cinematic contrast, fantasy architecture, overdecorated Beaux-Arts theatricality, dense modern urban clutter, fake readable labels, decorative borders that dominate the drawing, and copying the exact dome, column, facade, church interior, arch, figures, inscriptions, or relief programs from the style references unless they are present in the uploaded source.\n\nOutput a single finished image. Do not include labels, captions, watermarks, UI, borders, or process notes.",
+                "variables": [],
+                "referenceImages": [
+                    {
+                        "variable": "french_wash_dome_reference",
+                        "label": "Dome Palette and Sky Reference",
+                        "path": "public/images/style-references/architectural-rendering-french-wash-dome-reference.jpg",
+                        "instructions": "Use this reference for pale sky wash, warm stone color, patinated dome tones, fine architectural linework, and restrained monumental finish."
+                    },
+                    {
+                        "variable": "french_wash_monument_column_reference",
+                        "label": "Civic Scale and Atmosphere Reference",
+                        "path": "public/images/style-references/architectural-rendering-french-wash-monument-column-reference.jpg",
+                        "instructions": "Use this reference for large-scale civic composition, pale atmospheric field, tiny scale figures, balanced urban framing, and muted gray-brown lavis shadows."
+                    },
+                    {
+                        "variable": "french_wash_facade_reference",
+                        "label": "Facade Wash and Figure Reference",
+                        "path": "public/images/style-references/architectural-rendering-french-wash-facade-reference.jpg",
+                        "instructions": "Use this reference for flat academic facade handling, dark window voids, cream plaster washes, restrained street figures, and softened flanking architecture."
+                    },
+                    {
+                        "variable": "french_wash_interior_reference",
+                        "label": "Interior Light and Structure Reference",
+                        "path": "public/images/style-references/architectural-rendering-french-wash-interior-reference.jpg",
+                        "instructions": "Use this reference for pale vaulted interiors, deep but transparent shadows, delicate structural linework, hand-rendered railings, and atmospheric recession."
+                    },
+                    {
+                        "variable": "french_wash_arch_reference",
+                        "label": "Monumental Relief and Lavis Reference",
+                        "path": "public/images/style-references/architectural-rendering-french-wash-arch-reference.jpg",
+                        "instructions": "Use this reference for monument-scale massing, low-saturation sepia-gray wash, carved relief treatment, arch depth, and aged paper patina."
+                    }
+                ]
             }
         ],
         "featured": false,
