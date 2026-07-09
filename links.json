@@ -52,6 +52,21 @@
                 "url": "https://app.lumalabs.ai"
             },
             {
+                "name": "Meta AI",
+                "company": "Meta",
+                "url": "https://meta.ai/"
+            },
+            {
+                "name": "Eachlabs",
+                "company": "Eachlabs",
+                "url": "https://www.eachlabs.ai/generate"
+            },
+            {
+                "name": "Reference Files",
+                "company": "Prompts",
+                "url": "/reference-library.html?mode=read"
+            },
+            {
                 "name": "Image Outpainter",
                 "company": "Hugging Face",
                 "url": "https://huggingface.co/spaces/fffiloni/Image-Outpainter"

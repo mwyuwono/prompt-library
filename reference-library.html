@@ -19,7 +19,7 @@
                 <h1>Reference Files</h1>
             </div>
             <nav class="reference-library-actions" aria-label="Reference library actions">
-                <a href="/admin.html" class="reference-library-link">
+                <a href="/admin.html" class="reference-library-link" data-admin-only>
                     <span class="material-symbols-outlined" aria-hidden="true">edit_note</span>
                     Admin
                 </a>
@@ -28,6 +28,7 @@
                     class="reference-library-link"
                     target="_blank"
                     rel="noopener"
+                    data-admin-only
                 >
                     <span class="material-symbols-outlined" aria-hidden="true">cloud</span>
                     S3
@@ -47,7 +48,7 @@
                 <input id="searchInput" type="search" placeholder="Search reference files" autocomplete="off">
             </label>
             <div class="reference-toolbar-actions">
-                <button id="newFolderButton" class="reference-library-button secondary" type="button">
+                <button id="newFolderButton" class="reference-library-button secondary" type="button" data-admin-only>
                     <span class="material-symbols-outlined" aria-hidden="true">create_new_folder</span>
                     New Folder
                 </button>
@@ -57,6 +58,7 @@
                     href="https://s3.console.aws.amazon.com/s3/buckets/prompt-library-assets-009019643313?region=us-east-1&prefix=reference-images%2F&showversions=false"
                     target="_blank"
                     rel="noopener"
+                    data-admin-only
                 >
                     <span class="material-symbols-outlined" aria-hidden="true">upload</span>
                     Add Reference File
@@ -76,6 +78,6 @@
     <script type="module">
         import './web-components.js?v=20260629-light-dom';
     </script>
-    <script type="module" src="reference-library.js?v=20260707-reference-folders"></script>
+    <script type="module" src="reference-library.js?v=20260709-reference-readonly"></script>
 </body>
 </html>

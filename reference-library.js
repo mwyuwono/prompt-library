@@ -8,6 +8,7 @@ let uploadMode = 'api';
 const S3_BUCKET = 'prompt-library-assets-009019643313';
 const S3_PREFIX = 'reference-images/';
 const S3_PUBLIC_BASE_URL = `https://${S3_BUCKET}.s3.amazonaws.com/${S3_PREFIX.replace(/\/$/, '')}`;
+const isReadOnlyMode = new URLSearchParams(location.search).get('mode') === 'read';
 
 const grid = document.getElementById('assetGrid');
 const folderGrid = document.getElementById('folderGrid');
@@ -22,6 +23,19 @@ const moveMenu = document.getElementById('moveMenu');
 const toast = document.getElementById('toast');
 
 let folderOptionsCache = null;
+
+function applyPageMode() {
+    document.body.classList.toggle('reference-library-readonly', isReadOnlyMode);
+
+    if (!isReadOnlyMode) return;
+
+    document.title = 'Reference Files';
+    document.querySelectorAll('[data-admin-only]').forEach(element => {
+        element.hidden = true;
+        element.style.display = 'none';
+        element.setAttribute('aria-hidden', 'true');
+    });
+}
 
 const FILE_ICONS = {
     image: 'image',
@@ -116,6 +130,15 @@ function getUrlFromS3Key(key = '') {
 
 function getPathSegments(pathValue = '') {
     return pathValue.split('/').map(segment => segment.trim()).filter(Boolean);
+}
+
+function getS3PrefixForPath(pathValue = '') {
+    const folder = getPathSegments(pathValue).join('/');
+    return folder ? `${S3_PREFIX}${folder}/` : S3_PREFIX;
+}
+
+function getXmlText(element, tagName) {
+    return element.getElementsByTagName(tagName)[0]?.textContent || '';
 }
 
 function navigateTo(pathValue) {
@@ -216,9 +239,9 @@ function renderAssets() {
                     <a class="reference-icon-button" href="${escapeHtml(asset.url)}" target="_blank" rel="noopener" aria-label="Open ${escapeHtml(asset.filename)}" title="Open in new tab">
                         <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
                     </a>
-                    <button class="reference-icon-button" type="button" data-move-key="${escapeHtml(asset.key)}" aria-label="Move ${escapeHtml(asset.filename)} to another folder" aria-haspopup="true" title="Move to folder">
+                    ${isReadOnlyMode ? '' : `<button class="reference-icon-button" type="button" data-move-key="${escapeHtml(asset.key)}" aria-label="Move ${escapeHtml(asset.filename)} to another folder" aria-haspopup="true" title="Move to folder">
                         <span class="material-symbols-outlined" aria-hidden="true">drive_file_move</span>
-                    </button>
+                    </button>`}
                 </div>
             </div>
             <div class="reference-asset-meta">
@@ -344,7 +367,7 @@ async function loadAssets() {
     try {
         const data = await loadAssetsFromApi(currentPath).catch(async error => {
             console.warn('Reference asset API unavailable, using S3 listing:', error);
-            return await loadAssetsFromS3();
+            return await loadAssetsFromS3(currentPath);
         });
         assets = data.assets || [];
         folders = data.folders || [];
@@ -376,8 +399,17 @@ async function loadAssetsFromApi(pathValue = '') {
     };
 }
 
-async function loadAssetsFromS3() {
-    const listUrl = `https://${S3_BUCKET}.s3.amazonaws.com/?list-type=2&prefix=${encodeURIComponent(S3_PREFIX)}`;
+async function fetchS3ListPage(prefix, continuationToken = '') {
+    const params = new URLSearchParams({
+        'list-type': '2',
+        prefix,
+        delimiter: '/'
+    });
+    if (continuationToken) {
+        params.set('continuation-token', continuationToken);
+    }
+
+    const listUrl = `https://${S3_BUCKET}.s3.amazonaws.com/?${params.toString()}`;
     const response = await fetch(listUrl);
     if (!response.ok) {
         throw new Error(`S3 listing failed with HTTP ${response.status}`);
@@ -390,32 +422,63 @@ async function loadAssetsFromS3() {
         throw new Error('S3 listing response could not be parsed');
     }
 
-    const assets = Array.from(xml.querySelectorAll('Contents'))
-        .map(item => {
-            const key = item.querySelector('Key')?.textContent || '';
+    return xml;
+}
+
+async function loadAssetsFromS3(pathValue = '') {
+    const folder = getPathSegments(pathValue).join('/');
+    const prefix = getS3PrefixForPath(folder);
+    const folderMap = new Map();
+    const pageAssets = [];
+    let continuationToken = '';
+
+    do {
+        const xml = await fetchS3ListPage(prefix, continuationToken);
+
+        Array.from(xml.getElementsByTagName('CommonPrefixes')).forEach(item => {
+            const fullPrefix = getXmlText(item, 'Prefix');
+            if (!fullPrefix) return;
+
+            const name = fullPrefix.slice(prefix.length).replace(/\/$/, '');
+            if (!name) return;
+
+            folderMap.set(name, {
+                name,
+                path: folder ? `${folder}/${name}` : name
+            });
+        });
+
+        Array.from(xml.getElementsByTagName('Contents')).forEach(item => {
+            const key = getXmlText(item, 'Key');
             const filename = key.split('/').pop() || key;
             const contentType = getMimeTypeFromKey(key);
-            return {
+            if (!key || key === prefix || key.endsWith('/') || key.endsWith('/.keep')) {
+                return;
+            }
+
+            pageAssets.push({
                 key,
                 filename,
                 url: getUrlFromS3Key(key),
-                size: Number(item.querySelector('Size')?.textContent || 0),
-                lastModified: item.querySelector('LastModified')?.textContent || null,
+                size: Number(getXmlText(item, 'Size') || 0),
+                lastModified: getXmlText(item, 'LastModified') || null,
                 contentType,
                 type: contentType.startsWith('image/') ? 'image' : 'file'
-            };
-        })
-        .filter(asset => asset.key && !asset.key.endsWith('/'));
+            });
+        });
 
-    // Fallback mode has no folder support: only surface root-level files.
-    const rootAssets = assets
-        .filter(asset => !asset.key.slice(S3_PREFIX.length).includes('/'))
+        continuationToken = getXmlText(xml, 'NextContinuationToken');
+    } while (continuationToken);
+
+    const sortedFolders = Array.from(folderMap.values())
+        .sort((a, b) => a.name.localeCompare(b.name));
+    const sortedAssets = pageAssets
         .sort((a, b) => String(b.lastModified || '').localeCompare(String(a.lastModified || '')));
 
     return {
         source: 's3',
-        assets: rootAssets,
-        folders: []
+        assets: sortedAssets,
+        folders: sortedFolders
     };
 }
 
@@ -449,6 +512,11 @@ async function createFolder(name) {
 }
 
 uploadButton.addEventListener('click', event => {
+    if (isReadOnlyMode) {
+        event.preventDefault();
+        return;
+    }
+
     if (uploadMode === 'api') {
         event.preventDefault();
         uploadInput.click();
@@ -475,6 +543,8 @@ uploadInput.addEventListener('change', async () => {
 });
 
 newFolderButton.addEventListener('click', async () => {
+    if (isReadOnlyMode) return;
+
     const name = window.prompt('New folder name');
     if (!name || !name.trim()) return;
 
@@ -502,4 +572,5 @@ window.addEventListener('hashchange', () => {
     loadAssets();
 });
 
+applyPageMode();
 loadAssets();
