@@ -50,71 +50,95 @@ struct MasonryGrid: Layout {
 struct FlowLayout: Layout {
     var spacing: CGFloat = 4
 
-    /// A subview whose natural single-line width fits the container flows inline
-    /// like any other token (short atom chips, words). One whose natural width
-    /// would overflow — a long atom chip — is measured at the container's width
-    /// instead (so it reports its true wrapped height) and always starts on its
-    /// own line, so its wrapped block doesn't sit half-inline with neighbors.
-    private struct Item {
+    private struct MeasuredSubview {
+        let index: Int
         let size: CGSize
         let startsNewLine: Bool
+        let baseline: CGFloat
     }
 
-    private func items(for subviews: Subviews, maxWidth: CGFloat) -> [Item] {
-        subviews.map { subview in
+    private struct Row {
+        let items: [MeasuredSubview]
+        let width: CGFloat
+        let ascent: CGFloat
+        let descent: CGFloat
+
+        var height: CGFloat { ascent + descent }
+    }
+
+    private func measuredSubviews(for subviews: Subviews, maxWidth: CGFloat) -> [MeasuredSubview] {
+        subviews.enumerated().map { index, subview in
             let natural = subview.sizeThatFits(.unspecified)
-            guard natural.width > maxWidth else { return Item(size: natural, startsNewLine: false) }
+            let baselineValue = subview.dimensions(in: .unspecified)[.firstTextBaseline]
+            let baseline = baselineValue.isFinite ? baselineValue : natural.height
+            guard natural.width > maxWidth else {
+                return MeasuredSubview(index: index, size: natural, startsNewLine: false, baseline: baseline)
+            }
             let wrapped = subview.sizeThatFits(ProposedViewSize(width: maxWidth, height: nil))
-            return Item(size: wrapped, startsNewLine: true)
+            let wrappedBaselineValue = subview.dimensions(in: ProposedViewSize(width: maxWidth, height: nil))[.firstTextBaseline]
+            let wrappedBaseline = wrappedBaselineValue.isFinite ? wrappedBaselineValue : wrapped.height
+            return MeasuredSubview(index: index, size: wrapped, startsNewLine: true, baseline: wrappedBaseline)
         }
+    }
+
+    private func rows(for subviews: Subviews, maxWidth: CGFloat) -> [Row] {
+        let measured = measuredSubviews(for: subviews, maxWidth: maxWidth)
+        var rows: [Row] = []
+        var current: [MeasuredSubview] = []
+        var currentWidth: CGFloat = 0
+
+        func appendCurrent() {
+            guard !current.isEmpty else { return }
+            let width = current.reduce(CGFloat.zero) { partial, item in
+                partial + item.size.width
+            } + CGFloat(max(current.count - 1, 0)) * spacing
+            let ascent = current.map(\.baseline).max() ?? 0
+            let descent = current.map { max($0.size.height - $0.baseline, 0) }.max() ?? 0
+            rows.append(Row(items: current, width: width, ascent: ascent, descent: descent))
+            current.removeAll(keepingCapacity: true)
+            currentWidth = 0
+        }
+
+        for item in measured {
+            let proposedWidth = current.isEmpty ? item.size.width : currentWidth + spacing + item.size.width
+            if !current.isEmpty && (item.startsNewLine || proposedWidth > maxWidth) {
+                appendCurrent()
+            }
+            current.append(item)
+            currentWidth = current.count == 1 ? item.size.width : currentWidth + spacing + item.size.width
+            if item.startsNewLine {
+                appendCurrent()
+            }
+        }
+        appendCurrent()
+        return rows
     }
 
     func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
         let maxWidth = proposal.width ?? .infinity
-        var width: CGFloat = 0
-        var height: CGFloat = 0
-        var lineWidth: CGFloat = 0
-        var lineHeight: CGFloat = 0
-        for item in items(for: subviews, maxWidth: maxWidth) {
-            if lineWidth > 0, item.startsNewLine || lineWidth + item.size.width > maxWidth {
-                width = max(width, lineWidth)
-                height += lineHeight + spacing
-                lineWidth = 0
-                lineHeight = 0
-            }
-            lineWidth += item.size.width + spacing
-            lineHeight = max(lineHeight, item.size.height)
-            if item.startsNewLine {
-                width = max(width, lineWidth)
-                height += lineHeight + spacing
-                lineWidth = 0
-                lineHeight = 0
-            }
-        }
-        width = max(width, lineWidth)
-        height += lineHeight
+        let rows = rows(for: subviews, maxWidth: maxWidth)
+        let width = rows.map(\.width).max() ?? 0
+        let height = rows.reduce(CGFloat.zero) { $0 + $1.height }
+            + CGFloat(max(rows.count - 1, 0)) * spacing
         return CGSize(width: min(width, maxWidth), height: max(height, 0))
     }
 
     func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
-        var x = bounds.minX
+        let rows = rows(for: subviews, maxWidth: bounds.width)
         var y = bounds.minY
-        var lineHeight: CGFloat = 0
-        for (subview, item) in zip(subviews, items(for: subviews, maxWidth: bounds.width)) {
-            if x > bounds.minX, item.startsNewLine || x + item.size.width > bounds.maxX {
-                x = bounds.minX
-                y += lineHeight + spacing
-                lineHeight = 0
+        for row in rows {
+            var x = bounds.minX
+            let baselineY = y + row.ascent
+            for item in row.items {
+                let subview = subviews[item.index]
+                let top = baselineY - item.baseline
+                subview.place(
+                    at: CGPoint(x: x, y: top),
+                    proposal: ProposedViewSize(item.size)
+                )
+                x += item.size.width + spacing
             }
-            subview.place(at: CGPoint(x: x, y: y), proposal: ProposedViewSize(item.size))
-            x += item.size.width + spacing
-            lineHeight = max(lineHeight, item.size.height)
-            if item.startsNewLine {
-                x = bounds.minX
-                y += lineHeight + spacing
-                lineHeight = 0
-            }
+            y += row.height + spacing
         }
     }
 }
-

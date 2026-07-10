@@ -116,18 +116,20 @@ struct VariablesLibraryEditor: View {
 }
 
 private struct VariableCard: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     let variable: LibraryVariable
     let referenceCount: Int
     let onEdit: () -> Void
     let onDelete: () -> Void
     @State private var isHovering = false
+    private var typography: CardTypography { CardTypography(baseSize: 18, family: "serif") }
 
     var body: some View {
         Button(action: onEdit) {
             VStack(alignment: .leading, spacing: 2) {
                 HStack(alignment: .firstTextBaseline, spacing: 6) {
                     Text(isHovering ? hoverText : variable.name)
-                        .font(.system(size: 18, weight: .bold))
+                        .font(typography.tileFont)
                         .lineLimit(isHovering ? 5 : 3)
                         .minimumScaleFactor(0.78)
                     Spacer(minLength: 0)
@@ -140,20 +142,20 @@ private struct VariableCard: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
             }
-            .padding(12)
+            .padding(14)
             .frame(minHeight: 112, alignment: .topLeading)
             .frame(maxWidth: .infinity, alignment: .topLeading)
-            .background(Color(nsColor: .controlBackgroundColor).opacity(isHovering ? 0.96 : 0.74))
+            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
             .overlay(
-                RoundedRectangle(cornerRadius: 8)
+                RoundedRectangle(cornerRadius: 12)
                     .stroke(Color.primary.opacity(isHovering ? 0.22 : 0.1), lineWidth: 1)
             )
-            .clipShape(RoundedRectangle(cornerRadius: 8))
-            .contentShape(RoundedRectangle(cornerRadius: 8))
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .contentShape(RoundedRectangle(cornerRadius: 12))
         }
         .buttonStyle(.plain)
         .onHover { hovering in
-            withAnimation(.easeInOut(duration: 0.12)) {
+            withAnimation(reduceMotion ? nil : QuickTextMotion.micro) {
                 isHovering = hovering
             }
         }
@@ -235,7 +237,8 @@ private struct LibraryVariableEditorSheet: View {
             Text(isEditing ? "Edit Variable" : "New Variable").font(.headline)
 
             TextField("Name", text: $name)
-                .textFieldStyle(.roundedBorder)
+                .textFieldStyle(.plain)
+                .quickTextFieldSurface()
             if !nameAvailable && !trimmedName.isEmpty {
                 Text("Another variable already uses this name.")
                     .font(.caption)
@@ -251,7 +254,8 @@ private struct LibraryVariableEditorSheet: View {
 
             if type == .choice {
                 TextField("Options, comma separated", text: $optionsText)
-                    .textFieldStyle(.roundedBorder)
+                    .textFieldStyle(.plain)
+                    .quickTextFieldSurface()
             }
 
             if type == .value {
@@ -261,7 +265,8 @@ private struct LibraryVariableEditorSheet: View {
                 TextEditor(text: $valueText)
                     .font(.body)
                     .frame(height: 100)
-                    .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.secondary.opacity(0.3)))
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: QuickTextDesign.controlRadius))
+                    .overlay(RoundedRectangle(cornerRadius: QuickTextDesign.controlRadius).stroke(Color.primary.opacity(0.13), lineWidth: 1))
             }
 
             if isEditing, referenceCount > 0 {
@@ -359,7 +364,8 @@ private struct ForkVariableSheet: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
             TextField("New variable name", text: $name)
-                .textFieldStyle(.roundedBorder)
+                .textFieldStyle(.plain)
+                .quickTextFieldSurface()
             if !nameAvailable && !trimmedName.isEmpty {
                 Text("Another variable already uses this name.")
                     .font(.caption)
@@ -385,4 +391,3 @@ private struct ForkVariableSheet: View {
         .environmentObject(PreviewData.store)
         .padding()
 }
-

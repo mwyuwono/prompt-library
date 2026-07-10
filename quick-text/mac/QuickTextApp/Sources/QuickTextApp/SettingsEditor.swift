@@ -16,13 +16,13 @@ struct FloatingPanel<Content: View>: View {
                 Image(systemName: systemImage)
                     .foregroundStyle(.secondary)
                 Text(title)
-                    .font(.headline)
+                    .font(.headline.weight(.semibold))
                 Spacer()
                 Button(action: onClose) {
                     Image(systemName: "xmark")
                         .frame(width: 28, height: 28)
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(.glass)
                 .help("Close")
             }
             .padding(.horizontal, 14)
@@ -37,9 +37,9 @@ struct FloatingPanel<Content: View>: View {
             Divider()
             content
         }
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 14))
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
         .overlay(
-            RoundedRectangle(cornerRadius: 14)
+            RoundedRectangle(cornerRadius: 16)
                 .stroke(Color.primary.opacity(0.12), lineWidth: 1)
         )
         .shadow(color: .black.opacity(0.28), radius: 24, y: 12)
@@ -191,11 +191,12 @@ struct SettingsEditor: View {
     private func settingsSection<Content: View>(_ title: String, @ViewBuilder content: () -> Content) -> some View {
         VStack(alignment: .leading, spacing: 10) {
             Text(title)
-                .font(.headline)
+                .font(.caption.weight(.semibold))
+                .tracking(0.5)
+                .textCase(.uppercase)
             content()
         }
-        .padding(14)
-        .background(Color(nsColor: .windowBackgroundColor).opacity(0.24), in: RoundedRectangle(cornerRadius: 10))
+        .quickTextSectionSurface()
     }
 
     private var textSizeControl: some View {
@@ -313,6 +314,11 @@ struct SettingsEditor: View {
             didCopyPath = false
         }
     }
+}
+
+#Preview("Phase 4 — Settings") {
+    SettingsEditor(width: 720)
+        .environmentObject(PreviewData.store)
 }
 
 /// Lists every category with inline rename/color/delete, plus an add-row.
@@ -610,4 +616,3 @@ struct TextReplacementSyncPreviewSheet: View {
         }
     }
 }
-

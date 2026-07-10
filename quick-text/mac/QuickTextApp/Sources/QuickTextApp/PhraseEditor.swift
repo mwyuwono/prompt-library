@@ -16,17 +16,20 @@ struct PhraseEditor: View {
             VStack(alignment: .leading, spacing: 16) {
                 field("Title") {
                     TextField("Title", text: $phrase.title)
-                        .textFieldStyle(.roundedBorder)
+                        .textFieldStyle(.plain)
+                        .quickTextFieldSurface()
                 }
 
                 field("Summary") {
                     TextField("Summary", text: stringBinding($phrase.summary, replacingNilWith: ""))
-                        .textFieldStyle(.roundedBorder)
+                        .textFieldStyle(.plain)
+                        .quickTextFieldSurface()
                 }
 
                 field("Preview image (16:9 path or URL)") {
                     TextField("Preview image (16:9 path or URL)", text: stringBinding($phrase.image, replacingNilWith: ""))
-                        .textFieldStyle(.roundedBorder)
+                        .textFieldStyle(.plain)
+                        .quickTextFieldSurface()
                 }
 
                 field("Category") {
@@ -66,7 +69,8 @@ struct PhraseEditor: View {
                         }
                         SelectableTextEditor(text: $phrase.value, selectedRange: $selectedRange)
                             .frame(minHeight: 180)
-                            .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.secondary.opacity(0.3)))
+                            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: QuickTextDesign.controlRadius))
+                            .overlay(RoundedRectangle(cornerRadius: QuickTextDesign.controlRadius).stroke(Color.primary.opacity(0.13), lineWidth: 1))
                     }
                 }
 
@@ -96,7 +100,8 @@ struct PhraseEditor: View {
                         get: { phrase.tags.joined(separator: ", ") },
                         set: { phrase.tags = $0.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty } }
                     ))
-                    .textFieldStyle(.roundedBorder)
+                    .textFieldStyle(.plain)
+                    .quickTextFieldSurface()
                 }
 
                 field("Text Replacement") {
@@ -143,7 +148,10 @@ struct PhraseEditor: View {
 
     private func field<Content: View>(_ title: String, @ViewBuilder content: () -> Content) -> some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(title).font(.caption).foregroundStyle(.secondary)
+            Text(title.uppercased())
+                .font(.caption.weight(.semibold))
+                .tracking(0.5)
+                .foregroundStyle(.secondary)
             content()
         }
     }
@@ -152,8 +160,7 @@ struct PhraseEditor: View {
         VStack(alignment: .leading, spacing: 10) {
             content()
         }
-        .padding(12)
-        .background(Color(nsColor: .windowBackgroundColor).opacity(0.22), in: RoundedRectangle(cornerRadius: 10))
+        .quickTextSectionSurface()
     }
 
     private func colorEditingBinding(for target: ColorEditTarget) -> Binding<Bool> {
@@ -169,6 +176,7 @@ struct PhraseEditor: View {
 
             Button("Add atom from selection") { addAtomFromSelection() }
                 .disabled(selectedRange.length == 0)
+                .buttonStyle(.glass)
 
             if atoms.isEmpty {
                 Text("No atoms yet. This card copies as a single unit.")
@@ -205,10 +213,8 @@ struct PhraseEditor: View {
                         }
                         .font(.caption)
                         .lineLimit(1)
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 6)
-                        .background(variable.isUnresolved ? Color.red.opacity(0.14) : Color.secondary.opacity(0.14))
-                        .clipShape(Capsule())
+                        .quickTextPill()
+                        .background(variable.isUnresolved ? Color.red.opacity(0.14) : Color.clear, in: Capsule())
                     }
                 }
             }
@@ -304,7 +310,8 @@ struct PhraseEditor: View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: 10) {
                 TextField("e.g. xsum", text: shortcutBinding)
-                    .textFieldStyle(.roundedBorder)
+                    .textFieldStyle(.plain)
+                    .quickTextFieldSurface()
                     .font(.system(.body, design: .monospaced))
                     .focused($shortcutFieldFocused)
                     .frame(maxWidth: 180)
@@ -409,9 +416,8 @@ struct PhraseEditor: View {
             }
             .buttonStyle(.plain)
         }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 6)
-        .background(isInvalid ? Color.red.opacity(0.16) : Color.secondary.opacity(0.14))
+        .quickTextPill()
+        .background(isInvalid ? Color.red.opacity(0.16) : Color.clear, in: Capsule())
         .overlay(
             Capsule().stroke(isInvalid ? Color.red.opacity(0.55) : Color.clear, lineWidth: 1.5)
         )
@@ -574,7 +580,8 @@ private struct InsertVariablePopover: View {
     private var existingSection: some View {
         VStack(alignment: .leading, spacing: 8) {
             TextField("Search variables", text: $search)
-                .textFieldStyle(.roundedBorder)
+                .textFieldStyle(.plain)
+                .quickTextFieldSurface()
             if libraryVariables.isEmpty {
                 Text("No library variables yet. Switch to New to create one.")
                     .font(.caption)
@@ -612,7 +619,8 @@ private struct InsertVariablePopover: View {
     private var newSection: some View {
         VStack(alignment: .leading, spacing: 8) {
             TextField("Variable name", text: $newName)
-                .textFieldStyle(.roundedBorder)
+                .textFieldStyle(.plain)
+                .quickTextFieldSurface()
             Picker("Type", selection: $newType) {
                 Text("Text").tag(LibraryVariable.Kind.text)
                 Text("Choice").tag(LibraryVariable.Kind.choice)
@@ -621,13 +629,15 @@ private struct InsertVariablePopover: View {
             .pickerStyle(.segmented)
             if newType == .choice {
                 TextField("Options, comma separated", text: $newOptionsText)
-                    .textFieldStyle(.roundedBorder)
+                    .textFieldStyle(.plain)
+                    .quickTextFieldSurface()
             }
             if newType == .value {
                 TextEditor(text: $newValueText)
                     .font(.body)
                     .frame(height: 80)
-                    .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.secondary.opacity(0.3)))
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: QuickTextDesign.controlRadius))
+                    .overlay(RoundedRectangle(cornerRadius: QuickTextDesign.controlRadius).stroke(Color.primary.opacity(0.13), lineWidth: 1))
             }
             if nameCollides {
                 Text("A variable named \u{201C}\(trimmedNewName)\u{201D} already exists.")
@@ -637,6 +647,7 @@ private struct InsertVariablePopover: View {
             Button("Create & Insert") {
                 onCreateAndInsert(trimmedNewName, newType, parsedOptions, trimmedNewValue)
             }
+            .buttonStyle(.glassProminent)
             .buttonStyle(.glassProminent)
             .disabled(!canCreate)
         }
@@ -655,4 +666,3 @@ private struct InsertVariablePopover: View {
     PhraseEditor(phrase: PreviewData.addressPhrase)
         .environmentObject(PreviewData.store)
 }
-

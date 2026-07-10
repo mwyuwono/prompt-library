@@ -1,5 +1,15 @@
 import SwiftUI
 
+enum QuickTextMotion {
+    static let microDuration: Double = 0.14
+    static let standardDuration: Double = 0.22
+    static let panelDuration: Double = 0.30
+
+    static let micro = Animation.easeOut(duration: microDuration)
+    static let standard = Animation.easeInOut(duration: standardDuration)
+    static let panel = Animation.easeInOut(duration: panelDuration)
+}
+
 struct ExpandedOverlayView: View {
     @ObservedObject var store: CorpusStore
     let phrase: Phrase
@@ -8,6 +18,7 @@ struct ExpandedOverlayView: View {
         ZStack {
             Rectangle()
                 .fill(.ultraThinMaterial)
+                .overlay(Color.black.opacity(0.16))
                 .ignoresSafeArea()
                 .contentShape(Rectangle())
                 .onTapGesture { store.collapseExpanded() }
@@ -44,6 +55,7 @@ struct ExpandedOverlayView: View {
 /// Shift-click on atoms multiselects (highlighted, clipboard updated in document
 /// order on every change); a plain click reverts to single-atom copy.
 struct ExpandedCardView: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     let phrase: Phrase
     let fontSize: Int
     let fontFamily: String
@@ -60,6 +72,9 @@ struct ExpandedCardView: View {
     /// Global display-mode toggle (Settings > Behavior): when on, canned `"value"`-type
     /// library chips show their full value inline instead of the collapsed `name`.
     var expandedChipDisplay: Bool = false
+    /// Preview-only seed values for showing a filled variable state without changing
+    /// the runtime/session copy model.
+    var initialVariableValues: [String: String] = [:]
     let onCopyAtom: (Atom) -> Void
     let onCopySelection: ([Atom]) -> Void
     /// Receives the phrase value with any filled `{{...}}` variables substituted in.
@@ -83,6 +98,7 @@ struct ExpandedCardView: View {
     @State private var editingVariableKey: String?
 
     private var hasAtoms: Bool { !(phrase.atoms ?? []).isEmpty }
+    private var typography: CardTypography { CardTypography(baseSize: CGFloat(fontSize), family: fontFamily) }
     private var sortedAtoms: [Atom] { (phrase.atoms ?? []).sorted { $0.start < $1.start } }
     private var parsedVariables: [PhraseVariable] { PhraseVariable.parse(phrase.value, library: libraryVariables) }
     private var hasVariables: Bool { !parsedVariables.isEmpty }
@@ -105,17 +121,18 @@ struct ExpandedCardView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 22) {
+        VStack(alignment: .leading, spacing: typography.titleToBodySpacing) {
             Text(phrase.title.uppercased())
-                .font(.callout.bold())
+                .font(typography.titleFont)
+                .tracking(typography.titleTracking)
                 .foregroundStyle(textColor.opacity(0.6))
 
             GeometryReader { geometry in
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 10) {
+                    VStack(alignment: .leading, spacing: typography.lineSpacing) {
                         Spacer(minLength: 0)
                         linesBlock(maxWidth: geometry.size.width)
-                            .frame(maxWidth: .infinity, alignment: .center)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                         Spacer(minLength: 0)
                     }
                     .frame(minHeight: geometry.size.height)
@@ -124,14 +141,14 @@ struct ExpandedCardView: View {
         }
         .padding(46)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-        .background(
+            .background(
             ZStack {
                 isPulsingCardBackground ? highlightColor : background
                 if showsCopyAllTint {
                     highlightColor.opacity(0.06)
                 }
             }
-            .animation(.easeInOut(duration: 0.25), value: showsCopyAllTint)
+            .animation(reduceMotion ? nil : QuickTextMotion.standard, value: showsCopyAllTint)
         )
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .shadow(color: .black.opacity(0.4), radius: 40, y: 16)
@@ -141,6 +158,9 @@ struct ExpandedCardView: View {
         .onHover { hovering in isHoveringCard = hovering }
         .onTapGesture { copyFull() }
         .onAppear {
+            if variableValues.isEmpty {
+                variableValues = initialVariableValues
+            }
             keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
                 handleKeyEvent(event)
             }
@@ -166,21 +186,18 @@ struct ExpandedCardView: View {
     }
 
     private func linesBlock(maxWidth: CGFloat) -> some View {
-        let content = VStack(alignment: .leading, spacing: 10) {
+        let content = VStack(alignment: .leading, spacing: typography.lineSpacing) {
             ForEach(Array(lines.enumerated()), id: \.offset) { _, line in
-                FlowLayout(spacing: 6) {
+                FlowLayout(spacing: 0) {
                     ForEach(line) { segment in
                         if segment.atom != nil {
                             atomChip(segment, maxWidth: maxWidth)
                         } else if segment.variable != nil {
                             variableChip(segment, maxWidth: maxWidth)
                         } else {
-                            // Matches the atom chips' minHeight so punctuation/filler
-                            // text doesn't shift vertically relative to neighboring chips.
                             Text(segment.text)
-                                .font(bodyFont)
+                                .font(typography.bodyFont)
                                 .foregroundStyle(textColor)
-                                .frame(minHeight: 44)
                         }
                     }
                 }
@@ -218,16 +235,19 @@ struct ExpandedCardView: View {
         .padding(.trailing, 26)
     }
 
-    /// No background or border by design; the larger glyph plus a wider invisible
-    /// hit area (44x44) compensate for the lost touch target.
     private func iconButton(systemName: String, isHovering: Bool, action: @escaping () -> Void, onHoverChange: @escaping (Bool) -> Void) -> some View {
-        Image(systemName: systemName)
-            .font(.system(size: 26, weight: .semibold))
-            .foregroundStyle(isHovering ? highlightColor : textColor)
-            .frame(width: 44, height: 44)
-            .contentShape(Rectangle())
-            .onHover(perform: onHoverChange)
-            .onTapGesture(perform: action)
+        Button(action: action) {
+            Image(systemName: systemName)
+                .font(.system(size: 15, weight: .semibold))
+                .frame(width: 44, height: 44)
+        }
+        .buttonStyle(.glass)
+        .tint(isHovering ? highlightColor : textColor)
+        .scaleEffect(isHovering && !reduceMotion ? 1.02 : 1)
+        .frame(width: 44, height: 44)
+        .contentShape(RoundedRectangle(cornerRadius: 12))
+        .onHover(perform: onHoverChange)
+        .animation(reduceMotion ? nil : QuickTextMotion.micro, value: isHovering)
     }
 
     /// `maxWidth` caps the chip so a long atom (spanning a whole sentence, say)
@@ -243,14 +263,15 @@ struct ExpandedCardView: View {
                 .frame(maxWidth: maxWidth, alignment: .leading)
         }
             .buttonStyle(.plain)
-            .font(.system(size: bodyFontSize, weight: .bold))
-            .padding(.horizontal, 16)
-            .padding(.vertical, 10)
-            .frame(minHeight: 44)
+            .font(typography.chipFont)
+            .padding(.horizontal, typography.chipHorizontalPadding)
+            .padding(.vertical, typography.chipVerticalPadding)
+            .frame(minHeight: typography.chipMinHeight)
             .background(isHighlighted ? highlightColor : chipColor)
             .foregroundStyle(isHighlighted ? .white : background)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .clipShape(RoundedRectangle(cornerRadius: typography.chipCornerRadius))
             .onHover { hovering in hoveredAtomID = hovering ? segment.id : nil }
+            .animation(reduceMotion ? nil : QuickTextMotion.micro, value: isHighlighted)
     }
 
     /// Renders a `{{...}}` occurrence as a fill-in chip: unfilled shows a dashed
@@ -279,17 +300,18 @@ struct ExpandedCardView: View {
                     .italic(filled == nil)
             }
                 .buttonStyle(.plain)
-                .font(.system(size: bodyFontSize, weight: .bold))
-                .padding(.horizontal, 16)
-                .padding(.vertical, 10)
-                .frame(minHeight: 44)
+                .font(typography.chipFont)
+                .padding(.horizontal, typography.chipHorizontalPadding)
+                .padding(.vertical, typography.chipVerticalPadding)
+                .frame(minHeight: typography.chipMinHeight)
                 .background(isHighlighted ? highlightColor : (filled != nil ? chipColor : Color.clear))
                 .foregroundStyle(isHighlighted ? .white : (filled != nil ? background : textColor))
-                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .clipShape(RoundedRectangle(cornerRadius: typography.chipCornerRadius))
                 .overlay(
-                    RoundedRectangle(cornerRadius: 10)
+                    RoundedRectangle(cornerRadius: typography.chipCornerRadius)
                         .strokeBorder(filled == nil && !isHighlighted ? textColor.opacity(0.4) : .clear, style: StrokeStyle(lineWidth: 1.5, dash: [4, 3]))
                 )
+                .animation(reduceMotion ? nil : QuickTextMotion.standard, value: filled)
                 .popover(isPresented: Binding(
                     get: { editingVariableKey == variable.key },
                     set: { isPresented in if !isPresented { editingVariableKey = nil } }
@@ -310,14 +332,15 @@ struct ExpandedCardView: View {
             .multilineTextAlignment(.leading)
             .fixedSize(horizontal: false, vertical: true)
             .frame(maxWidth: maxWidth, alignment: .leading)
-            .font(.system(size: bodyFontSize, weight: .bold))
-            .padding(.horizontal, 16)
-            .padding(.vertical, 10)
-            .frame(minHeight: 44)
+            .font(typography.chipFont)
+            .padding(.horizontal, typography.chipHorizontalPadding)
+            .padding(.vertical, typography.chipVerticalPadding)
+            .frame(minHeight: typography.chipMinHeight)
             .background(isHighlighted ? highlightColor : chipColor)
             .foregroundStyle(isHighlighted ? .white : background)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .clipShape(RoundedRectangle(cornerRadius: typography.chipCornerRadius))
             .help(variable.libraryValue ?? "")
+            .animation(reduceMotion ? nil : QuickTextMotion.micro, value: isHighlighted)
     }
 
     /// A dangling `{{@name}}` — renamed or deleted out of the library. Visually distinct
@@ -326,40 +349,53 @@ struct ExpandedCardView: View {
     /// through as the literal `{{@name}}` text via `PhraseVariable.substitute`'s
     /// unfilled fallback, since it's never present in `variableValues`.
     private func unresolvedVariableChip(_ variable: PhraseVariable, maxWidth: CGFloat) -> some View {
-        Text(variable.displayLabel)
+        let isHighlighted = isPulsingAllAtoms || isHoveringCopyAllZone
+        return Text(variable.displayLabel)
             .multilineTextAlignment(.leading)
             .fixedSize(horizontal: false, vertical: true)
             .frame(maxWidth: maxWidth, alignment: .leading)
             .italic()
-            .font(.system(size: bodyFontSize, weight: .bold))
-            .padding(.horizontal, 16)
-            .padding(.vertical, 10)
-            .frame(minHeight: 44)
-            .foregroundStyle(Color.red.opacity(0.85))
+            .font(typography.chipFont)
+            .padding(.horizontal, typography.chipHorizontalPadding)
+            .padding(.vertical, typography.chipVerticalPadding)
+            .frame(minHeight: typography.chipMinHeight)
+            .foregroundStyle(isHighlighted ? background : Color.red.opacity(0.85))
+            .background(isHighlighted ? highlightColor : Color.red.opacity(0.06))
             .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .strokeBorder(Color.red.opacity(0.55), style: StrokeStyle(lineWidth: 1.5, dash: [4, 3]))
+                RoundedRectangle(cornerRadius: typography.chipCornerRadius)
+                    .strokeBorder(isHighlighted ? highlightColor : Color.red.opacity(0.55), style: StrokeStyle(lineWidth: 1.5, dash: [4, 3]))
             )
+            .clipShape(RoundedRectangle(cornerRadius: typography.chipCornerRadius))
+            .animation(reduceMotion ? nil : QuickTextMotion.micro, value: isHighlighted)
             .help("Unresolved variable reference — no library variable named \u{201C}\(variable.displayLabel)\u{201D} was found. Copies through as literal text.")
     }
 
     @ViewBuilder
     private func variableEditorPopover(for variable: PhraseVariable, currentValue: String?) -> some View {
         if let choices = variable.choices {
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: 4) {
                 ForEach(choices, id: \.self) { choice in
                     Button(choice) {
                         variableValues[variable.key] = choice
                         editingVariableKey = nil
                     }
-                    .buttonStyle(.plain)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 6)
+                    .font(typography.chipFont)
+                    .foregroundStyle(textColor)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .buttonStyle(.glass)
                 }
             }
-            .padding(6)
+            .padding(10)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14))
         } else {
-            VariableFillPopover(initialValue: currentValue ?? "") { value in
+            VariableFillPopover(
+                initialValue: currentValue ?? "",
+                typography: typography,
+                textColor: textColor,
+                highlightColor: highlightColor
+            ) { value in
                 variableValues[variable.key] = value
                 editingVariableKey = nil
             }
@@ -464,10 +500,10 @@ struct ExpandedCardView: View {
     /// shift releases), this should pop and fade back on its own, matching the
     /// full-card pulse's timing instead of sticking until the next tap.
     private func flashSingleCopiedAtom(_ id: String) {
-        withAnimation(.easeOut(duration: 0.12)) { singleCopiedAtomID = id }
+        withAnimation(reduceMotion ? nil : QuickTextMotion.micro) { singleCopiedAtomID = id }
         DispatchQueue.main.asyncAfter(deadline: .now() + CorpusStore.copyFeedbackDuration) {
             guard singleCopiedAtomID == id else { return }
-            withAnimation(.easeOut(duration: 0.22)) { singleCopiedAtomID = nil }
+            withAnimation(reduceMotion ? nil : QuickTextMotion.standard) { singleCopiedAtomID = nil }
         }
     }
 
@@ -488,22 +524,16 @@ struct ExpandedCardView: View {
     private func copyFull() {
         onCopyFull(PhraseVariable.substitute(phrase.value, values: valuesForSubstitution))
         guard hasChips else {
-            withAnimation(.easeOut(duration: 0.12)) { isPulsingCardBackground = true }
+            withAnimation(reduceMotion ? nil : QuickTextMotion.micro) { isPulsingCardBackground = true }
             DispatchQueue.main.asyncAfter(deadline: .now() + CorpusStore.copyFeedbackDuration) {
-                withAnimation(.easeOut(duration: 0.22)) { isPulsingCardBackground = false }
+                withAnimation(reduceMotion ? nil : QuickTextMotion.standard) { isPulsingCardBackground = false }
             }
             return
         }
-        withAnimation(.easeOut(duration: 0.12)) { isPulsingAllAtoms = true }
+        withAnimation(reduceMotion ? nil : QuickTextMotion.micro) { isPulsingAllAtoms = true }
         DispatchQueue.main.asyncAfter(deadline: .now() + CorpusStore.copyFeedbackDuration) {
-            withAnimation(.easeOut(duration: 0.22)) { isPulsingAllAtoms = false }
+            withAnimation(reduceMotion ? nil : QuickTextMotion.standard) { isPulsingAllAtoms = false }
         }
-    }
-
-    private var bodyFontSize: CGFloat { CGFloat(fontSize) * 1.5 }
-
-    private var bodyFont: Font {
-        fontFamily == "serif" ? .custom("Palatino", size: bodyFontSize) : .system(size: bodyFontSize)
     }
 
     private var lines: [[LineSegment]] {
@@ -511,30 +541,86 @@ struct ExpandedCardView: View {
     }
 }
 
+/// Shared card and tile type metrics derive from the user's base font-size setting.
+/// Expanded-card body text is intentionally scaled from the same base size used by
+/// the browsing surface so the two surfaces feel like one system.
+struct CardTypography {
+    let baseSize: CGFloat
+    let family: String
+
+    var isSerif: Bool { family == "serif" }
+    var bodySize: CGFloat { baseSize * 1.5 }
+    var bodyLineHeight: CGFloat { bodySize * (isSerif ? 1.22 : 1.28) }
+    var chipSize: CGFloat { bodySize * 0.88 }
+    var chipLineHeight: CGFloat { chipSize * 1.18 }
+    var chipHorizontalPadding: CGFloat { chipSize * 0.62 }
+    var chipVerticalPadding: CGFloat { chipSize * 0.12 }
+    var chipMinHeight: CGFloat { bodyLineHeight + 6 }
+    var chipCornerRadius: CGFloat { min(10, chipMinHeight * 0.24) }
+    var titleSize: CGFloat { baseSize * 0.62 }
+    var titleTracking: CGFloat { baseSize * (isSerif ? 0.14 : 0.12) }
+    var titleToBodySpacing: CGFloat { baseSize * 0.9 }
+    var lineSpacing: CGFloat { bodyLineHeight * 0.28 }
+
+    var bodyFont: Font { font(bodySize, weight: .regular) }
+    var chipFont: Font { font(chipSize, weight: .semibold) }
+    var titleFont: Font { font(titleSize, weight: .semibold) }
+    var tileFont: Font { font(baseSize, weight: .semibold) }
+
+    private func font(_ size: CGFloat, weight: Font.Weight) -> Font {
+        if isSerif {
+            return .custom("Palatino", size: size).weight(weight)
+        }
+        return .system(size: size, weight: weight)
+    }
+}
+
 /// Free-text fill-in popover for a single `{{variable}}` occurrence, shown by
 /// `ExpandedCardView.variableChip`. Choice-style `{{a/b}}` placeholders skip this
 /// in favor of a plain list of buttons.
 private struct VariableFillPopover: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var text: String
     @FocusState private var isFocused: Bool
+    let typography: CardTypography
+    let textColor: Color
+    let highlightColor: Color
     let onSubmit: (String) -> Void
 
-    init(initialValue: String, onSubmit: @escaping (String) -> Void) {
+    init(
+        initialValue: String,
+        typography: CardTypography,
+        textColor: Color,
+        highlightColor: Color,
+        onSubmit: @escaping (String) -> Void
+    ) {
         _text = State(initialValue: initialValue)
+        self.typography = typography
+        self.textColor = textColor
+        self.highlightColor = highlightColor
         self.onSubmit = onSubmit
     }
 
     var body: some View {
         HStack(spacing: 8) {
             TextField("Value", text: $text)
-                .textFieldStyle(.roundedBorder)
+                .font(typography.bodyFont)
+                .foregroundStyle(textColor)
+                .textFieldStyle(.plain)
                 .frame(width: 220)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 8)
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 10))
                 .focused($isFocused)
                 .onSubmit { onSubmit(text) }
             Button("Set") { onSubmit(text) }
-                .buttonStyle(.borderedProminent)
+                .font(typography.chipFont)
+                .buttonStyle(.glassProminent)
+                .tint(highlightColor)
         }
-        .padding(12)
+        .padding(14)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+        .transition(reduceMotion ? .opacity : .opacity.combined(with: .scale(scale: 0.96)).combined(with: .offset(y: 4)))
         .onAppear { isFocused = true }
     }
 }
@@ -589,12 +675,11 @@ struct LineSegment: Identifiable {
             }
             let parts = segment.text.components(separatedBy: "\n")
             for (index, part) in parts.enumerated() {
-                // FlowLayout only wraps between subviews, not inside one, so a long
-                // run of plain text has to be split into word tokens for word wrap
-                // to work; FlowLayout's own spacing supplies the gap between words.
-                let words = part.split(separator: " ")
-                for word in words {
-                    lines[lines.count - 1].append(LineSegment(id: nextID(), text: String(word), atom: nil, variable: nil))
+                // Keep contiguous plain runs intact so SwiftUI handles their native
+                // kerning, whitespace, and wrapping. Runs adjacent to chips retain
+                // their punctuation and spaces, allowing punctuation to hug a chip.
+                if !part.isEmpty {
+                    lines[lines.count - 1].append(LineSegment(id: nextID(), text: part, atom: nil, variable: nil))
                 }
                 if index < parts.count - 1 {
                     lines.append([])
@@ -686,3 +771,120 @@ struct LineSegment: Identifiable {
         .frame(width: 900, height: 600)
 }
 
+#Preview("Phase 1 — Serif and Sans at 14 and 22") {
+    ScrollView {
+        VStack(spacing: 20) {
+            ExpandedCardView(
+                phrase: PreviewData.plainPhrase,
+                fontSize: 14,
+                fontFamily: "serif",
+                isCopied: false,
+                onCopyAtom: { _ in }, onCopySelection: { _ in }, onCopyFull: { _ in }, onClose: {}
+            )
+            .frame(width: 760, height: 210)
+
+            ExpandedCardView(
+                phrase: PreviewData.plainPhrase,
+                fontSize: 14,
+                fontFamily: "sans",
+                isCopied: false,
+                onCopyAtom: { _ in }, onCopySelection: { _ in }, onCopyFull: { _ in }, onClose: {}
+            )
+            .frame(width: 760, height: 210)
+
+            ExpandedCardView(
+                phrase: PreviewData.longMixedPhrase,
+                fontSize: 22,
+                fontFamily: "serif",
+                isCopied: false,
+                initialVariableValues: ["recipient": "the review team", "date": "Friday"],
+                onCopyAtom: { _ in }, onCopySelection: { _ in }, onCopyFull: { _ in }, onClose: {}
+            )
+            .frame(width: 760, height: 360)
+
+            ExpandedCardView(
+                phrase: PreviewData.longMixedPhrase,
+                fontSize: 22,
+                fontFamily: "sans",
+                isCopied: false,
+                onCopyAtom: { _ in }, onCopySelection: { _ in }, onCopyFull: { _ in }, onClose: {}
+            )
+            .frame(width: 760, height: 360)
+        }
+        .padding(32)
+    }
+}
+
+#Preview("Phase 1 — Variable States") {
+    VStack(spacing: 20) {
+        ExpandedCardView(
+            phrase: PreviewData.variablePhrase,
+            fontSize: 18,
+            fontFamily: "serif",
+            isCopied: false,
+            initialVariableValues: ["name": "Matt", "topic": "the design refresh"],
+            onCopyAtom: { _ in }, onCopySelection: { _ in }, onCopyFull: { _ in }, onClose: {}
+        )
+        .frame(width: 860, height: 280)
+
+        ExpandedCardView(
+            phrase: PreviewData.cannedValuePhrase,
+            fontSize: 18,
+            fontFamily: "serif",
+            isCopied: false,
+            libraryVariables: PreviewData.store.libraryVariables,
+            expandedChipDisplay: false,
+            onCopyAtom: { _ in }, onCopySelection: { _ in }, onCopyFull: { _ in }, onClose: {}
+        )
+        .frame(width: 860, height: 220)
+
+        ExpandedCardView(
+            phrase: PreviewData.cannedValuePhrase,
+            fontSize: 18,
+            fontFamily: "serif",
+            isCopied: false,
+            libraryVariables: PreviewData.store.libraryVariables,
+            expandedChipDisplay: true,
+            onCopyAtom: { _ in }, onCopySelection: { _ in }, onCopyFull: { _ in }, onClose: {}
+        )
+        .frame(width: 860, height: 220)
+
+        ExpandedCardView(
+            phrase: PreviewData.libraryVariablePhrase,
+            fontSize: 18,
+            fontFamily: "sans",
+            isCopied: false,
+            libraryVariables: PreviewData.store.libraryVariables,
+            onCopyAtom: { _ in }, onCopySelection: { _ in }, onCopyFull: { _ in }, onClose: {}
+        )
+        .frame(width: 860, height: 260)
+    }
+    .padding(32)
+}
+
+#Preview("Phase 2 — Feedback States") {
+    VStack(spacing: 20) {
+        ExpandedCardView(
+            phrase: PreviewData.addressPhrase,
+            fontSize: 18,
+            fontFamily: "serif",
+            isCopied: true,
+            onCopyAtom: { _ in }, onCopySelection: { _ in }, onCopyFull: { _ in }, onClose: {}
+        )
+        .frame(width: 620, height: 300)
+
+        TileView(
+            phrase: PreviewData.plainPhrase,
+            imageURL: nil,
+            backgroundColor: Color(hex: "#2E301D"),
+            textColor: Color(hex: "#E2D6CF"),
+            fontSize: 18,
+            fontFamily: "serif",
+            cardWidth: 220,
+            isSelected: false,
+            isCopied: true
+        )
+    }
+    .padding(24)
+    .frame(width: 700)
+}

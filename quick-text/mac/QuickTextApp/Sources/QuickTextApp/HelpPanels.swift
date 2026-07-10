@@ -45,7 +45,7 @@ struct KeyboardShortcutsView: View {
                 ForEach(sections) { section in
                     VStack(alignment: .leading, spacing: 10) {
                         Text(section.title)
-                            .font(.headline)
+                            .font(.headline.weight(.semibold))
                         ForEach(section.shortcuts) { shortcut in
                             HStack(alignment: .firstTextBaseline, spacing: 12) {
                                 Text(shortcut.keys)
@@ -62,6 +62,7 @@ struct KeyboardShortcutsView: View {
                         }
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .quickTextSectionSurface()
                 }
             }
             .padding(18)
@@ -136,7 +137,7 @@ struct GlossaryView: View {
                 ForEach(sections) { section in
                     VStack(alignment: .leading, spacing: 10) {
                         Text(section.title)
-                            .font(.headline)
+                            .font(.headline.weight(.semibold))
                         ForEach(section.terms) { term in
                             VStack(alignment: .leading, spacing: 3) {
                                 Text(term.name)
@@ -150,6 +151,7 @@ struct GlossaryView: View {
                         }
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .quickTextSectionSurface()
                 }
             }
             .padding(18)
@@ -171,3 +173,10 @@ struct GlossaryTerm: Identifiable {
     let definition: String
 }
 
+#Preview("Phase 4 — Keyboard Shortcuts") {
+    KeyboardShortcutsView(width: 640)
+}
+
+#Preview("Phase 4 — Glossary") {
+    GlossaryView(width: 640)
+}

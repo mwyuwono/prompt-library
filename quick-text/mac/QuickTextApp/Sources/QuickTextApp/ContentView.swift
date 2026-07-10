@@ -1,4 +1,5 @@
 import SwiftUI
+import QuartzCore
 import UniformTypeIdentifiers
 
 #Preview("Content View") {
@@ -21,6 +22,7 @@ private enum SearchInlineItem: Int, CaseIterable {
 
 struct ContentView: View {
     @EnvironmentObject private var store: CorpusStore
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @FocusState private var searchFocused: Bool
     @State private var showingSettings = false
     @State private var settingsPanelOffset = CGSize.zero
@@ -96,44 +98,46 @@ struct ContentView: View {
 
             GeometryReader { geometry in
                 ScrollView {
-                    MasonryGrid(columnWidth: cardWidth, spacing: gridSpacing) {
-                        ForEach(Array(store.filteredPhrases.enumerated()), id: \.element.id) { index, phrase in
-                            let category = store.category(for: phrase.categoryId)
-                            TileView(
-                                phrase: phrase,
-                                imageURL: store.imageURL(for: phrase.image),
-                                backgroundColor: store.color(for: phrase.color ?? category?.color ?? store.corpus.settings.defaultTileColor),
-                                textColor: store.color(for: phrase.textColor ?? category?.textColor ?? store.corpus.settings.defaultTextColor),
-                                fontSize: store.corpus.settings.defaultFontSize,
-                                fontFamily: store.corpus.settings.defaultFontFamily,
-                                cardWidth: cardWidth,
-                                isSelected: store.selectedPhraseID == phrase.id,
-                                isCopied: store.copiedPhraseID == phrase.id,
-                                highlightColor: store.highlightColor
-                            )
-                            .onTapGesture {
-                                store.selectedPhraseID = phrase.id
-                                store.expandedPhraseID = phrase.id
-                                store.exitCategoryFocus()
-                                setFocusedModule(.cards)
+                    if store.filteredPhrases.isEmpty {
+                        emptyState
+                    } else {
+                        MasonryGrid(columnWidth: cardWidth, spacing: gridSpacing) {
+                            ForEach(Array(store.filteredPhrases.enumerated()), id: \.element.id) { _, phrase in
+                                let category = store.category(for: phrase.categoryId)
+                                TileView(
+                                    phrase: phrase,
+                                    imageURL: store.imageURL(for: phrase.image),
+                                    backgroundColor: store.color(for: phrase.color ?? category?.color ?? store.corpus.settings.defaultTileColor),
+                                    textColor: store.color(for: phrase.textColor ?? category?.textColor ?? store.corpus.settings.defaultTextColor),
+                                    fontSize: store.corpus.settings.defaultFontSize,
+                                    fontFamily: store.corpus.settings.defaultFontFamily,
+                                    cardWidth: cardWidth,
+                                    isSelected: store.selectedPhraseID == phrase.id,
+                                    isCopied: store.copiedPhraseID == phrase.id,
+                                    highlightColor: store.highlightColor
+                                )
+                                .onTapGesture {
+                                    store.selectedPhraseID = phrase.id
+                                    store.expandedPhraseID = phrase.id
+                                    store.exitCategoryFocus()
+                                    setFocusedModule(.cards)
+                                }
+                                .contextMenu {
+                                    Button("Copy") { store.copy(phrase) }
+                                    Button("Preview") { store.expandedPhraseID = phrase.id }
+                                    Button("Edit") { store.beginEditing(phrase) }
+                                    Button("Duplicate") { store.duplicate(phrase) }
+                                    Button("Delete", role: .destructive) { deleteCandidate = phrase }
+                                }
+                                .onDrag {
+                                    store.draggedPhraseID = phrase.id
+                                    return NSItemProvider(object: phrase.id as NSString)
+                                }
+                                .onDrop(of: [.text], delegate: PhraseDropDelegate(target: phrase, store: store))
                             }
-                            .contextMenu {
-                                Button("Copy") { store.copy(phrase) }
-                                Button("Preview") { store.expandedPhraseID = phrase.id }
-                                Button("Edit") { store.beginEditing(phrase) }
-                                Button("Duplicate") { store.duplicate(phrase) }
-                                Button("Delete", role: .destructive) { deleteCandidate = phrase }
-                            }
-                            // Drag-to-reorder: live-reorders `corpus.phrases` while dragging
-                            // (mirrors List's onMove), then persists on drop.
-                            .onDrag {
-                                store.draggedPhraseID = phrase.id
-                                return NSItemProvider(object: phrase.id as NSString)
-                            }
-                            .onDrop(of: [.text], delegate: PhraseDropDelegate(target: phrase, store: store))
                         }
+                        .padding(.vertical, 2)
                     }
-                    .padding(.vertical, 2)
                 }
                 .onAppear { gridWidth = geometry.size.width }
                 .onChange(of: geometry.size.width) { _, width in gridWidth = width }
@@ -143,6 +147,11 @@ struct ContentView: View {
                 RoundedRectangle(cornerRadius: 14)
                     .fill(focusedModule == .cards ? store.highlightColor.opacity(0.06) : Color.clear)
             )
+            .overlay(
+                RoundedRectangle(cornerRadius: 14)
+                    .stroke(store.highlightColor.opacity(focusedModule == .cards ? 0.18 : 0), lineWidth: 1)
+            )
+            .animation(reduceMotion ? nil : QuickTextMotion.standard, value: focusedModule)
             .contextMenu { gridContextMenu }
         }
         .padding(14)
@@ -207,6 +216,7 @@ struct ContentView: View {
         .overlay {
             if let phrase = store.expandedPhrase {
                 ExpandedOverlayView(store: store, phrase: phrase)
+                    .transition(.opacity)
             }
         }
         .overlay(alignment: .topTrailing) {
@@ -316,6 +326,7 @@ struct ContentView: View {
         .onChange(of: store.expandedPhraseID) { _, newValue in
             resizeWindowForExpansion(expanding: newValue != nil)
         }
+        .animation(reduceMotion ? nil : QuickTextMotion.panel, value: store.expandedPhraseID)
         .alert(
             "Delete \u{201C}\(deleteCandidate?.title ?? "")\u{201D}?",
             isPresented: deleteCandidateIsPresented,
@@ -358,7 +369,7 @@ struct ContentView: View {
                         .frame(width: 34, height: 34)
                         .contentShape(Rectangle())
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(.glass)
             }
         }
         .padding(.horizontal, 14)
@@ -369,6 +380,7 @@ struct ContentView: View {
             Capsule()
                 .stroke(searchFocused ? store.highlightColor : Color.primary.opacity(0.15), lineWidth: searchFocused ? 2 : 1)
         )
+        .animation(reduceMotion ? nil : QuickTextMotion.micro, value: searchFocused)
     }
 
     /// Search field plus its inline neighbors (New/Variables/Settings), treated
@@ -409,13 +421,40 @@ struct ContentView: View {
         .background(
             Capsule().fill(isFocused ? store.highlightColor.opacity(0.35) : Color.clear)
         )
+        .animation(reduceMotion ? nil : QuickTextMotion.micro, value: isFocused)
+    }
+
+    private var emptyState: some View {
+        VStack(spacing: 10) {
+            Image(systemName: store.searchTerm.isEmpty ? "square.stack.3d.up" : "magnifyingglass")
+                .font(.system(size: 28, weight: .light))
+                .foregroundStyle(.secondary)
+            Text(store.searchTerm.isEmpty ? "No phrases yet" : "No phrases found")
+                .font(.title3.weight(.semibold))
+            Text(store.searchTerm.isEmpty ? "Create a phrase to begin building your library." : "Try a different search or clear the current filter.")
+                .font(.body)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+            if store.searchTerm.isEmpty {
+                Button("New Phrase") { store.beginNewPhrase() }
+                    .buttonStyle(.glassProminent)
+                    .tint(store.highlightColor)
+                    .padding(.top, 4)
+            } else {
+                Button("Clear Search") { store.clearSearch() }
+                    .buttonStyle(.glass)
+                    .padding(.top, 4)
+            }
+        }
+        .frame(maxWidth: .infinity, minHeight: 240)
+        .padding(32)
     }
 
     /// Expands the window to ~80% of the display when a card expands, since the
     /// expanded card overlay fills the window rather than floating independently.
-    /// Unanimated both ways so expand/collapse feel instant rather than laggy.
     private func resizeWindowForExpansion(expanding: Bool) {
         guard let window = NSApp.keyWindow ?? NSApp.windows.first else { return }
+        let reduceMotion = NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
         if expanding {
             guard savedWindowFrame == nil else { return }
             savedWindowFrame = window.frame
@@ -423,10 +462,27 @@ struct ContentView: View {
                 let visible = screen.visibleFrame
                 let size = NSSize(width: visible.width * 0.8, height: visible.height * 0.8)
                 let origin = NSPoint(x: visible.midX - size.width / 2, y: visible.midY - size.height / 2)
-                window.setFrame(NSRect(origin: origin, size: size), display: true, animate: false)
+                let target = NSRect(origin: origin, size: size)
+                if reduceMotion {
+                    window.setFrame(target, display: true, animate: false)
+                } else {
+                    NSAnimationContext.runAnimationGroup { context in
+                        context.duration = QuickTextMotion.panelDuration
+                        context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+                        window.animator().setFrame(target, display: true)
+                    }
+                }
             }
         } else if let frame = savedWindowFrame {
-            window.setFrame(frame, display: true, animate: false)
+            if reduceMotion {
+                window.setFrame(frame, display: true, animate: false)
+            } else {
+                NSAnimationContext.runAnimationGroup { context in
+                    context.duration = QuickTextMotion.panelDuration
+                    context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+                    window.animator().setFrame(frame, display: true)
+                }
+            }
             savedWindowFrame = nil
         }
     }
@@ -737,8 +793,12 @@ struct PhraseDropDelegate: DropDelegate {
 
     func dropEntered(info: DropInfo) {
         guard let draggedID = store.draggedPhraseID, draggedID != target.id else { return }
-        withAnimation(.default) {
+        if NSWorkspace.shared.accessibilityDisplayShouldReduceMotion {
             store.movePhrase(draggedID, before: target.id)
+        } else {
+            withAnimation(QuickTextMotion.standard) {
+                store.movePhrase(draggedID, before: target.id)
+            }
         }
     }
 
@@ -747,4 +807,3 @@ struct PhraseDropDelegate: DropDelegate {
         return true
     }
 }
-

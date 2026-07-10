@@ -60,9 +60,16 @@ final class LineSegmentTests: XCTestCase {
         XCTAssertEqual(lines.count, 2)
     }
 
-    func testPlainTextIsTokenizedIntoWords() {
+    func testPlainTextRemainsAContiguousRun() {
         let lines = LineSegment.lines(value: "one two three", atoms: [], variables: [])
         XCTAssertEqual(lines.count, 1)
-        XCTAssertEqual(lines[0].map(\.text), ["one", "two", "three"])
+        XCTAssertEqual(lines[0].map(\.text), ["one two three"])
+    }
+
+    func testPlainTextAroundChipPreservesPunctuationAndWhitespace() {
+        let value = "Send to {{name}}, please."
+        let lines = LineSegment.lines(value: value, atoms: [], variables: PhraseVariable.parse(value))
+
+        XCTAssertEqual(lines[0].map(\.text), ["Send to ", "{{name}}", ", please."])
     }
 }
