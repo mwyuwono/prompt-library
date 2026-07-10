@@ -42,8 +42,11 @@ struct ExpandedOverlayView: View {
             // Resets variable fill-in state when the expanded phrase changes,
             // rather than carrying stale entries over from the previous card.
             .id(phrase.id)
+            .frame(minWidth: 320, maxWidth: .infinity, minHeight: 240, maxHeight: .infinity)
             .padding(64)
+            .zIndex(1)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
@@ -267,8 +270,12 @@ struct ExpandedCardView: View {
             .padding(.horizontal, typography.chipHorizontalPadding)
             .padding(.vertical, typography.chipVerticalPadding)
             .frame(minHeight: typography.chipMinHeight)
-            .background(isHighlighted ? highlightColor : chipColor)
-            .foregroundStyle(isHighlighted ? .white : background)
+            .background(isHighlighted ? highlightColor.opacity(0.18) : chipColor.opacity(0.12))
+            .foregroundStyle(isHighlighted ? highlightColor : textColor.opacity(0.82))
+            .overlay(
+                RoundedRectangle(cornerRadius: typography.chipCornerRadius)
+                    .strokeBorder(isHighlighted ? highlightColor.opacity(0.72) : textColor.opacity(0.22), lineWidth: 1)
+            )
             .clipShape(RoundedRectangle(cornerRadius: typography.chipCornerRadius))
             .onHover { hovering in hoveredAtomID = hovering ? segment.id : nil }
             .animation(reduceMotion ? nil : QuickTextMotion.micro, value: isHighlighted)
@@ -293,23 +300,25 @@ struct ExpandedCardView: View {
             Button {
                 editingVariableKey = variable.key
             } label: {
-                Text(filled ?? variable.displayLabel)
+                Text(typography.variableLabel(filled ?? variable.displayLabel))
                     .multilineTextAlignment(.leading)
                     .fixedSize(horizontal: false, vertical: true)
                     .frame(maxWidth: maxWidth, alignment: .leading)
-                    .italic(filled == nil)
             }
                 .buttonStyle(.plain)
                 .font(typography.chipFont)
                 .padding(.horizontal, typography.chipHorizontalPadding)
                 .padding(.vertical, typography.chipVerticalPadding)
                 .frame(minHeight: typography.chipMinHeight)
-                .background(isHighlighted ? highlightColor : (filled != nil ? chipColor : Color.clear))
-                .foregroundStyle(isHighlighted ? .white : (filled != nil ? background : textColor))
+                .background(isHighlighted ? highlightColor.opacity(0.18) : (filled != nil ? chipColor.opacity(0.12) : highlightColor.opacity(0.04)))
+                .foregroundStyle(isHighlighted ? highlightColor : (filled != nil ? textColor : highlightColor))
                 .clipShape(RoundedRectangle(cornerRadius: typography.chipCornerRadius))
                 .overlay(
                     RoundedRectangle(cornerRadius: typography.chipCornerRadius)
-                        .strokeBorder(filled == nil && !isHighlighted ? textColor.opacity(0.4) : .clear, style: StrokeStyle(lineWidth: 1.5, dash: [4, 3]))
+                        .strokeBorder(
+                            filled == nil ? (isHighlighted ? highlightColor.opacity(0.72) : highlightColor.opacity(0.7)) : (isHighlighted ? highlightColor.opacity(0.72) : textColor.opacity(0.22)),
+                            style: filled == nil ? StrokeStyle(lineWidth: 1, dash: [4, 3]) : StrokeStyle(lineWidth: 1)
+                        )
                 )
                 .animation(reduceMotion ? nil : QuickTextMotion.standard, value: filled)
                 .popover(isPresented: Binding(
@@ -328,7 +337,7 @@ struct ExpandedCardView: View {
     /// without switching modes (see README "Reusable variable library").
     private func cannedValueChip(_ variable: PhraseVariable, maxWidth: CGFloat) -> some View {
         let isHighlighted = isPulsingAllAtoms || isHoveringCopyAllZone
-        return Text(expandedChipDisplay ? (variable.libraryValue ?? variable.displayLabel) : variable.displayLabel)
+        return Text(typography.variableLabel(expandedChipDisplay ? (variable.libraryValue ?? variable.displayLabel) : variable.displayLabel))
             .multilineTextAlignment(.leading)
             .fixedSize(horizontal: false, vertical: true)
             .frame(maxWidth: maxWidth, alignment: .leading)
@@ -336,8 +345,12 @@ struct ExpandedCardView: View {
             .padding(.horizontal, typography.chipHorizontalPadding)
             .padding(.vertical, typography.chipVerticalPadding)
             .frame(minHeight: typography.chipMinHeight)
-            .background(isHighlighted ? highlightColor : chipColor)
-            .foregroundStyle(isHighlighted ? .white : background)
+            .background(isHighlighted ? highlightColor.opacity(0.18) : chipColor.opacity(0.12))
+            .foregroundStyle(isHighlighted ? highlightColor : textColor)
+            .overlay(
+                RoundedRectangle(cornerRadius: typography.chipCornerRadius)
+                    .strokeBorder(isHighlighted ? highlightColor.opacity(0.72) : textColor.opacity(0.22), lineWidth: 1)
+            )
             .clipShape(RoundedRectangle(cornerRadius: typography.chipCornerRadius))
             .help(variable.libraryValue ?? "")
             .animation(reduceMotion ? nil : QuickTextMotion.micro, value: isHighlighted)
@@ -350,20 +363,19 @@ struct ExpandedCardView: View {
     /// unfilled fallback, since it's never present in `variableValues`.
     private func unresolvedVariableChip(_ variable: PhraseVariable, maxWidth: CGFloat) -> some View {
         let isHighlighted = isPulsingAllAtoms || isHoveringCopyAllZone
-        return Text(variable.displayLabel)
+        return Text(typography.variableLabel(variable.displayLabel))
             .multilineTextAlignment(.leading)
             .fixedSize(horizontal: false, vertical: true)
             .frame(maxWidth: maxWidth, alignment: .leading)
-            .italic()
             .font(typography.chipFont)
             .padding(.horizontal, typography.chipHorizontalPadding)
             .padding(.vertical, typography.chipVerticalPadding)
             .frame(minHeight: typography.chipMinHeight)
-            .foregroundStyle(isHighlighted ? background : Color.red.opacity(0.85))
-            .background(isHighlighted ? highlightColor : Color.red.opacity(0.06))
+            .foregroundStyle(isHighlighted ? Color.red : Color.red.opacity(0.82))
+            .background(isHighlighted ? Color.red.opacity(0.14) : Color.red.opacity(0.05))
             .overlay(
                 RoundedRectangle(cornerRadius: typography.chipCornerRadius)
-                    .strokeBorder(isHighlighted ? highlightColor : Color.red.opacity(0.55), style: StrokeStyle(lineWidth: 1.5, dash: [4, 3]))
+                    .strokeBorder(isHighlighted ? Color.red.opacity(0.75) : Color.red.opacity(0.55), style: StrokeStyle(lineWidth: 1, dash: [4, 3]))
             )
             .clipShape(RoundedRectangle(cornerRadius: typography.chipCornerRadius))
             .animation(reduceMotion ? nil : QuickTextMotion.micro, value: isHighlighted)
@@ -550,21 +562,21 @@ struct CardTypography {
 
     var isSerif: Bool { family == "serif" }
     var bodySize: CGFloat { baseSize * 1.5 }
-    var bodyLineHeight: CGFloat { bodySize * (isSerif ? 1.22 : 1.28) }
-    var chipSize: CGFloat { bodySize * 0.88 }
+    var bodyLineHeight: CGFloat { bodySize * (isSerif ? 1.10 : 1.14) }
+    var chipSize: CGFloat { bodySize * 0.50 }
     var chipLineHeight: CGFloat { chipSize * 1.18 }
-    var chipHorizontalPadding: CGFloat { chipSize * 0.62 }
-    var chipVerticalPadding: CGFloat { chipSize * 0.12 }
-    var chipMinHeight: CGFloat { bodyLineHeight + 6 }
-    var chipCornerRadius: CGFloat { min(10, chipMinHeight * 0.24) }
-    var titleSize: CGFloat { baseSize * 0.62 }
-    var titleTracking: CGFloat { baseSize * (isSerif ? 0.14 : 0.12) }
-    var titleToBodySpacing: CGFloat { baseSize * 0.9 }
-    var lineSpacing: CGFloat { bodyLineHeight * 0.28 }
+    var chipHorizontalPadding: CGFloat { max(6, chipSize * 0.48) }
+    var chipVerticalPadding: CGFloat { max(2, chipSize * 0.10) }
+    var chipMinHeight: CGFloat { chipLineHeight + (chipVerticalPadding * 2) }
+    var chipCornerRadius: CGFloat { min(8, chipMinHeight * 0.24) }
+    var titleSize: CGFloat { baseSize * 0.48 }
+    var titleTracking: CGFloat { baseSize * 0.20 }
+    var titleToBodySpacing: CGFloat { baseSize * 0.72 }
+    var lineSpacing: CGFloat { bodyLineHeight * 0.16 }
 
     var bodyFont: Font { font(bodySize, weight: .regular) }
-    var chipFont: Font { font(chipSize, weight: .semibold) }
-    var titleFont: Font { font(titleSize, weight: .semibold) }
+    var chipFont: Font { .system(size: chipSize, weight: .regular, design: .monospaced) }
+    var titleFont: Font { font(titleSize, weight: .regular) }
     var tileFont: Font { font(baseSize, weight: .semibold) }
 
     private func font(_ size: CGFloat, weight: Font.Weight) -> Font {
@@ -573,6 +585,8 @@ struct CardTypography {
         }
         return .system(size: size, weight: weight)
     }
+
+    func variableLabel(_ value: String) -> String { "[\(value)]" }
 }
 
 /// Free-text fill-in popover for a single `{{variable}}` occurrence, shown by
