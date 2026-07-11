@@ -643,6 +643,24 @@
       "updatedAt" : "2026-07-09T22:33:48Z",
       "value" : "Change the subject’s body type to {{@Swimmer's build}}.",
       "visibility" : "private"
+    },
+    {
+      "categoryId" : "prompt-reuse",
+      "createdAt" : "2026-07-11T14:35:33Z",
+      "favorite" : false,
+      "id" : "phrase-98CB45C4-D08F-48E4-9050-BAC03ACC8387",
+      "summary" : "",
+      "tags" : [
+
+      ],
+      "textReplacement" : {
+        "shortcut" : "xmodel",
+        "syncEnabled" : false
+      },
+      "title" : "Request optimal model guidance",
+      "updatedAt" : "2026-07-11T14:35:33Z",
+      "value" : "Recommend the most lightweight, cost-effective LLM that meets the task's reasoning and context requirements. Optimize for minimum token usage while maintaining high-quality results.",
+      "visibility" : "public"
     }
   ],
   "settings" : {
@@ -679,7 +697,7 @@
     "paletteSource" : "Robert Brown Fabric Collection",
     "textReplacementLastSyncAt" : "2026-07-09T20:15:00Z"
   },
-  "updatedAt" : "2026-07-09T22:33:48Z",
+  "updatedAt" : "2026-07-11T14:35:33Z",
   "variables" : [
     {
       "id" : "var-1783398724430",

@@ -1,5 +1,9 @@
 import SwiftUI
 
+struct FlowLayoutWhitespaceKey: LayoutValueKey {
+    static let defaultValue = false
+}
+
 struct MasonryGrid: Layout {
     let columnWidth: CGFloat
     let spacing: CGFloat
@@ -55,6 +59,7 @@ struct FlowLayout: Layout {
         let size: CGSize
         let startsNewLine: Bool
         let baseline: CGFloat
+        let isWhitespace: Bool
     }
 
     private struct Row {
@@ -72,12 +77,24 @@ struct FlowLayout: Layout {
             let baselineValue = subview.dimensions(in: .unspecified)[.firstTextBaseline]
             let baseline = baselineValue.isFinite ? baselineValue : natural.height
             guard natural.width > maxWidth else {
-                return MeasuredSubview(index: index, size: natural, startsNewLine: false, baseline: baseline)
+                return MeasuredSubview(
+                    index: index,
+                    size: natural,
+                    startsNewLine: false,
+                    baseline: baseline,
+                    isWhitespace: subview[FlowLayoutWhitespaceKey.self]
+                )
             }
             let wrapped = subview.sizeThatFits(ProposedViewSize(width: maxWidth, height: nil))
             let wrappedBaselineValue = subview.dimensions(in: ProposedViewSize(width: maxWidth, height: nil))[.firstTextBaseline]
             let wrappedBaseline = wrappedBaselineValue.isFinite ? wrappedBaselineValue : wrapped.height
-            return MeasuredSubview(index: index, size: wrapped, startsNewLine: true, baseline: wrappedBaseline)
+            return MeasuredSubview(
+                index: index,
+                size: wrapped,
+                startsNewLine: true,
+                baseline: wrappedBaseline,
+                isWhitespace: subview[FlowLayoutWhitespaceKey.self]
+            )
         }
     }
 
@@ -103,6 +120,11 @@ struct FlowLayout: Layout {
             let proposedWidth = current.isEmpty ? item.size.width : currentWidth + spacing + item.size.width
             if !current.isEmpty && (item.startsNewLine || proposedWidth > maxWidth) {
                 appendCurrent()
+            }
+            // Whitespace ends the preceding run but never begins a rendered row.
+            // This matches ordinary text wrapping when a space precedes a token.
+            if current.isEmpty && item.isWhitespace {
+                continue
             }
             current.append(item)
             currentWidth = current.count == 1 ? item.size.width : currentWidth + spacing + item.size.width

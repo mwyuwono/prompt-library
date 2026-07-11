@@ -70,6 +70,7 @@ final class LineSegmentTests: XCTestCase {
         let value = "Send to {{name}}, please."
         let lines = LineSegment.lines(value: value, atoms: [], variables: PhraseVariable.parse(value))
 
-        XCTAssertEqual(lines[0].map(\.text), ["Send to ", "{{name}}", ", please."])
+        XCTAssertEqual(lines[0].map(\.text), ["Send to ", "{{name}},", " ", "please."])
+        XCTAssertEqual(lines[0].map(\.text).joined(), value)
     }
 }

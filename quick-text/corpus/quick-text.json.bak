@@ -374,9 +374,9 @@
         "syncEnabled" : true
       },
       "title" : "Prose formatting only. No lists.",
-      "updatedAt" : "2026-07-02T21:46:43Z",
+      "updatedAt" : "2026-07-09T22:32:30Z",
       "value" : "Respond in prose only, with no lists, tables, headers, or bullet points. Write naturally for spoken readability.",
-      "visibility" : "private"
+      "visibility" : "public"
     },
     {
       "atoms" : [
@@ -580,22 +580,6 @@
       "visibility" : "private"
     },
     {
-      "categoryId" : "image-quality",
-      "color" : "brown-18",
-      "createdAt" : "2026-07-06T15:37:03Z",
-      "favorite" : false,
-      "id" : "phrase-1783352201",
-      "summary" : "",
-      "tags" : [
-
-      ],
-      "textColor" : "brown-22",
-      "title" : "Swimmer's build",
-      "updatedAt" : "2026-07-06T15:37:03Z",
-      "value" : "A classical swimmer’s physique: athletic, broad-shouldered, and naturally powerful, with smooth, voluminous musculature defined by rounded anatomical forms rather than sharp striations. Prioritize continuous sculptural flow, natural proportions, a refined waist, proportionate trapezius muscles, and an elegant V-shaped silhouette. Avoid hyper-vascularity, exaggerated definition, or bodybuilding aesthetics. Render the anatomy with soft tonal transitions and sculptural volume, evoking polished Greco-Roman marble while remaining fully integrated into the source artwork’s medium, lighting, and level of abstraction. Use classical chiaroscuro to emphasize form through luminous highlights and deep, velvety shadows.",
-      "visibility" : "private"
-    },
-    {
       "categoryId" : "prompt-reuse",
       "color" : "brown-18",
       "createdAt" : "2026-07-06T20:52:13Z",
@@ -644,6 +628,21 @@
       "updatedAt" : "2026-07-08T14:39:57Z",
       "value" : "Spend tokens on analysis, implementation, and verification rather than chat. Omit conversational filler, praise, apologies, and restatements of my request. Do not narrate routine steps.",
       "visibility" : "public"
+    },
+    {
+      "categoryId" : "image-quality",
+      "createdAt" : "2026-07-09T22:33:48Z",
+      "favorite" : false,
+      "id" : "phrase-2A8A519F-258E-4ED6-B025-4BBE67B78465",
+      "image" : "",
+      "summary" : "",
+      "tags" : [
+
+      ],
+      "title" : "Change body type",
+      "updatedAt" : "2026-07-09T22:33:48Z",
+      "value" : "Change the subject’s body type to {{@Swimmer's build}}.",
+      "visibility" : "private"
     }
   ],
   "settings" : {
@@ -680,7 +679,7 @@
     "paletteSource" : "Robert Brown Fabric Collection",
     "textReplacementLastSyncAt" : "2026-07-09T20:15:00Z"
   },
-  "updatedAt" : "2026-07-09T22:26:15Z",
+  "updatedAt" : "2026-07-10T02:13:56Z",
   "variables" : [
     {
       "id" : "var-1783398724430",

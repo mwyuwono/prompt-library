@@ -2,12 +2,20 @@ import SwiftUI
 
 enum QuickTextMotion {
     static let microDuration: Double = 0.14
+    static let selectionDuration: Double = 0.12
     static let standardDuration: Double = 0.22
     static let panelDuration: Double = 0.30
 
     static let micro = Animation.easeOut(duration: microDuration)
+    static let selection = Animation.easeOut(duration: selectionDuration)
     static let standard = Animation.easeInOut(duration: standardDuration)
     static let panel = Animation.easeInOut(duration: panelDuration)
+}
+
+struct CardTextUnit {
+    let characterCount: Int
+    let isChip: Bool
+    let isWhitespace: Bool
 }
 
 struct ExpandedOverlayView: View {
@@ -99,9 +107,11 @@ struct ExpandedCardView: View {
     @State private var isPulsingCardBackground = false
     @State private var variableValues: [String: String] = [:]
     @State private var editingVariableKey: String?
+    @State private var keyboardNavigationActive = false
+    @State private var mouseMoveMonitor: Any?
 
     private var hasAtoms: Bool { !(phrase.atoms ?? []).isEmpty }
-    private var typography: CardTypography { CardTypography(baseSize: CGFloat(fontSize), family: fontFamily) }
+    private var titleTypography: CardTypography { CardTypography(baseSize: CGFloat(fontSize), family: fontFamily) }
     private var sortedAtoms: [Atom] { (phrase.atoms ?? []).sorted { $0.start < $1.start } }
     private var parsedVariables: [PhraseVariable] { PhraseVariable.parse(phrase.value, library: libraryVariables) }
     private var hasVariables: Bool { !parsedVariables.isEmpty }
@@ -113,7 +123,9 @@ struct ExpandedCardView: View {
     /// not the chips block) — a tap right now copies the whole card, so the
     /// background gets a subtle tint to signal that instead of leaving it
     /// ambiguous with the dead space between chips.
-    private var isHoveringCopyAllZone: Bool { isHoveringCard && !isHoveringAtomsBlock }
+    private var isHoveringCopyAllZone: Bool {
+        !keyboardNavigationActive && isHoveringCard && !isHoveringAtomsBlock
+    }
 
     private var showsCopyAllTint: Bool { isHoveringCopyAllZone || isAllAtomsMultiselected }
 
@@ -124,27 +136,23 @@ struct ExpandedCardView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: typography.titleToBodySpacing) {
+        VStack(alignment: .leading, spacing: titleTypography.titleToBodySpacing) {
             Text(phrase.title.uppercased())
-                .font(typography.titleFont)
-                .tracking(typography.titleTracking)
-                .foregroundStyle(textColor.opacity(0.6))
+                .font(titleTypography.titleFont)
+                .tracking(titleTypography.titleTracking)
+                .foregroundStyle(textColor.opacity(0.45))
 
             GeometryReader { geometry in
-                ScrollView {
-                    VStack(alignment: .leading, spacing: typography.lineSpacing) {
-                        Spacer(minLength: 0)
-                        linesBlock(maxWidth: geometry.size.width)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        Spacer(minLength: 0)
-                    }
-                    .frame(minHeight: geometry.size.height)
-                }
+                linesBlock(
+                    maxWidth: geometry.size.width,
+                    typography: typography(maxWidth: geometry.size.width, maxHeight: geometry.size.height)
+                )
+                .frame(width: geometry.size.width, height: geometry.size.height, alignment: .leading)
             }
         }
-        .padding(46)
+        .padding(60)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-            .background(
+        .background(
             ZStack {
                 isPulsingCardBackground ? highlightColor : background
                 if showsCopyAllTint {
@@ -153,12 +161,19 @@ struct ExpandedCardView: View {
             }
             .animation(reduceMotion ? nil : QuickTextMotion.standard, value: showsCopyAllTint)
         )
-        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .clipShape(RoundedRectangle(cornerRadius: 24))
+        .overlay(
+            RoundedRectangle(cornerRadius: 24)
+                .stroke(textColor.opacity(0.16), lineWidth: 1)
+        )
         .shadow(color: .black.opacity(0.4), radius: 40, y: 16)
         .overlay(alignment: .topTrailing) { iconsOverlay }
         .overlay { CopiedBadge(isVisible: isCopied, color: highlightColor) }
         .contentShape(Rectangle())
-        .onHover { hovering in isHoveringCard = hovering }
+        .onHover { hovering in
+            isHoveringCard = hovering
+            if hovering { keyboardNavigationActive = false }
+        }
         .onTapGesture { copyFull() }
         .onAppear {
             if variableValues.isEmpty {
@@ -175,6 +190,12 @@ struct ExpandedCardView: View {
                 }
                 return event
             }
+            mouseMoveMonitor = NSEvent.addLocalMonitorForEvents(matching: .mouseMoved) { event in
+                if keyboardNavigationActive {
+                    keyboardNavigationActive = false
+                }
+                return event
+            }
         }
         .onDisappear {
             if let keyMonitor {
@@ -185,22 +206,49 @@ struct ExpandedCardView: View {
                 NSEvent.removeMonitor(monitor)
                 shiftReleaseMonitor = nil
             }
+            if let monitor = mouseMoveMonitor {
+                NSEvent.removeMonitor(monitor)
+                mouseMoveMonitor = nil
+            }
         }
     }
 
-    private func linesBlock(maxWidth: CGFloat) -> some View {
+    private func typography(maxWidth: CGFloat, maxHeight: CGFloat) -> CardTypography {
+        CardTypography(
+            baseSize: CGFloat(fontSize),
+            family: fontFamily,
+            availableWidth: maxWidth,
+            availableHeight: maxHeight,
+            contentCharacterCount: phrase.value.count,
+            contentLines: lines.map { line in
+                line.map {
+                    CardTextUnit(
+                        characterCount: $0.text.count,
+                        isChip: $0.isChip,
+                        isWhitespace: $0.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                    )
+                }
+            }
+        )
+    }
+
+    private func linesBlock(maxWidth: CGFloat, typography: CardTypography) -> some View {
         let content = VStack(alignment: .leading, spacing: typography.lineSpacing) {
             ForEach(Array(lines.enumerated()), id: \.offset) { _, line in
                 FlowLayout(spacing: 0) {
                     ForEach(line) { segment in
                         if segment.atom != nil {
-                            atomChip(segment, maxWidth: maxWidth)
+                            atomChip(segment, typography: typography)
                         } else if segment.variable != nil {
-                            variableChip(segment, maxWidth: maxWidth)
+                            variableChip(segment, typography: typography)
                         } else {
                             Text(segment.text)
                                 .font(typography.bodyFont)
                                 .foregroundStyle(textColor)
+                                .layoutValue(
+                                    key: FlowLayoutWhitespaceKey.self,
+                                    value: segment.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                                )
                         }
                     }
                 }
@@ -245,7 +293,7 @@ struct ExpandedCardView: View {
                 .frame(width: 44, height: 44)
         }
         .buttonStyle(.glass)
-        .tint(isHovering ? highlightColor : textColor)
+        .tint(isHovering ? highlightColor : textColor.opacity(0.4))
         .scaleEffect(isHovering && !reduceMotion ? 1.02 : 1)
         .frame(width: 44, height: 44)
         .contentShape(RoundedRectangle(cornerRadius: 12))
@@ -256,25 +304,24 @@ struct ExpandedCardView: View {
     /// `maxWidth` caps the chip so a long atom (spanning a whole sentence, say)
     /// wraps internally instead of running off the card uncut — FlowLayout only
     /// wraps between subviews, so a single Text needs its own width ceiling.
-    private func atomChip(_ segment: LineSegment, maxWidth: CGFloat) -> some View {
+    private func atomChip(_ segment: LineSegment, typography: CardTypography) -> some View {
         let isHighlighted = selectedAtomIDs.contains(segment.id) || hoveredAtomID == segment.id
             || isPulsingAllAtoms || singleCopiedAtomID == segment.id || isHoveringCopyAllZone
         return Button { handleAtomTap(segment.atom!) } label: {
             Text(segment.text)
                 .multilineTextAlignment(.leading)
                 .fixedSize(horizontal: false, vertical: true)
-                .frame(maxWidth: maxWidth, alignment: .leading)
         }
             .buttonStyle(.plain)
             .font(typography.chipFont)
             .padding(.horizontal, typography.chipHorizontalPadding)
             .padding(.vertical, typography.chipVerticalPadding)
             .frame(minHeight: typography.chipMinHeight)
-            .background(isHighlighted ? highlightColor.opacity(0.18) : chipColor.opacity(0.12))
-            .foregroundStyle(isHighlighted ? highlightColor : textColor.opacity(0.82))
+            .background(isHighlighted ? highlightColor.opacity(0.14) : chipColor.opacity(0.10))
+            .foregroundStyle(isHighlighted ? highlightColor.opacity(0.92) : textColor.opacity(0.68))
             .overlay(
                 RoundedRectangle(cornerRadius: typography.chipCornerRadius)
-                    .strokeBorder(isHighlighted ? highlightColor.opacity(0.72) : textColor.opacity(0.22), lineWidth: 1)
+                    .strokeBorder(isHighlighted ? highlightColor.opacity(0.58) : textColor.opacity(0.20), lineWidth: 1)
             )
             .clipShape(RoundedRectangle(cornerRadius: typography.chipCornerRadius))
             .onHover { hovering in hoveredAtomID = hovering ? segment.id : nil }
@@ -288,44 +335,54 @@ struct ExpandedCardView: View {
     /// ones. An unresolved `{{@name}}` library reference (see `PhraseVariable.isUnresolved`)
     /// has nothing to fill, so it renders as a distinct, non-interactive chip instead.
     @ViewBuilder
-    private func variableChip(_ segment: LineSegment, maxWidth: CGFloat) -> some View {
+    private func variableChip(_ segment: LineSegment, typography: CardTypography) -> some View {
         let variable = segment.variable!
         if variable.isUnresolved {
-            unresolvedVariableChip(variable, maxWidth: maxWidth)
+            unresolvedVariableChip(variable, segment: segment, typography: typography)
         } else if variable.isCannedValue {
-            cannedValueChip(variable, maxWidth: maxWidth)
+            cannedValueChip(variable, segment: segment, typography: typography)
         } else {
             let filled = variableValues[variable.key]
+            let label = variableDisplayText(variable, in: segment, replacingWith: filled ?? variable.displayLabel)
             let isHighlighted = isPulsingAllAtoms || isHoveringCopyAllZone
+            let fillColor = isHighlighted
+                ? highlightColor.opacity(0.14)
+                : (filled != nil ? chipColor.opacity(0.10) : highlightColor.opacity(0.035))
+            let labelColor = isHighlighted
+                ? highlightColor.opacity(0.92)
+                : (filled != nil ? textColor.opacity(0.70) : highlightColor.opacity(0.86))
+            let borderColor = filled == nil
+                ? (isHighlighted ? highlightColor.opacity(0.58) : highlightColor.opacity(0.68))
+                : (isHighlighted ? highlightColor.opacity(0.58) : textColor.opacity(0.20))
+            let editorIsPresented = Binding(
+                get: { editingVariableKey == variable.key },
+                set: { isPresented in if !isPresented { editingVariableKey = nil } }
+            )
             Button {
                 editingVariableKey = variable.key
             } label: {
-                Text(typography.variableLabel(filled ?? variable.displayLabel))
+                Text(label)
                     .multilineTextAlignment(.leading)
                     .fixedSize(horizontal: false, vertical: true)
-                    .frame(maxWidth: maxWidth, alignment: .leading)
             }
                 .buttonStyle(.plain)
                 .font(typography.chipFont)
                 .padding(.horizontal, typography.chipHorizontalPadding)
                 .padding(.vertical, typography.chipVerticalPadding)
                 .frame(minHeight: typography.chipMinHeight)
-                .background(isHighlighted ? highlightColor.opacity(0.18) : (filled != nil ? chipColor.opacity(0.12) : highlightColor.opacity(0.04)))
-                .foregroundStyle(isHighlighted ? highlightColor : (filled != nil ? textColor : highlightColor))
+                .background(fillColor)
+                .foregroundStyle(labelColor)
                 .clipShape(RoundedRectangle(cornerRadius: typography.chipCornerRadius))
                 .overlay(
                     RoundedRectangle(cornerRadius: typography.chipCornerRadius)
                         .strokeBorder(
-                            filled == nil ? (isHighlighted ? highlightColor.opacity(0.72) : highlightColor.opacity(0.7)) : (isHighlighted ? highlightColor.opacity(0.72) : textColor.opacity(0.22)),
+                            borderColor,
                             style: filled == nil ? StrokeStyle(lineWidth: 1, dash: [4, 3]) : StrokeStyle(lineWidth: 1)
                         )
                 )
                 .animation(reduceMotion ? nil : QuickTextMotion.standard, value: filled)
-                .popover(isPresented: Binding(
-                    get: { editingVariableKey == variable.key },
-                    set: { isPresented in if !isPresented { editingVariableKey = nil } }
-                )) {
-                    variableEditorPopover(for: variable, currentValue: filled)
+                .popover(isPresented: editorIsPresented) {
+                    variableEditorPopover(for: variable, currentValue: filled, typography: typography)
                 }
         }
     }
@@ -335,21 +392,21 @@ struct ExpandedCardView: View {
     /// display mode (`expandedChipDisplay`) shows the full canned `value` instead. Either
     /// way, hovering surfaces the full value as a native tooltip — the "preview option"
     /// without switching modes (see README "Reusable variable library").
-    private func cannedValueChip(_ variable: PhraseVariable, maxWidth: CGFloat) -> some View {
+    private func cannedValueChip(_ variable: PhraseVariable, segment: LineSegment, typography: CardTypography) -> some View {
         let isHighlighted = isPulsingAllAtoms || isHoveringCopyAllZone
-        return Text(typography.variableLabel(expandedChipDisplay ? (variable.libraryValue ?? variable.displayLabel) : variable.displayLabel))
+        let baseLabel = expandedChipDisplay ? (variable.libraryValue ?? variable.displayLabel) : variable.displayLabel
+        return Text(variableDisplayText(variable, in: segment, replacingWith: baseLabel))
             .multilineTextAlignment(.leading)
             .fixedSize(horizontal: false, vertical: true)
-            .frame(maxWidth: maxWidth, alignment: .leading)
             .font(typography.chipFont)
             .padding(.horizontal, typography.chipHorizontalPadding)
             .padding(.vertical, typography.chipVerticalPadding)
             .frame(minHeight: typography.chipMinHeight)
-            .background(isHighlighted ? highlightColor.opacity(0.18) : chipColor.opacity(0.12))
-            .foregroundStyle(isHighlighted ? highlightColor : textColor)
+            .background(isHighlighted ? highlightColor.opacity(0.14) : chipColor.opacity(0.10))
+            .foregroundStyle(isHighlighted ? highlightColor.opacity(0.92) : textColor.opacity(0.70))
             .overlay(
                 RoundedRectangle(cornerRadius: typography.chipCornerRadius)
-                    .strokeBorder(isHighlighted ? highlightColor.opacity(0.72) : textColor.opacity(0.22), lineWidth: 1)
+                    .strokeBorder(isHighlighted ? highlightColor.opacity(0.58) : textColor.opacity(0.20), lineWidth: 1)
             )
             .clipShape(RoundedRectangle(cornerRadius: typography.chipCornerRadius))
             .help(variable.libraryValue ?? "")
@@ -361,29 +418,38 @@ struct ExpandedCardView: View {
     /// and a resolved one; not tappable, since there's nothing to fill. Still copies
     /// through as the literal `{{@name}}` text via `PhraseVariable.substitute`'s
     /// unfilled fallback, since it's never present in `variableValues`.
-    private func unresolvedVariableChip(_ variable: PhraseVariable, maxWidth: CGFloat) -> some View {
+    private func unresolvedVariableChip(_ variable: PhraseVariable, segment: LineSegment, typography: CardTypography) -> some View {
         let isHighlighted = isPulsingAllAtoms || isHoveringCopyAllZone
-        return Text(typography.variableLabel(variable.displayLabel))
+        let helpText = "Unresolved variable reference — no library variable named \u{201C}\(variable.displayLabel)\u{201D} was found. Copies through as literal text."
+        let foregroundColor = isHighlighted ? Color.red.opacity(0.92) : Color.red.opacity(0.74)
+        let backgroundColor = isHighlighted ? Color.red.opacity(0.12) : Color.red.opacity(0.035)
+        let borderColor = isHighlighted ? Color.red.opacity(0.62) : Color.red.opacity(0.50)
+        return Text(variableDisplayText(variable, in: segment, replacingWith: variable.displayLabel))
             .multilineTextAlignment(.leading)
             .fixedSize(horizontal: false, vertical: true)
-            .frame(maxWidth: maxWidth, alignment: .leading)
             .font(typography.chipFont)
             .padding(.horizontal, typography.chipHorizontalPadding)
             .padding(.vertical, typography.chipVerticalPadding)
             .frame(minHeight: typography.chipMinHeight)
-            .foregroundStyle(isHighlighted ? Color.red : Color.red.opacity(0.82))
-            .background(isHighlighted ? Color.red.opacity(0.14) : Color.red.opacity(0.05))
+            .foregroundStyle(foregroundColor)
+            .background(backgroundColor)
             .overlay(
                 RoundedRectangle(cornerRadius: typography.chipCornerRadius)
-                    .strokeBorder(isHighlighted ? Color.red.opacity(0.75) : Color.red.opacity(0.55), style: StrokeStyle(lineWidth: 1, dash: [4, 3]))
+                    .strokeBorder(borderColor, style: StrokeStyle(lineWidth: 1, dash: [4, 3]))
             )
             .clipShape(RoundedRectangle(cornerRadius: typography.chipCornerRadius))
             .animation(reduceMotion ? nil : QuickTextMotion.micro, value: isHighlighted)
-            .help("Unresolved variable reference — no library variable named \u{201C}\(variable.displayLabel)\u{201D} was found. Copies through as literal text.")
+            .help(helpText)
+    }
+
+    private func variableDisplayText(_ variable: PhraseVariable, in segment: LineSegment, replacingWith label: String) -> String {
+        let placeholderLength = variable.end - variable.start
+        let suffix = String(Array(segment.text).dropFirst(placeholderLength))
+        return label + suffix
     }
 
     @ViewBuilder
-    private func variableEditorPopover(for variable: PhraseVariable, currentValue: String?) -> some View {
+    private func variableEditorPopover(for variable: PhraseVariable, currentValue: String?, typography: CardTypography) -> some View {
         if let choices = variable.choices {
             VStack(alignment: .leading, spacing: 4) {
                 ForEach(choices, id: \.self) { choice in
@@ -391,7 +457,7 @@ struct ExpandedCardView: View {
                         variableValues[variable.key] = choice
                         editingVariableKey = nil
                     }
-                    .font(typography.chipFont)
+                    .font(typography.utilityFont)
                     .foregroundStyle(textColor)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 12)
@@ -439,6 +505,12 @@ struct ExpandedCardView: View {
         // without this guard, Space/Return/arrows here swallow keystrokes meant for
         // it — most notably Space, which multi-word variable values need.
         guard editingVariableKey == nil, !(NSApp.keyWindow?.firstResponder is NSTextView) else { return event }
+        if [36, 49, 123, 124, 125, 126].contains(event.keyCode) {
+            keyboardNavigationActive = true
+            hoveredAtomID = nil
+            isHoveringCopyIcon = false
+            isHoveringCloseIcon = false
+        }
         let extending = event.modifierFlags.contains(.shift)
         switch event.keyCode {
         case 53:
@@ -561,23 +633,111 @@ struct CardTypography {
     let family: String
 
     var isSerif: Bool { family == "serif" }
-    var bodySize: CGFloat { baseSize * 1.5 }
-    var bodyLineHeight: CGFloat { bodySize * (isSerif ? 1.10 : 1.14) }
-    var chipSize: CGFloat { bodySize * 0.50 }
-    var chipLineHeight: CGFloat { chipSize * 1.18 }
-    var chipHorizontalPadding: CGFloat { max(6, chipSize * 0.48) }
-    var chipVerticalPadding: CGFloat { max(2, chipSize * 0.10) }
+    var availableWidth: CGFloat = 0
+    var availableHeight: CGFloat = 0
+    var contentCharacterCount: Int = 0
+    var contentLines: [[CardTextUnit]] = []
+
+    var bodySize: CGFloat {
+        let preferredSize = baseSize * (isSerif ? 5.0 : 4.6)
+        guard availableWidth > 0 else { return preferredSize }
+        // A conservative average glyph width keeps at least 16 ordinary body
+        // characters on one line while preserving the largest possible hero type.
+        let sixteenCharacterLimit = availableWidth / (16 * 0.62)
+        let maximumSize = min(preferredSize, sixteenCharacterLimit)
+        guard availableHeight > 0, contentCharacterCount > 0 else { return maximumSize }
+
+        // Choose the largest type size whose rendered-unit estimate fits. Atom and
+        // variable chips occupy substantially less width/height than body text, so
+        // sizing from raw character count would undersize chip-heavy cards.
+        var candidate = maximumSize
+        while candidate > 10 {
+            let estimatedHeight = estimatedContentHeight(for: candidate)
+            if estimatedHeight <= availableHeight {
+                return candidate
+            }
+            candidate -= 1
+        }
+        return 10
+    }
+
+    private func estimatedContentHeight(for bodySize: CGFloat) -> CGFloat {
+        guard !contentLines.isEmpty else {
+            let averageGlyphWidth: CGFloat = isSerif ? 0.55 : 0.60
+            let lineHeightMultiplier: CGFloat = isSerif ? 1.10 : 1.14
+            let charactersPerLine = max(Int(availableWidth / (bodySize * averageGlyphWidth)), 1)
+            let lineCount = CGFloat((contentCharacterCount + charactersPerLine - 1) / charactersPerLine)
+            return lineCount * bodySize * lineHeightMultiplier
+                + max(lineCount - 1, 0) * bodySize * 0.08
+        }
+
+        let bodyLineHeight = bodySize * (isSerif ? 1.10 : 1.14)
+        let chipLineHeight = bodySize * 0.46 * 1.04 + max(2, bodySize * 0.46 * 0.06) * 2
+        let bodyGlyphWidth = bodySize * (isSerif ? 0.55 : 0.60)
+        let chipGlyphWidth = bodySize * 0.46 * 0.60
+        var total: CGFloat = 0
+
+        for (lineIndex, line) in contentLines.enumerated() {
+            var rowWidth: CGFloat = 0
+            var rowHeight: CGFloat = 0
+            var rowCount = 0
+
+            func flushRow() {
+                guard rowWidth > 0 else { return }
+                total += rowHeight
+                rowCount += 1
+                rowWidth = 0
+                rowHeight = 0
+            }
+
+            for unit in line {
+                let glyphWidth = unit.isChip ? chipGlyphWidth : bodyGlyphWidth
+                let unitWidth = CGFloat(max(unit.characterCount, 1)) * glyphWidth
+                let unitHeight = unit.isChip ? chipLineHeight : bodyLineHeight
+                if unit.isWhitespace {
+                    // Spaces are only a small separator and can disappear at a wrap.
+                    if rowWidth + unitWidth <= availableWidth { rowWidth += unitWidth }
+                    continue
+                }
+                if unitWidth > availableWidth {
+                    flushRow()
+                    let wrappedRows = max(Int(ceil(unitWidth / availableWidth)), 1)
+                    total += CGFloat(wrappedRows) * unitHeight
+                    rowCount += wrappedRows
+                } else if rowWidth > 0 && rowWidth + unitWidth > availableWidth {
+                    flushRow()
+                    rowWidth = unitWidth
+                    rowHeight = unitHeight
+                } else {
+                    rowWidth += unitWidth
+                    rowHeight = max(rowHeight, unitHeight)
+                }
+            }
+            flushRow()
+            if lineIndex < contentLines.count - 1 && rowCount > 0 {
+                total += bodySize * 0.06
+            }
+        }
+        return total
+    }
+    var bodyLineHeight: CGFloat { bodySize * (isSerif ? 1.08 : 1.12) }
+    var chipSize: CGFloat { bodySize * 0.46 }
+    var chipLineHeight: CGFloat { chipSize * 1.04 }
+    var chipHorizontalPadding: CGFloat { max(7, chipSize * 0.34) }
+    var chipVerticalPadding: CGFloat { max(2, chipSize * 0.06) }
     var chipMinHeight: CGFloat { chipLineHeight + (chipVerticalPadding * 2) }
-    var chipCornerRadius: CGFloat { min(8, chipMinHeight * 0.24) }
-    var titleSize: CGFloat { baseSize * 0.48 }
-    var titleTracking: CGFloat { baseSize * 0.20 }
-    var titleToBodySpacing: CGFloat { baseSize * 0.72 }
-    var lineSpacing: CGFloat { bodyLineHeight * 0.16 }
+    var chipCornerRadius: CGFloat { min(10, chipMinHeight * 0.22) }
+    var titleSize: CGFloat { max(13, baseSize * 0.84) }
+    var titleTracking: CGFloat { titleSize * 0.22 }
+    var titleToBodySpacing: CGFloat { max(24, bodySize * 0.42) }
+    var lineSpacing: CGFloat { bodyLineHeight * 0.06 }
 
     var bodyFont: Font { font(bodySize, weight: .regular) }
     var chipFont: Font { .system(size: chipSize, weight: .regular, design: .monospaced) }
     var titleFont: Font { font(titleSize, weight: .regular) }
     var tileFont: Font { font(baseSize, weight: .semibold) }
+    var utilityFont: Font { .system(size: max(15, baseSize), weight: .regular) }
+    var utilityButtonFont: Font { .system(size: max(13, baseSize * 0.82), weight: .regular, design: .monospaced) }
 
     private func font(_ size: CGFloat, weight: Font.Weight) -> Font {
         if isSerif {
@@ -586,7 +746,6 @@ struct CardTypography {
         return .system(size: size, weight: weight)
     }
 
-    func variableLabel(_ value: String) -> String { "[\(value)]" }
 }
 
 /// Free-text fill-in popover for a single `{{variable}}` occurrence, shown by
@@ -618,7 +777,7 @@ private struct VariableFillPopover: View {
     var body: some View {
         HStack(spacing: 8) {
             TextField("Value", text: $text)
-                .font(typography.bodyFont)
+                .font(typography.utilityFont)
                 .foregroundStyle(textColor)
                 .textFieldStyle(.plain)
                 .frame(width: 220)
@@ -628,7 +787,7 @@ private struct VariableFillPopover: View {
                 .focused($isFocused)
                 .onSubmit { onSubmit(text) }
             Button("Set") { onSubmit(text) }
-                .font(typography.chipFont)
+                .font(typography.utilityButtonFont)
                 .buttonStyle(.glassProminent)
                 .tint(highlightColor)
         }
@@ -668,17 +827,46 @@ struct LineSegment: Identifiable {
         var counter = 0
         func nextID() -> String { counter += 1; return "seg-\(counter)" }
 
+        func appendPlainText(_ value: String) {
+            guard !value.isEmpty else { return }
+            var remaining = value
+
+            // Keep punctuation visually attached to the preceding token so a
+            // period or comma never opens a wrapped line by itself.
+            if let last = flat.last, last.isChip,
+               let first = remaining.first,
+               ".,;:!?)]}".contains(first) {
+                flat[flat.count - 1] = LineSegment(
+                    id: last.id,
+                    text: last.text + String(first),
+                    atom: last.atom,
+                    variable: last.variable
+                )
+                remaining.removeFirst()
+            }
+
+            // Keep an ordinary separating space as its own layout item. FlowLayout
+            // renders it in-line but discards it when it would begin a new row.
+            if let first = remaining.first, first.isWhitespace {
+                flat.append(LineSegment(id: nextID(), text: String(first), atom: nil, variable: nil))
+                remaining.removeFirst()
+            }
+            if !remaining.isEmpty {
+                flat.append(LineSegment(id: nextID(), text: remaining, atom: nil, variable: nil))
+            }
+        }
+
         for range in ranges {
             guard range.start >= cursor else { continue }
             if range.start > cursor {
-                flat.append(LineSegment(id: nextID(), text: String(characters[cursor..<range.start]), atom: nil, variable: nil))
+                appendPlainText(String(characters[cursor..<range.start]))
             }
             let id = range.atom?.id ?? nextID()
             flat.append(LineSegment(id: id, text: String(characters[range.start..<range.end]), atom: range.atom, variable: range.variable))
             cursor = range.end
         }
         if cursor < characters.count {
-            flat.append(LineSegment(id: nextID(), text: String(characters[cursor...]), atom: nil, variable: nil))
+            appendPlainText(String(characters[cursor...]))
         }
 
         var lines: [[LineSegment]] = [[]]

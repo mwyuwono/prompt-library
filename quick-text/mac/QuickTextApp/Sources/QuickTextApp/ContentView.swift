@@ -97,46 +97,53 @@ struct ContentView: View {
             searchModuleRow
 
             GeometryReader { geometry in
-                ScrollView {
-                    if store.filteredPhrases.isEmpty {
-                        emptyState
-                    } else {
-                        MasonryGrid(columnWidth: cardWidth, spacing: gridSpacing) {
-                            ForEach(Array(store.filteredPhrases.enumerated()), id: \.element.id) { _, phrase in
-                                let category = store.category(for: phrase.categoryId)
-                                TileView(
-                                    phrase: phrase,
-                                    imageURL: store.imageURL(for: phrase.image),
-                                    backgroundColor: store.color(for: phrase.color ?? category?.color ?? store.corpus.settings.defaultTileColor),
-                                    textColor: store.color(for: phrase.textColor ?? category?.textColor ?? store.corpus.settings.defaultTextColor),
-                                    fontSize: store.corpus.settings.defaultFontSize,
-                                    fontFamily: store.corpus.settings.defaultFontFamily,
-                                    cardWidth: cardWidth,
-                                    isSelected: store.selectedPhraseID == phrase.id,
-                                    isCopied: store.copiedPhraseID == phrase.id,
-                                    highlightColor: store.highlightColor
-                                )
-                                .onTapGesture {
-                                    store.selectedPhraseID = phrase.id
-                                    store.expandedPhraseID = phrase.id
-                                    store.exitCategoryFocus()
-                                    setFocusedModule(.cards)
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        if store.filteredPhrases.isEmpty {
+                            emptyState
+                        } else {
+                            MasonryGrid(columnWidth: cardWidth, spacing: gridSpacing) {
+                                ForEach(Array(store.filteredPhrases.enumerated()), id: \.element.id) { _, phrase in
+                                    let category = store.category(for: phrase.categoryId)
+                                    TileView(
+                                        phrase: phrase,
+                                        imageURL: store.imageURL(for: phrase.image),
+                                        backgroundColor: store.color(for: phrase.color ?? category?.color ?? store.corpus.settings.defaultTileColor),
+                                        textColor: store.color(for: phrase.textColor ?? category?.textColor ?? store.corpus.settings.defaultTextColor),
+                                        fontSize: store.corpus.settings.defaultFontSize,
+                                        fontFamily: store.corpus.settings.defaultFontFamily,
+                                        cardWidth: cardWidth,
+                                        isSelected: store.selectedPhraseID == phrase.id,
+                                        isCopied: store.copiedPhraseID == phrase.id,
+                                        highlightColor: store.highlightColor
+                                    )
+                                    .id(phrase.id)
+                                    .onTapGesture {
+                                        store.selectedPhraseID = phrase.id
+                                        store.expandedPhraseID = phrase.id
+                                        store.exitCategoryFocus()
+                                        setFocusedModule(.cards)
+                                    }
+                                    .contextMenu {
+                                        Button("Copy") { store.copy(phrase) }
+                                        Button("Preview") { store.expandedPhraseID = phrase.id }
+                                        Button("Edit") { store.beginEditing(phrase) }
+                                        Button("Duplicate") { store.duplicate(phrase) }
+                                        Button("Delete", role: .destructive) { deleteCandidate = phrase }
+                                    }
+                                    .onDrag {
+                                        store.draggedPhraseID = phrase.id
+                                        return NSItemProvider(object: phrase.id as NSString)
+                                    }
+                                    .onDrop(of: [.text], delegate: PhraseDropDelegate(target: phrase, store: store))
                                 }
-                                .contextMenu {
-                                    Button("Copy") { store.copy(phrase) }
-                                    Button("Preview") { store.expandedPhraseID = phrase.id }
-                                    Button("Edit") { store.beginEditing(phrase) }
-                                    Button("Duplicate") { store.duplicate(phrase) }
-                                    Button("Delete", role: .destructive) { deleteCandidate = phrase }
-                                }
-                                .onDrag {
-                                    store.draggedPhraseID = phrase.id
-                                    return NSItemProvider(object: phrase.id as NSString)
-                                }
-                                .onDrop(of: [.text], delegate: PhraseDropDelegate(target: phrase, store: store))
                             }
+                            .padding(.vertical, 2)
                         }
-                        .padding(.vertical, 2)
+                    }
+                    .onChange(of: store.selectedPhraseID) { _, selectedID in
+                        guard focusedModule == .cards, let selectedID else { return }
+                        revealSelectedCard(selectedID, with: proxy)
                     }
                 }
                 .onAppear { gridWidth = geometry.size.width }
@@ -613,6 +620,18 @@ struct ContentView: View {
         let nextIndex = min(max(index + delta, 0), all.count - 1)
         searchInlineFocus = all[nextIndex]
         searchFocused = (searchInlineFocus == .searchField)
+    }
+
+    /// Keep keyboard selection within the scroll viewport so the visual focus
+    /// never advances onto a card the user cannot see.
+    private func revealSelectedCard(_ id: String, with proxy: ScrollViewProxy) {
+        if reduceMotion {
+            proxy.scrollTo(id, anchor: .center)
+        } else {
+            withAnimation(QuickTextMotion.selection) {
+                proxy.scrollTo(id, anchor: .center)
+            }
+        }
     }
 
     private func activateSearchInlineItem() -> Bool {

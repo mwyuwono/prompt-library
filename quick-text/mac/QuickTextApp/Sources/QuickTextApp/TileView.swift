@@ -79,7 +79,7 @@ struct TileView: View {
         .onHover { isHovering = $0 }
         .scaleEffect(isHovering && !isSelected && !reduceMotion ? 1.008 : 1)
         .animation(reduceMotion ? nil : QuickTextMotion.micro, value: isHovering)
-        .animation(reduceMotion ? nil : QuickTextMotion.standard, value: isSelected)
+        .animation(reduceMotion ? nil : QuickTextMotion.selection, value: isSelected)
     }
 }
 
