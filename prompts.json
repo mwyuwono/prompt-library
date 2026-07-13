@@ -1911,6 +1911,61 @@
             "instructions": "Use the Upturned Profile Reference for elegant upward profile, luminous blank paper field, fine parallel contour hatching, dark hair mass, and long sculptural neck treatment."
           }
         ]
+      },
+      {
+        "id": "luminous-geological-abstraction",
+        "name": "Luminous Geological Abstraction",
+        "description": "Layered biomorphic color fields with mineral depth and weathered luminosity.",
+        "instructions": "Created with [Synthesize Style Image Prompts](/Users/mwy/.codex/skills/synthesize-style-image-prompts/SKILL.md)",
+        "template": "Create a new image in the synthesized style defined by the attached style references.\n\nAttached style references:\n- {{lyrical_terrain_structure_reference}}\n- {{mineral_pool_palette_reference}}\n- {{depths_density_reference}}\n- {{held_current_flow_reference}}\n- {{silent_ground_atmosphere_reference}}\n- {{still_matter_color_reference}}\n\nSubject instructions, if provided:\n{{subject_instructions}}\n\nIf the subject instructions are blank, create an invented, place-responsive abstract composition suggesting terrain, water, stone, vegetation, and accumulated memory without depicting a literal landscape.\n\nStyle hierarchy:\n- The subject instructions control the underlying subject, orientation, aspect ratio, and any factual elements explicitly requested.\n- The attached style references control medium, palette, surface, mark-making, edge behavior, spatial compression, atmosphere, density, and level of finish.\n- Use both the attached images and this written synthesis. Synthesize their shared visual language rather than copying the composition or distinctive forms of any single reference.\n- Do not invent typography, symbols, recognizable landmarks, figures, architecture, or narrative objects unless requested in the subject instructions.\n\nSynthesized style direction:\nCreate a tactile contemporary abstract painting built from interlocking biomorphic masses that feel discovered through repeated painting, wiping, veiling, and revision. Let forms hover between aerial terrain, mineral deposits, pools, stones, foliage, and bodily contours without resolving into literal illustration. Compress depth into a shallow, all-over field while preserving a few strong spatial currents: broad pale passages that open breathing room, darker anchors that hold the composition, and clusters of smaller marks that create rhythm and geological complexity.\n\nUse a natural but chromatically alive palette: celadon, sage, moss, olive, eucalyptus, deep forest green, blue-gray, slate, charcoal, warm cream, chalky white, dusty rose, salmon, terracotta, rust, ochre, mustard, and restrained flashes of coral or turquoise. Organize color into substantial, readable zones. Balance cool mineral greens and blue-grays against warm earthen pinks and oranges; avoid letting either temperature dominate uniformly. Light should seem embedded in the pigment rather than cast from an external source, with pale translucent areas glowing beside matte dark passages.\n\nBuild the surface with visible oil- or acrylic-like brushwork: broad dragged strokes, thin veils, dry scumbling, rubbed transitions, scraped or redrawn edges, semi-opaque overlaps, occasional impasto, and traces of earlier layers showing through. Vary edges deliberately—some soft and dissolving, some bluntly brushed, some briefly defined by a narrow dark contour. Preserve canvas grain, pigment drag, uneven opacity, and hand-made irregularity. Marks may range from large quiet fields to compact pebble-like notes and sparse linear gestures, but every accent should support structure rather than decoration.\n\nKeep the composition asymmetrical, intuitive, and balanced through visual weight rather than geometry. Allow forms to touch, overlap, nest, and partially obscure one another. Maintain ambiguity and slow looking: the image should feel grounded, meditative, weathered, and sensuous, with enough unresolved space to suggest a remembered place rather than a mapped one. The finish should be confident but not polished smooth.\n\nComposition and output:\nHonor any requested format. Otherwise choose a portrait or landscape canvas according to the emerging subject. Fill the frame with an immersive painted field, using one or two larger quiet shapes, several mid-scale interlocking masses, and sparse small accents. Preserve clear value structure and passages of rest amid the density. Output a single finished painting with natural canvas texture and convincing physical pigment.\n\nAvoid:\nAvoid photorealistic scenery, literal topographic maps, obvious horizons, decorative floral motifs, cartoon outlines, crisp vector geometry, cubist grids, uniform mosaic patches, synthetic gradients, airbrushed blending, glossy digital effects, neon color, muddy all-over brown, excessive black, repetitive mark stamps, equal detail everywhere, forced symmetry, centralized emblem-like composition, fake gallery framing, copied signatures, legible writing, captions, watermarks, borders, UI, or process notes.\n\nOutput a single finished image. Do not include labels, captions, watermarks, UI, borders, or process notes.",
+        "variables": [
+          {
+            "name": "subject_instructions",
+            "label": "Subject Instructions",
+            "placeholder": "Optional: describe the subject, setting, composition, aspect ratio, mood, or constraints for the new image.",
+            "value": "",
+            "inputType": "textarea",
+            "rows": 5
+          }
+        ],
+        "referenceImages": [
+          {
+            "variable": "lyrical_terrain_structure_reference",
+            "label": "Interlocking Structure Reference",
+            "path": "public/images/style-references/lyrical-terrain-gravity-of-place.jpg",
+            "instructions": "Use the Interlocking Structure Reference for large asymmetrical masses, nested organic shapes, pale breathing passages, softened contours, and the balance of cool stone colors with warm earthen accents."
+          },
+          {
+            "variable": "mineral_pool_palette_reference",
+            "label": "Mineral Palette Reference",
+            "path": "public/images/style-references/lyrical-terrain-mineral-pool.jpeg",
+            "instructions": "Use the Mineral Palette Reference for celadon, turquoise, cream, umber, ochre, and slate relationships; translucent scumbling; shallow pooled depth; and large quiet color zones."
+          },
+          {
+            "variable": "depths_density_reference",
+            "label": "Layered Density Reference",
+            "path": "public/images/style-references/lyrical-terrain-depths.jpg",
+            "instructions": "Use the Layered Density Reference for complex all-over rhythm, dark green anchoring, fragmented secondary marks, luminous peach accents, linear traces, and the suggestion of remembered terrain without literal depiction."
+          },
+          {
+            "variable": "held_current_flow_reference",
+            "label": "Flow and Edge Reference",
+            "path": "public/images/style-references/lyrical-terrain-held-current.jpeg",
+            "instructions": "Use the Flow and Edge Reference for broad directional currents, alternating soft and dark-outlined edges, scraped transitions, pale internal pathways, and saturated green-rust contrast."
+          },
+          {
+            "variable": "silent_ground_atmosphere_reference",
+            "label": "Atmosphere and Veil Reference",
+            "path": "public/images/style-references/lyrical-terrain-silent-ground.jpeg",
+            "instructions": "Use the Atmosphere and Veil Reference for smoky veils, low-contrast transitions, embedded light, restrained marks, canvas grain, quiet negative space, and contemplative tonal depth."
+          },
+          {
+            "variable": "still_matter_color_reference",
+            "label": "Warm Color-Massing Reference",
+            "path": "public/images/style-references/lyrical-terrain-still-matter.jpeg",
+            "instructions": "Use the Warm Color-Massing Reference for clustered rounded forms, coral and terracotta warmth, creamy highlights, dark green intervals, dry-brushed texture, and balanced landscape-format abundance."
+          }
+        ]
       }
     ],
     "variationSelector": "visual",
