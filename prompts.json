@@ -1966,6 +1966,37 @@
             "instructions": "Use the Warm Color-Massing Reference for clustered rounded forms, coral and terracotta warmth, creamy highlights, dark green intervals, dry-brushed texture, and balanced landscape-format abundance."
           }
         ]
+      },
+      {
+        "id": "matte-tempera-figurative-stillness",
+        "name": "Matte Tempera Figurative Stillness",
+        "description": "Chalky modernist figuration with compressed space and poised psychological stillness.",
+        "instructions": "Created from two fixed figurative painting references supplied by the user.",
+        "template": "Create a new image in the synthesized style defined by the attached style references.\n\nAttached style references:\n- {{tempera_figurative_group_reference}}\n- {{tempera_reclining_portrait_reference}}\n\nSubject instructions, if provided:\n{{subject_instructions}}\n\nIf the subject instructions are blank, choose an intimate figurative subject and shallow interior or environmental setting that feel native to the style references while remaining entirely original.\n\nStyle hierarchy:\n- The subject instructions control the new subject, setting, composition, orientation, aspect ratio, and any factual elements explicitly requested.\n- The attached style references control medium, palette, surface, mark-making, drawing, spatial compression, atmosphere, and level of finish.\n- Synthesize their shared visual language rather than copying the composition, pose, figures, clothing, architecture, or narrative of either reference.\n\nSynthesized style direction:\nCreate a tempera-like figurative painting defined by matte, chalky color, restrained modeling, and an atmosphere of poised psychological stillness. Use a muted palette of pale turquoise, oxidized teal, dusty rose, warm clay, parchment, soft gray-green, muted coral, and deep brown-black, with occasional cool blue accents. Build forms through broad, dry, visibly worked brushstrokes, thin scumbles, rubbed passages, and softly layered opaque paint rather than glossy blending.\n\nPreserve clear, simplified drawing and strong structural proportions, but allow contours to remain slightly irregular, handmade, and selectively unresolved. Model faces and bodies with flattened planes, restrained tonal transitions, cool shadows, and subtle warm-cool shifts. Favor elongated silhouettes, sculptural anatomy, compressed perspective, and shallow spatial depth. Let backgrounds function as large, quiet fields of modulated color with sparse architectural or environmental suggestions, avoiding excessive detail.\n\nUse diffuse, ambient illumination with minimal cast shadow. Create depth through tonal temperature, overlapping shapes, and planar color rather than dramatic chiaroscuro. Keep the surface visibly painterly: dry edges, underpainting traces, uneven opacity, softly abraded texture, and occasional linear accents.\n\nThe overall mood should feel intimate, austere, dreamlike, and emotionally self-contained—classical yet modern, serene yet faintly uncanny. The final image should resemble an original early-to-mid twentieth-century European figurative painting, with a sensibility related to Pavel Tchelitchew and Christopher Wood without imitating any specific work.\n\nAvoid:\nAvoid photorealism, glossy digital blending, slick contemporary illustration, cinematic lighting, dramatic cast shadows, deep illusionistic perspective, hyper-detailed backgrounds, polished anatomy, plastic skin, saturated neon color, hard vector-clean contours, copied compositions or poses, captions, watermarks, borders, UI, or text artifacts.\n\nOutput a single finished image. Do not include labels, captions, watermarks, UI, borders, or process notes.",
+        "variables": [
+          {
+            "name": "subject_instructions",
+            "label": "Subject Instructions",
+            "placeholder": "Optional: describe the subject, setting, composition, aspect ratio, mood, or constraints for the new image.",
+            "value": "",
+            "inputType": "textarea",
+            "rows": 5
+          }
+        ],
+        "referenceImages": [
+          {
+            "variable": "tempera_figurative_group_reference",
+            "label": "Figurative Group Reference",
+            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/style-references/matte-tempera-figurative-group.jpg",
+            "instructions": "Use this reference for elongated multi-figure composition, shallow architectural space, pale turquoise and parchment color fields, dry matte paint, diffuse light, sparse environmental detail, and poised dreamlike atmosphere. Do not copy its figures, poses, setting, or narrative."
+          },
+          {
+            "variable": "tempera_reclining_portrait_reference",
+            "label": "Reclining Portrait Reference",
+            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/style-references/matte-tempera-figurative-reclining-portrait.jpg",
+            "instructions": "Use this reference for flattened facial and bodily planes, sculptural anatomy, compressed perspective, oxidized teal and dusty rose palette, restrained modeling, rubbed tempera-like surface, and emotionally self-contained portraiture. Do not copy its subject, pose, furniture, or composition."
+          }
+        ]
       }
     ],
     "variationSelector": "visual",
