@@ -2024,6 +2024,31 @@
             "instructions": "Use this reference for flattened facial and bodily planes, sculptural anatomy, compressed perspective, oxidized teal and dusty rose palette, restrained modeling, rubbed tempera-like surface, and emotionally self-contained portraiture. Do not copy its subject, pose, furniture, or composition."
           }
         ]
+      },
+      {
+        "id": "dry-brushed-architectural-facade",
+        "name": "Dry-Brushed Architectural Facade",
+        "description": "Cropped, materially tactile architecture in restrained earth tones.",
+        "instructions": "Created with [Synthesize Style Image Prompts](/Users/mwy/.codex/skills/synthesize-style-image-prompts/SKILL.md)",
+        "template": "Create a new image in the synthesized style defined by the attached style reference.\n\nAttached style reference:\n- {{dry_brushed_architectural_facade_reference}}\n\nSubject instructions, if provided:\n{{subject_instructions}}\n\nIf the subject instructions are blank, create an original close-cropped view of an old urban or domestic facade: a wall with windows, roofline, balcony, stair, or utility detail, chosen for strong stacked geometry and quiet material presence.\n\nStyle hierarchy:\n- The subject instructions control the new subject, setting, architecture, viewpoint, orientation, aspect ratio, and any factual elements explicitly requested.\n- The attached style reference controls medium, palette, surface, brushwork, edge behavior, spatial compression, atmosphere, and level of finish.\n- Use both the attached style reference and this written synthesis. Synthesize its visual language rather than copying its specific building, window arrangement, roofline, or composition.\n- Do not invent people, signage, text, vehicles, dramatic scenery, or decorative details unless requested in the subject instructions.\n\nSynthesized style direction:\nCreate a compact, painterly architectural study in opaque oil or gouache-like paint on a visible off-white ground. Crop the architecture boldly so the facade fills most of the frame; stack broad horizontal bands, shallow roof planes, and dark rectangular window openings into a slightly flattened elevation. Favor a close viewpoint and a tall or square composition where structural fragments read as large abstracted shapes rather than a complete picturesque building.\n\nUse a restrained palette of warm ivory, bone, chalk white, charcoal, soot black, deep brown, umber, muted rust, and small reddish-brown accents. Keep the value structure simple and strong: pale plaster or siding against heavy dark roof and window masses, with a few thin light strokes describing sashes, trim, or reflected light. Illumination should be diffuse and overcast, with no theatrical sunlight or deep cast shadows.\n\nMake the surface visibly hand-worked: bristly dry brush, dragged pigment, short opaque strokes, scumbled light paint, scraped edges, uneven coverage, and occasional exposed underlayer. Let windows and roof details remain suggestive and slightly irregular rather than precisely drafted. Preserve tactile brush direction, paint buildup, and the modest imperfections of a quickly observed painting. The mood should be quiet, weathered, intimate, and observant.\n\nComposition and output:\nHonor any requested format. Otherwise use a portrait-oriented crop with a pale lower facade, a dark upper roof or overhang, and a few vertically aligned windows. Keep the scene spatially shallow and graphic, with large calm planes balanced by a small number of expressive marks. Output one original finished painting with tangible pigment and no frame.\n\nAvoid:\nAvoid photorealism, polished digital painting, crisp architectural drafting, perspective-perfect rendering, glossy surfaces, clean vector lines, highly saturated color, blue skies, lush vegetation, cinematic lighting, busy streetscapes, picturesque storybook cottages, excessive brick or wood detail, repeated window patterns, copied compositions, signatures, captions, watermarks, borders, UI, or text artifacts.\n\nOutput a single finished image. Do not include labels, captions, watermarks, UI, borders, or process notes.",
+        "variables": [
+          {
+            "name": "subject_instructions",
+            "label": "Subject Instructions",
+            "placeholder": "Optional: describe the subject, setting, composition, aspect ratio, mood, or constraints for the new image.",
+            "value": "",
+            "inputType": "textarea",
+            "rows": 5
+          }
+        ],
+        "referenceImages": [
+          {
+            "variable": "dry_brushed_architectural_facade_reference",
+            "label": "Dry-Brushed Architectural Facade Reference",
+            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/style-references/1784243318407-dry-brushed-architectural-facade-reference.jpg",
+            "instructions": "Use this reference for the stacked, close-cropped facade composition; warm ivory, charcoal, brown, and rust palette; diffuse light; shallow spatial compression; dark window masses; and tactile dry-brushed, scumbled paint surface. Do not copy its specific building, window pattern, roofline, or composition."
+          }
+        ]
       }
     ],
     "variationSelector": "visual",
