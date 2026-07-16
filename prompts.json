@@ -252,9 +252,23 @@
     "category": "Art",
     "icon": "swap_horiz",
     "featured": false,
-    "template": "Edit the uploaded image to replace the character's head and face with that of a 19-year-old male Roman athlete, strictly maintaining the original pose, angle, and perspective.\n\n**Character Details (Adapted to Style):**\n\n**Face:** A classical facial structure featuring an aquiline nose and high cheekbones. Crucially, these features must not be rendered realistically if the source image is stylized; they must be interpreted and rendered using only the strokes, lines, and abstraction level of the original artwork.\n\n**Hair:** Very short hair. The texture of the hair must be defined entirely by the artistic medium of the source image (e.g., cross-hatching or engraved lines). No headgear.\n\n**Expression:** An expression that is natural and consistent with the body language and context of the original pose.\n\n**Physique & Proportions:** The figure should have a natural, athletic build reminiscent of classical Greco-Roman sculpture. Focus on sculptural muscle mass and functional strength rather than extreme bodybuilding proportions. The musculature should be well-defined but avoid hyper-vascularity or exaggerated \"cartoonish\" volume. Ensure the traps and shoulders are proportionate to a natural athlete, maintaining a sleek, alluring, and realistic silhouette.\n\n**Style & Technical Execution:**\n\n**Seamless Integration:** The new head and refined physique must perfectly match the exact medium, substrate texture (e.g., aged paper grain), line quality, and level of detail of the source image.\n\n**Lighting & Values:** Strictly adhere to the shading values, contrast, and lighting direction of the original image to ensure the swap appears authentic.\n\n**Contingency:** If the original pose hides portions of the face, apply the classical aesthetic and hair type to the visible portions of the head and neck.",
+    "template": "",
     "variables": [],
     "slug": "figure-replacement",
+    "variations": [
+      {
+        "id": "keep-style-and-composition",
+        "name": "Keep Style and Composition",
+        "description": "Replaces the figure while preserving the uploaded image’s visual treatment and layout.",
+        "template": "Keep the uploaded image’s style and composition exactly the same, but replace the figure with the new figure I provide. Preserve the original crop, framing, pose, proportions, perspective, lighting, palette, medium, texture, line quality, and level of detail. Change only the figure and make the replacement integrate naturally with the unchanged image. Do not redesign, restyle, recompose, or add new elements.\n\nTell me when you are ready for me to provide the new figure."
+      },
+      {
+        "id": "roman-athlete",
+        "name": "Roman Athlete",
+        "description": "Classical Roman athlete with source-matched integration.",
+        "template": "Edit the uploaded image to replace the character's head and face with that of a 19-year-old male Roman athlete, strictly maintaining the original pose, angle, and perspective.\n\n**Character Details (Adapted to Style):**\n\n**Face:** A classical facial structure featuring an aquiline nose and high cheekbones. Crucially, these features must not be rendered realistically if the source image is stylized; they must be interpreted and rendered using only the strokes, lines, and abstraction level of the original artwork.\n\n**Hair:** Very short hair. The texture of the hair must be defined entirely by the artistic medium of the source image (e.g., cross-hatching or engraved lines). No headgear.\n\n**Expression:** An expression that is natural and consistent with the body language and context of the original pose.\n\n**Physique & Proportions:** The figure should have a natural, athletic build reminiscent of classical Greco-Roman sculpture. Focus on sculptural muscle mass and functional strength rather than extreme bodybuilding proportions. The musculature should be well-defined but avoid hyper-vascularity or exaggerated \"cartoonish\" volume. Ensure the traps and shoulders are proportionate to a natural athlete, maintaining a sleek, alluring, and realistic silhouette.\n\n**Style & Technical Execution:**\n\n**Seamless Integration:** The new head and refined physique must perfectly match the exact medium, substrate texture (e.g., aged paper grain), line quality, and level of detail of the source image.\n\n**Lighting & Values:** Strictly adhere to the shading values, contrast, and lighting direction of the original image to ensure the swap appears authentic.\n\n**Contingency:** If the original pose hides portions of the face, apply the classical aesthetic and hair type to the visible portions of the head and neck."
+      }
+    ],
     "image": "public/images/1775766209619.jpg",
     "recommendedModels": [
       {
@@ -358,15 +372,28 @@
   {
     "id": "contour-form-study",
     "title": "Contour Form Study",
-    "description": "Turns an uploaded drawing into a dimensional contour study for understanding facial planes, light, and likely correction areas.",
+    "description": "Turns an uploaded drawing into a structural study that clarifies three-dimensional form and anatomy.",
     "category": "Art",
     "icon": "gesture",
     "featured": false,
     "image": "public/images/contour-form-study-preview.png",
-    "template": "Use the uploaded drawing as the source of truth.\n\nRender an educational contour/form study of the drawing that makes the three-dimensional structure easier to understand. Preserve the drawing's identity, pose, composition, proportions, and major shapes, but do not feel bound to the original medium. Choose whatever visual treatment best clarifies form: topographic contour lines, planar facial mapping, subtle tonal bands, cross-contour wrapping lines, or a clean academic study style.\n\nThe goal is not to create a polished corrected artwork. The goal is to help the artist understand how the forms turn in space and how light should move across them. Emphasize facial planes, contour logic, shadow edges, turning forms, and the relationship between surface direction and value.\n\nMake the study feel dimensional and useful for revision. Avoid inventing new anatomy, changing the expression, beautifying the subject, or replacing the original drawing style. The contour study should read as a diagnostic companion to the uploaded drawing.\n\nAfter rendering the image, add a short note that lists three likely corrections or revision areas that would help the drawing. Then ask whether the user would like you to render one of those correction areas as a focused follow-up image.",
     "variables": [],
     "slug": "contour-form-study",
-    "instructions": "Upload a drawing with this prompt. The generated response should include a contour/form study plus three likely correction areas and an offer to render one of those areas as a focused follow-up.",
+    "instructions": "Upload a drawing, then choose the structural study best suited to the revision task.",
+    "variations": [
+      {
+        "id": "contour-diagnostic",
+        "name": "Contour Diagnostic",
+        "description": "Contour and planar mapping with likely correction areas.",
+        "template": "Use the uploaded drawing as the source of truth.\n\nRender an educational contour/form study of the drawing that makes the three-dimensional structure easier to understand. Preserve the drawing's identity, pose, composition, proportions, and major shapes, but do not feel bound to the original medium. Choose whatever visual treatment best clarifies form: topographic contour lines, planar facial mapping, subtle tonal bands, cross-contour wrapping lines, or a clean academic study style.\n\nThe goal is not to create a polished corrected artwork. The goal is to help the artist understand how the forms turn in space and how light should move across them. Emphasize facial planes, contour logic, shadow edges, turning forms, and the relationship between surface direction and value.\n\nMake the study feel dimensional and useful for revision. Avoid inventing new anatomy, changing the expression, beautifying the subject, or replacing the original drawing style. The contour study should read as a diagnostic companion to the uploaded drawing.\n\nAfter rendering the image, add a short note that lists three likely corrections or revision areas that would help the drawing. Then ask whether the user would like you to render one of those correction areas as a focused follow-up image."
+      },
+      {
+        "id": "photographic-anatomy-reconstruction",
+        "name": "Photographic Anatomy",
+        "description": "Monochrome studio reconstruction with anatomically legible light and form.",
+        "template": "Use the uploaded artwork as the fixed structural source of truth. Create a high-resolution, anatomically resolved monochrome reconstruction with photographic lighting that clarifies the subject’s existing form without changing the pose, proportions, viewpoint, silhouette, gesture, weight distribution, crop, figure scale, or placement of the limbs.\n\nRemove only surface degradation, including dust, stains, foxing, discoloration, tears, abrasions, fading, and uneven paper tone. Preserve the original figure exactly.\n\nTranslate the drawing into a realistic black-and-white studio reference with soft directional light, a broad tonal range, strong midtone separation, and controlled local contrast. Make the musculature, bony landmarks, overlapping forms, planes of the torso, major shadow masses, reflected light, and transitions between light and shadow easier to discern.\n\nTreat this as an image-to-image reconstruction, not loose inspiration. Reconstruct unclear passages conservatively from visible evidence. Preserve all asymmetries, irregularities, and anatomical relationships present in the source. Where information is genuinely absent, use restrained, anatomically plausible inference rather than inventing specific detail.\n\nBefore finalizing, compare the result directly against the source and preserve the shoulder angle, spinal curve, ribcage orientation, pelvic tilt, arm placement, leg crossing, foot position, head orientation, crop, and overall silhouette.\n\nDo not redesign or idealize the anatomy, alter the body type, exaggerate musculature, substitute a different model, change the pose, add unsupported definition, smooth away structural nuance, or introduce dramatic lighting, glamour treatment, stylization, or reinterpretation.\n\nOutput a single clean, high-resolution grayscale image with realistic skin texture, crisp anatomical separation, clearly legible midtones and shadows, controlled highlights, and a neutral unobtrusive background."
+      }
+    ],
     "recommendedModels": [
       {
         "vendor": "anthropic",
@@ -3875,5 +3902,14 @@
         "level": ""
       }
     ]
+  },
+  {
+    "id": "untitled-prompt-1784075225691",
+    "title": "Untitled Prompt",
+    "description": "",
+    "instructions": "",
+    "category": "Architecture",
+    "template": "",
+    "variables": []
   }
 ]
