@@ -697,6 +697,24 @@
       "updatedAt" : "2026-07-15T20:33:27Z",
       "value" : "For any questions, tasks, or decisions that require my attention, please use a short, unique identifier. This way, I can easily refer to it without having to type out the entire question or task description again.",
       "visibility" : "public"
+    },
+    {
+      "categoryId" : "workflow-commands",
+      "createdAt" : "2026-07-16T18:00:16Z",
+      "favorite" : false,
+      "id" : "phrase-74887694-BA5A-4409-9D93-A2A6E29C277B",
+      "summary" : "",
+      "tags" : [
+
+      ],
+      "textReplacement" : {
+        "shortcut" : "xaudio",
+        "syncEnabled" : true
+      },
+      "title" : "Audio content: Invoke skill to create",
+      "updatedAt" : "2026-07-16T18:00:16Z",
+      "value" : "Use $listen-to-content on the source below.\n\nI authorize ElevenLabs to process this source for speech synthesis.\n\nSOURCE:\n",
+      "visibility" : "public"
     }
   ],
   "settings" : {
@@ -733,7 +751,7 @@
     "paletteSource" : "Robert Brown Fabric Collection",
     "textReplacementLastSyncAt" : "2026-07-09T20:15:00Z"
   },
-  "updatedAt" : "2026-07-15T20:33:27Z",
+  "updatedAt" : "2026-07-16T18:00:16Z",
   "variables" : [
     {
       "id" : "var-1783398724430",
