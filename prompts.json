@@ -1795,6 +1795,53 @@
         ]
       },
       {
+        "id": "quiet-architectural-oil-study",
+        "name": "Quiet Architectural Oil Study",
+        "description": "Spare early-modernist oil handling and architectural quiet.",
+        "instructions": "Upload a source image to transform, then choose whether person likeness should be preserved.\nCreated with [Synthesize Style Image Prompts](/Users/mwy/.codex/skills/synthesize-style-image-prompts/SKILL.md)",
+        "template": "Transform the uploaded source image into a new artwork in the synthesized style defined by the attached style references.\n\nAttached style references:\n- {{quiet_oil_interior_reference}}\n- {{quiet_oil_window_reference}}\n- {{quiet_oil_facade_reference}}\n\nSource image priority:\n- Preserve the source image's core subject, crop, composition, proportions, spatial relationships, perspective cues, and important factual details.\n- Likeness instruction: {{preserve_likeness}}\n- Do not replace the source subject with rooms, windows, or facades merely because those appear in the style references. The source controls what is depicted; the references control how it is painted.\n\nStyle reference priority:\n- Use both the attached style references and the written synthesis below. Treat the references as the visual source of truth for medium, palette, surface, mark-making, edge behavior, lighting, texture, density, mood, and level of finish.\n- Synthesize their shared traits rather than copying any one reference's subject, layout, or distinctive details.\n\nSynthesized style direction:\nRender the source as a small, intimate oil study with an early-twentieth-century observational character. Reduce the scene into a few broad, stable masses and flattened planes while keeping the source structure readable. Favor strong verticals and horizontals, slightly compressed depth, cropped or off-center framing where the source permits it, and generous areas of quiet wall, floor, sky, or shadow that function as negative space.\n\nUse a restrained, low-chroma palette of warm plaster cream, yellowed ivory, smoky gray, blue-gray, charcoal, umber, brown-black, and deep muted red-brown, with only small accents of dull rust, ochre, or cool pale blue. Organize color into coherent value fields: pale matte lights, softened midtones, and deep near-black anchors in openings, recesses, furniture, hair, or cast shadow. Keep color relationships subtle and slightly weathered rather than bright or decorative.\n\nPaint with visible, economical oil brushwork on a matte, lightly textured surface. Use broad dragged strokes, dry-brushed scumbles, thin rubbed passages, opaque rectangular notes, and occasional bristle marks. Edges should vary: firm enough around structural divisions and focal forms, but softened, scraped, or absorbed into adjacent masses elsewhere. Allow small inaccuracies, uneven contours, exposed underlayers, and abbreviated details to preserve the directness of a study made from observation.\n\nLighting should be quiet, diffuse, and natural, describing the scene mainly through broad value contrast rather than theatrical highlights or modeled gradients. Treat windows, doorways, frames, rooflines, furnishings, and other repeated elements as simple dark-light rhythms. If people appear, keep anatomy and identity legible according to the likeness instruction, but simplify clothing and secondary facial detail into restrained tonal planes. The finished image should feel solitary, still, modest, and psychologically attentive rather than picturesque.\n\nFlexible zones:\n- Secondary textures, clutter, foliage, ornament, and small objects may be omitted or compressed into a few purposeful strokes.\n- Background depth may flatten and nonessential perspective detail may simplify, provided the source's key spatial relationships remain intact.\n- Surface color may shift into the reference palette while preserving meaningful source distinctions.\n- Focal edges may sharpen slightly; peripheral edges may dissolve into adjoining paint masses.\n\nAvoid:\nAvoid photorealism, glossy digital finish, smooth airbrushed gradients, heavy impasto everywhere, saturated color, golden-hour spectacle, cinematic rim light, decorative nostalgia, twee charm, excessive canvas grain, fussy detail, crisp vector geometry, cartoon outlines, muddy all-brown tonality, cubist fragmentation, invented architectural features, copied reference compositions, text, captions, watermarks, borders, UI, or process notes.\n\nOutput a single finished image.",
+        "variables": [
+          {
+            "name": "preserve_likeness",
+            "label": "Likeness",
+            "inputType": "toggle",
+            "labels": [
+              "General",
+              "Preserve"
+            ],
+            "options": [
+              "If the uploaded source image includes a person, preserve general identity cues only when they are central to the source image; otherwise prioritize the synthesized style and composition.",
+              "If the uploaded source image includes a person, preserve recognizable likeness: facial structure, feature placement, age cues, expression, distinctive asymmetries, and identity-defining details must remain intact while the style changes."
+            ],
+            "optionDescriptions": [
+              "Prioritizes style and composition unless identity is central.",
+              "Preserves recognizable facial identity while changing style."
+            ],
+            "value": "If the uploaded source image includes a person, preserve general identity cues only when they are central to the source image; otherwise prioritize the synthesized style and composition."
+          }
+        ],
+        "referenceImages": [
+          {
+            "variable": "quiet_oil_interior_reference",
+            "label": "Interior Palette and Surface Reference",
+            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/style-references/quiet-architectural-oil-interior-reference.jpg",
+            "instructions": "Use the Interior Palette and Surface Reference for matte oil texture, dry-brushed gray-blue and umber planes, dark furniture anchors, close cropped framing, and intimate stillness."
+          },
+          {
+            "variable": "quiet_oil_window_reference",
+            "label": "Window Massing and Negative Space Reference",
+            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/style-references/quiet-architectural-oil-window-reference.jpg",
+            "instructions": "Use the Window Massing and Negative Space Reference for spare geometry, compressed depth, broad cream and charcoal value fields, economical detail, and quiet architectural rhythm."
+          },
+          {
+            "variable": "quiet_oil_facade_reference",
+            "label": "Facade Brushwork and Rhythm Reference",
+            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/style-references/quiet-architectural-oil-facade-reference.jpg",
+            "instructions": "Use the Facade Brushwork and Rhythm Reference for chalky cream paint, deep roof and window masses, restrained rust accents, repeated dark-light openings, and visibly dragged bristle strokes."
+          }
+        ]
+      },
+      {
         "id": "neoclassical-atelier-lithograph",
         "name": "Neoclassical Atelier Lithograph",
         "description": "Academic graphite lithograph figure plate.",
