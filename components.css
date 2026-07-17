@@ -3039,10 +3039,24 @@ wy-controls-bar {
       text-transform: uppercase;
     }
 
-    wy-prompt-modal .overview-figure {
+    wy-prompt-modal .overview-figures {
       float: right;
-      width: 206px;
+      display: grid;
+      gap: 12px;
       margin: 2px 0 14px 28px;
+    }
+
+    wy-prompt-modal .overview-figures-pair {
+      grid-template-columns: repeat(2, minmax(0, 206px));
+    }
+
+    wy-prompt-modal .overview-figures-single {
+      grid-template-columns: minmax(0, 206px);
+    }
+
+    wy-prompt-modal .overview-figure {
+      min-width: 0;
+      margin: 0;
     }
 
     wy-prompt-modal .overview-figure img {
@@ -3315,10 +3329,18 @@ wy-prompt-modal .stepper-progress-bar {
         gap: 4px;
       }
 
-      wy-prompt-modal .overview-figure {
+      wy-prompt-modal .overview-figures {
         float: none;
         width: 100%;
         margin: 0 0 var(--spacing-md, 16px);
+      }
+
+      wy-prompt-modal .overview-figures-pair {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      wy-prompt-modal .overview-figures-single {
+        grid-template-columns: minmax(0, 1fr);
       }
 
       wy-prompt-modal .overview-figure img {

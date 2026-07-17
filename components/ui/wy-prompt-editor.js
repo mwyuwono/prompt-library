@@ -981,6 +981,31 @@ export class WyPromptEditor extends LitElement {
         `;
     }
 
+    _renderPreviewBaseImage() {
+        const image = this._editedPrompt?.previewBaseImage || '';
+        if (!image) return '';
+
+        const description = this._editedPrompt.previewBaseImageDescription ||
+            'Shared before image used to generate this prompt family’s variant previews.';
+
+        return html`
+            <div class="preview-base-image-field">
+                <div class="label">Canonical Preview Base Image</div>
+                <p class="field-description">
+                    Shown as the before image beside the prompt overview thumbnail on the published site.
+                </p>
+                <figure class="preview-base-image-card">
+                    <img src="${image}" alt="${description}">
+                    <figcaption>
+                        <span class="preview-base-image-title">Before image</span>
+                        <span class="preview-base-image-description">${description}</span>
+                        <code>${image}</code>
+                    </figcaption>
+                </figure>
+            </div>
+        `;
+    }
+
     _handleVariationExpand(e) {
         this._openVariationIndex = e.detail?.index ?? -1;
     }
@@ -1287,6 +1312,7 @@ export class WyPromptEditor extends LitElement {
                             @change="${(e) => this._handleFieldChange('category', e.detail.value)}"
                         ></wy-dropdown>
                         ${this._renderPromptImageControl()}
+                        ${this._renderPreviewBaseImage()}
                         ${this._renderHeroImageGenerator()}
                     </div>
 

@@ -16,6 +16,8 @@ export class WyPromptModal extends LitElement {
     instructions: { type: String },
     image: { type: String },
     promptImage: { type: String, attribute: 'prompt-image' },
+    previewBaseImage: { type: String, attribute: 'preview-base-image' },
+    previewBaseImageDescription: { type: String, attribute: 'preview-base-image-description' },
     variationImage: { type: String, attribute: 'variation-image' },
     template: { type: String },
     variables: { type: Array },
@@ -44,6 +46,8 @@ export class WyPromptModal extends LitElement {
     this.instructions = '';
     this.image = '';
     this.promptImage = '';
+    this.previewBaseImage = '';
+    this.previewBaseImageDescription = '';
     this.variationImage = '';
     this.template = '';
     this.variables = [];
@@ -331,14 +335,31 @@ export class WyPromptModal extends LitElement {
   }
 
   _renderOverview(template) {
+    const hasOverviewImages = Boolean(this.promptImage || this.previewBaseImage);
+    const hasBeforeAndAfter = Boolean(this.promptImage && this.previewBaseImage);
+
     return html`
       <div class="overview">
         <span class="overview-eyebrow">Prompt Overview</span>
-        ${this.promptImage ? html`
-          <figure class="overview-figure">
-            <img src="${this.promptImage}" alt="${this.title}" loading="lazy">
-            <figcaption>N&ordm; 01 &mdash; Example output</figcaption>
-          </figure>
+        ${hasOverviewImages ? html`
+          <div class="overview-figures ${hasBeforeAndAfter ? 'overview-figures-pair' : 'overview-figures-single'}">
+            ${this.previewBaseImage ? html`
+              <figure class="overview-figure">
+                <img
+                  src="${this.previewBaseImage}"
+                  alt="${this.previewBaseImageDescription || `${this.title} before image`}"
+                  loading="lazy"
+                >
+                <figcaption>N&ordm; 01 &mdash; Before</figcaption>
+              </figure>
+            ` : ''}
+            ${this.promptImage ? html`
+              <figure class="overview-figure">
+                <img src="${this.promptImage}" alt="${this.title} example output" loading="lazy">
+                <figcaption>N&ordm; ${this.previewBaseImage ? '02' : '01'} &mdash; Example output</figcaption>
+              </figure>
+            ` : ''}
+          </div>
         ` : ''}
         <div class="overview-lead">${unsafeHTML(this._renderDescriptionMarkdown(this.description))}</div>
       </div>

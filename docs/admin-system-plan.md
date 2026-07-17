@@ -86,14 +86,12 @@ Changing the passcode does not modify prompt content. It only re-encrypts the ex
 
 - **Add/Delete prompts:** Use JSON editing (archive for soft-delete)
 - **Variable reordering:** Add/remove supported, not drag reorder
-- **Preview base images:** `previewBaseImage` and `previewBaseImageDescription` are preserved by saves but do not yet have dedicated admin fields.
+- **Preview base images:** `previewBaseImage` and `previewBaseImageDescription` are shown in the Visuals step and preserved by saves; adding or replacing the file still requires JSON editing.
 
 ## Backlog
 
 - Add admin support for prompt preview base images:
-  - Show `previewBaseImage` in the Visuals step for multi-variant prompts.
   - Allow uploading/replacing the base image separately from prompt/variation previews.
-  - Display `previewBaseImageDescription`.
   - When generating new variant previews, prefer the saved base image.
 
 ## Troubleshooting

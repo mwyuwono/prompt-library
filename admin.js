@@ -372,6 +372,10 @@ function getAllImagePaths(prompt) {
         imagePaths.push(prompt.image);
     }
 
+    if (prompt?.previewBaseImage) {
+        imagePaths.push(prompt.previewBaseImage);
+    }
+
     if (prompt?.variations?.length) {
         prompt.variations.forEach(variation => {
             if (variation.image) {

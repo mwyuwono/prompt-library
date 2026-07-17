@@ -3687,6 +3687,27 @@ ${subjectPrompt}`
             </div>
         `;
   }
+  _renderPreviewBaseImage() {
+    const image = this._editedPrompt?.previewBaseImage || "";
+    if (!image) return "";
+    const description = this._editedPrompt.previewBaseImageDescription || "Shared before image used to generate this prompt family\u2019s variant previews.";
+    return b2`
+            <div class="preview-base-image-field">
+                <div class="label">Canonical Preview Base Image</div>
+                <p class="field-description">
+                    Shown as the before image beside the prompt overview thumbnail on the published site.
+                </p>
+                <figure class="preview-base-image-card">
+                    <img src="${image}" alt="${description}">
+                    <figcaption>
+                        <span class="preview-base-image-title">Before image</span>
+                        <span class="preview-base-image-description">${description}</span>
+                        <code>${image}</code>
+                    </figcaption>
+                </figure>
+            </div>
+        `;
+  }
   _handleVariationExpand(e6) {
     this._openVariationIndex = e6.detail?.index ?? -1;
   }
@@ -3981,6 +4002,7 @@ ${subjectPrompt}`
                             @change="${(e6) => this._handleFieldChange("category", e6.detail.value)}"
                         ></wy-dropdown>
                         ${this._renderPromptImageControl()}
+                        ${this._renderPreviewBaseImage()}
                         ${this._renderHeroImageGenerator()}
                     </div>
 
@@ -5741,6 +5763,8 @@ var _WyPromptModal = class _WyPromptModal extends i4 {
     this.instructions = "";
     this.image = "";
     this.promptImage = "";
+    this.previewBaseImage = "";
+    this.previewBaseImageDescription = "";
     this.variationImage = "";
     this.template = "";
     this.variables = [];
@@ -5982,14 +6006,30 @@ var _WyPromptModal = class _WyPromptModal extends i4 {
     return Number.isInteger(this.activeVariationIndex) && this.activeVariationIndex >= 0 && this.activeVariationIndex < this.variations.length ? this.activeVariationIndex : 0;
   }
   _renderOverview(template) {
+    const hasOverviewImages = Boolean(this.promptImage || this.previewBaseImage);
+    const hasBeforeAndAfter = Boolean(this.promptImage && this.previewBaseImage);
     return b2`
       <div class="overview">
         <span class="overview-eyebrow">Prompt Overview</span>
-        ${this.promptImage ? b2`
-          <figure class="overview-figure">
-            <img src="${this.promptImage}" alt="${this.title}" loading="lazy">
-            <figcaption>N&ordm; 01 &mdash; Example output</figcaption>
-          </figure>
+        ${hasOverviewImages ? b2`
+          <div class="overview-figures ${hasBeforeAndAfter ? "overview-figures-pair" : "overview-figures-single"}">
+            ${this.previewBaseImage ? b2`
+              <figure class="overview-figure">
+                <img
+                  src="${this.previewBaseImage}"
+                  alt="${this.previewBaseImageDescription || `${this.title} before image`}"
+                  loading="lazy"
+                >
+                <figcaption>N&ordm; 01 &mdash; Before</figcaption>
+              </figure>
+            ` : ""}
+            ${this.promptImage ? b2`
+              <figure class="overview-figure">
+                <img src="${this.promptImage}" alt="${this.title} example output" loading="lazy">
+                <figcaption>N&ordm; ${this.previewBaseImage ? "02" : "01"} &mdash; Example output</figcaption>
+              </figure>
+            ` : ""}
+          </div>
         ` : ""}
         <div class="overview-lead">${o5(this._renderDescriptionMarkdown(this.description))}</div>
       </div>
@@ -6683,6 +6723,8 @@ __publicField(_WyPromptModal, "properties", {
   instructions: { type: String },
   image: { type: String },
   promptImage: { type: String, attribute: "prompt-image" },
+  previewBaseImage: { type: String, attribute: "preview-base-image" },
+  previewBaseImageDescription: { type: String, attribute: "preview-base-image-description" },
   variationImage: { type: String, attribute: "variation-image" },
   template: { type: String },
   variables: { type: Array },

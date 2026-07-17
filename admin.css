@@ -1823,6 +1823,57 @@ wy-prompt-editor .prompt-image-expanded img {
             aspect-ratio: 16 / 9;
             object-fit: cover;
         }
+wy-prompt-editor .preview-base-image-field {
+            margin-top: var(--spacing-lg, 24px);
+        }
+wy-prompt-editor .preview-base-image-field .field-description {
+            margin: 0 0 var(--spacing-sm, 8px);
+        }
+wy-prompt-editor .preview-base-image-card {
+            display: grid;
+            grid-template-columns: minmax(160px, 220px) minmax(0, 1fr);
+            gap: var(--spacing-md, 16px);
+            align-items: center;
+            margin: 0;
+            padding: var(--spacing-sm, 8px);
+            border-radius: var(--radius-2, 8px);
+            background: var(--admin-field-bg);
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink, #1A1A1A) 8%, transparent);
+        }
+wy-prompt-editor .preview-base-image-card img {
+            display: block;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            border-radius: var(--radius-2, 8px);
+        }
+wy-prompt-editor .preview-base-image-card figcaption {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-xs, 4px);
+            min-width: 0;
+        }
+wy-prompt-editor .preview-base-image-title {
+            color: var(--ink, #121714);
+            font-family: var(--font-body, 'Inter', sans-serif);
+            font-size: 0.9375rem;
+            font-weight: 650;
+        }
+wy-prompt-editor .preview-base-image-description,
+wy-prompt-editor .preview-base-image-card code {
+            color: var(--ink-mute, #5E6E66);
+            font-family: var(--font-body, 'Inter', sans-serif);
+            font-size: 0.8125rem;
+            line-height: 1.45;
+        }
+wy-prompt-editor .preview-base-image-card code {
+            overflow-wrap: anywhere;
+        }
+@media (max-width: 520px) {
+  wy-prompt-editor .preview-base-image-card {
+                grid-template-columns: 1fr;
+            }
+}
 wy-prompt-editor .prompt-image-remove {
             position: absolute;
             top: var(--spacing-sm, 8px);
