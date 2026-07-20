@@ -13,6 +13,7 @@ class PromptLibrary {
         this.currentView = 'grid'; // Default to grid view
         this.showFeaturedOnly = options.startFeaturedOnly ?? false;
         this.showHiddenOnly = false;
+        this.sortMode = this.loadSortMode();
         this.hiddenPromptIds = this.loadHiddenPromptIds();
 
         // DOM elements
@@ -321,12 +322,14 @@ Server will start on http://localhost:3001`;
 
         if (this.controlsBar) {
             this.controlsBar.addEventListener('filter-change', (e) => {
-                const { search, searchValue, viewMode, showDetails, category, showFeaturedOnly, showHiddenOnly } = e.detail;
+                const { search, searchValue, viewMode, showDetails, category, showFeaturedOnly, showHiddenOnly, sortMode } = e.detail;
                 // Support both 'search' and 'searchValue' for compatibility with controls bar component
                 this.searchTerm = (search || searchValue || '').toLowerCase();
                 this.showDetails = Boolean(showDetails);
                 this.showFeaturedOnly = Boolean(showFeaturedOnly);
                 this.showHiddenOnly = Boolean(showHiddenOnly);
+                this.sortMode = sortMode === 'modified' ? 'modified' : 'custom';
+                this.saveSortMode();
                 
                 // When exclusive filters are active, ignore category selection
                 if (this.showFeaturedOnly || this.showHiddenOnly) {
@@ -499,6 +502,7 @@ Server will start on http://localhost:3001`;
         this.controlsBar.showHiddenFilter = this.hasHiddenPrompts();
         this.controlsBar.showFeaturedOnly = this.showFeaturedOnly;
         this.controlsBar.showHiddenOnly = this.showHiddenOnly;
+        this.controlsBar.sortMode = this.sortMode;
     }
 
     hasFeaturedPrompts() {
@@ -564,15 +568,42 @@ Server will start on http://localhost:3001`;
             return matchesSearch && matchesCategory;
         });
 
-        // Sort: Featured prompts first, then the rest
+        // Apply the selected deterministic order. Featured remains a filter,
+        // not an ordering override.
         this.filteredPrompts.sort((a, b) => {
-            const aFeatured = a.featured === true ? 1 : 0;
-            const bFeatured = b.featured === true ? 1 : 0;
-            // Sort descending (featured first)
-            return bFeatured - aFeatured;
+            const orderDifference = (Number.isInteger(a.customOrder) ? a.customOrder : Number.MAX_SAFE_INTEGER) -
+                (Number.isInteger(b.customOrder) ? b.customOrder : Number.MAX_SAFE_INTEGER);
+            const titleDifference = String(a.title || '').localeCompare(String(b.title || ''));
+
+            if (this.sortMode === 'modified') {
+                const dateDifference = Date.parse(b.modifiedAt || 0) - Date.parse(a.modifiedAt || 0);
+                return dateDifference || orderDifference || titleDifference;
+            }
+
+            const isMixedCategoryView = !this.selectedCategory || isSearchActive;
+            const categoryDifference = isMixedCategoryView
+                ? String(a.category || '').localeCompare(String(b.category || ''))
+                : 0;
+            return categoryDifference || orderDifference || titleDifference;
         });
 
         this.renderPrompts();
+    }
+
+    loadSortMode() {
+        try {
+            return window.localStorage.getItem('wy-prompt-sort-mode') === 'modified' ? 'modified' : 'custom';
+        } catch {
+            return 'custom';
+        }
+    }
+
+    saveSortMode() {
+        try {
+            window.localStorage.setItem('wy-prompt-sort-mode', this.sortMode);
+        } catch {
+            // Sorting still works when storage is unavailable.
+        }
     }
 
     loadHiddenPromptIds() {

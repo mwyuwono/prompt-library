@@ -8,6 +8,11 @@ import { fileURLToPath } from 'url';
 import os from 'os';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
+import {
+    applyCategoryOrder,
+    nextCustomOrder,
+    normalizeCategoryOrders
+} from './prompt-metadata.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -502,19 +507,22 @@ function syncPrivateEncryptedPayload(prompts) {
     };
 }
 
-function createPromptShell({ title = 'Untitled Prompt', category = 'Productivity' } = {}) {
+function createPromptShell({ title = 'Untitled Prompt', category = 'Productivity' } = {}, customOrder = 0) {
     const slugBase = title
         .toLowerCase()
         .trim()
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '') || 'untitled-prompt';
 
+    const now = new Date().toISOString();
     return {
         id: `${slugBase}-${Date.now()}`,
         title,
         description: '',
         instructions: '',
         category,
+        modifiedAt: now,
+        customOrder,
         template: '',
         variables: []
     };
@@ -1445,6 +1453,35 @@ app.put('/api/palettes', (req, res) => {
 });
 
 /**
+ * PUT /api/prompts/order
+ * Reorders every prompt in one category without changing modifiedAt.
+ */
+app.put('/api/prompts/order', (req, res) => {
+    try {
+        const dataset = getDataset(req);
+        const prompts = readPrompts(dataset);
+        const { category, promptIds } = req.body || {};
+        const result = applyCategoryOrder(prompts, category, promptIds);
+
+        if (!result.ok) {
+            return res.status(400).json({ error: result.error });
+        }
+        if (!writePrompts(dataset, prompts)) {
+            return res.status(500).json({ error: 'Failed to save prompt order' });
+        }
+
+        const encryption = dataset === 'private'
+            ? syncPrivateEncryptedPayload(prompts)
+            : { ok: true, message: 'Public prompt order saved.' };
+
+        res.json({ success: true, prompts, dataset, encryption });
+    } catch (error) {
+        console.error('Error reordering prompts:', error);
+        res.status(500).json({ error: 'Failed to reorder prompts' });
+    }
+});
+
+/**
  * PUT /api/prompts/:id
  * Updates a prompt in prompts.json
  */
@@ -1465,9 +1502,17 @@ app.put('/api/prompts/:id', (req, res) => {
         }
         
         // Update prompt while preserving structure
+        const previousPrompt = prompts[index];
+        const previousCategory = previousPrompt.category;
+        const nextCategory = req.body.category;
+        const categoryChanged = previousCategory !== nextCategory;
         const updatedPrompt = {
             ...prompts[index],
             ...req.body,
+            modifiedAt: new Date().toISOString(),
+            customOrder: categoryChanged
+                ? nextCustomOrder(prompts, nextCategory)
+                : previousPrompt.customOrder,
             // Ensure variations structure is preserved
             variations: req.body.variations || prompts[index].variations,
             // Ensure variables structure is preserved
@@ -1475,6 +1520,10 @@ app.put('/api/prompts/:id', (req, res) => {
         };
 
         prompts[index] = updatedPrompt;
+        if (categoryChanged) {
+            normalizeCategoryOrders(prompts, previousCategory);
+            normalizeCategoryOrders(prompts, nextCategory);
+        }
         
         if (!writePrompts(dataset, prompts)) {
             return res.status(500).json({ error: 'Failed to save prompts' });
@@ -1504,7 +1553,8 @@ app.post('/api/prompts', (req, res) => {
     try {
         const dataset = getDataset(req);
         const prompts = readPrompts(dataset);
-        const prompt = createPromptShell(req.body || {});
+        const category = req.body?.category || 'Productivity';
+        const prompt = createPromptShell(req.body || {}, nextCustomOrder(prompts, category));
 
         prompts.push(prompt);
 
@@ -1543,6 +1593,7 @@ app.post('/api/prompts/:id/archive', (req, res) => {
         }
         
         prompt.archived = !prompt.archived;
+        prompt.modifiedAt = new Date().toISOString();
         
         if (!writePrompts(dataset, prompts)) {
             return res.status(500).json({ error: 'Failed to save prompts' });

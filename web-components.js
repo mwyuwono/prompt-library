@@ -660,6 +660,7 @@ var WyControlsBar = class extends i4 {
     this.showHiddenFilter = false;
     this.showFeaturedOnly = false;
     this.showHiddenOnly = false;
+    this.sortMode = "custom";
     this.chipVariant = "";
     this.isScrolled = false;
     this.scrollState = "normal";
@@ -916,6 +917,21 @@ var WyControlsBar = class extends i4 {
           <div class="divider"></div>
         ` : this.isScrolled ? b2`<div class="divider"></div>` : ""}
 
+        <label class="sort-control">
+          <span class="sort-label">Order</span>
+          <select
+            class="sort-select"
+            .value="${this.sortMode}"
+            @change="${this._setSortMode}"
+            aria-label="Prompt order"
+          >
+            <option value="custom">Custom</option>
+            <option value="modified">Date modified</option>
+          </select>
+        </label>
+
+        <div class="divider"></div>
+
         <div class="category-section">
           <div class="chips-track" role="tablist">
             ${this.showFeaturedFilter ? b2`
@@ -1008,6 +1024,10 @@ var WyControlsBar = class extends i4 {
     if (this.showHiddenOnly) this.showFeaturedOnly = false;
     this._notifyChange();
   }
+  _setSortMode(e6) {
+    this.sortMode = e6.target.value === "modified" ? "modified" : "custom";
+    this._notifyChange();
+  }
   _notifyChange() {
     this.dispatchEvent(new CustomEvent("filter-change", {
       detail: {
@@ -1016,7 +1036,8 @@ var WyControlsBar = class extends i4 {
         showDetails: this.showDetails,
         category: this.activeCategory,
         showFeaturedOnly: this.showFeaturedOnly,
-        showHiddenOnly: this.showHiddenOnly
+        showHiddenOnly: this.showHiddenOnly,
+        sortMode: this.sortMode
       },
       bubbles: true,
       composed: true
@@ -1035,6 +1056,7 @@ __publicField(WyControlsBar, "properties", {
   showHiddenFilter: { type: Boolean, attribute: "show-hidden-filter" },
   showFeaturedOnly: { type: Boolean, attribute: "show-featured-only" },
   showHiddenOnly: { type: Boolean, attribute: "show-hidden-only" },
+  sortMode: { type: String, attribute: "sort-mode" },
   chipVariant: { type: String, attribute: "chip-variant" },
   isScrolled: { type: Boolean, state: true },
   scrollState: { type: String, state: true },

@@ -90,6 +90,31 @@
     font-size: 17px;
 }
 
+.order-prompts-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    min-height: 34px;
+    padding: 0 10px;
+    border: 0;
+    border-radius: var(--radius-pill, 9999px);
+    background: var(--surface-2, #FFF);
+    color: var(--ink, #282828);
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.order-prompts-button[aria-pressed="true"] {
+    background: var(--accent-sage, #79830C);
+    color: var(--white, #FFF);
+}
+
+.order-prompts-button .material-symbols-outlined {
+    font-size: 17px;
+}
+
 .sidebar-icon-button {
     display: inline-grid;
     place-items: center;
@@ -511,6 +536,160 @@
 
 #editor-container.active {
     display: block;
+}
+
+.prompt-order-panel {
+    width: min(920px, calc(100% - 64px));
+    margin: 0 auto;
+    padding: 56px 0 80px;
+    box-sizing: border-box;
+}
+
+.prompt-order-panel[hidden] {
+    display: none;
+}
+
+.prompt-order-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--spacing-xl, 32px);
+    margin-bottom: var(--spacing-xl, 32px);
+}
+
+.prompt-order-kicker,
+.prompt-order-category-field span {
+    display: block;
+    margin: 0 0 var(--spacing-xs, 4px);
+    color: var(--ink-mute, #3F4944);
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.prompt-order-header h1 {
+    margin: 0 0 var(--spacing-xs, 4px);
+    color: var(--ink, #121714);
+    font-family: var(--font-serif, 'Lora', serif);
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    line-height: 1;
+}
+
+.prompt-order-header p:not(.prompt-order-kicker) {
+    margin: 0;
+    color: var(--ink-mute, #3F4944);
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.875rem;
+}
+
+.prompt-order-category-field {
+    flex: 0 0 240px;
+}
+
+.prompt-order-category-field select {
+    width: 100%;
+    height: 42px;
+    padding: 0 36px 0 14px;
+    border: 0;
+    border-radius: var(--radius-pill, 9999px);
+    background: var(--surface-2, #FFF);
+    color: var(--ink, #121714);
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.875rem;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 8%, transparent);
+}
+
+.prompt-order-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.prompt-order-row {
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--spacing-md, 16px);
+    min-height: 66px;
+    padding: 8px 10px;
+    border-radius: var(--radius-2);
+    background: var(--surface-2, #FFF);
+    box-shadow: 0 5px 18px color-mix(in srgb, var(--ink) 5%, transparent);
+    transition: opacity var(--dur-1, 150ms) var(--ease), transform var(--dur-1, 150ms) var(--ease);
+}
+
+.prompt-order-row.is-dragging {
+    opacity: 0.42;
+}
+
+.prompt-order-handle {
+    display: inline-grid;
+    place-items: center;
+    width: 38px;
+    height: 42px;
+    border: 0;
+    background: transparent;
+    color: var(--ink-mute, #3F4944);
+    cursor: grab;
+}
+
+.prompt-order-handle:active {
+    cursor: grabbing;
+}
+
+.prompt-order-copy {
+    min-width: 0;
+}
+
+.prompt-order-name {
+    overflow: hidden;
+    color: var(--ink, #121714);
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.9375rem;
+    font-weight: 650;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.prompt-order-meta {
+    margin-top: 3px;
+    color: var(--ink-mute, #3F4944);
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.75rem;
+}
+
+.prompt-order-meta .archived-label {
+    color: var(--err, #B3261E);
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.prompt-order-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.prompt-order-move {
+    display: inline-grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border: 0;
+    border-radius: var(--radius-pill, 9999px);
+    background: var(--paper-deep, #ECE9E4);
+    color: var(--ink, #121714);
+    cursor: pointer;
+}
+
+.prompt-order-move:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.prompt-order-move .material-symbols-outlined {
+    font-size: 19px;
 }
 
 /* Backup modal */

@@ -11,6 +11,11 @@ let backupStatus = null;
 let backupBusy = false;
 let startupPullPromptShown = false;
 let heroImageStatus = null;
+let adminMode = 'edit';
+let selectedOrderCategory = '';
+let orderSaveBusy = false;
+let draggedPromptId = null;
+let dragDidDrop = false;
 
 // DOM Elements
 const editor = document.getElementById('editor');
@@ -24,6 +29,10 @@ const privateDatasetButton = document.getElementById('privateDatasetButton');
 const datasetStatus = document.getElementById('datasetStatus');
 const sidebarTitle = document.getElementById('sidebarTitle');
 const newPromptButton = document.getElementById('newPromptButton');
+const orderPromptsButton = document.getElementById('orderPromptsButton');
+const promptOrderPanel = document.getElementById('promptOrderPanel');
+const promptOrderCategory = document.getElementById('promptOrderCategory');
+const promptOrderList = document.getElementById('promptOrderList');
 const backupStatusButton = document.getElementById('backupStatusButton');
 const backupStatusLabel = document.getElementById('backupStatusLabel');
 const backupModal = document.getElementById('backupModal');
@@ -75,8 +84,11 @@ async function init() {
  * Show empty state (no prompt selected)
  */
 function showEmptyState() {
+    adminMode = 'edit';
     currentPromptId = null;
     editorContainer.classList.remove('active');
+    promptOrderPanel.hidden = true;
+    orderPromptsButton?.setAttribute('aria-pressed', 'false');
     emptyState.classList.remove('hidden');
     renderPromptList(); // Update sidebar to clear active state
 }
@@ -85,7 +97,10 @@ function showEmptyState() {
  * Hide empty state (prompt selected)
  */
 function hideEmptyState() {
+    adminMode = 'edit';
     emptyState.classList.add('hidden');
+    promptOrderPanel.hidden = true;
+    orderPromptsButton?.setAttribute('aria-pressed', 'false');
     editorContainer.classList.add('active');
 }
 
@@ -106,6 +121,9 @@ async function loadPrompts() {
         prompts = data.prompts;
         categories = data.categories;
         privateVaultReady = Boolean(data.encryptedVaultReady);
+        if (!categories.includes(selectedOrderCategory)) {
+            selectedOrderCategory = categories[0] || '';
+        }
         updateDatasetUI();
         
         console.log(`Loaded ${prompts.length} prompts and ${categories.length} categories`);
@@ -199,6 +217,17 @@ async function createPrompt() {
         console.error('Error creating prompt:', error);
         throw error;
     }
+}
+
+async function savePromptOrder(category, promptIds) {
+    const response = await fetch(`/api/prompts/order?dataset=${currentDataset}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ category, promptIds })
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || 'Failed to save prompt order');
+    return result;
 }
 
 /**
@@ -404,6 +433,140 @@ function isImageReferenced(imagePath) {
     return prompts.some(prompt => getAllImagePaths(prompt).includes(imagePath));
 }
 
+function escapeAdminHTML(value = '') {
+    return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+function getOrderedCategoryPrompts() {
+    return prompts
+        .filter(prompt => prompt.category === selectedOrderCategory)
+        .sort((a, b) => a.customOrder - b.customOrder || a.title.localeCompare(b.title));
+}
+
+function formatPromptModifiedDate(value) {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return 'Modified date unavailable';
+    return `Modified ${date.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}`;
+}
+
+function showPromptOrderMode() {
+    adminMode = 'order';
+    currentPromptId = null;
+    editorContainer.classList.remove('active');
+    emptyState.classList.add('hidden');
+    promptOrderPanel.hidden = false;
+    orderPromptsButton?.setAttribute('aria-pressed', 'true');
+    renderPromptList();
+    renderPromptOrderView();
+}
+
+function renderPromptOrderView() {
+    if (adminMode !== 'order') return;
+
+    promptOrderCategory.innerHTML = categories
+        .map(category => `<option value="${escapeAdminHTML(category)}">${escapeAdminHTML(category)}</option>`)
+        .join('');
+    promptOrderCategory.value = selectedOrderCategory;
+
+    const ordered = getOrderedCategoryPrompts();
+    promptOrderList.innerHTML = ordered.map((prompt, index) => `
+        <article class="prompt-order-row" data-id="${escapeAdminHTML(prompt.id)}">
+            <button class="prompt-order-handle" type="button" draggable="true" aria-label="Drag ${escapeAdminHTML(prompt.title)}">
+                <span class="material-symbols-outlined" aria-hidden="true">drag_indicator</span>
+            </button>
+            <div class="prompt-order-copy">
+                <div class="prompt-order-name">${escapeAdminHTML(prompt.title)}</div>
+                <div class="prompt-order-meta">
+                    ${escapeAdminHTML(formatPromptModifiedDate(prompt.modifiedAt))}
+                    ${prompt.archived ? '<span aria-hidden="true"> · </span><span class="archived-label">Archived</span>' : ''}
+                </div>
+            </div>
+            <div class="prompt-order-actions">
+                <button class="prompt-order-move" type="button" data-direction="-1" aria-label="Move ${escapeAdminHTML(prompt.title)} up" ${index === 0 || orderSaveBusy ? 'disabled' : ''}>
+                    <span class="material-symbols-outlined" aria-hidden="true">arrow_upward</span>
+                </button>
+                <button class="prompt-order-move" type="button" data-direction="1" aria-label="Move ${escapeAdminHTML(prompt.title)} down" ${index === ordered.length - 1 || orderSaveBusy ? 'disabled' : ''}>
+                    <span class="material-symbols-outlined" aria-hidden="true">arrow_downward</span>
+                </button>
+            </div>
+        </article>
+    `).join('');
+
+    bindPromptOrderInteractions();
+}
+
+function bindPromptOrderInteractions() {
+    promptOrderList.querySelectorAll('.prompt-order-handle').forEach(handle => {
+        handle.addEventListener('dragstart', event => {
+            if (orderSaveBusy) {
+                event.preventDefault();
+                return;
+            }
+            const row = handle.closest('.prompt-order-row');
+            draggedPromptId = row.dataset.id;
+            dragDidDrop = false;
+            row.classList.add('is-dragging');
+            event.dataTransfer.effectAllowed = 'move';
+            event.dataTransfer.setData('text/plain', draggedPromptId);
+        });
+
+        handle.addEventListener('dragend', () => {
+            promptOrderList.querySelector('.is-dragging')?.classList.remove('is-dragging');
+            draggedPromptId = null;
+            if (!dragDidDrop) renderPromptOrderView();
+        });
+    });
+
+    promptOrderList.querySelectorAll('.prompt-order-move').forEach(button => {
+        button.addEventListener('click', () => {
+            const id = button.closest('.prompt-order-row').dataset.id;
+            movePromptBy(id, Number(button.dataset.direction));
+        });
+    });
+}
+
+async function persistVisiblePromptOrder() {
+    if (orderSaveBusy) return;
+    const promptIds = [...promptOrderList.querySelectorAll('.prompt-order-row')]
+        .map(row => row.dataset.id);
+    orderSaveBusy = true;
+    promptOrderList.querySelectorAll('.prompt-order-move').forEach(button => {
+        button.disabled = true;
+    });
+
+    try {
+        const result = await savePromptOrder(selectedOrderCategory, promptIds);
+        prompts = result.prompts;
+        showSaveResult(result, 'Prompt order saved');
+        renderPromptList();
+        refreshBackupStatus();
+    } catch (error) {
+        console.error('Prompt reorder failed:', error);
+        showToast(error.message || 'Failed to save prompt order', 'error');
+    } finally {
+        orderSaveBusy = false;
+        renderPromptOrderView();
+    }
+}
+
+function movePromptBy(promptId, direction) {
+    if (orderSaveBusy) return;
+    const rows = [...promptOrderList.querySelectorAll('.prompt-order-row')];
+    const index = rows.findIndex(row => row.dataset.id === promptId);
+    const targetIndex = index + direction;
+    if (index < 0 || targetIndex < 0 || targetIndex >= rows.length) return;
+
+    const row = rows[index];
+    if (direction < 0) promptOrderList.insertBefore(row, rows[targetIndex]);
+    else promptOrderList.insertBefore(row, rows[targetIndex].nextSibling);
+    persistVisiblePromptOrder();
+}
+
 /**
  * Setup event listeners
  */
@@ -412,6 +575,31 @@ function setupEventListeners() {
     privateDatasetButton.addEventListener('click', () => switchDataset('private'));
     sidebarCollapseButton?.addEventListener('click', () => setSidebarCollapsed(true));
     sidebarRevealButton?.addEventListener('click', () => setSidebarCollapsed(false));
+    orderPromptsButton?.addEventListener('click', () => {
+        if (adminMode === 'order') showEmptyState();
+        else showPromptOrderMode();
+    });
+    promptOrderCategory?.addEventListener('change', () => {
+        selectedOrderCategory = promptOrderCategory.value;
+        renderPromptOrderView();
+    });
+    promptOrderList?.addEventListener('dragover', event => {
+        if (!draggedPromptId || orderSaveBusy) return;
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'move';
+        const draggedRow = promptOrderList.querySelector(`[data-id="${CSS.escape(draggedPromptId)}"]`);
+        const targetRow = event.target.closest('.prompt-order-row');
+        if (!draggedRow || !targetRow || targetRow === draggedRow) return;
+        const rect = targetRow.getBoundingClientRect();
+        promptOrderList.insertBefore(draggedRow, event.clientY < rect.top + rect.height / 2 ? targetRow : targetRow.nextSibling);
+    });
+    promptOrderList?.addEventListener('drop', event => {
+        if (!draggedPromptId || orderSaveBusy) return;
+        event.preventDefault();
+        dragDidDrop = true;
+        promptOrderList.querySelector('.is-dragging')?.classList.remove('is-dragging');
+        persistVisiblePromptOrder();
+    });
 
     newPromptButton.addEventListener('click', async () => {
         try {
@@ -710,6 +898,7 @@ function setSidebarCollapsed(collapsed, { persist = true } = {}) {
 async function switchDataset(dataset) {
     if (dataset === currentDataset) return;
 
+    const wasOrdering = adminMode === 'order';
     currentDataset = dataset;
     currentPromptId = null;
     sidebarSearch = '';
@@ -717,10 +906,11 @@ async function switchDataset(dataset) {
     window.location.hash = '';
     updateDatasetUrl();
     updateDatasetUI();
-    showEmptyState();
+    if (!wasOrdering) showEmptyState();
 
     await loadPrompts();
     renderPromptList();
+    if (wasOrdering) showPromptOrderMode();
 }
 
 /**

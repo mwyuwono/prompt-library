@@ -42,6 +42,10 @@
                         <span class="material-symbols-outlined" aria-hidden="true">add</span>
                         New
                     </button>
+                    <button id="orderPromptsButton" class="order-prompts-button" type="button" aria-pressed="false">
+                        <span class="material-symbols-outlined" aria-hidden="true">swap_vert</span>
+                        Order
+                    </button>
                     <button id="sidebarCollapseButton" class="sidebar-icon-button" type="button" aria-label="Collapse sidebar">
                         <span class="material-symbols-outlined" aria-hidden="true">left_panel_close</span>
                     </button>
@@ -97,6 +101,20 @@
         <div id="editor-container">
             <wy-prompt-editor id="editor"></wy-prompt-editor>
         </div>
+        <section id="promptOrderPanel" class="prompt-order-panel" hidden aria-labelledby="promptOrderTitle">
+            <header class="prompt-order-header">
+                <div>
+                    <p class="prompt-order-kicker">Custom ordering</p>
+                    <h1 id="promptOrderTitle">Order prompts</h1>
+                    <p>Drag prompts or use the arrow controls. Changes save automatically.</p>
+                </div>
+                <label class="prompt-order-category-field">
+                    <span>Category</span>
+                    <select id="promptOrderCategory"></select>
+                </label>
+            </header>
+            <div id="promptOrderList" class="prompt-order-list"></div>
+        </section>
         <div id="empty-state" class="empty-state">
             <span class="material-symbols-outlined">arrow_back</span>
             <h3>Select a prompt to edit</h3>

@@ -250,6 +250,14 @@ function validatePrompt(prompt, index) {
     fail(`${ownerLabel} description must be a string when present.`);
   }
 
+  if (typeof prompt.modifiedAt !== 'string' || Number.isNaN(Date.parse(prompt.modifiedAt))) {
+    fail(`${ownerLabel} must define modifiedAt as a valid ISO 8601 timestamp.`);
+  }
+
+  if (!Number.isInteger(prompt.customOrder) || prompt.customOrder < 0) {
+    fail(`${ownerLabel} customOrder must be a non-negative integer.`);
+  }
+
   const promptVariables = collectVariableNames(ownerLabel, prompt);
   const promptUsed = validatePlaceholders(ownerLabel, prompt, promptVariables);
 
@@ -303,6 +311,22 @@ if (!Array.isArray(promptData)) {
 if (!hasErrors && Array.isArray(promptData)) {
   reportDuplicateValues('prompts.json ids', promptData.map((prompt) => prompt?.id).filter(Boolean));
   promptData.forEach(validatePrompt);
+
+  const promptsByCategory = promptData.reduce((groups, prompt) => {
+    if (!groups.has(prompt.category)) groups.set(prompt.category, []);
+    groups.get(prompt.category).push(prompt);
+    return groups;
+  }, new Map());
+
+  promptsByCategory.forEach((prompts, category) => {
+    const orders = prompts.map((prompt) => prompt.customOrder);
+    reportDuplicateValues(`category "${category}" customOrder values`, orders);
+    const expected = prompts.map((_, index) => index);
+    const actual = [...orders].sort((a, b) => a - b);
+    if (actual.some((order, index) => order !== expected[index])) {
+      fail(`category "${category}" customOrder values must be contiguous from 0 to ${prompts.length - 1}.`);
+    }
+  });
 }
 
 if (hasErrors) {

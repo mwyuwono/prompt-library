@@ -8,6 +8,7 @@
     "dev": "node server.js",
     "build:components": "esbuild components/ui/index.js --bundle --format=esm --target=es2020 --outfile=web-components.js",
     "validate:prompts": "node validate-prompts.js",
+    "test:ordering": "node --test tests/prompt-ordering.test.mjs tests/prompt-library-sorting.test.mjs",
     "check": "npm run validate:prompts && npm run build:components",
     "encrypt:private": "node scripts/encrypt-private-prompts.mjs",
     "migrate:reference-library": "node scripts/migrate-reference-library.mjs",

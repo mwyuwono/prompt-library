@@ -1429,6 +1429,41 @@ wy-controls-bar {
       white-space: nowrap;
     }
 
+    wy-controls-bar .sort-control {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--s-2, 8px);
+      flex-shrink: 0;
+    }
+
+    wy-controls-bar .sort-label {
+      font-family: var(--ff-sans, 'Inter', system-ui, sans-serif);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-mute, #868685);
+    }
+
+    wy-controls-bar .sort-select {
+      height: 32px;
+      padding: 0 28px 0 12px;
+      border: 1px solid var(--paper-edge, #DDD6C8);
+      border-radius: var(--wy-controls-radius, 999px);
+      background: var(--paper, #F7F4EE);
+      color: var(--ink, #1A1A1A);
+      font-family: var(--ff-sans, 'Inter', system-ui, sans-serif);
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      outline: none;
+    }
+
+    wy-controls-bar .sort-select:focus-visible {
+      border-color: var(--ink, #1A1A1A);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--ink, #1A1A1A) 8%, transparent);
+    }
+
     /* ---- Category chips ---- */
     wy-controls-bar .category-section {
       flex: 1 1 auto;
@@ -1592,6 +1627,15 @@ wy-controls-bar {
         display: none;
       }
 
+      wy-controls-bar .sort-label {
+        display: none;
+      }
+
+      wy-controls-bar .sort-select {
+        width: 96px;
+        padding-left: 10px;
+      }
+
       /* Collapsed: search is an icon button */
       wy-controls-bar .search-section {
         flex: 0 0 auto;
@@ -1688,6 +1732,10 @@ wy-controls-bar {
         overflow: hidden;
       }
 
+      wy-controls-bar[data-mobile-search] .sort-control {
+        display: none;
+      }
+
       wy-controls-bar[data-mobile-search] .mobile-cancel {
         display: inline-flex;
         align-items: center;
@@ -1711,6 +1759,8 @@ wy-controls-bar {
       wy-controls-bar .divider { display: none; }
 
       wy-controls-bar .toggle-label { display: none; }
+
+      wy-controls-bar .sort-label { display: none; }
 
       wy-controls-bar .toggle-section { gap: var(--s-2, 8px); }
 

@@ -53,7 +53,9 @@
         "model": "Gemma 4 31B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 0
   },
   {
     "id": "reference-image-comparator",
@@ -129,7 +131,9 @@
         "model": "Gemma 4 31B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 0
   },
   {
     "id": "image-result-critic",
@@ -172,7 +176,9 @@
         "model": "Gemma 4 31B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 1
   },
   {
     "id": "classical-scene-porcelain",
@@ -243,7 +249,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 0
   },
   {
     "id": "character-swap-male",
@@ -291,7 +299,9 @@
         "model": "Gemma 4 31B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-15T23:01:54-04:00",
+    "customOrder": 1
   },
   {
     "id": "targeted-image-edit-prompt",
@@ -334,7 +344,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 2
   },
   {
     "id": "oil-painting-study-reference",
@@ -367,7 +379,9 @@
         "model": "Gemma 4 E4B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 3
   },
   {
     "id": "contour-form-study",
@@ -415,7 +429,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-15T23:01:54-04:00",
+    "customOrder": 4
   },
   {
     "id": "wallpaper-artwork-extension",
@@ -466,7 +482,9 @@
         "model": "Gemma 4 31B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 5
   },
   {
     "id": "proofreader",
@@ -514,7 +532,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 1
   },
   {
     "id": "shipping-quote-request",
@@ -554,7 +574,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 0
   },
   {
     "id": "expertise-test",
@@ -593,7 +615,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 0
   },
   {
     "id": "mochi-cloze-flashcards",
@@ -652,7 +676,9 @@
         "model": "Gemma 4 E4B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 1
   },
   {
     "id": "product-research",
@@ -691,7 +717,9 @@
         "model": "Gemma 4 31B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 1
   },
   {
     "id": "antiques-expert",
@@ -750,7 +778,9 @@
         "model": "Gemma 4 31B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 2
   },
   {
     "id": "restaurant-finder",
@@ -791,7 +821,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 2
   },
   {
     "id": "accommodations-finder",
@@ -838,7 +870,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 3
   },
   {
     "id": "work-email-reply",
@@ -883,7 +917,9 @@
         "model": "Gemma 4 E4B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 0
   },
   {
     "id": "work-jira-task",
@@ -922,7 +958,9 @@
         "model": "Gemma 4 E4B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 1
   },
   {
     "id": "work-self-assessment",
@@ -967,7 +1005,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 2
   },
   {
     "id": "webflow-code-assistance",
@@ -1008,7 +1048,9 @@
         "model": "Gemma 4 31B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 3
   },
   {
     "id": "iron-railing-rendering-workflow",
@@ -1075,7 +1117,9 @@
         "model": "Gemma 4 31B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 0
   },
   {
     "id": "interior-photo-editorial-retouch",
@@ -1123,7 +1167,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 1
   },
   {
     "id": "character-portrait",
@@ -1215,7 +1261,9 @@
         "model": "Gemma 4 31B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 6
   },
   {
     "id": "academic-figure-study-prefix",
@@ -1268,7 +1316,9 @@
         "model": "Gemma 4 E4B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 7
   },
   {
     "id": "song-creator",
@@ -1316,7 +1366,9 @@
         "model": "Gemma 4 31B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 2
   },
   {
     "id": "architectural-rendering",
@@ -1646,7 +1698,9 @@
         "model": "Gemma 4 31B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-09T01:02:10-04:00",
+    "customOrder": 2
   },
   {
     "id": "engraving-conversion",
@@ -1926,7 +1980,9 @@
         "model": "Gemma 4 31B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-17T16:36:49-04:00",
+    "customOrder": 8
   },
   {
     "id": "new-subject-same-style",
@@ -2127,7 +2183,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-16T19:11:09-04:00",
+    "customOrder": 9
   },
   {
     "id": "prompt-builder",
@@ -2182,7 +2240,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 4
   },
   {
     "id": "reusable-prompt-builder",
@@ -2226,7 +2286,9 @@
         "model": "Gemma 4 31B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 5
   },
   {
     "id": "qa-check",
@@ -2273,7 +2335,9 @@
         "model": "Gemma 4 31B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 6
   },
   {
     "id": "academic-drawing",
@@ -2330,7 +2394,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 10
   },
   {
     "id": "artist-guide",
@@ -2407,7 +2473,9 @@
         "model": "Gemma 4 31B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 11
   },
   {
     "id": "restyle-image",
@@ -2494,7 +2562,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 12
   },
   {
     "id": "architectural-photo-visualization",
@@ -2544,7 +2614,9 @@
         "model": "Gemma 4 31B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 3
   },
   {
     "id": "component-adaptation",
@@ -2583,7 +2655,9 @@
         "model": "Gemma 4 31B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 7
   },
   {
     "id": "audio-essay-discovery",
@@ -2682,7 +2756,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 3
   },
   {
     "id": "portrait-iconography",
@@ -2723,7 +2799,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 13
   },
   {
     "id": "art-critique",
@@ -2786,7 +2864,9 @@
         "model": "Gemma 4 31B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 14
   },
   {
     "id": "fabric-colorways",
@@ -2845,7 +2925,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 0
   },
   {
     "id": "pattern-effects",
@@ -2918,7 +3000,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 1
   },
   {
     "id": "fabric-imagery",
@@ -2960,7 +3044,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 2
   },
   {
     "id": "fabric-rendering",
@@ -2993,7 +3079,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 3
   },
   {
     "id": "fabric-pattern-repeat",
@@ -3035,7 +3123,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 4
   },
   {
     "id": "fabric-pattern-extraction-tile",
@@ -3068,7 +3158,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 5
   },
   {
     "id": "fabric-vector-prep",
@@ -3119,7 +3211,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 6
   },
   {
     "id": "fabric-restyle-match",
@@ -3153,7 +3247,9 @@
         "model": "Gemma 4 E4B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 7
   },
   {
     "id": "gemma-chunk-processor",
@@ -3216,7 +3312,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 8
   },
   {
     "id": "cultural-city-guide",
@@ -3262,7 +3360,9 @@
         "model": "Gemma 4 31B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 4
   },
   {
     "id": "style-dna-extractor",
@@ -3296,7 +3396,9 @@
         "model": "Gemma 4 31B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 15
   },
   {
     "id": "architectural-detail-trace-prep",
@@ -3339,7 +3441,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 4
   },
   {
     "id": "minimalist-line-drawing",
@@ -3450,7 +3554,9 @@
         "model": "Gemma 4 E4B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 16
   },
   {
     "id": "svg-plotter-drawing",
@@ -3498,7 +3604,9 @@
         "model": "Gemma 4 31B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 17
   },
   {
     "id": "fabric-application-mockups",
@@ -3598,7 +3706,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 8
   },
   {
     "id": "room-repainter",
@@ -3651,7 +3761,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 5
   },
   {
     "id": "fabric-style-alignment",
@@ -3701,7 +3813,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 9
   },
   {
     "id": "extend-image-crop",
@@ -3745,7 +3859,9 @@
         "model": "Gemma 4 E4B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 10
   },
   {
     "id": "technical-drawing-restyle",
@@ -3795,7 +3911,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 18
   },
   {
     "id": "topographic-site-plan-map",
@@ -3868,7 +3986,9 @@
         "model": "Gemma 4 31B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 19
   },
   {
     "id": "miniature-portrait",
@@ -3907,7 +4027,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 20
   },
   {
     "id": "untitled-prompt-1783014432546",
@@ -3946,7 +4068,9 @@
         "model": "Gemma 4 12B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 21
   },
   {
     "id": "folder-cleanup",
@@ -3979,7 +4103,9 @@
         "model": "Gemma 4 31B",
         "level": ""
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "customOrder": 9
   },
   {
     "id": "ev-charger-finder",
@@ -4013,6 +4139,8 @@
         "model": "Gemini 3.1 Pro",
         "level": "High"
       }
-    ]
+    ],
+    "modifiedAt": "2026-07-19T23:17:10-04:00",
+    "customOrder": 5
   }
 ]
