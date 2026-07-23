@@ -251,7 +251,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 2
+    "customOrder": 6
   },
   {
     "id": "character-swap-male",
@@ -301,7 +301,7 @@
       }
     ],
     "modifiedAt": "2026-07-15T23:01:54-04:00",
-    "customOrder": 3
+    "customOrder": 7
   },
   {
     "id": "targeted-image-edit-prompt",
@@ -346,7 +346,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 4
+    "customOrder": 8
   },
   {
     "id": "oil-painting-study-reference",
@@ -381,7 +381,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 0
+    "customOrder": 5
   },
   {
     "id": "small-format-oil-painting",
@@ -469,7 +469,7 @@
       }
     ],
     "modifiedAt": "2026-07-15T23:01:54-04:00",
-    "customOrder": 5
+    "customOrder": 9
   },
   {
     "id": "wallpaper-artwork-extension",
@@ -522,7 +522,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 6
+    "customOrder": 10
   },
   {
     "id": "proofreader",
@@ -614,7 +614,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 0
+    "customOrder": 1
   },
   {
     "id": "expertise-test",
@@ -757,7 +757,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 1
+    "customOrder": 2
   },
   {
     "id": "antiques-expert",
@@ -861,7 +861,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 2
+    "customOrder": 3
   },
   {
     "id": "accommodations-finder",
@@ -910,7 +910,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 3
+    "customOrder": 4
   },
   {
     "id": "work-email-reply",
@@ -1301,7 +1301,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 7
+    "customOrder": 11
   },
   {
     "id": "academic-figure-study-prefix",
@@ -1356,7 +1356,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 8
+    "customOrder": 12
   },
   {
     "id": "song-creator",
@@ -2062,7 +2062,7 @@
       }
     ],
     "modifiedAt": "2026-07-22T21:31:35-04:00",
-    "customOrder": 9
+    "customOrder": 0
   },
   {
     "id": "new-subject-same-style",
@@ -2265,7 +2265,7 @@
       }
     ],
     "modifiedAt": "2026-07-16T19:11:09-04:00",
-    "customOrder": 10
+    "customOrder": 13
   },
   {
     "id": "prompt-builder",
@@ -2476,7 +2476,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 11
+    "customOrder": 14
   },
   {
     "id": "artist-guide",
@@ -2555,7 +2555,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 12
+    "customOrder": 15
   },
   {
     "id": "restyle-image",
@@ -2644,7 +2644,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 13
+    "customOrder": 2
   },
   {
     "id": "architectural-photo-visualization",
@@ -2881,7 +2881,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 14
+    "customOrder": 16
   },
   {
     "id": "art-critique",
@@ -2946,7 +2946,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 15
+    "customOrder": 17
   },
   {
     "id": "fabric-colorways",
@@ -3442,7 +3442,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 4
+    "customOrder": 5
   },
   {
     "id": "style-dna-extractor",
@@ -3478,7 +3478,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 16
+    "customOrder": 3
   },
   {
     "id": "architectural-detail-trace-prep",
@@ -3636,7 +3636,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 17
+    "customOrder": 18
   },
   {
     "id": "svg-plotter-drawing",
@@ -3686,7 +3686,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 18
+    "customOrder": 19
   },
   {
     "id": "fabric-application-mockups",
@@ -3993,7 +3993,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 19
+    "customOrder": 20
   },
   {
     "id": "topographic-site-plan-map",
@@ -4068,7 +4068,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 20
+    "customOrder": 21
   },
   {
     "id": "miniature-portrait",
@@ -4109,7 +4109,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 21
+    "customOrder": 22
   },
   {
     "id": "untitled-prompt-1783014432546",
@@ -4150,7 +4150,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 22
+    "customOrder": 4
   },
   {
     "id": "folder-cleanup",
@@ -4221,6 +4221,6 @@
       }
     ],
     "modifiedAt": "2026-07-19T23:17:10-04:00",
-    "customOrder": 5
+    "customOrder": 0
   }
 ]
