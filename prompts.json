@@ -3917,5 +3917,28 @@
     ],
     "modifiedAt": "2026-07-19T23:17:10-04:00",
     "customOrder": 0
+  },
+  {
+    "id": "naive-impasto-dog-portrait",
+    "title": "Naive Impasto Dog Portrait",
+    "description": "Transforms a dog photo into a close-cropped, graphic folk-art oil portrait.",
+    "category": "Art",
+    "icon": "brush",
+    "featured": false,
+    "image": "public/images/naive-impasto-dog-portrait-preview.png",
+    "previewBaseImage": "public/images/naive-impasto-dog-portrait-base-subject-dog.jpg",
+    "previewBaseImageDescription": "A curly black and gray poodle-like dog photographed outdoors, used as the shared source for the preview.",
+    "template": "Convert the provided Subject Dog image into a graphic, small-format dog portrait in a thick, naive oil/acrylic painting style.\n\nUse the Subject Dog as the source of truth for identity: preserve the dog’s breed cues, coat color, markings, ear shape, muzzle proportions, eye character, nose shape, expression, and overall personality. Recompose the dog into a centered, front-facing bust portrait with the head and ears filling most of the canvas, chest visible at the bottom, and a simple flat background behind it.\n\nUse the fixed Style Reference at {{style_reference}} for painterly handling, abstraction level, palette-knife texture, and surface quality. Do not copy its subject matter.\n\n### Composition\n\n- Square canvas\n- Dog centered and cropped closely\n- Head, ears, and upper chest dominate the frame\n- Face oriented toward the viewer where possible\n- Background simplified to a single deep, dark green field\n- Remove people, clothing, furniture, leashes, and background clutter unless essential to the dog’s identity\n\n### Painting treatment\n\n- Create a bold, charming, hand-painted portrait with the visual language of a simple folk-art animal painting\n- Use thick impasto brushwork, visible palette-knife texture, uneven paint ridges, chunky directional strokes, and opaque color fields\n- Simplify forms into broad graphic shapes rather than rendered photographic detail\n- Simplify fur into large painted planes and rough brush patches\n- Use irregular, hand-painted edges rather than clean digital outlines\n- Preserve distinctive markings, translated into blocky daubs of paint\n- Use small dark glossy eyes with simple white highlights\n- Paint the nose as a rounded dark shape with minimal detail\n- Indicate the mouth with one or two restrained dark strokes\n- Use creamy whites, ochres, tans, browns, grays, or blacks based on the dog’s actual coloring\n- Keep the image graphic, flat, expressive, and slightly naive\n\nAvoid photorealism, polished illustration, airbrushing, fine fur strands, realistic background depth, excessive facial detail, cartoon exaggeration, stickers, text, borders, frames, or decorative props.",
+    "variables": [],
+    "referenceImages": [
+      {
+        "variable": "style_reference",
+        "label": "Style Reference",
+        "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/style-references/naive-impasto-dog-portrait-style-reference.png",
+        "instructions": "Use this reference for the thick, naive oil/acrylic paint handling, graphic simplification, deep green background, and impasto surface quality."
+      }
+    ],
+    "modifiedAt": "2026-07-23T00:00:00-04:00",
+    "customOrder": 23
   }
 ]
