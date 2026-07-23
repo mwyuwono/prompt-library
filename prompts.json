@@ -112,11 +112,6 @@
     ],
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Opus 4.8",
-        "level": "High"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Thinking"
@@ -125,11 +120,6 @@
         "vendor": "google",
         "model": "Gemini 3.1 Pro",
         "level": "High"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 31B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -230,11 +220,6 @@
     "icon": "brush",
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Thinking"
@@ -243,11 +228,6 @@
         "vendor": "google",
         "model": "Gemini 3.5 Flash",
         "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -280,11 +260,6 @@
     "image": "public/images/1775766209619.jpg",
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Opus 4.8",
-        "level": "High"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Thinking"
@@ -293,11 +268,6 @@
         "vendor": "google",
         "model": "Gemini 3.1 Pro",
         "level": "High"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 31B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-15T23:01:54-04:00",
@@ -360,11 +330,6 @@
     "slug": "oil-painting-study-reference",
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Haiku 4.5",
-        "level": "Instant"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Instant"
@@ -373,11 +338,6 @@
         "vendor": "google",
         "model": "Gemini 3.5 Flash",
         "level": "Low"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 E4B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -398,11 +358,6 @@
     "slug": "small-format-oil-painting",
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Thinking"
@@ -411,11 +366,6 @@
         "vendor": "google",
         "model": "Gemini 3.5 Flash",
         "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-22T22:11:24-04:00",
@@ -448,11 +398,6 @@
     ],
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Thinking"
@@ -461,11 +406,6 @@
         "vendor": "google",
         "model": "Gemini 3.5 Flash",
         "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-15T23:01:54-04:00",
@@ -501,11 +441,6 @@
     "slug": "extend-panoramic-scene",
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Opus 4.8",
-        "level": "High"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Thinking"
@@ -514,11 +449,6 @@
         "vendor": "google",
         "model": "Gemini 3.1 Pro",
         "level": "High"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 31B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -606,11 +536,6 @@
         "vendor": "google",
         "model": "Gemini 3.5 Flash",
         "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -749,11 +674,6 @@
         "vendor": "google",
         "model": "Gemini 3.1 Pro",
         "level": "High"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 31B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -853,11 +773,6 @@
         "vendor": "google",
         "model": "Gemini 3.5 Flash",
         "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -902,11 +817,6 @@
         "vendor": "google",
         "model": "Gemini 3.5 Flash",
         "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -1136,11 +1046,6 @@
     ],
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Opus 4.8",
-        "level": "High"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Thinking"
@@ -1149,11 +1054,6 @@
         "vendor": "google",
         "model": "Gemini 3.1 Pro",
         "level": "High"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 31B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -1186,11 +1086,6 @@
     ],
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Thinking"
@@ -1199,11 +1094,6 @@
         "vendor": "google",
         "model": "Gemini 3.5 Flash",
         "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -1280,11 +1170,6 @@
     "instructions": "Select a variant for the source images and likeness workflow.",
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Opus 4.8",
-        "level": "High"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Thinking"
@@ -1293,11 +1178,6 @@
         "vendor": "google",
         "model": "Gemini 3.1 Pro",
         "level": "High"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 31B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -1717,11 +1597,6 @@
     "variationSelectorTileMode": "details",
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Fable 5",
-        "level": "Adaptive"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Pro"
@@ -1730,11 +1605,6 @@
         "vendor": "google",
         "model": "Gemini 3.1 Pro",
         "level": "High"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 31B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-09T01:02:10-04:00",
@@ -2033,6 +1903,56 @@
             "instructions": "Use the Upturned Profile Reference for elegant upward profile, luminous blank paper field, fine parallel contour hatching, dark hair mass, and long sculptural neck treatment."
           }
         ]
+      },
+    {
+      "id": "neoclassical-steel-engraving",
+      "name": "Neoclassical Steel Engraving",
+      "description": "Monochrome academic copperplate engraving.",
+      "template": "Convert the provided image to a highly refined monochrome academic engraving in the manner of a 19th-century steel or copperplate print derived from neoclassical sculpture. Preserve the source image’s essential composition, proportions, pose, spatial relationships, and focal hierarchy while translating every form into disciplined engraved linework.\n\nUse the attached Neoclassical Steel Engraving Reference at {{neoclassical_steel_engraving_reference}} as the visual source of truth for engraved mark density, marble-like volume, directional studio lighting, dark textured background, limited palette, and austere monumental atmosphere. Synthesize its visual language; do not copy its subject, pose, crop, or composition.\n\nModel volume through exceptionally fine cross-hatching, stippling, tapered contour lines, and densely layered tonal marks. Use precise, controlled draftsmanship with crisp structural edges, subtle anatomical or geometric articulation, and smooth transitions between light, halftone, and shadow. Let engraved marks follow the curvature and direction of each form, creating convincing solid, marble-like volume without photographic texture.\n\nUse strong, directional studio lighting with a luminous primary light plane, deep restrained shadows, and carefully graduated chiaroscuro. Set the subject against a dark, finely textured background that increases tonal contrast and gives the image a quiet, monumental presence. Maintain a limited palette of black, charcoal, warm gray, and ivory paper tones.\n\nThe overall atmosphere should feel austere, contemplative, dignified, timeless, and intellectually composed. Favor classical restraint, formal balance, and meticulous tonal control over expressive distortion or decorative flourish.\n\nAvoid visible brushstrokes, painterly color, digital smoothness, modern photographic effects, coarse sketching, exaggerated contrast, loose abstraction, captions, labels, watermarks, borders, UI, or process notes.\n\nOutput a single finished image.",
+      "variables": [],
+      "referenceImages": [
+        {
+          "variable": "neoclassical_steel_engraving_reference",
+          "label": "Neoclassical Steel Engraving Reference",
+          "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/style-references/neoclassical-steel-engraving-reference.jpg",
+          "instructions": "Use this reference for fine copperplate-like cross-hatching, luminous marble-like modeling, restrained chiaroscuro, dark textured grounds, and an austere neoclassical print atmosphere."
+        }
+      ]
+    },
+    {
+      "id": "charcoal-study-sheet",
+        "name": "Charcoal Study Sheet",
+        "description": "Restrained charcoal-and-graphite atelier study on aged paper.",
+        "instructions": "Upload a source image to transform, then choose whether person likeness should be preserved.\nCreated with [Synthesize Style Image Prompts](/Users/mwy/.codex/skills/synthesize-style-image-prompts/SKILL.md)",
+        "template": "Transform the uploaded source image into a new artwork in the synthesized style defined by the attached style reference.\n\nAttached style reference:\n- {{charcoal_study_sheet_reference}}\n\nSource image priority:\n- Preserve the source image's core subject, composition, crop, proportions, spatial relationships, and important factual details.\n- Likeness instruction: {{preserve_likeness}}\n- The source image controls what is depicted. Do not introduce the reference sheet's figure, handwriting, tape, framing, or studio marks unless they are present in the source image.\n\nStyle reference priority:\n- Use the attached style reference and the written synthesis below as the visual source of truth for medium, paper, mark-making, value structure, edge behavior, texture, density, mood, and level of finish.\n- Synthesize its visual traits rather than copying its subject, layout, or distinctive incidental details.\n\nSynthesized style direction:\nRender the source as a quiet academic charcoal-and-graphite drawing on warm, softly aged ivory paper. Build the image from a selective hierarchy of dark charcoal masses, fine graphite construction lines, dense directional hatching, crosshatching, and lightly rubbed tonal passages. Let the strongest values gather in focal features, deep recesses, hair or other textured dark forms, and decisive cast shadows, while broad illuminated planes remain pale, breathable, and sparsely worked.\n\nModel form through layered diagonal hatching that follows the underlying volume. Combine firm, searching contours with softened, partially erased edges; allow unfinished construction lines to remain visible around secondary forms. Keep pressure, line weight, and density varied and hand-drawn, with a few decisive dark accents against a largely restrained tonal scale. Avoid mechanically uniform marks or polished continuous shading.\n\nUse a spacious study-sheet composition with generous untouched paper around the subject. The paper may carry subtle tooth, faint smudging, irregular graphite dust, gentle wear, and a softly yellowed archival cast, but it should remain clean enough to feel like a considered atelier drawing rather than a distressed prop. Lighting should be diffuse and natural, describing form through measured value changes rather than dramatic spectacle. The finished image should feel observant, intimate, and materially direct: partly resolved where attention matters, deliberately open elsewhere.\n\nFlexible zones:\n- Nonessential background detail may dissolve into blank warm paper, faint construction marks, or a spare tonal suggestion.\n- Secondary textures and small objects may simplify into economical hatching or abbreviated outlines.\n- Color may collapse to charcoal black, graphite gray, soft sepia-gray, and aged ivory while retaining factual distinctions through value.\n- Peripheral edges may fade, break, or remain exploratory; focal features may receive denser modeling.\n\nAvoid:\nAvoid photorealism, glossy digital rendering, smooth airbrushed gradients, pure white digital paper, heavy black fill everywhere, vector-clean outlines, uniform pencil texture, comic-book inking, dramatic cinematic lighting, saturated color, ornate fantasy details, copied handwritten notes, tape, borders, reference-sheet framing, captions, watermarks, UI, or process notes.\n\nOutput a single finished image.",
+        "variables": [
+          {
+            "name": "preserve_likeness",
+            "label": "Likeness",
+            "inputType": "toggle",
+            "labels": [
+              "General",
+              "Preserve"
+            ],
+            "options": [
+              "If the uploaded source image includes a person, preserve general identity cues only when they are central to the source image; otherwise prioritize the synthesized style and composition.",
+              "If the uploaded source image includes a person, preserve recognizable likeness: facial structure, feature placement, age cues, expression, distinctive asymmetries, and identity-defining details must remain intact while the style changes."
+            ],
+            "optionDescriptions": [
+              "Prioritizes style and composition unless identity is central.",
+              "Preserves recognizable facial identity while changing style."
+            ],
+            "value": "If the uploaded source image includes a person, preserve general identity cues only when they are central to the source image; otherwise prioritize the synthesized style and composition."
+          }
+        ],
+        "referenceImages": [
+          {
+            "variable": "charcoal_study_sheet_reference",
+            "label": "Charcoal Study Sheet Reference",
+            "path": "public/images/image-restyle-charcoal-study-sheet-reference.png",
+            "instructions": "Use the Charcoal Study Sheet Reference for warm ivory paper, layered graphite and charcoal marks, directional hatching, selectively resolved facial and structural planes, airy negative space, faint construction lines, and a quiet atelier-study finish."
+          }
+        ]
       }
     ],
     "showPalette": true,
@@ -2040,11 +1960,6 @@
     "variationSelectorTileMode": "details",
     "fullScreenModal": true,
     "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Opus 4.8",
-        "level": "High"
-      },
       {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
@@ -2054,14 +1969,9 @@
         "vendor": "google",
         "model": "Gemini 3.1 Pro",
         "level": "High"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 31B",
-        "level": ""
       }
     ],
-    "modifiedAt": "2026-07-22T21:31:35-04:00",
+  "modifiedAt": "2026-07-23T00:34:00-04:00",
     "customOrder": 0
   },
   {
@@ -2244,11 +2154,6 @@
     "variationSelectorTileMode": "details",
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Thinking"
@@ -2257,11 +2162,6 @@
         "vendor": "google",
         "model": "Gemini 3.5 Flash",
         "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-16T19:11:09-04:00",
@@ -2455,11 +2355,6 @@
     "instructions": "Select a variant based on the input type.",
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Thinking"
@@ -2468,11 +2363,6 @@
         "vendor": "google",
         "model": "Gemini 3.5 Flash",
         "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -2623,11 +2513,6 @@
     "variationSelectorTileMode": "details",
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Thinking"
@@ -2636,11 +2521,6 @@
         "vendor": "google",
         "model": "Gemini 3.5 Flash",
         "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -2675,11 +2555,6 @@
     "template": "",
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Opus 4.8",
-        "level": "High"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Thinking"
@@ -2688,11 +2563,6 @@
         "vendor": "google",
         "model": "Gemini 3.1 Pro",
         "level": "High"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 31B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -2925,11 +2795,6 @@
     "instructions": "Choose a reference-matching variant when comparing your artwork to a target image, or choose the single-artwork variant when you want critique without a reference.",
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Opus 4.8",
-        "level": "High"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Thinking"
@@ -2938,11 +2803,6 @@
         "vendor": "google",
         "model": "Gemini 3.1 Pro",
         "level": "High"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 31B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -2986,11 +2846,6 @@
     "image": "public/images/1777905940023.jpeg",
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Thinking"
@@ -2999,11 +2854,6 @@
         "vendor": "google",
         "model": "Gemini 3.5 Flash",
         "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -3061,11 +2911,6 @@
     "image": "public/images/1777908525884.jpeg",
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Thinking"
@@ -3074,11 +2919,6 @@
         "vendor": "google",
         "model": "Gemini 3.5 Flash",
         "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -3140,11 +2980,6 @@
     "slug": "fabric-rendering",
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Thinking"
@@ -3153,11 +2988,6 @@
         "vendor": "google",
         "model": "Gemini 3.5 Flash",
         "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -3184,11 +3014,6 @@
     "slug": "fabric-pattern-repeat",
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Thinking"
@@ -3197,11 +3022,6 @@
         "vendor": "google",
         "model": "Gemini 3.5 Flash",
         "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -3219,11 +3039,6 @@
     "slug": "pattern-extraction",
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Thinking"
@@ -3232,11 +3047,6 @@
         "vendor": "google",
         "model": "Gemini 3.5 Flash",
         "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -3272,11 +3082,6 @@
     "slug": "fabric-vector-prep",
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Thinking"
@@ -3285,11 +3090,6 @@
         "vendor": "google",
         "model": "Gemini 3.5 Flash",
         "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -3308,11 +3108,6 @@
     "instructions": "Submit the inspiration rendering first, then the design mockup.",
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Haiku 4.5",
-        "level": "Instant"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Instant"
@@ -3321,11 +3116,6 @@
         "vendor": "google",
         "model": "Gemini 3.5 Flash",
         "level": "Low"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 E4B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -3434,11 +3224,6 @@
         "vendor": "google",
         "model": "Gemini 3.1 Pro",
         "level": "High"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 31B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -3615,11 +3400,6 @@
     "variationSelectorTileMode": "details",
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Haiku 4.5",
-        "level": "Instant"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Instant"
@@ -3628,11 +3408,6 @@
         "vendor": "google",
         "model": "Gemini 3.5 Flash",
         "level": "Low"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 E4B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -3767,11 +3542,6 @@
     "instructions": "- Submit an image of a fabric pattern.",
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Thinking"
@@ -3780,11 +3550,6 @@
         "vendor": "google",
         "model": "Gemini 3.5 Flash",
         "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -3822,11 +3587,6 @@
     "instructions": "Submit the room image and the desired paint colors.",
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Thinking"
@@ -3835,11 +3595,6 @@
         "vendor": "google",
         "model": "Gemini 3.5 Flash",
         "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -3874,11 +3629,6 @@
     "instructions": "- Image 1: draft design\n- Image 2: style reference",
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Thinking"
@@ -3887,11 +3637,6 @@
         "vendor": "google",
         "model": "Gemini 3.5 Flash",
         "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -3920,11 +3665,6 @@
     "image": "public/images/1777229893811.jpg",
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Haiku 4.5",
-        "level": "Instant"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Instant"
@@ -3933,11 +3673,6 @@
         "vendor": "google",
         "model": "Gemini 3.5 Flash",
         "level": "Low"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 E4B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -3972,11 +3707,6 @@
     ],
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Thinking"
@@ -3985,11 +3715,6 @@
         "vendor": "google",
         "model": "Gemini 3.5 Flash",
         "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -4047,11 +3772,6 @@
     "previewBaseImageDescription": "Fort Sewall, Marblehead satellite screenshot used as the standardized base image for this prompt family preview variants.",
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Opus 4.8",
-        "level": "High"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Thinking"
@@ -4060,11 +3780,6 @@
         "vendor": "google",
         "model": "Gemini 3.1 Pro",
         "level": "High"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 31B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -4088,11 +3803,6 @@
     ],
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Thinking"
@@ -4101,11 +3811,6 @@
         "vendor": "google",
         "model": "Gemini 3.5 Flash",
         "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -4129,11 +3834,6 @@
     "slug": "color-shift",
     "recommendedModels": [
       {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
         "vendor": "openai",
         "model": "ChatGPT 5.5",
         "level": "Thinking"
@@ -4142,11 +3842,6 @@
         "vendor": "google",
         "model": "Gemini 3.5 Flash",
         "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
