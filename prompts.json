@@ -1853,6 +1853,48 @@
         ]
       },
       {
+        "id": "chalky-umber-oil-study",
+        "name": "Chalky Umber Oil Study",
+        "description": "Chalky architectural planes and intimate umber interiors.",
+        "image": "public/images/image-restyle-chalky-umber-oil-study-preview.png",
+        "instructions": "Upload a source image to transform, then choose whether person likeness should be preserved.\nCreated with [Synthesize Style Image Prompts](/Users/mwy/.codex/skills/synthesize-style-image-prompts/SKILL.md)",
+        "template": "Transform the uploaded source image into a new artwork in the synthesized style defined by the attached style references.\n\nAttached style references:\n- {{chalky_umber_facade_reference}}\n- {{chalky_umber_interior_reference}}\n\nSource image priority:\n- Preserve the source image's core subject, crop, composition, proportions, spatial relationships, perspective cues, and important factual details.\n- Likeness instruction: {{preserve_likeness}}\n- The source image controls what is depicted. Do not replace its subject with a facade, bedroom, furniture, windows, or framed portrait merely because those appear in the style references.\n\nStyle reference priority:\n- Use both attached style references and the written synthesis below. Treat the references as the visual source of truth for medium, palette, surface, mark-making, edge behavior, lighting, texture, density, mood, and level of finish.\n- Synthesize their shared traits rather than copying either reference's subject, layout, or distinctive details.\n\nSynthesized style direction:\nRender the source as an intimate observational oil study built from broad, economical masses rather than precise description. Compress depth gently and organize the image through a few strong verticals, horizontals, and irregular dark-light divisions. Favor close, slightly off-center cropping and ordinary, unidealized viewpoints. Preserve meaningful negative space as quiet painted fields instead of filling every area with incident.\n\nUse a restrained, low-chroma palette of chalky cream, yellowed ivory, smoky blue-gray, charcoal, brown-black, raw umber, muted russet, and dull oxide red. Establish pale matte lights against deep, nearly opaque dark anchors, with subdued middle values joining them. Limit warm accents to narrow structural notes or small focal passages. Keep whites weathered and warm, blacks chromatic and varied, and the overall color balance sober rather than monochromatically brown.\n\nMake the surface read as oil paint applied directly and sparingly: broad dragged bristle strokes, thin rubbed layers, dry scumbles, blunt opaque patches, visible directional marks, and occasional exposed underpainting. Describe forms with adjacent color and value planes rather than outlines or smooth modeling. Let firm edges define a few structural or focal divisions while other contours remain softened, scraped, uneven, or absorbed into neighboring paint. Retain slight inaccuracies, abbreviated details, and variations in opacity that reveal the hand and pace of painting.\n\nLighting should be diffuse, cool-to-neutral, and psychologically quiet. Avoid theatrical beams or polished highlight effects. Let illumination register through chalky pale planes set against deep recesses and muted surrounding color. Repeated elements should become simple rhythms of dark openings, pale bars, restrained rust notes, or stacked horizontal masses. If a person appears, keep anatomy and identity legible according to the likeness instruction while simplifying secondary facial, hair, and clothing details into a few tonal planes. The finished image should feel modest, still, inward, and materially immediate.\n\nFlexible zones:\n- Secondary clutter, ornament, textures, foliage, and small objects may be omitted or compressed into purposeful marks.\n- Background depth may flatten and nonessential perspective detail may simplify, provided the source's key spatial relationships remain readable.\n- Surface colors may shift into the reference palette while preserving important distinctions between major forms.\n- Peripheral forms may dissolve into adjoining value masses; focal structures may retain slightly firmer edges.\n\nAvoid:\nAvoid photorealism, glossy digital finish, smooth airbrushed gradients, cinematic lighting, bright saturated color, decorative prettiness, sentimental nostalgia, golden-hour glow, uniformly heavy impasto, excessive canvas texture, fussy detail, hard vector geometry, cartoon outlines, muddy undifferentiated browns, cubist fragmentation, invented architectural or domestic features, copied reference compositions, text, captions, watermarks, borders, UI, or process notes.\n\nOutput a single finished image.",
+        "variables": [
+          {
+            "name": "preserve_likeness",
+            "label": "Likeness",
+            "inputType": "toggle",
+            "labels": [
+              "General",
+              "Preserve"
+            ],
+            "options": [
+              "If the uploaded source image includes a person, preserve general identity cues only when they are central to the source image; otherwise prioritize the synthesized style and composition.",
+              "If the uploaded source image includes a person, preserve recognizable likeness: facial structure, feature placement, age cues, expression, distinctive asymmetries, and identity-defining details must remain intact while the style changes."
+            ],
+            "optionDescriptions": [
+              "Prioritizes style and composition unless identity is central.",
+              "Preserves recognizable facial identity while changing style."
+            ],
+            "value": "If the uploaded source image includes a person, preserve general identity cues only when they are central to the source image; otherwise prioritize the synthesized style and composition."
+          }
+        ],
+        "referenceImages": [
+          {
+            "variable": "chalky_umber_facade_reference",
+            "label": "Facade Rhythm and Brushwork Reference",
+            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/style-references/quiet-architectural-oil-facade-reference.jpg",
+            "instructions": "Use the Facade Rhythm and Brushwork Reference for chalky cream planes, deep charcoal roof and window masses, restrained oxide-red accents, repeated dark-light rhythms, direct cropping, and visibly dragged bristle strokes."
+          },
+          {
+            "variable": "chalky_umber_interior_reference",
+            "label": "Interior Palette and Atmosphere Reference",
+            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/style-references/quiet-architectural-oil-interior-reference.jpg",
+            "instructions": "Use the Interior Palette and Atmosphere Reference for compressed domestic space, smoky blue-gray and umber color fields, deep furniture anchors, subdued diffuse light, spare detail, and intimate psychological stillness."
+          }
+        ]
+      },
+      {
         "id": "quiet-architectural-oil-study",
         "name": "Quiet Architectural Oil Study",
         "description": "Spare early-modernist oil handling and architectural quiet.",
@@ -1981,7 +2023,7 @@
         "level": ""
       }
     ],
-    "modifiedAt": "2026-07-17T16:36:49-04:00",
+    "modifiedAt": "2026-07-22T21:31:35-04:00",
     "customOrder": 8
   },
   {
