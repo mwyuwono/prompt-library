@@ -251,7 +251,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 0
+    "customOrder": 2
   },
   {
     "id": "character-swap-male",
@@ -301,7 +301,7 @@
       }
     ],
     "modifiedAt": "2026-07-15T23:01:54-04:00",
-    "customOrder": 1
+    "customOrder": 3
   },
   {
     "id": "targeted-image-edit-prompt",
@@ -346,7 +346,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 2
+    "customOrder": 4
   },
   {
     "id": "oil-painting-study-reference",
@@ -381,7 +381,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 3
+    "customOrder": 0
   },
   {
     "id": "small-format-oil-painting",
@@ -390,10 +390,10 @@
     "category": "Art",
     "icon": "brush",
     "featured": false,
-    "image": "public/images/small-format-oil-painting-snowstorm-preview.png",
-    "previewBaseImage": "public/images/small-format-oil-painting-base-snowstorm.png",
-    "previewBaseImageDescription": "Snow-covered city street with a plow, foreground car, lamps, and surrounding buildings during heavy snowfall.",
-    "template": "Transform the uploaded image into a small-format oil painting, conceived at approximately 7 inches on its longest dimension. Preserve the source image’s essential composition, subject placement, proportions, spatial relationships, lighting direction, and overall emotional character, while simplifying the scene to suit the intimate physical scale.\n\nUse the visual economy and painterly discipline associated with Edward Hopper: strong structural drawing, simplified geometry, quiet tonal transitions, restrained detail, and clearly organized areas of light and shadow. Define forms through broad planes of color, value, and temperature rather than intricate linework or photographic precision.\n\nEliminate minor textures, background clutter, small decorative elements, and incidental details that would become visually confusing at this scale. Retain only the features necessary to preserve the identity, pose, setting, and focal hierarchy of the source. Consolidate complex shapes into larger, block-like masses with controlled edges and deliberate silhouettes.\n\nUse broad, economical oil brushwork with visible but restrained surface texture. Allow some contours to remain firm and architectural, while softening or losing edges in shadow and less important areas. Avoid excessive blending, fine outlining, miniature detail, or uniformly sharp rendering.\n\nDerive the palette from the uploaded image, but reduce it to a limited, harmonious set of colors. Emphasize clear value structure, muted midtones, selective warm and cool contrasts, and deep, quiet shadows. Keep the lighting simple, directional, and psychologically evocative.\n\nThe finished result should feel like a complete, hand-painted oil study made for intimate viewing: concise, atmospheric, structurally clear, and visually legible from a short distance. It should resemble a genuine small canvas rather than a photograph filtered to look painted.",
+    "image": "public/images/small-format-oil-painting-sleeping-dog-preview.png",
+    "previewBaseImage": "public/images/small-format-oil-painting-base-sleeping-dog.png",
+    "previewBaseImageDescription": "Sleeping white dog curled on a navy-and-cream plaid blanket in a tufted brown leather chair.",
+    "template": "Transform the uploaded source image into a **small-format oil painting conceived at approximately 7 inches on its longest dimension**. Preserve the source image’s essential composition, crop, subject placement, proportions, gesture, spatial relationships, lighting direction, and emotional character.\n\nUse the visual economy and structural clarity associated with Edward Hopper: strong underlying drawing, simplified geometry, restrained tonal transitions, deliberate silhouettes, and clearly organized areas of light and shadow. Define forms through broad planes of color, value, and temperature rather than photographic description or intricate linework.\n\n### Scale-driven simplification\n\nPaint only the amount of information that could credibly be resolved on a 7-inch canvas using relatively broad brushes. Treat the image as something intended to remain legible at arm’s length rather than reward close inspection.\n\nReduce every major form to a small number of clearly differentiated shapes and value planes. Consolidate complex passages into broad, continuous masses. Eliminate repeated small marks, minor contours, surface noise, incidental textures, decorative details, and background clutter.\n\nUse the following hierarchy:\n\n1. Preserve the dominant silhouettes, gesture, pose, and compositional structure.\n2. Preserve only the internal features necessary to identify the principal subjects and important objects.\n3. Suggest secondary information with one or two economical strokes.\n4. Merge low-priority areas into simplified shadow, color, or atmospheric masses.\n\nFaces, hands, anatomy, foliage, water, architecture, fabric, hair, and other complex subjects should be **abbreviated rather than fully rendered**. Faces should be conveyed through head shape, light-and-shadow placement, and only a few essential marks. Background vegetation or texture should read as grouped shapes, not collections of individually described elements.\n\n### Brushwork and edges\n\nUse broad, economical oil brushwork with visible but controlled surface texture. Favor larger, flatter strokes and connected passages over small dabs or intricate modeling. Avoid brushmarks that would be implausibly fine on a 7-inch painting.\n\nKeep the sharpest edges and strongest contrasts around the primary focal area. Use firm, architectural contours selectively. Soften, merge, or lose edges in shadow, background, and less important passages. Avoid uniformly sharp rendering, excessive blending, fine outlining, tiny highlights, or decorative impasto.\n\n### Color and material treatment\n\nDerive the palette from the supplied style or palette reference when one is provided; otherwise derive it from the source image. Emphasize a clear value structure, muted midtones, selective warm–cool contrasts, and deep, quiet shadows.\n\nPreserve the essential identity of materials while simplifying their texture. Do not introduce arbitrary black, white, or highly saturated accents merely to increase contrast. When a monochrome source leaves color ambiguous, use historically and materially plausible muted colors, including natural, undyed, weathered, or earth-toned materials where appropriate.\n\n### Finished character\n\nKeep the lighting simple, directional, and psychologically evocative. The result should feel like a complete, hand-painted oil study made for intimate viewing: concise, atmospheric, structurally clear, and immediately legible.\n\nThe finished image should resemble a genuine small canvas painted with disciplined visual shorthand. It should not resemble a photograph processed through a painting filter, a fully rendered illustration, or a large painting reduced in size.",
     "variables": [],
     "slug": "small-format-oil-painting",
     "recommendedModels": [
@@ -418,8 +418,8 @@
         "level": ""
       }
     ],
-    "modifiedAt": "2026-07-22T12:00:00-04:00",
-    "customOrder": 4
+    "modifiedAt": "2026-07-22T22:11:24-04:00",
+    "customOrder": 1
   },
   {
     "id": "contour-form-study",
@@ -1157,7 +1157,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 0
+    "customOrder": 2
   },
   {
     "id": "interior-photo-editorial-retouch",
@@ -1738,7 +1738,7 @@
       }
     ],
     "modifiedAt": "2026-07-09T01:02:10-04:00",
-    "customOrder": 2
+    "customOrder": 0
   },
   {
     "id": "engraving-conversion",
