@@ -384,6 +384,44 @@
     "customOrder": 3
   },
   {
+    "id": "small-format-oil-painting",
+    "title": "Small-Format Oil Painting",
+    "description": "Transforms an uploaded image into a concise, atmospheric small-format oil painting study.",
+    "category": "Art",
+    "icon": "brush",
+    "featured": false,
+    "image": "public/images/small-format-oil-painting-snowstorm-preview.png",
+    "previewBaseImage": "public/images/small-format-oil-painting-base-snowstorm.png",
+    "previewBaseImageDescription": "Snow-covered city street with a plow, foreground car, lamps, and surrounding buildings during heavy snowfall.",
+    "template": "Transform the uploaded image into a small-format oil painting, conceived at approximately 7 inches on its longest dimension. Preserve the source image’s essential composition, subject placement, proportions, spatial relationships, lighting direction, and overall emotional character, while simplifying the scene to suit the intimate physical scale.\n\nUse the visual economy and painterly discipline associated with Edward Hopper: strong structural drawing, simplified geometry, quiet tonal transitions, restrained detail, and clearly organized areas of light and shadow. Define forms through broad planes of color, value, and temperature rather than intricate linework or photographic precision.\n\nEliminate minor textures, background clutter, small decorative elements, and incidental details that would become visually confusing at this scale. Retain only the features necessary to preserve the identity, pose, setting, and focal hierarchy of the source. Consolidate complex shapes into larger, block-like masses with controlled edges and deliberate silhouettes.\n\nUse broad, economical oil brushwork with visible but restrained surface texture. Allow some contours to remain firm and architectural, while softening or losing edges in shadow and less important areas. Avoid excessive blending, fine outlining, miniature detail, or uniformly sharp rendering.\n\nDerive the palette from the uploaded image, but reduce it to a limited, harmonious set of colors. Emphasize clear value structure, muted midtones, selective warm and cool contrasts, and deep, quiet shadows. Keep the lighting simple, directional, and psychologically evocative.\n\nThe finished result should feel like a complete, hand-painted oil study made for intimate viewing: concise, atmospheric, structurally clear, and visually legible from a short distance. It should resemble a genuine small canvas rather than a photograph filtered to look painted.",
+    "variables": [],
+    "slug": "small-format-oil-painting",
+    "recommendedModels": [
+      {
+        "vendor": "anthropic",
+        "model": "Claude Sonnet 5",
+        "level": "Light"
+      },
+      {
+        "vendor": "openai",
+        "model": "ChatGPT 5.5",
+        "level": "Thinking"
+      },
+      {
+        "vendor": "google",
+        "model": "Gemini 3.5 Flash",
+        "level": "Medium"
+      },
+      {
+        "vendor": "gemma",
+        "model": "Gemma 4 12B",
+        "level": ""
+      }
+    ],
+    "modifiedAt": "2026-07-22T12:00:00-04:00",
+    "customOrder": 4
+  },
+  {
     "id": "contour-form-study",
     "title": "Contour Form Study",
     "description": "Turns an uploaded drawing into a structural study that clarifies three-dimensional form and anatomy.",
@@ -431,7 +469,7 @@
       }
     ],
     "modifiedAt": "2026-07-15T23:01:54-04:00",
-    "customOrder": 4
+    "customOrder": 5
   },
   {
     "id": "wallpaper-artwork-extension",
@@ -484,7 +522,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 5
+    "customOrder": 6
   },
   {
     "id": "proofreader",
@@ -1263,7 +1301,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 6
+    "customOrder": 7
   },
   {
     "id": "academic-figure-study-prefix",
@@ -1318,7 +1356,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 7
+    "customOrder": 8
   },
   {
     "id": "song-creator",
@@ -2024,7 +2062,7 @@
       }
     ],
     "modifiedAt": "2026-07-22T21:31:35-04:00",
-    "customOrder": 8
+    "customOrder": 9
   },
   {
     "id": "new-subject-same-style",
@@ -2227,7 +2265,7 @@
       }
     ],
     "modifiedAt": "2026-07-16T19:11:09-04:00",
-    "customOrder": 9
+    "customOrder": 10
   },
   {
     "id": "prompt-builder",
@@ -2438,7 +2476,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 10
+    "customOrder": 11
   },
   {
     "id": "artist-guide",
@@ -2517,7 +2555,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 11
+    "customOrder": 12
   },
   {
     "id": "restyle-image",
@@ -2606,7 +2644,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 12
+    "customOrder": 13
   },
   {
     "id": "architectural-photo-visualization",
@@ -2843,7 +2881,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 13
+    "customOrder": 14
   },
   {
     "id": "art-critique",
@@ -2908,7 +2946,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 14
+    "customOrder": 15
   },
   {
     "id": "fabric-colorways",
@@ -3440,7 +3478,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 15
+    "customOrder": 16
   },
   {
     "id": "architectural-detail-trace-prep",
@@ -3598,7 +3636,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 16
+    "customOrder": 17
   },
   {
     "id": "svg-plotter-drawing",
@@ -3648,7 +3686,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 17
+    "customOrder": 18
   },
   {
     "id": "fabric-application-mockups",
@@ -3955,7 +3993,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 18
+    "customOrder": 19
   },
   {
     "id": "topographic-site-plan-map",
@@ -4030,7 +4068,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 19
+    "customOrder": 20
   },
   {
     "id": "miniature-portrait",
@@ -4071,7 +4109,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 20
+    "customOrder": 21
   },
   {
     "id": "untitled-prompt-1783014432546",
@@ -4112,7 +4150,7 @@
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 21
+    "customOrder": 22
   },
   {
     "id": "folder-cleanup",
