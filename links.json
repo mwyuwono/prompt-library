@@ -75,6 +75,11 @@
                 "name": "Qwen",
                 "company": "Alibaba",
                 "url": "https://chat.qwen.ai/"
+            },
+            {
+                "name": "Playground",
+                "company": "Microsoft",
+                "url": "https://playground.microsoft.ai/chat"
             }
         ]
     },
