@@ -420,8 +420,8 @@
         "syncEnabled" : true
       },
       "title" : "Capture durable learnings",
-      "updatedAt" : "2026-07-02T22:14:35Z",
-      "value" : "Review this session for durable learnings worth preserving: user preferences, reusable instructions, architecture decisions, debugging insights, project knowledge, workflow improvements, documentation updates, tests, runbooks, or backlog items. Propose additions or changes. Exclude temporary, speculative, redundant, or low-value details.",
+      "updatedAt" : "2026-07-15T02:25:02Z",
+      "value" : "Review this session and capture durable learnings worth preserving: user preferences, reusable instructions, architecture decisions, debugging insights, project knowledge, workflow improvements, documentation updates, tests, runbooks, or backlog items. Exclude temporary, speculative, redundant, or low-value details.",
       "visibility" : "public"
     },
     {
@@ -643,6 +643,78 @@
       "updatedAt" : "2026-07-09T22:33:48Z",
       "value" : "Change the subject’s body type to {{@Swimmer's build}}.",
       "visibility" : "private"
+    },
+    {
+      "categoryId" : "prompt-reuse",
+      "createdAt" : "2026-07-11T14:35:33Z",
+      "favorite" : false,
+      "id" : "phrase-98CB45C4-D08F-48E4-9050-BAC03ACC8387",
+      "summary" : "",
+      "tags" : [
+
+      ],
+      "textReplacement" : {
+        "shortcut" : "xmodel",
+        "syncEnabled" : false
+      },
+      "title" : "Request optimal model guidance",
+      "updatedAt" : "2026-07-11T14:35:33Z",
+      "value" : "Recommend the most lightweight, cost-effective LLM that meets the task's reasoning and context requirements. Optimize for minimum token usage while maintaining high-quality results.",
+      "visibility" : "public"
+    },
+    {
+      "categoryId" : "prompt-reuse",
+      "createdAt" : "2026-07-14T17:56:00Z",
+      "favorite" : false,
+      "id" : "phrase-9B782C0F-EBEB-4FAD-88C3-2FF9DCCCCBE9",
+      "summary" : "",
+      "tags" : [
+
+      ],
+      "textReplacement" : {
+        "shortcut" : "xtune",
+        "syncEnabled" : true
+      },
+      "title" : "Help me fine-tune a behavior. ",
+      "updatedAt" : "2026-07-14T17:56:00Z",
+      "value" : "I want to adjust the behavior of this element: [Describe the element\/interaction or paste the code here]. \n\nPlease analyze its current behavior and break it down into labeled, adjustable components (for example: [A] Trigger, [B] Keyframes\/States, [C] Timing\/Duration, [D] Easing\/Curve, [E] Visual Properties). \n\nOnce you provide this breakdown, I will give you feedback using those labels so I can easily say \"Change A to...\" or \"Adjust C to...\". ",
+      "visibility" : "public"
+    },
+    {
+      "categoryId" : "prompt-reuse",
+      "createdAt" : "2026-07-15T20:33:27Z",
+      "favorite" : false,
+      "id" : "phrase-901BD7E9-D061-4219-B916-46FA7C774C6C",
+      "summary" : "",
+      "tags" : [
+
+      ],
+      "textReplacement" : {
+        "shortcut" : "xlabel",
+        "syncEnabled" : true
+      },
+      "title" : "Label everything for easy reference",
+      "updatedAt" : "2026-07-15T20:33:27Z",
+      "value" : "For any questions, tasks, or decisions that require my attention, please use a short, unique identifier. This way, I can easily refer to it without having to type out the entire question or task description again.",
+      "visibility" : "public"
+    },
+    {
+      "categoryId" : "workflow-commands",
+      "createdAt" : "2026-07-16T18:00:16Z",
+      "favorite" : false,
+      "id" : "phrase-74887694-BA5A-4409-9D93-A2A6E29C277B",
+      "summary" : "",
+      "tags" : [
+
+      ],
+      "textReplacement" : {
+        "shortcut" : "xaudio",
+        "syncEnabled" : true
+      },
+      "title" : "Audio content: Invoke skill to create",
+      "updatedAt" : "2026-07-16T18:00:16Z",
+      "value" : "Use $listen-to-content on the source below.\n\nI authorize ElevenLabs to process this source for speech synthesis.\n\nSOURCE:\n",
+      "visibility" : "public"
     }
   ],
   "settings" : {
@@ -679,7 +751,7 @@
     "paletteSource" : "Robert Brown Fabric Collection",
     "textReplacementLastSyncAt" : "2026-07-09T20:15:00Z"
   },
-  "updatedAt" : "2026-07-10T02:13:56Z",
+  "updatedAt" : "2026-07-16T18:00:16Z",
   "variables" : [
     {
       "id" : "var-1783398724430",

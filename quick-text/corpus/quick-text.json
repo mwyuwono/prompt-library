@@ -715,6 +715,42 @@
       "updatedAt" : "2026-07-16T18:00:16Z",
       "value" : "Use $listen-to-content on the source below.\n\nI authorize ElevenLabs to process this source for speech synthesis.\n\nSOURCE:\n",
       "visibility" : "public"
+    },
+    {
+      "categoryId" : "image-quality",
+      "createdAt" : "2026-07-24T13:42:34Z",
+      "favorite" : false,
+      "id" : "phrase-E97D29EC-7EA4-41AC-A282-6D3D3A0D7195",
+      "summary" : "",
+      "tags" : [
+
+      ],
+      "textReplacement" : {
+        "shortcut" : "xrework",
+        "syncEnabled" : true
+      },
+      "title" : "Use uploaded image for style",
+      "updatedAt" : "2026-07-24T13:42:34Z",
+      "value" : "We will edit the uploaded image, maintaining its current style. Tell me when you are ready for the editing instructions. ",
+      "visibility" : "public"
+    },
+    {
+      "categoryId" : "image-quality",
+      "createdAt" : "2026-07-24T14:06:42Z",
+      "favorite" : false,
+      "id" : "phrase-EBD760C3-622A-4774-8F75-4D5803FD0D34",
+      "summary" : "",
+      "tags" : [
+
+      ],
+      "textReplacement" : {
+        "shortcut" : "xcomp",
+        "syncEnabled" : true
+      },
+      "title" : "Use only subject & composition ",
+      "updatedAt" : "2026-07-24T14:06:42Z",
+      "value" : "Use this subject and composition. ",
+      "visibility" : "public"
     }
   ],
   "settings" : {
@@ -751,7 +787,7 @@
     "paletteSource" : "Robert Brown Fabric Collection",
     "textReplacementLastSyncAt" : "2026-07-09T20:15:00Z"
   },
-  "updatedAt" : "2026-07-16T18:00:16Z",
+  "updatedAt" : "2026-07-24T14:06:42Z",
   "variables" : [
     {
       "id" : "var-1783398724430",
