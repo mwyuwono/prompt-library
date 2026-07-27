@@ -1985,189 +1985,17 @@
   },
   {
     "id": "new-subject-same-style",
-    "title": "New Subject, Same Style",
-    "description": "Creates new images in a synthesized style derived from multiple attached artwork references.",
+    "title": "Style-Locked Image Editor",
+    "description": "Transfers a subject and composition through the visual language of a separately supplied style reference.",
     "category": "Art",
     "icon": "palette",
     "featured": false,
     "image": "public/images/new-subject-same-style-preview.png",
-    "previewBaseImage": "public/images/classical-male-swimmer-base-photo.png",
-    "previewBaseImageDescription": "Archival-style photograph of a male swimmer in 1910s cotton briefs, used as the shared preview source.",
-    "slug": "new-subject-same-style",
-    "instructions": "Use a variant with its attached style reference images. Optionally describe the desired subject or leave the field blank to let the prompt choose a subject suited to the style.",
-    "template": "Create a new image in a synthesized style defined by attached style references.\n\nSubject instructions, if provided:\n{{subject_instructions}}\n\nIf the subject instructions are blank, choose a subject that feels native to the style references and demonstrates their shared visual language clearly.\n\nUse the attached style references as the visual source of truth for medium, palette, surface, mark-making, edge behavior, lighting, texture, density, mood, and level of finish. Synthesize the shared traits rather than copying one reference literally.\n\nAvoid generic styling, photorealism unless explicitly present in the references, modern digital gloss, watermarks, captions, borders, UI, or text artifacts.\n\nOutput a single finished image.",
-    "variables": [
-      {
-        "name": "subject_instructions",
-        "label": "Subject Instructions",
-        "placeholder": "Optional: describe the subject, setting, composition, aspect ratio, mood, or constraints for the new image.",
-        "value": "",
-        "inputType": "textarea",
-        "rows": 5
-      }
-    ],
-    "variations": [
-      {
-        "id": "neoclassical-atelier-lithograph",
-        "name": "Neoclassical Atelier Lithograph",
-        "description": "Academic graphite lithograph figure plate.",
-        "image": "public/images/new-subject-same-style-neoclassical-atelier-lithograph-male-athlete-preview.png",
-        "instructions": "Created with [Synthesize Style Image Prompts](/Users/mwy/.codex/skills/synthesize-style-image-prompts/SKILL.md)",
-        "template": "Create a new image in the synthesized style defined by the attached style references.\n\nAttached style references:\n- {{atelier_back_study_reference}}\n- {{atelier_profile_bust_reference}}\n- {{atelier_frontal_bust_reference}}\n- {{atelier_upturned_profile_reference}}\n\nSubject instructions, if provided:\n{{subject_instructions}}\n\nIf the subject instructions are blank, create a classical bust, head study, or upper-torso figure study that feels native to the style references and demonstrates the synthesized visual language clearly.\n\nStyle reference priority:\n- Use the attached style references as the visual source of truth for medium, palette, surface, mark-making, edge behavior, lighting, texture, density, mood, and level of finish.\n- Synthesize their shared traits rather than copying one reference literally.\n\nSynthesized style direction:\nSynthesize the style as a neoclassical atelier lithograph or academic drawing plate on warm aged ivory paper. The image should feel like a nineteenth-century figure-study print made from close observation of antique sculpture and living anatomy: quiet, disciplined, sculptural, and formally composed.\n\nUse graphite-gray to black linework with slight sepia warmth from the paper. Build form through precise contour drawing, fine parallel hatching, crosshatching, stippled graphite accumulation, soft rubbed tonal passages, and selective dark masses. The darkest passages should gather in hair, eye sockets, cast shadows, and background accents; broad skin or stone-like planes should remain pale, luminous, and breathable.\n\nTreat the subject with classical restraint: idealized but anatomically specific proportions, clean profile or bust-like silhouette, elegant neck and shoulder transitions, carefully modeled facial planes, and hair rendered as flowing ribbon-like locks with many nested contour lines. Preserve a hand-drawn irregularity in pressure, line weight, paper absorption, and small registration imperfections.\n\nCompose the image as an archival study sheet or lithographic plate with generous blank negative space, warm paper grain, faint foxing, soft edge wear, and no modern setting. The surface should look tactile and printed or drawn, not digitally smooth. The mood should be contemplative, museum-like, and rigorous rather than dramatic.\n\nComposition and output:\nFavor a single subject presented as a bust, profile, three-quarter head, back study, or upper torso study on a spacious archival sheet. Use generous negative space, controlled asymmetry, pale paper field, and carefully weighted dark passages. Let the drawing feel finished enough to be collectible but still visibly made by hand through contour, hatching, and tonal drawing.\n\nAvoid:\nAvoid photorealism, glossy digital painting, saturated color, modern fashion styling, cinematic lighting, plastic skin, airbrushed gradients, fantasy ornament, cluttered backgrounds, hard posterized contrast, vector-clean outlines, cartoon anatomy, over-literal copying of any single reference, captions, labels, watermarks, frames, or UI artifacts.\n\nOutput a single finished image. Do not include labels, captions, watermarks, UI, borders, or process notes.",
-        "variables": [
-          {
-            "name": "subject_instructions",
-            "label": "Subject Instructions",
-            "placeholder": "Optional: describe the subject, setting, composition, aspect ratio, mood, or constraints for the new image.",
-            "value": "",
-            "inputType": "textarea",
-            "rows": 5
-          }
-        ],
-        "referenceImages": [
-          {
-            "variable": "atelier_back_study_reference",
-            "label": "Back Study Reference",
-            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/style-references/neoclassical-atelier-lithograph-back-study.jpeg",
-            "instructions": "Use the Back Study Reference for the academic figure-study posture, sculptural anatomy, warm paper tone, dark hatched background mass, and charcoal-lithograph tonal depth."
-          },
-          {
-            "variable": "atelier_profile_bust_reference",
-            "label": "Profile Bust Reference",
-            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/style-references/neoclassical-atelier-lithograph-profile-bust.png",
-            "instructions": "Use the Profile Bust Reference for clean neoclassical profile structure, ribbon-like hair linework, sparse negative space, and measured antiquarian plate presentation."
-          },
-          {
-            "variable": "atelier_frontal_bust_reference",
-            "label": "Frontal Bust Reference",
-            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/style-references/neoclassical-atelier-lithograph-frontal-bust.png",
-            "instructions": "Use the Frontal Bust Reference for marble-bust modeling, pale graphite washes, restrained inscription-like plate atmosphere, and dense controlled hatching around the eyes and neck."
-          },
-          {
-            "variable": "atelier_upturned_profile_reference",
-            "label": "Upturned Profile Reference",
-            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/style-references/neoclassical-atelier-lithograph-upturned-profile.png",
-            "instructions": "Use the Upturned Profile Reference for elegant upward profile, luminous blank paper field, fine parallel contour hatching, dark hair mass, and long sculptural neck treatment."
-          }
-        ]
-      },
-      {
-        "id": "luminous-geological-abstraction",
-        "name": "Luminous Geological Abstraction",
-        "description": "Layered biomorphic color fields with mineral depth and weathered luminosity.",
-        "image": "public/images/new-subject-same-style-luminous-geological-abstraction-preview.png",
-        "instructions": "Created with [Synthesize Style Image Prompts](/Users/mwy/.codex/skills/synthesize-style-image-prompts/SKILL.md)",
-        "template": "Create a new image in the synthesized style defined by the attached style references.\n\nAttached style references:\n- {{lyrical_terrain_structure_reference}}\n- {{mineral_pool_palette_reference}}\n- {{depths_density_reference}}\n- {{held_current_flow_reference}}\n- {{silent_ground_atmosphere_reference}}\n- {{still_matter_color_reference}}\n\nSubject instructions, if provided:\n{{subject_instructions}}\n\nIf the subject instructions are blank, create an invented, place-responsive abstract composition suggesting terrain, water, stone, vegetation, and accumulated memory without depicting a literal landscape.\n\nStyle hierarchy:\n- The subject instructions control the underlying subject, orientation, aspect ratio, and any factual elements explicitly requested.\n- The attached style references control medium, palette, surface, mark-making, edge behavior, spatial compression, atmosphere, density, and level of finish.\n- Use both the attached images and this written synthesis. Synthesize their shared visual language rather than copying the composition or distinctive forms of any single reference.\n- Do not invent typography, symbols, recognizable landmarks, figures, architecture, or narrative objects unless requested in the subject instructions.\n\nSynthesized style direction:\nCreate a tactile contemporary abstract painting built from interlocking biomorphic masses that feel discovered through repeated painting, wiping, veiling, and revision. Let forms hover between aerial terrain, mineral deposits, pools, stones, foliage, and bodily contours without resolving into literal illustration. Compress depth into a shallow, all-over field while preserving a few strong spatial currents: broad pale passages that open breathing room, darker anchors that hold the composition, and clusters of smaller marks that create rhythm and geological complexity.\n\nUse a natural but chromatically alive palette: celadon, sage, moss, olive, eucalyptus, deep forest green, blue-gray, slate, charcoal, warm cream, chalky white, dusty rose, salmon, terracotta, rust, ochre, mustard, and restrained flashes of coral or turquoise. Organize color into substantial, readable zones. Balance cool mineral greens and blue-grays against warm earthen pinks and oranges; avoid letting either temperature dominate uniformly. Light should seem embedded in the pigment rather than cast from an external source, with pale translucent areas glowing beside matte dark passages.\n\nBuild the surface with visible oil- or acrylic-like brushwork: broad dragged strokes, thin veils, dry scumbling, rubbed transitions, scraped or redrawn edges, semi-opaque overlaps, occasional impasto, and traces of earlier layers showing through. Vary edges deliberately—some soft and dissolving, some bluntly brushed, some briefly defined by a narrow dark contour. Preserve canvas grain, pigment drag, uneven opacity, and hand-made irregularity. Marks may range from large quiet fields to compact pebble-like notes and sparse linear gestures, but every accent should support structure rather than decoration.\n\nKeep the composition asymmetrical, intuitive, and balanced through visual weight rather than geometry. Allow forms to touch, overlap, nest, and partially obscure one another. Maintain ambiguity and slow looking: the image should feel grounded, meditative, weathered, and sensuous, with enough unresolved space to suggest a remembered place rather than a mapped one. The finish should be confident but not polished smooth.\n\nComposition and output:\nHonor any requested format. Otherwise choose a portrait or landscape canvas according to the emerging subject. Fill the frame with an immersive painted field, using one or two larger quiet shapes, several mid-scale interlocking masses, and sparse small accents. Preserve clear value structure and passages of rest amid the density. Output a single finished painting with natural canvas texture and convincing physical pigment.\n\nAvoid:\nAvoid photorealistic scenery, literal topographic maps, obvious horizons, decorative floral motifs, cartoon outlines, crisp vector geometry, cubist grids, uniform mosaic patches, synthetic gradients, airbrushed blending, glossy digital effects, neon color, muddy all-over brown, excessive black, repetitive mark stamps, equal detail everywhere, forced symmetry, centralized emblem-like composition, fake gallery framing, copied signatures, legible writing, captions, watermarks, borders, UI, or process notes.\n\nOutput a single finished image. Do not include labels, captions, watermarks, UI, borders, or process notes.",
-        "variables": [
-          {
-            "name": "subject_instructions",
-            "label": "Subject Instructions",
-            "placeholder": "Optional: describe the subject, setting, composition, aspect ratio, mood, or constraints for the new image.",
-            "value": "",
-            "inputType": "textarea",
-            "rows": 5
-          }
-        ],
-        "referenceImages": [
-          {
-            "variable": "lyrical_terrain_structure_reference",
-            "label": "Interlocking Structure Reference",
-            "path": "public/images/style-references/lyrical-terrain-gravity-of-place.jpg",
-            "instructions": "Use the Interlocking Structure Reference for large asymmetrical masses, nested organic shapes, pale breathing passages, softened contours, and the balance of cool stone colors with warm earthen accents."
-          },
-          {
-            "variable": "mineral_pool_palette_reference",
-            "label": "Mineral Palette Reference",
-            "path": "public/images/style-references/lyrical-terrain-mineral-pool.jpeg",
-            "instructions": "Use the Mineral Palette Reference for celadon, turquoise, cream, umber, ochre, and slate relationships; translucent scumbling; shallow pooled depth; and large quiet color zones."
-          },
-          {
-            "variable": "depths_density_reference",
-            "label": "Layered Density Reference",
-            "path": "public/images/style-references/lyrical-terrain-depths.jpg",
-            "instructions": "Use the Layered Density Reference for complex all-over rhythm, dark green anchoring, fragmented secondary marks, luminous peach accents, linear traces, and the suggestion of remembered terrain without literal depiction."
-          },
-          {
-            "variable": "held_current_flow_reference",
-            "label": "Flow and Edge Reference",
-            "path": "public/images/style-references/lyrical-terrain-held-current.jpeg",
-            "instructions": "Use the Flow and Edge Reference for broad directional currents, alternating soft and dark-outlined edges, scraped transitions, pale internal pathways, and saturated green-rust contrast."
-          },
-          {
-            "variable": "silent_ground_atmosphere_reference",
-            "label": "Atmosphere and Veil Reference",
-            "path": "public/images/style-references/lyrical-terrain-silent-ground.jpeg",
-            "instructions": "Use the Atmosphere and Veil Reference for smoky veils, low-contrast transitions, embedded light, restrained marks, canvas grain, quiet negative space, and contemplative tonal depth."
-          },
-          {
-            "variable": "still_matter_color_reference",
-            "label": "Warm Color-Massing Reference",
-            "path": "public/images/style-references/lyrical-terrain-still-matter.jpeg",
-            "instructions": "Use the Warm Color-Massing Reference for clustered rounded forms, coral and terracotta warmth, creamy highlights, dark green intervals, dry-brushed texture, and balanced landscape-format abundance."
-          }
-        ]
-      },
-      {
-        "id": "matte-tempera-figurative-stillness",
-        "name": "Matte Tempera Figurative Stillness",
-        "description": "Chalky modernist figuration with compressed space and poised psychological stillness.",
-        "image": "public/images/new-subject-same-style-matte-tempera-figurative-stillness-male-athlete-preview.png",
-        "instructions": "Created from two fixed figurative painting references supplied by the user.",
-        "template": "Create a new image in the synthesized style defined by the attached style references.\n\nAttached style references:\n- {{tempera_figurative_group_reference}}\n- {{tempera_reclining_portrait_reference}}\n\nSubject instructions, if provided:\n{{subject_instructions}}\n\nIf the subject instructions are blank, choose an intimate figurative subject and shallow interior or environmental setting that feel native to the style references while remaining entirely original.\n\nStyle hierarchy:\n- The subject instructions control the new subject, setting, composition, orientation, aspect ratio, and any factual elements explicitly requested.\n- The attached style references control medium, palette, surface, mark-making, drawing, spatial compression, atmosphere, and level of finish.\n- Synthesize their shared visual language rather than copying the composition, pose, figures, clothing, architecture, or narrative of either reference.\n\nSynthesized style direction:\nCreate a tempera-like figurative painting defined by matte, chalky color, restrained modeling, and an atmosphere of poised psychological stillness. Use a muted palette of pale turquoise, oxidized teal, dusty rose, warm clay, parchment, soft gray-green, muted coral, and deep brown-black, with occasional cool blue accents. Build forms through broad, dry, visibly worked brushstrokes, thin scumbles, rubbed passages, and softly layered opaque paint rather than glossy blending.\n\nPreserve clear, simplified drawing and strong structural proportions, but allow contours to remain slightly irregular, handmade, and selectively unresolved. Model faces and bodies with flattened planes, restrained tonal transitions, cool shadows, and subtle warm-cool shifts. Favor elongated silhouettes, sculptural anatomy, compressed perspective, and shallow spatial depth. Let backgrounds function as large, quiet fields of modulated color with sparse architectural or environmental suggestions, avoiding excessive detail.\n\nUse diffuse, ambient illumination with minimal cast shadow. Create depth through tonal temperature, overlapping shapes, and planar color rather than dramatic chiaroscuro. Keep the surface visibly painterly: dry edges, underpainting traces, uneven opacity, softly abraded texture, and occasional linear accents.\n\nThe overall mood should feel intimate, austere, dreamlike, and emotionally self-contained—classical yet modern, serene yet faintly uncanny. The final image should resemble an original early-to-mid twentieth-century European figurative painting, with a sensibility related to Pavel Tchelitchew and Christopher Wood without imitating any specific work.\n\nAvoid:\nAvoid photorealism, glossy digital blending, slick contemporary illustration, cinematic lighting, dramatic cast shadows, deep illusionistic perspective, hyper-detailed backgrounds, polished anatomy, plastic skin, saturated neon color, hard vector-clean contours, copied compositions or poses, captions, watermarks, borders, UI, or text artifacts.\n\nOutput a single finished image. Do not include labels, captions, watermarks, UI, borders, or process notes.",
-        "variables": [
-          {
-            "name": "subject_instructions",
-            "label": "Subject Instructions",
-            "placeholder": "Optional: describe the subject, setting, composition, aspect ratio, mood, or constraints for the new image.",
-            "value": "",
-            "inputType": "textarea",
-            "rows": 5
-          }
-        ],
-        "referenceImages": [
-          {
-            "variable": "tempera_figurative_group_reference",
-            "label": "Figurative Group Reference",
-            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/style-references/matte-tempera-figurative-group.jpg",
-            "instructions": "Use this reference for elongated multi-figure composition, shallow architectural space, pale turquoise and parchment color fields, dry matte paint, diffuse light, sparse environmental detail, and poised dreamlike atmosphere. Do not copy its figures, poses, setting, or narrative."
-          },
-          {
-            "variable": "tempera_reclining_portrait_reference",
-            "label": "Reclining Portrait Reference",
-            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/style-references/matte-tempera-figurative-reclining-portrait.jpg",
-            "instructions": "Use this reference for flattened facial and bodily planes, sculptural anatomy, compressed perspective, oxidized teal and dusty rose palette, restrained modeling, rubbed tempera-like surface, and emotionally self-contained portraiture. Do not copy its subject, pose, furniture, or composition."
-          }
-        ]
-      },
-      {
-        "id": "dry-brushed-architectural-facade",
-        "name": "Dry-Brushed Architectural Facade",
-        "description": "Cropped, materially tactile architecture in restrained earth tones.",
-        "image": "public/images/new-subject-same-style-dry-brushed-architectural-facade-preview.png",
-        "instructions": "Created with [Synthesize Style Image Prompts](/Users/mwy/.codex/skills/synthesize-style-image-prompts/SKILL.md)",
-        "template": "Create a new image in the synthesized style defined by the attached style reference.\n\nAttached style reference:\n- {{dry_brushed_architectural_facade_reference}}\n\nSubject instructions, if provided:\n{{subject_instructions}}\n\nIf the subject instructions are blank, create an original close-cropped view of an old urban or domestic facade: a wall with windows, roofline, balcony, stair, or utility detail, chosen for strong stacked geometry and quiet material presence.\n\nStyle hierarchy:\n- The subject instructions control the new subject, setting, architecture, viewpoint, orientation, aspect ratio, and any factual elements explicitly requested.\n- The attached style reference controls medium, palette, surface, brushwork, edge behavior, spatial compression, atmosphere, and level of finish.\n- Use both the attached style reference and this written synthesis. Synthesize its visual language rather than copying its specific building, window arrangement, roofline, or composition.\n- Do not invent people, signage, text, vehicles, dramatic scenery, or decorative details unless requested in the subject instructions.\n\nSynthesized style direction:\nCreate a compact, painterly architectural study in opaque oil or gouache-like paint on a visible off-white ground. Crop the architecture boldly so the facade fills most of the frame; stack broad horizontal bands, shallow roof planes, and dark rectangular window openings into a slightly flattened elevation. Favor a close viewpoint and a tall or square composition where structural fragments read as large abstracted shapes rather than a complete picturesque building.\n\nUse a restrained palette of warm ivory, bone, chalk white, charcoal, soot black, deep brown, umber, muted rust, and small reddish-brown accents. Keep the value structure simple and strong: pale plaster or siding against heavy dark roof and window masses, with a few thin light strokes describing sashes, trim, or reflected light. Illumination should be diffuse and overcast, with no theatrical sunlight or deep cast shadows.\n\nMake the surface visibly hand-worked: bristly dry brush, dragged pigment, short opaque strokes, scumbled light paint, scraped edges, uneven coverage, and occasional exposed underlayer. Let windows and roof details remain suggestive and slightly irregular rather than precisely drafted. Preserve tactile brush direction, paint buildup, and the modest imperfections of a quickly observed painting. The mood should be quiet, weathered, intimate, and observant.\n\nComposition and output:\nHonor any requested format. Otherwise use a portrait-oriented crop with a pale lower facade, a dark upper roof or overhang, and a few vertically aligned windows. Keep the scene spatially shallow and graphic, with large calm planes balanced by a small number of expressive marks. Output one original finished painting with tangible pigment and no frame.\n\nAvoid:\nAvoid photorealism, polished digital painting, crisp architectural drafting, perspective-perfect rendering, glossy surfaces, clean vector lines, highly saturated color, blue skies, lush vegetation, cinematic lighting, busy streetscapes, picturesque storybook cottages, excessive brick or wood detail, repeated window patterns, copied compositions, signatures, captions, watermarks, borders, UI, or text artifacts.\n\nOutput a single finished image. Do not include labels, captions, watermarks, UI, borders, or process notes.",
-        "variables": [
-          {
-            "name": "subject_instructions",
-            "label": "Subject Instructions",
-            "placeholder": "Optional: describe the subject, setting, composition, aspect ratio, mood, or constraints for the new image.",
-            "value": "",
-            "inputType": "textarea",
-            "rows": 5
-          }
-        ],
-        "referenceImages": [
-          {
-            "variable": "dry_brushed_architectural_facade_reference",
-            "label": "Dry-Brushed Architectural Facade Reference",
-            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/style-references/1784243318407-dry-brushed-architectural-facade-reference.jpg",
-            "instructions": "Use this reference for the stacked, close-cropped facade composition; warm ivory, charcoal, brown, and rust palette; diffuse light; shallow spatial compression; dark window masses; and tactile dry-brushed, scumbled paint surface. Do not copy its specific building, window pattern, roofline, or composition."
-          }
-        ]
-      }
-    ],
-    "variationSelector": "visual",
-    "variationSelectorTileMode": "details",
+    "slug": "style-locked-image-editor",
+    "instructions": "Upload the Style Reference first. After the prompt responds “Style locked,” upload the Subject / Composition Reference and any required changes.",
+    "template": "TWO-STEP STYLE-LOCKED IMAGE EDITING WORKFLOW\n\nYou are a style-locked image editor. Your task is to reproduce the visual language of one reference image while replacing its subject matter and composition with those supplied separately.\n\nThe two references have strictly separated roles:\n\n1. STYLE REFERENCE\nDefines how the output must look.\n\n2. SUBJECT / COMPOSITION REFERENCE\nDefines what the output must depict and how the scene must be arranged.\n\nNever blend these roles.\n\nSTEP 1 — ANALYZE AND LOCK THE STYLE\n\nFor Step 1, analyze only the attached Style Reference.\n\nDo not generate or edit an image yet. Do not infer the future subject. Do not carry over any depicted people, objects, scenery, architecture, symbols, or narrative content.\n\nExtract and internally lock the following Style DNA:\n\n1. Medium and surface\nIdentify the apparent medium and physical character: medium; paint or mark application; surface texture; and matte, chalky, waxy, glossy, stained, weathered, or unfinished appearance.\n\n2. Palette system\nIdentify five to seven dominant color families, saturation, value range, warm–cool balance, neutrals, accents, and light/shadow shifts. Treat this as a controlled system, permitting only subtle value and temperature variations consistent with the Style Reference.\n\n3. Mark-making and brushwork\nIdentify mark scale, stroke visibility, application thickness, paint continuity, directionality, repeated mark shapes, and edge quality.\n\n4. Form construction\nIdentify the realism or abstraction level; geometric or organic simplification; anatomical, perspective, and proportion conventions; shape economy; treatment of faces, hands, hair, foliage, fabric, architecture, and small objects; and whether forms are volumetric or flattened.\n\n5. Detail ceiling\nDetermine the maximum permitted detail: what is clearly described, suggested, or omitted; how text, faces, and textures are treated. The final output must never exceed this ceiling.\n\n6. Light and tonal organization\nIdentify lighting direction, contrast, shadow softness and color, highlight treatment, atmospheric depth, and whether illumination is naturalistic, flattened, theatrical, diffuse, or symbolic.\n\n7. Compositional behavior\nAnalyze style-related density, negative space, hierarchy, cropping, balance, spatial compression, and foreground/middle-ground/background relationships without importing actual subject matter.\n\n8. Intentional irregularities\nIdentify and preserve wobbly contours, uneven fills, awkward anatomy, flattened perspective, misregistration, smudged features, incomplete edges, blank or pseudo-text, simplified shadows, visible corrections, uneven coverage, and other deliberate imperfections. Do not correct or normalize them.\n\nAt the end of Step 1, respond only:\n\nStyle locked. Provide the Subject / Composition Reference and any required changes.\n\nSTEP 2 — TRANSFER THE SUBJECT AND COMPOSITION\n\nAfter receiving the Subject / Composition Reference, use it only to determine what must appear in the output. Extract its subject identity; number of subjects and objects; pose, gesture, orientation, silhouette, crop, framing, camera angle, perspective, scale, placement, overlap, depth order, spatial relationships, background structure, explicitly required lighting direction, and requested additions, removals, or substitutions.\n\nIgnore the Subject / Composition Reference’s palette, rendering style, brushwork, texture, sharpness, photographic detail, surface finish, contrast treatment, typography style, and degree of realism. It supplies the scaffold, not the visual language.\n\nRENDERING PRIORITIES\n\n1. Preserve the requested subject, pose, crop, viewpoint, and spatial relationships.\n2. Render every visible element through the locked Style DNA.\n3. Match the Style Reference’s medium, palette system, mark-making, edge behavior, tonal structure, and imperfections.\n4. Keep detail at or below the Style Reference’s detail ceiling.\n5. Reinterpret complex features using the Style Reference’s simplification logic.\n6. Maintain visual consistency throughout. No region may be more photographic, polished, sharp, saturated, or technically refined than the Style Reference.\n\nWhen references conflict, preserve content structure from the Subject / Composition Reference and every rendering decision from the Style Reference.\n\nSTRICT PROHIBITIONS\n\nDo not import people, objects, scenery, architecture, symbols, or background content from the Style Reference. Do not import color, texture, brushwork, finish, or realism from the Subject / Composition Reference. Do not increase sharpness, realism, contrast, saturation, gloss, or detail beyond the Style Reference. Do not add micro-detail unless comparable treatment is clearly present in the Style Reference. Do not correct intentional Style DNA irregularities. Do not introduce a second visual style, polish the central subject beyond the background, invent decorative details except to complete an obscured form conservatively, make illegible text legible, or reproduce signatures, watermarks, or artist marks from either reference.\n\nFINAL QUALITY CONTROL\n\nBefore rendering, verify that the result plausibly belongs to the same body of work as the Style Reference; the subject and composition are clearly derived from the Subject / Composition Reference; incidental Style Reference content and Subject / Composition Reference rendering influence are excluded; no region is sharper, more detailed, saturated, realistic, or polished than the Style Reference; small features follow its simplification; intentional irregularities are preserved; and the image reads as one unified work rather than a styled filter applied to a photograph.\n\nIf any answer indicates drift, revise the image before output.\n\nSTEP 2 OUTPUT\n\nGenerate only the final edited image. Do not include analysis, captions, explanations, or alternate versions.",
+    "variables": [],
+    "variations": [],
     "recommendedModels": [
       {
         "vendor": "openai",
@@ -2180,7 +2008,7 @@
         "level": "Medium"
       }
     ],
-    "modifiedAt": "2026-07-16T19:11:09-04:00",
+    "modifiedAt": "2026-07-27T02:40:22Z",
     "customOrder": 13
   },
   {
@@ -2237,7 +2065,7 @@
         "level": ""
       }
     ],
-    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "modifiedAt": "2026-07-27T02:40:22Z",
     "customOrder": 4
   },
   {
