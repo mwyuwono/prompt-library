@@ -3948,5 +3948,29 @@
     ],
     "modifiedAt": "2026-07-23T00:00:00-04:00",
     "customOrder": 23
+  },
+  {
+    "id": "modernist-oil-painting-restyle",
+    "title": "Modernist Oil Painting Restyle",
+    "description": "Transforms a photo into a simplified, muted-palette modernist oil painting while preserving its composition.",
+    "category": "Art",
+    "icon": "brush",
+    "featured": false,
+    "template": "Transform the provided source image into a stylized modernist oil painting while preserving its essential subject, composition, crop, perspective, pose, proportions, spatial relationships, and object placement. Treat the source image as the authority for what is depicted, but translate every element into the following unified visual language.\n\n### Core painting style\n\nUse a simplified, expressive, slightly naïve oil-painting treatment built from broad, soft-edged shapes rather than photographic description. Render forms with:\n\n- Flat to gently modeled planes of color\n- Broad, visible brushwork\n- Thin-to-moderate paint application\n- Soft, slightly imprecise contours\n- Simplified drawing and restrained anatomical detail\n- Subtle, intentional distortions\n- Muted tonal variation\n- Clearly organized silhouettes and color masses\n- A quiet, lyrical, hand-painted atmosphere\n\nThe image should feel modernist, intimate, and observational. Favor visual economy, shape, and atmosphere over technical realism.\n\n### Rigorous simplification\n\nReduce every subject and object to a small number of legible painted shapes. Preserve:\n\n- Dominant silhouettes\n- Essential gesture and pose\n- Major value relationships\n- Important color relationships\n- Primary architectural or object geometry\n- The visual hierarchy of the source\n- Distinctive features required for recognition\n\nSimplify or eliminate:\n\n- Fine surface texture\n- Individual hairs, fibers, pores, or microscopic detail\n- Crisp photographic edges\n- Repeated small marks\n- Intricate ornament\n- Minor reflections\n- Incidental background information\n- Overly precise perspective corrections\n- High-frequency visual noise\n\nDo not merely apply a painterly surface texture over a realistic rendering. Reconstruct the entire image through simplified painted forms.\n\n### Subject treatment\n\nRender people, animals, furniture, architecture, and objects with the same degree of abstraction.\n\nFor figures or animals:\n\n- Preserve identity, pose, expression, and proportions\n- Generalize facial features into a few soft, decisive marks\n- Describe hair or fur as broad masses with only limited directional strokes\n- Avoid hyperreal eyes, noses, mouths, skin, or fur\n- Keep anatomy believable but slightly simplified and painterly\n\nFor interiors, furniture, and architecture:\n\n- Preserve structural relationships and recognizable geometry\n- Translate surfaces into broad planes of muted color\n- Allow edges to soften, merge, or become slightly irregular\n- Reduce decorative and construction detail to essential cues\n\n### Brushwork and edges\n\nUse broad, deliberate strokes with visible variation in direction and pressure. Maintain a hierarchy of edges:\n\n- Moderately defined around the primary subject\n- Softer within secondary forms\n- Partially lost in shadows and peripheral areas\n- Slightly irregular throughout, avoiding digitally perfect contours\n\nAvoid heavy impasto, excessive texture, glossy finish, palette-knife effects, or decorative brushwork unrelated to form.\n\n### Color and value\n\nTranslate the source palette into muted, harmonized color fields. Favor:\n\n- Warm creams\n- Soft ochres\n- Earthy browns\n- Muted greens\n- Smoky grays\n- Restrained blues\n- Limited dull reds or oranges where supported by the source\n\nKeep chroma controlled. Preserve meaningful color accents, but integrate them into the overall harmony. Organize light through broad value masses rather than sharp highlights. Use soft transitions and restrained contrast. Avoid photographic glare, hard specular reflections, crushed blacks, or brilliant whites.\n\n### Depth and atmosphere\n\nRetain enough depth to preserve the original spatial relationships, while flattening the image slightly so it reads as a unified painted surface. Use:\n\n- Overlapping shapes\n- Simplified perspective\n- Broad light and shadow divisions\n- Subdued background contrast\n- Reduced detail with distance\n\nDo not create exaggerated depth, cinematic lighting, dramatic atmospheric effects, or photographic lens behavior unless clearly present in the source.\n\n### Composition\n\nMaintain the source image’s:\n\n- Crop\n- Orientation\n- Camera position\n- Perspective\n- Subject scale\n- Pose\n- Object arrangement\n- Negative space\n- Foreground, middle-ground, and background relationships\n\nDo not redesign, beautify, restage, or editorialize the scene. Preserve ordinary asymmetries, awkwardness, and incidental relationships when they contribute to the source composition.\n\n### Final quality standard\n\nThe final image should appear to have been conceived and painted from the outset in this style. It should feel:\n\n- Simplified rather than unfinished\n- Expressive rather than decorative\n- Painterly rather than filtered\n- Observational rather than photographic\n- Intimate, quiet, and slightly naïve\n- Unified by broad shape, muted color, and restrained detail\n\nAvoid photorealism, digital smoothness, sharp illustration, cartoon outlines, excessive abstraction, exaggerated impasto, high saturation, artificial drama, and generic “oil painting” effects.",
+    "variables": [],
+    "recommendedModels": [
+      {
+        "vendor": "openai",
+        "model": "ChatGPT 5.5",
+        "level": "Thinking"
+      },
+      {
+        "vendor": "google",
+        "model": "Gemini 3.5 Flash",
+        "level": "Medium"
+      }
+    ],
+    "modifiedAt": "2026-07-26T09:00:00-04:00",
+    "customOrder": 24
   }
 ]
