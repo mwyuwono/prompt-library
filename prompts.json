@@ -325,6 +325,7 @@
     "category": "Art",
     "icon": "brush",
     "featured": false,
+    "image": "public/images/oil-painting-study-reference-preview.png",
     "template": "Regenerate the attached image as a realistic oil-painting study reference. Render in naturalistic oil paint with controlled painterly brushwork, simplified anatomy, broad value masses, clear planes, soft transitions, and believable form. Generalize fine details so the image remains realistic but easier to copy.",
     "variables": [],
     "slug": "oil-painting-study-reference",
@@ -1989,6 +1990,9 @@
     "category": "Art",
     "icon": "palette",
     "featured": false,
+    "image": "public/images/new-subject-same-style-preview.png",
+    "previewBaseImage": "public/images/classical-male-swimmer-base-photo.png",
+    "previewBaseImageDescription": "Archival-style photograph of a male swimmer in 1910s cotton briefs, used as the shared preview source.",
     "slug": "new-subject-same-style",
     "instructions": "Use a variant with its attached style reference images. Optionally describe the desired subject or leave the field blank to let the prompt choose a subject suited to the style.",
     "template": "Create a new image in a synthesized style defined by attached style references.\n\nSubject instructions, if provided:\n{{subject_instructions}}\n\nIf the subject instructions are blank, choose a subject that feels native to the style references and demonstrates their shared visual language clearly.\n\nUse the attached style references as the visual source of truth for medium, palette, surface, mark-making, edge behavior, lighting, texture, density, mood, and level of finish. Synthesize the shared traits rather than copying one reference literally.\n\nAvoid generic styling, photorealism unless explicitly present in the references, modern digital gloss, watermarks, captions, borders, UI, or text artifacts.\n\nOutput a single finished image.",
@@ -2333,6 +2337,9 @@
     "description": "Creates 19th-century academic figure studies.",
     "category": "Art",
     "icon": "brush",
+    "image": "public/images/academic-drawing-preview.png",
+    "previewBaseImage": "public/images/classical-male-swimmer-base-photo.png",
+    "previewBaseImageDescription": "Archival-style photograph of a male swimmer in 1910s cotton briefs, used as the shared preview source.",
     "variables": [],
     "variations": [
       {
@@ -2541,6 +2548,9 @@
     "instructions": "Select a variant for the uploaded interior, room, architectural image, or design mockup.",
     "category": "Architecture",
     "icon": "photo_camera",
+    "image": "public/images/architectural-photo-visualization-preview.png",
+    "previewBaseImage": "public/images/architectural-photo-visualization-base-interior.png",
+    "previewBaseImageDescription": "Unretouched historic room photograph used as the shared source for the preview.",
     "variables": [],
     "variations": [
       {
@@ -3066,6 +3076,7 @@
     "description": "Converts an uploaded image into a flat, high-contrast graphic with a specified color count for clean vector tracing.",
     "category": "Fabric",
     "icon": "polyline",
+    "image": "public/images/fabric-vector-prep-preview.png",
     "variables": [
       {
         "name": "num_colors",
@@ -3693,6 +3704,9 @@
     "category": "Art",
     "icon": "architecture",
     "featured": false,
+    "image": "public/images/technical-drawing-restyle-preview.png",
+    "previewBaseImage": "public/images/technical-drawing-restyle-base-architectural-drawing.png",
+    "previewBaseImageDescription": "Archival architectural measured drawing used as the shared preview source.",
     "slug": "technical-drawing-restyle",
     "instructions": "Select a variant to match your drawing subject.",
     "template": "",
@@ -3799,6 +3813,7 @@
     "description": "Creates historical folk-art miniature portraits.",
     "instructions": "",
     "category": "Art",
+    "image": "public/images/miniature-portrait-preview.png",
     "template": "Create a formal historical bust portrait combining the likeness from the attached 'character reference' image and the artistic style from the style reference at {{miniature_style}}.\n\n**Character & Likeness:** The portrait must feature the precise facial features, expression, and likeness of the subject shown in the character reference image, seamlessly integrated.\n\n**Artistic Style & Medium:** Apply the exact 19th-century American Folk Art watercolor and gouache painting technique seen in the style reference. This includes the precise brushwork, the soft tonal washes, the use of desaturated, rich pigments, and the distinct, hand-painted texture. The background must be the same aged, textured cream paper with its specific patina.\n\n**Composition & Attire:** Replicate the formal, three-quarter bust composition and the exact attire (the dark charcoal-grey frock coat, the white multiple-buttoned waistcoat, and the oversized black silk bow tie stock) from the style reference, but adapted to the character's form. Maintain the neutral lighting and composed, formal expression.",
     "variables": [],
     "slug": "miniature-portrait",
@@ -3830,6 +3845,7 @@
     "description": "",
     "instructions": "",
     "category": "Art",
+    "image": "public/images/color-shift-preview.png",
     "template": "Use the attached image as the structural and stylistic source of truth. Recolor the image so that its overall color language becomes complementary to the target palette below, while preserving the original composition, subject matter, drawing, lighting logic, texture, brushwork, grain, and material character.\n\nTarget palette:\n{{target-palette}}\n\nObjective:\nCreate a sophisticated color translation, not a monochrome tint. The final image should feel organically recolored into a new palette family while still retaining believable secondary colors, natural material variation, and the original image’s depth.\n\nColor direction:\n- Use the target palette as the dominant design system, not as a flat overlay.\n- Preserve a broad but controlled range of hues so the image does not feel simply tinted.\n- Let key palette colors appear selectively in the image where they make visual sense: skies, shadows, reflections, fabric, foliage accents, architectural details, atmospheric haze, or other naturally suitable areas.\n- Keep complementary and residual local colors where needed to preserve realism, richness, and painterly nuance.\n- Avoid washing the whole image in one color.\n\nValue mapping:\n- Preserve the original value structure, contrast, and depth.\n- Map highlights to the lightest tones in the target palette.\n- Map midtones to muted or softened versions of the palette’s core colors.\n- Map deep shadows to the darkest palette colors.\n- Keep shadow areas rich and dimensional rather than flat.\n- Maintain readable separation between foreground, midground, and background.\n\nStyle preservation:\n- Do not change the composition, crop, subject placement, geometry, silhouettes, lines, figures, objects, or spatial relationships.\n- Do not modernize, redraw, simplify, sharpen, stylize, or reinterpret the image.\n- Preserve the original medium, surface texture, brushwork, patina, grain, craquelure, edge softness, and atmospheric quality.\n- Preserve small details and the original visual hierarchy.\n\nRecoloring behavior:\n- Rebalance the image globally and locally, as a professional colorist would.\n- Shift the palette gently but holistically across the scene.\n- Allow warm, neutral, green, brown, gray, or other natural notes to remain when they support the image.\n- Introduce target-palette colors with restraint, especially in highlights, reflected light, ambient shadows, and accent areas.\n- Maintain a cohesive, believable mood.\n\nAvoid:\n- Monochrome tinting\n- Duotone posterization\n- Flat color replacement\n- Over-saturated palette colors\n- Loss of texture or painterly detail\n- Changed composition or invented elements\n- Generic “blue filter” or “brand overlay” effects\n\nOutput:\nA source-faithful recolored version of the attached image that feels designed around the target palette, yet remains visually rich, natural, and materially consistent with the original.",
     "variables": [
       {
@@ -3956,6 +3972,7 @@
     "category": "Art",
     "icon": "brush",
     "featured": false,
+    "image": "public/images/modernist-oil-painting-restyle-preview.png",
     "template": "Transform the provided source image into a stylized modernist oil painting while preserving its essential subject, composition, crop, perspective, pose, proportions, spatial relationships, and object placement. Treat the source image as the authority for what is depicted, but translate every element into the following unified visual language.\n\n### Core painting style\n\nUse a simplified, expressive, slightly naïve oil-painting treatment built from broad, soft-edged shapes rather than photographic description. Render forms with:\n\n- Flat to gently modeled planes of color\n- Broad, visible brushwork\n- Thin-to-moderate paint application\n- Soft, slightly imprecise contours\n- Simplified drawing and restrained anatomical detail\n- Subtle, intentional distortions\n- Muted tonal variation\n- Clearly organized silhouettes and color masses\n- A quiet, lyrical, hand-painted atmosphere\n\nThe image should feel modernist, intimate, and observational. Favor visual economy, shape, and atmosphere over technical realism.\n\n### Rigorous simplification\n\nReduce every subject and object to a small number of legible painted shapes. Preserve:\n\n- Dominant silhouettes\n- Essential gesture and pose\n- Major value relationships\n- Important color relationships\n- Primary architectural or object geometry\n- The visual hierarchy of the source\n- Distinctive features required for recognition\n\nSimplify or eliminate:\n\n- Fine surface texture\n- Individual hairs, fibers, pores, or microscopic detail\n- Crisp photographic edges\n- Repeated small marks\n- Intricate ornament\n- Minor reflections\n- Incidental background information\n- Overly precise perspective corrections\n- High-frequency visual noise\n\nDo not merely apply a painterly surface texture over a realistic rendering. Reconstruct the entire image through simplified painted forms.\n\n### Subject treatment\n\nRender people, animals, furniture, architecture, and objects with the same degree of abstraction.\n\nFor figures or animals:\n\n- Preserve identity, pose, expression, and proportions\n- Generalize facial features into a few soft, decisive marks\n- Describe hair or fur as broad masses with only limited directional strokes\n- Avoid hyperreal eyes, noses, mouths, skin, or fur\n- Keep anatomy believable but slightly simplified and painterly\n\nFor interiors, furniture, and architecture:\n\n- Preserve structural relationships and recognizable geometry\n- Translate surfaces into broad planes of muted color\n- Allow edges to soften, merge, or become slightly irregular\n- Reduce decorative and construction detail to essential cues\n\n### Brushwork and edges\n\nUse broad, deliberate strokes with visible variation in direction and pressure. Maintain a hierarchy of edges:\n\n- Moderately defined around the primary subject\n- Softer within secondary forms\n- Partially lost in shadows and peripheral areas\n- Slightly irregular throughout, avoiding digitally perfect contours\n\nAvoid heavy impasto, excessive texture, glossy finish, palette-knife effects, or decorative brushwork unrelated to form.\n\n### Color and value\n\nTranslate the source palette into muted, harmonized color fields. Favor:\n\n- Warm creams\n- Soft ochres\n- Earthy browns\n- Muted greens\n- Smoky grays\n- Restrained blues\n- Limited dull reds or oranges where supported by the source\n\nKeep chroma controlled. Preserve meaningful color accents, but integrate them into the overall harmony. Organize light through broad value masses rather than sharp highlights. Use soft transitions and restrained contrast. Avoid photographic glare, hard specular reflections, crushed blacks, or brilliant whites.\n\n### Depth and atmosphere\n\nRetain enough depth to preserve the original spatial relationships, while flattening the image slightly so it reads as a unified painted surface. Use:\n\n- Overlapping shapes\n- Simplified perspective\n- Broad light and shadow divisions\n- Subdued background contrast\n- Reduced detail with distance\n\nDo not create exaggerated depth, cinematic lighting, dramatic atmospheric effects, or photographic lens behavior unless clearly present in the source.\n\n### Composition\n\nMaintain the source image’s:\n\n- Crop\n- Orientation\n- Camera position\n- Perspective\n- Subject scale\n- Pose\n- Object arrangement\n- Negative space\n- Foreground, middle-ground, and background relationships\n\nDo not redesign, beautify, restage, or editorialize the scene. Preserve ordinary asymmetries, awkwardness, and incidental relationships when they contribute to the source composition.\n\n### Final quality standard\n\nThe final image should appear to have been conceived and painted from the outset in this style. It should feel:\n\n- Simplified rather than unfinished\n- Expressive rather than decorative\n- Painterly rather than filtered\n- Observational rather than photographic\n- Intimate, quiet, and slightly naïve\n- Unified by broad shape, muted color, and restrained detail\n\nAvoid photorealism, digital smoothness, sharp illustration, cartoon outlines, excessive abstraction, exaggerated impasto, high saturation, artificial drama, and generic “oil painting” effects.",
     "variables": [],
     "recommendedModels": [
