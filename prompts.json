@@ -1363,7 +1363,15 @@
         "image": "public/images/architectural-rendering-travel-study.png",
         "template": "Transform the provided building image into a 19th-century architectural travel-study watercolor: transparent washes and subtle tonal glazing over delicate graphite/ink underdrawing, hand-rendered and observational rather than digitally polished.\nPreserve the source building's exact massing, proportions, façade rhythm, openings, roof logic, material cues, and major details—do not redesign, simplify, or modernize. Render it as the principal subject but keep it subordinate to the overall atmospheric composition.\n**Composition:** wide horizontal presentation format with generous luminous sky and atmospheric distance. Place the building in the middle distance, integrated into a broader landscape rather than isolated as an elevation; frame with trees, ground plane, planting, paths, and low foreground masses that carry tonal weight and establish depth. Balanced, restrained, panoramic.\n**Viewpoint:** naturalistic, slightly elevated or eye-level oblique; convincing perspective with no wide-angle distortion. Building legible, measured, architecturally accurate.\n**Linework:** sparse, fine graphite/ink defining architecture, roof edges, openings, recesses, horizon, and select landscape contours—secondary to wash and tone, no heavy outlines or mechanical drafting.\n**Palette:** muted and low-saturation—pale blue, blue-gray, smoke gray, olive and dark green, warm beige, soft ochre, umber, charcoal, diluted brown-black—in thin transparent layers. Dark accents reserved for windows, deep recesses, tree masses, and foreground shadows.\n**Value:** broad range from pale upper atmosphere and distant haze, through moderate middle-distance architecture, to darker foreground vegetation and ground shadow. Soft, pooled, wash-based shadows; restrained tonal contrast, not photorealistic lighting.\n**Substrate:** warm cream paper with visible grain, slight age toning, and a fine presentation-plate border—soft edges, quiet tonal bloom, the look of a preserved archival sheet.",
         "variables": [],
-        "instructions": "Upload a building image with this prompt. "
+        "instructions": "Upload a building image with this prompt. ",
+        "referenceImages": [
+          {
+            "variable": "travel_study_landscape_reference",
+            "label": "Travel-Study Landscape Watercolor Reference",
+            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/1785203608697-rp-t-1921-194.jpg",
+            "instructions": "Use this reference for the luminous blue-gray sky washes, olive-green tree framing, delicate ink contours, quiet classical garden setting, aged paper, and restrained 19th-century travel-study watercolor handling."
+          }
+        ]
       },
       {
         "id": "manuscript-watercolor-survey",
@@ -1428,7 +1436,21 @@
         "template": "Generate a hand-rendered 18th-century orthographic frontal architectural elevation of the input building.\n\n**Style:** Classical Wash Elevation Drafting.\n\n**Composition:** Centrally isolate the building facade. The backdrop must be a uniform wash using hex code D8DBD7 on slightly textured aged paper. Enclose the center field with a single precise dark ink border line, and frame the entire page with a slim outer border using hex code 6D9E6E that evokes the simple border style often seen in high-end engraved stationery.\n\n**Medium & Linework:** Extremely fine, consistent-weight dark-grey ink lines defining all architectural forms. Use transparent watercolor and dilute ink washes for coloring based strictly on the specified hex palette.\n\n**Color Palette:**\n\n- Backdrop / Background Wash: D8DBD7\n- Outer Border Frame: 6D9E6E\n- Main Building Facade: E1D6C2\n- Facade in Shadow / Recesses: A49380\n- Distant / Secondary Side Structures (if relevant): C7C4B0\n- Small Architectural Ornaments & Accents, Used sparingly: 44615B\n- Window Glazing / Glass Panes: D3D1CC\n\n**Shading & Atmosphere:** Articulate form and depth through subtle tonal value gradations transitioning between the main facade and shadow hex codes without harsh edges. Include subtle historical wear like faint water stains on the paper. Maintain strict fidelity to the source building's proportions and details.",
         "variables": [],
         "instructions": "Upload a building image with this prompt.",
-        "image": "public/images/architectural-rendering-classical-wash-elevation-drafting.png"
+        "image": "public/images/architectural-rendering-classical-wash-elevation-drafting.png",
+        "referenceImages": [
+          {
+            "variable": "classical_elevation_full_sheet_reference",
+            "label": "Classical Elevation Sheet Reference",
+            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/1785203498129-dp307224.jpg",
+            "instructions": "Use this reference for the cool pale wash, fine orthographic ink linework, green ruled border, aged paper, and restrained classical elevation presentation."
+          },
+          {
+            "variable": "classical_elevation_presentation_reference",
+            "label": "Classical Elevation Presentation Reference",
+            "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/1785203501720-da8b0338-87f2-4ae7-9ed6-dc8ca839a379.jpg",
+            "instructions": "Use this reference for the paired elevation composition, pale cream-and-gray-green palette, delicate tonal wash, and sparse archival presentation layout."
+          }
+        ]
       },
       {
         "id": "chinoiserie-mural-facade",
