@@ -1433,7 +1433,7 @@
         "id": "classical-wash-elevation-drafting",
         "name": "Classical Cool-Wash Elevation",
         "description": "Cool gray-green orthographic facade elevation.",
-        "template": "Generate a hand-rendered 18th-century orthographic frontal architectural elevation of the input building.\n\n**Style:** Classical Wash Elevation Drafting.\n\n**Composition:** Centrally isolate the building facade. The backdrop must be a uniform wash using hex code D8DBD7 on slightly textured aged paper. Enclose the center field with a single precise dark ink border line, and frame the entire page with a slim outer border using hex code 6D9E6E that evokes the simple border style often seen in high-end engraved stationery.\n\n**Medium & Linework:** Extremely fine, consistent-weight dark-grey ink lines defining all architectural forms. Use transparent watercolor and dilute ink washes for coloring based strictly on the specified hex palette.\n\n**Color Palette:**\n\n- Backdrop / Background Wash: D8DBD7\n- Outer Border Frame: 6D9E6E\n- Main Building Facade: E1D6C2\n- Facade in Shadow / Recesses: A49380\n- Distant / Secondary Side Structures (if relevant): C7C4B0\n- Small Architectural Ornaments & Accents, Used sparingly: 44615B\n- Window Glazing / Glass Panes: D3D1CC\n\n**Shading & Atmosphere:** Articulate form and depth through subtle tonal value gradations transitioning between the main facade and shadow hex codes without harsh edges. Include subtle historical wear like faint water stains on the paper. Maintain strict fidelity to the source building's proportions and details.",
+        "template": "Generate a hand-rendered 18th-century orthographic frontal architectural elevation of the input building.\n\n**Style:** Classical Wash Elevation Drafting.\n\n**Composition:** Centrally isolate the building facade on the landscape-oriented page. The backdrop must be a uniform wash using hex code D8DBD7 on slightly textured aged paper. Enclose the center field with a single precise dark ink border line, and frame the entire page with a slim outer border using hex code 6D9E6E that evokes the simple border style often seen in high-end engraved stationery.\n\n**Medium & Linework:** Extremely fine, consistent-weight dark-grey ink lines defining all architectural forms. Use transparent watercolor and dilute ink washes for coloring based strictly on the specified hex palette.\n\n**Color Palette:**\n\n- Backdrop / Background Wash: D8DBD7\n- Outer Border Frame: 6D9E6E\n- Main Building Facade: E1D6C2\n- Facade in Shadow / Recesses: A49380\n- Distant / Secondary Side Structures (if relevant): C7C4B0\n- Small Architectural Ornaments & Accents, Used sparingly: 44615B\n- Window Glazing / Glass Panes: D3D1CC\n\n**Shading & Atmosphere:** Articulate form and depth through subtle tonal value gradations transitioning between the main facade and shadow hex codes without harsh edges. Include subtle historical wear like faint water stains on the paper. Maintain strict fidelity to the source building's proportions and details.",
         "variables": [],
         "instructions": "Upload a building image with this prompt.",
         "image": "public/images/architectural-rendering-classical-wash-elevation-drafting.png",
@@ -1630,7 +1630,7 @@
         "level": "High"
       }
     ],
-    "modifiedAt": "2026-07-09T01:02:10-04:00",
+    "modifiedAt": "2026-07-28T02:13:55.938Z",
     "customOrder": 0
   },
   {
