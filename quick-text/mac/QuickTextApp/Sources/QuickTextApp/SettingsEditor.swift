@@ -56,6 +56,7 @@ struct SettingsEditor: View {
     @State private var didCopyPath = false
     @State private var pendingSyncPlan: TextReplacementSync.SyncPlan?
     @State private var lastSyncReport: TextReplacementSync.SyncReport?
+    @State private var isSyncing = false
 
     private var usesTwoColumns: Bool { width >= 760 }
     private var primaryColumnWidth: CGFloat { usesTwoColumns ? 320 : width - 44 }
@@ -106,8 +107,15 @@ struct SettingsEditor: View {
                     plan: plan,
                     onCancel: { pendingSyncPlan = nil },
                     onConfirm: {
-                        lastSyncReport = store.applyTextReplacementSync(plan)
+                        // Runs off the main thread — the KeyboardServices completion
+                        // handler needs the main queue, so blocking it here would time
+                        // out every sync. See CorpusStore.applyTextReplacementSync.
+                        isSyncing = true
                         pendingSyncPlan = nil
+                        store.applyTextReplacementSync(plan) { report in
+                            lastSyncReport = report
+                            isSyncing = false
+                        }
                     }
                 )
             }
@@ -119,10 +127,11 @@ struct SettingsEditor: View {
     private var textReplacementsSection: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 10) {
-                Button("Sync Now") {
+                Button(isSyncing ? "Syncing…" : "Sync Now") {
                     pendingSyncPlan = store.computeTextReplacementSyncPlan()
                 }
                 .buttonStyle(.glassProminent)
+                .disabled(isSyncing)
                 if let lastSyncReport, lastSyncReport.usedFallback {
                     Button("Open Text Replacements…") {
                         TextReplacementSync.openSystemSettingsTextReplacements()
@@ -146,6 +155,16 @@ struct SettingsEditor: View {
                     .font(.caption)
                     .foregroundStyle(lastSyncReport.failureReason == nil ? Color.secondary : Color.red)
 
+                // Newly written replacements only reach apps launched afterwards — a real
+                // macOS limitation, so say it rather than implying instant availability.
+                if let activationNote = lastSyncReport.activationNote {
+                    Text(activationNote)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.top, 2)
+                }
+
                 if lastSyncReport.usedFallback && !lastSyncReport.manualInstructions.isEmpty {
                     VStack(alignment: .leading, spacing: 3) {
                         ForEach(lastSyncReport.manualInstructions, id: \.self) { line in
@@ -154,6 +173,24 @@ struct SettingsEditor: View {
                                 .foregroundStyle(.secondary)
                         }
                     }
+                    .padding(.top, 2)
+                }
+
+                // Stage-by-stage record, so a failure names the layer that broke.
+                if !lastSyncReport.diagnostics.isEmpty {
+                    DisclosureGroup("Sync details") {
+                        VStack(alignment: .leading, spacing: 3) {
+                            ForEach(lastSyncReport.diagnostics, id: \.self) { line in
+                                Text(line)
+                                    .font(.caption2.monospaced())
+                                    .foregroundStyle(.secondary)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.top, 2)
+                    }
+                    .font(.caption)
                     .padding(.top, 2)
                 }
             }

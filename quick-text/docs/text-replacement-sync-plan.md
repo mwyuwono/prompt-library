@@ -99,7 +99,12 @@ Reuse the existing `{{@name}}` resolution logic (see `PhraseVariable.swift` / `E
 
 ### 3a. Reading current system state
 
-Read `NSUserDictionaryReplacementItems` from the global defaults domain (this is how `corpus/text-replacements-map.json` was generated; reads are reliable even though writes are not). **Use the any-host domain** — `UserDefaults.standard.array(forKey:)`, not `CFPreferencesCopyValue` with `kCFPreferencesCurrentHost` (the latter always returns `nil` for this key and silently produces an empty array; shipped as a real bug, fixed 2026-07-09). See the "Verify-after-write reliability" note under 3c for a same-process staleness gotcha on the read side.
+Read **both** layers — see "macOS 27: the activation layer" under 3c for why one is not enough:
+
+- `NSUserDictionaryReplacementItems` via `CFPreferencesCopyValue` on `kCFPreferencesAnyApplication` / `kCFPreferencesCurrentUser` / **`kCFPreferencesAnyHost`**. Text replacements live in the any-host domain, so `kCFPreferencesCurrentHost` always returns `nil` here and silently produces an empty array (shipped as a real bug, fixed 2026-07-09).
+- `~/Library/KeyboardServices/TextReplacements.db` via a read-only `sqlite3` query.
+
+A shortcut is only "in sync" when both layers hold exactly one enabled entry with matching text. An unreadable layer is unknown, not empty. See the "Verify-after-write reliability" note under 3c for the same-process staleness gotcha on the read side.
 
 ### 3b. Diff computation
 
@@ -113,9 +118,29 @@ Output a `SyncPlan`:
 - **conflict**: toggle on, shortcut exists in system but is NOT in `managedReplacementShortcuts` and its text differs (a pre-existing user entry). Policy: Quick Text is canonical → classify as update, but flag it in the preview so the user sees it will be overwritten. First sync after migration will adopt the 15+ existing overlapping entries this way — expected.
 - **skip/noop**: toggle on, system text already matches.
 
-### 3c. Writing — direct method (VERIFIED WORKING on macOS 26.5.1, 2026-07-09)
+### 3c. Writing — direct method
 
-**Do NOT write to `TextReplacements.db` or `NSUserDictionaryReplacementItems` — both are daemon-owned downstream stores and direct writes are overwritten or ignored.** The verified mechanism is the private KeyboardServices XPC client API, which transacts with `keyboardservicesd` (the same path System Settings uses). End-to-end verification performed: XPC add → entry appeared in both defaults cache and db without any manual refresh → typing the shortcut in TextEdit expanded correctly → XPC remove → entry gone from both stores. iCloud sync is handled by the daemon automatically. No entitlements or special permissions were needed (tested as a plain unsigned CLI).
+> **Superseded on macOS 27 (2026-07-29).** The paragraph below describes what was verified on macOS 26.5.1. Two of its claims no longer hold: XPC alone is **not** sufficient, and `NSUserDictionaryReplacementItems` is **not** effectively daemon-owned any more — it has to be written by the app. See "macOS 27: the activation layer" immediately after. Kept because the XPC half is still correct and still required.
+
+**Do NOT write to `TextReplacements.db` — it is the daemon's Core Data store and direct writes are overwritten or ignored.** The verified mechanism is the private KeyboardServices XPC client API, which transacts with `keyboardservicesd` (the same path System Settings uses). End-to-end verification performed on macOS 26.5.1: XPC add → entry appeared in both defaults cache and db without any manual refresh → typing the shortcut in TextEdit expanded correctly → XPC remove → entry gone from both stores. iCloud sync is handled by the daemon automatically. No entitlements or special permissions were needed (tested as a plain unsigned CLI).
+
+### macOS 27: the activation layer (verified 2026-07-29)
+
+On macOS 27.0 (`26A5388g`) the XPC transaction still reports success and still persists to the database, but it **no longer publishes to `NSUserDictionaryReplacementItems`**, and that projection — not the database — is what the input system reads to expand text. Evidence: an XPC-only add of a throwaway shortcut landed in the database, never appeared in `defaults export -g -`, and did not expand in a *freshly launched* TextEdit, while a control shortcut present in both layers expanded in the same document.
+
+So sync writes both layers:
+
+- **XPC** → persistence + iCloud/iOS propagation (unchanged).
+- **`CFPreferencesSetValue`** on `kCFPreferencesAnyApplication` / `kCFPreferencesCurrentUser` / `kCFPreferencesAnyHost` → activation.
+
+The preferences write is a read-modify-write that preserves unmanaged entries verbatim, collapses duplicates of targeted shortcuts to one canonical `{replace, with, on: 1}` (`on` as an **integer**; `defaults write -array-add` stores it as a string, which is why hand-repaired entries look different), and refuses to write when the array reads back empty while the database holds entries. Verification requires both layers to agree, read from outside this process, before any success is recorded.
+
+There is no way to make the daemon republish: no text-replacement change/reload notification symbol exists anywhere in the dyld shared cache.
+
+Two implementation traps, both of which masquerade as "the OS broke it":
+
+1. **Client-store lifetime.** The completion block must capture the `_KSTextReplacementClientStore`. Otherwise ARC releases it when the calling function returns, the in-flight XPC connection dies, and the handler never fires — the sync times out and falls back to manual instructions. A CLI spike cannot reproduce this, because it waits inside the same scope that holds the store. This single bug is why the app reported "direct sync unavailable" for weeks while hand-run spikes worked.
+2. **Per-process caching.** Applications read the replacement set at launch. A newly written entry does not expand in an already-running app until it is relaunched, even with both layers correct — verified with one identical entry failing in a running TextEdit and succeeding in a relaunched one. Report this to the user rather than implying instant availability; it is also the first thing to check when a correctly-synced shortcut "doesn't work".
 
 API (from `/System/Library/PrivateFrameworks/KeyboardServices.framework`, verified present with correct selectors at runtime):
 
@@ -159,7 +184,9 @@ func ksTransact(add: [(shortcut: String, phrase: String)],
 
 Reading current state (for diff + verify): `NSUserDefaults` global domain, key `NSUserDictionaryReplacementItems`, entry keys are **`replace`** (shortcut) / **`with`** (phrase) / `on`.
 
-**Verify-after-write reliability (found 2026-07-09; updated for macOS 27 on 2026-07-28):** a re-read from the same process that issued the XPC write can remain stale for 60+ seconds, even after `CFPreferencesAppSynchronize(kCFPreferencesAnyApplication)`. On macOS 27, XPC can return code 0 and persist an entry in `~/Library/KeyboardServices/TextReplacements.db` without publishing it to `NSUserDictionaryReplacementItems`; the database-only entry does not expand when typed. Current code reads the database through the system `sqlite3` client for accurate diffing, then requires both database state and a fresh-process global-preferences projection to match before recording success. This database access is strictly read-only; writes still go through KeyboardServices XPC. Updates are sent as one add-new/remove-old transaction because add-only creates duplicate shortcuts instead of replacing the prior entry. Runtime acceptance for sync changes is the shortcut expanding after typing it plus a space in a temporary unsaved TextEdit document.
+**Verify-after-write reliability (found 2026-07-09; corrected 2026-07-29):** a re-read from the same process that issued the write can remain stale, so verification reads the database through the system `sqlite3` client (read-only) and the preferences projection through a fresh `defaults export -g -` process. Both must match the plan — exactly one enabled entry per shortcut with the expected text, and nothing left behind for removals — before success is recorded. Updates are sent as one add-new/remove-old XPC transaction because add-only creates duplicate shortcuts instead of replacing the prior entry; the exception is an update whose text is unchanged (database already correct, only the activation layer missing), where sending a removal risks the daemon cancelling the add.
+
+Runtime acceptance for sync changes: **quit and relaunch TextEdit first**, then type the shortcut plus a space in a temporary unsaved document. Testing in an app that was already running when the write happened proves nothing (see per-process caching above).
 
 Timeout the completion handler wait (reference uses 3s; use 5–8s) — treat timeout as failure.
 

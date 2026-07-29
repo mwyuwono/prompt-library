@@ -751,6 +751,25 @@
       "updatedAt" : "2026-07-24T14:06:42Z",
       "value" : "Use this subject and composition. ",
       "visibility" : "public"
+    },
+    {
+      "categoryId" : "image-quality",
+      "createdAt" : "2026-07-29T02:30:00Z",
+      "favorite" : false,
+      "id" : "phrase-7D696D8C-7EB0-4FDC-ACDE-DFB604908D8F",
+      "image" : "",
+      "summary" : "",
+      "tags" : [
+
+      ],
+      "textReplacement" : {
+        "shortcut" : "xalign",
+        "syncEnabled" : true
+      },
+      "title" : "Analyze style alignment & refine",
+      "updatedAt" : "2026-07-29T02:32:54Z",
+      "value" : "Evaluate how well the generated image matches the aesthetic and visual style of the reference image. Based on that evaluation, write a precise system-level prompt (meta prompt) that can be pasted into a fresh chat to recreate that exact reference style more accurately.",
+      "visibility" : "public"
     }
   ],
   "settings" : {
@@ -787,7 +806,7 @@
     "paletteSource" : "Robert Brown Fabric Collection",
     "textReplacementLastSyncAt" : "2026-07-09T20:15:00Z"
   },
-  "updatedAt" : "2026-07-24T14:06:42Z",
+  "updatedAt" : "2026-07-29T02:32:54Z",
   "variables" : [
     {
       "id" : "var-1783398724430",

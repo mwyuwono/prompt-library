@@ -416,6 +416,8 @@
         "llmlearn"
       ],
       "textReplacement" : {
+        "lastSyncedAt" : "2026-07-29T04:22:15Z",
+        "lastSyncedValue" : "Review this session and capture durable learnings worth preserving: user preferences, reusable instructions, architecture decisions, debugging insights, project knowledge, workflow improvements, documentation updates, tests, runbooks, or backlog items. Exclude temporary, speculative, redundant, or low-value details.",
         "shortcut" : "xlearn",
         "syncEnabled" : true
       },
@@ -763,6 +765,8 @@
 
       ],
       "textReplacement" : {
+        "lastSyncedAt" : "2026-07-29T04:22:15Z",
+        "lastSyncedValue" : "Evaluate how well the generated image matches the aesthetic and visual style of the reference image. Based on that evaluation, write a precise system-level prompt (meta prompt) that can be pasted into a fresh chat to recreate that exact reference style more accurately.",
         "shortcut" : "xalign",
         "syncEnabled" : true
       },
@@ -784,14 +788,18 @@
     "expandedChipDisplay" : false,
     "gridBackgroundColor" : "#2F2D29",
     "managedReplacementShortcuts" : [
+      "xalign",
       "xapprove",
       "xattach",
+      "xaudio",
       "xbfwf",
+      "xcomp",
       "xcontext",
       "xfiles",
       "xhoa",
       "xhoadocs",
       "xintro",
+      "xlabel",
       "xlearn",
       "xllm",
       "xmeta",
@@ -800,13 +808,15 @@
       "xprose",
       "xpush",
       "xreuse",
+      "xrework",
       "xsum",
-      "xtrust"
+      "xtrust",
+      "xtune"
     ],
     "paletteSource" : "Robert Brown Fabric Collection",
-    "textReplacementLastSyncAt" : "2026-07-09T20:15:00Z"
+    "textReplacementLastSyncAt" : "2026-07-29T04:22:15Z"
   },
-  "updatedAt" : "2026-07-29T02:32:54Z",
+  "updatedAt" : "2026-07-29T04:22:15Z",
   "variables" : [
     {
       "id" : "var-1783398724430",

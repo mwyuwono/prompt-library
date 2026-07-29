@@ -13,9 +13,16 @@ const publicPhrases = (corpus.phrases || [])
   .map(({ textReplacement, ...rest }) => rest);
 const publicCategoryIds = new Set(publicPhrases.map((phrase) => phrase.categoryId));
 
+// The same reasoning applies to the corpus-level sync bookkeeping. It is admin state,
+// and managedReplacementShortcuts in particular names shortcuts belonging to private
+// phrases (xhoa, xtrust, xbfwf…), so exporting it leaks private metadata even though
+// no private phrase is exported.
+const { managedReplacementShortcuts, textReplacementLastSyncAt, ...publicSettings } = corpus.settings || {};
+
 const exported = {
   ...corpus,
   updatedAt: new Date().toISOString(),
+  settings: publicSettings,
   categories: (corpus.categories || []).filter((category) => publicCategoryIds.has(category.id)),
   phrases: publicPhrases
 };

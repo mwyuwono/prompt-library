@@ -656,23 +656,42 @@ extension CorpusStore {
             phrases: corpus.phrases,
             variables: libraryVariables,
             managedShortcuts: managedReplacementShortcuts,
-            systemReplacements: TextReplacementSync.readSystemReplacements()
+            systemState: TextReplacementSync.readSystemState()
         )
     }
 
     /// Applies `plan` to the system store, then updates each synced phrase's
     /// `lastSyncedAt`/`lastSyncedValue`, `managedReplacementShortcuts`, and
     /// `textReplacementLastSyncAt` before persisting via the usual `writeCorpus()` path.
-    @discardableResult
-    func applyTextReplacementSync(_ plan: TextReplacementSync.SyncPlan) -> TextReplacementSync.SyncReport {
-        let (report, managedShortcuts) = TextReplacementSync.apply(plan, currentManagedShortcuts: managedReplacementShortcuts)
+    ///
+    /// The system write runs on a background queue and the result comes back on the main
+    /// queue: the KeyboardServices reply is awaited with a bounded block and verification
+    /// then polls both system layers, so running this inline would freeze the UI for
+    /// several seconds.
+    func applyTextReplacementSync(
+        _ plan: TextReplacementSync.SyncPlan,
+        completion: @escaping (TextReplacementSync.SyncReport) -> Void
+    ) {
+        let managed = managedReplacementShortcuts
+        DispatchQueue.global(qos: .userInitiated).async {
+            let (report, managedShortcuts) = TextReplacementSync.apply(plan, currentManagedShortcuts: managed)
+            DispatchQueue.main.async {
+                self.recordTextReplacementSync(plan, report: report, managedShortcuts: managedShortcuts)
+                completion(report)
+            }
+        }
+    }
 
+    /// Persists the outcome of a sync. Main queue only — it mutates published state.
+    private func recordTextReplacementSync(
+        _ plan: TextReplacementSync.SyncPlan,
+        report: TextReplacementSync.SyncReport,
+        managedShortcuts: [String]
+    ) {
         // Only record a sync as having happened if it actually landed in the system
         // store — a fallback (unwritten) or failed attempt leaves corpus state as-is
         // so the next Sync Now still sees these as pending.
-        guard report.failureReason == nil && !report.usedFallback else {
-            return report
-        }
+        guard report.failureReason == nil && !report.usedFallback else { return }
 
         let now = Date()
         for entry in plan.adds + plan.updates + plan.conflicts {
@@ -686,7 +705,6 @@ extension CorpusStore {
         corpus.settings.textReplacementLastSyncAt = now
         corpus.updatedAt = now
         writeCorpus()
-        return report
     }
 }
 

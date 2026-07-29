@@ -325,30 +325,9 @@
     "expandedCardTextColor": "brown-22",
     "expandedChipDisplay": false,
     "gridBackgroundColor": "#2F2D29",
-    "managedReplacementShortcuts": [
-      "xapprove",
-      "xattach",
-      "xbfwf",
-      "xcontext",
-      "xfiles",
-      "xhoa",
-      "xhoadocs",
-      "xintro",
-      "xlearn",
-      "xllm",
-      "xmeta",
-      "xnoise",
-      "xpositive",
-      "xprose",
-      "xpush",
-      "xreuse",
-      "xsum",
-      "xtrust"
-    ],
-    "paletteSource": "Robert Brown Fabric Collection",
-    "textReplacementLastSyncAt": "2026-07-09T20:15:00Z"
+    "paletteSource": "Robert Brown Fabric Collection"
   },
-  "updatedAt": "2026-07-29T02:54:59.765Z",
+  "updatedAt": "2026-07-29T04:29:19.423Z",
   "variables": [
     {
       "id": "var-1783398724430",
