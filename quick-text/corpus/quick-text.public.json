@@ -8,14 +8,158 @@
       "textColor": "#E8DED8"
     },
     {
+      "id": "response-style",
+      "name": "Prompt Response Rules",
+      "sortOrder": 60,
+      "textColor": "#E8DED8"
+    },
+    {
       "color": "brown-07",
       "id": "workflow-commands",
       "name": "Workflows",
       "sortOrder": 70,
       "textColor": "#E8DED8"
+    },
+    {
+      "color": "#807D76",
+      "id": "image-quality",
+      "name": "Images",
+      "sortOrder": 80,
+      "textColor": "#E8DED8"
     }
   ],
   "phrases": [
+    {
+      "categoryId": "prompt-reuse",
+      "createdAt": "2026-07-02T21:07:02Z",
+      "favorite": false,
+      "id": "prompt-reuse-llmsum",
+      "tags": [
+        "llmsum"
+      ],
+      "title": "Summarize all context from this chat",
+      "updatedAt": "2026-07-09T22:26:15Z",
+      "value": "Create an LLM-optimized meta-prompt that captures the effective instructions, constraints, decisions, and workflow patterns from this session so they can be reused in a new chat. Keep it generic and portable. Refer to external materials only with indirect labels such as \"the attached image,” rather than specific filenames. Optimize for faithful replication of the setup.",
+      "visibility": "public"
+    },
+    {
+      "categoryId": "prompt-reuse",
+      "createdAt": "2026-07-02T21:07:02Z",
+      "favorite": false,
+      "id": "prompt-reuse-samefiles",
+      "tags": [
+        "samefiles"
+      ],
+      "title": "Same attachments provided",
+      "updatedAt": "2026-07-09T19:53:31Z",
+      "value": "Assume the same attachments or reference materials will be provided in the subsequent chat. ",
+      "visibility": "public"
+    },
+    {
+      "categoryId": "prompt-reuse",
+      "createdAt": "2026-07-02T21:07:02Z",
+      "favorite": false,
+      "id": "instruction-editing-llmformat",
+      "tags": [
+        "llmformat"
+      ],
+      "title": "Rewrite for an LLM",
+      "updatedAt": "2026-07-09T19:54:41Z",
+      "value": "Rewrite for concision and clarity without changing the meaning or effectiveness. Write for an LLM audience, using direct imperative language and removing human-oriented explanation or filler.",
+      "visibility": "public"
+    },
+    {
+      "categoryId": "prompt-reuse",
+      "createdAt": "2026-07-02T21:07:02Z",
+      "favorite": false,
+      "id": "instruction-editing-noneg",
+      "summary": "",
+      "tags": [
+        "noneg"
+      ],
+      "title": "Restate as positive instructions; Avoid negative constructions",
+      "updatedAt": "2026-07-09T19:55:02Z",
+      "value": "Rewrite the instructions using positive, action-oriented requirements. Define what to do, what to produce, and how to perform the task using direct affirmative language. Avoid negative constructions",
+      "visibility": "public"
+    },
+    {
+      "categoryId": "prompt-reuse",
+      "createdAt": "2026-07-02T21:07:02Z",
+      "favorite": false,
+      "id": "instruction-editing-nofiles",
+      "tags": [
+        "nofiles"
+      ],
+      "title": "Provide a portable response. No file names.",
+      "updatedAt": "2026-07-09T19:55:58Z",
+      "value": "Make the output self-contained and portable for reuse in a new context. Refer to provided materials indirectly, using labels such as \"the document,\" \"the subject,\" \"the image,\" or \"the reference material.\" Do not include filenames, system paths, chat-specific labels, or environment-specific references.",
+      "visibility": "public"
+    },
+    {
+      "categoryId": "response-style",
+      "createdAt": "2026-07-02T21:07:02Z",
+      "favorite": false,
+      "id": "response-style-nocontext",
+      "tags": [
+        "nocontext"
+      ],
+      "title": "Respond with full context",
+      "updatedAt": "2026-07-09T19:56:45Z",
+      "value": "Generate a self-contained response that can be understood without prior conversation context. Include any necessary assumptions or framing directly in the response, and avoid references to earlier messages.",
+      "visibility": "public"
+    },
+    {
+      "categoryId": "response-style",
+      "createdAt": "2026-07-02T21:07:02Z",
+      "favorite": false,
+      "id": "response-style-nointro",
+      "tags": [
+        "nointro"
+      ],
+      "title": "Avoid commentary & filler",
+      "updatedAt": "2026-07-09T19:56:58Z",
+      "value": "Provide only the requested output. Omit introductions, acknowledgments, setup commentary, and closing remarks.",
+      "visibility": "public"
+    },
+    {
+      "categoryId": "response-style",
+      "createdAt": "2026-07-02T21:07:02Z",
+      "favorite": false,
+      "id": "response-style-ptext",
+      "summary": "",
+      "tags": [
+        "ptext"
+      ],
+      "title": "Prose formatting only. No lists.",
+      "updatedAt": "2026-07-09T22:32:30Z",
+      "value": "Respond in prose only, with no lists, tables, headers, or bullet points. Write naturally for spoken readability.",
+      "visibility": "public"
+    },
+    {
+      "atoms": [
+        {
+          "end": 30,
+          "id": "atom-1783027071473",
+          "start": 0
+        },
+        {
+          "end": 50,
+          "id": "atom-1F741F44-A7A6-4FA0-8F16-855BBCD77D9D",
+          "start": 31
+        }
+      ],
+      "categoryId": "workflow-commands",
+      "createdAt": "2026-07-02T21:07:02Z",
+      "favorite": false,
+      "id": "workflow-commands-llmapprove",
+      "tags": [
+        "llmapprove"
+      ],
+      "title": "Approve proposed actions",
+      "updatedAt": "2026-07-09T19:58:11Z",
+      "value": "I approve the proposed action. Execute the prompt.",
+      "visibility": "public"
+    },
     {
       "categoryId": "workflow-commands",
       "createdAt": "2026-07-02T21:07:02Z",
@@ -25,8 +169,33 @@
         "llmlearn"
       ],
       "title": "Capture durable learnings",
-      "updatedAt": "2026-07-02T22:14:35Z",
-      "value": "Review this session for durable learnings worth preserving: user preferences, reusable instructions, architecture decisions, debugging insights, project knowledge, workflow improvements, documentation updates, tests, runbooks, or backlog items. Propose additions or changes. Exclude temporary, speculative, redundant, or low-value details.",
+      "updatedAt": "2026-07-15T02:25:02Z",
+      "value": "Review this session and capture durable learnings worth preserving: user preferences, reusable instructions, architecture decisions, debugging insights, project knowledge, workflow improvements, documentation updates, tests, runbooks, or backlog items. Exclude temporary, speculative, redundant, or low-value details.",
+      "visibility": "public"
+    },
+    {
+      "atoms": [
+        {
+          "end": 47,
+          "id": "atom-1783027222348",
+          "start": 0
+        },
+        {
+          "end": 195,
+          "id": "atom-1783027245612",
+          "start": 48
+        }
+      ],
+      "categoryId": "workflow-commands",
+      "createdAt": "2026-07-02T21:07:02Z",
+      "favorite": false,
+      "id": "workflow-commands-compush",
+      "tags": [
+        "compush"
+      ],
+      "title": "Github: Commit, Push, Merge",
+      "updatedAt": "2026-07-09T22:23:21Z",
+      "value": "Commit all changes and push them to the remote. If working on a branch other than main, merge the branch into main after validation, push main, then delete the merged branch locally and remotely.",
       "visibility": "public"
     },
     {
@@ -47,22 +216,6 @@
     {
       "categoryId": "prompt-reuse",
       "color": "brown-18",
-      "createdAt": "2026-07-07T00:50:28Z",
-      "favorite": false,
-      "id": "phrase-1783385381",
-      "summary": "",
-      "tags": [
-        "etp"
-      ],
-      "textColor": "brown-22",
-      "title": "\"Execute the prompt\"",
-      "updatedAt": "2026-07-07T00:53:10Z",
-      "value": "Execute the prompt",
-      "visibility": "public"
-    },
-    {
-      "categoryId": "prompt-reuse",
-      "color": "brown-18",
       "createdAt": "2026-07-08T14:39:57Z",
       "favorite": false,
       "id": "phrase-1783521575",
@@ -73,6 +226,91 @@
       "title": "Save tokens",
       "updatedAt": "2026-07-08T14:39:57Z",
       "value": "Spend tokens on analysis, implementation, and verification rather than chat. Omit conversational filler, praise, apologies, and restatements of my request. Do not narrate routine steps.",
+      "visibility": "public"
+    },
+    {
+      "categoryId": "prompt-reuse",
+      "createdAt": "2026-07-11T14:35:33Z",
+      "favorite": false,
+      "id": "phrase-98CB45C4-D08F-48E4-9050-BAC03ACC8387",
+      "summary": "",
+      "tags": [],
+      "title": "Request optimal model guidance",
+      "updatedAt": "2026-07-11T14:35:33Z",
+      "value": "Recommend the most lightweight, cost-effective LLM that meets the task's reasoning and context requirements. Optimize for minimum token usage while maintaining high-quality results.",
+      "visibility": "public"
+    },
+    {
+      "categoryId": "prompt-reuse",
+      "createdAt": "2026-07-14T17:56:00Z",
+      "favorite": false,
+      "id": "phrase-9B782C0F-EBEB-4FAD-88C3-2FF9DCCCCBE9",
+      "summary": "",
+      "tags": [],
+      "title": "Help me fine-tune a behavior. ",
+      "updatedAt": "2026-07-14T17:56:00Z",
+      "value": "I want to adjust the behavior of this element: [Describe the element/interaction or paste the code here]. \n\nPlease analyze its current behavior and break it down into labeled, adjustable components (for example: [A] Trigger, [B] Keyframes/States, [C] Timing/Duration, [D] Easing/Curve, [E] Visual Properties). \n\nOnce you provide this breakdown, I will give you feedback using those labels so I can easily say \"Change A to...\" or \"Adjust C to...\". ",
+      "visibility": "public"
+    },
+    {
+      "categoryId": "prompt-reuse",
+      "createdAt": "2026-07-15T20:33:27Z",
+      "favorite": false,
+      "id": "phrase-901BD7E9-D061-4219-B916-46FA7C774C6C",
+      "summary": "",
+      "tags": [],
+      "title": "Label everything for easy reference",
+      "updatedAt": "2026-07-15T20:33:27Z",
+      "value": "For any questions, tasks, or decisions that require my attention, please use a short, unique identifier. This way, I can easily refer to it without having to type out the entire question or task description again.",
+      "visibility": "public"
+    },
+    {
+      "categoryId": "workflow-commands",
+      "createdAt": "2026-07-16T18:00:16Z",
+      "favorite": false,
+      "id": "phrase-74887694-BA5A-4409-9D93-A2A6E29C277B",
+      "summary": "",
+      "tags": [],
+      "title": "Audio content: Invoke skill to create",
+      "updatedAt": "2026-07-16T18:00:16Z",
+      "value": "Use $listen-to-content on the source below.\n\nI authorize ElevenLabs to process this source for speech synthesis.\n\nSOURCE:\n",
+      "visibility": "public"
+    },
+    {
+      "categoryId": "image-quality",
+      "createdAt": "2026-07-24T13:42:34Z",
+      "favorite": false,
+      "id": "phrase-E97D29EC-7EA4-41AC-A282-6D3D3A0D7195",
+      "summary": "",
+      "tags": [],
+      "title": "Use uploaded image for style",
+      "updatedAt": "2026-07-24T13:42:34Z",
+      "value": "We will edit the uploaded image, maintaining its current style. Tell me when you are ready for the editing instructions. ",
+      "visibility": "public"
+    },
+    {
+      "categoryId": "image-quality",
+      "createdAt": "2026-07-24T14:06:42Z",
+      "favorite": false,
+      "id": "phrase-EBD760C3-622A-4774-8F75-4D5803FD0D34",
+      "summary": "",
+      "tags": [],
+      "title": "Use only subject & composition ",
+      "updatedAt": "2026-07-24T14:06:42Z",
+      "value": "Use this subject and composition. ",
+      "visibility": "public"
+    },
+    {
+      "categoryId": "image-quality",
+      "createdAt": "2026-07-29T02:30:00Z",
+      "favorite": false,
+      "id": "phrase-7D696D8C-7EB0-4FDC-ACDE-DFB604908D8F",
+      "image": "",
+      "summary": "",
+      "tags": [],
+      "title": "Analyze style alignment & refine",
+      "updatedAt": "2026-07-29T02:32:54Z",
+      "value": "Evaluate how well the generated image matches the aesthetic and visual style of the reference image. Based on that evaluation, write a precise system-level prompt (meta prompt) that can be pasted into a fresh chat to recreate that exact reference style more accurately.",
       "visibility": "public"
     }
   ],
@@ -87,27 +325,30 @@
     "expandedCardTextColor": "brown-22",
     "expandedChipDisplay": false,
     "gridBackgroundColor": "#2F2D29",
-    "paletteSource": "Robert Brown Fabric Collection",
     "managedReplacementShortcuts": [
-      "bfwf",
-      "compush",
-      "ehoa",
-      "llmapprove",
-      "llmformat",
-      "llmlearn",
-      "llmmeta",
-      "llmnoise",
-      "llmsum",
-      "nocontext",
-      "nofiles",
-      "nointro",
-      "noneg",
-      "ptext",
-      "samefiles",
-      "subjectagnostic"
-    ]
+      "xapprove",
+      "xattach",
+      "xbfwf",
+      "xcontext",
+      "xfiles",
+      "xhoa",
+      "xhoadocs",
+      "xintro",
+      "xlearn",
+      "xllm",
+      "xmeta",
+      "xnoise",
+      "xpositive",
+      "xprose",
+      "xpush",
+      "xreuse",
+      "xsum",
+      "xtrust"
+    ],
+    "paletteSource": "Robert Brown Fabric Collection",
+    "textReplacementLastSyncAt": "2026-07-09T20:15:00Z"
   },
-  "updatedAt": "2026-07-09T16:20:52.210Z",
+  "updatedAt": "2026-07-29T02:54:59.765Z",
   "variables": [
     {
       "id": "var-1783398724430",

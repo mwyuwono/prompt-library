@@ -84,13 +84,85 @@ enum TextReplacementSync {
     /// so without forcing a resync here, a same-process re-read right after our own
     /// write can go stale for a long, unbounded time.
     static func readSystemReplacements() -> [SystemReplacement] {
+        if let databaseEntries = readSystemReplacementsFromDatabase() {
+            return databaseEntries
+        }
         CFPreferencesAppSynchronize(kCFPreferencesAnyApplication)
         guard let raw = UserDefaults.standard.array(forKey: "NSUserDictionaryReplacementItems") as? [[String: Any]] else { return [] }
 
-        return raw.compactMap { dict in
+        return parseSystemReplacements(raw)
+    }
+
+    private static func parseSystemReplacements(_ raw: [[String: Any]]) -> [SystemReplacement] {
+        raw.compactMap { dict in
             guard let shortcut = dict["replace"] as? String, let phrase = dict["with"] as? String else { return nil }
             let enabled = (dict["on"] as? Bool) ?? true
             return SystemReplacement(shortcut: shortcut, text: phrase, enabled: enabled)
+        }
+    }
+
+    /// Reads keyboardservicesd's database through the system sqlite client. This is
+    /// read-only: writes still go exclusively through KeyboardServices XPC. On macOS
+    /// 27, even a fresh `defaults` process can lag behind this daemon-owned store.
+    private static func readSystemReplacementsFromDatabase() -> [SystemReplacement]? {
+        struct Row: Decodable {
+            let shortcut: String
+            let text: String
+        }
+
+        let databaseURL = FileManager.default.homeDirectoryForCurrentUser
+            .appendingPathComponent("Library/KeyboardServices/TextReplacements.db")
+        let process = Process()
+        let output = Pipe()
+        let errors = Pipe()
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/sqlite3")
+        process.arguments = [
+            "-json",
+            databaseURL.path,
+            "SELECT ZSHORTCUT AS shortcut, ZPHRASE AS text FROM ZTEXTREPLACEMENTENTRY WHERE COALESCE(ZWASDELETED, 0) = 0"
+        ]
+        process.standardOutput = output
+        process.standardError = errors
+
+        do {
+            try process.run()
+            process.waitUntilExit()
+            guard process.terminationStatus == 0 else { return nil }
+
+            let data = output.fileHandleForReading.readDataToEndOfFile()
+            return try JSONDecoder().decode([Row].self, from: data).map {
+                SystemReplacement(shortcut: $0.shortcut, text: $0.text, enabled: true)
+            }
+        } catch {
+            return nil
+        }
+    }
+
+    /// Reads the global Text Replacements projection from a fresh process. On macOS
+    /// 27 this can differ from the KeyboardServices database: database presence proves
+    /// persistence, while this projection proves the shortcut is active for expansion.
+    private static func readSystemReplacementsFromFreshPreferencesProcess() -> [SystemReplacement]? {
+        let process = Process()
+        let output = Pipe()
+        let errors = Pipe()
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/defaults")
+        process.arguments = ["export", "-g", "-"]
+        process.standardOutput = output
+        process.standardError = errors
+
+        do {
+            try process.run()
+            process.waitUntilExit()
+            guard process.terminationStatus == 0 else { return nil }
+
+            let data = output.fileHandleForReading.readDataToEndOfFile()
+            guard
+                let plist = try PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? [String: Any],
+                let raw = plist["NSUserDictionaryReplacementItems"] as? [[String: Any]]
+            else { return nil }
+            return parseSystemReplacements(raw)
+        } catch {
+            return nil
         }
     }
 
@@ -259,9 +331,10 @@ enum TextReplacementSync {
             guard let newText = entry.newText else { return nil }
             return (entry.shortcut, newText)
         }
-        // Removes need the shortcut AND its current phrase on the entry (matches the
-        // reference implementation) — use what's currently in the system store.
-        let toRemove = plan.removals.compactMap { entry -> (shortcut: String, phrase: String)? in
+        // An update is an add-new + remove-old transaction. Adding the new value alone
+        // creates duplicate shortcuts in KeyboardServices instead of replacing the old
+        // entry. Explicit removals likewise need both shortcut and current phrase.
+        let toRemove = (plan.updates + plan.conflicts + plan.removals).compactMap { entry -> (shortcut: String, phrase: String)? in
             guard let oldText = entry.oldText else { return nil }
             return (entry.shortcut, oldText)
         }
@@ -283,17 +356,11 @@ enum TextReplacementSync {
         report.removed = plan.removals.map(\.shortcut)
         report.skipped = plan.skips.map(\.shortcut)
 
-        // The defaults cache updates within ~2s of a successful XPC transaction in the
-        // common case, but this process's own `UserDefaults.standard` cache (unlike a
-        // freshly-spawned process reading the same domain) has been observed to lag
-        // well past that — up to roughly a minute — after an externally-triggered write
-        // via this XPC path. Poll with a generous budget instead of a single fixed sleep
-        // so a slow-to-propagate success doesn't get misreported as a failed sync; this
-        // only blocks the (already-synchronous, single-action) Sync Now flow, and exits
-        // as soon as the change is observed.
+        // Verify both persistence and activation. macOS 27 can update the database
+        // without publishing the corresponding keyboard-expansion preference.
         var verified = false
-        for _ in 0..<10 {
-            Thread.sleep(forTimeInterval: 1)
+        for _ in 0..<5 {
+            Thread.sleep(forTimeInterval: 0.5)
             if verifyAfterWrite(plan) {
                 verified = true
                 break
@@ -310,17 +377,25 @@ enum TextReplacementSync {
 
     /// Re-reads system state and confirms every planned add/update/removal landed.
     private static func verifyAfterWrite(_ plan: SyncPlan) -> Bool {
-        let after = readSystemReplacements()
-        var byShortcut: [String: SystemReplacement] = [:]
-        for replacement in after { byShortcut[replacement.shortcut.lowercased()] = replacement }
+        guard
+            let database = readSystemReplacementsFromDatabase(),
+            let preferences = readSystemReplacementsFromFreshPreferencesProcess()
+        else { return false }
 
-        for entry in plan.adds + plan.updates + plan.conflicts {
-            guard let newText = entry.newText,
-                  let landed = byShortcut[entry.shortcut.lowercased()],
-                  landed.text == newText else { return false }
-        }
-        for entry in plan.removals {
-            if byShortcut[entry.shortcut.lowercased()] != nil { return false }
+        for replacements in [database, preferences] {
+            var byShortcut: [String: [SystemReplacement]] = [:]
+            for replacement in replacements {
+                byShortcut[replacement.shortcut.lowercased(), default: []].append(replacement)
+            }
+
+            for entry in plan.adds + plan.updates + plan.conflicts {
+                guard let newText = entry.newText,
+                      byShortcut[entry.shortcut.lowercased()]?.contains(where: { $0.text == newText }) == true
+                else { return false }
+            }
+            for entry in plan.removals {
+                if byShortcut[entry.shortcut.lowercased()] != nil { return false }
+            }
         }
         return true
     }
