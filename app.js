@@ -283,6 +283,10 @@ Server will start on http://localhost:3001`;
 
         // Load saved variable values and metadata from localStorage
         this.prompts.forEach(prompt => {
+            if (shouldFilterArchived && Array.isArray(prompt.variations)) {
+                prompt.variations = prompt.variations.filter(variation => !variation.archived);
+            }
+
             // Process prompt-level variables
             if (prompt.variables) {
                 this.applyVariableDisplayHints(prompt);
