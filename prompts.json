@@ -3892,7 +3892,7 @@
     "description": "Transforms an uploaded image into a substantially reorganized fine-art interpretation inspired by a selected artist.",
     "category": "Art",
     "icon": "palette",
-    "featured": false,
+    "featured": true,
     "slug": "artists-style",
     "template": "",
     "variables": [],
@@ -3967,7 +3967,11 @@
         "level": "High"
       }
     ],
-    "modifiedAt": "2026-08-01T15:02:51.003Z",
-    "customOrder": 25
+    "modifiedAt": "2026-08-01T15:07:09.999Z",
+    "customOrder": 25,
+    "variationSelector": "visual",
+    "variationSelectorTileMode": "details",
+    "fullScreenModal": true,
+    "image": "public/images/generated-hero-1785596812666.jpg"
   }
 ]
