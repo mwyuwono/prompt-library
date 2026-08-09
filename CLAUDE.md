@@ -252,6 +252,19 @@ For multi-step prompts, the prompt or variation `description` should describe th
 
 Format prompt and step instructions for readability. Use markdown lists for numbered or bulleted guidance instead of packing list-like instructions into one paragraph.
 
+### Adding Library Items
+
+Treat a request such as “add this to the library” as a request to determine its best home, not as an instruction to create a new standalone prompt by default. Before making any change, inspect the current library and recommend one concrete placement for the user's approval:
+
+- a new standalone prompt;
+- a sibling variation of an existing prompt;
+- an addition or revision to an existing prompt, variation, or tool; or
+- another supported library structure when that is a clearer fit.
+
+State the proposed parent/location, title, and a brief reason for the fit. Do not add or modify the item until the user approves the recommendation. If the fit is uncertain, identify the decision that would resolve it rather than silently creating a duplicate.
+
+After approval, complete the whole library-ready addition: clear title and ID, concise description, category and other applicable metadata, prompt/variation structure, variables and steps, recommended models, reference images, and preview assets. Follow the existing schema and house rules; do not leave a partial card for the user to finish unless required source material or a user decision is still missing.
+
 ### Prompt Preview Images
 
 Prompt preview artwork should be exact `1920x1080` images, which is a `16:9` landscape aspect ratio. The public grid/card UI renders prompt thumbnails in a 16:9 frame, so normalize generated preview images to exact dimensions before committing rather than relying on images that are only visually close to 16:9.
@@ -259,6 +272,8 @@ Prompt preview artwork should be exact `1920x1080` images, which is a `16:9` lan
 Multi-variant prompt previews have two levels: the prompt-level `image` is the hero/card image, while each `variations[].image` is used for that variant's visual preview.
 
 When an image-generation prompt has multiple variants, save the shared base/reference image used to generate the variant previews in `public/images/` and record it on the prompt as `previewBaseImage`. Use the same saved base image for future variant preview images so the variant set shows standardized results. Add a short `previewBaseImageDescription` when the source or purpose would not be obvious from the filename.
+
+For every image-oriented prompt or image-oriented variation set, check for an existing appropriate `previewBaseImage` before creating previews. If none exists, ask the user to specify or provide the base image; do not invent one. Once supplied, save and record that base image, and use it for all of that prompt's variant previews unless the user explicitly directs otherwise. This requirement does not apply to text-only prompts.
 
 Prompt execution reference images (`referenceImages[].path`) should live in the public S3 asset bucket under `https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/`, not in Git. These URLs are substituted into copied prompts and fetched by the image clipboard action.
 
