@@ -24,6 +24,7 @@ private-passcode.txt
 # Generated source maps
 web-components.js.map
 
-# Swift Package Manager build output
-quick-text/mac/QuickTextApp/.build/
+# Swift build products
+.build/
+quick-text/**/.build/
 quick-text/mac/QuickTextApp/QuickTextApp

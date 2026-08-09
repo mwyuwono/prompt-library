@@ -69,6 +69,8 @@ Write instructions as readable markdown. If the content is a sequence or checkli
 
 ## Prompt Images
 
+Every public prompt must have a prompt-level `image` card thumbnail. Generate and wire this image during the same library addition; do not leave a prompt image-less. For workflows without a fixed source subject, use a subject-agnostic editorial preview rather than inventing a source image. Use `previewBaseImage` only when the preview must depict a supplied subject or standardized source.
+
 Standard prompts can use a prompt-level image:
 ```json
 { "image": "public/images/example.jpg" }
@@ -154,6 +156,7 @@ The `details` field hides when `include_details` equals the empty string (toggle
 
 Before committing public prompt changes to `prompts.json`:
 
+- Every prompt has a prompt-level `image` path, and the referenced file exists
 - All `{{variable}}` placeholders have entries in `variables`
 - No manual placeholders like `[Describe...]`
 - Variation descriptions state only what makes that variant different

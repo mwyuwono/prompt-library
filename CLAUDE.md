@@ -265,6 +265,8 @@ State the proposed parent/location, title, and a brief reason for the fit. Do no
 
 After approval, complete the whole library-ready addition: clear title and ID, concise description, category and other applicable metadata, prompt/variation structure, variables and steps, recommended models, reference images, and preview assets. Follow the existing schema and house rules; do not leave a partial card for the user to finish unless required source material or a user decision is still missing.
 
+Every public prompt entry must have a prompt-level `image` card thumbnail. Generate and wire that preview during the same library addition; never leave a prompt image-less. If a source image is required to make the preview depict a supplied subject, record that source as `previewBaseImage` and follow the base-image rule below. Otherwise, create a subject-agnostic editorial preview that communicates the prompt's workflow without inventing source content.
+
 ### Prompt Preview Images
 
 Prompt preview artwork should be exact `1920x1080` images, which is a `16:9` landscape aspect ratio. The public grid/card UI renders prompt thumbnails in a 16:9 frame, so normalize generated preview images to exact dimensions before committing rather than relying on images that are only visually close to 16:9.
@@ -273,7 +275,7 @@ Multi-variant prompt previews have two levels: the prompt-level `image` is the h
 
 When an image-generation prompt has multiple variants, save the shared base/reference image used to generate the variant previews in `public/images/` and record it on the prompt as `previewBaseImage`. Use the same saved base image for future variant preview images so the variant set shows standardized results. Add a short `previewBaseImageDescription` when the source or purpose would not be obvious from the filename.
 
-For every image-oriented prompt or image-oriented variation set, check for an existing appropriate `previewBaseImage` before creating previews. If none exists, ask the user to specify or provide the base image; do not invent one. Once supplied, save and record that base image, and use it for all of that prompt's variant previews unless the user explicitly directs otherwise. This requirement does not apply to text-only prompts.
+For every image-oriented prompt or image-oriented variation set whose preview must depict a supplied subject, check for an existing appropriate `previewBaseImage` before creating previews. If none exists, ask the user to specify or provide the base image; do not invent one. Once supplied, save and record that base image, and use it for all of that prompt's variant previews unless the user explicitly directs otherwise. For image-oriented prompts that describe a workflow without a fixed subject, generate a subject-agnostic preview and do not block the library addition on a base image. Text-only prompts still require a prompt-level card thumbnail under the all-prompts rule above.
 
 Prompt execution reference images (`referenceImages[].path`) should live in the public S3 asset bucket under `https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/`, not in Git. These URLs are substituted into copied prompts and fetched by the image clipboard action.
 
