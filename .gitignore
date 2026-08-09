@@ -24,3 +24,7 @@ private-passcode.txt
 # Local design system builds (use CDN instead)
 web-components.js
 web-components.js.map
+
+# Swift build products
+.build/
+quick-text/**/.build/
