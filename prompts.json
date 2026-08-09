@@ -3723,7 +3723,7 @@
     "description": "Creates historical folk-art miniature portraits.",
     "instructions": "",
     "category": "Art",
-    "image": "public/images/miniature-portrait-preview.png",
+    "image": "public/images/1786242743981.jpg",
     "template": "Create a formal historical bust portrait combining the likeness from the attached 'character reference' image and the artistic style from the style reference at {{miniature_style}}.\n\n**Character & Likeness:** The portrait must feature the precise facial features, expression, and likeness of the subject shown in the character reference image, seamlessly integrated.\n\n**Artistic Style & Medium:** Apply the exact 19th-century American Folk Art watercolor and gouache painting technique seen in the style reference. This includes the precise brushwork, the soft tonal washes, the use of desaturated, rich pigments, and the distinct, hand-painted texture. The background must be the same aged, textured cream paper with its specific patina.\n\n**Composition & Attire:** Replicate the formal, three-quarter bust composition and the exact attire (the dark charcoal-grey frock coat, the white multiple-buttoned waistcoat, and the oversized black silk bow tie stock) from the style reference, but adapted to the character's form. Maintain the neutral lighting and composed, formal expression.",
     "variables": [],
     "slug": "miniature-portrait",
@@ -3746,7 +3746,7 @@
         "level": "Medium"
       }
     ],
-    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "modifiedAt": "2026-08-09T02:32:43.122Z",
     "customOrder": 22
   },
   {
