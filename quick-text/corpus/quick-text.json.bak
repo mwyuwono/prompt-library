@@ -416,6 +416,8 @@
         "llmlearn"
       ],
       "textReplacement" : {
+        "lastSyncedAt" : "2026-07-29T04:22:15Z",
+        "lastSyncedValue" : "Review this session and capture durable learnings worth preserving: user preferences, reusable instructions, architecture decisions, debugging insights, project knowledge, workflow improvements, documentation updates, tests, runbooks, or backlog items. Exclude temporary, speculative, redundant, or low-value details.",
         "shortcut" : "xlearn",
         "syncEnabled" : true
       },
@@ -442,18 +444,6 @@
       "visibility" : "private"
     },
     {
-      "atoms" : [
-        {
-          "end" : 47,
-          "id" : "atom-1783027222348",
-          "start" : 0
-        },
-        {
-          "end" : 195,
-          "id" : "atom-1783027245612",
-          "start" : 48
-        }
-      ],
       "categoryId" : "workflow-commands",
       "createdAt" : "2026-07-02T21:07:02Z",
       "favorite" : false,
@@ -462,12 +452,14 @@
         "compush"
       ],
       "textReplacement" : {
+        "lastSyncedAt" : "2026-08-03T23:46:01Z",
+        "lastSyncedValue" : "Commit all outstanding changes on main and every branch. Validate, merge, and delete each non-main branch (local + remote); push main when done. Stop and ask if any branch fails validation or conflicts.",
         "shortcut" : "xpush",
         "syncEnabled" : true
       },
       "title" : "Github: Commit, Push, Merge",
-      "updatedAt" : "2026-07-09T22:23:21Z",
-      "value" : "Commit all changes and push them to the remote. If working on a branch other than main, merge the branch into main after validation, push main, then delete the merged branch locally and remotely.",
+      "updatedAt" : "2026-08-03T23:44:52Z",
+      "value" : "Commit all outstanding changes on main and every branch. Validate, merge, and delete each non-main branch (local + remote); push main when done. Stop and ask if any branch fails validation or conflicts.",
       "visibility" : "public"
     },
     {
@@ -763,6 +755,8 @@
 
       ],
       "textReplacement" : {
+        "lastSyncedAt" : "2026-07-29T04:22:15Z",
+        "lastSyncedValue" : "Evaluate how well the generated image matches the aesthetic and visual style of the reference image. Based on that evaluation, write a precise system-level prompt (meta prompt) that can be pasted into a fresh chat to recreate that exact reference style more accurately.",
         "shortcut" : "xalign",
         "syncEnabled" : true
       },
@@ -784,14 +778,18 @@
     "expandedChipDisplay" : false,
     "gridBackgroundColor" : "#2F2D29",
     "managedReplacementShortcuts" : [
+      "xalign",
       "xapprove",
       "xattach",
+      "xaudio",
       "xbfwf",
+      "xcomp",
       "xcontext",
       "xfiles",
       "xhoa",
       "xhoadocs",
       "xintro",
+      "xlabel",
       "xlearn",
       "xllm",
       "xmeta",
@@ -800,13 +798,15 @@
       "xprose",
       "xpush",
       "xreuse",
+      "xrework",
       "xsum",
-      "xtrust"
+      "xtrust",
+      "xtune"
     ],
     "paletteSource" : "Robert Brown Fabric Collection",
-    "textReplacementLastSyncAt" : "2026-07-09T20:15:00Z"
+    "textReplacementLastSyncAt" : "2026-08-03T23:46:01Z"
   },
-  "updatedAt" : "2026-07-29T02:32:54Z",
+  "updatedAt" : "2026-08-03T23:46:01Z",
   "variables" : [
     {
       "id" : "var-1783398724430",

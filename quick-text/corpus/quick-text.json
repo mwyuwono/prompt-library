@@ -764,6 +764,46 @@
       "updatedAt" : "2026-07-29T02:32:54Z",
       "value" : "Evaluate how well the generated image matches the aesthetic and visual style of the reference image. Based on that evaluation, write a precise system-level prompt (meta prompt) that can be pasted into a fresh chat to recreate that exact reference style more accurately.",
       "visibility" : "public"
+    },
+    {
+      "categoryId" : "image-quality",
+      "createdAt" : "2026-08-14T17:40:36Z",
+      "favorite" : false,
+      "id" : "phrase-2E7918E5-DED5-407C-BE82-E15D765EBFDD",
+      "summary" : "",
+      "tags" : [
+
+      ],
+      "textReplacement" : {
+        "lastSyncedAt" : "2026-08-14T17:41:38Z",
+        "lastSyncedValue" : "Provide the hex codes of the most dominant colors in this artwork with no intro or commentary.",
+        "shortcut" : "xpal",
+        "syncEnabled" : true
+      },
+      "title" : "Extract a color palette",
+      "updatedAt" : "2026-08-14T17:41:32Z",
+      "value" : "Provide the hex codes of the most dominant colors in this artwork with no intro or commentary.",
+      "visibility" : "private"
+    },
+    {
+      "categoryId" : "image-quality",
+      "createdAt" : "2026-08-14T17:51:40Z",
+      "favorite" : false,
+      "id" : "phrase-89BAE550-6738-427F-984A-08FDB0CAC5A6",
+      "summary" : "",
+      "tags" : [
+
+      ],
+      "textReplacement" : {
+        "lastSyncedAt" : "2026-08-14T17:51:47Z",
+        "lastSyncedValue" : "Using the attached image as a strict guide for composition, pattern, and texture, the directive is to deepen the overall luminance of the image. This change must be achieved strictly by shifting the value of each individual local color downward, rather than by applying a global dark overlay, a vignette, or a translucent veil. The specific color and value instructions include a local value remapping, where each distinct color swatch is shifted down by one to two value stops, or twenty to thirty percent luminance; this is to ensure that the lightest highlights become midtones and the midtones shift toward deep earth tones. Critically, there must be a zero overlay effect, meaning no flat dark tint, atmospheric haze, vignetting, or semi-transparent layer is to be applied over the top. The output should be a source-faithful version where every individual pigment is fundamentally darker.",
+        "shortcut" : "xdarken",
+        "syncEnabled" : true
+      },
+      "title" : "Color Value Stepdown",
+      "updatedAt" : "2026-08-14T17:51:40Z",
+      "value" : "Using the attached image as a strict guide for composition, pattern, and texture, the directive is to deepen the overall luminance of the image. This change must be achieved strictly by shifting the value of each individual local color downward, rather than by applying a global dark overlay, a vignette, or a translucent veil. The specific color and value instructions include a local value remapping, where each distinct color swatch is shifted down by one to two value stops, or twenty to thirty percent luminance; this is to ensure that the lightest highlights become midtones and the midtones shift toward deep earth tones. Critically, there must be a zero overlay effect, meaning no flat dark tint, atmospheric haze, vignetting, or semi-transparent layer is to be applied over the top. The output should be a source-faithful version where every individual pigment is fundamentally darker.",
+      "visibility" : "private"
     }
   ],
   "settings" : {
@@ -785,6 +825,7 @@
       "xbfwf",
       "xcomp",
       "xcontext",
+      "xdarken",
       "xfiles",
       "xhoa",
       "xhoadocs",
@@ -794,6 +835,7 @@
       "xllm",
       "xmeta",
       "xnoise",
+      "xpal",
       "xpositive",
       "xprose",
       "xpush",
@@ -804,9 +846,9 @@
       "xtune"
     ],
     "paletteSource" : "Robert Brown Fabric Collection",
-    "textReplacementLastSyncAt" : "2026-08-03T23:46:01Z"
+    "textReplacementLastSyncAt" : "2026-08-14T17:51:47Z"
   },
-  "updatedAt" : "2026-08-03T23:46:01Z",
+  "updatedAt" : "2026-08-14T18:59:04Z",
   "variables" : [
     {
       "id" : "var-1783398724430",
