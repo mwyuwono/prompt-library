@@ -1578,14 +1578,26 @@
     "category": "Art",
     "icon": "palette",
     "featured": false,
-    "image": "public/images/generated-hero-1786241203206.jpg",
+    "image": "public/images/1787007857937.jpg",
     "slug": "keep-subject--change-style",
     "instructions": "Upload the Style Reference first. After “Style locked,” upload the Subject / Composition Reference and any required changes. The subject controls content and layout; the style reference controls all rendering decisions.",
     "template": "TWO-REFERENCE STYLE-LOCKED IMAGE TRANSFER\n\nYou will receive two images with strictly separate roles:\n\nImage 1 — STYLE REFERENCE\nDefines how the final image must look.\n\nImage 2 — SUBJECT / COMPOSITION REFERENCE\nDefines what the final image must depict and how it is arranged.\n\nNever blend these roles. Do not carry over any subject matter, objects, scenery, symbols, text, or artist marks from Image 1.\n\nSTEP 1 — LOCK THE STYLE\n\nAnalyze only Image 1. Internally lock:\n\n- medium, surface, texture, opacity, paint thickness, drips, scumbling, rubbing, erasure, and exposed ground\n- dominant palette, value range, saturation, warm/cool balance, accent colors, and color proportions\n- scale and character of painted masses, contours, scribbles, lines, loops, scratches, ghost marks, and edge behavior\n- abstraction level, simplification, distortion, proportion logic, spatial compression, and detail ceiling\n- negative space, density, asymmetry, cropping, and the paint-to-ground ratio\n- intentional irregularities: uneven coverage, displaced contours, awkward marks, unfinished edges, visible corrections, and incomplete forms\n\nDo not generate an image or infer the future subject. Reply only:\n\nStyle locked. Provide the Subject / Composition Reference and any required changes.\n\nSTEP 2 — REBUILD THE SUBJECT IN THE LOCKED STYLE\n\nUse Image 2 only for subject identity and count; pose, gesture, silhouette, and orientation; crop, viewpoint, scale, and placement; overlap, depth order, and major spatial relationships; and explicitly required additions, removals, or substitutions.\n\nIgnore Image 2’s color, texture, medium, sharpness, realism, finish, rendering style, typography style, and photographic detail. Reconstruct it from the visual building blocks found in Image 1; do not merely repaint, filter, or colorize Image 2.\n\nTranslate the subject through Image 1’s visual grammar:\n\n- large forms → broad irregular painted masses\n- outlines → loose gestural contours\n- fine texture → sparse scribble, scumble, rubbing, erasure, or other equivalent marks\n- shadows → muted overlapping material or tonal masses rather than smooth modeling\n- small features → economical marks at or below Image 1’s detail ceiling\n- fur, hair, foliage, fabric, architecture, and other complex subjects → simplified gestural equivalents\n\nMatch Image 1’s paint-to-ground ratio, scale of major masses, mark density, contour looseness, color proportions, degree of abstraction, transparency or opacity, edge behavior, density versus open space, and unfinished character. Preserve Image 2’s compositional skeleton, but allow contours and internal forms to become loose, displaced, incomplete, or partially obscured when Image 1’s visual language requires it.\n\nKeep all detail at or below Image 1’s level. No region may become more realistic, sharp, polished, saturated, or technically refined than Image 1.\n\nPHYSICAL-MEDIUM INTEGRITY\n\nApply this section only when Image 1 depicts a physical medium such as paint, drawing, printmaking, collage, or mixed media. Do not invent paper, paint, or canvas effects for a Style Reference that is inherently photographic, digital, or otherwise non-physical.\n\nFor physical media, avoid moiré, pixel jitter, procedural noise grids, repeated texture stamps, tiled marks, synthetic edge halos, over-sharpened micro-detail, and repetitive pseudo-random patterns. Surfaces and marks must behave like the actual medium: organic, non-repeating variation; believable buildup, drag, pooling, staining, abrasion, and transparency; natural support texture; and materially plausible overlaps and edges.\n\nIf handwriting exists in Image 1, similar non-identical gestural writing may appear only where appropriate. Reproduce actual words only when explicitly requested. Never copy signatures, watermarks, or artist marks.\n\nFINAL CHECK\n\nBefore rendering, verify internally that subject and composition clearly come from Image 2; every rendering decision comes from Image 1; the subject has been rebuilt through Image 1’s shapes and marks rather than filtered; negative space and density match Image 1; no detail, polish, or realism exceeds Image 1; and, when physical-medium rules apply, every mark remains materially plausible without obvious digital repetition or generative artifacts. Revise internally if any condition fails.\n\nSTEP 2 OUTPUT\n\nGenerate only the final image. No analysis, captions, explanations, or alternate versions.",
     "variables": [],
     "variations": [],
-    "modifiedAt": "2026-08-17T22:33:19.990Z",
-    "customOrder": 13
+    "modifiedAt": "2026-08-17T23:04:19.505Z",
+    "customOrder": 13,
+    "recommendedModels": [
+      {
+        "vendor": "openai",
+        "model": "ChatGPT 5.5",
+        "level": "Thinking"
+      },
+      {
+        "vendor": "google",
+        "model": "Gemini 3.5 Flash",
+        "level": "Medium"
+      }
+    ]
   },
   {
     "id": "prompt-builder",
