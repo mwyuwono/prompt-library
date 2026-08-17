@@ -2975,14 +2975,14 @@
   },
   {
     "id": "oil-painting-blocking-in-study",
-    "title": "Oil Painting Blocking-In Study",
+    "title": "Oil Painting Block-In",
     "description": "Creates a simplified blocking-in study from a finished oil painting.",
     "instructions": "1. Upload the finished oil painting.\n2. Choose Low or Mid fidelity.",
     "category": "Art",
     "icon": "brush",
     "featured": false,
-    "slug": "oil-painting-blocking-in-study",
-    "image": "public/images/oil-painting-blocking-in-study-preview.png",
+    "slug": "oil-painting-block-in",
+    "image": "public/images/1787008575127.jpg",
     "template": "Analyze the attached finished oil painting and generate a new image that visualizes its blocking-in stage. Fidelity: {{fidelity}}.\n\nFidelity level definitions — apply only the one selected above:\n\n- Low — Reduce all forms to the broadest flat primary masses. Use a single flat local color per region. No secondary planes, edge variation, directional brushwork, or temperature shifts. The result should read as a pure abstract color map.\n\n- Mid — Reduce forms to primary masses but allow secondary planes where major surfaces turn. Introduce color temperature variation within masses (warm lights, cool shadows). Differentiate hard edges at form boundaries from soft edges at gradual transitions. Suggest volume with directional brushwork. Still no fine textures, highlights, or rendered detail.\n\nConstraints common to all fidelity levels:\n\n- Composition: Maintain the exact proportions and layout of the original.\n- Style: Thin underpainting aesthetic — a 'lean' first layer or lay-in. A front-on map of the painting's masses.\n- Presentation: Flat, front-on perspective. No framing, easel, or context — just the study itself.\n\nThe goal is to strip away the 'rendered' data (skin texture, leaf detail) and reveal only the 'abstract' data beneath it.",
     "variables": [
       {
@@ -3001,7 +3001,7 @@
         "size": "compact"
       }
     ],
-    "modifiedAt": "2026-08-17T22:45:22.810Z",
+    "modifiedAt": "2026-08-17T23:16:17.241Z",
     "customOrder": 16
   },
   {
@@ -3013,10 +3013,10 @@
     "icon": "layers",
     "featured": false,
     "slug": "artwork-alignment-overlay",
-    "image": "public/images/artwork-alignment-overlay-preview.png",
+    "image": "public/images/1787009126062.jpg",
     "template": "Generate a high-fidelity, analytical composite image for art critique and visual comparison.\n\n**Input Images:** The scene uses two sources: [Image 2, the reference] and [Image 1, the user's artwork].\n\n**Geometric Correction of Image 1:** First, analyze [Image 1], which is a photo taken via an iPhone and contains distortion (lens warp, keystone effect, or skewed perspective). Apply precision perspective correction and a digital realignment to [Image 1]. The goal is to flatten the image plane to match [Image 2], ensuring that key anatomical or structural landmarks in the drawing (e.g., eyes, joints, contours) align geometrically with those in the reference, without altering the actual strokes, proportions, or essence of the original artwork itself.\n\n**Create the Composite Layer:** Once corrected, layer the realigned [Image 1] directly on top of [Image 2].\n\n**Apply Blending (Opacity):** Set the blending of the top layer ([Image 1, the artwork]) to 50% opacity. The background layer ([Image 2, the reference]) remains fully opaque.\n\n**Final Output:** The resulting image must clearly present the underlying reference visible through the semi-transparent, geometrically corrected artwork. This must highlight precisely where the forms of the artwork align with or stray from the reference in terms of size, angle, and placement.",
     "variables": [],
-    "modifiedAt": "2026-08-17T22:45:22.810Z",
+    "modifiedAt": "2026-08-17T23:25:28.055Z",
     "customOrder": 19
   }
 ]
