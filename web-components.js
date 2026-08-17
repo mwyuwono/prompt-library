@@ -2921,7 +2921,7 @@ __publicField(WyVariationEditor, "properties", {
 customElements.define("wy-variation-editor", WyVariationEditor);
 
 // components/ui/wy-prompt-editor.js
-var _WyPromptEditor = class _WyPromptEditor extends i4 {
+var WyPromptEditor = class extends i4 {
   constructor() {
     super();
     this.prompt = null;
@@ -3059,50 +3059,6 @@ ${subjectPrompt}`
     }
     this._markDirty();
     this.requestUpdate();
-  }
-  _getRecommendedModelEntry(vendor) {
-    return (this._editedPrompt?.recommendedModels || []).find((m4) => m4.vendor === vendor) || null;
-  }
-  _handleRecommendedModelChange(vendor, field, value) {
-    if (!this._editedPrompt) return;
-    const existing = this._editedPrompt.recommendedModels || [];
-    const entry = existing.find((m4) => m4.vendor === vendor);
-    let next;
-    if (entry) {
-      next = existing.map((m4) => m4.vendor === vendor ? { ...m4, [field]: value } : m4);
-    } else {
-      next = [...existing, { vendor, model: "", level: "", [field]: value }];
-    }
-    next = next.filter((m4) => (m4.model || "").trim());
-    this._handleFieldChange("recommendedModels", next);
-  }
-  _renderRecommendedModelsEditor() {
-    return b2`
-            <div class="recommended-models-editor">
-                ${_WyPromptEditor.RECOMMENDED_MODEL_VENDORS.map(({ vendor, label }) => {
-      const entry = this._getRecommendedModelEntry(vendor);
-      return b2`
-                        <div class="recommended-model-row">
-                            <span class="recommended-model-vendor-label">${label}</span>
-                            <input
-                                type="text"
-                                placeholder="Model name"
-                                .value="${entry?.model || ""}"
-                                @input="${(e6) => this._handleRecommendedModelChange(vendor, "model", e6.target.value)}"
-                                ?disabled="${this.readonly}"
-                            >
-                            <input
-                                type="text"
-                                placeholder="Thinking level (optional)"
-                                .value="${entry?.level || ""}"
-                                @input="${(e6) => this._handleRecommendedModelChange(vendor, "level", e6.target.value)}"
-                                ?disabled="${this.readonly}"
-                            >
-                        </div>
-                    `;
-    })}
-            </div>
-        `;
   }
   _markDirty() {
     if (!this._isDirty) {
@@ -3993,15 +3949,6 @@ ${subjectPrompt}`
                         </div>
                     </div>
 
-                    <!-- Section 1.5: Recommended Models -->
-                    <div class="card" data-section="recommended-models">
-                        <h2 class="card-title" data-eyebrow="Section 01">Recommended Models</h2>
-                        <p class="card-description">
-                            Up to one model per vendor (Anthropic, OpenAI, Google, Gemma). Leave the model field blank to omit a vendor's chip.
-                        </p>
-                        ${this._renderRecommendedModelsEditor()}
-                    </div>
-
                     <!-- Section 2: Visuals & Metadata -->
                     <div class="card" data-section="visuals">
                         <h2 class="card-title" data-eyebrow="Section 02">Visuals & Metadata</h2>
@@ -4267,7 +4214,7 @@ ${subjectPrompt}`
         `;
   }
 };
-__publicField(_WyPromptEditor, "properties", {
+__publicField(WyPromptEditor, "properties", {
   prompt: { type: Object },
   categories: { type: Array },
   heroImageStatus: { type: Object },
@@ -4293,13 +4240,6 @@ __publicField(_WyPromptEditor, "properties", {
   _openVariationIndex: { type: Number, state: true },
   _isDirty: { type: Boolean, state: true }
 });
-__publicField(_WyPromptEditor, "RECOMMENDED_MODEL_VENDORS", [
-  { vendor: "anthropic", label: "Anthropic" },
-  { vendor: "openai", label: "OpenAI" },
-  { vendor: "google", label: "Google Gemini" },
-  { vendor: "gemma", label: "Gemma (local)" }
-]);
-var WyPromptEditor = _WyPromptEditor;
 customElements.define("wy-prompt-editor", WyPromptEditor);
 
 // components/ui/wy-step-editor.js
@@ -5772,7 +5712,7 @@ var Vt = b3.parse;
 var Yt = x2.lex;
 
 // components/ui/wy-prompt-modal.js
-var _WyPromptModal = class _WyPromptModal extends i4 {
+var WyPromptModal = class extends i4 {
   createRenderRoot() {
     return this;
   }
@@ -5791,7 +5731,7 @@ var _WyPromptModal = class _WyPromptModal extends i4 {
     this.template = "";
     this.variables = [];
     this.referenceImages = [];
-    this.recommendedModels = [];
+    this.relatedPrompts = [];
     this.variations = [];
     this.variationSelector = "";
     this.variationSelectorTileMode = "thumbnail";
@@ -5916,25 +5856,24 @@ var _WyPromptModal = class _WyPromptModal extends i4 {
     if (!text) return "";
     return g2.parse(text, { breaks: true });
   }
-  _renderRecommendedModels() {
-    const models = Array.isArray(this.recommendedModels) ? this.recommendedModels : [];
-    if (!models.length) return "";
-    const ordered = [...models].sort((a3, b4) => {
-      const orderIndex = (vendor) => {
-        const idx = _WyPromptModal.MODEL_VENDOR_ORDER.indexOf(vendor);
-        return idx === -1 ? _WyPromptModal.MODEL_VENDOR_ORDER.length : idx;
-      };
-      return orderIndex(a3.vendor) - orderIndex(b4.vendor);
-    });
+  _openRelatedPrompt(promptId) {
+    this.dispatchEvent(new CustomEvent("related-prompt-open", {
+      detail: { promptId },
+      bubbles: true,
+      composed: true
+    }));
+  }
+  _renderRelatedPrompts() {
+    const prompts = Array.isArray(this.relatedPrompts) ? this.relatedPrompts : [];
+    if (!prompts.length) return "";
     return b2`
-      <div class="recommended-models">
-        <span class="recommended-models-label">Recommended models</span>
-        <div class="recommended-models-chips">
-          ${ordered.map((m4) => b2`
-            <span class="recommended-model-chip" title="${m4.vendor || ""}">
-              <span class="recommended-model-name">${m4.model}</span>
-              ${m4.level ? b2`<span class="recommended-model-level">${m4.level}</span>` : ""}
-            </span>
+      <div class="related-prompts">
+        <span class="related-prompts-label">Related prompts</span>
+        <div class="related-prompts-buttons">
+          ${prompts.map((prompt) => b2`
+            <button class="related-prompt-button" @click=${() => this._openRelatedPrompt(prompt.id)}>
+              ${prompt.title}
+            </button>
           `)}
         </div>
       </div>
@@ -5947,13 +5886,13 @@ var _WyPromptModal = class _WyPromptModal extends i4 {
           ${showDescription ? b2`
             <div class="description-text ${this.descriptionExpanded ? "expanded" : ""}">${o5(this._renderDescriptionMarkdown(this.description))}</div>
           ` : ""}
-          ${this._renderRecommendedModels()}
           ${this.instructions ? b2`
             <wy-info-panel class="prompt-instructions-panel">
               <p class="prompt-instructions-heading">Instructions</p>
               <div class="prompt-instructions-copy">${o5(this._renderDescriptionMarkdown(this.instructions))}</div>
             </wy-info-panel>
           ` : ""}
+          ${this._renderRelatedPrompts()}
       </div>
     `;
   }
@@ -6737,7 +6676,7 @@ ${textWithUrl}`;
     }));
   }
 };
-__publicField(_WyPromptModal, "properties", {
+__publicField(WyPromptModal, "properties", {
   open: { type: Boolean, reflect: true },
   title: { type: String },
   category: { type: String },
@@ -6751,7 +6690,7 @@ __publicField(_WyPromptModal, "properties", {
   template: { type: String },
   variables: { type: Array },
   referenceImages: { type: Array },
-  recommendedModels: { type: Array, attribute: "recommended-models" },
+  relatedPrompts: { type: Array, attribute: "related-prompts" },
   variations: { type: Array },
   variationSelector: { type: String, attribute: "variation-selector" },
   variationSelectorTileMode: { type: String, attribute: "variation-selector-tile-mode" },
@@ -6770,9 +6709,6 @@ __publicField(_WyPromptModal, "properties", {
   variationDetailsExpanded: { type: Boolean, attribute: "variation-details-expanded" },
   showPalette: { type: Boolean, attribute: "show-palette" }
 });
-// Fixed display order regardless of stored order
-__publicField(_WyPromptModal, "MODEL_VENDOR_ORDER", ["anthropic", "openai", "google", "gemma"]);
-var WyPromptModal = _WyPromptModal;
 customElements.define("wy-prompt-modal", WyPromptModal);
 
 // components/ui/wy-links-modal.js

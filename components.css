@@ -2627,11 +2627,11 @@ wy-controls-bar {
         margin-top: 2px;
     }
 
-    wy-prompt-modal .recommended-models {
+    wy-prompt-modal .related-prompts {
         margin-top: 16px;
     }
 
-    wy-prompt-modal .recommended-models-label {
+    wy-prompt-modal .related-prompts-label {
         display: block;
         margin: 0 0 var(--spacing-xxs, 4px);
         font-family: var(--ff-sans);
@@ -2642,33 +2642,23 @@ wy-controls-bar {
         color: var(--ink-soft, #A8A49C);
     }
 
-    wy-prompt-modal .recommended-models-chips {
+    wy-prompt-modal .related-prompts-buttons {
         display: flex;
         flex-wrap: wrap;
         gap: var(--spacing-xs, 8px);
     }
 
-    wy-prompt-modal .recommended-model-chip {
-        display: inline-flex;
-        align-items: baseline;
-        gap: 6px;
-        padding: 6px 14px;
-        background: var(--ink);
-        color: var(--white);
+    wy-prompt-modal .related-prompt-button {
+        padding: 6px 12px;
+        border: 1px solid var(--paper-edge, #DDD);
         border-radius: var(--radius-pill);
+        background: transparent;
+        color: var(--ink);
+        cursor: pointer;
         font-family: var(--ff-sans);
-        line-height: 1.2;
-    }
-
-    wy-prompt-modal .recommended-model-name {
         font-size: 0.8125rem;
         font-weight: 600;
-    }
-
-    wy-prompt-modal .recommended-model-level {
-        font-size: 0.8125rem;
-        font-weight: 400;
-        color: var(--ink-soft, #A8A49C);
+        line-height: 1.2;
     }
 
     wy-prompt-modal .variation-description-heading {

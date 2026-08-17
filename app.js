@@ -1516,6 +1516,10 @@ Server will start on http://localhost:3001`;
             this.copyPromptLink();
         });
 
+        this.promptModal.addEventListener('related-prompt-open', (e) => {
+            this.openPromptById(e.detail.promptId);
+        });
+
         this.promptModal.addEventListener('variable-change', (e) => {
             const { name, value, values } = e.detail;
             const prompt = this.filteredPrompts[this.activePromptIndex];
@@ -1603,7 +1607,7 @@ Server will start on http://localhost:3001`;
                 category: prompt.category,
                 description: prompt.description || '',
                 instructions: prompt.instructions || '',
-                recommendedModels: prompt.recommendedModels || [],
+                relatedPrompts: this.getRelatedPrompts(prompt),
                 previewBaseImage: prompt.previewBaseImage || '',
                 previewBaseImageDescription: prompt.previewBaseImageDescription || '',
                 steps: prompt.steps,
@@ -1627,7 +1631,7 @@ Server will start on http://localhost:3001`;
                 category: prompt.category,
                 description: prompt.description || '',
                 instructions: prompt.instructions || '',
-                recommendedModels: prompt.recommendedModels || [],
+                relatedPrompts: this.getRelatedPrompts(prompt),
                 template: this.getActiveTemplate(prompt),
                 image: prompt.image || '',
                 promptImage: prompt.image || '',
@@ -1750,6 +1754,15 @@ Server will start on http://localhost:3001`;
         return false;
     }
 
+    getRelatedPrompts(prompt) {
+        if (!Array.isArray(prompt?.relatedPromptIds)) return [];
+
+        return prompt.relatedPromptIds
+            .map(id => this.prompts.find(candidate => candidate.id === id))
+            .filter(Boolean)
+            .map(({ id, title }) => ({ id, title }));
+    }
+
     /**
      * Handle URL hash changes for deep linking
      */
@@ -1804,7 +1817,7 @@ Server will start on http://localhost:3001`;
             template: '',
             variables: [],
             referenceImages: [],
-            recommendedModels: [],
+            relatedPrompts: [],
             variations: [],
             variationSelector: '',
             variationSelectorTileMode: 'thumbnail',
@@ -1897,7 +1910,7 @@ Server will start on http://localhost:3001`;
                 category: prompt.category,
                 description: prompt.description || '',
                 instructions: prompt.instructions || '',
-                recommendedModels: prompt.recommendedModels || [],
+                relatedPrompts: this.getRelatedPrompts(prompt),
                 template: this.getActiveTemplate(prompt),
                 image: prompt.image || '',
                 promptImage: prompt.image || '',

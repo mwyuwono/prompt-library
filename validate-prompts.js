@@ -5,7 +5,6 @@ import path from 'node:path';
 
 const PROMPTS_PATH = process.argv[2] || 'prompts.json';
 const ALLOWED_INPUT_TYPES = new Set(['text', 'textarea', 'toggle']);
-const ALLOWED_MODEL_VENDORS = new Set(['anthropic', 'openai', 'google', 'gemma']);
 
 let promptData;
 let hasErrors = false;
@@ -163,6 +162,30 @@ function validateVariationDescription(prompt, variation, ownerLabel) {
   }
 }
 
+function validateRelatedPromptIds(prompt, allPromptIds) {
+  if (prompt.relatedPromptIds === undefined) return;
+
+  const ownerLabel = `prompt "${prompt.id}" relatedPromptIds`;
+  if (!Array.isArray(prompt.relatedPromptIds)) {
+    fail(`${ownerLabel} must be an array when present.`);
+    return;
+  }
+
+  const seen = new Set();
+  prompt.relatedPromptIds.forEach((id, index) => {
+    if (typeof id !== 'string' || !id.trim()) {
+      fail(`${ownerLabel}[${index}] must be a non-empty prompt ID.`);
+    } else if (id === prompt.id) {
+      fail(`${ownerLabel} must not include its own ID.`);
+    } else if (seen.has(id)) {
+      fail(`${ownerLabel} contains duplicate ID "${id}".`);
+    } else if (!allPromptIds.has(id)) {
+      fail(`${ownerLabel} references missing prompt ID "${id}".`);
+    }
+    seen.add(id);
+  });
+}
+
 function validateImagePath(ownerLabel, imagePath) {
   if (!imagePath || typeof imagePath !== 'string') return;
   if (/^https?:\/\//.test(imagePath)) return;
@@ -178,46 +201,6 @@ function validateItemImages(ownerLabel, item) {
 
   asArray(item?.referenceImages).forEach((reference, index) => {
     validateImagePath(`${ownerLabel} referenceImages[${index}]`, reference?.path);
-  });
-}
-
-function validateRecommendedModels(ownerLabel, recommendedModels) {
-  if (recommendedModels === undefined) return;
-
-  if (!Array.isArray(recommendedModels)) {
-    fail(`${ownerLabel} recommendedModels must be an array when present.`);
-    return;
-  }
-
-  if (recommendedModels.length > 4) {
-    fail(`${ownerLabel} recommendedModels must not exceed 4 entries (one per vendor).`);
-  }
-
-  const seenVendors = new Set();
-
-  recommendedModels.forEach((entry, index) => {
-    const entryLabel = `${ownerLabel} recommendedModels[${index}]`;
-
-    if (!entry || typeof entry !== 'object') {
-      fail(`${entryLabel} must be an object.`);
-      return;
-    }
-
-    if (typeof entry.vendor !== 'string' || !ALLOWED_MODEL_VENDORS.has(entry.vendor)) {
-      fail(`${entryLabel} vendor must be one of: ${[...ALLOWED_MODEL_VENDORS].join(', ')}.`);
-    } else if (seenVendors.has(entry.vendor)) {
-      fail(`${ownerLabel} recommendedModels contains duplicate vendor "${entry.vendor}" (max one model per vendor).`);
-    } else {
-      seenVendors.add(entry.vendor);
-    }
-
-    if (typeof entry.model !== 'string' || !entry.model.trim()) {
-      fail(`${entryLabel} is missing a non-empty "model" name.`);
-    }
-
-    if (entry.level !== undefined && typeof entry.level !== 'string') {
-      fail(`${entryLabel} level must be a string when present.`);
-    }
   });
 }
 
@@ -273,7 +256,6 @@ function validatePrompt(prompt, index) {
     });
 
   validateItemImages(ownerLabel, prompt);
-  validateRecommendedModels(ownerLabel, prompt.recommendedModels);
   validateSteps(ownerLabel, prompt.steps, promptVariables);
 
   reportDuplicateValues(`${ownerLabel} variation ids`, asArray(prompt.variations).map((variation) => variation?.id).filter(Boolean));
@@ -311,6 +293,8 @@ if (!Array.isArray(promptData)) {
 if (!hasErrors && Array.isArray(promptData)) {
   reportDuplicateValues('prompts.json ids', promptData.map((prompt) => prompt?.id).filter(Boolean));
   promptData.forEach(validatePrompt);
+  const allPromptIds = new Set(promptData.map((prompt) => prompt?.id).filter(Boolean));
+  promptData.forEach((prompt) => validateRelatedPromptIds(prompt, allPromptIds));
 
   const promptsByCategory = promptData.reduce((groups, prompt) => {
     if (!groups.has(prompt.category)) groups.set(prompt.category, []);

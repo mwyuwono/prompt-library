@@ -199,50 +199,9 @@ First variation is default. User input preserved when switching. Variables share
 
 When a variation has a `description`, keep it to the unique differentiator of that variation only. Do not repeat the parent prompt's job, input requirements, or shared usage instructions. For example, use `18th Century Hand Colored Plan` instead of `Recreates an uploaded map, satellite view, or site-plan screenshot as...`.
 
-### Recommended Models
+### Related Prompts
 
-Each prompt can carry a `recommendedModels` array that renders as small chips under the title in the prompt detail modal (`wy-prompt-modal`, "Recommended models" label). This tells the user which AI model to run the prompt with.
-
-```json
-{
-    "recommendedModels": [
-        { "vendor": "anthropic", "model": "Claude Sonnet 5", "level": "Light" },
-        { "vendor": "openai", "model": "ChatGPT 5.5", "level": "Instant" },
-        { "vendor": "google", "model": "Gemini 3.5 Flash", "level": "Medium" },
-        { "vendor": "gemma", "model": "Gemma 4 12B", "level": "" }
-    ]
-}
-```
-
-**Rules:**
-- `vendor` must be one of `anthropic`, `openai`, `google`, `gemma` (Gemma = local runner for lightweight/offline tasks).
-- One entry per vendor maximum, so the array holds at most 4 entries.
-- `level` is free-text and optional — use it for the vendor's thinking/reasoning/effort setting (e.g. "Light", "Instant", "Thinking", "High"). Omit or leave empty for models without a meaningful thinking-level toggle.
-- Chips always render in the fixed order anthropic → openai → google → gemma, regardless of array order.
-- Editable in the admin UI under Basic Information → Recommended Models. Leaving a vendor's model field blank omits that vendor's chip.
-- Validated by `validate-prompts.js` (max 4 entries, valid vendor, no duplicate vendors, non-empty `model`).
-
-**Selection logic is two steps, in order — a hard capability gate, then a soft difficulty tier. Never skip straight to tiering.**
-
-1. **Capability gate (hard filter — drop vendors that structurally cannot do the task, don't just deprioritize them):**
-   - **Image output required** (the prompt's deliverable is a generated/edited/restyled image, not a text description of one): only vendors whose consumer product actually outputs images are eligible. As of this writing that's `google` and `openai` only — drop `anthropic` and `gemma` entirely, since Claude has no image-generation capability and local Gemma is text/vision-input only. A prompt that merely *writes an image-generation prompt* for later use elsewhere (e.g. a "prompt builder"/"extractor" prompt) is text output, not image output — don't gate those.
-   - **Live web search / URL fetching required** (the prompt needs current listings, prices, hours, availability, or to read an arbitrary URL): drop `gemma` — it's a local/offline runner with no default network access. Keep the other three, since their consumer chat products support browsing.
-   - Check both gates independently; a prompt can trigger neither, either, or in principle both.
-   - When a prompt has multiple variations with different output types, gate by the variation(s) that represent the prompt's primary stated purpose (its `description`), not by an edge-case variation.
-2. **Difficulty tier (soft, within the vendors that survive the gate):** pick the model/level that matches the task's actual difficulty — not reflexively the most powerful model available. Favor a fast/cheap model when the task is simple, single-turn, or low-stakes (formatting, extraction, short lookups); reserve top-tier or frontier models for multi-step agentic work, code, precise/technical judgment, or open-ended creative work where quality clearly benefits from more capability. Judge each prompt's actual template and category before assigning — don't apply one tier to an entire category by default.
-
-Do not attempt to rank vendors against each other by output *quality* (e.g. "Gemini is better than GPT at oil-painting style transfer") — that's a subjective, fast-moving claim this file can't keep verified. The gate + tier approach only ever claims "capable of the task" and "roughly the right amount of compute," which is a durable, checkable claim.
-
-**Keeping the model reference current:** vendors release new models and rename thinking-level parameters often. When asked to update recommendations, first search the web for each vendor's current model lineup and thinking/effort/reasoning level names (don't rely on training knowledge — it goes stale). As of July 2026, the reference points were:
-
-| Vendor | Models (fast → frontier) | Thinking/level options |
-|---|---|---|
-| Anthropic | Claude Haiku 4.5 → Claude Sonnet 5 → Claude Opus 4.8 → Claude Fable 5 | Low / Medium / High / X-High (Opus, Sonnet); Fable 5 has always-on adaptive thinking |
-| OpenAI | ChatGPT 5.5 | Instant / Thinking / Pro |
-| Google | Gemini 3.5 Flash → Gemini 3.1 Pro | Low / Medium / High (`thinking_level`); Pro is Google's strongest pure-reasoning tier |
-| Gemma (local) | Gemma 4 E4B → Gemma 4 12B → Gemma 4 31B | n/a — pick by parameter size for the device/task |
-
-Update this table (and the prompts' `recommendedModels`) whenever a new flagship ships or a vendor renames its thinking-level parameter, so future updates start from accurate information instead of this snapshot.
+Use an optional prompt-level `relatedPromptIds` array to link adjacent workflows. Each value must be a unique, non-self prompt ID that exists in `prompts.json`. The public modal renders these as related-prompt buttons; there is no admin authoring control in this pass.
 
 ### Prompt Copy Rules
 
@@ -269,7 +228,7 @@ Treat a request such as “add this to the library” as a request to determine 
 
 State the proposed parent/location, title, and a brief reason for the fit. Do not add or modify the item until the user approves the recommendation. If the fit is uncertain, identify the decision that would resolve it rather than silently creating a duplicate.
 
-After approval, complete the whole library-ready addition: clear title and ID, concise description, category and other applicable metadata, prompt/variation structure, variables and steps, recommended models, reference images, and preview assets. Follow the existing schema and house rules; do not leave a partial card for the user to finish unless required source material or a user decision is still missing.
+After approval, complete the whole library-ready addition: clear title and ID, concise description, category and other applicable metadata, prompt/variation structure, variables and steps, reference images, and preview assets. Follow the existing schema and house rules; do not leave a partial card for the user to finish unless required source material or a user decision is still missing.
 
 Every public prompt entry must have a prompt-level `image` card thumbnail. Generate and wire that preview during the same library addition; never leave a prompt image-less. If a source image is required to make the preview depict a supplied subject, record that source as `previewBaseImage` and follow the base-image rule below. Otherwise, create a subject-agnostic editorial preview that communicates the prompt's workflow without inventing source content.
 

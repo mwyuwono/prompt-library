@@ -22,7 +22,7 @@ export class WyPromptModal extends LitElement {
     template: { type: String },
     variables: { type: Array },
     referenceImages: { type: Array },
-    recommendedModels: { type: Array, attribute: 'recommended-models' },
+    relatedPrompts: { type: Array, attribute: 'related-prompts' },
     variations: { type: Array },
     variationSelector: { type: String, attribute: 'variation-selector' },
     variationSelectorTileMode: { type: String, attribute: 'variation-selector-tile-mode' },
@@ -52,7 +52,7 @@ export class WyPromptModal extends LitElement {
     this.template = '';
     this.variables = [];
     this.referenceImages = [];
-    this.recommendedModels = [];
+    this.relatedPrompts = [];
     this.variations = [];
     this.variationSelector = '';
     this.variationSelectorTileMode = 'thumbnail';
@@ -202,30 +202,26 @@ export class WyPromptModal extends LitElement {
     return marked.parse(text, { breaks: true });
   }
 
-  // Fixed display order regardless of stored order
-  static MODEL_VENDOR_ORDER = ['anthropic', 'openai', 'google', 'gemma'];
+  _openRelatedPrompt(promptId) {
+    this.dispatchEvent(new CustomEvent('related-prompt-open', {
+      detail: { promptId },
+      bubbles: true,
+      composed: true
+    }));
+  }
 
-  _renderRecommendedModels() {
-    const models = Array.isArray(this.recommendedModels) ? this.recommendedModels : [];
-    if (!models.length) return '';
-
-    const ordered = [...models].sort((a, b) => {
-      const orderIndex = (vendor) => {
-        const idx = WyPromptModal.MODEL_VENDOR_ORDER.indexOf(vendor);
-        return idx === -1 ? WyPromptModal.MODEL_VENDOR_ORDER.length : idx;
-      };
-      return orderIndex(a.vendor) - orderIndex(b.vendor);
-    });
+  _renderRelatedPrompts() {
+    const prompts = Array.isArray(this.relatedPrompts) ? this.relatedPrompts : [];
+    if (!prompts.length) return '';
 
     return html`
-      <div class="recommended-models">
-        <span class="recommended-models-label">Recommended models</span>
-        <div class="recommended-models-chips">
-          ${ordered.map(m => html`
-            <span class="recommended-model-chip" title="${m.vendor || ''}">
-              <span class="recommended-model-name">${m.model}</span>
-              ${m.level ? html`<span class="recommended-model-level">${m.level}</span>` : ''}
-            </span>
+      <div class="related-prompts">
+        <span class="related-prompts-label">Related prompts</span>
+        <div class="related-prompts-buttons">
+          ${prompts.map(prompt => html`
+            <button class="related-prompt-button" @click=${() => this._openRelatedPrompt(prompt.id)}>
+              ${prompt.title}
+            </button>
           `)}
         </div>
       </div>
@@ -239,13 +235,13 @@ export class WyPromptModal extends LitElement {
           ${showDescription ? html`
             <div class="description-text ${this.descriptionExpanded ? 'expanded' : ''}">${unsafeHTML(this._renderDescriptionMarkdown(this.description))}</div>
           ` : ''}
-          ${this._renderRecommendedModels()}
           ${this.instructions ? html`
             <wy-info-panel class="prompt-instructions-panel">
               <p class="prompt-instructions-heading">Instructions</p>
               <div class="prompt-instructions-copy">${unsafeHTML(this._renderDescriptionMarkdown(this.instructions))}</div>
             </wy-info-panel>
           ` : ''}
+          ${this._renderRelatedPrompts()}
       </div>
     `;
   }

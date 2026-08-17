@@ -32,53 +32,31 @@
         "template": "Write a ~3000-word audio essay to be listened to via text-to-speech.\n\nTopic:\n{{topic}}\n\nUse your own research and reasoning to produce the finished essay directly. Do not ask me for additional input before writing unless the topic is impossible to interpret.\n\n## LENGTH & FORMAT\n- Approximately 3000 words of continuous, flowing prose\n- No headers, bullets, numbered lists, or section labels in the main essay\n- End with a short References section that maintains plain-spoken prose rather than formal reference formatting\n- Follow the References section with three concise areas for deeper learning appropriate for expert-level readers\n\n## AUDIO OPTIMIZATION\n- Written to be HEARD, not read\n- Varied sentence rhythm and spoken transitions between ideas\n- A strong but not gimmicky opening hook\n- A resonant close that is not a summary\n- Address the specific audio challenges this topic presents, such as visual concepts that need tactile reframing or technical vocabulary that must land without footnotes\n\n## STYLE AND LANGUAGE\n- Spell out all numbers, dates, and quantities in full: write \"nineteen fifties\" not \"1950s,\" \"five percent\" not \"5%,\" \"first\" not \"1st,\" and \"twenty twenty-four\" not \"2024\"\n- Write out all symbols as words: percent, dollar, and; never use %, $, or &\n- No abbreviations or acronyms unless the full form is written out first\n- No inline citations such as \"(Smith, 1999)\" or \"[1]\"; collect sources in the References section at the end\n\n## AUDIENCE AND DEPTH\n- Write for a highly intelligent audience that already knows something about the topic\n- Go beyond common knowledge and surface-level facts\n- Incorporate historical, cultural, and technical context where it deepens understanding\n- Use metaphors or analogies sparingly and only when they improve clarity\n\n## FACTUAL RIGOR\n- Anchor claims in precise details: exact figures, dates, names, dimensions, places, and mechanisms where relevant\n- If a claim uses a superlative or comparative, such as \"the first,\" \"the deepest,\" or \"transformative,\" immediately follow with the specific evidence: what measurement, what year, what it surpassed or replaced\n- Do not leave generalizations unsupported; if something was significant, state specifically what changed, how it was measured, and what followed\n- If reliable specifics are unavailable, say so plainly rather than inventing detail\n\n## TONE\n- Precise, information-dense, and void of filler words and throat-clearing phrases such as \"it is worth noting,\" \"in many ways,\" or \"as we can see\"\n- Sophisticated but listenable; avoid academic stiffness, podcast banter, and motivational-summary language\n\nBegin with the essay itself."
       }
     ],
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Fable 5",
-        "level": "Adaptive"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Pro"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.1 Pro",
-        "level": "High"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 31B",
-        "level": ""
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 0
   },
   {
     "id": "reference-image-comparator",
-    "title": "Reference Image Comparator",
+    "title": "Reference Image Style Synthesis",
     "description": "Extracts shared visual DNA from reference images, then generates new artwork from the synthesized prompt.",
     "category": "Creative Direction",
     "icon": "compare",
     "featured": true,
-    "slug": "reference-image-comparator",
+    "slug": "reference-image-style-synthesis",
     "template": "",
     "variables": [],
     "steps": [
       {
         "id": "visual-dna-extraction",
         "name": "Visual DNA Extraction",
-        "instructions": "- Upload the reference images.\n- Copy the prompt returned by the model.\n- The model should return only the finished image-generation prompt.",
+        "instructions": "1. Upload the reference images.\n2. Copy the finished image-generation prompt returned by the model.\nThe model returns only that prompt.",
         "template": "You are a Visual Language Extraction Engine. Your task is to identify the shared artistic DNA across the attached reference images and convert that analysis into a single image-generation prompt.\n\nYour objective is not to describe or recreate any individual reference image. Instead, infer the common visual language that emerges across the collection and express it as a prompt capable of generating an entirely new artwork.\n\nUser Controls (Optional)\n\nPriority weighting (optional):\n\n* Style:\n* Color & Light:\n* Surface & Materiality:\n* Design Language:\n* Mood:\n* Technical Execution:\n\nIf no priorities are supplied, treat all categories equally.\n\nAnalysis Rules\n\n1. Analyze every attached image.\n2. Consider only characteristics shared across a majority of the references.\n3. Treat distinctive or isolated characteristics as outliers and exclude them.\n4. Infer the underlying artistic principles rather than copying visible details.\n5. Separate enduring visual language from image-specific subject matter.\n6. Never reference specific objects, figures, poses, compositions, or narratives that appear only because they exist in the references.\n\nEvaluate the shared characteristics across:\n\n* Style\n* Color & Light\n* Surface & Materiality\n* Design Language\n* Mood\n* Technical Execution\n\nThen synthesize these into a prompt that:\n\n* captures the common visual language\n* preserves the shared style, color relationships, rendering approach, atmosphere, and execution\n* intentionally avoids reproducing any reference composition\n* encourages an entirely original composition\n* allows new subjects, new arrangements, and new storytelling while remaining faithful to the extracted visual DNA\n\nThe generated prompt should assume the same reference images will also be supplied during image generation. The prompt must NOT specify whether the prompt will elicit an entirely new artwork or be used to restyle an existing image; The generated prompt must be sufficiently generic to work for either use case. \n\nOutput Rules:\n* Output only the finished image-generation prompt.\n* Do not include headings.\n* Do not explain your reasoning.\n* Do not summarize the references.\n* Do not include commentary.\n\nReturn only the finished image-generation prompt. ",
         "variables": []
       },
       {
         "id": "image-generation",
         "name": "Image Generation",
-        "instructions": "- Attach the same reference images from Step 1.\n- Choose whether to restyle an uploaded image or create new artwork.\n- Paste the synthesized prompt from Step 1.",
+        "instructions": "1. Attach the same reference images from Step 1.\n2. When Restyle Image is selected, also upload the target image.\n3. Choose Restyle Image or New Artwork.\n4. Paste the synthesized prompt from Step 1.",
         "template": "Use the attached reference images together with the prompt below.\n\nSynthesized prompt:\n{{synthesized_prompt}}\n\nTreat the prompt as the authoritative description of the visual language extracted from the references.\n\nUse the reference images only to reinforce that shared visual language—not to reproduce any individual artwork.\n\nGeneration mode:\n{{generation_mode}}\n\nAvoid borrowing poses, layouts, cropping, perspective, object placement, or identifiable compositions from any reference image.\n\nThe resulting artwork should feel like a newly discovered work created within the same artistic vocabulary rather than a reinterpretation of any supplied image.\n\nAfter presenting the image, invite the user to iterate on the composition if desired. Future revisions should preserve the established visual language and modify only compositional aspects unless the user explicitly requests changes to the style itself.",
         "variables": [
           {
@@ -110,18 +88,6 @@
         ]
       }
     ],
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.1 Pro",
-        "level": "High"
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 0
   },
@@ -144,35 +110,13 @@
         "rows": 8
       }
     ],
-    "instructions": "Upload the generated result and any reference images that were used. Paste the original prompt or intent.",
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Opus 4.8",
-        "level": "High"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.1 Pro",
-        "level": "High"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 31B",
-        "level": ""
-      }
-    ],
+    "instructions": "1. Upload the generated result and every relevant reference image.\n2. Paste the original prompt or intent.",
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 1
   },
   {
     "id": "classical-scene-porcelain",
-    "title": "Ceramic Vessel Design",
+    "title": "Add Scene to Ceramic Vessel",
     "description": "Adds a classical scene to a ceramic vessel.",
     "category": "Art",
     "image": "public/images/1775765459808.jpg",
@@ -216,20 +160,8 @@
       }
     ],
     "featured": false,
-    "slug": "ceramic-vessel-design",
+    "slug": "add-scene-to-ceramic-vessel",
     "icon": "brush",
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 6
   },
@@ -258,18 +190,6 @@
       }
     ],
     "image": "public/images/1775766209619.jpg",
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.1 Pro",
-        "level": "High"
-      }
-    ],
     "modifiedAt": "2026-07-15T23:01:54-04:00",
     "customOrder": 7
   },
@@ -293,28 +213,6 @@
     ],
     "slug": "targeted-image-edit",
     "image": "public/images/generated-hero-1780327603658.jpg",
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 8
   },
@@ -329,18 +227,6 @@
     "template": "Regenerate the attached image as a realistic oil-painting study reference. Render in naturalistic oil paint with controlled painterly brushwork, simplified anatomy, broad value masses, clear planes, soft transitions, and believable form. Generalize fine details so the image remains realistic but easier to copy.",
     "variables": [],
     "slug": "oil-painting-study-reference",
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Instant"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Low"
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 5
   },
@@ -354,23 +240,29 @@
     "image": "public/images/small-format-oil-painting-sleeping-dog-preview.png",
     "previewBaseImage": "public/images/small-format-oil-painting-base-sleeping-dog.png",
     "previewBaseImageDescription": "Sleeping white dog curled on a navy-and-cream plaid blanket in a tufted brown leather chair.",
-    "template": "Transform the uploaded source image into a **small-format oil painting conceived at approximately 7 inches on its longest dimension**. Preserve the source image’s essential composition, crop, subject placement, proportions, gesture, spatial relationships, lighting direction, and emotional character.\n\nUse the visual economy and structural clarity associated with Edward Hopper: strong underlying drawing, simplified geometry, restrained tonal transitions, deliberate silhouettes, and clearly organized areas of light and shadow. Define forms through broad planes of color, value, and temperature rather than photographic description or intricate linework.\n\n### Scale-driven simplification\n\nPaint only the amount of information that could credibly be resolved on a 7-inch canvas using relatively broad brushes. Treat the image as something intended to remain legible at arm’s length rather than reward close inspection.\n\nReduce every major form to a small number of clearly differentiated shapes and value planes. Consolidate complex passages into broad, continuous masses. Eliminate repeated small marks, minor contours, surface noise, incidental textures, decorative details, and background clutter.\n\nUse the following hierarchy:\n\n1. Preserve the dominant silhouettes, gesture, pose, and compositional structure.\n2. Preserve only the internal features necessary to identify the principal subjects and important objects.\n3. Suggest secondary information with one or two economical strokes.\n4. Merge low-priority areas into simplified shadow, color, or atmospheric masses.\n\nFaces, hands, anatomy, foliage, water, architecture, fabric, hair, and other complex subjects should be **abbreviated rather than fully rendered**. Faces should be conveyed through head shape, light-and-shadow placement, and only a few essential marks. Background vegetation or texture should read as grouped shapes, not collections of individually described elements.\n\n### Brushwork and edges\n\nUse broad, economical oil brushwork with visible but controlled surface texture. Favor larger, flatter strokes and connected passages over small dabs or intricate modeling. Avoid brushmarks that would be implausibly fine on a 7-inch painting.\n\nKeep the sharpest edges and strongest contrasts around the primary focal area. Use firm, architectural contours selectively. Soften, merge, or lose edges in shadow, background, and less important passages. Avoid uniformly sharp rendering, excessive blending, fine outlining, tiny highlights, or decorative impasto.\n\n### Color and material treatment\n\nDerive the palette from the supplied style or palette reference when one is provided; otherwise derive it from the source image. Emphasize a clear value structure, muted midtones, selective warm–cool contrasts, and deep, quiet shadows.\n\nPreserve the essential identity of materials while simplifying their texture. Do not introduce arbitrary black, white, or highly saturated accents merely to increase contrast. When a monochrome source leaves color ambiguous, use historically and materially plausible muted colors, including natural, undyed, weathered, or earth-toned materials where appropriate.\n\n### Finished character\n\nKeep the lighting simple, directional, and psychologically evocative. The result should feel like a complete, hand-painted oil study made for intimate viewing: concise, atmospheric, structurally clear, and immediately legible.\n\nThe finished image should resemble a genuine small canvas painted with disciplined visual shorthand. It should not resemble a photograph processed through a painting filter, a fully rendered illustration, or a large painting reduced in size.",
+    "template": "",
     "variables": [],
     "slug": "small-format-oil-painting",
-    "recommendedModels": [
+    "modifiedAt": "2026-07-22T22:11:24-04:00",
+    "customOrder": 1,
+    "variations": [
       {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
+        "id": "source-faithful-study",
+        "name": "Source-Faithful Study",
+        "description": "Source-faithful seven-inch oil study.",
+        "image": "public/images/small-format-oil-painting-sleeping-dog-preview.png",
+        "template": "Transform the uploaded source image into a **small-format oil painting conceived at approximately 7 inches on its longest dimension**. Preserve the source image’s essential composition, crop, subject placement, proportions, gesture, spatial relationships, lighting direction, and emotional character.\n\nUse the visual economy and structural clarity associated with Edward Hopper: strong underlying drawing, simplified geometry, restrained tonal transitions, deliberate silhouettes, and clearly organized areas of light and shadow. Define forms through broad planes of color, value, and temperature rather than photographic description or intricate linework.\n\n### Scale-driven simplification\n\nPaint only the amount of information that could credibly be resolved on a 7-inch canvas using relatively broad brushes. Treat the image as something intended to remain legible at arm’s length rather than reward close inspection.\n\nReduce every major form to a small number of clearly differentiated shapes and value planes. Consolidate complex passages into broad, continuous masses. Eliminate repeated small marks, minor contours, surface noise, incidental textures, decorative details, and background clutter.\n\nUse the following hierarchy:\n\n1. Preserve the dominant silhouettes, gesture, pose, and compositional structure.\n2. Preserve only the internal features necessary to identify the principal subjects and important objects.\n3. Suggest secondary information with one or two economical strokes.\n4. Merge low-priority areas into simplified shadow, color, or atmospheric masses.\n\nFaces, hands, anatomy, foliage, water, architecture, fabric, hair, and other complex subjects should be **abbreviated rather than fully rendered**. Faces should be conveyed through head shape, light-and-shadow placement, and only a few essential marks. Background vegetation or texture should read as grouped shapes, not collections of individually described elements.\n\n### Brushwork and edges\n\nUse broad, economical oil brushwork with visible but controlled surface texture. Favor larger, flatter strokes and connected passages over small dabs or intricate modeling. Avoid brushmarks that would be implausibly fine on a 7-inch painting.\n\nKeep the sharpest edges and strongest contrasts around the primary focal area. Use firm, architectural contours selectively. Soften, merge, or lose edges in shadow, background, and less important passages. Avoid uniformly sharp rendering, excessive blending, fine outlining, tiny highlights, or decorative impasto.\n\n### Color and material treatment\n\nDerive the palette from the supplied style or palette reference when one is provided; otherwise derive it from the source image. Emphasize a clear value structure, muted midtones, selective warm–cool contrasts, and deep, quiet shadows.\n\nPreserve the essential identity of materials while simplifying their texture. Do not introduce arbitrary black, white, or highly saturated accents merely to increase contrast. When a monochrome source leaves color ambiguous, use historically and materially plausible muted colors, including natural, undyed, weathered, or earth-toned materials where appropriate.\n\n### Finished character\n\nKeep the lighting simple, directional, and psychologically evocative. The result should feel like a complete, hand-painted oil study made for intimate viewing: concise, atmospheric, structurally clear, and immediately legible.\n\nThe finished image should resemble a genuine small canvas painted with disciplined visual shorthand. It should not resemble a photograph processed through a painting filter, a fully rendered illustration, or a large painting reduced in size.",
+        "variables": []
       },
       {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
+        "id": "classical-figure-study",
+        "name": "Classical Figure Study",
+        "description": "Small-format oil study with classical figure treatment.",
+        "image": "public/images/image-restyle-small-format-oil-preview.png",
+        "template": "Reusable image-editing prompt\n\nEdit the attached source image into a deliberately simplified, small-format oil painting. Treat the source as the authoritative composition and direct edit target.\n\nObjective\n\nCreate a convincing oil painting conceived at approximately 7 inches on its longest dimension. The result should feel physically plausible at that scale:\n\n- Broad, economical brushwork\n- Limited descriptive resolution\n- Strong compositional clarity\n- Immediate legibility at arm’s length\n- Visible hand-painted character\n\nPreserve\n\nMaintain the source image’s:\n\n- Composition and crop\n- Subject placement and scale\n- Pose, gesture, and weight distribution\n- Spatial relationships\n- Lighting direction\n- Dominant silhouettes\n- Environmental structure\n- Emotional tone\n\nDo not redesign the scene unless explicitly requested.\n\nFigures\n\nWhen human figures are present, render them as adult nude figures in the tradition of classical observational painting.\n\nPreserve the original:\n\n- Pose\n- Gesture\n- Body type\n- Limb placement\n- Contact points\n- Direction of gaze\n- Balance and anatomical logic\n\nUse natural proportions and discreet, matter-of-fact anatomy. Avoid erotic staging, glamour treatment, exaggerated musculature, or cosmetic perfection.\n\nVisual language\n\nUse the structural economy of early-20th-century American realism:\n\n- Strong underlying drawing\n- Simplified geometry\n- Clear light-and-shadow organization\n- Broad planes of color, value, and temperature\n- Deliberate silhouettes\n- Restrained tonal transitions\n- Quiet psychological atmosphere\n\nThe image should feel painted rather than filtered or digitally illustrated.\n\nSimplification\n\nAssume the work must be executable on a 7-inch support with relatively broad brushes.\n\nPrioritize:\n\n1. Silhouette, gesture, pose, and composition\n2. Essential identifying features\n3. Major value and color relationships\n4. Minimal secondary marks\n\nReduce or eliminate:\n\n- Minor contours\n- Intricate anatomy\n- Decorative detail\n- Surface noise\n- Tiny highlights\n- Repeated marks\n- Fine outlining\n- Background clutter\n- Photographic specificity\n\nAbbreviate faces, hands, feet, hair, anatomy, foliage, architecture, fabric, and ground texture into a few broad, legible shapes.\n\nBrushwork and edges\n\nUse:\n\n- Large flat strokes\n- Connected paint passages\n- Visible directional brushwork\n- Broad scumbles\n- Simplified impasto\n- Broken and lost edges\n- Large interlocking color masses\n\nReserve the sharpest edges and strongest contrasts for the focal area, typically the head, upper torso, and key hand or arm placements. Allow secondary forms to merge, soften, or dissolve.\n\nAvoid uniformly fine brushwork, airbrushed blending, excessive polish, and texture added over an otherwise detailed image.\n\nColor and lighting\n\nDerive the palette from the source unless otherwise instructed.\n\nUse:\n\n- Muted midtones\n- Deep, quiet shadows\n- Restrained saturation\n- Controlled warm–cool relationships\n- A limited number of major light, middle-value, and shadow families\n\nPreserve material identity without rendering intricate texture.\n\nFinished character\n\nThe result should feel like:\n\n- A complete small oil study\n- Hand-painted from observation\n- Concise and atmospheric\n- Structurally clear\n- Loosely resolved\n- Rich in broad paint handling\n\nIt should avoid resembling a filtered photograph, polished digital illustration, fully rendered academic painting, or large painting reduced in size.\n\nExecution\n\n1. Use the attached image as the direct edit target.\n2. Preserve composition, crop, pose, and spatial relationships.\n3. Render any human figures as adult nudes.\n4. Establish the major value pattern.\n5. Block the scene as large interlocking masses.\n6. Simplify all secondary information.\n7. Add only the minimum marks required for recognition.\n8. Concentrate detail and edge sharpness at the focal area.\n9. Review at thumbnail size and remove implausibly small detail.\n10. For later revisions, edit the latest generated version unless directed otherwise.\n\nGenerate the edited image directly. Do not provide an explanation or textual description after generation.",
+        "variables": []
       }
-    ],
-    "modifiedAt": "2026-07-22T22:11:24-04:00",
-    "customOrder": 1
+    ]
   },
   {
     "id": "contour-form-study",
@@ -382,7 +274,7 @@
     "image": "public/images/contour-form-study-preview.png",
     "variables": [],
     "slug": "contour-form-study",
-    "instructions": "Upload a drawing, then choose the structural study best suited to the revision task.",
+    "instructions": "1. Upload the drawing.\n2. Select the structural study best suited to the revision task.",
     "variations": [
       {
         "id": "contour-diagnostic",
@@ -395,18 +287,6 @@
         "name": "Photographic Anatomy",
         "description": "Monochrome studio reconstruction with anatomically legible light and form.",
         "template": "Use the uploaded artwork as the fixed structural source of truth. Create a high-resolution, anatomically resolved monochrome reconstruction with photographic lighting that clarifies the subject’s existing form without changing the pose, proportions, viewpoint, silhouette, gesture, weight distribution, crop, figure scale, or placement of the limbs.\n\nRemove only surface degradation, including dust, stains, foxing, discoloration, tears, abrasions, fading, and uneven paper tone. Preserve the original figure exactly.\n\nTranslate the drawing into a realistic black-and-white studio reference with soft directional light, a broad tonal range, strong midtone separation, and controlled local contrast. Make the musculature, bony landmarks, overlapping forms, planes of the torso, major shadow masses, reflected light, and transitions between light and shadow easier to discern.\n\nTreat this as an image-to-image reconstruction, not loose inspiration. Reconstruct unclear passages conservatively from visible evidence. Preserve all asymmetries, irregularities, and anatomical relationships present in the source. Where information is genuinely absent, use restrained, anatomically plausible inference rather than inventing specific detail.\n\nBefore finalizing, compare the result directly against the source and preserve the shoulder angle, spinal curve, ribcage orientation, pelvic tilt, arm placement, leg crossing, foot position, head orientation, crop, and overall silhouette.\n\nDo not redesign or idealize the anatomy, alter the body type, exaggerate musculature, substitute a different model, change the pose, add unsupported definition, smooth away structural nuance, or introduce dramatic lighting, glamour treatment, stylization, or reinterpretation.\n\nOutput a single clean, high-resolution grayscale image with realistic skin texture, crisp anatomical separation, clearly legible midtones and shadows, controlled highlights, and a neutral unobtrusive background."
-      }
-    ],
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
       }
     ],
     "modifiedAt": "2026-07-15T23:01:54-04:00",
@@ -438,20 +318,8 @@
         "size": "compact"
       }
     ],
-    "instructions": "Upload a wallpaper image, then choose which side of the generated extension panel should connect to the reference.",
+    "instructions": "1. Upload the wallpaper image.\n2. Choose which side of the generated extension panel should connect to the reference.",
     "slug": "extend-panoramic-scene",
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.1 Pro",
-        "level": "High"
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 10
   },
@@ -480,28 +348,6 @@
     "featured": false,
     "slug": "writing-assistant",
     "template": "",
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 1
   },
@@ -522,23 +368,6 @@
     ],
     "featured": false,
     "slug": "shipping-quote-request",
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 1
   },
@@ -558,28 +387,6 @@
       }
     ],
     "featured": false,
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 0
   },
@@ -619,28 +426,6 @@
         "variables": []
       }
     ],
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Haiku 4.5",
-        "level": "Instant"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Instant"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Low"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 E4B",
-        "level": ""
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 1
   },
@@ -660,23 +445,6 @@
       }
     ],
     "featured": false,
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Opus 4.8",
-        "level": "High"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.1 Pro",
-        "level": "High"
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 2
   },
@@ -716,28 +484,6 @@
     "featured": false,
     "slug": "antiques-expert-analysis",
     "instructions": "Select a variant for the desired analysis workflow.",
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Fable 5",
-        "level": "Adaptive"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Pro"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.1 Pro",
-        "level": "High"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 31B",
-        "level": ""
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 2
   },
@@ -759,23 +505,6 @@
     "featured": false,
     "slug": "restaurant-finder",
     "image": "public/images/1780071198932.jpg",
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 3
   },
@@ -803,23 +532,6 @@
     "featured": false,
     "slug": "accommodations-finder",
     "image": "public/images/1780336941003.jpg",
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 4
   },
@@ -845,28 +557,6 @@
       }
     ],
     "featured": false,
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Haiku 4.5",
-        "level": "Instant"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Instant"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Low"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 E4B",
-        "level": ""
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 0
   },
@@ -886,28 +576,6 @@
       }
     ],
     "featured": false,
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Haiku 4.5",
-        "level": "Instant"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Instant"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Low"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 E4B",
-        "level": ""
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 1
   },
@@ -933,28 +601,6 @@
       }
     ],
     "featured": false,
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 2
   },
@@ -976,28 +622,6 @@
     "featured": false,
     "slug": "webflow-code-helper",
     "image": "public/images/generated-hero-1780363463573.jpg",
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Opus 4.8",
-        "level": "High"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.1 Pro",
-        "level": "High"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 31B",
-        "level": ""
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 3
   },
@@ -1045,56 +669,44 @@
         ]
       }
     ],
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.1 Pro",
-        "level": "High"
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 2
+    "customOrder": 2,
+    "instructions": "1. Upload Image 1: the railing design or source image.\n2. Upload Image 2: the architectural context, when needed.\n3. Select the workflow variant."
   },
   {
     "id": "interior-photo-editorial-retouch",
     "title": "Interior Photo Editorial Retouch",
     "description": "Creates editorial interior photos from uploaded images.",
-    "instructions": "Upload an interior photograph and choose whether to preserve all contents exactly or remove incidental clutter.",
+    "instructions": "1. Upload the interior photograph.\n2. Select Context-Preserving Correction to retain all contents, or Clutter Removed to remove incidental clutter.",
     "category": "Architecture",
     "icon": "architecture",
     "featured": false,
     "slug": "interior-photo-editorial-retouch",
     "template": "",
-    "variables": [],
+    "variables": [
+      {
+        "name": "additional_notes",
+        "label": "Additional Notes (Optional)",
+        "placeholder": "e.g., Focus on the blue ceramic vase in the center; ignore background objects",
+        "value": "",
+        "inputType": "textarea",
+        "rows": 3
+      }
+    ],
     "variations": [
       {
-        "id": "contents-maintained",
-        "name": "Contents Maintained",
-        "description": "Photographic retouching only.",
-        "template": "Transform the uploaded interior photograph into a polished, editorial-quality architectural/interiors photograph while preserving the room's identity, layout, camera position, and factual contents. Use the uploaded image as the source of truth.\n\nCorrect perspective, verticals, lens distortion, framing, color balance, exposure, contrast, shadows, highlights, white balance, and lighting consistency so the image reads like a professionally shot magazine or design portfolio photograph. Improve sharpness, tonal depth, material realism, and spatial clarity. Retain natural-looking daylight or existing artificial light as appropriate. Remove visual artifacts, noise, blur, muddy color casts, uneven lighting, and amateur snapshot qualities.\n\nThe result should feel realistic, restrained, and photographically credible: clean, balanced, well-composed, and editorial, without looking overprocessed, staged beyond the original scene, or artificially generated.\n\nMaintain all furniture, decor, objects, artwork, textiles, lighting fixtures, architectural details, and visible contents exactly as they appear in the uploaded image. Do not remove, replace, rearrange, add, resize, restyle, or reinterpret any objects. The only changes should be photographic corrections and professional retouching treatments: perspective correction, color correction, lighting correction, exposure balancing, lens correction, clarity, realism, and artifact cleanup."
+        "id": "context-preserving-editorial-correction",
+        "name": "Context-Preserving Correction",
+        "description": "Corrects an interior photograph while retaining every original object and setting detail.",
+        "image": "public/images/interior-context-fidelity-correction-preview.png",
+        "template": "Transform the attached image into a high-end editorial real-estate/interior-design photograph. Preserve the scene exactly as photographed: do not add, remove, relocate, resize, or restyle any object, furniture piece, fixture, artwork, plant, or architectural element. Do not invent content outside the original frame. This is a corrective and grading pass, not a reimagining.\n\nApply the following corrections, in this priority order:\n\n1. GEOMETRY\n\n- Correct converging verticals (walls, door frames, cabinetry, window mullions) so they are truly vertical.\n- Correct perspective distortion and barrel/pincushion lens distortion typical of wide-angle phone lenses.\n- Straighten the horizon line and any horizontal reference lines (countertops, floor-wall junctions, ceiling lines).\n- Re-crop minimally if needed to square up the composition after correction, without cutting off key elements.\n\n2. EXPOSURE AND DYNAMIC RANGE\n\n- Balance exposure between bright windows and darker interior areas; recover blown-out window highlights and lift crushed shadows without introducing an unnatural HDR look.\n- Even out any harsh hot spots from direct sun or lamps.\n- Preserve natural contrast; avoid flat, washed-out results.\n\n3. WHITE BALANCE AND COLOR GRADING\n\n- Neutralize mixed-lighting color casts (e.g., warm tungsten bulbs vs. cool daylight from windows) to a single consistent, natural white balance.\n- Ensure whites read as true white and skin-tone-adjacent materials (wood, stone) read accurately.\n- Apply a restrained, tasteful editorial color grade: rich but natural saturation, clean neutrals, no oversaturation, no heavy filter look.\n\n4. REFLECTIONS AND ARTIFACTS\n\n- Remove or reduce distracting reflections in glass, mirrors, polished surfaces, and screens (e.g., camera reflection, photographer, phone, visible flash glare).\n- Remove lens flare, dust spots, and sensor artifacts.\n- Do not remove reflections that are structurally part of the space's design intent (e.g., intentional mirror placement)—only clean up distracting artifacts within them.\n\n5. SHARPNESS AND FINISH\n\n- Apply clean, natural sharpening appropriate for print/web editorial use—enhance texture in materials (wood grain, fabric, stone) without haloing or over-sharpening.\n- Reduce visible noise/grain from low-light phone capture while retaining texture detail.\n- Ensure clean, true-to-life colors throughout with no color banding.\n\nSTRICT CONSTRAINTS\n\n- Output must be photorealistic—this is a corrected photograph, not a rendering, illustration, or AI-stylized image.\n- Do not alter room layout, staging, or decor choices.\n- Do not change materials, finishes, or colors of real objects beyond correcting for lighting/white-balance inaccuracies.\n- Match the framing and content of the original as closely as possible after geometric correction.\n\nOptional user notes (may be blank; if blank, ignore this field): {{additional_notes}}",
+        "referenceImages": []
       },
       {
         "id": "clutter-removed",
         "name": "Clutter Removed",
         "description": "Removes incidental clutter.",
         "template": "Transform the uploaded interior photograph into a polished, editorial-quality architectural/interiors photograph while preserving the room's identity, layout, camera position, and factual contents. Use the uploaded image as the source of truth.\n\nCorrect perspective, verticals, lens distortion, framing, color balance, exposure, contrast, shadows, highlights, white balance, and lighting consistency so the image reads like a professionally shot magazine or design portfolio photograph. Improve sharpness, tonal depth, material realism, and spatial clarity. Retain natural-looking daylight or existing artificial light as appropriate. Remove visual artifacts, noise, blur, muddy color casts, uneven lighting, and amateur snapshot qualities.\n\nThe result should feel realistic, restrained, and photographically credible: clean, balanced, well-composed, and editorial, without looking overprocessed, staged beyond the original scene, or artificially generated.\n\nMaintain the room architecture, layout, camera position, major furniture, built-ins, artwork, rugs, lighting fixtures, window treatments, and overall design intent. Remove only incidental clutter and distracting temporary items, such as loose papers, cords, bags, personal items, trash, random small objects, messy surfaces, or anything that makes the room feel casually unprepared.\n\nDo not redesign, refurnish, redecorate, replace major items, change finishes, alter architectural features, or introduce new decor. After decluttering, clean and lightly stage the room only through removal, straightening, and subtle visual tidying. The final image should look like the same room, professionally photographed for an interiors publication."
-      }
-    ],
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -1168,32 +780,20 @@
     "slug": "portrait-creator",
     "icon": "face_right",
     "template": "",
-    "instructions": "Select a variant for the source images and likeness workflow.",
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.1 Pro",
-        "level": "High"
-      }
-    ],
+    "instructions": "1. Select the source-image and likeness workflow.\n2. Upload the required image or images in the selected variant’s stated order.",
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 11
   },
   {
     "id": "academic-figure-study-prefix",
-    "title": "Moderator Rationale",
+    "title": "Public-Domain Image Tool Context",
     "description": "Provides context for AI image tools framing requests as legitimate fine-art study of public-domain works.",
     "category": "Art",
     "icon": "format_quote",
     "featured": false,
     "template": "This request uses a public-domain artwork from a major museum collection as the source image. The intended use is artistic historical study. Treat this as a fine-art image transformation.\n",
     "variables": [],
-    "slug": "moderator-rationale",
+    "slug": "public-domain-image-tool-context",
     "image": "public/images/1775762962254.jpg",
     "variations": [
       {
@@ -1212,28 +812,6 @@
         "template": "Please help me report this overzealous moderator denial. This request uses a public-domain artwork from a major museum collection as the source image and is intended for artistic study.",
         "variables": [],
         "referenceImages": []
-      }
-    ],
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Haiku 4.5",
-        "level": "Instant"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Instant"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Low"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 E4B",
-        "level": ""
       }
     ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
@@ -1264,28 +842,6 @@
       }
     ],
     "slug": "song-creator-suno",
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Opus 4.8",
-        "level": "High"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.1 Pro",
-        "level": "High"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 31B",
-        "level": ""
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 2
   },
@@ -1367,9 +923,9 @@
         "name": "Travel-Study Landscape Watercolor",
         "description": "19th-century travel-study landscape watercolor.",
         "image": "public/images/architectural-rendering-travel-study.png",
-        "template": "Transform the provided building image into a 19th-century architectural travel-study watercolor: transparent washes and subtle tonal glazing over delicate graphite/ink underdrawing, hand-rendered and observational rather than digitally polished.\nPreserve the source building's exact massing, proportions, façade rhythm, openings, roof logic, material cues, and major details—do not redesign, simplify, or modernize. Render it as the principal subject but keep it subordinate to the overall atmospheric composition.\n**Composition:** wide horizontal presentation format with generous luminous sky and atmospheric distance. Place the building in the middle distance, integrated into a broader landscape rather than isolated as an elevation; frame with trees, ground plane, planting, paths, and low foreground masses that carry tonal weight and establish depth. Balanced, restrained, panoramic.\n**Viewpoint:** naturalistic, slightly elevated or eye-level oblique; convincing perspective with no wide-angle distortion. Building legible, measured, architecturally accurate.\n**Linework:** sparse, fine graphite/ink defining architecture, roof edges, openings, recesses, horizon, and select landscape contours—secondary to wash and tone, no heavy outlines or mechanical drafting.\n**Palette:** muted and low-saturation—pale blue, blue-gray, smoke gray, olive and dark green, warm beige, soft ochre, umber, charcoal, diluted brown-black—in thin transparent layers. Dark accents reserved for windows, deep recesses, tree masses, and foreground shadows.\n**Value:** broad range from pale upper atmosphere and distant haze, through moderate middle-distance architecture, to darker foreground vegetation and ground shadow. Soft, pooled, wash-based shadows; restrained tonal contrast, not photorealistic lighting.\n**Substrate:** warm cream paper with visible grain, slight age toning, and a fine presentation-plate border—soft edges, quiet tonal bloom, the look of a preserved archival sheet.",
+        "template": "Use the uploaded building image as the architectural source. Use {{travel_study_landscape_reference}} as the visual source for the luminous sky, landscape framing, aged paper, and 19th-century travel-study watercolor handling.\n\nTransform the provided building image into a 19th-century architectural travel-study watercolor: transparent washes and subtle tonal glazing over delicate graphite/ink underdrawing, hand-rendered and observational rather than digitally polished.\nPreserve the source building's exact massing, proportions, façade rhythm, openings, roof logic, material cues, and major details—do not redesign, simplify, or modernize. Render it as the principal subject but keep it subordinate to the overall atmospheric composition.\n**Composition:** wide horizontal presentation format with generous luminous sky and atmospheric distance. Place the building in the middle distance, integrated into a broader landscape rather than isolated as an elevation; frame with trees, ground plane, planting, paths, and low foreground masses that carry tonal weight and establish depth. Balanced, restrained, panoramic.\n**Viewpoint:** naturalistic, slightly elevated or eye-level oblique; convincing perspective with no wide-angle distortion. Building legible, measured, architecturally accurate.\n**Linework:** sparse, fine graphite/ink defining architecture, roof edges, openings, recesses, horizon, and select landscape contours—secondary to wash and tone, no heavy outlines or mechanical drafting.\n**Palette:** muted and low-saturation—pale blue, blue-gray, smoke gray, olive and dark green, warm beige, soft ochre, umber, charcoal, diluted brown-black—in thin transparent layers. Dark accents reserved for windows, deep recesses, tree masses, and foreground shadows.\n**Value:** broad range from pale upper atmosphere and distant haze, through moderate middle-distance architecture, to darker foreground vegetation and ground shadow. Soft, pooled, wash-based shadows; restrained tonal contrast, not photorealistic lighting.\n**Substrate:** warm cream paper with visible grain, slight age toning, and a fine presentation-plate border—soft edges, quiet tonal bloom, the look of a preserved archival sheet.",
         "variables": [],
-        "instructions": "Upload a building image with this prompt. ",
+        "instructions": "1. Upload the building image.\n2. The travel-study landscape reference is attached automatically.",
         "referenceImages": [
           {
             "variable": "travel_study_landscape_reference",
@@ -1447,9 +1003,9 @@
         "id": "classical-wash-elevation-drafting",
         "name": "Classical Cool-Wash Elevation",
         "description": "Cool gray-green orthographic facade elevation.",
-        "template": "Generate a hand-rendered 18th-century orthographic frontal architectural elevation of the input building.\n\n**Style:** Classical Wash Elevation Drafting.\n\n**Composition:** Centrally isolate the building facade on the landscape-oriented page. The backdrop must be a uniform wash using hex code D8DBD7 on slightly textured aged paper. Enclose the center field with a single precise dark ink border line, and frame the entire page with a slim outer border using hex code 6D9E6E that evokes the simple border style often seen in high-end engraved stationery.\n\n**Medium & Linework:** Extremely fine, consistent-weight dark-grey ink lines defining all architectural forms. Use transparent watercolor and dilute ink washes for coloring based strictly on the specified hex palette.\n\n**Color Palette:**\n\n- Backdrop / Background Wash: D8DBD7\n- Outer Border Frame: 6D9E6E\n- Main Building Facade: E1D6C2\n- Facade in Shadow / Recesses: A49380\n- Distant / Secondary Side Structures (if relevant): C7C4B0\n- Small Architectural Ornaments & Accents, Used sparingly: 44615B\n- Window Glazing / Glass Panes: D3D1CC\n\n**Shading & Atmosphere:** Articulate form and depth through subtle tonal value gradations transitioning between the main facade and shadow hex codes without harsh edges. Include subtle historical wear like faint water stains on the paper. Maintain strict fidelity to the source building's proportions and details.",
+        "template": "Use {{classical_elevation_full_sheet_reference}} for the orthographic sheet, ruled border, aged paper, and fine ink linework. Use {{classical_elevation_presentation_reference}} for the paired-elevation composition, restrained palette, and sparse archival presentation.\n\nGenerate a hand-rendered 18th-century orthographic frontal architectural elevation of the input building.\n\n**Style:** Classical Wash Elevation Drafting.\n\n**Composition:** Centrally isolate the building facade on the landscape-oriented page. The backdrop must be a uniform wash using hex code D8DBD7 on slightly textured aged paper. Enclose the center field with a single precise dark ink border line, and frame the entire page with a slim outer border using hex code 6D9E6E that evokes the simple border style often seen in high-end engraved stationery.\n\n**Medium & Linework:** Extremely fine, consistent-weight dark-grey ink lines defining all architectural forms. Use transparent watercolor and dilute ink washes for coloring based strictly on the specified hex palette.\n\n**Color Palette:**\n\n- Backdrop / Background Wash: D8DBD7\n- Outer Border Frame: 6D9E6E\n- Main Building Facade: E1D6C2\n- Facade in Shadow / Recesses: A49380\n- Distant / Secondary Side Structures (if relevant): C7C4B0\n- Small Architectural Ornaments & Accents, Used sparingly: 44615B\n- Window Glazing / Glass Panes: D3D1CC\n\n**Shading & Atmosphere:** Articulate form and depth through subtle tonal value gradations transitioning between the main facade and shadow hex codes without harsh edges. Include subtle historical wear like faint water stains on the paper. Maintain strict fidelity to the source building's proportions and details.",
         "variables": [],
-        "instructions": "Upload a building image with this prompt.",
+        "instructions": "1. Upload the building image.\n2. The full-sheet and presentation references are attached automatically.",
         "image": "public/images/architectural-rendering-classical-wash-elevation-drafting.png",
         "referenceImages": [
           {
@@ -1573,8 +1129,8 @@
         "name": "Old Master Oil Panel",
         "description": "Old-master oil-on-panel architectural study.",
         "variables": [],
-        "template": "Use the uploaded building image as the architectural source. Use this style reference for old-master oil-on-panel medium, palette, light, and painterly finish:\n{{oldmaster_reference}}\n\n1. Core instruction\nTransform the provided building image into a source-faithful old-master architectural rendering: preserve the source building’s massing, proportions, facade rhythm, openings, roof geometry, material cues, site relationship, asymmetries, and recognizable character; translate only the visual language into a refined hand-painted architectural study in the manner of the style reference above. Do not regularize the building into a generic classical mansion or add historicizing features absent from the source, and do not copy the reference's specific building, courtyard, bench, fence, or trees unless they exist in the uploaded source.\n\n2. Composition\nUse a quiet museum-catalog architectural composition with the building as the dominant middle-ground subject, modest foreground ground-plane for depth, atmospheric sky or soft background above, and restrained landscape/site framing, echoing the calm, unpeopled courtyard staging of the style reference. Maintain the source building's compositional hierarchy and crop logic; allow centered balance only when supported by the source. Avoid clutter, theatrical scenery, and invented monumental approaches.\n\n3. Viewpoint / projection\nNear-frontal eye-level architectural view with disciplined verticals, shallow perspectival recession, slightly compressed depth, and elevation-like facade legibility. Preserve the source viewpoint where possible; do not force perfect axial symmetry, classical proportional order, or a frontal palace elevation unless present in the source.\n\n4. Rendering medium\nSmall oil-on-panel architectural painting matching the handling of the style reference: warm umber imprimatura, thin translucent glazes, scumbled opaque passages, soft dry-brushed highlights, visible brush grain, slight impasto on masonry edges/clouds/foliage, aged varnish, subtle craquelure, hand-rendered finish. Painterly realism, not photorealism, not digital concept art.\n\n5. Linework\nPrecise architectural underdrawing softened by paint: fine dark articulation for roof edges, cornices, mullions, trim, joints, openings, stair lines, railings, and material seams. Use broken contours, tonal edges, and small brush accents rather than hard ink outlines. Keep windows and recesses crisp enough to read but softened by glaze and age.\n\n6. Color palette\nRestrained old-master palette drawn from the style reference: warm ivory, parchment beige, limestone cream, ochre, raw sienna, burnt umber, terracotta, muted brick red, smoke gray, blue-gray, dusty ultramarine, pale cloud white, olive, moss green, charcoal brown. Adapt the material colors of the source building, but keep saturation low, values warm, and the image unified by a golden-brown varnish tone. Avoid clean modern whites, saturated primaries, and high-chroma digital color.\n\n7. Light, shadow, and value\nClear warm daylight with gentle side illumination, matching the still courtyard-daylight quality of the style reference: luminous mid-value facade planes, pale highlights on exposed trim and edges, dark brown-black recessed windows/doors, atmospheric blue-gray shadows, and soft cast shadows tied to the ground plane. Strong value structure through openings and recesses; otherwise quiet tonal transitions. Avoid harsh spotlighting, HDR contrast, and overly even flat illumination.\n\n8. Atmosphere / substrate / finish\nAged painted panel surface with fine crackle, slight abrasion at edges, warm varnish bloom, soft haze in the air, scumbled sky, textured clouds, and a narrow darkened antique border, as seen in the style reference. Museum-quality archival presentation: calm, quiet, tactile, materially rich, with no visible digital sharpness or synthetic texture.\n\n9. Architectural handling\nMaintain source-specific identity exactly: roofline, parapets, chimneys, dormers, towers, bays, facade spacing, window/door placement, structural rhythm, ornament, material transitions, and scale relationships. Simplify incidental detail into painterly marks while keeping architecturally important details legible. Do not invent cupolas, pediments, columns, shutters, chimneys, dormers, masonry patterns, stairs, fences, trees, or courtyards unless they exist or are clearly implied by the source image.",
-        "instructions": "Upload a building image with this prompt. The old-master oil panel style reference is included automatically.",
+        "template": "Use the uploaded building image as the architectural source. Use {{oldmaster_reference}} as the primary reference for old-master oil-on-panel medium, palette, light, and painterly finish. Use {{vermeer_street_scene_reference}} only as a secondary reference for quiet streetscape atmosphere and brick-and-plaster material handling.\n\n1. Core instruction\nTransform the provided building image into a source-faithful old-master architectural rendering: preserve the source building’s massing, proportions, facade rhythm, openings, roof geometry, material cues, site relationship, asymmetries, and recognizable character; translate only the visual language into a refined hand-painted architectural study in the manner of the style reference above. Do not regularize the building into a generic classical mansion or add historicizing features absent from the source, and do not copy the reference's specific building, courtyard, bench, fence, or trees unless they exist in the uploaded source.\n\n2. Composition\nUse a quiet museum-catalog architectural composition with the building as the dominant middle-ground subject, modest foreground ground-plane for depth, atmospheric sky or soft background above, and restrained landscape/site framing, echoing the calm, unpeopled courtyard staging of the style reference. Maintain the source building's compositional hierarchy and crop logic; allow centered balance only when supported by the source. Avoid clutter, theatrical scenery, and invented monumental approaches.\n\n3. Viewpoint / projection\nNear-frontal eye-level architectural view with disciplined verticals, shallow perspectival recession, slightly compressed depth, and elevation-like facade legibility. Preserve the source viewpoint where possible; do not force perfect axial symmetry, classical proportional order, or a frontal palace elevation unless present in the source.\n\n4. Rendering medium\nSmall oil-on-panel architectural painting matching the handling of the style reference: warm umber imprimatura, thin translucent glazes, scumbled opaque passages, soft dry-brushed highlights, visible brush grain, slight impasto on masonry edges/clouds/foliage, aged varnish, subtle craquelure, hand-rendered finish. Painterly realism, not photorealism, not digital concept art.\n\n5. Linework\nPrecise architectural underdrawing softened by paint: fine dark articulation for roof edges, cornices, mullions, trim, joints, openings, stair lines, railings, and material seams. Use broken contours, tonal edges, and small brush accents rather than hard ink outlines. Keep windows and recesses crisp enough to read but softened by glaze and age.\n\n6. Color palette\nRestrained old-master palette drawn from the style reference: warm ivory, parchment beige, limestone cream, ochre, raw sienna, burnt umber, terracotta, muted brick red, smoke gray, blue-gray, dusty ultramarine, pale cloud white, olive, moss green, charcoal brown. Adapt the material colors of the source building, but keep saturation low, values warm, and the image unified by a golden-brown varnish tone. Avoid clean modern whites, saturated primaries, and high-chroma digital color.\n\n7. Light, shadow, and value\nClear warm daylight with gentle side illumination, matching the still courtyard-daylight quality of the style reference: luminous mid-value facade planes, pale highlights on exposed trim and edges, dark brown-black recessed windows/doors, atmospheric blue-gray shadows, and soft cast shadows tied to the ground plane. Strong value structure through openings and recesses; otherwise quiet tonal transitions. Avoid harsh spotlighting, HDR contrast, and overly even flat illumination.\n\n8. Atmosphere / substrate / finish\nAged painted panel surface with fine crackle, slight abrasion at edges, warm varnish bloom, soft haze in the air, scumbled sky, textured clouds, and a narrow darkened antique border, as seen in the style reference. Museum-quality archival presentation: calm, quiet, tactile, materially rich, with no visible digital sharpness or synthetic texture.\n\n9. Architectural handling\nMaintain source-specific identity exactly: roofline, parapets, chimneys, dormers, towers, bays, facade spacing, window/door placement, structural rhythm, ornament, material transitions, and scale relationships. Simplify incidental detail into painterly marks while keeping architecturally important details legible. Do not invent cupolas, pediments, columns, shutters, chimneys, dormers, masonry patterns, stairs, fences, trees, or courtyards unless they exist or are clearly implied by the source image.",
+        "instructions": "1. Upload the building image.\n2. The primary old-master and secondary streetscape references are attached automatically.",
         "referenceImages": [
           {
             "variable": "oldmaster_reference",
@@ -1615,7 +1171,7 @@
         "name": "French Academic Wash Rendering",
         "description": "Pale academic watercolor-and-ink architectural wash.",
         "image": "public/images/architectural-rendering-french-academic-wash-classical-house-preview.png",
-        "instructions": "Upload an architectural source image with this prompt. The fixed French academic wash style references are included automatically.\n\nCreated with [Synthesize Style Image Prompts](/Users/mwy/.codex/skills/synthesize-style-image-prompts/SKILL.md)",
+        "instructions": "1. Upload the architectural source image.\n2. The fixed French academic wash references are attached automatically.",
         "template": "Use the uploaded architectural source image as the factual subject. Use the attached style references and the written synthesis below to transform the source into a French academic architectural watercolor-and-ink rendering.\n\nAttached style references:\n- {{french_wash_dome_reference}}\n- {{french_wash_monument_column_reference}}\n- {{french_wash_facade_reference}}\n- {{french_wash_interior_reference}}\n- {{french_wash_arch_reference}}\n\nSource image priority:\nPreserve the source architecture's identity, massing, proportions, view type, spatial relationships, major silhouette, facade rhythm, openings, roof logic, structural bays, ornament, material cues, and distinctive factual details. If the source is an interior, preserve the room volume, columns, vaults, stairs, railings, openings, and depth relationships. If the source is a monument or exterior, preserve its measured geometry and civic scale. Do not redesign, normalize, modernize, simplify beyond the style's level of finish, or invent a different building.\n\nStyle reference priority:\nUse the attached style references as the visual source of truth for medium, palette, surface, linework, wash behavior, lighting, texture, detail density, mood, and level of finish. Synthesize their shared traits rather than copying any one reference literally.\n\nSynthesized style direction:\nRender the source as an early-19th-century French academic architectural study on aged off-white paper: precise graphite and fine gray-brown ink underdrawing, restrained watercolor and lavis washes, measured but slightly hand-irregular contours, and calm document-like daylight. Use pale stone cream, warm ivory, diluted ochre, gray beige, smoke gray, soft blue-gray sky, olive-gray patinated metal, umber shadow, and occasional muted terracotta-brown accents. Keep broad architectural planes lightly washed and matte, with darker value concentrated in window voids, deep recesses, column shadows, arch soffits, stair undersides, railings, and carved relief.\n\nComposition should feel archival and studied: centered or carefully balanced, orthographic or gently perspectival according to the source, with ample quiet air or interior depth around the subject. Let backgrounds recede through pale washes, soft atmospheric haze, and minimal contextual structures. Ornament should be legible but dry and time-softened: fine hatching, small stippled marks, lightly modeled relief, and transparent wash shadows, not glossy rendering. The paper should show subtle grain, faint foxing, age stains, pigment pooling, and softened edges.\n\nFlexible zones:\nYou may translate modern lighting into flat studio daylight, reduce incidental clutter, soften color saturation, add restrained paper margins or a thin plate edge, and simplify nonessential background detail so the architectural subject reads as a preserved academic plate. Small scale figures may be added only when they help establish scale and remain tiny, subdued, and period-neutral.\n\nAvoid:\nPhotorealism, digital concept art, glossy CGI, saturated color, heavy black outlines, crisp CAD vectors, exaggerated perspective, cinematic contrast, fantasy architecture, overdecorated Beaux-Arts theatricality, dense modern urban clutter, fake readable labels, decorative borders that dominate the drawing, and copying the exact dome, column, facade, church interior, arch, figures, inscriptions, or relief programs from the style references unless they are present in the uploaded source.\n\nOutput a single finished image. Do not include labels, captions, watermarks, UI, borders, or process notes.",
         "variables": [],
         "referenceImages": [
@@ -1660,18 +1216,6 @@
     "previewBaseImageDescription": "Classical columned house used as the shared source image for Architectural Rendering variant previews.",
     "variationSelector": "visual",
     "variationSelectorTileMode": "details",
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Pro"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.1 Pro",
-        "level": "High"
-      }
-    ],
     "modifiedAt": "2026-07-28T02:13:55.938Z",
     "customOrder": 0
   },
@@ -1690,14 +1234,6 @@
     "previewBaseImage": "public/images/image-restyle-base-blue-white-interior.png",
     "previewBaseImageDescription": "Blue-and-white ceramic still life in a layered domestic interior, used as the shared source image for Image Restyle variant previews.",
     "variations": [
-      {
-        "id": "small-format-oil-painting",
-        "name": "Small-Format Oil Painting",
-        "description": "Simplified seven-inch observational oil study.",
-        "image": "public/images/image-restyle-small-format-oil-preview.png",
-        "template": "Reusable image-editing prompt\n\nEdit the attached source image into a deliberately simplified, small-format oil painting. Treat the source as the authoritative composition and direct edit target.\n\nObjective\n\nCreate a convincing oil painting conceived at approximately 7 inches on its longest dimension. The result should feel physically plausible at that scale:\n\n- Broad, economical brushwork\n- Limited descriptive resolution\n- Strong compositional clarity\n- Immediate legibility at arm’s length\n- Visible hand-painted character\n\nPreserve\n\nMaintain the source image’s:\n\n- Composition and crop\n- Subject placement and scale\n- Pose, gesture, and weight distribution\n- Spatial relationships\n- Lighting direction\n- Dominant silhouettes\n- Environmental structure\n- Emotional tone\n\nDo not redesign the scene unless explicitly requested.\n\nFigures\n\nWhen human figures are present, render them as adult nude figures in the tradition of classical observational painting.\n\nPreserve the original:\n\n- Pose\n- Gesture\n- Body type\n- Limb placement\n- Contact points\n- Direction of gaze\n- Balance and anatomical logic\n\nUse natural proportions and discreet, matter-of-fact anatomy. Avoid erotic staging, glamour treatment, exaggerated musculature, or cosmetic perfection.\n\nVisual language\n\nUse the structural economy of early-20th-century American realism:\n\n- Strong underlying drawing\n- Simplified geometry\n- Clear light-and-shadow organization\n- Broad planes of color, value, and temperature\n- Deliberate silhouettes\n- Restrained tonal transitions\n- Quiet psychological atmosphere\n\nThe image should feel painted rather than filtered or digitally illustrated.\n\nSimplification\n\nAssume the work must be executable on a 7-inch support with relatively broad brushes.\n\nPrioritize:\n\n1. Silhouette, gesture, pose, and composition\n2. Essential identifying features\n3. Major value and color relationships\n4. Minimal secondary marks\n\nReduce or eliminate:\n\n- Minor contours\n- Intricate anatomy\n- Decorative detail\n- Surface noise\n- Tiny highlights\n- Repeated marks\n- Fine outlining\n- Background clutter\n- Photographic specificity\n\nAbbreviate faces, hands, feet, hair, anatomy, foliage, architecture, fabric, and ground texture into a few broad, legible shapes.\n\nBrushwork and edges\n\nUse:\n\n- Large flat strokes\n- Connected paint passages\n- Visible directional brushwork\n- Broad scumbles\n- Simplified impasto\n- Broken and lost edges\n- Large interlocking color masses\n\nReserve the sharpest edges and strongest contrasts for the focal area, typically the head, upper torso, and key hand or arm placements. Allow secondary forms to merge, soften, or dissolve.\n\nAvoid uniformly fine brushwork, airbrushed blending, excessive polish, and texture added over an otherwise detailed image.\n\nColor and lighting\n\nDerive the palette from the source unless otherwise instructed.\n\nUse:\n\n- Muted midtones\n- Deep, quiet shadows\n- Restrained saturation\n- Controlled warm–cool relationships\n- A limited number of major light, middle-value, and shadow families\n\nPreserve material identity without rendering intricate texture.\n\nFinished character\n\nThe result should feel like:\n\n- A complete small oil study\n- Hand-painted from observation\n- Concise and atmospheric\n- Structurally clear\n- Loosely resolved\n- Rich in broad paint handling\n\nIt should avoid resembling a filtered photograph, polished digital illustration, fully rendered academic painting, or large painting reduced in size.\n\nExecution\n\n1. Use the attached image as the direct edit target.\n2. Preserve composition, crop, pose, and spatial relationships.\n3. Render any human figures as adult nudes.\n4. Establish the major value pattern.\n5. Block the scene as large interlocking masses.\n6. Simplify all secondary information.\n7. Add only the minimum marks required for recognition.\n8. Concentrate detail and edge sharpness at the focal area.\n9. Review at thumbnail size and remove implausibly small detail.\n10. For later revisions, edit the latest generated version unless directed otherwise.\n\nGenerate the edited image directly. Do not provide an explanation or textual description after generation.",
-        "variables": []
-      },
       {
         "id": "technical-engraving",
         "name": "Technical Engraving",
@@ -1733,7 +1269,7 @@
       {
         "id": "landscape-oil",
         "name": "Landscape Oil Painting",
-        "description": "",
+        "description": "Naturalistic landscape restyled as an oil painting.",
         "image": "public/images/image-restyle-landscape-oil-preview.png",
         "template": "Convert the provided image to a classical late 18th-century oil painting aesthetic, reminiscent of the English Romantic portraiture style of John Hoppner. The visual style is defined by a powerful contrast between a highly illuminated, crisply detailed subject and a moody, atmospheric backdrop of a rolling landscape under a tumultuous, stormy sky. See the {{boxer}} image for reference. The lighting is intensely theatrical and directional, carving out form with bright highlights and deep, rich shadows. The palette relies heavily on earthy tones, muted ochres, deep forest greens, and dark grays, offset by hints of a warm twilight glow along the horizon. The brushwork is painterly yet precise, capturing fine textures on the main subject while becoming looser and more expressive in the environment to create an intense, heroic, and solitary mood. 3:4 aspect ratio ",
         "variables": [],
@@ -1838,7 +1374,7 @@
         "name": "Chalky Umber Oil Study",
         "description": "Chalky architectural planes and intimate umber interiors.",
         "image": "public/images/image-restyle-chalky-umber-oil-study-preview.png",
-        "instructions": "Upload a source image to transform, then choose whether person likeness should be preserved.\nCreated with [Synthesize Style Image Prompts](/Users/mwy/.codex/skills/synthesize-style-image-prompts/SKILL.md)",
+        "instructions": "1. Upload the source image.\n2. Choose whether to preserve person likeness.",
         "template": "Transform the uploaded source image into a new artwork in the synthesized style defined by the attached style references.\n\nAttached style references:\n- {{chalky_umber_facade_reference}}\n- {{chalky_umber_interior_reference}}\n\nSource image priority:\n- Preserve the source image's core subject, crop, composition, proportions, spatial relationships, perspective cues, and important factual details.\n- Likeness instruction: {{preserve_likeness}}\n- The source image controls what is depicted. Do not replace its subject with a facade, bedroom, furniture, windows, or framed portrait merely because those appear in the style references.\n\nStyle reference priority:\n- Use both attached style references and the written synthesis below. Treat the references as the visual source of truth for medium, palette, surface, mark-making, edge behavior, lighting, texture, density, mood, and level of finish.\n- Synthesize their shared traits rather than copying either reference's subject, layout, or distinctive details.\n\nSynthesized style direction:\nRender the source as an intimate observational oil study built from broad, economical masses rather than precise description. Compress depth gently and organize the image through a few strong verticals, horizontals, and irregular dark-light divisions. Favor close, slightly off-center cropping and ordinary, unidealized viewpoints. Preserve meaningful negative space as quiet painted fields instead of filling every area with incident.\n\nUse a restrained, low-chroma palette of chalky cream, yellowed ivory, smoky blue-gray, charcoal, brown-black, raw umber, muted russet, and dull oxide red. Establish pale matte lights against deep, nearly opaque dark anchors, with subdued middle values joining them. Limit warm accents to narrow structural notes or small focal passages. Keep whites weathered and warm, blacks chromatic and varied, and the overall color balance sober rather than monochromatically brown.\n\nMake the surface read as oil paint applied directly and sparingly: broad dragged bristle strokes, thin rubbed layers, dry scumbles, blunt opaque patches, visible directional marks, and occasional exposed underpainting. Describe forms with adjacent color and value planes rather than outlines or smooth modeling. Let firm edges define a few structural or focal divisions while other contours remain softened, scraped, uneven, or absorbed into neighboring paint. Retain slight inaccuracies, abbreviated details, and variations in opacity that reveal the hand and pace of painting.\n\nLighting should be diffuse, cool-to-neutral, and psychologically quiet. Avoid theatrical beams or polished highlight effects. Let illumination register through chalky pale planes set against deep recesses and muted surrounding color. Repeated elements should become simple rhythms of dark openings, pale bars, restrained rust notes, or stacked horizontal masses. If a person appears, keep anatomy and identity legible according to the likeness instruction while simplifying secondary facial, hair, and clothing details into a few tonal planes. The finished image should feel modest, still, inward, and materially immediate.\n\nFlexible zones:\n- Secondary clutter, ornament, textures, foliage, and small objects may be omitted or compressed into purposeful marks.\n- Background depth may flatten and nonessential perspective detail may simplify, provided the source's key spatial relationships remain readable.\n- Surface colors may shift into the reference palette while preserving important distinctions between major forms.\n- Peripheral forms may dissolve into adjoining value masses; focal structures may retain slightly firmer edges.\n\nAvoid:\nAvoid photorealism, glossy digital finish, smooth airbrushed gradients, cinematic lighting, bright saturated color, decorative prettiness, sentimental nostalgia, golden-hour glow, uniformly heavy impasto, excessive canvas texture, fussy detail, hard vector geometry, cartoon outlines, muddy undifferentiated browns, cubist fragmentation, invented architectural or domestic features, copied reference compositions, text, captions, watermarks, borders, UI, or process notes.\n\nOutput a single finished image.",
         "variables": [
           {
@@ -1880,7 +1416,7 @@
         "name": "Quiet Architectural Oil Study",
         "description": "Spare early-modernist oil handling and architectural quiet.",
         "image": "public/images/image-restyle-quiet-architectural-oil-study-preview.png",
-        "instructions": "Upload a source image to transform, then choose whether person likeness should be preserved.\nCreated with [Synthesize Style Image Prompts](/Users/mwy/.codex/skills/synthesize-style-image-prompts/SKILL.md)",
+        "instructions": "1. Upload the source image.\n2. Choose whether to preserve person likeness.",
         "template": "Transform the uploaded source image into a new artwork in the synthesized style defined by the attached style references.\n\nAttached style references:\n- {{quiet_oil_interior_reference}}\n- {{quiet_oil_window_reference}}\n- {{quiet_oil_facade_reference}}\n\nSource image priority:\n- Preserve the source image's core subject, crop, composition, proportions, spatial relationships, perspective cues, and important factual details.\n- Likeness instruction: {{preserve_likeness}}\n- Do not replace the source subject with rooms, windows, or facades merely because those appear in the style references. The source controls what is depicted; the references control how it is painted.\n\nStyle reference priority:\n- Use both the attached style references and the written synthesis below. Treat the references as the visual source of truth for medium, palette, surface, mark-making, edge behavior, lighting, texture, density, mood, and level of finish.\n- Synthesize their shared traits rather than copying any one reference's subject, layout, or distinctive details.\n\nSynthesized style direction:\nRender the source as a small, intimate oil study with an early-twentieth-century observational character. Reduce the scene into a few broad, stable masses and flattened planes while keeping the source structure readable. Favor strong verticals and horizontals, slightly compressed depth, cropped or off-center framing where the source permits it, and generous areas of quiet wall, floor, sky, or shadow that function as negative space.\n\nUse a restrained, low-chroma palette of warm plaster cream, yellowed ivory, smoky gray, blue-gray, charcoal, umber, brown-black, and deep muted red-brown, with only small accents of dull rust, ochre, or cool pale blue. Organize color into coherent value fields: pale matte lights, softened midtones, and deep near-black anchors in openings, recesses, furniture, hair, or cast shadow. Keep color relationships subtle and slightly weathered rather than bright or decorative.\n\nPaint with visible, economical oil brushwork on a matte, lightly textured surface. Use broad dragged strokes, dry-brushed scumbles, thin rubbed passages, opaque rectangular notes, and occasional bristle marks. Edges should vary: firm enough around structural divisions and focal forms, but softened, scraped, or absorbed into adjacent masses elsewhere. Allow small inaccuracies, uneven contours, exposed underlayers, and abbreviated details to preserve the directness of a study made from observation.\n\nLighting should be quiet, diffuse, and natural, describing the scene mainly through broad value contrast rather than theatrical highlights or modeled gradients. Treat windows, doorways, frames, rooflines, furnishings, and other repeated elements as simple dark-light rhythms. If people appear, keep anatomy and identity legible according to the likeness instruction, but simplify clothing and secondary facial detail into restrained tonal planes. The finished image should feel solitary, still, modest, and psychologically attentive rather than picturesque.\n\nFlexible zones:\n- Secondary textures, clutter, foliage, ornament, and small objects may be omitted or compressed into a few purposeful strokes.\n- Background depth may flatten and nonessential perspective detail may simplify, provided the source's key spatial relationships remain intact.\n- Surface color may shift into the reference palette while preserving meaningful source distinctions.\n- Focal edges may sharpen slightly; peripheral edges may dissolve into adjoining paint masses.\n\nAvoid:\nAvoid photorealism, glossy digital finish, smooth airbrushed gradients, heavy impasto everywhere, saturated color, golden-hour spectacle, cinematic rim light, decorative nostalgia, twee charm, excessive canvas grain, fussy detail, crisp vector geometry, cartoon outlines, muddy all-brown tonality, cubist fragmentation, invented architectural features, copied reference compositions, text, captions, watermarks, borders, UI, or process notes.\n\nOutput a single finished image.",
         "variables": [
           {
@@ -1943,7 +1479,7 @@
         "name": "Neoclassical Atelier Lithograph",
         "description": "Academic graphite lithograph figure plate.",
         "image": "public/images/image-restyle-neoclassical-atelier-lithograph-preview.png",
-        "instructions": "Upload a source image to transform, then choose whether person likeness should be preserved.\nCreated with [Synthesize Style Image Prompts](/Users/mwy/.codex/skills/synthesize-style-image-prompts/SKILL.md)",
+        "instructions": "1. Upload the source image.\n2. Choose whether to preserve person likeness.",
         "template": "Transform the uploaded source image into a new artwork in the synthesized style defined by the attached style references.\n\nAttached style references:\n- {{atelier_back_study_reference}}\n- {{atelier_profile_bust_reference}}\n- {{atelier_frontal_bust_reference}}\n- {{atelier_upturned_profile_reference}}\n\nSource image priority:\n- Preserve the source image's core subject, composition, proportions, spatial relationships, and important factual details.\n- Likeness instruction: {{preserve_likeness}}\n\nStyle reference priority:\n- Use the attached style references as the visual source of truth for medium, palette, surface, mark-making, edge behavior, lighting, texture, density, mood, and level of finish.\n- Synthesize their shared traits rather than copying one reference literally.\n\nSynthesized style direction:\nSynthesize the style as a neoclassical atelier lithograph or academic drawing plate on warm aged ivory paper. The image should feel like a nineteenth-century figure-study print made from close observation of antique sculpture and living anatomy: quiet, disciplined, sculptural, and formally composed.\n\nUse graphite-gray to black linework with slight sepia warmth from the paper. Build form through precise contour drawing, fine parallel hatching, crosshatching, stippled graphite accumulation, soft rubbed tonal passages, and selective dark masses. The darkest passages should gather in hair, eye sockets, cast shadows, and background accents; broad skin or stone-like planes should remain pale, luminous, and breathable.\n\nTreat the subject with classical restraint: idealized but anatomically specific proportions, clean profile or bust-like silhouette, elegant neck and shoulder transitions, carefully modeled facial planes, and hair rendered as flowing ribbon-like locks with many nested contour lines. Preserve a hand-drawn irregularity in pressure, line weight, paper absorption, and small registration imperfections.\n\nCompose the image as an archival study sheet or lithographic plate with generous blank negative space, warm paper grain, faint foxing, soft edge wear, and no modern setting. The surface should look tactile and printed or drawn, not digitally smooth. The mood should be contemplative, museum-like, and rigorous rather than dramatic.\n\nFlexible zones:\n- The source image may be simplified into a more classical study-sheet composition.\n- Backgrounds may become blank warm paper, faint plate tone, or a restrained hatched shadow mass when that supports the subject.\n- Color should collapse toward graphite, black ink, sepia-gray, and aged ivory unless a factual color cue is essential to the source image.\n- Fine details may be translated into hatching, contour, or tonal wash, but the subject's readable identity and structure should remain clear.\n\nAvoid:\nAvoid photorealism, glossy digital painting, saturated color, modern fashion styling, cinematic lighting, plastic skin, airbrushed gradients, fantasy ornament, cluttered backgrounds, hard posterized contrast, vector-clean outlines, cartoon anatomy, over-literal copying of any single reference, captions, labels, watermarks, frames, or UI artifacts.\n\nOutput a single finished image. Do not include labels, captions, watermarks, UI, borders, or process notes.",
         "variables": [
           {
@@ -1996,8 +1532,8 @@
         "id": "charcoal-study-sheet",
         "name": "Charcoal Study Sheet",
         "description": "Restrained charcoal-and-graphite atelier study on aged paper.",
-        "instructions": "Upload a source image to transform, then choose whether person likeness should be preserved.\nCreated with [Synthesize Style Image Prompts](/Users/mwy/.codex/skills/synthesize-style-image-prompts/SKILL.md)",
-        "template": "Transform the uploaded source image into a new artwork in the synthesized style defined by the attached style reference.\n\nAttached style reference:\n- {{charcoal_study_sheet_reference}}\n- Use the attached style reference as the visual source of truth for medium, paper, mark-making, value structure, edge behavior, texture, density, mood, and level of finish.\n- Synthesize its visual traits rather than copying its subject, layout, distinctive incidental details, handwriting, tape, framing, captions, studio marks, or borders.\n\nSource image priority:\n- Preserve the source image’s core subject, pose, proportions, orientation, spatial relationships, factual details, and emotional character.\n- If the source image includes a person, preserve general identity cues only where they are central to the image; otherwise prioritize the synthesized drawing style, composition, and level of finish.\n- The source image controls what is depicted. Do not introduce objects, figures, writing, props, framing, or marks from the reference sheet unless they are present in the source image.\n\nComposition override:\n- Do not preserve a tight source crop literally. Preserve the subject’s pose, proportions, orientation, and core relationships, but recompose the subject onto a larger sheet of warm ivory drawing paper with substantial negative space around the form.\n- The subject should occupy roughly 60–70% of the page height, leaving visible breathing room above, beside, and below the subject.\n- Avoid filling the frame edge-to-edge. The finished image should feel like an academic study placed on a sheet of paper, not a cropped photographic portrait.\n\nSynthesized style direction:\n- Render the source as a quiet academic charcoal-and-graphite drawing on warm, softly aged ivory paper.\n- Build the image from a selective hierarchy of dark charcoal masses, fine graphite construction lines, dense directional hatching, crosshatching, and lightly rubbed tonal passages.\n- Let the strongest values gather in focal features, deep recesses, textured dark forms, and decisive cast shadows.\n- Keep broad illuminated planes pale, breathable, and sparsely worked.\n\nFinish hierarchy:\n- Resolve only the focal areas with dense charcoal and graphite modeling.\n- Keep secondary forms looser, more abbreviated, and less finished.\n- Allow peripheral areas to remain as construction lines, pale hatching, rubbed tonal ghosts, or partially erased contours.\n- The image should feel partly resolved where attention matters and deliberately open elsewhere.\n\nValue discipline:\n- Keep the overall drawing restrained and pale.\n- Reserve the darkest charcoal values for a small number of accents: focal features, deep shadow pockets, dark hair or objects, recesses, folds, and select cast shadows.\n- Avoid spreading heavy midtones across the entire subject.\n- Large illuminated planes should remain mostly untouched paper with sparse directional hatching.\n\nMark-making discipline:\n- Model form through layered directional hatching that follows the underlying volume.\n- Combine firm, searching contours with softened, partially erased edges.\n- Keep pressure, line weight, and density varied and hand-drawn.\n- Include visible starts, stops, broken contours, exploratory construction lines, and subtle corrections.\n- Avoid uniform all-over crosshatching, mechanical mesh texture, polished continuous shading, or airbrushed tonal gradients.\n\nDetail simplification:\n- Simplify nonessential background detail into blank warm paper, faint construction marks, or spare tonal suggestion.\n- Reduce secondary textures, patterns, small objects, and incidental details into economical hatching, abbreviated outlines, or broad value blocks.\n- Preserve factual distinctions through value and drawing structure rather than color or literal detail.\n- Prevent secondary textures or patterns from competing with the focal hierarchy.\n\nPaper and surface:\n- Use warm, softly aged ivory paper with visible tooth.\n- Include subtle graphite dust, faint smudging, rubbed erasures, and gentle archival yellowing.\n- Keep the paper clean and spacious enough to feel like a considered atelier drawing rather than a distressed prop.\n\nLighting and mood:\n- Use diffuse, natural lighting.\n- Describe form through measured value changes rather than dramatic spectacle.\n- The finished image should feel observant, intimate, restrained, materially direct, and quietly academic.\n\nFlexible zones:\n- Peripheral edges may fade, break, or remain exploratory.\n- Secondary forms may dissolve into pale hatching or unfinished construction.\n- Color should collapse to charcoal black, graphite gray, soft sepia-gray, and aged ivory while retaining factual distinctions through value.\n\nAvoid:\n- Photorealism\n- Glossy digital rendering\n- Smooth airbrushed gradients\n- Pure white digital paper\n- Heavy black fill everywhere\n- Vector-clean outlines\n- Uniform pencil texture\n- Comic-book inking\n- Dramatic cinematic lighting\n- Saturated color\n- Ornate fantasy details\n- Copied handwritten notes\n- Tape\n- Borders\n- Reference-sheet framing\n- Captions\n- Watermarks\n- UI\n- Process notes\n\nOutput a single finished image.\n",
+        "instructions": "1. Upload the source image.\n2. Choose whether to preserve person likeness.",
+        "template": "Transform the uploaded source image into a new artwork in the synthesized style defined by the attached style reference.\n\nAttached style reference:\n- {{charcoal_study_sheet_reference}}\n- Use the attached style reference as the visual source of truth for medium, paper, mark-making, value structure, edge behavior, texture, density, mood, and level of finish.\n- Synthesize its visual traits rather than copying its subject, layout, distinctive incidental details, handwriting, tape, framing, captions, studio marks, or borders.\n\nSource image priority:\n- Preserve the source image’s core subject, pose, proportions, orientation, spatial relationships, factual details, and emotional character.\n- {{preserve_likeness}}\n- The source image controls what is depicted. Do not introduce objects, figures, writing, props, framing, or marks from the reference sheet unless they are present in the source image.\n\nComposition override:\n- Do not preserve a tight source crop literally. Preserve the subject’s pose, proportions, orientation, and core relationships, but recompose the subject onto a larger sheet of warm ivory drawing paper with substantial negative space around the form.\n- The subject should occupy roughly 60–70% of the page height, leaving visible breathing room above, beside, and below the subject.\n- Avoid filling the frame edge-to-edge. The finished image should feel like an academic study placed on a sheet of paper, not a cropped photographic portrait.\n\nSynthesized style direction:\n- Render the source as a quiet academic charcoal-and-graphite drawing on warm, softly aged ivory paper.\n- Build the image from a selective hierarchy of dark charcoal masses, fine graphite construction lines, dense directional hatching, crosshatching, and lightly rubbed tonal passages.\n- Let the strongest values gather in focal features, deep recesses, textured dark forms, and decisive cast shadows.\n- Keep broad illuminated planes pale, breathable, and sparsely worked.\n\nFinish hierarchy:\n- Resolve only the focal areas with dense charcoal and graphite modeling.\n- Keep secondary forms looser, more abbreviated, and less finished.\n- Allow peripheral areas to remain as construction lines, pale hatching, rubbed tonal ghosts, or partially erased contours.\n- The image should feel partly resolved where attention matters and deliberately open elsewhere.\n\nValue discipline:\n- Keep the overall drawing restrained and pale.\n- Reserve the darkest charcoal values for a small number of accents: focal features, deep shadow pockets, dark hair or objects, recesses, folds, and select cast shadows.\n- Avoid spreading heavy midtones across the entire subject.\n- Large illuminated planes should remain mostly untouched paper with sparse directional hatching.\n\nMark-making discipline:\n- Model form through layered directional hatching that follows the underlying volume.\n- Combine firm, searching contours with softened, partially erased edges.\n- Keep pressure, line weight, and density varied and hand-drawn.\n- Include visible starts, stops, broken contours, exploratory construction lines, and subtle corrections.\n- Avoid uniform all-over crosshatching, mechanical mesh texture, polished continuous shading, or airbrushed tonal gradients.\n\nDetail simplification:\n- Simplify nonessential background detail into blank warm paper, faint construction marks, or spare tonal suggestion.\n- Reduce secondary textures, patterns, small objects, and incidental details into economical hatching, abbreviated outlines, or broad value blocks.\n- Preserve factual distinctions through value and drawing structure rather than color or literal detail.\n- Prevent secondary textures or patterns from competing with the focal hierarchy.\n\nPaper and surface:\n- Use warm, softly aged ivory paper with visible tooth.\n- Include subtle graphite dust, faint smudging, rubbed erasures, and gentle archival yellowing.\n- Keep the paper clean and spacious enough to feel like a considered atelier drawing rather than a distressed prop.\n\nLighting and mood:\n- Use diffuse, natural lighting.\n- Describe form through measured value changes rather than dramatic spectacle.\n- The finished image should feel observant, intimate, restrained, materially direct, and quietly academic.\n\nFlexible zones:\n- Peripheral edges may fade, break, or remain exploratory.\n- Secondary forms may dissolve into pale hatching or unfinished construction.\n- Color should collapse to charcoal black, graphite gray, soft sepia-gray, and aged ivory while retaining factual distinctions through value.\n\nAvoid:\n- Photorealism\n- Glossy digital rendering\n- Smooth airbrushed gradients\n- Pure white digital paper\n- Heavy black fill everywhere\n- Vector-clean outlines\n- Uniform pencil texture\n- Comic-book inking\n- Dramatic cinematic lighting\n- Saturated color\n- Ornate fantasy details\n- Copied handwritten notes\n- Tape\n- Borders\n- Reference-sheet framing\n- Captions\n- Watermarks\n- UI\n- Process notes\n\nOutput a single finished image.\n",
         "variables": [
           {
             "name": "preserve_likeness",
@@ -2032,18 +1568,6 @@
     "variationSelector": "visual",
     "variationSelectorTileMode": "details",
     "fullScreenModal": true,
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.1 Pro",
-        "level": "High"
-      }
-    ],
     "modifiedAt": "2026-07-23T04:47:51.948Z",
     "customOrder": 0
   },
@@ -2060,18 +1584,6 @@
     "template": "TWO-REFERENCE STYLE-LOCKED IMAGE TRANSFER\n\nYou will receive two images with strictly separate roles:\n\nImage 1 — STYLE REFERENCE\nDefines how the final image must look.\n\nImage 2 — SUBJECT / COMPOSITION REFERENCE\nDefines what the final image must depict and how it is arranged.\n\nNever blend these roles. Do not carry over any subject matter, objects, scenery, symbols, text, or artist marks from Image 1.\n\nSTEP 1 — LOCK THE STYLE\n\nAnalyze only Image 1. Internally lock:\n\n- medium, surface, texture, opacity, paint thickness, drips, scumbling, rubbing, erasure, and exposed ground\n- dominant palette, value range, saturation, warm/cool balance, accent colors, and color proportions\n- scale and character of painted masses, contours, scribbles, lines, loops, scratches, ghost marks, and edge behavior\n- abstraction level, simplification, distortion, proportion logic, spatial compression, and detail ceiling\n- negative space, density, asymmetry, cropping, and the paint-to-ground ratio\n- intentional irregularities: uneven coverage, displaced contours, awkward marks, unfinished edges, visible corrections, and incomplete forms\n\nDo not generate an image or infer the future subject. Reply only:\n\nStyle locked. Provide the Subject / Composition Reference and any required changes.\n\nSTEP 2 — REBUILD THE SUBJECT IN THE LOCKED STYLE\n\nUse Image 2 only for subject identity and count; pose, gesture, silhouette, and orientation; crop, viewpoint, scale, and placement; overlap, depth order, and major spatial relationships; and explicitly required additions, removals, or substitutions.\n\nIgnore Image 2’s color, texture, medium, sharpness, realism, finish, rendering style, typography style, and photographic detail. Reconstruct it from the visual building blocks found in Image 1; do not merely repaint, filter, or colorize Image 2.\n\nTranslate the subject through Image 1’s visual grammar:\n\n- large forms → broad irregular painted masses\n- outlines → loose gestural contours\n- fine texture → sparse scribble, scumble, rubbing, erasure, or other equivalent marks\n- shadows → muted overlapping material or tonal masses rather than smooth modeling\n- small features → economical marks at or below Image 1’s detail ceiling\n- fur, hair, foliage, fabric, architecture, and other complex subjects → simplified gestural equivalents\n\nMatch Image 1’s paint-to-ground ratio, scale of major masses, mark density, contour looseness, color proportions, degree of abstraction, transparency or opacity, edge behavior, density versus open space, and unfinished character. Preserve Image 2’s compositional skeleton, but allow contours and internal forms to become loose, displaced, incomplete, or partially obscured when Image 1’s visual language requires it.\n\nKeep all detail at or below Image 1’s level. No region may become more realistic, sharp, polished, saturated, or technically refined than Image 1.\n\nPHYSICAL-MEDIUM INTEGRITY\n\nApply this section only when Image 1 depicts a physical medium such as paint, drawing, printmaking, collage, or mixed media. Do not invent paper, paint, or canvas effects for a Style Reference that is inherently photographic, digital, or otherwise non-physical.\n\nFor physical media, avoid moiré, pixel jitter, procedural noise grids, repeated texture stamps, tiled marks, synthetic edge halos, over-sharpened micro-detail, and repetitive pseudo-random patterns. Surfaces and marks must behave like the actual medium: organic, non-repeating variation; believable buildup, drag, pooling, staining, abrasion, and transparency; natural support texture; and materially plausible overlaps and edges.\n\nIf handwriting exists in Image 1, similar non-identical gestural writing may appear only where appropriate. Reproduce actual words only when explicitly requested. Never copy signatures, watermarks, or artist marks.\n\nFINAL CHECK\n\nBefore rendering, verify internally that subject and composition clearly come from Image 2; every rendering decision comes from Image 1; the subject has been rebuilt through Image 1’s shapes and marks rather than filtered; negative space and density match Image 1; no detail, polish, or realism exceeds Image 1; and, when physical-medium rules apply, every mark remains materially plausible without obvious digital repetition or generative artifacts. Revise internally if any condition fails.\n\nSTEP 2 OUTPUT\n\nGenerate only the final image. No analysis, captions, explanations, or alternate versions.",
     "variables": [],
     "variations": [],
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      }
-    ],
     "modifiedAt": "2026-08-17T22:33:19.990Z",
     "customOrder": 13
   },
@@ -2107,28 +1619,6 @@
     "instructions": "Select a variant for general prompting or image-generation prompting.",
     "slug": "prompt-builder-assistant",
     "image": "public/images/1780365264408.jpg",
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
-      }
-    ],
     "modifiedAt": "2026-07-27T02:40:22Z",
     "customOrder": 4
   },
@@ -2153,28 +1643,6 @@
       }
     ],
     "instructions": "Paste the one-off prompt and any useful outcome context. The assistant should either propose necessary variables for confirmation or, when variables are unnecessary, produce the reusable prompt and prompt-library draft immediately.",
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Opus 4.8",
-        "level": "High"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.1 Pro",
-        "level": "High"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 31B",
-        "level": ""
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 5
   },
@@ -2202,28 +1670,6 @@
     "featured": false,
     "instructions": "Select the comprehensive review or the short single-session check.",
     "slug": "qa-check",
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Fable 5",
-        "level": "Adaptive"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Pro"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.1 Pro",
-        "level": "High"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 31B",
-        "level": ""
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 6
   },
@@ -2264,18 +1710,6 @@
     "slug": "academic-drawing",
     "archived": true,
     "instructions": "Select a variant based on the input type.",
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 14
   },
@@ -2304,63 +1738,18 @@
         "name": "Drawing Guide",
         "description": "Pencil drawing reproduction guide.",
         "template": "**Role:** You are a Master Draftsman and Drawing Instructor. Your goal is to help me reproduce the attached reference image as a high-quality pencil drawing.\n\n**Task 1:** Stylistic & Technical Diagnosis\nAnalyze the attached image. Identify the drawing approach best suited for this piece (e.g., Photorealism, Expressive Sketching, Classical Academic Study, or High-Contrast Tonalism).\n\n**Material Recommendations:** Suggest the best medium for the job (e.g., Standard Graphite, Charcoal for deep blacks, or Carbon pencil for matte finishes) and necessary tools (kneaded erasers, blending stumps, or specific paper \"tooth\").\n\n**Texture Strategy:** Briefly explain the primary technique needed for the dominant textures in the image (e.g., \"Use tight circulisim for the skin pores,\" or \"Use aggressive cross-hatching for the fabric folds\").\n\n**Task 2:** Technical Breakdown\nBased on your diagnosis, provide:\n\n**The \"Palette\" (Grade Selection):** List the specific range of pencils required (e.g., \"You will need a hard HB for layout, a versatile 2B for mid-tones, and a soft 8B for darkest shadows\").\n\n**Step-by-Step Guide:** Divide the process into logical drawing phases that build value gradually:\n\n**Phase 1:** The Framework (Hard Pencils): (Guidelines for accurate proportions, gesture, and light \"envelope\" shapes).\n\n**Phase 2:** Mapping Shadows (Mid-Range Pencils): (Establishing the \"bedbug line\" separating light and shadow families; flat tonal mapping).\n\n**Phase 3:** Modeling Form & Blending: (Developing gradients, turning soft edges, and deciding whether to blend with tools or rely on distinct hatch marks).\n\n**Phase 4:** Deepening Darks & Texture: (Pushing contrast to the limit with softest pencils and rendering specific surface details).\n\n**Phase 5:** Subtractive Highlights: (Using erasers to \"draw\" back into the tones to create crisp highlights or stray hairs).\n\n**Task 3:** Interactive Guidance\nProvide high-level instructions for these steps now. End your response by reminding me that I can ask for:\n\n\"Detailed Instructions for Step X\" (including specific pencil grades, pressure guidance, and stroke types).\n\n\"Generate a visual reference for Step X\" (to see a generated example of what the drawing should look like at that specific stage of completion, e.g., just the line work)."
-      },
-      {
-        "id": "blocking-in",
-        "name": "Blocking-In Study",
-        "description": "Blocking-in study from a finished oil painting.",
-        "variables": [
-          {
-            "name": "fidelity",
-            "label": "Fidelity",
-            "inputType": "toggle",
-            "options": [
-              "Low",
-              "Mid"
-            ],
-            "optionDescriptions": [
-              "Pure abstract color map with flat shapes, no edge variation or temperature shifts",
-              "Adds secondary planes, color temperature variation, and edge differentiation"
-            ],
-            "value": "Low",
-            "size": "compact"
-          }
-        ],
-        "template": "Analyze the attached finished oil painting and generate a new image that visualizes its blocking-in stage. Fidelity: {{fidelity}}.\n\nFidelity level definitions — apply only the one selected above:\n\n- Low — Reduce all forms to the broadest flat primary masses. Use a single flat local color per region. No secondary planes, edge variation, directional brushwork, or temperature shifts. The result should read as a pure abstract color map.\n\n- Mid — Reduce forms to primary masses but allow secondary planes where major surfaces turn. Introduce color temperature variation within masses (warm lights, cool shadows). Differentiate hard edges at form boundaries from soft edges at gradual transitions. Suggest volume with directional brushwork. Still no fine textures, highlights, or rendered detail.\n\nConstraints common to all fidelity levels:\n\n- Composition: Maintain the exact proportions and layout of the original.\n- Style: Thin underpainting aesthetic — a 'lean' first layer or lay-in. A front-on map of the painting's masses.\n- Presentation: Flat, front-on perspective. No framing, easel, or context — just the study itself.\n\nThe goal is to strip away the 'rendered' data (skin texture, leaf detail) and reveal only the 'abstract' data beneath it."
       }
     ],
     "featured": false,
     "slug": "artist-guide",
     "variables": [],
     "instructions": "Select a variant for the medium or study type.",
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Opus 4.8",
-        "level": "High"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.1 Pro",
-        "level": "High"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 31B",
-        "level": ""
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 15
   },
   {
     "id": "restyle-image",
-    "title": "Photography",
+    "title": "Photo Restyle & Correction",
     "description": "Transforms an uploaded photo into a selected fine-art, editorial, or archival photography style.",
     "category": "Art",
     "icon": "camera_alt",
@@ -2409,40 +1798,19 @@
       {
         "id": "faithful-upscale",
         "name": "Style Preservation Upscale",
-        "description": "",
+        "description": "Faithful upscale that preserves the source image's visual intent.",
         "image": "",
         "template": "Upscale and enhance the provided image while preserving its exact existing aesthetic intent.\n\nUse the source image as the authority for composition, subject identity, framing, camera position, perspective, lighting, color, contrast, atmosphere, texture, depth of field, grain, sharpness, lens behavior, and overall visual character.\n\nInfer the intended image language before enhancing. If the source is clean, sharp, modern, commercial, editorial, architectural, or studio-like, preserve that polished precision. If the source is analog, archival, vintage, cinematic, documentary, painterly, soft-focus, low-light, or intentionally imperfect, preserve its grain, softness, haze, tonal compression, lens falloff, blur, patina, and medium-specific imperfections.\n\nIncrease resolution, fidelity, and print-readiness without changing the image’s content or style. Recover plausible detail only where the source is degraded, and keep all added detail consistent with the original medium, optics, lighting, and material behavior.\n\nRemove digital artifacts such as compression blocks, AI smearing, pixelation, banding, moiré, edge halos, warped details, duplicated textures, and over-smoothing. Preserve intentional grain, texture, softness, blur, haze, aging, and natural irregularity.\n\nDo not modernize, restyle, beautify, over-sharpen, over-clean, over-saturate, over-contrast, crop, recompose, add content, remove content, redesign subjects, or reinterpret the image.\n\nFinal result: a higher-resolution faithful master version of the same image, with improved technical quality and no change to its original aesthetic intent.",
-        "variables": [],
-        "referenceImages": []
-      },
-      {
-        "id": "context-preserving-editorial-correction",
-        "name": "Context-Preserving Editorial Correction",
-        "description": "Helpful for refining images of objects in context—such as artwork on a decorated wall—while maintaining the original setting and details.",
-        "image": "public/images/interior-context-fidelity-correction-preview.png",
-        "template": "Transform the attached image into a high-end editorial real-estate/interior-design photograph. Preserve the scene exactly as photographed: do not add, remove, relocate, resize, or restyle any object, furniture piece, fixture, artwork, plant, or architectural element. Do not invent content outside the original frame. This is a corrective and grading pass, not a reimagining.\n\nApply the following corrections, in this priority order:\n\n1. GEOMETRY\n\n- Correct converging verticals (walls, door frames, cabinetry, window mullions) so they are truly vertical.\n- Correct perspective distortion and barrel/pincushion lens distortion typical of wide-angle phone lenses.\n- Straighten the horizon line and any horizontal reference lines (countertops, floor-wall junctions, ceiling lines).\n- Re-crop minimally if needed to square up the composition after correction, without cutting off key elements.\n\n2. EXPOSURE AND DYNAMIC RANGE\n\n- Balance exposure between bright windows and darker interior areas; recover blown-out window highlights and lift crushed shadows without introducing an unnatural HDR look.\n- Even out any harsh hot spots from direct sun or lamps.\n- Preserve natural contrast; avoid flat, washed-out results.\n\n3. WHITE BALANCE AND COLOR GRADING\n\n- Neutralize mixed-lighting color casts (e.g., warm tungsten bulbs vs. cool daylight from windows) to a single consistent, natural white balance.\n- Ensure whites read as true white and skin-tone-adjacent materials (wood, stone) read accurately.\n- Apply a restrained, tasteful editorial color grade: rich but natural saturation, clean neutrals, no oversaturation, no heavy filter look.\n\n4. REFLECTIONS AND ARTIFACTS\n\n- Remove or reduce distracting reflections in glass, mirrors, polished surfaces, and screens (e.g., camera reflection, photographer, phone, visible flash glare).\n- Remove lens flare, dust spots, and sensor artifacts.\n- Do not remove reflections that are structurally part of the space's design intent (e.g., intentional mirror placement)—only clean up distracting artifacts within them.\n\n5. SHARPNESS AND FINISH\n\n- Apply clean, natural sharpening appropriate for print/web editorial use—enhance texture in materials (wood grain, fabric, stone) without haloing or over-sharpening.\n- Reduce visible noise/grain from low-light phone capture while retaining texture detail.\n- Ensure clean, true-to-life colors throughout with no color banding.\n\nSTRICT CONSTRAINTS\n\n- Output must be photorealistic—this is a corrected photograph, not a rendering, illustration, or AI-stylized image.\n- Do not alter room layout, staging, or decor choices.\n- Do not change materials, finishes, or colors of real objects beyond correcting for lighting/white-balance inaccuracies.\n- Match the framing and content of the original as closely as possible after geometric correction.\n\nOptional user notes (may be blank; if blank, ignore this field): {{additional_notes}}",
         "variables": [],
         "referenceImages": []
       }
     ],
     "featured": false,
-    "slug": "restyle-photograph",
+    "slug": "photo-restyle-and-correction",
     "template": "",
     "instructions": "Select a variant for the desired photographic treatment.",
     "variationSelector": "visual",
     "variationSelectorTileMode": "details",
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 2
   },
@@ -2476,18 +1844,6 @@
     "featured": false,
     "slug": "architectural-photo-visualization",
     "template": "",
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.1 Pro",
-        "level": "High"
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 3
   },
@@ -2507,28 +1863,6 @@
       }
     ],
     "featured": false,
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Fable 5",
-        "level": "Adaptive"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Pro"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.1 Pro",
-        "level": "High"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 31B",
-        "level": ""
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 7
   },
@@ -2608,28 +1942,6 @@
     "template": "",
     "variables": [],
     "featured": false,
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 3
   },
@@ -2651,30 +1963,8 @@
     "featured": false,
     "slug": "art-iconography",
     "image": "public/images/1779288421261.jpg",
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 16
+    "customOrder": 17
   },
   {
     "id": "art-critique",
@@ -2699,13 +1989,6 @@
         "template": "I am uploading two images: [Image 1] is my artwork, and [Image 2] is the reference I am trying to emulate.\n\nAct as a professional art instructor specializing in draftsmanship and construction. Your goal is to help me bridge the gap between the underlying structure of my work and the reference. Unless I say otherwise, my goal is to adapt the current attempt to the reference rather than starting from scratch. Ignore color, lighting, and texture for this analysis. Please provide a side-by-side technical critique focusing on:\n\n**Anatomy & Proportions:** Are the internal landmarks (bones, muscle groups, or joints) aligned correctly? Compare the relative lengths and widths of the forms.\n\n**Gesture & Line of Action:** Does my work capture the same energy and flow as the reference? Analyze the 'weight' and balance of the pose or subject.\n\n**Perspective & Solid Form:** Am I thinking in 3D? Compare how the objects/limbs recede in space and whether the foreshortening matches the reference.\n\n**Composition & Silhouette:** Analyze the 'big shapes' and negative space. Is the placement on the canvas creating the same visual impact or focal point?\n\nPlease be specific and prioritize the top 3 most impactful structural corrections I can make to the underlying sketch to better align my work with the reference.\n\nAfter the written critique, ask whether I would like an annotated copy of Image 1. If I say yes, create an annotated version of Image 1 using simple visual indicators—arrows, outlines, guide lines, and numbered callouts—to mark the specific areas discussed in the critique. Keep the annotation visually clean. Use minimal text, since the written critique already explains the guidance. The purpose of the annotated image is to identify where the structural refinements should occur, not to restate the full analysis.  "
       },
       {
-        "id": "difference-overlay",
-        "name": "Difference Identification: Image Overlay",
-        "description": "50% opacity alignment overlay.",
-        "instructions": "Upload with this variant:\n**Image 1:** Your artwork photographed from life\n**Image 2:** The reference image you want to compare against",
-        "template": "Generate a high-fidelity, analytical composite image for art critique and visual comparison.\n\n**Input Images:** The scene uses two sources: [Image 2, the reference] and [Image 1, the user's artwork].\n\n**Geometric Correction of Image 1:** First, analyze [Image 1], which is a photo taken via an iPhone and contains distortion (lens warp, keystone effect, or skewed perspective). Apply precision perspective correction and a digital realignment to [Image 1]. The goal is to flatten the image plane to match [Image 2], ensuring that key anatomical or structural landmarks in the drawing (e.g., eyes, joints, contours) align geometrically with those in the reference, without altering the actual strokes, proportions, or essence of the original artwork itself.\n\n**Create the Composite Layer:** Once corrected, layer the realigned [Image 1] directly on top of [Image 2].\n\n**Apply Blending (Opacity):** Set the blending of the top layer ([Image 1, the artwork]) to 50% opacity. The background layer ([Image 2, the reference]) remains fully opaque.\n\n**Final Output:** The resulting image must clearly present the underlying reference visible through the semi-transparent, geometrically corrected artwork. This must highlight precisely where the forms of the artwork align with or stray from the reference in terms of size, angle, and placement."
-      },
-      {
         "id": "technique-style",
         "name": "Single Artwork: General Critique",
         "description": "Technique and style critique.",
@@ -2716,20 +1999,8 @@
     "featured": false,
     "slug": "artwork-critique",
     "instructions": "Choose a reference-matching variant when comparing your artwork to a target image, or choose the single-artwork variant when you want critique without a reference.",
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.1 Pro",
-        "level": "High"
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 17
+    "customOrder": 18
   },
   {
     "id": "fabric-colorways",
@@ -2744,7 +2015,8 @@
         "name": "Palette Method",
         "description": "Palette-reference recolor.",
         "template": "I am uploading two images:\n\n1. **Target Pattern Image** — This is the image that must be recolored.\n2. **Palette Reference Image** — This image is only a color palette reference.\n\n**Your task:**\n\nRecolor **Image 1 using colors extracted from **Image 2, the palette reference**.\n\n**Critical instruction:**\nDo not alter, reinterpret, redraw, or recolor Image 2. Image 2 is not the design target. It is only the palette source.\n\nThe output should be a single high-quality image showing the pattern from Image 1 recolored with the color palette from Image 2.\n\nThe recolored pattern should:\n\n- Maintain the exact composition, structure, scale, layout of Image 1\n- Extract the palette from Image 2\n- Apply those colors harmoniously \n- Keep the result refined, cohesive, and suitable for a professional textile colorway presentation",
-        "variables": []
+        "variables": [],
+        "instructions": "1. Upload the fabric design.\n2. Upload the palette reference."
       },
       {
         "id": "style-direction",
@@ -2760,25 +2032,14 @@
             "inputType": "textarea",
             "rows": 3
           }
-        ]
+        ],
+        "instructions": "1. Upload the fabric design.\n2. Enter the written color direction."
       }
     ],
     "featured": false,
     "slug": "fabric-colorways",
-    "instructions": "Select a variant for the colorway method.",
+    "instructions": "1. Select the colorway method.\n2. Upload or describe the palette inputs required by that method.",
     "image": "public/images/1777905940023.jpeg",
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 0
   },
@@ -2832,18 +2093,6 @@
     "slug": "pattern-effects",
     "instructions": "",
     "image": "public/images/1777908525884.jpeg",
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 1
   },
@@ -2866,28 +2115,6 @@
     "template": "**Story:** {{story}}\n\nAct as a textile designer's muse. For the story provided above, respond with twenty relevant physical objects that can be translated into fabric patterns.\n\nThe aesthetic is French Modernism: a blend of classical imagery, simple abstracted illustrations, and botanicals. Think 1920s and 30s avant-garde. Think Jean Cocteau meets Matisse.\n\nAfter your response, offer to write an image prompt that elicits a fabric pattern based on the provided imagery and executed in the style of House of Hackney, Dedar, Schumacher, or Lee Jofa. The image prompt would elicit a flat, full-color illustration of the fabric pattern that can essentially serve as a digital \"pattern swatch\" without any real-world context, such as fabric folds, shadows, or background clutter.",
     "featured": false,
     "slug": "fabric-imagery",
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 2
   },
@@ -2901,20 +2128,9 @@
     "template": "The first image I am uploading is the fabric design that I wish to transform. If a second image is provided, treat it as the style reference while ignoring its design. \n\nTransform the uploaded design into a high-end hand-blocked textile print on heavy linen, ensuring the design's geometry and colors are maintained.\n**Material & Substrate:**\n- Base: A heavy-weight, off-white slubbed linen. The weave should be coarse and tactile, with visible horizontal and vertical thread variations.\n- Interaction: The design must appear absorbed into the fibers, not sitting on top. The texture of the linen should be clearly visible underneath the printed ink areas.\n**Printing Technique (The \"Schumacher\" Look):**\n- Technique: Hand-block printed style.\n- Ink Quality: Use translucent pigment logic. The colors should have slight, natural variations in saturation (areas where the \"block\" hit harder or softer), creating a \"living\" surface.\n- Edge Behavior: Strictly no digital glows or added outlines. The edges of the shapes should show the slight variation one would expect from a wood block print as opposed to a perfect digital print. While it is extremely subtle, dye has traveled slightly along the specific warp and weft threads of the linen. This should look like \"wicking\" or capillary action, not a blur.\n- Consistency: Maintain the color palette and shapes of the provided design. \n**Lighting & Finish:**\n- The fabric is lying flat with no wrinkles or folds. Use even, natural daylight that shows the physical texture of the fabric weave and the way the dye interacts with the thread.",
     "featured": false,
     "slug": "fabric-rendering",
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 3
+    "customOrder": 3,
+    "instructions": "1. Upload Image 1: the fabric design.\n2. Optionally upload Image 2: the style reference."
   },
   {
     "id": "fabric-pattern-repeat",
@@ -2935,18 +2151,6 @@
     "template": "Analyze the visual style, color palette, and botanical motifs of the provided image to create a net new, seamless repeating tile.\n1. Maintain Aesthetic DNA: Capture the specific \"look and feel\" of the original—including the line weight, artistic medium (e.g., block print, watercolor, or ink), and the specific shade of the background and foreground elements.\n2. Design a New Repeat: Instead of cropping the original, generate a fresh composition of these elements. You are not constrained by the original’s specific dimensions or geometric grid.\n3. Ensure Technical Seamlessness: The new tile must be perfectly seamless. The motifs at the top edge must transition perfectly into the bottom, and the left edge must transition perfectly into the right.\n4. Optimize for Tiling: The final output should be a single, centered tile that can be repeated indefinitely to create a continuous, cohesive pattern without visible seams or “edge breaks.”{{notes}}",
     "featured": false,
     "slug": "fabric-pattern-repeat",
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 4
   },
@@ -2960,18 +2164,6 @@
     "template": "**Role:** You are a professional textile designer and digital illustrator.\n**Task:** Analyze the pattern in the attached photo. Extract the core design elements and recreate them as a flat, full-color illustration.\n**Format:** Generate a high-resolution representation of the pattern that can essentially serve as a digital \"pattern swatch\". Remove all real-world context, such as fabric folds, shadows, or background clutter.\n**Coloring:** Normalize and refine the colors to look like a clean digital asset, while strictly adhering to the original color palette of the photo.\n**Post-Generation:** Once you have provided the image, offer a variation that you feel may be useful. For example:\n1. A seamless, repeating tile suitable for textile printing.\n2. A recolored variation using a different colorway.\n3. A simpler outline version suitable for laser etching or embroidery.\n\n**IMPORTANT:** If you have not yet provided a generated image, the request is not complete.",
     "featured": false,
     "slug": "pattern-extraction",
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 5
   },
@@ -3004,44 +2196,23 @@
     "template": "Recreate the provided image as a simplified, high-contrast graphic optimized for vector tracing. Follow these technical constraints:\n- Geometry: Convert all elements into flat, solid shapes with clearly defined, closed paths. Remove all gradients, blurs, shadows, and painterly textures.\n- Color Palette: Reduce the image to a limited set of {{num_colors}} distinct, solid colors. Ensure high contrast between adjacent color fields.\n- Edge Quality: Smooth all curves and sharpen all corners. Eliminate fine, intricate details or “noise” that would create excessive nodes during conversion.\n- Composition: Maintain the essential subject matter, layout, and “look and feel” of the original, but simplify complex areas into unified color blocks.\n- Background: Place the simplified graphic on a solid, neutral {{background}} background to ensure clean edge detection.",
     "featured": false,
     "slug": "fabric-vector-prep",
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 6
+    "customOrder": 6,
+    "relatedPromptIds": [
+      "minimalist-line-drawing"
+    ]
   },
   {
     "id": "fabric-restyle-match",
-    "title": "Rendering: Exact Style Match",
+    "title": "Match Fabric Rendering Style",
     "description": "Restyles a design mockup to match the ink colors, fabric, and texture of an inspiration rendering.",
     "category": "Fabric",
     "icon": "style",
     "variables": [],
     "template": "The attached image is a fabric rendering that I like. I'm going to upload a fabric design mockup in my next message, and I want you to maintain the design of my mockup but match it to this rendering style, ink colors, fabric color, and texture. Tell me when you're ready for the image I want you to restyle.",
     "featured": false,
-    "slug": "rendering-exact-style-match",
-    "instructions": "Submit the inspiration rendering first, then the design mockup.",
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Instant"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Low"
-      }
-    ],
+    "slug": "match-fabric-rendering-style",
+    "instructions": "1. Upload Image 1: the inspiration rendering.\n2. Upload Image 2: the design mockup.",
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 7
   },
@@ -3085,28 +2256,6 @@
     ],
     "template": "## USER CONFIG\n\n### OBJECTIVE\n{{objective}}\n\n### INPUT\n{{input}}\n\n### OUTPUT_MODE\n{{output_mode}}\n\n---\n\n## Deliverable\n\nWrite a single self-contained Python script. Output only the script in one fenced Python code block.\n\nDo not include setup commentary, explanation, or shell session output before or after the code block.\n\nAt the top of the script, include a comment with:\n\n`pip install aiohttp tqdm`\n\nThe script itself should handle dependency bootstrapping by creating a `.venv` in the script's directory if one does not exist, then installing required packages into it before main processing begins.\n\n---\n\n## Task\n\nWrite a Python script that processes the INPUT file(s) using the Ollama local API (`gemma4:e2b`) to accomplish the OBJECTIVE.\n\nEach unit is processed independently:\n- Text files are processed chunk by chunk\n- Image files are processed one file at a time\n- No context passes between chunks or files\n\nSave the output file in the same directory as the first matched input file, using the input filename plus a short descriptive suffix derived from the OBJECTIVE.\n\nSuffix rules:\n- lowercase only\n- use underscores only\n- max length 20 characters\n- if no safe suffix can be derived, use `_processed`\n\nIf the glob matches no files, exit with a clear error message and non-zero status.\n\n---\n\n## API\n\nUse the Ollama local API:\n\n- Endpoint: `http://localhost:11434/api/generate`\n- Model: `gemma4:e2b`\n- Always use `stream: true`\n- Options: `temperature: 0`, `num_ctx: 4096`\n- Use `aiohttp` + `asyncio`\n\nFor text requests, send JSON in this shape:\n\n```json\n{\n  \"model\": \"gemma4:e2b\",\n  \"system\": \"DERIVED_SYSTEM_PROMPT\",\n  \"prompt\": \"CHUNK_TEXT\",\n  \"stream\": true,\n  \"options\": {\n    \"temperature\": 0,\n    \"num_ctx\": 4096\n  }\n}\n```\n\nFor image requests, send JSON in this shape:\n\n```json\n{\n  \"model\": \"gemma4:e2b\",\n  \"system\": \"DERIVED_SYSTEM_PROMPT\",\n  \"prompt\": \"PROCESS THIS IMAGE ACCORDING TO THE OBJECTIVE.\",\n  \"images\": [\"BASE64_STRING\"],\n  \"stream\": true,\n  \"options\": {\n    \"temperature\": 0,\n    \"num_ctx\": 4096\n  }\n}\n```\n\n---\n\n## File Type Detection\n\nDetect each file's type by extension, case-insensitive:\n\n- **Text**: `.txt` `.md` `.csv` `.json` `.xml` `.html` `.rst` `.log`\n- **Image**: `.jpg` `.jpeg` `.png` `.gif` `.webp` `.bmp`\n- **Unknown**: exit with a clear error asking the user to add the extension to the detection list\n\nA single glob can return a mix of text and image files; each file must be handled according to its own type.\n\nProcess files in sorted input-file order.\n\n---\n\n## System Prompt\n\nDerive a tight, task-specific system prompt from the OBJECTIVE.\n\nAppend this exact sentence to the system prompt:\n\n`Output only the result. Do not summarize, add commentary, or change anything beyond the stated task.`\n\nThe system prompt should contain only task instructions, not file metadata or progress information.\n\n---\n\n## Text File Processing\n\nChoose a chunk size appropriate for `gemma4:e2b`, using this rule:\n\n- default: about 150 words per chunk\n- increase up to about 250 words only if the OBJECTIVE clearly benefits from wider local context\n- never exceed what would reasonably risk degraded output quality\n\n**Requirements:**\n\n- split on whitespace only, never mid-word\n- preserve original chunk order\n- send each chunk as a text-only request with no `images` field\n- join chunk outputs according to `OUTPUT_MODE`:\n  - `seamless`: concatenate with no separator\n  - `separated`: join with one blank line between chunk outputs\n\n`OUTPUT_MODE` applies only to chunk joining within a single text file. It does not affect file-to-file separators in multi-file output.\n\n---\n\n## Image File Processing\n\n- one request per image\n- never chunk images\n- base64-encode the file and send it via the `images` field\n- write the model's text response as that image file's output block\n\n---\n\n## Multi-File Output\n\nIf more than one file matches, prefix each file's output block with:\n\n`=== <filename> ===`\n\nfollowed by a newline.\n\nIf only one file matches, do not add a filename prefix.\n\nWrite all file outputs into a single output file.\n\n---\n\n## Concurrency and Timeout\n\n- process all units sequentially\n- set `CONCURRENCY = 1`\n- per-unit timeout: 600 seconds\n\nA unit means:\n- one text chunk, or\n- one image file\n\n---\n\n## Retry\n\nRetry failed units up to 2 times:\n- first retry after 5 seconds\n- second retry after 10 seconds\n\nOn total failure:\n\n- **Text chunk**: write the original chunk unchanged\n- **Image file**: write `[ERROR: <filename> could not be processed]`\n\nAlso log failures to `review.log` in the output directory.\n\nEach log entry must include:\n- timestamp\n- filename\n- chunk index if applicable\n- retry attempt count\n- exception or HTTP error details\n\n---\n\n## Progress and Status\n\nPrint a startup summary including:\n- model\n- input pattern\n- matched file count\n- output path\n- chunk size\n\nShow a `tqdm` progress bar.\n\nUse `tqdm.write()` for all per-unit status lines so normal prints do not corrupt the progress bar.\n\nPrint a final summary including:\n- output path\n- log path\n- error count, but omit error count if it is zero\n\n---\n\n## Dependencies and Setup\n\nRequired packages:\n- `aiohttp`\n- `tqdm`\n\nThe script must:\n\n- create a `.venv` in the script directory if missing\n- install required packages into that `.venv`\n- continue execution using that environment's interpreter or otherwise ensure imports succeed reliably\n\nUse only standard library modules plus `aiohttp` and `tqdm`.\n\n---\n\n## Quality Bar\n\nThe script should be production-minded and runnable, with:\n\n- clear function boundaries\n- deterministic behavior\n- explicit error handling\n- readable status messages\n- no placeholder pseudocode\n- no omitted implementation details",
     "featured": false,
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 8
   },
@@ -3133,23 +2282,6 @@
     ],
     "featured": false,
     "slug": "cultural-city-guide",
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Opus 4.8",
-        "level": "High"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.1 Pro",
-        "level": "High"
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 5
   },
@@ -3165,7 +2297,7 @@
     "slug": "keep-composition--change-style",
     "featured": false,
     "modifiedAt": "2026-08-17T22:00:04.343Z",
-    "customOrder": 28,
+    "customOrder": 30,
     "instructions": "1. Submit composition reference. Wait for model's acknowledgement.\n2. Submit style reference"
   },
   {
@@ -3179,34 +2311,12 @@
     "slug": "style-dna-extractor",
     "icon": "palette",
     "featured": false,
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Opus 4.8",
-        "level": "High"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.1 Pro",
-        "level": "High"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 31B",
-        "level": ""
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 3
   },
   {
     "id": "architectural-detail-trace-prep",
-    "title": "Enlarge & Refine Details",
+    "title": "Detail Enlargement Prompt Builder",
     "description": "Creates detail-enlargement image prompts.",
     "category": "Architecture",
     "icon": "architecture",
@@ -3221,31 +2331,9 @@
         "rows": 6
       }
     ],
-    "slug": "enlarge--refine-details",
+    "slug": "detail-enlargement-prompt-builder",
     "featured": false,
     "image": "public/images/1775761209614.jpg",
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Sonnet 5",
-        "level": "Light"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 12B",
-        "level": ""
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 4
   },
@@ -3273,7 +2361,7 @@
       {
         "id": "minimalist-line-drawing",
         "name": "Minimalist Line Drawing",
-        "description": "",
+        "description": "Minimal black contour drawing for tracing.",
         "image": "public/images/line-drawing-minimalist-preview.png",
         "template": "Convert the attached image into a minimalist black and white line drawing. Use clean, continuous black outlines on a solid white background. No shading, no gradients, and no textures; only pure vector-style mono-lines suitable for pen plotting and tracing.",
         "variables": []
@@ -3281,7 +2369,7 @@
       {
         "id": "variation-2",
         "name": "Mid-Fidelity Line Drawing",
-        "description": "A line drawing with a bit more fidelity than the 'minimalist' variant",
+        "description": "Adds key internal contours while retaining black single-weight outlines.",
         "image": "public/images/line-drawing-mid-fidelity-preview.png",
         "template": "Convert the attached image into a black and white line drawing. Use clean, continuous black outlines on a solid white background. No shading, no gradients; only vector-style mono-lines suitable for pen plotting or tracing.",
         "variables": []
@@ -3289,7 +2377,7 @@
       {
         "id": "detailed-lines",
         "name": "Detailed Line Drawing",
-        "description": "",
+        "description": "Preserves primary structural and interior outlines for detailed tracing.",
         "image": "public/images/line-drawing-detailed-lines-preview.png",
         "template": "Convert the attached image into a black-and-white pen-plotter-ready contour drawing. Preserve composition, crop, aspect ratio, perspective, placement, and major proportions. Use clean, smooth, continuous, single-weight black contour lines on a solid white background. Prioritize silhouettes, structural boundaries, facial features, anatomical contours, clothing edges, and major background outlines. Remove shading, gradients, hatching, stippling, texture, gray tones, and filled black areas. Simplify complex areas such as hair, eyes, hands, fabric folds, foliage, and background detail into a small number of deliberate continuous contours. Avoid clusters of short parallel strokes, dense micro-lines, tiny isolated marks, broken strokes, and thick filled marks. Optimize for later SVG vectorization and pen plotting.",
         "variables": []
@@ -3337,20 +2425,11 @@
     ],
     "variationSelector": "visual",
     "variationSelectorTileMode": "details",
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Instant"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Low"
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 18
+    "customOrder": 20,
+    "relatedPromptIds": [
+      "fabric-vector-prep"
+    ]
   },
   {
     "id": "svg-plotter-drawing",
@@ -3377,30 +2456,8 @@
     ],
     "slug": "svg-plotter-drawing",
     "featured": false,
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Opus 4.8",
-        "level": "High"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.1 Pro",
-        "level": "High"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 31B",
-        "level": ""
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 19
+    "customOrder": 21
   },
   {
     "id": "fabric-application-mockups",
@@ -3479,18 +2536,6 @@
       }
     ],
     "instructions": "- Submit an image of a fabric pattern.",
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 8
   },
@@ -3523,19 +2568,7 @@
     "slug": "room-repainter",
     "image": "public/images/1777069870101.png",
     "icon": "format_paint",
-    "instructions": "Submit the room image and the desired paint colors.",
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      }
-    ],
+    "instructions": "1. Upload the room image.\n2. Enter the desired paint colors.",
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 5
   },
@@ -3565,19 +2598,7 @@
         "variables": []
       }
     ],
-    "instructions": "- Image 1: draft design\n- Image 2: style reference",
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      }
-    ],
+    "instructions": "1. Upload Image 1: the draft fabric design.\n2. Upload Image 2: the style reference.",
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 9
   },
@@ -3602,18 +2623,6 @@
     "slug": "extend-image-crop",
     "icon": "aspect_ratio",
     "image": "public/images/1777229893811.jpg",
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Instant"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Low"
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 10
   },
@@ -3647,20 +2656,8 @@
         "variables": []
       }
     ],
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 20
+    "customOrder": 22
   },
   {
     "id": "topographic-site-plan-map",
@@ -3670,7 +2667,7 @@
     "icon": "map",
     "featured": false,
     "slug": "topographic-site-plan-map",
-    "instructions": "Upload an overhead map, satellite view, or site-plan screenshot as the Site Reference, then choose the desired historical map style variant. Each variant includes its own fixed Style Reference.",
+    "instructions": "1. Upload the overhead map, satellite view, or site-plan screenshot as the Site Reference.\n2. Choose the historical map style variant; its Style Reference is included automatically.",
     "image": "public/images/topographic-site-plan-manuscript-fort-sewall-preview.png",
     "variables": [],
     "variationSelector": "visual",
@@ -3712,26 +2709,14 @@
     ],
     "previewBaseImage": "public/images/topographic-site-plan-base-fort-sewall-satellite.png",
     "previewBaseImageDescription": "Fort Sewall, Marblehead satellite screenshot used as the standardized base image for this prompt family preview variants.",
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.1 Pro",
-        "level": "High"
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
-    "customOrder": 21
+    "customOrder": 23
   },
   {
     "id": "miniature-portrait",
     "title": "Miniature Portrait",
     "description": "Creates historical folk-art miniature portraits.",
-    "instructions": "",
+    "instructions": "1. Upload the character reference image.\n2. The miniature-portrait style reference is attached automatically.",
     "category": "Art",
     "image": "public/images/1786242743981.jpg",
     "template": "Create a formal historical bust portrait combining the likeness from the attached 'character reference' image and the artistic style from the style reference at {{miniature_style}}.\n\n**Character & Likeness:** The portrait must feature the precise facial features, expression, and likeness of the subject shown in the character reference image, seamlessly integrated.\n\n**Artistic Style & Medium:** Apply the exact 19th-century American Folk Art watercolor and gouache painting technique seen in the style reference. This includes the precise brushwork, the soft tonal washes, the use of desaturated, rich pigments, and the distinct, hand-painted texture. The background must be the same aged, textured cream paper with its specific patina.\n\n**Composition & Attire:** Replicate the formal, three-quarter bust composition and the exact attire (the dark charcoal-grey frock coat, the white multiple-buttoned waistcoat, and the oversized black silk bow tie stock) from the style reference, but adapted to the character's form. Maintain the neutral lighting and composed, formal expression.",
@@ -3744,26 +2729,14 @@
         "path": "https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/Images/Matt/1780451009194.jpg"
       }
     ],
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      }
-    ],
     "modifiedAt": "2026-08-09T02:32:43.122Z",
-    "customOrder": 22
+    "customOrder": 24
   },
   {
-    "id": "untitled-prompt-1783014432546",
-    "title": "Color Shift",
-    "description": "",
-    "instructions": "",
+    "id": "recolor-image-for-palette",
+    "title": "Recolor Image for a Palette",
+    "description": "Recolors an image to a supplied palette while preserving its visual structure.",
+    "instructions": "1. Upload the image to recolor.\n2. Enter the target palette as color names, swatches, or hex values.",
     "category": "Art",
     "image": "public/images/1786242452526.jpg",
     "template": "Use the attached image as the structural and stylistic source of truth. Recolor the image so that its overall color language becomes complementary to the target palette below, while preserving the original composition, subject matter, drawing, lighting logic, texture, brushwork, grain, and material character.\n\nTarget palette:\n{{target-palette}}\n\nObjective:\nCreate a sophisticated color translation, not a monochrome tint. The final image should feel organically recolored into a new palette family while still retaining believable secondary colors, natural material variation, and the original image’s depth.\n\nColor direction:\n- Use the target palette as the dominant design system, not as a flat overlay.\n- Preserve a broad but controlled range of hues so the image does not feel simply tinted.\n- Let key palette colors appear selectively in the image where they make visual sense: skies, shadows, reflections, fabric, foliage accents, architectural details, atmospheric haze, or other naturally suitable areas.\n- Keep complementary and residual local colors where needed to preserve realism, richness, and painterly nuance.\n- Avoid washing the whole image in one color.\n\nValue mapping:\n- Preserve the original value structure, contrast, and depth.\n- Map highlights to the lightest tones in the target palette.\n- Map midtones to muted or softened versions of the palette’s core colors.\n- Map deep shadows to the darkest palette colors.\n- Keep shadow areas rich and dimensional rather than flat.\n- Maintain readable separation between foreground, midground, and background.\n\nStyle preservation:\n- Do not change the composition, crop, subject placement, geometry, silhouettes, lines, figures, objects, or spatial relationships.\n- Do not modernize, redraw, simplify, sharpen, stylize, or reinterpret the image.\n- Preserve the original medium, surface texture, brushwork, patina, grain, craquelure, edge softness, and atmospheric quality.\n- Preserve small details and the original visual hierarchy.\n\nRecoloring behavior:\n- Rebalance the image globally and locally, as a professional colorist would.\n- Shift the palette gently but holistically across the scene.\n- Allow warm, neutral, green, brown, gray, or other natural notes to remain when they support the image.\n- Introduce target-palette colors with restraint, especially in highlights, reflected light, ambient shadows, and accent areas.\n- Maintain a cohesive, believable mood.\n\nAvoid:\n- Monochrome tinting\n- Duotone posterization\n- Flat color replacement\n- Over-saturated palette colors\n- Loss of texture or painterly detail\n- Changed composition or invented elements\n- Generic “blue filter” or “brand overlay” effects\n\nOutput:\nA source-faithful recolored version of the attached image that feels designed around the target palette, yet remains visually rich, natural, and materially consistent with the original.",
@@ -3775,19 +2748,7 @@
         "inputType": "text"
       }
     ],
-    "slug": "color-shift",
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      }
-    ],
+    "slug": "recolor-image-for-palette",
     "modifiedAt": "2026-08-09T02:30:48.678Z",
     "customOrder": 4
   },
@@ -3801,28 +2762,6 @@
     "variables": [],
     "slug": "folder-cleanup",
     "image": "public/images/generated-hero-1783440808394.jpg",
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Opus 4.8",
-        "level": "High"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.1 Pro",
-        "level": "High"
-      },
-      {
-        "vendor": "gemma",
-        "model": "Gemma 4 31B",
-        "level": ""
-      }
-    ],
     "modifiedAt": "2026-07-07T12:42:40-04:00",
     "customOrder": 9
   },
@@ -3842,23 +2781,6 @@
       }
     ],
     "slug": "ev-charger-finder",
-    "recommendedModels": [
-      {
-        "vendor": "anthropic",
-        "model": "Claude Opus 4.8",
-        "level": "High"
-      },
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.1 Pro",
-        "level": "High"
-      }
-    ],
     "modifiedAt": "2026-07-19T23:17:10-04:00",
     "customOrder": 0
   },
@@ -3883,7 +2805,8 @@
       }
     ],
     "modifiedAt": "2026-07-23T00:00:00-04:00",
-    "customOrder": 23
+    "customOrder": 25,
+    "instructions": "1. Upload the dog photograph.\n2. The naive-portrait style reference is attached automatically."
   },
   {
     "id": "modernist-oil-painting-restyle",
@@ -3895,20 +2818,8 @@
     "image": "public/images/generated-hero-1786240897213.jpg",
     "template": "Transform the provided source image into a stylized modernist oil painting while preserving its essential subject, composition, crop, perspective, pose, proportions, spatial relationships, and object placement. Treat the source image as the authority for what is depicted, but translate every element into the following unified visual language.\n\n### Core painting style\n\nUse a simplified, expressive, slightly naïve oil-painting treatment built from broad, soft-edged shapes rather than photographic description. Render forms with:\n\n- Flat to gently modeled planes of color\n- Broad, visible brushwork\n- Thin-to-moderate paint application\n- Soft, slightly imprecise contours\n- Simplified drawing and restrained anatomical detail\n- Subtle, intentional distortions\n- Muted tonal variation\n- Clearly organized silhouettes and color masses\n- A quiet, lyrical, hand-painted atmosphere\n\nThe image should feel modernist, intimate, and observational. Favor visual economy, shape, and atmosphere over technical realism.\n\n### Rigorous simplification\n\nReduce every subject and object to a small number of legible painted shapes. Preserve:\n\n- Dominant silhouettes\n- Essential gesture and pose\n- Major value relationships\n- Important color relationships\n- Primary architectural or object geometry\n- The visual hierarchy of the source\n- Distinctive features required for recognition\n\nSimplify or eliminate:\n\n- Fine surface texture\n- Individual hairs, fibers, pores, or microscopic detail\n- Crisp photographic edges\n- Repeated small marks\n- Intricate ornament\n- Minor reflections\n- Incidental background information\n- Overly precise perspective corrections\n- High-frequency visual noise\n\nDo not merely apply a painterly surface texture over a realistic rendering. Reconstruct the entire image through simplified painted forms.\n\n### Subject treatment\n\nRender people, animals, furniture, architecture, and objects with the same degree of abstraction.\n\nFor figures or animals:\n\n- Preserve identity, pose, expression, and proportions\n- Generalize facial features into a few soft, decisive marks\n- Describe hair or fur as broad masses with only limited directional strokes\n- Avoid hyperreal eyes, noses, mouths, skin, or fur\n- Keep anatomy believable but slightly simplified and painterly\n\nFor interiors, furniture, and architecture:\n\n- Preserve structural relationships and recognizable geometry\n- Translate surfaces into broad planes of muted color\n- Allow edges to soften, merge, or become slightly irregular\n- Reduce decorative and construction detail to essential cues\n\n### Brushwork and edges\n\nUse broad, deliberate strokes with visible variation in direction and pressure. Maintain a hierarchy of edges:\n\n- Moderately defined around the primary subject\n- Softer within secondary forms\n- Partially lost in shadows and peripheral areas\n- Slightly irregular throughout, avoiding digitally perfect contours\n\nAvoid heavy impasto, excessive texture, glossy finish, palette-knife effects, or decorative brushwork unrelated to form.\n\n### Color and value\n\nTranslate the source palette into muted, harmonized color fields. Favor:\n\n- Warm creams\n- Soft ochres\n- Earthy browns\n- Muted greens\n- Smoky grays\n- Restrained blues\n- Limited dull reds or oranges where supported by the source\n\nKeep chroma controlled. Preserve meaningful color accents, but integrate them into the overall harmony. Organize light through broad value masses rather than sharp highlights. Use soft transitions and restrained contrast. Avoid photographic glare, hard specular reflections, crushed blacks, or brilliant whites.\n\n### Depth and atmosphere\n\nRetain enough depth to preserve the original spatial relationships, while flattening the image slightly so it reads as a unified painted surface. Use:\n\n- Overlapping shapes\n- Simplified perspective\n- Broad light and shadow divisions\n- Subdued background contrast\n- Reduced detail with distance\n\nDo not create exaggerated depth, cinematic lighting, dramatic atmospheric effects, or photographic lens behavior unless clearly present in the source.\n\n### Composition\n\nMaintain the source image’s:\n\n- Crop\n- Orientation\n- Camera position\n- Perspective\n- Subject scale\n- Pose\n- Object arrangement\n- Negative space\n- Foreground, middle-ground, and background relationships\n\nDo not redesign, beautify, restage, or editorialize the scene. Preserve ordinary asymmetries, awkwardness, and incidental relationships when they contribute to the source composition.\n\n### Final quality standard\n\nThe final image should appear to have been conceived and painted from the outset in this style. It should feel:\n\n- Simplified rather than unfinished\n- Expressive rather than decorative\n- Painterly rather than filtered\n- Observational rather than photographic\n- Intimate, quiet, and slightly naïve\n- Unified by broad shape, muted color, and restrained detail\n\nAvoid photorealism, digital smoothness, sharp illustration, cartoon outlines, excessive abstraction, exaggerated impasto, high saturation, artificial drama, and generic “oil painting” effects.",
     "variables": [],
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Thinking"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.5 Flash",
-        "level": "Medium"
-      }
-    ],
     "modifiedAt": "2026-08-09T02:01:45.454Z",
-    "customOrder": 24,
+    "customOrder": 26,
     "slug": "modernist-oil-painting-restyle"
   },
   {
@@ -3994,20 +2905,8 @@
         "template": "Using the uploaded image as the subject reference, reimagine it in the painterly oil style of Edward Hopper, defined by these concrete rules: bright, clear, high-angle sunlight (midday-to-afternoon quality) producing crisp, hard-edged shadows and strong contrast between sunlit and shaded facades; a clean palette of white, weathered gray, slate blue, muted green, and terracotta, with sky rendered as a flat or gently gradated pale blue; simplified geometric treatment of architecture (clapboard houses, lighthouses, dunes) reduced to clean planes and strong rectilinear or cylindrical forms with minimal surface texture beyond suggested wood grain or shingle lines; a high, wide horizon line or elevated vantage point that gives the scene an open, airy, slightly isolated feel; visible brushwork that stays smooth and controlled on architectural surfaces and looser/drier on grass, dune grass, or foliage; near-total absence of figures or activity, emphasizing structure and land against sky and sea; strong directional shadows used as the primary compositional device to divide the canvas. Preserve the subject loosely: keep it recognizable in overall form, scale, and orientation, but reshape edges and simplify surface detail so it reads as sunbaked, weathered architecture consistent with Hopper's coastal work. Avoid adding people or vehicles, avoid overcast or diffuse lighting, avoid saturated tropical color, and avoid decorative or intricate ornamentation foreign to Hopper's restraint."
       }
     ],
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Pro"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.1 Pro",
-        "level": "High"
-      }
-    ],
     "modifiedAt": "2026-08-09T01:53:59.749Z",
-    "customOrder": 25,
+    "customOrder": 27,
     "variationSelector": "visual",
     "variationSelectorTileMode": "details",
     "fullScreenModal": true,
@@ -4029,19 +2928,7 @@
     "template": "This image is one half of a pair (e.g., diptych, matched set, or complementary object). Generate its counterpart with the same medium, palette, lighting, and rendering style. Do not alter the original's style, color grading, or technique — match those exactly.\n\nDo not mirror, flip, rotate, trace, or closely paraphrase the original composition. Do not reuse the same silhouette, object arrangement, dominant directional movement, focal placement, or negative-space pattern.\n\nInstead, design a genuinely distinct but visually compatible composition using the same formal vocabulary.",
     "variables": [],
     "modifiedAt": "2026-08-04T15:28:24.000Z",
-    "customOrder": 26,
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Pro"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.1 Pro",
-        "level": "High"
-      }
-    ]
+    "customOrder": 28
   },
   {
     "id": "abstract-art-composition-refinement",
@@ -4054,22 +2941,10 @@
     "image": "public/images/abstract-art-composition-refinement-preview.png",
     "previewBaseImage": "public/images/abstract-art-composition-refinement-base-architectural-abstraction.png",
     "previewBaseImageDescription": "Black-and-cream architectural abstraction supplied as the source artwork for this prompt preview.",
-    "template": "Use the uploaded artwork as the source material. Rework its composition so the finished image feels intentional, balanced, spatially resolved, visually compelling, and complete as a standalone artwork.\n\nPreserve the essential artistic identity, subject language, material character, and overall spirit of the source, but treat the existing composition as editable rather than fixed.\n\nYou are explicitly empowered to make significant compositional changes where they improve the artwork. You may move, resize, crop, rotate, simplify, remove, extend, overlap, consolidate, separate, or redistribute existing forms, gestures, marks, masses, colors, and areas of negative space. You may alter the relative scale and placement of major elements, change the balance between dense and open areas, expand the apparent field of view, or substantially restructure weak portions of the image.\n\nDo not preserve compositional decisions merely because they appear in the source. Preserve what works; redesign what does not.\n\nPRIMARY OBJECTIVE\n\nCreate a composition with:\n\n* Clear visual hierarchy\n* Intentional asymmetrical balance\n* Strong relationships between positive and negative space\n* Convincing large-scale massing\n* Varied density and openness\n* Controlled visual movement\n* Meaningful focal and secondary areas\n* Varied scale, spacing, and interval\n* Deliberate edge relationships and cropping\n* Cohesive value structure\n* Enough tension to feel alive without becoming chaotic\n\nThe final work should feel discovered and inevitable rather than mechanically arranged.\n\n1. ESTABLISH THE LARGE COMPOSITION FIRST\n\nEvaluate the image initially as a small thumbnail or blurred field.\n\nIdentify the principal light, midtone, and dark masses and reorganize them where necessary so the artwork reads convincingly at a distance.\n\nPrioritize the overall arrangement of the picture plane before refining individual marks.\n\nAvoid allowing numerous small incidents to substitute for a strong large-scale compositional structure.\n\n2. CREATE A CLEAR HIERARCHY\n\nDetermine what should function as:\n\n* The dominant compositional event\n* One or two secondary areas\n* Supporting incidents\n* Quiet or resting areas\n\nStrengthen these distinctions.\n\nDo not give every element equal visual importance.\n\nConcentrate the strongest combinations of contrast, density, scale, saturation, sharpness, or complexity selectively rather than distributing them uniformly.\n\n3. DESIGN THE NEGATIVE SPACE\n\nTreat empty or relatively quiet areas as active compositional shapes.\n\nReshape, enlarge, compress, or relocate surrounding forms where necessary to make the negative spaces interesting in their own right.\n\nCreate intentional relationships between:\n\n* Open and compressed space\n* Large and small voids\n* Interior and edge-adjacent space\n* Active and restful regions\n\nAvoid filling empty areas simply because they are empty.\n\n4. FAVOR CONTROLLED ASYMMETRY\n\nSeek equilibrium without relying on symmetry or equal division.\n\nWhere useful, balance:\n\n* A large quiet mass with a smaller intense one\n* A dense region with an expansive open field\n* A heavy dark element with several lighter counterweights\n* A strong edge event with activity deeper inside the picture\n\nPrefer unequal but convincing relationships over visually neutral 50/50 arrangements.\n\n5. CONTROL VISUAL WEIGHT\n\nConsider the relative weight created by:\n\n* Size\n* Darkness\n* Saturation\n* Contrast\n* Texture\n* Complexity\n* Sharpness\n* Isolation\n* Proximity to the edge\n\nRedistribute these forces so the composition feels balanced without becoming static.\n\n6. CREATE A VISUAL PATH\n\nOrganize marks and forms so the eye can move through the artwork.\n\nCreate an implicit sequence such as:\n\nentry → primary event → secondary event → quieter passage → return\n\nUse gesture, repetition, diagonals, overlaps, directional marks, echoes, and interruptions to support this movement.\n\nAvoid compositions in which the eye either becomes trapped in one area or disperses everywhere simultaneously.\n\n7. VARY DENSITY\n\nCreate meaningful contrast between:\n\n* Dense and sparse\n* Active and quiet\n* Layered and exposed\n* Complex and simple\n\nConcentrate activity rather than spreading it evenly across the surface.\n\nAllow some passages to remain unresolved, erased, faint, open, atmospheric, or minimally articulated.\n\n8. VARY SCALE AND INTERVAL\n\nUse clearly differentiated:\n\n* Large forms\n* Medium forms\n* Small incidents\n\nVary the distances between forms and gestures.\n\nAvoid repetitive equal spacing, evenly distributed motifs, or similarly sized elements unless repetition is intentionally serving the composition.\n\nUse repetition with variation rather than repetition as pattern.\n\n9. MANAGE THE EDGES\n\nTreat all four edges as active compositional boundaries.\n\nConsider whether forms should:\n\n* Extend beyond the frame\n* Be cropped decisively\n* Approach an edge\n* Retreat from an edge\n* Enter or exit the picture plane\n\nUse cropping to imply a larger world beyond the image when appropriate.\n\nAvoid timid near-crops and accidental edge relationships.\n\n10. REMOVE ACCIDENTAL TANGENCIES\n\nIdentify places where forms:\n\n* Barely touch\n* Almost align\n* Accidentally kiss an edge\n* Create awkward near-overlaps\n* Produce ambiguous spacing\n\nResolve these deliberately.\n\nEither create clear separation or meaningful overlap.\n\n11. PRESERVE A STRONG VALUE STRUCTURE\n\nMaintain or improve the distribution of light, middle, and dark values.\n\nThe composition should remain compelling when viewed in grayscale.\n\nUse strong value contrast selectively to reinforce hierarchy rather than allowing identical contrast everywhere.\n\n12. INTRODUCE COUNTERFORCES\n\nWhen the composition has a dominant directional movement, introduce a smaller opposing or stabilizing movement where useful.\n\nExamples:\n\n* Vertical against horizontal\n* Diagonal against vertical\n* Curved gesture against rectilinear mass\n* Dense cluster against open field\n* Heavy form against delicate marks\n\nUse these counterforces subtly enough that the dominant movement remains clear.\n\n13. ELIMINATE DECORATIVE EVENNESS\n\nAvoid:\n\n* Equal spacing\n* Uniform distribution\n* Repeated identical scales\n* Excessive centering\n* Predictable symmetry\n* Activity covering the entire surface\n* Similar contrast everywhere\n* Marks that function independently rather than relationally\n\nWhere the image feels patterned, regular, or overly polite, introduce variation, interruption, compression, openness, or asymmetry.\n\n14. MAKE THE IMAGE FEEL LIKE A COMPLETE PAINTING\n\nIf the source feels like an attractive fragment, cropped detail, isolated motif, or incomplete study, expand or reorganize the composition so it operates convincingly as a complete artwork.\n\nThis may require:\n\n* Expanding the apparent field\n* Increasing negative space\n* Consolidating scattered marks\n* Establishing a larger dominant mass\n* Moving activity away from the center\n* Creating stronger edge relationships\n* Simplifying secondary areas\n* Increasing hierarchy between major and minor events\n\n15. USE ADDITION BY SUBTRACTION\n\nRemove or suppress elements that weaken the composition.\n\nDo not retain marks simply because they are visually interesting in isolation.\n\nEvery major element should contribute to the whole through balance, rhythm, tension, movement, hierarchy, or spatial structure.\n\nWhen uncertain, favor fewer stronger relationships over more competing incidents.\n\nFINAL COMPOSITIONAL TEST\n\nBefore finalizing, evaluate the transformed work as a whole:\n\n* Does it remain compelling at thumbnail scale?\n* Is there a clear first, second, and third place for the eye to travel?\n* Are the negative spaces intentionally shaped?\n* Are the major masses balanced without becoming symmetrical?\n* Is activity concentrated rather than uniformly distributed?\n* Are scale and spacing sufficiently varied?\n* Do the edges feel intentional?\n* Are there any unresolved tangencies?\n* Does the value structure work independently of color?\n* Are there meaningful areas of rest?\n* Does every major element earn its place?\n* Does the artwork feel complete rather than like a cropped detail?\n* Does the final composition possess both equilibrium and tension?\n\nIf any of these conditions are weak, continue restructuring the image.\n\nPrioritize the quality of the final composition over fidelity to the original arrangement. Make whatever compositional changes are required for the artwork to feel harmonious, resolved, dynamic, and visually inevitable.",
+    "template": "Use the uploaded artwork as source material. Preserve its artistic identity, material character, and subject language, but treat its composition as editable rather than fixed. Preserve what works; redesign what does not.\n\nMake substantial compositional edits when needed—move, resize, crop, remove, extend, overlap, consolidate, separate, or redistribute forms, masses, colors, and negative space—so the result reads as a complete painting rather than a refined fragment.\n\nControl the composition through five decisions:\n\n1. Hierarchy and focal areas: establish one dominant event, one or two secondary areas, and genuine resting areas.\n2. Asymmetrical balance and massing: balance unequal large and small, dense and open, light and dark forces without defaulting to symmetry.\n3. Negative space and edges: shape empty space deliberately; make all crops, approaches, separations, overlaps, and frame-edge relationships intentional.\n4. Visual path, density, and scale: lead the eye through varied scale, intervals, clustered activity, and quiet passages; concentrate complexity instead of spreading it evenly.\n5. Tonal and value hierarchy: organize light, middle, and dark masses so the image reads in grayscale and contrast reinforces hierarchy.\n\nDo not introduce decorative evenness, accidental tangencies, timid near-crops, uniform all-over fussiness, equal spacing, or similar contrast everywhere. Remove or suppress isolated incidents that do not serve the whole.\n\nFinal quality check: confirm the image reads at thumbnail scale; the eye has a clear path; negative spaces and edge decisions are deliberate; values support hierarchy; rest areas remain; and the work feels complete, balanced, and alive.",
     "variables": [],
-    "recommendedModels": [
-      {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Pro"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.1 Pro",
-        "level": "High"
-      }
-    ],
     "modifiedAt": "2026-08-08T00:00:00.000Z",
-    "customOrder": 27
+    "customOrder": 29
   },
   {
     "id": "artwork-archive-photograph",
@@ -4082,20 +2957,54 @@
     "image": "public/images/1787001776488.jpg",
     "template": "Prompt:\n\nGenerate a professional, high-resolution archive photograph from the attached image(s) of the artwork. If more than one image is attached, treat them as a set intended to produce a single composite image — the additional images are provided to clarify details (edges, corners, frame condition, texture, color) that may be ambiguous or unclear if only one image were used. If the artwork is framed, retain the original frame exactly as-is.\n\nGEOMETRY CORRECTION - CRITICAL:\nTreat the source as a document that must be converted into a front-on orthographic flatbed scan. Apply full 4-point homography orthorectification / dewarping before any other image adjustment. Use the four true outer corners of the artwork or original frame as the homography control points, then transform the image into a mathematically perfect, axis-aligned rectangle. The final camera viewpoint must be exactly perpendicular (90-degrees) to the center of the canvas, with no residual viewpoint angle.\nThe transformed result must satisfy all of these geometric conditions: top edge = 0° horizontal; bottom edge = 0° horizontal and exactly parallel to the top; left edge = 90° vertical; right edge = 90° vertical and exactly parallel to the left; all four corners = exactly 90°; frame edges perfectly parallel to the outer image canvas borders; uniform frame width along the entire top and bottom edges; uniform frame width along the entire left and right edges.\nCorrect ALL perspective distortion, keystoning, foreshortening, skew, barrel distortion, pincushion distortion, lens distortion, tilt, and rotation. Absolutely no tilt, rotation, trapezoid, keystone, perspective, foreshortening, or lens distortion may remain. Do not approximate the correction visually: enforce the axis-aligned orthographic geometry mathematically.\n\nBACKGROUND:\nIsolate artwork via precise cutout. Replace all original background with a seamless, pure solid white background #FFFFFF (255,255,255). No texture, no gradient, no vignetting.\n\nLIGHTING:\nEven, diffuse, professional museum studio lighting, high CRI >95, uniform luminance across entire canvas and frame. No hotspots, no glare, no reflections.\n\nSHADOWS:\nZERO shadows. Eliminate all drop shadows, contact shadows, ambient occlusion behind or around frame. Artwork must appear flush and floating without depth cue on white.\n\nARTWORK PRESERVATION - DO NOT REINTERPRET:\nPreserve 1:1 pixel-accurate details, true colors, brushstroke texture, impasto of the inner oil painting. Preserve exact patina, distressing, chips, craquelure, and age of the gold-leaf frame. Do not repaint, inpaint, stylize, or enhance.\n\nOUTPUT:\nUltra high-resolution, sharp focus, color-accurate digital record for catalog raisonné, minimalist.",
     "variables": [],
-    "recommendedModels": [
+    "modifiedAt": "2026-08-17T21:22:57.773Z",
+    "customOrder": 31,
+    "instructions": "1. Upload Image 1: the primary full artwork photograph.\n2. Optionally upload additional detail views."
+  },
+  {
+    "id": "oil-painting-blocking-in-study",
+    "title": "Oil Painting Blocking-In Study",
+    "description": "Creates a simplified blocking-in study from a finished oil painting.",
+    "instructions": "1. Upload the finished oil painting.\n2. Choose Low or Mid fidelity.",
+    "category": "Art",
+    "icon": "brush",
+    "featured": false,
+    "slug": "oil-painting-blocking-in-study",
+    "image": "public/images/oil-painting-blocking-in-study-preview.png",
+    "template": "Analyze the attached finished oil painting and generate a new image that visualizes its blocking-in stage. Fidelity: {{fidelity}}.\n\nFidelity level definitions — apply only the one selected above:\n\n- Low — Reduce all forms to the broadest flat primary masses. Use a single flat local color per region. No secondary planes, edge variation, directional brushwork, or temperature shifts. The result should read as a pure abstract color map.\n\n- Mid — Reduce forms to primary masses but allow secondary planes where major surfaces turn. Introduce color temperature variation within masses (warm lights, cool shadows). Differentiate hard edges at form boundaries from soft edges at gradual transitions. Suggest volume with directional brushwork. Still no fine textures, highlights, or rendered detail.\n\nConstraints common to all fidelity levels:\n\n- Composition: Maintain the exact proportions and layout of the original.\n- Style: Thin underpainting aesthetic — a 'lean' first layer or lay-in. A front-on map of the painting's masses.\n- Presentation: Flat, front-on perspective. No framing, easel, or context — just the study itself.\n\nThe goal is to strip away the 'rendered' data (skin texture, leaf detail) and reveal only the 'abstract' data beneath it.",
+    "variables": [
       {
-        "vendor": "openai",
-        "model": "ChatGPT 5.5",
-        "level": "Pro"
-      },
-      {
-        "vendor": "google",
-        "model": "Gemini 3.1 Pro",
-        "level": "High"
+        "name": "fidelity",
+        "label": "Fidelity",
+        "inputType": "toggle",
+        "options": [
+          "Low",
+          "Mid"
+        ],
+        "optionDescriptions": [
+          "Pure abstract color map with flat shapes, no edge variation or temperature shifts",
+          "Adds secondary planes, color temperature variation, and edge differentiation"
+        ],
+        "value": "Low",
+        "size": "compact"
       }
     ],
-    "modifiedAt": "2026-08-17T21:22:57.773Z",
-    "customOrder": 29,
-    "instructions": "If more than one image is attached, a composite output is generated."
+    "modifiedAt": "2026-08-17T22:45:22.810Z",
+    "customOrder": 16
+  },
+  {
+    "id": "artwork-alignment-overlay",
+    "title": "Artwork Alignment Overlay",
+    "description": "Creates a corrected 50% overlay of an artwork and its reference.",
+    "instructions": "1. Upload Image 1: your artwork photographed from life.\n2. Upload Image 2: the reference image to compare.",
+    "category": "Art",
+    "icon": "layers",
+    "featured": false,
+    "slug": "artwork-alignment-overlay",
+    "image": "public/images/artwork-alignment-overlay-preview.png",
+    "template": "Generate a high-fidelity, analytical composite image for art critique and visual comparison.\n\n**Input Images:** The scene uses two sources: [Image 2, the reference] and [Image 1, the user's artwork].\n\n**Geometric Correction of Image 1:** First, analyze [Image 1], which is a photo taken via an iPhone and contains distortion (lens warp, keystone effect, or skewed perspective). Apply precision perspective correction and a digital realignment to [Image 1]. The goal is to flatten the image plane to match [Image 2], ensuring that key anatomical or structural landmarks in the drawing (e.g., eyes, joints, contours) align geometrically with those in the reference, without altering the actual strokes, proportions, or essence of the original artwork itself.\n\n**Create the Composite Layer:** Once corrected, layer the realigned [Image 1] directly on top of [Image 2].\n\n**Apply Blending (Opacity):** Set the blending of the top layer ([Image 1, the artwork]) to 50% opacity. The background layer ([Image 2, the reference]) remains fully opaque.\n\n**Final Output:** The resulting image must clearly present the underlying reference visible through the semi-transparent, geometrically corrected artwork. This must highlight precisely where the forms of the artwork align with or stray from the reference in terms of size, angle, and placement.",
+    "variables": [],
+    "modifiedAt": "2026-08-17T22:45:22.810Z",
+    "customOrder": 19
   }
 ]
