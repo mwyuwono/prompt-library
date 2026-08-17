@@ -246,6 +246,12 @@ Update this table (and the prompts' `recommendedModels`) whenever a new flagship
 
 ### Prompt Copy Rules
 
+Prompt metadata is functional, literal, and easy to scan. Avoid marketing language, evocative claims, and filler.
+
+- **Titles:** Name the core action, transformation, or input/output relationship in a few plain words. Prefer directly comparable naming for related prompts, such as `Keep Subject / Change Style` and `Keep Composition / Change Style`.
+- **Descriptions:** State the prompt's job in one short sentence. Do not restate setup, workflow, benefits, or promotional claims.
+- **Instructions:** When the user must perform two or more actions, use an ordered list with one action per line (for example, `1. Submit composition reference. Wait for model's acknowledgement.\n2. Submit style reference`). Do not hide multiple steps in a paragraph.
+
 Keep every prompt `description` as short as possible while still making the prompt's purpose clear to users. Do not put usage instructions, setup steps, or prompt-level instructions in descriptions.
 
 For multi-step prompts, the prompt or variation `description` should describe the entire workflow. Put the actionable instructions for each step in that step's `instructions` field. Do not duplicate the step workflow in prompt-level or variation-level `instructions`.
