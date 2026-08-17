@@ -4078,7 +4078,7 @@
     "icon": "photo_camera",
     "featured": false,
     "slug": "artwork-catalog-photo",
-    "image": "public/images/1787001710647.webp",
+    "image": "public/images/1787001776488.jpg",
     "template": "Prompt:\n\nGenerate a professional, high-resolution archive photograph from the attached image(s) of the artwork. If more than one image is attached, treat them as a set intended to produce a single composite image — the additional images are provided to clarify details (edges, corners, frame condition, texture, color) that may be ambiguous or unclear if only one image were used. If the artwork is framed, retain the original frame exactly as-is.\n\nGEOMETRY CORRECTION - CRITICAL:\nTreat the source as a document that must be converted into a front-on orthographic flatbed scan. Apply full 4-point homography orthorectification / dewarping before any other image adjustment. Use the four true outer corners of the artwork or original frame as the homography control points, then transform the image into a mathematically perfect, axis-aligned rectangle. The final camera viewpoint must be exactly perpendicular (90-degrees) to the center of the canvas, with no residual viewpoint angle.\nThe transformed result must satisfy all of these geometric conditions: top edge = 0° horizontal; bottom edge = 0° horizontal and exactly parallel to the top; left edge = 90° vertical; right edge = 90° vertical and exactly parallel to the left; all four corners = exactly 90°; frame edges perfectly parallel to the outer image canvas borders; uniform frame width along the entire top and bottom edges; uniform frame width along the entire left and right edges.\nCorrect ALL perspective distortion, keystoning, foreshortening, skew, barrel distortion, pincushion distortion, lens distortion, tilt, and rotation. Absolutely no tilt, rotation, trapezoid, keystone, perspective, foreshortening, or lens distortion may remain. Do not approximate the correction visually: enforce the axis-aligned orthographic geometry mathematically.\n\nBACKGROUND:\nIsolate artwork via precise cutout. Replace all original background with a seamless, pure solid white background #FFFFFF (255,255,255). No texture, no gradient, no vignetting.\n\nLIGHTING:\nEven, diffuse, professional museum studio lighting, high CRI >95, uniform luminance across entire canvas and frame. No hotspots, no glare, no reflections.\n\nSHADOWS:\nZERO shadows. Eliminate all drop shadows, contact shadows, ambient occlusion behind or around frame. Artwork must appear flush and floating without depth cue on white.\n\nARTWORK PRESERVATION - DO NOT REINTERPRET:\nPreserve 1:1 pixel-accurate details, true colors, brushstroke texture, impasto of the inner oil painting. Preserve exact patina, distressing, chips, craquelure, and age of the gold-leaf frame. Do not repaint, inpaint, stylize, or enhance.\n\nOUTPUT:\nUltra high-resolution, sharp focus, color-accurate digital record for catalog raisonné, minimalist.",
     "variables": [],
     "recommendedModels": [
@@ -4093,7 +4093,7 @@
         "level": "High"
       }
     ],
-    "modifiedAt": "2026-08-17T21:21:52.395Z",
+    "modifiedAt": "2026-08-17T21:22:57.773Z",
     "customOrder": 29,
     "instructions": "If more than one image is attached, a composite output is generated."
   }
