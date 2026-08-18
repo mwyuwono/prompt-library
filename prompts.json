@@ -3006,17 +3006,17 @@
   },
   {
     "id": "artwork-alignment-overlay",
-    "title": "Compare Copied Art To Original",
+    "title": "Compare Copy To Original",
     "description": "Creates an overlay of an artwork and its reference.",
     "instructions": "1. Upload Image 1: your artwork photographed from life.\n2. Upload Image 2: the reference image to compare.",
     "category": "Art",
     "icon": "layers",
     "featured": false,
-    "slug": "compare-copied-art-to-original",
-    "image": "public/images/1787009126062.jpg",
+    "slug": "compare-copy-to-original",
+    "image": "public/images/1787012582950.jpg",
     "template": "Generate a high-fidelity, analytical composite image for art critique and visual comparison.\n\n**Input Images:** The scene uses two sources: [Image 2, the reference] and [Image 1, the user's artwork].\n\n**Geometric Correction of Image 1:** First, analyze [Image 1], which is a photo taken via an iPhone and contains distortion (lens warp, keystone effect, or skewed perspective). Apply precision perspective correction and a digital realignment to [Image 1]. The goal is to flatten the image plane to match [Image 2], ensuring that key anatomical or structural landmarks in the drawing (e.g., eyes, joints, contours) align geometrically with those in the reference, without altering the actual strokes, proportions, or essence of the original artwork itself.\n\n**Create the Composite Layer:** Once corrected, layer the realigned [Image 1] directly on top of [Image 2].\n\n**Apply Blending (Opacity):** Set the blending of the top layer ([Image 1, the artwork]) to 50% opacity. The background layer ([Image 2, the reference]) remains fully opaque.\n\n**Final Output:** The resulting image must clearly present the underlying reference visible through the semi-transparent, geometrically corrected artwork. This must highlight precisely where the forms of the artwork align with or stray from the reference in terms of size, angle, and placement.",
     "variables": [],
-    "modifiedAt": "2026-08-17T23:45:31.147Z",
+    "modifiedAt": "2026-08-18T00:23:04.293Z",
     "customOrder": 19
   }
 ]
