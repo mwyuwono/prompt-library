@@ -4,7 +4,7 @@
     "title": "Audio Essay",
     "description": "Creates audio-optimized essays from a topic, either as a two-step research workflow or as a simple one-shot essay prompt.",
     "category": "Writing",
-    "image": "",
+    "image": "public/images/generated-hero-1787498490427.jpg",
     "variables": [
       {
         "name": "topic",
@@ -32,7 +32,7 @@
         "template": "Write a ~3000-word audio essay to be listened to via text-to-speech.\n\nTopic:\n{{topic}}\n\nUse your own research and reasoning to produce the finished essay directly. Do not ask me for additional input before writing unless the topic is impossible to interpret.\n\n## LENGTH & FORMAT\n- Approximately 3000 words of continuous, flowing prose\n- No headers, bullets, numbered lists, or section labels in the main essay\n- End with a short References section that maintains plain-spoken prose rather than formal reference formatting\n- Follow the References section with three concise areas for deeper learning appropriate for expert-level readers\n\n## AUDIO OPTIMIZATION\n- Written to be HEARD, not read\n- Varied sentence rhythm and spoken transitions between ideas\n- A strong but not gimmicky opening hook\n- A resonant close that is not a summary\n- Address the specific audio challenges this topic presents, such as visual concepts that need tactile reframing or technical vocabulary that must land without footnotes\n\n## STYLE AND LANGUAGE\n- Spell out all numbers, dates, and quantities in full: write \"nineteen fifties\" not \"1950s,\" \"five percent\" not \"5%,\" \"first\" not \"1st,\" and \"twenty twenty-four\" not \"2024\"\n- Write out all symbols as words: percent, dollar, and; never use %, $, or &\n- No abbreviations or acronyms unless the full form is written out first\n- No inline citations such as \"(Smith, 1999)\" or \"[1]\"; collect sources in the References section at the end\n\n## AUDIENCE AND DEPTH\n- Write for a highly intelligent audience that already knows something about the topic\n- Go beyond common knowledge and surface-level facts\n- Incorporate historical, cultural, and technical context where it deepens understanding\n- Use metaphors or analogies sparingly and only when they improve clarity\n\n## FACTUAL RIGOR\n- Anchor claims in precise details: exact figures, dates, names, dimensions, places, and mechanisms where relevant\n- If a claim uses a superlative or comparative, such as \"the first,\" \"the deepest,\" or \"transformative,\" immediately follow with the specific evidence: what measurement, what year, what it surpassed or replaced\n- Do not leave generalizations unsupported; if something was significant, state specifically what changed, how it was measured, and what followed\n- If reliable specifics are unavailable, say so plainly rather than inventing detail\n\n## TONE\n- Precise, information-dense, and void of filler words and throat-clearing phrases such as \"it is worth noting,\" \"in many ways,\" or \"as we can see\"\n- Sophisticated but listenable; avoid academic stiffness, podcast banter, and motivational-summary language\n\nBegin with the essay itself."
       }
     ],
-    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "modifiedAt": "2026-08-23T15:21:32.409Z",
     "customOrder": 0
   },
   {
