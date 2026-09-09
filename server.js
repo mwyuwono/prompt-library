@@ -31,6 +31,9 @@ const REFERENCE_ASSET_REGION = process.env.REFERENCE_ASSET_REGION || 'us-east-1'
 const REFERENCE_ASSET_PROFILE = process.env.REFERENCE_ASSET_PROFILE || process.env.AWS_PROFILE || 'plots-s3-admin-bootstrap';
 const REFERENCE_ASSET_PUBLIC_BASE_URL = (process.env.REFERENCE_ASSET_PUBLIC_BASE_URL ||
     `https://${REFERENCE_ASSET_BUCKET}.s3.amazonaws.com/${REFERENCE_ASSET_PREFIX}`).replace(/\/+$/g, '');
+const PROMPT_PREVIEW_ASSET_PREFIX = (process.env.PROMPT_PREVIEW_ASSET_PREFIX || 'prompt-previews').replace(/^\/+|\/+$/g, '');
+const PROMPT_PREVIEW_ASSET_PUBLIC_BASE_URL = (process.env.PROMPT_PREVIEW_ASSET_PUBLIC_BASE_URL ||
+    `https://${REFERENCE_ASSET_BUCKET}.s3.amazonaws.com/${PROMPT_PREVIEW_ASSET_PREFIX}`).replace(/\/+$/g, '');
 const SKILL_ROOTS = [
     path.join(os.homedir(), '.codex', 'skills'),
     path.join(os.homedir(), '.agents', 'skills')
@@ -76,24 +79,8 @@ app.use(express.json({ limit: '15mb' }));
 app.use(express.static('.')); // Serve static files from current directory
 
 // Multer configuration for image uploads
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        const uploadDir = path.join(__dirname, 'public', 'images');
-        // Ensure directory exists
-        if (!fs.existsSync(uploadDir)) {
-            fs.mkdirSync(uploadDir, { recursive: true });
-        }
-        cb(null, uploadDir);
-    },
-    filename: (req, file, cb) => {
-        const ext = path.extname(file.originalname);
-        const filename = `${Date.now()}${ext}`;
-        cb(null, filename);
-    }
-});
-
 const upload = multer({
-    storage,
+    storage: multer.memoryStorage(),
     limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
     fileFilter: (req, file, cb) => {
         // Accept images only
@@ -266,6 +253,28 @@ function normalizeReferenceAssetKey(filename = '', folderPath = '') {
 function getReferenceAssetUrl(key) {
     const relativeKey = String(key || '').replace(new RegExp(`^${REFERENCE_ASSET_PREFIX}/?`), '');
     return `${REFERENCE_ASSET_PUBLIC_BASE_URL}/${relativeKey.split('/').map(encodeURIComponent).join('/')}`;
+}
+
+function getPromptPreviewAssetUrl(filename) {
+    return `${PROMPT_PREVIEW_ASSET_PUBLIC_BASE_URL}/${encodeURIComponent(filename)}`;
+}
+
+async function uploadPromptPreviewAsset({ buffer, filename, mimeType }) {
+    const key = `${PROMPT_PREVIEW_ASSET_PREFIX}/${filename}`;
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'prompt-preview-'));
+    const tempPath = path.join(tempDir, filename);
+    try {
+        fs.writeFileSync(tempPath, buffer);
+        await execFileAsync('aws', getAwsCliArgs([
+            's3', 'cp', tempPath, `s3://${REFERENCE_ASSET_BUCKET}/${key}`,
+            '--content-type', mimeType,
+            '--cache-control', 'public, max-age=31536000, immutable',
+            '--metadata-directive', 'REPLACE', '--no-progress'
+        ]), { timeout: 120000, maxBuffer: 10 * 1024 * 1024 });
+        return getPromptPreviewAssetUrl(filename);
+    } finally {
+        fs.rmSync(tempDir, { recursive: true, force: true });
+    }
 }
 
 async function runAwsJson(args, options = {}) {
@@ -1874,7 +1883,7 @@ app.post('/api/hero-image/generate', async (req, res) => {
  * POST /api/images/generated
  * Saves an approved generated image preview to public/images/.
  */
-app.post('/api/images/generated', (req, res) => {
+app.post('/api/images/generated', async (req, res) => {
     try {
         const { mimeType, base64 } = normalizeBase64Image(req.body?.image, req.body?.mimeType || 'image/png');
 
@@ -1887,18 +1896,12 @@ app.post('/api/images/generated', (req, res) => {
             return res.status(400).json({ success: false, error: 'Generated image is empty or too large.' });
         }
 
-        const uploadDir = path.join(__dirname, 'public', 'images');
-        if (!fs.existsSync(uploadDir)) {
-            fs.mkdirSync(uploadDir, { recursive: true });
-        }
-
         const filename = `generated-hero-${Date.now()}${getImageExtension(mimeType)}`;
-        const filepath = path.join(uploadDir, filename);
-        fs.writeFileSync(filepath, buffer);
+        const imagePath = await uploadPromptPreviewAsset({ buffer, filename, mimeType });
 
         res.json({
             success: true,
-            path: `public/images/${filename}`
+            path: imagePath
         });
     } catch (error) {
         console.error('Error saving generated image:', error);
@@ -1910,14 +1913,19 @@ app.post('/api/images/generated', (req, res) => {
  * POST /api/images/upload
  * Uploads image file to public/images/
  */
-app.post('/api/images/upload', upload.single('file'), (req, res) => {
+app.post('/api/images/upload', upload.single('file'), async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ error: 'No file uploaded' });
         }
         
-        // Return relative path for storage in prompts.json
-        const imagePath = `public/images/${req.file.filename}`;
+        const extension = path.extname(req.file.originalname).toLowerCase() || getImageExtension(req.file.mimetype);
+        const filename = `${Date.now()}${extension}`;
+        const imagePath = await uploadPromptPreviewAsset({
+            buffer: req.file.buffer,
+            filename,
+            mimeType: req.file.mimetype || getMimeTypeFromFilename(filename)
+        });
         
         res.json({
             success: true,
@@ -2029,16 +2037,12 @@ app.post('/api/reference-assets/upload', referenceAssetUpload.single('file'), as
  * DELETE /api/images/:filename
  * Deletes image file from public/images/
  */
-app.delete('/api/images/:filename', (req, res) => {
+app.delete('/api/images/:filename', async (req, res) => {
     try {
-        const filename = req.params.filename;
-        const filepath = path.join(__dirname, 'public', 'images', filename);
-        
-        if (!fs.existsSync(filepath)) {
-            return res.status(404).json({ error: 'File not found' });
-        }
-        
-        fs.unlinkSync(filepath);
+        const filename = path.basename(req.params.filename);
+        await execFileAsync('aws', getAwsCliArgs([
+            's3', 'rm', `s3://${REFERENCE_ASSET_BUCKET}/${PROMPT_PREVIEW_ASSET_PREFIX}/${filename}`, '--no-progress'
+        ]), { timeout: 30000 });
         
         res.json({ success: true });
     } catch (error) {
