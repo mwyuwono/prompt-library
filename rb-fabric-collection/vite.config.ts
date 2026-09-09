@@ -1,13 +1,17 @@
 import { defineConfig } from 'vite'
 import type { Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
+import { spawn } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const contentPath = path.join(__dirname, 'src', 'data', 'content.json')
-const uploadsDir = path.join(__dirname, 'public', 'fabrics', 'uploads')
+const fabricAssetBucket = process.env.RB_FABRIC_ASSET_BUCKET || 'prompt-library-assets-009019643313'
+const fabricAssetPrefix = 'rb-fabric-collection/fabrics/uploads'
+const fabricAssetProfile = process.env.RB_FABRIC_ASSET_PROFILE || 'plots-s3-admin-bootstrap'
+const fabricAssetBaseUrl = `https://${fabricAssetBucket}.s3.amazonaws.com/${fabricAssetPrefix}`
 
 type JsonBody = Record<string, unknown>
 
@@ -105,6 +109,43 @@ function safeImageName(fileName: string, mimeType: string) {
   return `${Date.now()}-${slug || 'fabric-image'}${ext}`
 }
 
+function uploadFabricImage(fileName: string, mimeType: string, bytes: Buffer) {
+  const key = `${fabricAssetPrefix}/${fileName}`
+
+  return new Promise<void>((resolve, reject) => {
+    const upload = spawn(
+      'aws',
+      [
+        's3',
+        'cp',
+        '-',
+        `s3://${fabricAssetBucket}/${key}`,
+        '--content-type',
+        mimeType,
+        '--cache-control',
+        'public, max-age=31536000, immutable',
+        '--profile',
+        fabricAssetProfile,
+      ],
+      { stdio: ['pipe', 'ignore', 'pipe'] },
+    )
+    let errorOutput = ''
+
+    upload.stderr.on('data', (chunk: Buffer) => {
+      errorOutput += chunk.toString()
+    })
+    upload.once('error', reject)
+    upload.once('close', (code) => {
+      if (code === 0) {
+        resolve()
+        return
+      }
+      reject(new Error(errorOutput || `S3 upload exited with code ${code}`))
+    })
+    upload.stdin.end(bytes)
+  })
+}
+
 function fabricAdminApi(): Plugin {
   return {
     name: 'fabric-admin-api',
@@ -149,9 +190,8 @@ function fabricAdminApi(): Plugin {
             }
 
             const safeName = safeImageName(fileName, mimeType)
-            fs.mkdirSync(uploadsDir, { recursive: true })
-            fs.writeFileSync(path.join(uploadsDir, safeName), Buffer.from(match[2], 'base64'))
-            sendJson(response, 201, { path: `/fabrics/uploads/${safeName}` })
+            await uploadFabricImage(safeName, mimeType, Buffer.from(match[2], 'base64'))
+            sendJson(response, 201, { path: `${fabricAssetBaseUrl}/${safeName}` })
             return
           }
 
