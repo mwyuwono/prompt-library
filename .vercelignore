@@ -1,2 +1,25 @@
 # Sibling project source + stale committed build output; not in prompts vercel.json builds list
 rb-fabric-collection/
+
+# Non-runtime source, design references, local applications, and QA material.
+# The explicit `vercel.json` build list is the source of truth for this static site.
+.github/
+.claude/
+arched-double-door-render/
+design_handoff_fullscreen_modal/
+docs/
+prompts-for-implementation/
+quick-text/
+redesign-reference/
+skills/
+tests/
+scripts/
+admin-settings.*
+admin.*
+reference-library.*
+server.js
+tools.*
+validate-prompts.js
+validate_prompts.js
+verify-*.js
+style-guide*.html
