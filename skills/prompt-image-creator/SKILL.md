@@ -1,6 +1,6 @@
 ---
 name: prompt-image-creator
-description: Create prompt preview images for the Prompt Library project using "The Nineteenth" editorial atelier style. Use when generating, editing, or refreshing prompt card images, prompt hero images, or prompt-library visual assets under public/images.
+description: Create prompt preview images for the Prompt Library project using "The Nineteenth" editorial atelier style. Use when generating, editing, or refreshing prompt card images, prompt hero images, or prompt-library visual assets for the S3 preview bucket.
 ---
 
 # Prompt Image Creator
@@ -9,7 +9,14 @@ description: Create prompt preview images for the Prompt Library project using "
 
 Use this skill to create prompt preview images for the Prompt Library. Default every image to "The Nineteenth" style unless the user explicitly asks for a different direction.
 
-Prompt images are project assets. Save final selected images under `public/images/`, use descriptive filenames, and wire them into the relevant `prompts.json` entry with the `image` field. Normalize prompt preview images to exact `1920x1080` unless the user specifies another project need.
+Prompt preview images live in the S3 asset bucket under `https://prompt-library-assets-009019643313.s3.amazonaws.com/prompt-previews/` — never in `public/images/` or Git. `public/images/` is logo-only per the deployment storage guardrail. Upload final selected images to the S3 preview bucket with descriptive filenames, and wire the S3 URLs into the relevant `prompts.json` entry with the `image` field. Normalize prompt preview images to exact `1920x1080` unless the user specifies another project need.
+
+For image-generation prompts with multiple variants, upload the shared base/reference image used to create the variant preview set to the S3 preview bucket, record its URL on the prompt as `previewBaseImage`, and add `previewBaseImageDescription` when helpful. When new variants are added or existing variant previews are refreshed, reuse the recorded base image so the preview set demonstrates standardized results from the same source image. Use descriptive filenames for standardized variant previews:
+
+```text
+{prompt-slug}-{variant-slug}-{base-subject}-preview.jpg
+{prompt-slug}-base-{base-subject}.jpg
+```
 
 ## Workflow
 
@@ -26,7 +33,7 @@ Prompt images are project assets. Save final selected images under `public/image
 4. Pick one accent only when it helps the subject: rust, sage, terracotta, dusty rose, or none.
 5. Generate or edit the image with the style guide below embedded in the prompt.
 6. Inspect the result for forbidden traits: gradients, rounded corners, glows, shadows, busy backgrounds, centered symmetry, or clutter.
-7. Save the final project copy in `public/images/`, leaving any generated source file in place.
+7. Upload the final image to the S3 preview bucket through the admin/S3 path (`server.js` `uploadPromptPreviewAsset`: AWS profile `plots-s3-admin-bootstrap`, content-type set, `--cache-control 'public, max-age=31536000, immutable'`), leaving any generated source file in place. Do not commit preview media to `public/` or Git.
 8. If the image belongs to a prompt entry, update `prompts.json` and validate JSON.
 
 ## Prompt Template
@@ -105,4 +112,4 @@ Apply when the image is photography:
 - Prefer exact `1920x1080` PNG or JPG for prompt preview cards.
 - Do not overwrite existing assets unless explicitly asked; create a new descriptive filename.
 - After adding or changing a prompt image, run JSON validation for `prompts.json`.
-- If the image is generated outside the workspace, copy the selected output into `public/images/` and leave the original generated file in place.
+- If the image is generated outside the workspace, upload the selected output to the S3 preview bucket and leave the original generated file in place.
