@@ -446,20 +446,20 @@
     {
       "categoryId" : "workflow-commands",
       "createdAt" : "2026-07-02T21:07:02Z",
-      "favorite" : false,
+      "favorite" : true,
       "id" : "workflow-commands-compush",
       "tags" : [
         "compush"
       ],
       "textReplacement" : {
-        "lastSyncedAt" : "2026-08-03T23:46:01Z",
-        "lastSyncedValue" : "Commit all outstanding changes on main and every branch. Validate, merge, and delete each non-main branch (local + remote); push main when done. Stop and ask if any branch fails validation or conflicts.",
+        "lastSyncedAt" : "2026-08-31T11:59:40Z",
+        "lastSyncedValue" : "Commit all outstanding changes. Validate, merge, and delete any existing non-main branches (local + remote), then push main. If no secondary branches exist, skip straight to pushing main.",
         "shortcut" : "xpush",
         "syncEnabled" : true
       },
       "title" : "Github: Commit, Push, Merge",
-      "updatedAt" : "2026-08-03T23:44:52Z",
-      "value" : "Commit all outstanding changes on main and every branch. Validate, merge, and delete each non-main branch (local + remote); push main when done. Stop and ask if any branch fails validation or conflicts.",
+      "updatedAt" : "2026-08-31T11:54:25Z",
+      "value" : "Commit all outstanding changes. Validate, merge, and delete any existing non-main branches (local + remote), then push main. If no secondary branches exist, skip straight to pushing main.",
       "visibility" : "public"
     },
     {
@@ -804,6 +804,26 @@
       "updatedAt" : "2026-08-14T17:51:40Z",
       "value" : "Using the attached image as a strict guide for composition, pattern, and texture, the directive is to deepen the overall luminance of the image. This change must be achieved strictly by shifting the value of each individual local color downward, rather than by applying a global dark overlay, a vignette, or a translucent veil. The specific color and value instructions include a local value remapping, where each distinct color swatch is shifted down by one to two value stops, or twenty to thirty percent luminance; this is to ensure that the lightest highlights become midtones and the midtones shift toward deep earth tones. Critically, there must be a zero overlay effect, meaning no flat dark tint, atmospheric haze, vignetting, or semi-transparent layer is to be applied over the top. The output should be a source-faithful version where every individual pigment is fundamentally darker.",
       "visibility" : "private"
+    },
+    {
+      "categoryId" : "image-quality",
+      "createdAt" : "2026-08-31T11:58:19Z",
+      "favorite" : false,
+      "id" : "phrase-A246A8F0-DC7A-449D-86BF-DB158DB12704",
+      "summary" : "Provides a text description of the current image",
+      "tags" : [
+
+      ],
+      "textReplacement" : {
+        "lastSyncedAt" : "2026-08-31T11:59:40Z",
+        "lastSyncedValue" : "Write a Midjourney prompt describing the provided image's subject, composition, lighting, style, color palette, and mood in descriptive detail. Focus purely on visual elements and atmosphere. Use text only—do not include any Midjourney parameters, commands, or flags.",
+        "shortcut" : "xmj",
+        "syncEnabled" : true
+      },
+      "title" : "Midjourney: Describe an image",
+      "updatedAt" : "2026-08-31T11:58:19Z",
+      "value" : "Write a Midjourney prompt describing the provided image's subject, composition, lighting, style, color palette, and mood in descriptive detail. Focus purely on visual elements and atmosphere. Use text only—do not include any Midjourney parameters, commands, or flags.",
+      "visibility" : "private"
     }
   ],
   "settings" : {
@@ -834,6 +854,7 @@
       "xlearn",
       "xllm",
       "xmeta",
+      "xmj",
       "xnoise",
       "xpal",
       "xpositive",
@@ -846,9 +867,9 @@
       "xtune"
     ],
     "paletteSource" : "Robert Brown Fabric Collection",
-    "textReplacementLastSyncAt" : "2026-08-14T17:51:47Z"
+    "textReplacementLastSyncAt" : "2026-08-31T11:59:40Z"
   },
-  "updatedAt" : "2026-08-14T18:59:04Z",
+  "updatedAt" : "2026-08-31T11:59:40Z",
   "variables" : [
     {
       "id" : "var-1783398724430",

@@ -140,8 +140,8 @@ npm run encrypt:private
 That re-encrypts the current `private-prompts.source.json` with the new passcode. After that, restart `node server.js` if the admin is already running, then redeploy so the updated `private-prompts.enc.json` is published.
 
 Deploy workflow:
-- Public edits: deploy `prompts.json`; prompt preview artwork stays in `public/images/`
-- Prompt execution reference images should use the public S3 bucket under `https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/`
+- Public edits: deploy `prompts.json`; prompt preview artwork lives at `https://prompt-library-assets-009019643313.s3.amazonaws.com/prompt-previews/`, not in Git or `public/images/`.
+- Prompt execution reference images use `https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/`.
 - Private edits: deploy `private-prompts.enc.json`
 
 ## Local Design System
@@ -158,6 +158,12 @@ This project owns its component and styling system locally. See [CLAUDE.md](CLAU
 ## Deployment
 
 Auto-deploys to Vercel on push to `main`. For manual: `vercel --prod`.
+
+### Deployment storage
+
+Vercel retains a complete deployment artifact, so versioned deployment storage grows with every large static asset. Keep `public/images/` limited to static runtime assets such as `prompts-logo.svg`. Store prompt-preview media in S3 at `s3://prompt-library-assets-009019643313/prompt-previews/`; `prompts.json` must use its public HTTPS URLs. The local admin upload/delete routes use this same prefix.
+
+Before shipping a media-heavy change, inventory deployable bytes and verify `.vercelignore` excludes sibling projects, generated output, dependencies, caches, and local data. After deployment, verify preview images load from S3 and inspect Vercel Deployment Storage. Current team budget: 10 GB; deployment retention is 30 days.
 
 ## Robert Brown Fabric Collection
 

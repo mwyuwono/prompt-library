@@ -242,7 +242,7 @@ When an image-generation prompt has multiple variants, save the shared base/refe
 
 For every image-oriented prompt or image-oriented variation set whose preview must depict a supplied subject, check for an existing appropriate `previewBaseImage` before creating previews. If none exists, ask the user to specify or provide the base image; do not invent one. Once supplied, save and record that base image, and use it for all of that prompt's variant previews unless the user explicitly directs otherwise. For image-oriented prompts that describe a workflow without a fixed subject, generate a subject-agnostic preview and do not block the library addition on a base image. Text-only prompts still require a prompt-level card thumbnail under the all-prompts rule above.
 
-Prompt execution reference images (`referenceImages[].path`) should live in the public S3 asset bucket under `https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/`, not in Git. These URLs are substituted into copied prompts and fetched by the image clipboard action.
+Prompt preview images (`image`, variation `image`, and `previewBaseImage`) must use the public S3 asset bucket under `https://prompt-library-assets-009019643313.s3.amazonaws.com/prompt-previews/`, not `public/images/` or Git. The logo remains the sole local image. Upload through the admin/S3 path and preserve immutable cache headers. Prompt execution reference images (`referenceImages[].path`) use `https://prompt-library-assets-009019643313.s3.amazonaws.com/reference-images/`. These URLs are substituted into copied prompts and fetched by the image clipboard action.
 
 When generating or refreshing preview images, existing generated previews may be visually 16:9 but not exact. Normalize final project copies to exact `1920x1080` before final validation.
 
@@ -276,6 +276,12 @@ When generating or refreshing preview images, existing generated previews may be
 ## Git Workflow
 
 Auto-deploys to Vercel on push to `main`.
+
+## Deployment Storage Guardrail
+
+Vercel deployment artifacts are retained versions. Do not add bulk, generated, user-uploaded, or replaceable media to `public/`, static assets, or build output. Before a media-heavy deployment, inventory deployable bytes and confirm `.vercelignore` excludes sibling projects, generated output, dependencies, caches, and local data. After deployment, verify live image URLs resolve from S3 and inspect Vercel Deployment Storage. Team budget: 10 GB; project retention: 30 days.
+
+For `rb-fabric-collection/`, use `https://prompt-library-assets-009019643313.s3.amazonaws.com/rb-fabric-collection/fabrics/uploads/` for uploaded fabrics and follow its local README before changing the Vite admin or Vercel configuration.
 
 
 ## Admin System

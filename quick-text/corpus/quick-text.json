@@ -283,12 +283,14 @@
         "llmformat"
       ],
       "textReplacement" : {
+        "lastSyncedAt" : "2026-09-10T16:23:39Z",
+        "lastSyncedValue" : "Write for concision and clarity without changing the meaning or effectiveness. Write for an LLM audience, using direct imperative language and removing human-oriented explanation or filler.",
         "shortcut" : "xllm",
         "syncEnabled" : true
       },
-      "title" : "Rewrite for an LLM",
-      "updatedAt" : "2026-07-09T19:54:41Z",
-      "value" : "Rewrite for concision and clarity without changing the meaning or effectiveness. Write for an LLM audience, using direct imperative language and removing human-oriented explanation or filler.",
+      "title" : "Write for an LLM",
+      "updatedAt" : "2026-09-10T16:23:33Z",
+      "value" : "Write for concision and clarity without changing the meaning or effectiveness. Write for an LLM audience, using direct imperative language and removing human-oriented explanation or filler.",
       "visibility" : "public"
     },
     {
@@ -513,11 +515,6 @@
           "end" : 21,
           "id" : "atom-1783030265897",
           "start" : 12
-        },
-        {
-          "end" : 37,
-          "id" : "atom-1783030290124",
-          "start" : 23
         }
       ],
       "categoryId" : "bullfinch",
@@ -530,9 +527,15 @@
 
       ],
       "textColor" : "brown-22",
+      "textReplacement" : {
+        "lastSyncedAt" : "2026-09-03T16:32:29Z",
+        "lastSyncedValue" : "Quick start Bullfinch.",
+        "shortcut" : "qsb",
+        "syncEnabled" : true
+      },
       "title" : "Start Bullfinch",
-      "updatedAt" : "2026-07-03T01:24:54Z",
-      "value" : "Quick start Bullfinch. Let’s work on:",
+      "updatedAt" : "2026-09-03T16:32:22Z",
+      "value" : "Quick start Bullfinch.",
       "visibility" : "private"
     },
     {
@@ -824,6 +827,26 @@
       "updatedAt" : "2026-08-31T11:58:19Z",
       "value" : "Write a Midjourney prompt describing the provided image's subject, composition, lighting, style, color palette, and mood in descriptive detail. Focus purely on visual elements and atmosphere. Use text only—do not include any Midjourney parameters, commands, or flags.",
       "visibility" : "private"
+    },
+    {
+      "categoryId" : "personal",
+      "createdAt" : "2026-09-10T16:27:24Z",
+      "favorite" : false,
+      "id" : "phrase-5508D3CB-7C0A-4424-A9E5-95452C1CFF1E",
+      "summary" : "",
+      "tags" : [
+
+      ],
+      "textReplacement" : {
+        "lastSyncedAt" : "2026-09-10T16:27:31Z",
+        "lastSyncedValue" : "Your ENTIRE response—including all code, inline comments, explanations, setup instructions, and usage examples—MUST be contained within a SINGLE markdown code block. Do NOT break the response into separate sections, distinct code blocks, or conversational text outside the block. \nPlace all narrative context, instructions, or documentation as code comments (e.g., `#` or `\/\/`) inside the single code block so the entire output can be copied and pasted at once without syntax errors.\n",
+        "shortcut" : "xblock",
+        "syncEnabled" : true
+      },
+      "title" : "Provide results in Code Block",
+      "updatedAt" : "2026-09-10T16:27:24Z",
+      "value" : "Your ENTIRE response—including all code, inline comments, explanations, setup instructions, and usage examples—MUST be contained within a SINGLE markdown code block. Do NOT break the response into separate sections, distinct code blocks, or conversational text outside the block. \nPlace all narrative context, instructions, or documentation as code comments (e.g., `#` or `\/\/`) inside the single code block so the entire output can be copied and pasted at once without syntax errors.\n",
+      "visibility" : "private"
     }
   ],
   "settings" : {
@@ -838,11 +861,13 @@
     "expandedChipDisplay" : false,
     "gridBackgroundColor" : "#2F2D29",
     "managedReplacementShortcuts" : [
+      "qsb",
       "xalign",
       "xapprove",
       "xattach",
       "xaudio",
       "xbfwf",
+      "xblock",
       "xcomp",
       "xcontext",
       "xdarken",
@@ -867,9 +892,9 @@
       "xtune"
     ],
     "paletteSource" : "Robert Brown Fabric Collection",
-    "textReplacementLastSyncAt" : "2026-08-31T11:59:40Z"
+    "textReplacementLastSyncAt" : "2026-09-10T16:27:31Z"
   },
-  "updatedAt" : "2026-08-31T11:59:40Z",
+  "updatedAt" : "2026-09-10T16:27:31Z",
   "variables" : [
     {
       "id" : "var-1783398724430",
