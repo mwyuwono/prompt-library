@@ -3060,45 +3060,52 @@
     "variables": [],
     "slug": "painting-analysis-visualizations",
     "instructions": "Upload with this prompt:\n**Image 1:** The reference oil painting to analyze",
-    "modifiedAt": "2026-09-11T15:03:21-04:00",
+    "modifiedAt": "2026-09-11T17:22:02-04:00",
     "customOrder": 32,
-    "archived": true,
     "variations": [
       {
         "id": "value-structure-notan",
         "name": "Value Structure and Notan",
         "description": "Four-value Notan massing of lights and shadows.",
         "template": "Generate a high-resolution visualization deconstructing the underlying value structure and tonal composition of the provided reference oil painting. This image must be a stark, monochromatic ‘Notan’ analysis, reducing the reference artwork’s entire value range strictly to four absolute values: Black, Dark Gray, Light Gray, and Pure White. All surface details, color, and texture are removed, focusing entirely on the large graphic shapes formed by massing lights and shadows. The resulting composition reveals the core visual weight, rhythm, and structural ‘bones’ of the artwork’s chiaroscuro, displayed as a bold, flattened geometric abstraction of light and dark.",
-        "variables": []
+        "variables": [],
+        "image": "https://prompt-library-assets-009019643313.s3.amazonaws.com/prompt-previews/painting-analysis-visualizations-value-structure-notan-seated-portrait-preview.jpg"
       },
       {
         "id": "temperature-chroma",
         "name": "Temperature and Chroma",
         "description": "Warm-versus-cool temperature map for depth and focus.",
         "template": "Generate a visualization analyzing the temperature strategy and chroma balance within the provided reference oil painting. The image isolates and visualizes the juxtaposition of warm versus cool colors by mapping the entire composition based on thermal contrast. Realistic tones are translated into absolute visual temperature markers: intense, saturated cool colors (deep blues, turquoises, cool magentas) versus intense warm colors (burnt oranges, golden yellows, warm reds). The resulting visualization is a simplified temperature map, showing how the contrast between warm advancing shapes and cool receding passages dictates spatial depth, visual focus, and atmosphere, completely ignoring local color detail.",
-        "variables": []
+        "variables": [],
+        "image": "https://prompt-library-assets-009019643313.s3.amazonaws.com/prompt-previews/painting-analysis-visualizations-temperature-chroma-seated-portrait-preview.jpg"
       },
       {
         "id": "color-blocking",
         "name": "Color Blocking",
         "description": "Large averaged-color planes showing foundational shapes.",
         "template": "Generate a simplified, analytical visualization of the provided reference oil painting, deconstructed into its fundamental color blocks and large planes. This visualization strips away fine details, brushstrokes, and rendered forms, replacing them with a simplified patchwork of large, solid geometric polygons. Each polygon represents the single ‘averaged’ color and value of that specific mass or zone in the reference image. This abstraction emphasizes color-blocking relationships, value masses, and underlying plane construction, visually demonstrating how the composition is built from simple, flat foundational shapes before detail is added.",
-        "variables": []
+        "variables": [],
+        "image": "https://prompt-library-assets-009019643313.s3.amazonaws.com/prompt-previews/painting-analysis-visualizations-color-blocking-seated-portrait-preview.jpg"
       },
       {
         "id": "brushwork-impasto",
         "name": "Brushwork and Impasto",
         "description": "Relief map of paint thickness with stroke-flow overlays.",
         "template": "Generate a high-contrast texture and directional stroke visualization analyzing the physical brushwork and impasto application of the provided reference oil painting. The image converts all color, value, and local imagery into a neutral, monochromatic relief map, emphasizing only surface topography, paint thickness, and gesture. Glowing vector movement lines and directional arrows are overlaid to trace the flow, velocity, and orientation of the artist’s brushstrokes across major focal points. This visual breakdown isolates the painterly hand, impasto height, and physical mark-making rhythms stripped of color distraction.",
-        "variables": []
+        "variables": [],
+        "image": "https://prompt-library-assets-009019643313.s3.amazonaws.com/prompt-previews/painting-analysis-visualizations-brushwork-impasto-seated-portrait-preview.jpg"
       },
       {
         "id": "geometric-composition",
         "name": "Geometric Composition",
         "description": "Vector overlay of diagonals, ratios, and focal anchors.",
         "template": "Generate a graphic compositional analysis overlay mapping the geometric framework and spatial organization of the provided reference oil painting. The reference artwork is rendered in low-opacity, desaturated tones in the background, while bold, clean vector lines (such as cyan, magenta, and yellow sightlines) are overlaid to illuminate the composition’s underlying geometry. The visualization highlights major diagonals, golden ratio spirals, rule-of-thirds intersections, leading lines, and structural axes that anchor the subjects within the frame, making the hidden structural scaffolding and focal anchors immediately clear.",
-        "variables": []
+        "variables": [],
+        "image": "https://prompt-library-assets-009019643313.s3.amazonaws.com/prompt-previews/painting-analysis-visualizations-geometric-composition-seated-portrait-preview.jpg"
       }
-    ]
+    ],
+    "image": "https://prompt-library-assets-009019643313.s3.amazonaws.com/prompt-previews/painting-analysis-visualizations-value-structure-notan-seated-portrait-preview.jpg",
+    "previewBaseImage": "https://prompt-library-assets-009019643313.s3.amazonaws.com/prompt-previews/painting-analysis-visualizations-base-seated-portrait.jpg",
+    "previewBaseImageDescription": "Seated man in a dark jacket with hand to cheek, open book on the table, small dark sculpture at right, patterned curtain upper left."
   }
 ]
