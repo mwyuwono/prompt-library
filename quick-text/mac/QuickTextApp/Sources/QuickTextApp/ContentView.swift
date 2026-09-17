@@ -45,6 +45,17 @@ struct ContentView: View {
     private var deleteCandidateIsPresented: Binding<Bool> {
         Binding(get: { deleteCandidate != nil }, set: { isPresented in if !isPresented { deleteCandidate = nil } })
     }
+    /// Extracted from the `.alert` call below: the interpolated form timed out
+    /// the type-checker on newer toolchains, while plain concatenation checks
+    /// trivially. Same rendered string.
+    private var deleteAlertTitle: String {
+        "Delete \u{201C}" + (deleteCandidate?.title ?? "") + "\u{201D}?"
+    }
+    /// Extracted from the error `.alert` call below for the same type-checker
+    /// timeout reason as `deleteAlertTitle`/`deleteCandidateIsPresented`.
+    private var errorAlertIsPresented: Binding<Bool> {
+        Binding(get: { store.errorMessage != nil }, set: { isPresented in if !isPresented { store.errorMessage = nil } })
+    }
 
     private let gridSpacing: CGFloat = 10
 
@@ -335,7 +346,7 @@ struct ContentView: View {
         }
         .animation(reduceMotion ? nil : QuickTextMotion.panel, value: store.expandedPhraseID)
         .alert(
-            "Delete \u{201C}\(deleteCandidate?.title ?? "")\u{201D}?",
+            deleteAlertTitle,
             isPresented: deleteCandidateIsPresented,
             presenting: deleteCandidate
         ) { phrase in
@@ -349,7 +360,7 @@ struct ContentView: View {
         }
         .alert(
             "Quick Text Error",
-            isPresented: Binding(get: { store.errorMessage != nil }, set: { isPresented in if !isPresented { store.errorMessage = nil } })
+            isPresented: errorAlertIsPresented
         ) {
             Button("OK") { store.errorMessage = nil }
         } message: {

@@ -121,4 +121,31 @@ final class CorpusStoreTests: XCTestCase {
         XCTAssertEqual(store.editingPhrase?.id, phrase.id)
         XCTAssertEqual(store.expandedPhraseID, phrase.id, "editing from the open item must leave the expanded card open")
     }
+
+    // MARK: - openCardTitle shortcut display
+
+    func testOpenCardTitleWithoutTextReplacementShowsTitleOnly() {
+        XCTAssertEqual(ExpandedCardView.openCardTitle(for: makePhrase(value: "v")), "TEST")
+    }
+
+    func testOpenCardTitleAppendsShortcutAfterTitle() {
+        var phrase = makePhrase(value: "v")
+        phrase.textReplacement = TextReplacementLink(shortcut: "xsum", syncEnabled: true)
+
+        XCTAssertEqual(ExpandedCardView.openCardTitle(for: phrase), "TEST | xsum")
+    }
+
+    func testOpenCardTitleIgnoresBlankShortcut() {
+        var phrase = makePhrase(value: "v")
+        phrase.textReplacement = TextReplacementLink(shortcut: "   ", syncEnabled: false)
+
+        XCTAssertEqual(ExpandedCardView.openCardTitle(for: phrase), "TEST")
+    }
+
+    func testOpenCardTitlePreservesShortcutCase() {
+        var phrase = makePhrase(value: "v")
+        phrase.textReplacement = TextReplacementLink(shortcut: "xSum", syncEnabled: true)
+
+        XCTAssertEqual(ExpandedCardView.openCardTitle(for: phrase), "TEST | xSum")
+    }
 }

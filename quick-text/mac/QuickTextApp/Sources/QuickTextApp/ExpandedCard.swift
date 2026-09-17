@@ -124,6 +124,18 @@ struct ExpandedCardView: View {
     /// so atom- and variable-only phrases share the same "gaps absorb taps" behavior.
     private var hasChips: Bool { hasAtoms || hasVariables }
 
+    /// Title line for the open card: the phrase title plus its Text Replacement
+    /// shortcut when one is configured (e.g. "SUMMARY | xsum"), so the shortcut
+    /// is visible without opening the editor. The shortcut keeps its exact
+    /// typed case since that is what the user types; the whole line shares one
+    /// text style at the call site.
+    static func openCardTitle(for phrase: Phrase) -> String {
+        let base = phrase.title.uppercased()
+        guard let shortcut = phrase.textReplacement?.shortcut.trimmingCharacters(in: .whitespacesAndNewlines),
+              !shortcut.isEmpty else { return base }
+        return base + " | " + shortcut
+    }
+
     /// True over the same area that reveals the copy icon (hovering the card but
     /// not the chips block) — a tap right now copies the whole card, so the
     /// background gets a subtle tint to signal that instead of leaving it
@@ -142,7 +154,7 @@ struct ExpandedCardView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: titleTypography.titleToBodySpacing) {
-            Text(phrase.title.uppercased())
+            Text(Self.openCardTitle(for: phrase))
                 .font(titleTypography.titleFont)
                 .tracking(titleTypography.titleTracking)
                 .foregroundStyle(textColor.opacity(0.45))
