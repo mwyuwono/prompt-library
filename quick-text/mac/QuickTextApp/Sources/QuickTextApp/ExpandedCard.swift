@@ -45,7 +45,8 @@ struct ExpandedOverlayView: View {
                 onCopyAtom: { atom in store.copyAtom(atom, in: phrase) },
                 onCopySelection: { atoms in store.copyAtomSelection(atoms, in: phrase) },
                 onCopyFull: { text in store.copyFullFromExpandedCard(text, phraseID: phrase.id) },
-                onClose: { store.collapseExpanded() }
+                onClose: { store.collapseExpanded() },
+                onEdit: { store.beginEditing(phrase) }
             )
             // Resets variable fill-in state when the expanded phrase changes,
             // rather than carrying stale entries over from the previous card.
@@ -91,12 +92,16 @@ struct ExpandedCardView: View {
     /// Receives the phrase value with any filled `{{...}}` variables substituted in.
     let onCopyFull: (String) -> Void
     let onClose: () -> Void
+    /// Opens the phrase editor for the displayed phrase. Optional so previews
+    /// don't need to wire it; the live overlay always passes `store.beginEditing`.
+    var onEdit: (() -> Void)? = nil
 
     @State private var hoveredAtomID: String?
     @State private var isHoveringCard = false
     @State private var isHoveringAtomsBlock = false
     @State private var isHoveringCopyIcon = false
     @State private var isHoveringCloseIcon = false
+    @State private var isHoveringEditIcon = false
     @State private var focusedAtomID: String?
     @State private var selectedAtomAnchorID: String?
     @State private var selectedAtomIDs: Set<String> = []
@@ -273,6 +278,11 @@ struct ExpandedCardView: View {
 
     private var iconsOverlay: some View {
         HStack(spacing: 12) {
+            if let onEdit {
+                iconButton(systemName: "pencil", isHovering: isHoveringEditIcon, action: onEdit) { hovering in
+                    isHoveringEditIcon = hovering
+                }
+            }
             if isHoveringCard, !isHoveringAtomsBlock {
                 iconButton(systemName: "doc.on.doc", isHovering: isHoveringCopyIcon, action: copyFull) { hovering in
                     isHoveringCopyIcon = hovering
@@ -510,6 +520,7 @@ struct ExpandedCardView: View {
             hoveredAtomID = nil
             isHoveringCopyIcon = false
             isHoveringCloseIcon = false
+            isHoveringEditIcon = false
         }
         let extending = event.modifierFlags.contains(.shift)
         switch event.keyCode {

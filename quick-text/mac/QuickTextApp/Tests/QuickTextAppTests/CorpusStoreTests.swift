@@ -105,4 +105,20 @@ final class CorpusStoreTests: XCTestCase {
 
         XCTAssertEqual(store.resolvedCopyText(for: phrase), "Status: {{@retired field}}")
     }
+
+    // MARK: - beginEditing from the expanded card
+
+    /// The expanded card's Edit button routes through `beginEditing(_:)`, the
+    /// same path as the grid context menu. Opening the editor from an open
+    /// item must not collapse that item — the user returns to it on dismiss.
+    func testBeginEditingExpandedPhraseKeepsExpandedOpen() {
+        let store = CorpusStore()
+        let phrase = makePhrase(value: "edit me")
+        store.expandedPhraseID = phrase.id
+
+        store.beginEditing(phrase)
+
+        XCTAssertEqual(store.editingPhrase?.id, phrase.id)
+        XCTAssertEqual(store.expandedPhraseID, phrase.id, "editing from the open item must leave the expanded card open")
+    }
 }
