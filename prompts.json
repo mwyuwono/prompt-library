@@ -3002,13 +3002,16 @@
         "id": "faithful-reproduction-restore",
         "name": "Faithful Reproduction Restore",
         "description": "High-resolution studio-quality restoration with strict medium fidelity.",
-        "template": "Use the attached artwork as the strict reference. Restore it into a high-resolution, studio-quality reproduction while preserving the original work exactly.\n\nPreserve:\n- Subject, composition, crop, proportions, perspective, and all original details\n- Original medium, surface, texture, mark-making, palette, value structure, and artistic character\n- Natural material qualities such as paper, canvas, paint, ink, pastel, charcoal, graphite, or other visible media\n\nRestore:\n- Lost fine detail and subtle tonal or color transitions\n- Natural edge definition and surface texture\n- Clarity, tonal separation, and material fidelity\n- Damage from low resolution, blur, pixelation, compression, noise, or poor reproduction\n\nConstraints:\n- Do not reinterpret, restyle, repaint, or redesign the artwork\n- Do not add, remove, simplify, or invent content\n- Do not alter anatomy, expression, geometry, color relationships, or composition\n- Avoid oversharpening, smoothing, artificial texture, excessive contrast, or synthetic detail\n\nResult: a faithful, high-resolution, museum-quality reproduction of the same artwork with restored detail, clarity, texture, and medium-specific authenticity."
+        "template": "Use the attached artwork as the strict reference. Restore it into a high-resolution, studio-quality reproduction while preserving the original work exactly.\n\nPreserve:\n- Subject, composition, crop, proportions, perspective, and all original details\n- Original medium, surface, texture, mark-making, palette, value structure, and artistic character\n- Natural material qualities such as paper, canvas, paint, ink, pastel, charcoal, graphite, or other visible media\n\nRestore:\n- Lost fine detail and subtle tonal or color transitions\n- Natural edge definition and surface texture\n- Clarity, tonal separation, and material fidelity\n- Damage from low resolution, blur, pixelation, compression, noise, or poor reproduction\n\nConstraints:\n- Do not reinterpret, restyle, repaint, or redesign the artwork\n- Do not add, remove, simplify, or invent content\n- Do not alter anatomy, expression, geometry, color relationships, or composition\n- Avoid oversharpening, smoothing, artificial texture, excessive contrast, or synthetic detail\n\nResult: a faithful, high-resolution, museum-quality reproduction of the same artwork with restored detail, clarity, texture, and medium-specific authenticity.",
+        "image": "https://prompt-library-assets-009019643313.s3.amazonaws.com/prompt-previews/artwork-catalog-photo-faithful-reproduction-restore-charcoal-detail-preview.jpg"
       }
     ],
     "variables": [],
-    "modifiedAt": "2026-09-17T21:52:59-04:00",
+    "modifiedAt": "2026-09-17T21:58:31-04:00",
     "customOrder": 31,
-    "instructions": "1. Upload Image 1: the primary full-artwork photograph or the artwork detail image you want to clean up.\n2. Optionally upload additional views of the same artwork to clarify edges, corners, frame condition, texture, or color."
+    "instructions": "1. Upload Image 1: the primary full-artwork photograph or the artwork detail image you want to clean up.\n2. Optionally upload additional views of the same artwork to clarify edges, corners, frame condition, texture, or color.",
+    "previewBaseImage": "https://prompt-library-assets-009019643313.s3.amazonaws.com/prompt-previews/artwork-catalog-photo-base-charcoal-detail.jpg",
+    "previewBaseImageDescription": "Charcoal academic head-study detail; source for the Faithful Reproduction Restore variant preview."
   },
   {
     "id": "oil-painting-blocking-in-study",
