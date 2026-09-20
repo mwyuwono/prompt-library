@@ -67,6 +67,27 @@ final class DictateTests: XCTestCase {
         XCTAssertEqual(try GeminiClient.extractOutputText(from: data), "hello")
     }
 
+    func testExtractOutputTextFromInteractionsSteps() throws {
+        let json = """
+        {
+          "id": "int_123",
+          "status": "completed",
+          "steps": [
+            {
+              "type": "thought",
+              "content": [{"type": "text", "text": "transcribing audio..."}]
+            },
+            {
+              "type": "model_output",
+              "content": [{"type": "text", "text": "This is the transcribed speech."}]
+            }
+          ]
+        }
+        """
+        let data = Data(json.utf8)
+        XCTAssertEqual(try GeminiClient.extractOutputText(from: data), "This is the transcribed speech.")
+    }
+
     func testExtractOutputTextThrowsWhenMissing() {
         let data = Data(#"{"something_else":1}"#.utf8)
         XCTAssertThrowsError(try GeminiClient.extractOutputText(from: data))

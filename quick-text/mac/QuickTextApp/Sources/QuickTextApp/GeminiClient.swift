@@ -89,9 +89,10 @@ struct GeminiClient {
         return try Self.extractOutputText(from: data)
     }
 
-    /// The SDK surfaces `interaction.output_text`; the REST envelope shape for
-    /// that field is probed defensively so an API-side rename surfaces as a
-    /// readable error instead of an empty result.
+    /// The SDK surfaces `interaction.output_text`; the REST envelope for the
+    /// Gemini Interactions API returns a `steps` array with `model_output`
+    /// content blocks. We parse `steps`, `outputs`, `output_text`, and
+    /// legacy `candidates` defensively.
     static func extractOutputText(from data: Data) throws -> String {
         let json: Any
         do {
@@ -99,17 +100,72 @@ struct GeminiClient {
         } catch {
             throw DictateError.badResponse("not JSON")
         }
-        if let dict = json as? [String: Any] {
-            if let text = dict["output_text"] as? String { return text }
-            if let interaction = dict["interaction"] as? [String: Any],
-               let text = interaction["output_text"] as? String { return text }
-            if let candidates = dict["candidates"] as? [[String: Any]],
-               let content = candidates.first?["content"] as? [String: Any],
-               let parts = content["parts"] as? [[String: Any]],
-               let text = parts.first?["text"] as? String { return text }
-            let keys = dict.keys.sorted().joined(separator: ", ")
-            throw DictateError.badResponse("no output_text; top-level keys: \(keys)")
+        guard let dict = json as? [String: Any] else {
+            throw DictateError.badResponse("top-level JSON is not an object")
         }
-        throw DictateError.badResponse("top-level JSON is not an object")
+
+        // 1. Direct output_text
+        if let text = dict["output_text"] as? String { return text }
+        if let interaction = dict["interaction"] as? [String: Any],
+           let text = interaction["output_text"] as? String { return text }
+
+        // 2. Gemini Interactions API: steps array
+        if let steps = dict["steps"] as? [[String: Any]] {
+            let modelSteps = steps.filter { ($0["type"] as? String) == "model_output" }
+            let candidateSteps = modelSteps.isEmpty ? steps.filter {
+                let t = $0["type"] as? String
+                return t != "thought" && t != "user_input"
+            } : modelSteps
+
+            var texts: [String] = []
+            for step in candidateSteps {
+                if let contents = step["content"] as? [[String: Any]] {
+                    for block in contents {
+                        let blockType = block["type"] as? String
+                        if blockType == nil || blockType == "text" {
+                            if let text = block["text"] as? String, !text.isEmpty {
+                                texts.append(text)
+                            }
+                        }
+                    }
+                } else if let contents = step["content"] as? [String] {
+                    texts.append(contents.joined(separator: "\n"))
+                } else if let contentStr = step["content"] as? String, !contentStr.isEmpty {
+                    texts.append(contentStr)
+                } else if let text = step["text"] as? String, !text.isEmpty {
+                    texts.append(text)
+                }
+            }
+            if !texts.isEmpty {
+                return texts.joined(separator: "\n")
+            }
+        }
+
+        // 3. Alternate outputs array
+        if let outputs = dict["outputs"] as? [[String: Any]] {
+            var outputTexts: [String] = []
+            for out in outputs {
+                let outType = out["type"] as? String
+                if outType == nil || outType == "text" {
+                    if let text = out["text"] as? String, !text.isEmpty {
+                        outputTexts.append(text)
+                    }
+                }
+            }
+            if !outputTexts.isEmpty {
+                return outputTexts.joined(separator: "\n")
+            }
+        }
+
+        // 4. Legacy generateContent candidates array
+        if let candidates = dict["candidates"] as? [[String: Any]],
+           let content = candidates.first?["content"] as? [String: Any],
+           let parts = content["parts"] as? [[String: Any]],
+           let text = parts.first?["text"] as? String {
+            return text
+        }
+
+        let keys = dict.keys.sorted().joined(separator: ", ")
+        throw DictateError.badResponse("no output text found in response; top-level keys: \(keys)")
     }
 }
