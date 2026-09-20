@@ -6,6 +6,11 @@ enum SearchScope {
 }
 
 final class CorpusStore: ObservableObject {
+    static let builtInDictationPromptIDs: Set<String> = [
+        DictateSession.defaultProcessID,
+        "voice-process-text-message",
+        "voice-process-email"
+    ]
     @Published var corpus = QuickTextCorpus.empty
     @Published var palette = Palette.empty
     @Published var activeCategoryID = "all"
@@ -311,6 +316,14 @@ final class CorpusStore: ObservableObject {
         corpus.phrases.removeAll { $0.id == phrase.id }
         selectedPhraseID = filteredPhrases.first?.id
         writeCorpus()
+    }
+
+    /// The Dictate prompt manager only permits deletion of user-created types;
+    /// its three shipped presets remain a dependable fallback for the picker.
+    func deleteDictationPrompt(_ phrase: Phrase) {
+        guard phrase.categoryId == "voice-process",
+              !Self.builtInDictationPromptIDs.contains(phrase.id) else { return }
+        delete(phrase)
     }
 
     /// Live grid-reorder while dragging: moves the dragged phrase to sit just
@@ -707,4 +720,3 @@ extension CorpusStore {
         writeCorpus()
     }
 }
-

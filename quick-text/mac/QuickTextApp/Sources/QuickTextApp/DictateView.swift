@@ -5,8 +5,12 @@ import SwiftUI
 /// Presented as a sheet from the phrases grid; phrase editing, copy, and
 /// text-replacement sync are untouched.
 struct DictateView: View {
+    let parentWindowWidth: CGFloat
     @EnvironmentObject private var store: CorpusStore
     @StateObject private var session = DictateSession()
+    @State private var showingPromptManager = false
+
+    @Environment(\.dismiss) private var dismiss
 
     private var voicePhrases: [Phrase] {
         store.corpus.phrases
@@ -21,27 +25,31 @@ struct DictateView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            header
+        ScrollView {
+            VStack(alignment: .leading, spacing: 14) {
+                header
 
-            if !GeminiKeychain.hasKey {
-                keyWarning
+                if !GeminiKeychain.hasKey {
+                    keyWarning
+                }
+
+                if voicePhrases.isEmpty {
+                    Text("No Voice Process prompts found in the corpus. Add phrases to the Voice Process category first.")
+                        .foregroundStyle(.secondary)
+                } else {
+                    recordRow
+                    takesList
+                    processRow
+                    resultSection
+                    sessionUsageFooter
+                }
             }
-
-            if voicePhrases.isEmpty {
-                Text("No Voice Process prompts found in the corpus. Add phrases to the Voice Process category first.")
-                    .foregroundStyle(.secondary)
-            } else {
-                recordRow
-                takesList
-                processRow
-                resultSection
-            }
-
-            Spacer(minLength: 0)
+            .padding(20)
         }
-        .padding(20)
-        .frame(minWidth: 620, minHeight: 560)
+        // Sheets size to their content by default. Use the presenting app window
+        // width so Dictate remains capped at 90% while giving editing room.
+        .frame(width: parentWindowWidth * 0.9)
+        .frame(minHeight: 560, idealHeight: 640, maxHeight: 720)
         .alert("Dictate Error", isPresented: Binding(
             get: { session.errorMessage != nil },
             set: { if !$0 { session.errorMessage = nil } }
@@ -49,6 +57,10 @@ struct DictateView: View {
             Button("OK") { session.errorMessage = nil }
         } message: {
             Text(session.errorMessage ?? "")
+        }
+        .sheet(isPresented: $showingPromptManager) {
+            DictationPromptManager(selectedProcessID: $session.selectedProcessID)
+                .environmentObject(store)
         }
     }
 
@@ -60,6 +72,15 @@ struct DictateView: View {
             Button("New Session") { session.newSession() }
                 .buttonStyle(.glass)
                 .disabled(session.isRecording || session.isWorking)
+            Button {
+                showingPromptManager = true
+            } label: {
+                Label("Manage prompts", systemImage: "gearshape")
+            }
+            .buttonStyle(.glass)
+            .help("Create and edit Process As prompts")
+            Button("Done") { dismiss() }
+                .buttonStyle(.glass)
         }
     }
 
@@ -78,20 +99,54 @@ struct DictateView: View {
             .tint(session.isRecording ? .red : store.highlightColor)
             .keyboardShortcut(.defaultAction)
             .disabled(session.isWorking)
+            .frame(width: 80)
 
             if session.isRecording {
-                Text("Recording…")
-                    .foregroundStyle(.red)
+                HStack(spacing: 8) {
+                    Circle()
+                        .fill(.red)
+                        .frame(width: 8, height: 8)
+                    Text("Recording (\(formatDuration(session.recordingElapsed)))")
+                        .foregroundStyle(.red)
+                        .monospacedDigit()
+                    recordingLevelMeter
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
             } else if session.isWorking {
-                ProgressView()
-                    .controlSize(.small)
-                Text("Working…")
-                    .foregroundStyle(.secondary)
+                HStack(spacing: 8) {
+                    ProgressView()
+                        .controlSize(.small)
+                    Text("Working…")
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
             } else {
                 Text(session.takes.isEmpty ? "Press Record, speak, then Stop. Repeat for more takes." : "\(session.readyTranscripts.count) of \(session.takes.count) takes transcribed.")
                     .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
+        .frame(minHeight: 32)
+    }
+
+    private var recordingLevelMeter: some View {
+        GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                Capsule()
+                    .fill(Color.primary.opacity(0.10))
+                Capsule()
+                    .fill(.red.gradient)
+                    .frame(width: geometry.size.width * CGFloat(session.recordingLevel))
+            }
+        }
+        .frame(width: 96, height: 6)
+        .accessibilityLabel("Recording input level")
+        .accessibilityValue("\(Int(session.recordingLevel * 100)) percent")
+    }
+
+    private func formatDuration(_ duration: TimeInterval) -> String {
+        let totalSeconds = max(0, Int(duration.rounded(.down)))
+        return String(format: "%02d:%02d", totalSeconds / 60, totalSeconds % 60)
     }
 
     private var takesList: some View {
@@ -126,10 +181,23 @@ struct DictateView: View {
 
     private func takeRow(index: Int, take: DictateTake) -> some View {
         HStack(alignment: .top, spacing: 10) {
-            Text("Take \(index + 1)")
-                .font(.headline)
-                .frame(minWidth: 56, alignment: .leading)
-                .padding(.top, 4)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Take \(index + 1)")
+                    .font(.headline)
+                HStack(spacing: 5) {
+                    if let duration = take.duration {
+                        Text(formatDuration(duration))
+                    }
+                    if let usage = take.tokenUsage {
+                        Text("·")
+                        Text("\(usage.totalTokens.formatted()) tokens")
+                    }
+                }
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
+            }
+            .frame(minWidth: 68, alignment: .leading)
+            .padding(.top, 4)
             VStack(alignment: .leading, spacing: 4) {
                 switch take.status {
                 case .recording:
@@ -156,6 +224,18 @@ struct DictateView: View {
             }
             Spacer()
             HStack(spacing: 6) {
+                if take.audioURL != nil, take.status != .recording, take.status != .transcribing {
+                    Button {
+                        session.togglePlayback(take)
+                    } label: {
+                        Label(
+                            session.playingTakeID == take.id ? "Stop" : "Play",
+                            systemImage: session.playingTakeID == take.id ? "stop.fill" : "play.fill"
+                        )
+                    }
+                    .buttonStyle(.glass)
+                    .help(session.playingTakeID == take.id ? "Stop playback" : "Play recorded take")
+                }
                 if take.status == .ready {
                     Button {
                         session.copyTake(take)
@@ -165,6 +245,21 @@ struct DictateView: View {
                     .buttonStyle(.glass)
                     .disabled((take.transcript ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                     .help("Copy take transcript")
+                    Button {
+                        session.rerecordTake(take)
+                    } label: {
+                        Label("Re-record", systemImage: "arrow.counterclockwise")
+                    }
+                    .buttonStyle(.glass)
+                    .help("Discard this take and record it again")
+                }
+                if case .failed = take.status {
+                    Button {
+                        session.rerecordTake(take)
+                    } label: {
+                        Label("Re-record", systemImage: "arrow.counterclockwise")
+                    }
+                    .buttonStyle(.glass)
                 }
                 Button(role: .destructive) { session.deleteTake(take) } label: {
                     Image(systemName: "trash")
@@ -179,32 +274,71 @@ struct DictateView: View {
     }
 
     private var processRow: some View {
-        HStack(spacing: 12) {
-            Picker("Process as", selection: $session.selectedProcessID) {
-                ForEach(voicePhrases) { phrase in
-                    Text(phrase.title).tag(phrase.id)
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 12) {
+                Picker("Process as", selection: $session.selectedProcessID) {
+                    ForEach(voicePhrases) { phrase in
+                        Text(phrase.title).tag(phrase.id)
+                    }
                 }
-            }
-            .pickerStyle(.menu)
-            .frame(maxWidth: 280)
+                .pickerStyle(.menu)
+                .frame(maxWidth: 280)
 
-            Button("Process") {
-                if let prompt = selectedPrompt {
-                    session.process(masterPrompt: prompt.value)
+                Button("Reprocess Takes") {
+                    if let prompt = selectedPrompt {
+                        session.reprocessTakes(masterPrompt: prompt.value)
+                    }
                 }
+                .buttonStyle(.glassProminent)
+                .tint(store.highlightColor)
+                .disabled(session.readyTranscripts.isEmpty || session.isWorking || session.isRecording || selectedPrompt == nil)
             }
-            .buttonStyle(.glassProminent)
-            .tint(store.highlightColor)
-            .disabled(session.readyTranscripts.isEmpty || session.isWorking || session.isRecording || selectedPrompt == nil)
+
+            if let prompt = selectedPrompt {
+                DisclosureGroup("Prompt preview") {
+                    ScrollView {
+                        Text(prompt.value)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .textSelection(.enabled)
+                    }
+                    .frame(maxHeight: 88)
+                }
+                .font(.caption)
+            }
         }
     }
 
     private var resultSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack {
+            HStack(spacing: 8) {
                 Text("Result")
                     .font(.headline)
+                if let synth = session.synthesisTokenUsage {
+                    Text("(\(synth.totalTokens.formatted()) tokens · \(TokenUsage.formatCost(synth.estimatedCost)))")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
                 Spacer()
+                if !session.resultText.isEmpty {
+                    Button("Clear") { session.resultText = "" }
+                        .buttonStyle(.glass)
+                }
+                Button("Reprocess Takes") {
+                    if let prompt = selectedPrompt {
+                        session.reprocessTakes(masterPrompt: prompt.value)
+                    }
+                }
+                .buttonStyle(.glass)
+                .disabled(session.readyTranscripts.isEmpty || session.isWorking || session.isRecording || selectedPrompt == nil)
+                Button("Refine Result") {
+                    if let prompt = selectedPrompt {
+                        session.refineCurrentResult(masterPrompt: prompt.value)
+                    }
+                }
+                .buttonStyle(.glass)
+                .disabled(session.resultText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || session.isWorking || session.isRecording || selectedPrompt == nil)
                 Button("Copy") { session.copyResult() }
                     .buttonStyle(.glass)
                     .disabled(session.resultText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
@@ -212,7 +346,7 @@ struct DictateView: View {
             ZStack(alignment: .topLeading) {
                 TextEditor(text: $session.resultText)
                     .font(.body)
-                    .frame(minHeight: 140)
+                    .frame(minHeight: 200)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                     .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.primary.opacity(0.15)))
                 if session.resultText.isEmpty {
@@ -225,5 +359,44 @@ struct DictateView: View {
                 }
             }
         }
+    }
+
+    private var sessionUsageFooter: some View {
+        let total = session.sessionTokenUsage
+        let transcription = session.transcriptionTokenUsage
+        let synthesis = session.synthesisTokenUsage
+
+        let costString = total.totalTokens == 0 ? "$0.00" : "~\(TokenUsage.formatCost(session.sessionEstimatedCost))"
+
+        return HStack(spacing: 6) {
+            Image(systemName: "chart.bar")
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
+            Text("Session usage: \(total.totalTokens.formatted()) tokens (\(costString))")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            if transcription.totalTokens > 0 {
+                Text("·")
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
+                Text("Transcription: \(transcription.totalTokens.formatted())")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            if !session.processingTurns.isEmpty {
+                Text("·")
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
+                Text("Processing: \(session.processingTokenUsage.totalTokens.formatted()) (\(session.processingTurns.count) turn\(session.processingTurns.count == 1 ? "" : "s"))")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            Spacer()
+        }
+        .padding(.top, 2)
+        .help("Transcription: \(transcription.totalTokens.formatted()) tokens (\(TokenUsage.formatCost(transcription.estimatedCost(pricing: .transcribe)))), latest processing: \(synthesis?.totalTokens.formatted() ?? "0") tokens")
     }
 }

@@ -60,6 +60,7 @@ struct SettingsEditor: View {
     @State private var apiKeyInput = ""
     @State private var apiKeyStatus: String?
     @State private var isTestingKey = false
+    @ObservedObject private var statsStore = DictateStatsStore.shared
 
     private var usesTwoColumns: Bool { width >= 760 }
     private var primaryColumnWidth: CGFloat { usesTwoColumns ? 320 : width - 44 }
@@ -132,59 +133,122 @@ struct SettingsEditor: View {
     // MARK: - Dictation (Gemini API key, Keychain only — never in the corpus)
 
     private var dictationSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Powers Dictate mode transcription and processing. Stored in the login Keychain, never in Quick Text data.")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-            HStack(spacing: 10) {
-                SecureField(GeminiKeychain.hasKey ? "Key saved — paste a new one to replace" : "Paste Gemini API key", text: $apiKeyInput)
-                    .textFieldStyle(.roundedBorder)
-                    .frame(maxWidth: 320)
-                Button("Save") {
-                    do {
-                        try GeminiKeychain.save(apiKeyInput)
-                        apiKeyInput = ""
-                        apiKeyStatus = "Key saved."
-                    } catch {
-                        apiKeyStatus = error.localizedDescription
-                    }
-                }
-                .buttonStyle(.glassProminent)
-                .disabled(apiKeyInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-                Button(isTestingKey ? "Testing…" : "Test") {
-                    isTestingKey = true
-                    apiKeyStatus = nil
-                    Task {
+        VStack(alignment: .leading, spacing: 14) {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Powers Dictate mode transcription and processing. Stored in the login Keychain, never in Quick Text data.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                HStack(spacing: 10) {
+                    SecureField(GeminiKeychain.hasKey ? "Key saved — paste a new one to replace" : "Paste Gemini API key", text: $apiKeyInput)
+                        .textFieldStyle(.roundedBorder)
+                        .frame(maxWidth: 320)
+                    Button("Save") {
                         do {
-                            let key = try GeminiKeychain.load()
-                            _ = try await GeminiClient(apiKey: key).ping()
-                            apiKeyStatus = "Key works."
+                            try GeminiKeychain.save(apiKeyInput)
+                            apiKeyInput = ""
+                            apiKeyStatus = "Key saved."
                         } catch {
                             apiKeyStatus = error.localizedDescription
                         }
-                        isTestingKey = false
                     }
-                }
-                .buttonStyle(.glass)
-                .disabled(!GeminiKeychain.hasKey || isTestingKey)
-                if GeminiKeychain.hasKey {
-                    Button("Remove") {
-                        do {
-                            try GeminiKeychain.delete()
-                            apiKeyStatus = "Key removed."
-                        } catch {
-                            apiKeyStatus = error.localizedDescription
+                    .buttonStyle(.glassProminent)
+                    .disabled(apiKeyInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    Button(isTestingKey ? "Testing…" : "Test") {
+                        isTestingKey = true
+                        apiKeyStatus = nil
+                        Task {
+                            do {
+                                let key = try GeminiKeychain.load()
+                                _ = try await GeminiClient(apiKey: key).ping()
+                                apiKeyStatus = "Key works."
+                            } catch {
+                                apiKeyStatus = error.localizedDescription
+                            }
+                            isTestingKey = false
                         }
                     }
                     .buttonStyle(.glass)
+                    .disabled(!GeminiKeychain.hasKey || isTestingKey)
+                    if GeminiKeychain.hasKey {
+                        Button("Remove") {
+                            do {
+                                try GeminiKeychain.delete()
+                                apiKeyStatus = "Key removed."
+                            } catch {
+                                apiKeyStatus = error.localizedDescription
+                            }
+                        }
+                        .buttonStyle(.glass)
+                    }
+                }
+                if let apiKeyStatus {
+                    Text(apiKeyStatus)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
             }
-            if let apiKeyStatus {
-                Text(apiKeyStatus)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
+
+            Divider()
+
+            dictateUsageAndCostCard
         }
+    }
+
+    private var dictateUsageAndCostCard: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Text("Usage & Cost")
+                    .font(.subheadline.weight(.semibold))
+                Spacer()
+                Button("Reset Lifetime Stats") {
+                    statsStore.reset()
+                }
+                .buttonStyle(.glass)
+                .controlSize(.small)
+                .disabled(statsStore.cumulativeTotalTokens == 0)
+            }
+
+            Grid(alignment: .leading, horizontalSpacing: 24, verticalSpacing: 6) {
+                GridRow {
+                    Text("Input tokens:")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Text("\(statsStore.cumulativeInputTokens.formatted())")
+                        .font(.caption.monospacedDigit())
+                }
+                GridRow {
+                    Text("Output tokens:")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Text("\(statsStore.cumulativeOutputTokens.formatted())")
+                        .font(.caption.monospacedDigit())
+                }
+                GridRow {
+                    Text("Total tokens:")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Text("\(statsStore.cumulativeTotalTokens.formatted())")
+                        .font(.caption.monospacedDigit().weight(.medium))
+                }
+                GridRow {
+                    Text("Estimated spend:")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Text(TokenUsage.formatCost(statsStore.cumulativeEstimatedCost))
+                        .font(.caption.monospacedDigit().weight(.semibold))
+                }
+            }
+
+            Text("Calculated using gemini-3.8-flash pricing ($0.75/M input, $3.75/M output introductory through 2026; $1.50/M input, $7.50/M output standard effective Jan 1, 2027).")
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
+        }
+        .padding(12)
+        .background(RoundedRectangle(cornerRadius: QuickTextDesign.controlRadius).fill(Color.primary.opacity(0.03)))
+        .overlay(
+            RoundedRectangle(cornerRadius: QuickTextDesign.controlRadius)
+                .stroke(Color.primary.opacity(0.08), lineWidth: 1)
+        )
     }
 
     // MARK: - Text Replacements (see docs/text-replacement-sync-plan.md)

@@ -12,21 +12,48 @@ enum TranscriptStore {
             .appendingPathComponent("com.weaveryuwono.quicktext/DictateTranscripts", isDirectory: true)
     }
 
-    struct SessionRecord: Codable {
+    struct SessionRecord: Codable, Equatable {
         var savedAt: Date
         var takes: [String]
         var result: String
+        var tokenUsage: TokenUsage?
+        var transcriptionUsage: TokenUsage?
+        var synthesisUsage: TokenUsage?
+        var takeUsages: [TokenUsage]?
+        var processingTurns: [DictateProcessingTurn]?
+        var estimatedCost: Double?
     }
 
     @discardableResult
-    static func saveSession(takes: [String], result: String, date: Date = Date(), in directory: URL? = nil) throws -> URL {
+    static func saveSession(
+        takes: [String],
+        result: String,
+        tokenUsage: TokenUsage? = nil,
+        transcriptionUsage: TokenUsage? = nil,
+        synthesisUsage: TokenUsage? = nil,
+        takeUsages: [TokenUsage]? = nil,
+        processingTurns: [DictateProcessingTurn]? = nil,
+        estimatedCost: Double? = nil,
+        date: Date = Date(),
+        in directory: URL? = nil
+    ) throws -> URL {
         let dir = directory ?? Self.directory
         try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime]
-        let stamp = formatter.string(from: date).replacingOccurrences(of: ":", with: "-")
-        let url = dir.appendingPathComponent("dictate-\(stamp).json")
-        let record = SessionRecord(savedAt: date, takes: takes, result: result)
+        // A processing/refinement chain can finish more than once in a second.
+        // Keep every billable turn rather than overwriting a same-second record.
+        let url = dir.appendingPathComponent("dictate-\(UUID().uuidString).json")
+        let cost = estimatedCost ?? tokenUsage?.estimatedCost
+        let record = SessionRecord(
+            savedAt: date,
+            takes: takes,
+            result: result,
+            tokenUsage: tokenUsage,
+            transcriptionUsage: transcriptionUsage,
+            synthesisUsage: synthesisUsage,
+            takeUsages: takeUsages,
+            processingTurns: processingTurns,
+            estimatedCost: cost
+        )
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys]

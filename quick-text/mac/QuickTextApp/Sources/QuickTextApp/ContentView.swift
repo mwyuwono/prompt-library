@@ -217,7 +217,7 @@ struct ContentView: View {
                 .environmentObject(store)
         }
         .sheet(isPresented: $showingDictate) {
-            DictateView()
+            DictateView(parentWindowWidth: currentWindowWidth)
                 .environmentObject(store)
         }
         .toolbar {
@@ -702,6 +702,9 @@ struct ContentView: View {
     }
 
     private func handleKeyEvent(_ event: NSEvent) -> NSEvent? {
+        // SwiftUI text controls are backed by NSTextView on macOS. Never consume
+        // their arrows/selection modifiers in the app-wide grid navigator.
+        guard !isEditingText else { return event }
         guard event.modifierFlags.intersection([.command, .option, .control]).isEmpty else { return event }
         if event.keyCode == 53 {
             if showingSettings || showingVariablesLibrary || showingKeyboardShortcuts || showingGlossary || store.expandedPhraseID != nil || !store.searchTerm.isEmpty || store.categoryFocusMode {
