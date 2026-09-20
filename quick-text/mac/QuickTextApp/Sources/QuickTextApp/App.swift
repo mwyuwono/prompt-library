@@ -45,6 +45,12 @@ struct QuickTextApp: App {
 
         MenuBarExtra("Quick Text", systemImage: "text.badge.plus") {
             Button("Open Quick Text") { AppDelegate.openWindow() }
+            Button("Open Dictate") {
+                AppDelegate.openWindow()
+                DispatchQueue.main.async {
+                    NotificationCenter.default.post(name: .quickTextOpenDictate, object: nil)
+                }
+            }
             Button("New Phrase") {
                 AppDelegate.openWindow()
                 store.beginNewPhrase()
@@ -107,6 +113,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 }
 
 extension Notification.Name {
+    static let quickTextOpenDictate = Notification.Name("quickTextOpenDictate")
     static let quickTextFocusSearch = Notification.Name("quickTextFocusSearch")
     static let quickTextShowKeyboardShortcuts = Notification.Name("quickTextShowKeyboardShortcuts")
     static let quickTextShowGlossary = Notification.Name("quickTextShowGlossary")

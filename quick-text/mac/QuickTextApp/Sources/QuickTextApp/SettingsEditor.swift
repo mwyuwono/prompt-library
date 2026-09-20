@@ -57,6 +57,9 @@ struct SettingsEditor: View {
     @State private var pendingSyncPlan: TextReplacementSync.SyncPlan?
     @State private var lastSyncReport: TextReplacementSync.SyncReport?
     @State private var isSyncing = false
+    @State private var apiKeyInput = ""
+    @State private var apiKeyStatus: String?
+    @State private var isTestingKey = false
 
     private var usesTwoColumns: Bool { width >= 760 }
     private var primaryColumnWidth: CGFloat { usesTwoColumns ? 320 : width - 44 }
@@ -89,6 +92,10 @@ struct SettingsEditor: View {
                     }
                 }
 
+                settingsSection("Dictation") {
+                    dictationSection
+                }
+
                 settingsSection("Text Replacements") {
                     textReplacementsSection
                 }
@@ -118,6 +125,64 @@ struct SettingsEditor: View {
                         }
                     }
                 )
+            }
+        }
+    }
+
+    // MARK: - Dictation (Gemini API key, Keychain only — never in the corpus)
+
+    private var dictationSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Powers Dictate mode transcription and processing. Stored in the login Keychain, never in Quick Text data.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            HStack(spacing: 10) {
+                SecureField(GeminiKeychain.hasKey ? "Key saved — paste a new one to replace" : "Paste Gemini API key", text: $apiKeyInput)
+                    .textFieldStyle(.roundedBorder)
+                    .frame(maxWidth: 320)
+                Button("Save") {
+                    do {
+                        try GeminiKeychain.save(apiKeyInput)
+                        apiKeyInput = ""
+                        apiKeyStatus = "Key saved."
+                    } catch {
+                        apiKeyStatus = error.localizedDescription
+                    }
+                }
+                .buttonStyle(.glassProminent)
+                .disabled(apiKeyInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                Button(isTestingKey ? "Testing…" : "Test") {
+                    isTestingKey = true
+                    apiKeyStatus = nil
+                    Task {
+                        do {
+                            let key = try GeminiKeychain.load()
+                            _ = try await GeminiClient(apiKey: key).ping()
+                            apiKeyStatus = "Key works."
+                        } catch {
+                            apiKeyStatus = error.localizedDescription
+                        }
+                        isTestingKey = false
+                    }
+                }
+                .buttonStyle(.glass)
+                .disabled(!GeminiKeychain.hasKey || isTestingKey)
+                if GeminiKeychain.hasKey {
+                    Button("Remove") {
+                        do {
+                            try GeminiKeychain.delete()
+                            apiKeyStatus = "Key removed."
+                        } catch {
+                            apiKeyStatus = error.localizedDescription
+                        }
+                    }
+                    .buttonStyle(.glass)
+                }
+            }
+            if let apiKeyStatus {
+                Text(apiKeyStatus)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
         }
     }

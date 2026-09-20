@@ -26,6 +26,8 @@
 	<string>13.0</string>
 	<key>NSHighResolutionCapable</key>
 	<true/>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Quick Text Dictate mode records your voice to transcribe it with the Gemini API.</string>
 	<key>QuickTextCorpusDirectory</key>
 	<string>/Users/mwy/Library/Mobile Documents/com~apple~CloudDocs/Projects/prompts-library/quick-text/corpus</string>
 </dict>

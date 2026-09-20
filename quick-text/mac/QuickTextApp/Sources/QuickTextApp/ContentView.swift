@@ -36,6 +36,7 @@ struct ContentView: View {
     @State private var showingGlossary = false
     @State private var glossaryPanelOffset = CGSize.zero
     @State private var glossaryPanelDragOffset = CGSize.zero
+    @State private var showingDictate = false
     @State private var savedWindowFrame: NSRect?
     @State private var gridWidth: CGFloat = 0
     @State private var keyMonitor: Any?
@@ -196,6 +197,9 @@ struct ContentView: View {
             guard store.editingPhrase == nil else { return }
             openGlossaryPanel()
         }
+        .onReceive(NotificationCenter.default.publisher(for: .quickTextOpenDictate)) { _ in
+            showingDictate = true
+        }
         .onChange(of: store.searchTerm) { _, _ in
             store.searchTermDidChange()
         }
@@ -212,24 +216,12 @@ struct ContentView: View {
             PhraseEditor(phrase: phrase)
                 .environmentObject(store)
         }
+        .sheet(isPresented: $showingDictate) {
+            DictateView()
+                .environmentObject(store)
+        }
         .toolbar {
-            Button(action: { searchFocused = true }) {
-                Label("Search", systemImage: "magnifyingglass")
-            }
-            .keyboardShortcut("f", modifiers: .command)
-            // Only claim Cmd-C window-wide while the grid actually owns keyboard
-            // focus; otherwise leave it unregistered so the search field, the
-            // phrase editor sheet, and settings text fields keep native Cmd-C.
-            if canUseGridKeyboard {
-                Button(action: copySelected) {
-                    Label("Copy", systemImage: "doc.on.doc")
-                }
-                .keyboardShortcut("c", modifiers: .command)
-            } else {
-                Button(action: copySelected) {
-                    Label("Copy", systemImage: "doc.on.doc")
-                }
-            }
+            toolbarItems
         }
         .overlay {
             if let phrase = store.expandedPhrase {
@@ -365,6 +357,40 @@ struct ContentView: View {
             Button("OK") { store.errorMessage = nil }
         } message: {
             Text(store.errorMessage ?? "")
+        }
+    }
+
+    /// Extracted from `body`: the toolbar plus the Dictate button grew the
+    /// body expression past the type-checker's limit (same reason as
+    /// `deleteAlertTitle` above).
+    @ToolbarContentBuilder
+    private var toolbarItems: some ToolbarContent {
+        ToolbarItem(placement: .primaryAction) {
+            Button(action: { searchFocused = true }) {
+                Label("Search", systemImage: "magnifyingglass")
+            }
+            .keyboardShortcut("f", modifiers: .command)
+        }
+        ToolbarItem(placement: .primaryAction) {
+            Button(action: { showingDictate = true }) {
+                Label("Dictate", systemImage: "mic")
+            }
+            .keyboardShortcut("d", modifiers: .command)
+        }
+        ToolbarItem(placement: .primaryAction) {
+            // Only claim Cmd-C window-wide while the grid actually owns keyboard
+            // focus; otherwise leave it unregistered so the search field, the
+            // phrase editor sheet, and settings text fields keep native Cmd-C.
+            if canUseGridKeyboard {
+                Button(action: copySelected) {
+                    Label("Copy", systemImage: "doc.on.doc")
+                }
+                .keyboardShortcut("c", modifiers: .command)
+            } else {
+                Button(action: copySelected) {
+                    Label("Copy", systemImage: "doc.on.doc")
+                }
+            }
         }
     }
 
