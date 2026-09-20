@@ -153,6 +153,17 @@ final class DictateSession: ObservableObject {
         takes.removeAll { $0.id == take.id }
     }
 
+    func updateTranscript(for id: UUID, text: String) {
+        guard let index = takes.firstIndex(where: { $0.id == id }) else { return }
+        takes[index].transcript = text
+    }
+
+    func copyTake(_ take: DictateTake) {
+        guard let text = take.transcript, !text.isEmpty else { return }
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(text, forType: .string)
+    }
+
     // MARK: - Processing
 
     func process(masterPrompt: String) {

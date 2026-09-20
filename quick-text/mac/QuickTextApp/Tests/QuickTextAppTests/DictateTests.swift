@@ -112,4 +112,18 @@ final class DictateTests: XCTestCase {
         XCTAssertTrue(ids.contains("voice-process-text-message"))
         XCTAssertTrue(ids.contains("voice-process-email"))
     }
+
+    @MainActor
+    func testUpdateTranscriptAndCopyTake() {
+        let session = DictateSession()
+        let take = DictateTake(audioURL: nil, transcript: "original text", status: .ready)
+        session.takes = [take]
+
+        session.updateTranscript(for: take.id, text: "tweaked text")
+        XCTAssertEqual(session.takes.first?.transcript, "tweaked text")
+        XCTAssertEqual(session.readyTranscripts, ["tweaked text"])
+
+        session.copyTake(session.takes[0])
+        XCTAssertEqual(NSPasteboard.general.string(forType: .string), "tweaked text")
+    }
 }

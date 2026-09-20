@@ -113,11 +113,23 @@ struct DictateView: View {
         }
     }
 
+    private func transcriptBinding(takeID: UUID) -> Binding<String> {
+        Binding(
+            get: {
+                session.takes.first(where: { $0.id == takeID })?.transcript ?? ""
+            },
+            set: { newValue in
+                session.updateTranscript(for: takeID, text: newValue)
+            }
+        )
+    }
+
     private func takeRow(index: Int, take: DictateTake) -> some View {
         HStack(alignment: .top, spacing: 10) {
             Text("Take \(index + 1)")
                 .font(.headline)
                 .frame(minWidth: 56, alignment: .leading)
+                .padding(.top, 4)
             VStack(alignment: .leading, spacing: 4) {
                 switch take.status {
                 case .recording:
@@ -128,8 +140,12 @@ struct DictateView: View {
                         Text("Transcribing…").foregroundStyle(.secondary)
                     }
                 case .ready:
-                    Text(take.transcript ?? "")
-                        .lineLimit(3)
+                    TextField("Transcript", text: transcriptBinding(takeID: take.id), axis: .vertical)
+                        .textFieldStyle(.plain)
+                        .lineLimit(1...6)
+                        .padding(6)
+                        .background(RoundedRectangle(cornerRadius: 6).fill(Color.primary.opacity(0.04)))
+                        .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.primary.opacity(0.12)))
                 case .failed(let message):
                     Text(message)
                         .foregroundStyle(.red)
@@ -139,11 +155,24 @@ struct DictateView: View {
                 }
             }
             Spacer()
-            Button(role: .destructive) { session.deleteTake(take) } label: {
-                Image(systemName: "trash")
+            HStack(spacing: 6) {
+                if take.status == .ready {
+                    Button {
+                        session.copyTake(take)
+                    } label: {
+                        Label("Copy", systemImage: "doc.on.doc")
+                    }
+                    .buttonStyle(.glass)
+                    .disabled((take.transcript ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    .help("Copy take transcript")
+                }
+                Button(role: .destructive) { session.deleteTake(take) } label: {
+                    Image(systemName: "trash")
+                }
+                .buttonStyle(.glass)
+                .disabled(session.isRecording)
+                .help("Delete take")
             }
-            .buttonStyle(.glass)
-            .disabled(session.isRecording)
         }
         .padding(10)
         .background(RoundedRectangle(cornerRadius: 10).fill(Color.primary.opacity(0.05)))
@@ -178,13 +207,23 @@ struct DictateView: View {
                 Spacer()
                 Button("Copy") { session.copyResult() }
                     .buttonStyle(.glass)
-                    .disabled(session.resultText.isEmpty)
+                    .disabled(session.resultText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             }
-            TextEditor(text: $session.resultText)
-                .font(.body)
-                .frame(minHeight: 140)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.primary.opacity(0.15)))
+            ZStack(alignment: .topLeading) {
+                TextEditor(text: $session.resultText)
+                    .font(.body)
+                    .frame(minHeight: 140)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.primary.opacity(0.15)))
+                if session.resultText.isEmpty {
+                    Text("Result will appear here after processing, or type and edit directly…")
+                        .font(.body)
+                        .foregroundStyle(.tertiary)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 10)
+                        .allowsHitTesting(false)
+                }
+            }
         }
     }
 }

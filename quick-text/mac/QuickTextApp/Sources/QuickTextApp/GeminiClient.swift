@@ -44,11 +44,12 @@ struct GeminiClient {
         return try await createInteraction(model: Self.transcribeModel, input: input, thinkingLevel: "low")
     }
 
+    /// Low thinking effort keeps text synthesis cost-conscious and latency low.
     func process(masterPrompt: String, transcript: String) async throws -> String {
         let input: [[String: String]] = [
             ["type": "text", "text": masterPrompt + "\n\n--- Transcribed audio ---\n" + transcript]
         ]
-        return try await createInteraction(model: Self.processModel, input: input, thinkingLevel: "medium")
+        return try await createInteraction(model: Self.processModel, input: input, thinkingLevel: "low")
     }
 
     /// Minimal text round-trip used by Settings > Dictation to verify a key.
