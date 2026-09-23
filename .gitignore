@@ -28,3 +28,7 @@ web-components.js.map
 .build/
 quick-text/**/.build/
 quick-text/mac/QuickTextApp/QuickTextApp
+
+# Python virtual environments
+.venv/
+venv/
