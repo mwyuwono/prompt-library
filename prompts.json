@@ -3151,7 +3151,7 @@
   },
   {
     "id": "same-room-new-view",
-    "title": "Same Room, New View",
+    "title": "Generate Room. Visualize Art.",
     "description": "Photographs a new empty-wall angle of the same room, then renders an artwork hung on it at true scale.",
     "category": "Architecture",
     "icon": "architecture",
@@ -3161,8 +3161,8 @@
     "previewBaseImageDescription": "Color editorial Greek Revival column-and-wall view derived from a historic survey photograph; source room for the empty-wall preview.",
     "instructions": "1. Upload the room photograph and run Step 1. Save the generated room image.\n2. Run Step 2 with the Step 1 room image, the artwork image, and the artwork dimensions.",
     "variables": [],
-    "slug": "same-room-new-view",
-    "modifiedAt": "2026-09-23T01:07:01.625Z",
+    "slug": "generate-room-visualize-art",
+    "modifiedAt": "2026-09-23T01:20:01.182Z",
     "customOrder": 6,
     "variations": null,
     "steps": [
