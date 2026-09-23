@@ -3131,5 +3131,46 @@
     "variables": [],
     "modifiedAt": "2026-09-14T19:52:20-04:00",
     "customOrder": 33
+  },
+  {
+    "id": "same-room-new-view",
+    "title": "Same Room, New View",
+    "description": "Photographs a new empty-wall angle of the same room, then renders an artwork hung on it at true scale.",
+    "category": "Architecture",
+    "icon": "architecture",
+    "featured": false,
+    "image": "https://prompt-library-assets-009019643313.s3.amazonaws.com/prompt-previews/same-room-new-view-empty-wall-preview.jpg",
+    "previewBaseImage": "https://prompt-library-assets-009019643313.s3.amazonaws.com/prompt-previews/same-room-new-view-base-greek-revival-column.jpg",
+    "previewBaseImageDescription": "Color editorial Greek Revival column-and-wall view derived from a historic survey photograph; source room for the empty-wall preview.",
+    "instructions": "1. Upload the room photograph and run Step 1. Save the generated room image.\n2. Run Step 2 with the Step 1 room image, the artwork image, and the artwork dimensions.",
+    "variables": [],
+    "slug": "same-room-new-view",
+    "modifiedAt": "2026-09-22T20:31:13-04:00",
+    "customOrder": 6,
+    "variations": null,
+    "steps": [
+      {
+        "id": "generate-empty-wall-view",
+        "name": "Generate Empty-Wall Room View",
+        "instructions": "- Upload the room photograph.\n- Run this step and save the generated room image for Step 2.",
+        "template": "Use the uploaded room photograph as the architectural and stylistic reference for the space, but create a new camera position within the same room. Reposition the camera so that the existing photographed view is largely out of frame and a previously unseen section of the room becomes visible.\n\nThe new viewpoint should feel like a physically plausible continuation of the same interior. Preserve the room's architectural language, proportions, materials, finishes, color palette, age, decorative vocabulary, and overall atmosphere. Infer unseen details conservatively from the reference rather than redesigning the room.\n\nMake the primary compositional feature a large, uninterrupted section of wall intended to serve later as a backdrop for a substantial framed artwork. Keep this wall completely empty for now: no artwork, mirrors, sconces, shelving, decorative objects, wall-mounted lighting, or architectural elements that compete with the usable wall area. Preserve appropriate baseboards, crown molding, paneling, trim, or other architectural details where consistent with the reference, while maintaining a generous central expanse of visually quiet wall.\n\nCompose the photograph so the empty wall has strong presence within the frame without looking artificially staged for artwork placement. Allow surrounding architectural elements—such as a doorway, window, fireplace, column, furniture, curtain, or adjoining wall—to establish scale, depth, and a convincing sense of place, while keeping them away from the principal blank-wall area.\n\nPhotograph the new view as sophisticated editorial interior photography suitable for *The World of Interiors*. Favor an observational, atmospheric composition over a perfectly centered or real-estate-style image. Use naturalistic perspective, restrained styling, subtle asymmetry, and a sense of an inhabited historic interior rather than a showroom.\n\nLighting: soft, dim natural daylight casting gentle directional illumination from one side. Use low-key, atmospheric lighting with muted highlights, deep soft-edged shadows, and a painterly, moody chiaroscuro effect. Keep the contrast subdued, with an overcast, quiet ambient mood. The light should feel natural to the room, creating depth and atmosphere without becoming theatrical or overly dramatic.\n\nRender the image with the character of high-end film photography: fine organic grain, nuanced color separation, slightly softened highlight roll-off, natural texture, restrained saturation, and tactile material detail. The result should feel photographed rather than digitally rendered.\n\nDo not add artwork to the blank wall. Do not substantially alter the room's architectural identity. Do not turn the space into a generic luxury interior. The final image should read as a newly photographed angle of the same distinctive room, with a beautiful and compositionally useful expanse of empty wall.",
+        "variables": []
+      },
+      {
+        "id": "hang-artwork-in-situ",
+        "name": "Hang Artwork In Situ",
+        "instructions": "- Submit the room image generated in Step 1 as the room image.\n- Submit the artwork image.\n- Enter the artwork dimensions.",
+        "template": "TASK: Create a photorealistic ultra high resolution in-situ rendering of an artwork hung in an interior.\n\nArtwork dimensions: {{scale}}\n\nINPUTS:\n1. Image INPUT 1 = \"the artwork image\" - The piece to be displayed. Treat as immutable source of truth for content that must be faithfully upheld.\n2. Image INPUT 2 = \"the room image\" - The interior generated in Step 1. The architecture, lighting, and ambiance reference. Do not copy literally, emulate its style.\n3. SCALE PARAMETER = Artwork dimensions are provided above. Use this for correct physical scale.\n\nOBJECTIVE:\nRender a photorealistic, ultra-high-resolution 4K interior photograph where the artwork from the artwork image is hung centered on the main wall of a room like the room image.\n\nCRITICAL CONSTRAINTS - DO NOT VIOLATE:\n\n1. ARTWORK FIDELITY: Preserve the artwork and frame image exactly. No reinterpretation, no color shift, no cropping, no distortion, no stylization. Preserve frame type, color, ornamentation, texture, and canvas details 1:1. If ARTWORK_IMAGE includes a frame, preserve that exact frame. If it is unframed canvas/paper, render it unframed. Do not add glass glare, mat, or new frame. Do not add background outside the frame.\n\n2. LIGHTING & AMBIANCE FIDELITY: Artwork should receive the same ambient light as the wall. Maintain the moody lighting and ambiance of the room image. This includes: quality of natural light, soft shadows, color temperature, exposure, quiet/calm mood, and material feel.\n\n3. ARCHITECTURE FIDELITY: Emulate the room image's architectural details.\n\n4. SCALE & PLACEMENT:\n   - Scale artwork correctly to SCALE PARAMETER on the wall\n   - Hang at proper gallery height, centered on wall, with breathing room above baseboard/wainscoting\n   - Show correct perspective, wall shadow, and hanging hardware subtlety\n   - Do not let artwork touch floor, ceiling, or molding\n\n5. COMPOSITION & MINIMALISM:\n   - Keep room minimal and uncluttered to focus on artwork\n   - No extra art, no clutter, no people\n   - Camera: straight-on, eye-level interior photography, slight perspective showing two walls/floor for depth like the room image\n   - Keep any incidental furniture from room image extremely minimal or remove\n\nPROCESS:\nStep 1: Analyze artwork image for content, colors, frame, and exact aspect ratio.\nStep 2: Analyze room image for light direction, materials, moldings, floor, and atmosphere.\nStep 3: Synthesize a new photorealistic interior that matches room image's architecture/lighting, with artwork image placed as a correctly scaled, framed object on the wall.\n\nOUTPUT SPEC:\n- Photorealistic interior photograph\n- Ultra high resolution, natural light, soft shadows, interior design photography style\n- Aspect ratio matching the room image reference\n- Single final image only\n\nQUALITY TAGS TO INCLUDE: photorealistic, 4k rendering, interior photography, natural daylight, soft shadows, accurate scale, architectural visualization",
+        "variables": [
+          {
+            "name": "scale",
+            "label": "Artwork Dimensions",
+            "placeholder": "e.g., 48 x 60 in",
+            "value": "",
+            "inputType": "text"
+          }
+        ]
+      }
+    ]
   }
 ]
