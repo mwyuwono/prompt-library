@@ -77,7 +77,7 @@
       ],
       "categoryId" : "elbridge",
       "createdAt" : "2026-07-02T04:00:00Z",
-      "favorite" : true,
+      "favorite" : false,
       "id" : "elbridge-hoa-members",
       "summary" : "HOA Members",
       "tags" : [
@@ -89,7 +89,7 @@
         "syncEnabled" : true
       },
       "title" : "HOA Members",
-      "updatedAt" : "2026-07-03T05:42:28Z",
+      "updatedAt" : "2026-09-22T16:14:37Z",
       "value" : "Greg Swalwell, Adam Maffei, and Stanton Yuwono",
       "visibility" : "private"
     },
@@ -256,12 +256,14 @@
         "llmsum"
       ],
       "textReplacement" : {
+        "lastSyncedAt" : "2026-09-23T00:19:25Z",
+        "lastSyncedValue" : "I want to turn this into a reusable workflow that is equally effective when used with different source material. Create an LLM-optimized meta-prompt that captures the effective instructions, constraints, decisions, and workflow patterns from this session so they can be reused in a new chat. Keep it generic and portable. Refer to external materials only with indirect labels such as \"the room image” or \"the artwork image,\" rather than specific filenames. Optimize for faithful replication of the setup.",
         "shortcut" : "xsum",
         "syncEnabled" : true
       },
-      "title" : "Summarize all context from this chat",
-      "updatedAt" : "2026-07-09T22:26:15Z",
-      "value" : "Create an LLM-optimized meta-prompt that captures the effective instructions, constraints, decisions, and workflow patterns from this session so they can be reused in a new chat. Keep it generic and portable. Refer to external materials only with indirect labels such as \"the attached image,” rather than specific filenames. Optimize for faithful replication of the setup.",
+      "title" : "Make workflow reusable",
+      "updatedAt" : "2026-09-23T00:19:18Z",
+      "value" : "I want to turn this into a reusable workflow that is equally effective when used with different source material. Create an LLM-optimized meta-prompt that captures the effective instructions, constraints, decisions, and workflow patterns from this session so they can be reused in a new chat. Keep it generic and portable. Refer to external materials only with indirect labels such as \"the room image” or \"the artwork image,\" rather than specific filenames. Optimize for faithful replication of the setup.",
       "visibility" : "public"
     },
     {
@@ -425,8 +427,8 @@
         "llmlearn"
       ],
       "textReplacement" : {
-        "lastSyncedAt" : "2026-07-29T04:22:15Z",
-        "lastSyncedValue" : "Review this session and capture durable learnings worth preserving: user preferences, reusable instructions, architecture decisions, debugging insights, project knowledge, workflow improvements, documentation updates, tests, runbooks, or backlog items. Exclude temporary, speculative, redundant, or low-value details.",
+        "lastSyncedAt" : "2026-09-22T16:18:57Z",
+        "lastSyncedValue" : "Review this session for durable learnings.\n\nCapture:\n\nReusable rules, constraints, decisions, conventions, and preferences.\nFailure modes, debugging insights, and avoidable complexity.\nImplicit best practices and proactive default behaviors.\nPersistent project knowledge, workflow improvements, documentation, tests, runbooks, and backlog items.\n\nExclude temporary, speculative, redundant, or low-value details.\n\nRoute each learning to the right destination. Use project instructions only for durable guidance that should shape future agent behavior.\n\nPropose minimal exact changes: add, revise, consolidate, or remove. Avoid duplication, overfitting, and bloat.",
         "shortcut" : "xlearn",
         "syncEnabled" : true
       },
@@ -594,6 +596,8 @@
       ],
       "textColor" : "brown-22",
       "textReplacement" : {
+        "lastSyncedAt" : "2026-09-22T16:18:57Z",
+        "lastSyncedValue" : "Before you proceed, ask any questions needed for clarification. If you don’t have questions, proceed. ",
         "shortcut" : "xint",
         "syncEnabled" : true
       },
@@ -891,8 +895,8 @@
         "voice"
       ],
       "title" : "Agent Instructions",
-      "updatedAt" : "2026-09-20T16:40:42Z",
-      "value" : "Synthesize the transcribed audio and present it as instructions for a coding agent. Write for concision and clarity without changing the meaning or effectiveness. Write for an LLM audience, using direct imperative language and removing human-oriented explanation or filler.",
+      "updatedAt" : "2026-09-21T13:59:55Z",
+      "value" : "Synthesize the transcribed audio into direct instructions for a coding agent. Retain exact original intent without reinterpreting, extrapolating, or adding creative features. Output strictly actionable specifications.",
       "visibility" : "private"
     },
     {
@@ -905,8 +909,8 @@
         "voice"
       ],
       "title" : "Text Message",
-      "updatedAt" : "2026-09-20T16:40:42Z",
-      "value" : "Be friendly but succinct. Dont use bullets for lists, rather use empty lines for separation.",
+      "updatedAt" : "2026-09-21T22:33:25Z",
+      "value" : "Task: Transform the following raw dictation into a clear, natural, and well-structured text message.\nCore Objective: Reorganize the text completely to maximize logical flow and clarity. Relocate, merge, split, or rewrite sentences across paragraphs whenever it improves the structure. Do not feel constrained by the original sentence order.\nFormatting Rules:\nOutput plain text only. Do not use bullet points, special characters, or markdown symbols that could cause copy-paste issues.\nUse standard paragraph breaks (blank lines) between sections.\nIf headings are necessary, place each heading on its own line, followed immediately by a blank line before the section text. Keep headings brief and natural for SMS.\nEditorial & Style Standards:\nTone & Voice: Preserve my natural voice, style, and level of concision while sounding direct, confident, and polished. Write as if I had composed the ideal version myself.\nGrammar & Usage: Adhere to rigorous standard American English. Avoid decorative adjectives, litotes, and negative constructions. Use em dashes sparingly.\nSentence Structure: Vary sentence structures to reduce repetitive \"I\" openings without dropping key details. Ensure each paragraph advances a single, clear idea.\nDirect Editing: Execute all structural changes cleanly without adding meta-commentary, notes, or explanations.",
       "visibility" : "private"
     },
     {
@@ -919,9 +923,63 @@
         "voice"
       ],
       "title" : "Email",
-      "updatedAt" : "2026-09-20T16:40:42Z",
-      "value" : "Write a short email with a subject line. Friendly, direct, one ask max. Propose wording; don't send.",
+      "updatedAt" : "2026-09-21T22:31:06Z",
+      "value" : "Draft an email based on my dictation. Optimize organization  even if that requires:\n\nMoving sentences or clauses across paragraphs\nReordering sentences within a paragraph\nMerging or splitting sentences\nRewriting a sentence so it fits better in a different structural position\nDo not preserve the original order unless it is already optimal. If a sentence in a later paragraph strengthens an earlier idea, relocate and revise it accordingly.\n\nPreserve my original tone, style, and level of concision. Write as if I had written the improved version myself.\n\nEditorial standards\n\nBe concise, direct, and confident\nFavor economical constructions over verbosity\nMaintain rigorous American English usage (Chicago Manual of Style)\nAvoid litotes and other negative constructions\nAvoid decorative or ornamental adjectives\nLimit the use of em dashes\nReduce repetitive use of “I” by restructuring sentences rather than deleting content\nStructural heuristics\n\nEach paragraph should advance a single, clear idea\nSentences should appear in the order that maximizes logical buildup and emphasis\nIf clarity improves by repositioning or rewriting a sentence, do so without comment",
       "visibility" : "private"
+    },
+    {
+      "categoryId" : "voice-process",
+      "createdAt" : "2026-09-21T22:35:18Z",
+      "favorite" : false,
+      "id" : "voice-process-custom-F5BCFD13-61C5-4DF6-8126-348CB1C4A749",
+      "tags" : [
+
+      ],
+      "title" : "General Synthesis",
+      "updatedAt" : "2026-09-21T22:35:29Z",
+      "value" : "Task: Transform the following raw dictation into a clear, natural, and well-structured text message.\n\nCore Objective: Reorganize the text completely to maximize logical flow and clarity. Relocate, merge, split, or rewrite sentences across paragraphs whenever it improves the structure. Do not feel constrained by the original sentence order.\n\nFormatting Rules:\nOutput plain text only. Do not use bullet points, special characters, or markdown symbols that could cause copy-paste issues.\n\nUse standard paragraph breaks (blank lines) between sections.\nIf headings are necessary, place each heading on its own line, followed immediately by a blank line before the section text. Keep headings brief and natural for SMS.\n\nEditorial & Style Standards:\nTone & Voice: Preserve my natural voice, style, and level of concision while sounding direct, confident, and polished. Write as if I had composed the ideal version myself.\n\nGrammar & Usage: Adhere to rigorous standard American English. Avoid decorative adjectives, litotes, and negative constructions. Use em dashes sparingly.\n\nSentence Structure: Vary sentence structures to reduce repetitive \"I\" openings without dropping key details. Ensure each paragraph advances a single, clear idea.\n\nDirect Editing: Execute all structural changes cleanly without adding meta-commentary, notes, or explanations.",
+      "visibility" : "private"
+    },
+    {
+      "categoryId" : "prompt-reuse",
+      "createdAt" : "2026-09-22T16:18:49Z",
+      "favorite" : true,
+      "id" : "phrase-05534FFE-6401-4A0A-897F-C7AF546225EF",
+      "image" : "",
+      "summary" : "",
+      "tags" : [
+
+      ],
+      "textReplacement" : {
+        "lastSyncedAt" : "2026-09-22T16:18:57Z",
+        "lastSyncedValue" : "Revise my writing for clarity, flow, and structure.\n\nReorganize freely: move, merge, split, or reorder sentences and clauses across paragraphs whenever it strengthens logical buildup. Original order is not sacred. Rewrite sentences as needed to fit their new position.\n\nPreserve my tone, style, and concision — write as if I'd produced the improved version myself.\n\nStandards: concise, direct, confident. Chicago Manual of Style, American English. No litotes, ornamental adjectives, or excessive em dashes. Reduce repetitive \"I\" through restructuring, not deletion. Each paragraph advances one idea. Make changes without comment.",
+        "shortcut" : "xproof",
+        "syncEnabled" : true
+      },
+      "title" : "Proof text",
+      "updatedAt" : "2026-09-22T16:18:49Z",
+      "value" : "Revise my writing for clarity, flow, and structure.\n\nReorganize freely: move, merge, split, or reorder sentences and clauses across paragraphs whenever it strengthens logical buildup. Original order is not sacred. Rewrite sentences as needed to fit their new position.\n\nPreserve my tone, style, and concision — write as if I'd produced the improved version myself.\n\nStandards: concise, direct, confident. Chicago Manual of Style, American English. No litotes, ornamental adjectives, or excessive em dashes. Reduce repetitive \"I\" through restructuring, not deletion. Each paragraph advances one idea. Make changes without comment.",
+      "visibility" : "public"
+    },
+    {
+      "categoryId" : "prompt-reuse",
+      "createdAt" : "2026-09-22T16:30:48Z",
+      "favorite" : true,
+      "id" : "phrase-2A91A318-3EB6-4B15-8FDD-308EBCA1C7BB",
+      "summary" : "",
+      "tags" : [
+
+      ],
+      "textReplacement" : {
+        "lastSyncedAt" : "2026-09-22T16:30:53Z",
+        "lastSyncedValue" : "Reveal the relevant file in finder. ",
+        "shortcut" : "xshow",
+        "syncEnabled" : true
+      },
+      "title" : "Show in finder",
+      "updatedAt" : "2026-09-22T16:30:48Z",
+      "value" : "Reveal the relevant file in finder. ",
+      "visibility" : "public"
     }
   ],
   "settings" : {
@@ -950,6 +1008,7 @@
       "xfiles",
       "xhoa",
       "xhoadocs",
+      "xint",
       "xintro",
       "xlabel",
       "xlearn",
@@ -959,18 +1018,20 @@
       "xnoise",
       "xpal",
       "xpositive",
+      "xproof",
       "xprose",
       "xpush",
       "xreuse",
       "xrework",
+      "xshow",
       "xsum",
       "xtrust",
       "xtune"
     ],
     "paletteSource" : "Robert Brown Fabric Collection",
-    "textReplacementLastSyncAt" : "2026-09-15T18:48:23Z"
+    "textReplacementLastSyncAt" : "2026-09-23T00:19:25Z"
   },
-  "updatedAt" : "2026-09-20T16:40:42Z",
+  "updatedAt" : "2026-09-23T00:19:25Z",
   "variables" : [
     {
       "id" : "var-1783398724430",

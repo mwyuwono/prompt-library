@@ -15,6 +15,13 @@
       "textColor" : "#E8DED8"
     },
     {
+      "color" : "brown-13",
+      "id" : "voice-process",
+      "name" : "Voice Process",
+      "sortOrder" : 50,
+      "textColor" : "#E8DED8"
+    },
+    {
       "id" : "response-style",
       "name" : "Prompt Response Rules",
       "sortOrder" : 60,
@@ -586,8 +593,12 @@
 
       ],
       "textColor" : "brown-22",
-      "title" : "Ask questions before proceeding",
-      "updatedAt" : "2026-07-06T20:52:13Z",
+      "textReplacement" : {
+        "shortcut" : "xint",
+        "syncEnabled" : true
+      },
+      "title" : "Interview before proceeding",
+      "updatedAt" : "2026-09-17T13:09:14Z",
       "value" : "Before you proceed, ask any questions needed for clarification. If you don’t have questions, proceed. ",
       "visibility" : "public"
     },
@@ -869,6 +880,48 @@
       "updatedAt" : "2026-09-15T18:48:15Z",
       "value" : "Provide a brief summary of our recent work for a non-technical audience. Use plain, jargon-free language and highlight key outcomes, explaining non-obvious terms or concepts for non-technical users. ",
       "visibility" : "private"
+    },
+    {
+      "categoryId" : "voice-process",
+      "createdAt" : "2026-09-20T16:40:42Z",
+      "favorite" : false,
+      "id" : "voice-process-agent-instructions",
+      "summary" : "Agent instructions",
+      "tags" : [
+        "voice"
+      ],
+      "title" : "Agent Instructions",
+      "updatedAt" : "2026-09-21T13:59:55Z",
+      "value" : "Synthesize the transcribed audio into direct instructions for a coding agent. Retain exact original intent without reinterpreting, extrapolating, or adding creative features. Output strictly actionable specifications.",
+      "visibility" : "private"
+    },
+    {
+      "categoryId" : "voice-process",
+      "createdAt" : "2026-09-20T16:40:42Z",
+      "favorite" : false,
+      "id" : "voice-process-text-message",
+      "summary" : "Text message",
+      "tags" : [
+        "voice"
+      ],
+      "title" : "Text Message",
+      "updatedAt" : "2026-09-20T16:40:42Z",
+      "value" : "Be friendly but succinct. Dont use bullets for lists, rather use empty lines for separation.",
+      "visibility" : "private"
+    },
+    {
+      "categoryId" : "voice-process",
+      "createdAt" : "2026-09-20T16:40:42Z",
+      "favorite" : false,
+      "id" : "voice-process-email",
+      "summary" : "Email",
+      "tags" : [
+        "voice"
+      ],
+      "title" : "Email",
+      "updatedAt" : "2026-09-20T16:40:42Z",
+      "value" : "Write a short email with a subject line. Friendly, direct, one ask max. Propose wording; don't send.",
+      "visibility" : "private"
     }
   ],
   "settings" : {
@@ -917,7 +970,7 @@
     "paletteSource" : "Robert Brown Fabric Collection",
     "textReplacementLastSyncAt" : "2026-09-15T18:48:23Z"
   },
-  "updatedAt" : "2026-09-17T12:34:36Z",
+  "updatedAt" : "2026-09-21T13:59:55Z",
   "variables" : [
     {
       "id" : "var-1783398724430",
