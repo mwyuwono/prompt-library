@@ -980,6 +980,27 @@
       "updatedAt" : "2026-09-22T16:30:48Z",
       "value" : "Reveal the relevant file in finder. ",
       "visibility" : "public"
+    },
+    {
+      "categoryId" : "prompt-reuse",
+      "createdAt" : "2026-09-25T14:27:11Z",
+      "favorite" : true,
+      "id" : "phrase-96019A1B-7ADD-4D4A-AB3B-3748E66216F2",
+      "image" : "",
+      "summary" : "",
+      "tags" : [
+
+      ],
+      "textReplacement" : {
+        "lastSyncedAt" : "2026-09-25T14:27:20Z",
+        "lastSyncedValue" : "Prepare a handoff so this task can continue in a new chat with no access to this conversation.\n\n1. Write a Markdown handoff file in the project's working directory (or the scratchpad if there isn't one). Name it `HANDOFF-<task-slug>-<YYYY-MM-DD>.md`. Include:\n   - **Objective**: the end goal and what \"done\" looks like.\n   - **Status**: what is finished, what is partly done, and what hasn't started.\n   - **Context**: key file paths, URLs, IDs, commands, and environment details. Point to canonical sources instead of copying them.\n   - **Constraints**: the user's rules and preferences, and anything the user has ruled out.\n   - **Decisions**: each technical choice, with a one-line reason and any alternatives already rejected.\n   - **Open issues**: unresolved bugs, unanswered questions, and assumptions that haven't been checked.\n   - **Next step**: one specific action to take first, followed by the rest of the queue in order.\n2. Be dense and factual, with no narrative. Only include what the new session can't get from files, git history, or memory. Mark anything unverified as unverified.\n3. Reply with the file path and a resume prompt of 3 lines or fewer inside a code block. The prompt should tell the new session to read the file first, check the file's claims against the current state, and then carry out the next step.",
+        "shortcut" : "xhandoff",
+        "syncEnabled" : true
+      },
+      "title" : "Provide a new chat file",
+      "updatedAt" : "2026-09-25T14:27:11Z",
+      "value" : "Prepare a handoff so this task can continue in a new chat with no access to this conversation.\n\n1. Write a Markdown handoff file in the project's working directory (or the scratchpad if there isn't one). Name it `HANDOFF-<task-slug>-<YYYY-MM-DD>.md`. Include:\n   - **Objective**: the end goal and what \"done\" looks like.\n   - **Status**: what is finished, what is partly done, and what hasn't started.\n   - **Context**: key file paths, URLs, IDs, commands, and environment details. Point to canonical sources instead of copying them.\n   - **Constraints**: the user's rules and preferences, and anything the user has ruled out.\n   - **Decisions**: each technical choice, with a one-line reason and any alternatives already rejected.\n   - **Open issues**: unresolved bugs, unanswered questions, and assumptions that haven't been checked.\n   - **Next step**: one specific action to take first, followed by the rest of the queue in order.\n2. Be dense and factual, with no narrative. Only include what the new session can't get from files, git history, or memory. Mark anything unverified as unverified.\n3. Reply with the file path and a resume prompt of 3 lines or fewer inside a code block. The prompt should tell the new session to read the file first, check the file's claims against the current state, and then carry out the next step.",
+      "visibility" : "public"
     }
   ],
   "settings" : {
@@ -1006,6 +1027,7 @@
       "xdarken",
       "xdid",
       "xfiles",
+      "xhandoff",
       "xhoa",
       "xhoadocs",
       "xint",
@@ -1029,9 +1051,9 @@
       "xtune"
     ],
     "paletteSource" : "Robert Brown Fabric Collection",
-    "textReplacementLastSyncAt" : "2026-09-23T00:19:25Z"
+    "textReplacementLastSyncAt" : "2026-09-25T14:27:20Z"
   },
-  "updatedAt" : "2026-09-23T00:19:25Z",
+  "updatedAt" : "2026-09-25T14:27:20Z",
   "variables" : [
     {
       "id" : "var-1783398724430",
