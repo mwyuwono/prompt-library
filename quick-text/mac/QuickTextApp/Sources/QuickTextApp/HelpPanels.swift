@@ -8,29 +8,33 @@ struct KeyboardShortcutsView: View {
             title: "App",
             shortcuts: [
                 ShortcutItem(keys: "Cmd-Shift-Space", action: "Open Quick Text"),
-                ShortcutItem(keys: "Cmd-N", action: "New phrase"),
-                ShortcutItem(keys: "Cmd-E", action: "Edit selected phrase"),
-                ShortcutItem(keys: "Cmd-F", action: "Focus search"),
-                ShortcutItem(keys: "Cmd-C", action: "Copy selected phrase")
+                ShortcutItem(keys: "Cmd-N", action: "New snippet"),
+                ShortcutItem(keys: "Cmd-E", action: "Edit selected snippet"),
+                ShortcutItem(keys: "Cmd-K / Cmd-F / /", action: "Focus search"),
+                ShortcutItem(keys: "Cmd-C", action: "Copy selected snippet"),
+                ShortcutItem(keys: "Cmd-D", action: "Dictate")
             ]
         ),
         ShortcutSection(
-            title: "Navigation",
+            title: "Library",
             shortcuts: [
-                ShortcutItem(keys: "Tab / Shift-Tab", action: "Move between categories, search row, and cards"),
-                ShortcutItem(keys: "Arrow keys", action: "Move within the focused area"),
-                ShortcutItem(keys: "Space", action: "Open the selected card"),
-                ShortcutItem(keys: "Return", action: "Copy the selected phrase"),
-                ShortcutItem(keys: "Escape", action: "Close help/settings panels, close expanded cards, or clear search")
+                ShortcutItem(keys: "Click", action: "Copy the snippet, or open it when it has variables or parts"),
+                ShortcutItem(keys: "Double-click / Space", action: "Open the snippet"),
+                ShortcutItem(keys: "Return", action: "Copy the selected snippet"),
+                ShortcutItem(keys: "Arrow keys", action: "Move through the grid, or the sidebar when it has focus"),
+                ShortcutItem(keys: "Tab / Shift-Tab", action: "Move between sidebar, search, and snippets"),
+                ShortcutItem(keys: "Escape", action: "Close panels, then the open snippet, then clear search, then the selection")
             ]
         ),
         ShortcutSection(
-            title: "Expanded Cards",
+            title: "Open Snippet",
             shortcuts: [
-                ShortcutItem(keys: "Click chip", action: "Copy or edit that atom or variable"),
-                ShortcutItem(keys: "Shift-click atoms", action: "Select multiple atoms and copy them in document order"),
-                ShortcutItem(keys: "Space / Return", action: "Copy the full expanded card"),
-                ShortcutItem(keys: "Escape", action: "Close the expanded card")
+                ShortcutItem(keys: "Tab / Shift-Tab", action: "Next or previous field"),
+                ShortcutItem(keys: "Left / Right", action: "Step through a choice field's options"),
+                ShortcutItem(keys: "Return", action: "Copy the filled snippet and close"),
+                ShortcutItem(keys: "Click part", action: "Copy that part (atom)"),
+                ShortcutItem(keys: "Shift-click parts", action: "Select several parts and copy them in document order"),
+                ShortcutItem(keys: "Escape", action: "Close")
             ]
         )
     ]
@@ -93,7 +97,7 @@ struct GlossaryView: View {
             terms: [
                 GlossaryTerm(name: "Phrase", definition: "A saved reusable text item. This is the canonical name for what the app stores and copies."),
                 GlossaryTerm(name: "Card", definition: "The visual tile for a phrase in the main grid."),
-                GlossaryTerm(name: "Expanded card", definition: "The large preview and copy surface that opens when a phrase needs atoms, variables, or a full-text preview."),
+                GlossaryTerm(name: "Expanded card", definition: "The open snippet: a sheet over the library showing the full value, with a Fill in panel when the phrase has variables. Opens on click for phrases with atoms or variables, and on Space or double-click for any phrase."),
                 GlossaryTerm(name: "Value", definition: "The full stored text of a phrase. Full-card copy uses the value, with filled variables substituted."),
                 GlossaryTerm(name: "Category", definition: "A group used to filter and color phrases.")
             ]

@@ -2,7 +2,7 @@
 
 Local-first phrase launcher with two surfaces:
 
-- `mac/QuickTextApp`: SwiftUI Mac utility, local JSON load, global `Cmd+Shift+Space` hotkey, click-to-copy, search, category tabs, menu bar extra, add/edit/delete/duplicate phrases.
+- `mac/QuickTextApp`: SwiftUI Mac utility, local JSON load, global `Cmd+Shift+Space` hotkey, click-to-copy, search, sidebar library (All / Favorites / Recently Used / collections), menu bar extra, add/edit/delete/duplicate phrases.
 - `web/quick-text-component`: buildless Web Component, read-only public mode or local admin mode, same corpus and palette files.
 
 Shared data:
@@ -79,6 +79,18 @@ The in-app glossary lives in the macOS Help menu as **Quick Text Glossary**. It 
 - **Library variable**: a shared variable referenced with `{{@name}}`.
 - **Value variable**: a library variable with a fixed stored value that substitutes automatically. Use this term instead of `atomic variable`.
 - **Unresolved variable**: a `{{@name}}` reference with no matching library variable.
+
+## Mac library design
+
+The Mac app follows the Quick Text redesign handoff (Claude Design canvas "Quick Text Redesign"): editorial serif for meaning, system font for chrome, neutral tiles, and one highlight hue per theme.
+
+- **Tokens** live in `mac/QuickTextApp/Sources/QuickTextApp/Theme.swift` (`Theme`, `ThemeFont`, shared button styles). Colors are dynamic per appearance; views never hard-code hex. The highlight (`Theme.hl*`: clay in dark, olive `#6D7C3C` in light) marks hover, selection, the open card's source tile, search matches, variable fields, and focus. It never fills a button; `Theme.accent` does (black in light mode).
+- **Type**: Newsreader when installed, otherwise New York (`Font.system(design: .serif)`). Install Newsreader from Google Fonts to match the canvas exactly.
+- **Collection dots** are keyed by category id in `Theme.collectionDot(for:)`. Categories without a built-in pigment use their stored color (Settings > Categories > Dot). Per-phrase tile/text colors and the old color/text-size/card-size settings stay in the corpus but are no longer read.
+- **Library**: sidebar (Library, Collections, Variables, Settings); sections Favorites, Recently Used (up to 6), then Everything Else, each hidden when empty; grid columns `floor((width + 20) / 320)` clamped 1–4; list view; sort by Recently Used, Title, or Manual Order (drag-to-reorder only in Manual Order without a search).
+- **Recently Used** is local app state (`UserDefaults` key `QuickText.lastUsed`), never the shared corpus, so usage doesn't sync or export. Appearance (System/Light/Dark), layout, sort, and sidebar visibility are per-Mac `UserDefaults` too.
+- **Click** copies a phrase with no atoms and no fill-in variables; otherwise it opens the card. Space or double-click always opens; Return copies the selection.
+- **Open card**: sheet over a blurred scrim with the full value in the reading serif, inline variable fields, a Fill in panel (Tab / Shift-Tab between fields, ←/→ through choice options), Copy (stays open), and Copy & Close (Return). There is no paste-into-front-app action, so the handoff's Paste button is Copy & Close.
 
 ## Atomic phrase cards
 

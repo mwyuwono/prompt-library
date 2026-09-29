@@ -2,7 +2,9 @@
 
 Orchestration doc for a phased visual refresh of the Quick Text **Mac app** (SwiftUI). Scope: Mac app only. Direction: **match the design references** in `quick-text/docs/design-references/` — editorial serif hero text with small, quiet inline variable tokens. Not a redesign of behavior.
 
-**Status:** a first implementation pass (commit `27ef124`) fixed the mechanical defects — baseline-aligned `FlowLayout`, native text runs, punctuation hugging chips, `CardTypography` spec, Liquid Glass icons — but kept the old chip philosophy (large, inverted, high-contrast slabs). **Phase 1b below is the active phase.** Later phases (2–5) polish interactions and remaining surfaces.
+**Superseded (2026-09-29):** the Quick Text redesign handoff replaced this plan's direction for the main window, tiles, and expanded card (see README "Mac library design"). Phase 4 (editors, library, settings, help panels) has not been redone to the new tokens yet.
+
+**Previous status:** a first implementation pass (commit `27ef124`) fixed the mechanical defects — baseline-aligned `FlowLayout`, native text runs, punctuation hugging chips, `CardTypography` spec, Liquid Glass icons — but kept the old chip philosophy (large, inverted, high-contrast slabs). **Phase 1b below is the active phase.** Later phases (2–5) polish interactions and remaining surfaces.
 
 **Do not delete this file until the user says the refresh is complete.** Run ONE phase per session; stop after the phase's acceptance criteria are met and wait for review.
 
