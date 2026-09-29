@@ -1,29 +1,28 @@
 import SwiftUI
-import QuartzCore
 import UniformTypeIdentifiers
 
 #Preview("Content View") {
     ContentView()
         .environmentObject(PreviewData.store)
-        .frame(width: 720, height: 520)
+        .frame(width: 1280, height: 900)
 }
 
 /// The three top-level keyboard-navigable regions. Tab cycles between these;
 /// arrow keys navigate *within* whichever one is focused.
 private enum FocusModule: Int, CaseIterable {
-    case categories, search, cards
+    case sidebar, search, cards
 }
 
-/// Inline neighbors within the search module, navigated with left/right
-/// arrows once the search module has focus.
-private enum SearchInlineItem: Int, CaseIterable {
-    case searchField, newButton, variablesButton, settingsButton
+private enum LibraryLayout: String {
+    case grid, list
 }
 
 struct ContentView: View {
     @EnvironmentObject private var store: CorpusStore
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @FocusState private var searchFocused: Bool
+    @AppStorage("QuickText.sidebarVisible") private var sidebarVisible = true
+    @AppStorage("QuickText.libraryLayout") private var layoutRaw = LibraryLayout.grid.rawValue
     @State private var showingSettings = false
     @State private var settingsPanelOffset = CGSize.zero
     @State private var settingsPanelDragOffset = CGSize.zero
@@ -37,11 +36,10 @@ struct ContentView: View {
     @State private var glossaryPanelOffset = CGSize.zero
     @State private var glossaryPanelDragOffset = CGSize.zero
     @State private var showingDictate = false
-    @State private var savedWindowFrame: NSRect?
-    @State private var gridWidth: CGFloat = 0
+    @State private var contentWidth: CGFloat = 0
+    @State private var windowSize = CGSize(width: 1280, height: 900)
     @State private var keyMonitor: Any?
     @State private var focusedModule: FocusModule = .search
-    @State private var searchInlineFocus: SearchInlineItem = .searchField
     @State private var deleteCandidate: Phrase?
     private var deleteCandidateIsPresented: Binding<Bool> {
         Binding(get: { deleteCandidate != nil }, set: { isPresented in if !isPresented { deleteCandidate = nil } })
@@ -58,123 +56,43 @@ struct ContentView: View {
         Binding(get: { store.errorMessage != nil }, set: { isPresented in if !isPresented { store.errorMessage = nil } })
     }
 
-    private let gridSpacing: CGFloat = 10
+    private var layout: LibraryLayout { LibraryLayout(rawValue: layoutRaw) ?? .grid }
 
-    private var cardWidth: CGFloat {
-        CGFloat(store.corpus.settings.cardWidth ?? Settings.defaultCardWidth)
-    }
-
-    private var gridColumnCount: Int {
-        max(Int((max(gridWidth, cardWidth) + gridSpacing) / (cardWidth + gridSpacing)), 1)
-    }
-
-    private var currentWindowWidth: CGFloat {
-        NSApp.keyWindow?.contentLayoutRect.width ?? 720
+    private var columnCount: Int {
+        layout == .list ? 1 : Theme.columnCount(for: contentWidth)
     }
 
     private var standardPanelWidth: CGFloat {
-        min(max(currentWindowWidth * 0.6, 420), currentWindowWidth * 0.9)
+        min(max(windowSize.width * 0.6, 420), windowSize.width * 0.9)
     }
 
     private var settingsPanelWidth: CGFloat {
-        min(max(currentWindowWidth * 0.6, 560), currentWindowWidth * 0.9)
-    }
-
-    private var variablesPanelWidth: CGFloat {
-        currentWindowWidth * 0.9
-    }
-
-    private var currentWindowHeight: CGFloat {
-        NSApp.keyWindow?.contentLayoutRect.height ?? 520
-    }
-
-    private var variablesPanelHeight: CGFloat {
-        currentWindowHeight * 0.9
+        min(max(windowSize.width * 0.6, 560), windowSize.width * 0.9)
     }
 
     private var showVariablesLibraryButton: Bool {
         store.corpus.settings.showVariablesLibraryButton ?? Settings.defaultShowVariablesLibraryButton
     }
 
-    private var activeSearchInlineItems: [SearchInlineItem] {
-        SearchInlineItem.allCases.filter { item in
-            item != .variablesButton || showVariablesLibraryButton
-        }
+    private var anyPanelOpen: Bool {
+        showingSettings || showingVariablesLibrary || showingKeyboardShortcuts || showingGlossary
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            categoryTabs
-
-            searchModuleRow
-
-            GeometryReader { geometry in
-                ScrollViewReader { proxy in
-                    ScrollView {
-                        if store.filteredPhrases.isEmpty {
-                            emptyState
-                        } else {
-                            MasonryGrid(columnWidth: cardWidth, spacing: gridSpacing) {
-                                ForEach(Array(store.filteredPhrases.enumerated()), id: \.element.id) { _, phrase in
-                                    let category = store.category(for: phrase.categoryId)
-                                    TileView(
-                                        phrase: phrase,
-                                        imageURL: store.imageURL(for: phrase.image),
-                                        backgroundColor: store.color(for: phrase.color ?? category?.color ?? store.corpus.settings.defaultTileColor),
-                                        textColor: store.color(for: phrase.textColor ?? category?.textColor ?? store.corpus.settings.defaultTextColor),
-                                        fontSize: store.corpus.settings.defaultFontSize,
-                                        fontFamily: store.corpus.settings.defaultFontFamily,
-                                        cardWidth: cardWidth,
-                                        isSelected: store.selectedPhraseID == phrase.id,
-                                        isCopied: store.copiedPhraseID == phrase.id,
-                                        highlightColor: store.highlightColor
-                                    )
-                                    .id(phrase.id)
-                                    .onTapGesture {
-                                        store.selectedPhraseID = phrase.id
-                                        store.expandedPhraseID = phrase.id
-                                        store.exitCategoryFocus()
-                                        setFocusedModule(.cards)
-                                    }
-                                    .contextMenu {
-                                        Button("Copy") { store.copy(phrase) }
-                                        Button("Preview") { store.expandedPhraseID = phrase.id }
-                                        Button("Edit") { store.beginEditing(phrase) }
-                                        Button("Duplicate") { store.duplicate(phrase) }
-                                        Button("Delete", role: .destructive) { deleteCandidate = phrase }
-                                    }
-                                    .onDrag {
-                                        store.draggedPhraseID = phrase.id
-                                        return NSItemProvider(object: phrase.id as NSString)
-                                    }
-                                    .onDrop(of: [.text], delegate: PhraseDropDelegate(target: phrase, store: store))
-                                }
-                            }
-                            .padding(.vertical, 2)
-                        }
-                    }
-                    .onChange(of: store.selectedPhraseID) { _, selectedID in
-                        guard focusedModule == .cards, let selectedID else { return }
-                        revealSelectedCard(selectedID, with: proxy)
-                    }
-                }
-                .onAppear { gridWidth = geometry.size.width }
-                .onChange(of: geometry.size.width) { _, width in gridWidth = width }
+        HStack(spacing: 0) {
+            if sidebarVisible {
+                sidebar
+                    .transition(.move(edge: .leading))
             }
-            .padding(.top, 10)
-            .background(
-                RoundedRectangle(cornerRadius: 14)
-                    .fill(focusedModule == .cards ? store.highlightColor.opacity(0.06) : Color.clear)
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 14)
-                    .stroke(store.highlightColor.opacity(focusedModule == .cards ? 0.18 : 0), lineWidth: 1)
-            )
-            .animation(reduceMotion ? nil : QuickTextMotion.standard, value: focusedModule)
-            .contextMenu { gridContextMenu }
+            VStack(spacing: 0) {
+                header
+                library
+            }
+            .background(Theme.bgContent)
         }
-        .padding(14)
-        .background(store.gridBackgroundColor)
+        .background(Theme.bgContent)
+        .ignoresSafeArea(.container, edges: .top)
+        .onGeometryChange(for: CGSize.self) { $0.size } action: { windowSize = $0 }
         .onAppear {
             store.load()
             store.startWatchingCorpus()
@@ -186,7 +104,7 @@ struct ContentView: View {
             store.stopWatchingCorpus()
         }
         .onReceive(NotificationCenter.default.publisher(for: .quickTextFocusSearch)) { _ in
-            guard store.editingPhrase == nil, !showingSettings, !showingVariablesLibrary, !showingKeyboardShortcuts, !showingGlossary else { return }
+            guard store.editingPhrase == nil, !anyPanelOpen else { return }
             focusSearchSoon()
         }
         .onReceive(NotificationCenter.default.publisher(for: .quickTextShowKeyboardShortcuts)) { _ in
@@ -204,10 +122,11 @@ struct ContentView: View {
             store.searchTermDidChange()
         }
         .onChange(of: searchFocused) { _, focused in
-            if focused {
-                focusedModule = .search
-                searchInlineFocus = .searchField
-            }
+            if focused { focusedModule = .search }
+        }
+        .onChange(of: store.expandedPhraseID) { oldValue, newValue in
+            // Focus returns to the source tile when the card closes.
+            if oldValue != nil, newValue == nil { setFocusedModule(.cards) }
         }
         .onExitCommand {
             handleEscape()
@@ -217,126 +136,14 @@ struct ContentView: View {
                 .environmentObject(store)
         }
         .sheet(isPresented: $showingDictate) {
-            DictateView(parentWindowWidth: currentWindowWidth)
+            DictateView(parentWindowWidth: windowSize.width)
                 .environmentObject(store)
         }
-        .toolbar {
-            toolbarItems
-        }
         .overlay {
-            if let phrase = store.expandedPhrase {
-                ExpandedOverlayView(store: store, phrase: phrase)
-                    .transition(.opacity)
-            }
+            ExpandedOverlayView(store: store, onDelete: { deleteCandidate = $0 })
         }
-        .overlay(alignment: .topTrailing) {
-            if showingSettings {
-                FloatingPanel(
-                    onClose: closeFloatingPanels,
-                    onDragEnded: {
-                        settingsPanelOffset.width += settingsPanelDragOffset.width
-                        settingsPanelOffset.height += settingsPanelDragOffset.height
-                        settingsPanelDragOffset = .zero
-                    },
-                    dragOffset: $settingsPanelDragOffset
-                ) {
-                    SettingsEditor(width: settingsPanelWidth)
-                        .environmentObject(store)
-                }
-                .offset(
-                    x: settingsPanelOffset.width + settingsPanelDragOffset.width,
-                    y: settingsPanelOffset.height + settingsPanelDragOffset.height
-                )
-                .padding(.top, 54)
-                .padding(.trailing, 8)
-                .zIndex(2)
-            }
-        }
-        .overlay {
-            if showingVariablesLibrary {
-                ZStack {
-                    Color.clear
-                        .contentShape(Rectangle())
-                        .onTapGesture(perform: closeFloatingPanels)
-
-                    FloatingPanel(
-                        title: "Variables Library",
-                        systemImage: "curlybraces",
-                        onClose: closeFloatingPanels,
-                        onDragEnded: {
-                            variablesPanelOffset.width += variablesPanelDragOffset.width
-                            variablesPanelOffset.height += variablesPanelDragOffset.height
-                            variablesPanelDragOffset = .zero
-                        },
-                        dragOffset: $variablesPanelDragOffset
-                    ) {
-                        VariablesLibraryEditor(
-                            width: variablesPanelWidth,
-                            height: variablesPanelHeight,
-                            onClose: closeFloatingPanels
-                        )
-                            .environmentObject(store)
-                    }
-                    .offset(
-                        x: variablesPanelOffset.width + variablesPanelDragOffset.width,
-                        y: variablesPanelOffset.height + variablesPanelDragOffset.height
-                    )
-                }
-                .zIndex(2)
-            }
-        }
-        .overlay(alignment: .topTrailing) {
-            if showingKeyboardShortcuts {
-                FloatingPanel(
-                    title: "Keyboard Shortcuts",
-                    systemImage: "keyboard",
-                    onClose: closeFloatingPanels,
-                    onDragEnded: {
-                        shortcutsPanelOffset.width += shortcutsPanelDragOffset.width
-                        shortcutsPanelOffset.height += shortcutsPanelDragOffset.height
-                        shortcutsPanelDragOffset = .zero
-                    },
-                    dragOffset: $shortcutsPanelDragOffset
-                ) {
-                    KeyboardShortcutsView(width: standardPanelWidth)
-                }
-                .offset(
-                    x: shortcutsPanelOffset.width + shortcutsPanelDragOffset.width,
-                    y: shortcutsPanelOffset.height + shortcutsPanelDragOffset.height
-                )
-                .padding(.top, 54)
-                .padding(.trailing, 8)
-                .zIndex(3)
-            }
-        }
-        .overlay(alignment: .topTrailing) {
-            if showingGlossary {
-                FloatingPanel(
-                    title: "Glossary",
-                    systemImage: "questionmark.circle",
-                    onClose: closeFloatingPanels,
-                    onDragEnded: {
-                        glossaryPanelOffset.width += glossaryPanelDragOffset.width
-                        glossaryPanelOffset.height += glossaryPanelDragOffset.height
-                        glossaryPanelDragOffset = .zero
-                    },
-                    dragOffset: $glossaryPanelDragOffset
-                ) {
-                    GlossaryView(width: standardPanelWidth)
-                }
-                .offset(
-                    x: glossaryPanelOffset.width + glossaryPanelDragOffset.width,
-                    y: glossaryPanelOffset.height + glossaryPanelDragOffset.height
-                )
-                .padding(.top, 54)
-                .padding(.trailing, 8)
-                .zIndex(4)
-            }
-        }
-        .onChange(of: store.expandedPhraseID) { _, newValue in
-            resizeWindowForExpansion(expanding: newValue != nil)
-        }
-        .animation(reduceMotion ? nil : QuickTextMotion.panel, value: store.expandedPhraseID)
+        .overlay(alignment: .bottom) { copiedToast }
+        .overlay { floatingPanels }
         .alert(
             deleteAlertTitle,
             isPresented: deleteCandidateIsPresented,
@@ -360,214 +167,574 @@ struct ContentView: View {
         }
     }
 
-    /// Extracted from `body`: the toolbar plus the Dictate button grew the
-    /// body expression past the type-checker's limit (same reason as
-    /// `deleteAlertTitle` above).
-    @ToolbarContentBuilder
-    private var toolbarItems: some ToolbarContent {
-        ToolbarItem(placement: .primaryAction) {
-            Button(action: { searchFocused = true }) {
-                Label("Search", systemImage: "magnifyingglass")
+    /// Window-level confirmation for every copy path (tile, keyboard, card).
+    private var copiedToast: some View {
+        ZStack {
+            if store.copiedPhraseID != nil {
+                CopiedToast()
+                    .transition(reduceMotion ? .opacity : .opacity.combined(with: .offset(y: 6)))
             }
-            .keyboardShortcut("f", modifiers: .command)
         }
-        ToolbarItem(placement: .primaryAction) {
-            Button(action: { showingDictate = true }) {
-                Label("Dictate", systemImage: "mic")
+        .animation(reduceMotion ? nil : Theme.Motion.fade, value: store.copiedPhraseID)
+        .padding(.bottom, 28)
+        .allowsHitTesting(false)
+    }
+
+    /// Settings, Variables Library, Keyboard Shortcuts, and Glossary panels.
+    /// Extracted from `body` to keep it under the type-checker's limit.
+    private var floatingPanels: some View {
+        ZStack(alignment: .topTrailing) {
+            Color.clear
+                .allowsHitTesting(false)
+            if showingVariablesLibrary {
+                ZStack {
+                    Color.clear
+                        .contentShape(Rectangle())
+                        .onTapGesture(perform: closeFloatingPanels)
+
+                    FloatingPanel(
+                        title: "Variables Library",
+                        systemImage: "curlybraces",
+                        onClose: closeFloatingPanels,
+                        onDragEnded: {
+                            variablesPanelOffset.width += variablesPanelDragOffset.width
+                            variablesPanelOffset.height += variablesPanelDragOffset.height
+                            variablesPanelDragOffset = .zero
+                        },
+                        dragOffset: $variablesPanelDragOffset
+                    ) {
+                        VariablesLibraryEditor(
+                            width: windowSize.width * 0.9,
+                            height: windowSize.height * 0.9,
+                            onClose: closeFloatingPanels
+                        )
+                            .environmentObject(store)
+                    }
+                    .offset(
+                        x: variablesPanelOffset.width + variablesPanelDragOffset.width,
+                        y: variablesPanelOffset.height + variablesPanelDragOffset.height
+                    )
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .zIndex(2)
             }
+            if showingSettings {
+                FloatingPanel(
+                    onClose: closeFloatingPanels,
+                    onDragEnded: {
+                        settingsPanelOffset.width += settingsPanelDragOffset.width
+                        settingsPanelOffset.height += settingsPanelDragOffset.height
+                        settingsPanelDragOffset = .zero
+                    },
+                    dragOffset: $settingsPanelDragOffset
+                ) {
+                    SettingsEditor(width: settingsPanelWidth)
+                        .environmentObject(store)
+                }
+                .offset(
+                    x: settingsPanelOffset.width + settingsPanelDragOffset.width,
+                    y: settingsPanelOffset.height + settingsPanelDragOffset.height
+                )
+                .padding(.top, 64)
+                .padding(.trailing, 12)
+                .zIndex(2)
+            }
+            if showingKeyboardShortcuts {
+                FloatingPanel(
+                    title: "Keyboard Shortcuts",
+                    systemImage: "keyboard",
+                    onClose: closeFloatingPanels,
+                    onDragEnded: {
+                        shortcutsPanelOffset.width += shortcutsPanelDragOffset.width
+                        shortcutsPanelOffset.height += shortcutsPanelDragOffset.height
+                        shortcutsPanelDragOffset = .zero
+                    },
+                    dragOffset: $shortcutsPanelDragOffset
+                ) {
+                    KeyboardShortcutsView(width: standardPanelWidth)
+                }
+                .offset(
+                    x: shortcutsPanelOffset.width + shortcutsPanelDragOffset.width,
+                    y: shortcutsPanelOffset.height + shortcutsPanelDragOffset.height
+                )
+                .padding(.top, 64)
+                .padding(.trailing, 12)
+                .zIndex(3)
+            }
+            if showingGlossary {
+                FloatingPanel(
+                    title: "Glossary",
+                    systemImage: "questionmark.circle",
+                    onClose: closeFloatingPanels,
+                    onDragEnded: {
+                        glossaryPanelOffset.width += glossaryPanelDragOffset.width
+                        glossaryPanelOffset.height += glossaryPanelDragOffset.height
+                        glossaryPanelDragOffset = .zero
+                    },
+                    dragOffset: $glossaryPanelDragOffset
+                ) {
+                    GlossaryView(width: standardPanelWidth)
+                }
+                .offset(
+                    x: glossaryPanelOffset.width + glossaryPanelDragOffset.width,
+                    y: glossaryPanelOffset.height + glossaryPanelDragOffset.height
+                )
+                .padding(.top, 64)
+                .padding(.trailing, 12)
+                .zIndex(4)
+            }
+        }
+    }
+
+    // MARK: - Sidebar
+
+    private var sidebar: some View {
+        VStack(alignment: .leading, spacing: 28) {
+            sidebarGroup("Library") {
+                SidebarRow(title: "All Snippets", systemImage: "rectangle.stack", isSelected: store.isTabSelected("all"), showsFocus: focusedModule == .sidebar) {
+                    selectSidebar("all")
+                }
+                SidebarRow(title: "Favorites", systemImage: "star", isSelected: store.isTabSelected("favorites"), showsFocus: focusedModule == .sidebar) {
+                    selectSidebar("favorites")
+                }
+                SidebarRow(title: "Recently Used", systemImage: "clock", isSelected: store.isTabSelected("recent"), showsFocus: focusedModule == .sidebar) {
+                    selectSidebar("recent")
+                }
+            }
+
+            sidebarGroup("Collections") {
+                ForEach(store.sortedCategories) { category in
+                    SidebarRow(title: category.name, dotColor: store.dotColor(for: category.id), isSelected: store.isTabSelected(category.id), showsFocus: focusedModule == .sidebar) {
+                        selectSidebar(category.id)
+                    }
+                }
+            }
+
+            Spacer(minLength: 0)
+
+            VStack(alignment: .leading, spacing: 2) {
+                if showVariablesLibraryButton {
+                    SidebarRow(title: "Variables", systemImage: "curlybraces", isSelected: showingVariablesLibrary, showsFocus: false) {
+                        openVariablesPanel()
+                    }
+                }
+                SidebarRow(title: "Settings", systemImage: "gearshape", isSelected: showingSettings, showsFocus: false) {
+                    openSettingsPanel()
+                }
+            }
+            .padding(.top, 14)
+            .overlay(alignment: .top) {
+                Rectangle().fill(Theme.rule).frame(height: 1)
+            }
+        }
+        // Clears the window's traffic lights, which sit over the sidebar's top edge.
+        .padding(.top, 64)
+        .padding(.horizontal, 14)
+        .padding(.bottom, 18)
+        .frame(width: 260)
+        .frame(maxHeight: .infinity, alignment: .top)
+        .background(Theme.bgSidebar)
+        .overlay(alignment: .trailing) {
+            Rectangle().fill(Theme.rule).frame(width: 1)
+        }
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel("Collections")
+    }
+
+    private func sidebarGroup<Content: View>(_ title: String, @ViewBuilder content: () -> Content) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(title.uppercased())
+                .font(ThemeFont.eyebrow())
+                .tracking(11 * 0.06)
+                .foregroundStyle(Theme.textTertiary)
+                .padding(.horizontal, 10)
+                .padding(.bottom, 8)
+                .accessibilityAddTraits(.isHeader)
+            content()
+        }
+    }
+
+    private func selectSidebar(_ id: String) {
+        store.selectTab(id)
+        focusedModule = .sidebar
+        searchFocused = false
+    }
+
+    // MARK: - Header
+
+    private var header: some View {
+        HStack(spacing: 12) {
+            Button {
+                withAnimation(reduceMotion ? nil : Theme.Motion.sheet) { sidebarVisible.toggle() }
+            } label: {
+                Image(systemName: "sidebar.left")
+                    .font(.system(size: 15, weight: .regular))
+                    .foregroundStyle(Theme.textSecondary)
+            }
+            .buttonStyle(IconButtonStyle())
+            .accessibilityLabel(sidebarVisible ? "Hide sidebar" : "Show sidebar")
+
+            Text("Quick Text")
+                .font(.system(size: 14, weight: .semibold))
+                .tracking(-0.14)
+                .foregroundStyle(Theme.textPrimary)
+
+            Spacer(minLength: 12)
+
+            searchField
+
+            Button { showingDictate = true } label: {
+                Image(systemName: "mic")
+                    .font(.system(size: 15, weight: .regular))
+                    .foregroundStyle(Theme.textSecondary)
+            }
+            .buttonStyle(IconButtonStyle())
             .keyboardShortcut("d", modifiers: .command)
-        }
-        ToolbarItem(placement: .primaryAction) {
-            // Only claim Cmd-C window-wide while the grid actually owns keyboard
-            // focus; otherwise leave it unregistered so the search field, the
-            // phrase editor sheet, and settings text fields keep native Cmd-C.
-            if canUseGridKeyboard {
-                Button(action: copySelected) {
-                    Label("Copy", systemImage: "doc.on.doc")
-                }
-                .keyboardShortcut("c", modifiers: .command)
-            } else {
-                Button(action: copySelected) {
-                    Label("Copy", systemImage: "doc.on.doc")
+            .accessibilityLabel("Dictate snippet")
+            .help("Dictate (⌘D)")
+
+            Rectangle()
+                .fill(Theme.rule)
+                .frame(width: 1, height: 20)
+                .padding(.horizontal, 4)
+
+            Button { store.beginNewPhrase() } label: {
+                HStack(spacing: 6) {
+                    Image(systemName: "plus")
+                        .font(.system(size: 12, weight: .bold))
+                    Text("New Snippet")
                 }
             }
+            .buttonStyle(AccentButtonStyle())
         }
+        // Leaves room for the traffic lights when the sidebar is hidden.
+        .padding(.leading, sidebarVisible ? 16 : 84)
+        .padding(.trailing, 20)
+        .frame(height: 56)
+        .overlay(alignment: .bottom) {
+            Rectangle().fill(Theme.rule).frame(height: 1)
+        }
+        .background { shortcutButtons }
     }
 
     private var searchField: some View {
         HStack(spacing: 8) {
             Image(systemName: "magnifyingglass")
-                .foregroundStyle(.secondary)
-            TextField("Search", text: $store.searchTerm)
+                .font(.system(size: 13, weight: .medium))
+                .foregroundStyle(Theme.textTertiary)
+            TextField("Search snippets", text: $store.searchTerm)
                 .textFieldStyle(.plain)
+                .font(.system(size: 13))
+                .foregroundStyle(Theme.textPrimary)
                 .focused($searchFocused)
                 .focusEffectDisabled()
                 .onSubmit { copySelected() }
-            if !store.searchTerm.isEmpty {
-                Button {
-                    store.clearSearch()
-                } label: {
+                .accessibilityLabel("Search snippets")
+            if store.searchTerm.isEmpty {
+                KeyCap(text: "⌘K")
+                    .foregroundStyle(Theme.textTertiary)
+                    .accessibilityHidden(true)
+            } else {
+                Button { store.clearSearch() } label: {
                     Image(systemName: "xmark.circle.fill")
-                        .foregroundStyle(.secondary)
-                        .font(.system(size: 17, weight: .semibold))
-                        .frame(width: 34, height: 34)
+                        .font(.system(size: 13))
+                        .foregroundStyle(Theme.textTertiary)
+                        .frame(width: 22, height: 22)
                         .contentShape(Rectangle())
                 }
-                .buttonStyle(.glass)
+                .buttonStyle(.plain)
+                .accessibilityLabel("Clear search")
             }
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 10)
-        .frame(minHeight: 44)
-        .glassEffect(.regular, in: Capsule())
-        .overlay(
-            Capsule()
-                .stroke(searchFocused ? store.highlightColor : Color.primary.opacity(0.15), lineWidth: searchFocused ? 2 : 1)
-        )
-        .animation(reduceMotion ? nil : QuickTextMotion.micro, value: searchFocused)
+        .padding(.leading, 12)
+        .padding(.trailing, 8)
+        .frame(minWidth: 180, idealWidth: 300, maxWidth: 300)
+        .frame(height: 34)
+        .background(RoundedRectangle(cornerRadius: Theme.Radius.search).fill(Theme.bgField))
+        .overlay(RoundedRectangle(cornerRadius: Theme.Radius.search).strokeBorder(searchFocused ? Theme.hl : Theme.borderField, lineWidth: 1))
+        .focusRing(searchFocused, cornerRadius: Theme.Radius.search)
+        .animation(reduceMotion ? nil : Theme.Motion.hover, value: searchFocused)
     }
 
-    /// Search field plus its inline neighbors (New/Variables/Settings), treated
-    /// as one keyboard-navigable module — left/right arrows move between them.
-    private var searchModuleRow: some View {
-        HStack(spacing: 10) {
-            searchField
-            moduleButton(icon: "plus", label: "New", item: .newButton) {
-                store.beginNewPhrase()
+    /// Invisible buttons that own window-level shortcuts. Cmd-C is only claimed
+    /// while the grid owns keyboard focus, so text fields keep native copy.
+    @ViewBuilder
+    private var shortcutButtons: some View {
+        ZStack {
+            Button("Search") { setFocusedModule(.search) }
+                .keyboardShortcut("k", modifiers: .command)
+            Button("Find") { setFocusedModule(.search) }
+                .keyboardShortcut("f", modifiers: .command)
+            if canUseGridKeyboard {
+                Button("Copy") { copySelected() }
+                    .keyboardShortcut("c", modifiers: .command)
             }
-            if showVariablesLibraryButton {
-                moduleButton(icon: "curlybraces", label: "Variables", item: .variablesButton) {
-                    openVariablesPanel()
+        }
+        .opacity(0)
+        .frame(width: 0, height: 0)
+        .accessibilityHidden(true)
+    }
+
+    // MARK: - Library
+
+    private var library: some View {
+        ScrollViewReader { proxy in
+            ScrollView {
+                VStack(alignment: .leading, spacing: 36) {
+                    libraryHeader
+                    if store.sections.isEmpty {
+                        emptyState
+                    } else {
+                        ForEach(store.sections) { section in
+                            sectionView(section)
+                        }
+                    }
+                }
+                .padding(.top, 44)
+                .padding(.horizontal, 56)
+                .padding(.bottom, 48)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .onGeometryChange(for: CGFloat.self) { $0.size.width - 112 } action: { contentWidth = $0 }
+            }
+            .scrollIndicators(.automatic)
+            .onChange(of: store.selectedPhraseID) { _, selectedID in
+                guard focusedModule == .cards, let selectedID else { return }
+                if reduceMotion {
+                    proxy.scrollTo(selectedID, anchor: nil)
+                } else {
+                    withAnimation(Theme.Motion.hover) { proxy.scrollTo(selectedID, anchor: nil) }
                 }
             }
-            moduleButton(icon: "slider.horizontal.3", label: "Settings", item: .settingsButton) {
-                openSettingsPanel()
-            }
         }
-        .padding(6)
-        .background(
-            RoundedRectangle(cornerRadius: 14)
-                .fill(focusedModule == .search ? store.highlightColor.opacity(0.06) : Color.clear)
-        )
+        .contextMenu { gridContextMenu }
     }
 
-    private func moduleButton(icon: String, label: String, item: SearchInlineItem, action: @escaping () -> Void) -> some View {
-        let isFocused = focusedModule == .search && searchInlineFocus == item
-        return Button {
-            action()
-            focusedModule = .search
-            searchInlineFocus = item
-            searchFocused = false
+    private var libraryHeader: some View {
+        HStack(alignment: .bottom, spacing: 24) {
+            VStack(alignment: .leading, spacing: 6) {
+                Text(store.viewEyebrow.uppercased())
+                    .font(ThemeFont.eyebrow())
+                    .tracking(11 * 0.12)
+                    .foregroundStyle(Theme.accent)
+                Text(store.viewTitle)
+                    .font(ThemeFont.serif(52))
+                    .tracking(52 * -0.02)
+                    .foregroundStyle(Theme.textPrimary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.6)
+                    .accessibilityAddTraits(.isHeader)
+            }
+            Spacer(minLength: 12)
+            HStack(spacing: 12) {
+                layoutToggle
+                if store.activeCategoryID != "recent" {
+                    sortMenu
+                }
+            }
+            .padding(.bottom, 6)
+        }
+    }
+
+    private var layoutToggle: some View {
+        HStack(spacing: 0) {
+            layoutButton(.grid, systemImage: "square.grid.2x2", label: "Grid view")
+            layoutButton(.list, systemImage: "list.bullet", label: "List view")
+        }
+        .padding(2)
+        .background(RoundedRectangle(cornerRadius: Theme.Radius.search).fill(Theme.bgField))
+        .overlay(RoundedRectangle(cornerRadius: Theme.Radius.search).strokeBorder(Theme.borderField, lineWidth: 1))
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel("View")
+    }
+
+    private func layoutButton(_ value: LibraryLayout, systemImage: String, label: String) -> some View {
+        let isOn = layout == value
+        return Button { layoutRaw = value.rawValue } label: {
+            Image(systemName: systemImage)
+                .font(.system(size: 12, weight: .medium))
+                .foregroundStyle(isOn ? Theme.textPrimary : Theme.textTertiary)
+                .frame(width: 34, height: 28)
+                .background(RoundedRectangle(cornerRadius: 7).fill(isOn ? Theme.segmentOn : Color.clear))
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(label)
+        .accessibilityAddTraits(isOn ? .isSelected : [])
+    }
+
+    private var sortMenu: some View {
+        Menu {
+            Picker("Sort", selection: $store.librarySort) {
+                ForEach(LibrarySort.allCases) { sort in
+                    Text(sort.label).tag(sort)
+                }
+            }
+            .pickerStyle(.inline)
         } label: {
-            Label(label, systemImage: icon)
-        }
-        .buttonStyle(.glass)
-        .background(
-            Capsule().fill(isFocused ? store.highlightColor.opacity(0.35) : Color.clear)
-        )
-        .animation(reduceMotion ? nil : QuickTextMotion.micro, value: isFocused)
-    }
-
-    private var emptyState: some View {
-        VStack(spacing: 10) {
-            Image(systemName: store.searchTerm.isEmpty ? "square.stack.3d.up" : "magnifyingglass")
-                .font(.system(size: 28, weight: .light))
-                .foregroundStyle(.secondary)
-            Text(store.searchTerm.isEmpty ? "No phrases yet" : "No phrases found")
-                .font(.title3.weight(.semibold))
-            Text(store.searchTerm.isEmpty ? "Create a phrase to begin building your library." : "Try a different search or clear the current filter.")
-                .font(.body)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-            if store.searchTerm.isEmpty {
-                Button("New Phrase") { store.beginNewPhrase() }
-                    .buttonStyle(.glassProminent)
-                    .tint(store.highlightColor)
-                    .padding(.top, 4)
-            } else {
-                Button("Clear Search") { store.clearSearch() }
-                    .buttonStyle(.glass)
-                    .padding(.top, 4)
+            HStack(spacing: 6) {
+                Text(store.librarySort.label)
+                Image(systemName: "chevron.down")
+                    .font(.system(size: 10, weight: .semibold))
             }
+            .font(.system(size: 13))
+            .foregroundStyle(Theme.textSecondary)
+            .padding(.leading, 12)
+            .padding(.trailing, 10)
+            .frame(height: 34)
+            .overlay(RoundedRectangle(cornerRadius: Theme.Radius.search).strokeBorder(Theme.borderField, lineWidth: 1))
+            .contentShape(Rectangle())
         }
-        .frame(maxWidth: .infinity, minHeight: 240)
-        .padding(32)
+        .menuStyle(.button)
+        .buttonStyle(.plain)
+        .menuIndicator(.hidden)
+        .fixedSize()
+        .accessibilityLabel("Sort by \(store.librarySort.label)")
     }
 
-    /// Expands the window to ~80% of the display when a card expands, since the
-    /// expanded card overlay fills the window rather than floating independently.
-    private func resizeWindowForExpansion(expanding: Bool) {
-        guard let window = NSApp.keyWindow ?? NSApp.windows.first else { return }
-        let reduceMotion = NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
-        if expanding {
-            guard savedWindowFrame == nil else { return }
-            savedWindowFrame = window.frame
-            if let screen = window.screen ?? NSScreen.main {
-                let visible = screen.visibleFrame
-                let size = NSSize(width: visible.width * 0.8, height: visible.height * 0.8)
-                let origin = NSPoint(x: visible.midX - size.width / 2, y: visible.midY - size.height / 2)
-                let target = NSRect(origin: origin, size: size)
-                if reduceMotion {
-                    window.setFrame(target, display: true, animate: false)
-                } else {
-                    NSAnimationContext.runAnimationGroup { context in
-                        context.duration = QuickTextMotion.panelDuration
-                        context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-                        window.animator().setFrame(target, display: true)
+    private func sectionView(_ section: PhraseSection) -> some View {
+        VStack(alignment: .leading, spacing: 18) {
+            if let title = section.title {
+                HStack(spacing: 14) {
+                    Text(title)
+                        .font(ThemeFont.serif(24, italic: true))
+                        .foregroundStyle(Theme.textPrimary)
+                        .accessibilityAddTraits(.isHeader)
+                    Text("\(section.phrases.count)")
+                        .font(.system(size: 12))
+                        .monospacedDigit()
+                        .foregroundStyle(Theme.textTertiary)
+                    Rectangle()
+                        .fill(Theme.rule)
+                        .frame(height: 1)
+                }
+            }
+            if layout == .list {
+                VStack(spacing: 8) {
+                    ForEach(section.phrases) { phrase in
+                        row(for: phrase)
+                    }
+                }
+            } else {
+                LazyVGrid(
+                    columns: Array(repeating: GridItem(.flexible(), spacing: Theme.gridSpacing, alignment: .top), count: columnCount),
+                    alignment: .leading,
+                    spacing: Theme.gridSpacing
+                ) {
+                    ForEach(section.phrases) { phrase in
+                        tile(for: phrase)
                     }
                 }
             }
-        } else if let frame = savedWindowFrame {
-            if reduceMotion {
-                window.setFrame(frame, display: true, animate: false)
-            } else {
-                NSAnimationContext.runAnimationGroup { context in
-                    context.duration = QuickTextMotion.panelDuration
-                    context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-                    window.animator().setFrame(frame, display: true)
-                }
-            }
-            savedWindowFrame = nil
         }
     }
 
-    private var categoryTabs: some View {
-        HStack(spacing: 6) {
-            ForEach(store.tabs, id: \.id) { tab in
-                CategoryTabButton(
-                    title: tab.name,
-                    isSelected: store.isTabSelected(tab.id),
-                    background: store.categoryTabBackground(for: tab, isSelected: store.isTabSelected(tab.id))
-                ) {
-                    store.selectTab(tab.id)
-                    setFocusedModule(.categories)
-                }
-            }
-        }
-        .padding(6)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(focusedModule == .categories ? store.highlightColor.opacity(0.12) : Color.clear)
+    private func tile(for phrase: Phrase) -> some View {
+        TileView(
+            phrase: phrase,
+            categoryName: store.categoryName(for: phrase.categoryId),
+            dotColor: store.dotColor(for: phrase.categoryId),
+            libraryVariables: store.libraryVariables,
+            searchTerm: store.trimmedSearchTerm,
+            isSelected: isShowingSelection(phrase),
+            isOpen: store.expandedPhraseID == phrase.id,
+            isCopied: store.copiedPhraseID == phrase.id && store.expandedPhraseID == nil,
+            opensCard: true,
+            onActivate: { activate(phrase) },
+            onToggleFavorite: { store.toggleFavorite(phrase) },
+            onCopy: { select(phrase); store.copy(phrase) }
         )
+        .id(phrase.id)
+        .simultaneousGesture(TapGesture(count: 2).onEnded { open(phrase) })
+        .contextMenu { tileContextMenu(for: phrase) }
+        .onDrag {
+            store.draggedPhraseID = phrase.id
+            return NSItemProvider(object: phrase.id as NSString)
+        }
+        .onDrop(of: [.text], delegate: PhraseDropDelegate(target: phrase, store: store))
     }
 
-    private func openSelected() {
-        if let phrase = store.selectedPhrase {
-            store.expandedPhraseID = phrase.id
-            store.exitCategoryFocus()
+    private func row(for phrase: Phrase) -> some View {
+        PhraseRowView(
+            phrase: phrase,
+            categoryName: store.categoryName(for: phrase.categoryId),
+            dotColor: store.dotColor(for: phrase.categoryId),
+            libraryVariables: store.libraryVariables,
+            searchTerm: store.trimmedSearchTerm,
+            isSelected: isShowingSelection(phrase),
+            isOpen: store.expandedPhraseID == phrase.id,
+            isCopied: store.copiedPhraseID == phrase.id && store.expandedPhraseID == nil,
+            onActivate: { activate(phrase) },
+            onToggleFavorite: { store.toggleFavorite(phrase) }
+        )
+        .id(phrase.id)
+        .simultaneousGesture(TapGesture(count: 2).onEnded { open(phrase) })
+        .contextMenu { tileContextMenu(for: phrase) }
+    }
+
+    /// Selection is drawn only while the grid owns keyboard focus, so the
+    /// implicit "first result" used by Return-from-search stays invisible.
+    private func isShowingSelection(_ phrase: Phrase) -> Bool {
+        focusedModule == .cards && store.selectedPhraseID == phrase.id && store.expandedPhraseID == nil
+    }
+
+    @ViewBuilder
+    private func tileContextMenu(for phrase: Phrase) -> some View {
+        Button("Copy") { select(phrase); store.copy(phrase) }
+        Button("Open") { open(phrase) }
+        Button(phrase.favorite ? "Remove from Favorites" : "Add to Favorites") { store.toggleFavorite(phrase) }
+        Divider()
+        Button("Edit") { store.beginEditing(phrase) }
+        Button("Duplicate") { store.duplicate(phrase) }
+        Button("Delete", role: .destructive) { deleteCandidate = phrase }
+    }
+
+    private var emptyState: some View {
+        let searching = !store.trimmedSearchTerm.isEmpty
+        return VStack(alignment: .leading, spacing: 10) {
+            Text(searching ? "No snippets found" : emptyTitle)
+                .font(ThemeFont.serif(26, weight: .medium))
+                .foregroundStyle(Theme.textPrimary)
+            Text(searching ? "Try a different search, or press Esc to clear it." : emptyMessage)
+                .font(.system(size: 13))
+                .foregroundStyle(Theme.textSecondary)
+            if searching {
+                Button("Clear Search") { store.clearSearch() }
+                    .buttonStyle(OutlineButtonStyle(height: 34))
+                    .padding(.top, 6)
+            } else if store.activeCategoryID != "favorites" && store.activeCategoryID != "recent" {
+                Button { store.beginNewPhrase() } label: {
+                    HStack(spacing: 6) {
+                        Image(systemName: "plus").font(.system(size: 12, weight: .bold))
+                        Text("New Snippet")
+                    }
+                }
+                .buttonStyle(AccentButtonStyle())
+                .padding(.top, 6)
+            }
+        }
+        .padding(.vertical, 24)
+    }
+
+    private var emptyTitle: String {
+        switch store.activeCategoryID {
+        case "favorites": "No favorites yet"
+        case "recent": "Nothing used yet"
+        default: "No snippets yet"
         }
     }
 
-    private func copySelected() {
-        if let phrase = store.selectedPhrase {
-            store.copy(phrase)
+    private var emptyMessage: String {
+        switch store.activeCategoryID {
+        case "favorites": "Star a snippet to keep it here."
+        case "recent": "Snippets you copy will appear here."
+        default: "Create a snippet to begin building this collection."
         }
     }
 
     @ViewBuilder
     private var gridContextMenu: some View {
-        Button("New Phrase") { store.beginNewPhrase() }
-        Button("Edit Selected Phrase") { store.beginEditingSelectedPhrase() }
+        Button("New Snippet") { store.beginNewPhrase() }
+        Button("Edit Selected Snippet") { store.beginEditingSelectedPhrase() }
             .disabled(store.selectedPhrase == nil)
         Button("Copy Selected") { copySelected() }
             .disabled(store.selectedPhrase == nil)
@@ -576,12 +743,40 @@ struct ContentView: View {
         Button("Settings") { openSettingsPanel() }
     }
 
+    // MARK: - Actions
+
+    private func select(_ phrase: Phrase) {
+        store.selectedPhraseID = phrase.id
+        focusedModule = .cards
+        searchFocused = false
+    }
+
+    /// Click: always opens the card. Copy is the card's Copy / Copy & Close.
+    private func activate(_ phrase: Phrase) {
+        open(phrase)
+    }
+
+    private func open(_ phrase: Phrase) {
+        select(phrase)
+        store.expandedPhraseID = phrase.id
+    }
+
+    private func openSelected() {
+        if let phrase = store.selectedPhrase { open(phrase) }
+    }
+
+    private func copySelected() {
+        if let phrase = store.selectedPhrase {
+            store.copy(phrase)
+        }
+    }
+
     private var isEditingText: Bool {
-        return NSApp.keyWindow?.firstResponder is NSTextView
+        NSApp.keyWindow?.firstResponder is NSTextView
     }
 
     private var canUseGridKeyboard: Bool {
-        store.expandedPhraseID == nil && !showingSettings && !showingVariablesLibrary && !showingKeyboardShortcuts && !showingGlossary && store.editingPhrase == nil && !searchFocused && !isEditingText
+        store.expandedPhraseID == nil && !anyPanelOpen && store.editingPhrase == nil && !searchFocused && !isEditingText
     }
 
     private func openSettingsPanel() {
@@ -625,67 +820,32 @@ struct ContentView: View {
         }
     }
 
-    /// Switches which of the three top-level regions has keyboard focus,
-    /// applying each module's "entry" default (search field ready to type,
-    /// a card always selected once the grid is focused).
+    /// Switches which top-level region has keyboard focus, applying each
+    /// module's entry default (search field ready to type; a card always
+    /// selected once the grid is focused).
     private func setFocusedModule(_ module: FocusModule) {
         focusedModule = module
         switch module {
-        case .categories:
+        case .sidebar:
             searchFocused = false
         case .search:
-            searchInlineFocus = .searchField
             searchFocused = true
         case .cards:
             searchFocused = false
-            if store.selectedPhraseID == nil || !store.filteredPhrases.contains(where: { $0.id == store.selectedPhraseID }) {
-                store.selectedPhraseID = store.filteredPhrases.first?.id
+            let displayed = store.displayedPhrases
+            if store.selectedPhraseID == nil || !displayed.contains(where: { $0.id == store.selectedPhraseID }) {
+                store.selectedPhraseID = displayed.first?.id
             }
         }
     }
 
     private func advanceFocusedModule(reverse: Bool) {
-        let all = FocusModule.allCases
-        guard let index = all.firstIndex(of: focusedModule) else { return }
-        let next = all[(index + (reverse ? -1 : 1) + all.count) % all.count]
-        setFocusedModule(next)
+        let all = FocusModule.allCases.filter { $0 != .sidebar || sidebarVisible }
+        let index = all.firstIndex(of: focusedModule) ?? 0
+        setFocusedModule(all[(index + (reverse ? -1 : 1) + all.count) % all.count])
     }
 
-    private func moveSearchInlineFocus(_ delta: Int) {
-        let all = activeSearchInlineItems
-        guard let index = all.firstIndex(of: searchInlineFocus) else { return }
-        let nextIndex = min(max(index + delta, 0), all.count - 1)
-        searchInlineFocus = all[nextIndex]
-        searchFocused = (searchInlineFocus == .searchField)
-    }
-
-    /// Keep keyboard selection within the scroll viewport so the visual focus
-    /// never advances onto a card the user cannot see.
-    private func revealSelectedCard(_ id: String, with proxy: ScrollViewProxy) {
-        if reduceMotion {
-            proxy.scrollTo(id, anchor: .center)
-        } else {
-            withAnimation(QuickTextMotion.selection) {
-                proxy.scrollTo(id, anchor: .center)
-            }
-        }
-    }
-
-    private func activateSearchInlineItem() -> Bool {
-        switch searchInlineFocus {
-        case .searchField:
-            return false
-        case .newButton:
-            store.beginNewPhrase()
-            return true
-        case .variablesButton:
-            openVariablesPanel()
-            return true
-        case .settingsButton:
-            openSettingsPanel()
-            return true
-        }
-    }
+    // MARK: - Keyboard
 
     private func installKeyMonitor() {
         guard keyMonitor == nil else { return }
@@ -702,156 +862,171 @@ struct ContentView: View {
     }
 
     private func handleKeyEvent(_ event: NSEvent) -> NSEvent? {
-        // SwiftUI text controls are backed by NSTextView on macOS. Never consume
-        // their arrows/selection modifiers in the app-wide grid navigator.
-        guard !isEditingText else { return event }
+        // Sheets (phrase editor, Dictate) are their own windows with their own keys.
+        guard NSApp.keyWindow?.sheetParent == nil else { return event }
         guard event.modifierFlags.intersection([.command, .option, .control]).isEmpty else { return event }
+
+        // From the search field: Down hands off to the grid; Escape clears.
+        if searchFocused, store.expandedPhraseID == nil, !anyPanelOpen {
+            if event.keyCode == 125 {
+                setFocusedModule(.cards)
+                return nil
+            }
+            if event.keyCode == 53, !store.searchTerm.isEmpty {
+                store.clearSearch()
+                return nil
+            }
+        }
+
+        // SwiftUI text controls are backed by NSTextView on macOS. Never consume
+        // their arrows/selection keys in the app-wide navigator.
+        guard !isEditingText else { return event }
+
         if event.keyCode == 53 {
-            if showingSettings || showingVariablesLibrary || showingKeyboardShortcuts || showingGlossary || store.expandedPhraseID != nil || !store.searchTerm.isEmpty || store.categoryFocusMode {
+            if anyPanelOpen || store.expandedPhraseID != nil || !store.searchTerm.isEmpty || focusedModule != .search {
                 handleEscape()
                 return nil
             }
             return event
         }
-        guard store.editingPhrase == nil, !showingSettings, !showingVariablesLibrary, !showingKeyboardShortcuts, !showingGlossary else { return event }
-        guard store.expandedPhraseID == nil else { return event }
+        guard store.editingPhrase == nil, !anyPanelOpen, store.expandedPhraseID == nil else { return event }
 
         switch event.keyCode {
         case 48: // Tab
             advanceFocusedModule(reverse: event.modifierFlags.contains(.shift))
             return nil
-        // Escape (keyCode 53) is handled by the early guard above this switch —
-        // this case would be unreachable.
+        case 44 where !event.modifierFlags.contains(.shift): // "/"
+            setFocusedModule(.search)
+            return nil
         case 123: // Left
             return handleHorizontal(-1) ? nil : event
         case 124: // Right
             return handleHorizontal(1) ? nil : event
         case 125: // Down
-            return handleDown() ? nil : event
+            return handleVertical(1) ? nil : event
         case 126: // Up
-            return handleUp() ? nil : event
+            return handleVertical(-1) ? nil : event
         case 49: // Space
-            return handleSpace() ? nil : event
+            guard focusedModule == .cards else { return event }
+            openSelected()
+            return nil
         case 36, 76: // Return
-            return handleReturn() ? nil : event
+            switch focusedModule {
+            case .sidebar:
+                setFocusedModule(.cards)
+            case .search, .cards:
+                copySelected()
+            }
+            return nil
         default:
             return event
         }
     }
 
-    /// Left/right: in-module navigation for categories and the search row;
-    /// left/right selection movement within the cards grid.
     private func handleHorizontal(_ delta: Int) -> Bool {
         switch focusedModule {
-        case .categories:
-            store.moveCategoryFocus(delta)
+        case .sidebar:
+            guard delta > 0 else { return false }
+            setFocusedModule(.cards)
             return true
         case .search:
-            // Let the text field own left/right for cursor movement once there's
-            // something to edit; only hijack for inline-item navigation when the
-            // field is empty (nothing for the caret to move through).
-            guard searchInlineFocus != .searchField || store.searchTerm.isEmpty else { return false }
-            moveSearchInlineFocus(delta)
-            return true
+            return false
         case .cards:
-            guard canUseGridKeyboard else { return false }
             store.moveSelection(delta)
             return true
         }
     }
 
-    /// Down always hands off from categories/search to the cards grid;
-    /// within the grid it moves selection down a row.
-    private func handleDown() -> Bool {
+    private func handleVertical(_ direction: Int) -> Bool {
         switch focusedModule {
-        case .categories, .search:
+        case .sidebar:
+            store.moveSidebarSelection(direction)
+            return true
+        case .search:
+            guard direction > 0 else { return false }
             setFocusedModule(.cards)
             return true
         case .cards:
-            guard canUseGridKeyboard else { return false }
-            store.moveSelection(gridColumnCount)
+            if !store.moveSelectionVertically(direction, columns: columnCount), direction < 0 {
+                setFocusedModule(.search)
+            }
             return true
         }
     }
 
-    private func handleUp() -> Bool {
-        guard focusedModule == .cards, canUseGridKeyboard else { return false }
-        store.moveSelection(-gridColumnCount)
-        return true
-    }
-
-    private func handleSpace() -> Bool {
-        switch focusedModule {
-        case .categories:
-            return false
-        case .search:
-            return activateSearchInlineItem()
-        case .cards:
-            guard canUseGridKeyboard else { return false }
-            openSelected()
-            return true
-        }
-    }
-
-    private func handleReturn() -> Bool {
-        switch focusedModule {
-        case .categories:
-            return false
-        case .search:
-            return activateSearchInlineItem()
-        case .cards:
-            guard canUseGridKeyboard else { return false }
-            copySelected()
-            return true
-        }
-    }
-
+    /// Escape order: panels, then the open card, then search, then selection.
     private func handleEscape() {
-        if showingGlossary || showingKeyboardShortcuts || showingSettings || showingVariablesLibrary {
+        if anyPanelOpen {
             closeFloatingPanels()
         } else if store.expandedPhraseID != nil {
             store.collapseExpanded()
         } else if !store.searchTerm.isEmpty {
             store.clearSearch()
             setFocusedModule(.search)
-        } else if store.categoryFocusMode {
-            store.exitCategoryFocus()
+        } else if focusedModule != .search {
+            setFocusedModule(.search)
         }
     }
 }
 
-struct CategoryTabButton: View {
+/// Sidebar destination: 32 pt row, 8 pt radius, icon or collection dot.
+private struct SidebarRow: View {
     let title: String
+    var systemImage: String? = nil
+    var dotColor: Color? = nil
     let isSelected: Bool
-    let background: Color
+    let showsFocus: Bool
     let action: () -> Void
+    @State private var isHovering = false
 
     var body: some View {
         Button(action: action) {
-            Text(title)
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(isSelected ? Color.white : .primary)
-                .lineLimit(1)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 7)
-                .background {
-                    Capsule()
-                        .fill(isSelected ? background.opacity(0.78) : Color(nsColor: .windowBackgroundColor).opacity(0.18))
-                        .background(.ultraThinMaterial, in: Capsule())
+            HStack(spacing: dotColor == nil ? 10 : 12) {
+                if let systemImage {
+                    Image(systemName: systemImage)
+                        .font(.system(size: 13, weight: .regular))
+                        .foregroundStyle(isSelected ? Theme.accent : Theme.textSecondary)
+                        .frame(width: 16)
+                } else if let dotColor {
+                    Circle()
+                        .fill(dotColor)
+                        .frame(width: 8, height: 8)
+                        .padding(.leading, 2)
                 }
+                Text(title)
+                    .font(.system(size: 13, weight: isSelected ? .medium : .regular))
+                    .foregroundStyle(isSelected ? Theme.textPrimary : Theme.textSecondary)
+                    .lineLimit(1)
+                Spacer(minLength: 0)
+            }
+            .padding(.horizontal, 10)
+            .frame(height: 32)
+            .background(
+                RoundedRectangle(cornerRadius: Theme.Radius.sidebarItem)
+                    .fill(isSelected ? Theme.sidebarSelected : (isHovering ? Theme.sidebarHover : Color.clear))
+            )
+            .focusRing(isSelected && showsFocus, cornerRadius: Theme.Radius.sidebarItem)
+            .contentShape(RoundedRectangle(cornerRadius: Theme.Radius.sidebarItem))
         }
         .buttonStyle(.plain)
+        .onHover { isHovering = $0 }
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }
 
 /// Live-reorders the grid while dragging (mirrors List's onMove UX), then
-/// persists the new order to disk once the drop completes.
+/// persists the new order to disk once the drop completes. Only active in
+/// Manual Order with no search, where the grid shows raw corpus order.
 struct PhraseDropDelegate: DropDelegate {
     let target: Phrase
     let store: CorpusStore
 
+    func validateDrop(info: DropInfo) -> Bool {
+        store.canReorder
+    }
+
     func dropEntered(info: DropInfo) {
-        guard let draggedID = store.draggedPhraseID, draggedID != target.id else { return }
+        guard store.canReorder, let draggedID = store.draggedPhraseID, draggedID != target.id else { return }
         if NSWorkspace.shared.accessibilityDisplayShouldReduceMotion {
             store.movePhrase(draggedID, before: target.id)
         } else {
@@ -862,6 +1037,10 @@ struct PhraseDropDelegate: DropDelegate {
     }
 
     func performDrop(info: DropInfo) -> Bool {
+        guard store.canReorder else {
+            store.draggedPhraseID = nil
+            return false
+        }
         store.finishReorder()
         return true
     }

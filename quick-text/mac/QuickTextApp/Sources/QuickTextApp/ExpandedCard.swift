@@ -18,68 +18,83 @@ struct CardTextUnit {
     let isWhitespace: Bool
 }
 
+/// Hosts the open card: a scrim with backdrop blur, then the sheet, centered,
+/// 112 pt from the top and at most 820 pt wide. The scrim fades; the sheet
+/// scales from 0.96 and fades (cross-fade only under Reduce Motion).
 struct ExpandedOverlayView: View {
     @ObservedObject var store: CorpusStore
-    let phrase: Phrase
+    var onDelete: (Phrase) -> Void = { _ in }
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    /// A double-click that opens the card would otherwise land its second click
+    /// on the fresh scrim and close it again.
+    @State private var openedAt = Date.distantPast
 
     var body: some View {
-        ZStack {
-            Rectangle()
-                .fill(.ultraThinMaterial)
-                .overlay(Color.black.opacity(0.16))
-                .ignoresSafeArea()
-                .contentShape(Rectangle())
-                .onTapGesture { store.collapseExpanded() }
+        GeometryReader { geometry in
+            ZStack(alignment: .top) {
+                if let phrase = store.expandedPhrase {
+                    Theme.scrim
+                        .background(.ultraThinMaterial)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            guard Date().timeIntervalSince(openedAt) > 0.4 else { return }
+                            store.collapseExpanded()
+                        }
+                        .accessibilityHidden(true)
+                        .transition(.opacity)
 
-            ExpandedCardView(
-                phrase: phrase,
-                fontSize: store.corpus.settings.defaultFontSize,
-                fontFamily: store.corpus.settings.defaultFontFamily,
-                isCopied: store.copiedPhraseID == phrase.id,
-                background: store.expandedCardBackgroundColor,
-                textColor: store.expandedCardTextColor,
-                chipColor: store.expandedCardChipColor,
-                highlightColor: store.highlightColor,
-                libraryVariables: store.libraryVariables,
-                expandedChipDisplay: store.corpus.settings.expandedChipDisplay ?? Settings.defaultExpandedChipDisplay,
-                onCopyAtom: { atom in store.copyAtom(atom, in: phrase) },
-                onCopySelection: { atoms in store.copyAtomSelection(atoms, in: phrase) },
-                onCopyFull: { text in store.copyFullFromExpandedCard(text, phraseID: phrase.id) },
-                onClose: { store.collapseExpanded() },
-                onEdit: { store.beginEditing(phrase) }
-            )
-            // Resets variable fill-in state when the expanded phrase changes,
-            // rather than carrying stale entries over from the previous card.
-            .id(phrase.id)
-            .frame(minWidth: 320, maxWidth: .infinity, minHeight: 240, maxHeight: .infinity)
-            .padding(64)
-            .zIndex(1)
+                    ExpandedCardView(
+                        phrase: phrase,
+                        categoryName: store.categoryName(for: phrase.categoryId),
+                        dotColor: store.dotColor(for: phrase.categoryId),
+                        libraryVariables: store.libraryVariables,
+                        expandedChipDisplay: store.corpus.settings.expandedChipDisplay ?? Settings.defaultExpandedChipDisplay,
+                        maxBodyHeight: max(geometry.size.height - 300, 160),
+                        onCopyAtom: { atom in store.copyAtom(atom, in: phrase) },
+                        onCopySelection: { atoms in store.copyAtomSelection(atoms, in: phrase) },
+                        onCopyFull: { text, close in store.copyFullFromExpandedCard(text, phraseID: phrase.id, closeImmediately: close) },
+                        onClose: { store.collapseExpanded() },
+                        onEdit: { store.beginEditing(phrase) },
+                        onToggleFavorite: { store.toggleFavorite(phrase) },
+                        onDuplicate: { store.duplicate(phrase) },
+                        onDelete: {
+                            store.collapseExpanded()
+                            onDelete(phrase)
+                        }
+                    )
+                    // Resets fill-in state when the open phrase changes.
+                    .id(phrase.id)
+                    .frame(width: min(820, max(geometry.size.width - 32, 320)))
+                    .padding(.top, 112)
+                    .transition(reduceMotion ? .opacity : .scale(scale: 0.96).combined(with: .opacity))
+                    .zIndex(1)
+                }
+            }
+            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .top)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .animation(reduceMotion ? Theme.Motion.fade : Theme.Motion.sheet, value: store.expandedPhraseID)
+        .allowsHitTesting(store.expandedPhraseID != nil)
+        .onChange(of: store.expandedPhraseID) { _, id in
+            if id != nil { openedAt = Date() }
+        }
     }
 }
 
-/// Preview mechanism for every card, atomic or plain: fills ~80% of the display
-/// (see `ContentView.resizeWindowForExpansion`) so the full item text can be read
-/// at a glance. Hovering the card body (not an atom chip) surfaces a copy icon in
-/// the top-right corner using the same text/highlight colors as the atom chips;
-/// hovering a chip instead highlights that chip since it becomes the copy target.
-/// Shift-click on atoms multiselects (highlighted, clipboard updated in document
-/// order on every change); a plain click reverts to single-atom copy.
+/// The open card. Header (collection, favorite, edit, more, close); the title
+/// and a meta line; the full phrase value in the reading serif, with each
+/// fill-in variable as an inline field; the Fill in panel (one input per
+/// variable); and a footer with Copy (stays open) and Copy & Close (↩).
+///
+/// Atoms stay individually copyable: click copies that slice, Shift-click
+/// multiselects (clipboard updated in document order), and arrow keys walk
+/// them when no text field has focus.
 struct ExpandedCardView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.colorScheme) private var colorScheme
     let phrase: Phrase
-    let fontSize: Int
-    let fontFamily: String
-    let isCopied: Bool
-    // Defaulted so #Preview call sites below don't need to specify a full
-    // palette; ExpandedOverlayView passes the live, settings-resolved values.
-    var background: Color = Color(hex: Settings.defaultExpandedCardBackgroundColor)
-    var textColor: Color = Color(hex: Settings.defaultExpandedCardTextColor)
-    var chipColor: Color = Color(hex: Settings.defaultExpandedCardChipColor)
-    var highlightColor: Color = Color(hex: Settings.defaultHighlightColor)
-    // Resolves `{{@name}}` references against the corpus-level library; defaulted so
-    // #Preview call sites below don't need to specify one for inline-only phrases.
+    var categoryName: String = ""
+    var dotColor: Color = Theme.textTertiary
+    // Resolves `{{@name}}` references against the corpus-level library.
     var libraryVariables: [LibraryVariable] = []
     /// Global display-mode toggle (Settings > Behavior): when on, canned `"value"`-type
     /// library chips show their full value inline instead of the collapsed `name`.
@@ -87,111 +102,112 @@ struct ExpandedCardView: View {
     /// Preview-only seed values for showing a filled variable state without changing
     /// the runtime/session copy model.
     var initialVariableValues: [String: String] = [:]
+    /// Cap for the scrolling body (window height minus the sheet's offsets and chrome).
+    var maxBodyHeight: CGFloat = 640
     let onCopyAtom: (Atom) -> Void
     let onCopySelection: ([Atom]) -> Void
-    /// Receives the phrase value with any filled `{{...}}` variables substituted in.
-    let onCopyFull: (String) -> Void
+    /// Receives the phrase value with filled `{{...}}` variables substituted in,
+    /// and whether to close the card right away.
+    let onCopyFull: (String, Bool) -> Void
     let onClose: () -> Void
-    /// Opens the phrase editor for the displayed phrase. Optional so previews
-    /// don't need to wire it; the live overlay always passes `store.beginEditing`.
     var onEdit: (() -> Void)? = nil
+    var onToggleFavorite: (() -> Void)? = nil
+    var onDuplicate: (() -> Void)? = nil
+    var onDelete: (() -> Void)? = nil
 
     @State private var hoveredAtomID: String?
-    @State private var isHoveringCard = false
-    @State private var isHoveringAtomsBlock = false
-    @State private var isHoveringCopyIcon = false
-    @State private var isHoveringCloseIcon = false
-    @State private var isHoveringEditIcon = false
     @State private var focusedAtomID: String?
     @State private var selectedAtomAnchorID: String?
     @State private var selectedAtomIDs: Set<String> = []
-    @State private var keyMonitor: Any?
     @State private var singleCopiedAtomID: String?
+    @State private var keyMonitor: Any?
     @State private var shiftReleaseMonitor: Any?
-    @State private var isPulsingAllAtoms = false
-    @State private var isPulsingCardBackground = false
     @State private var variableValues: [String: String] = [:]
-    @State private var editingVariableKey: String?
-    @State private var keyboardNavigationActive = false
-    @State private var mouseMoveMonitor: Any?
+    /// The variable whose inline field shows the active underline and caret.
+    @State private var activeVariableKey: String?
+    @State private var bodyHeight: CGFloat = 240
+    @FocusState private var focusedField: String?
+
+    private static let bodySize: CGFloat = 23
+    /// Half the extra leading of a 1.6 line height, applied above and below every
+    /// run so wrapped lines and FlowLayout rows share one rhythm.
+    private static let bodyLeading: CGFloat = 4.5
 
     private var hasAtoms: Bool { !(phrase.atoms ?? []).isEmpty }
-    private var titleTypography: CardTypography { CardTypography(baseSize: CGFloat(fontSize), family: fontFamily) }
     private var sortedAtoms: [Atom] { (phrase.atoms ?? []).sorted { $0.start < $1.start } }
     private var parsedVariables: [PhraseVariable] { PhraseVariable.parse(phrase.value, library: libraryVariables) }
-    private var hasVariables: Bool { !parsedVariables.isEmpty }
-    /// Either kind of chip makes the card interactive rather than a single tap target,
-    /// so atom- and variable-only phrases share the same "gaps absorb taps" behavior.
-    private var hasChips: Bool { hasAtoms || hasVariables }
+
+    /// One entry per fill-in key, in first-occurrence order. Canned values fill
+    /// themselves and unresolved references have nothing to fill.
+    private var fillableVariables: [PhraseVariable] {
+        var seen = Set<String>()
+        return parsedVariables.filter { variable in
+            guard !variable.isCannedValue, !variable.isUnresolved else { return false }
+            return seen.insert(variable.key).inserted
+        }
+    }
+
+    private var filledCount: Int {
+        fillableVariables.filter { !(variableValues[$0.key] ?? "").isEmpty }.count
+    }
+
+    private var lines: [[LineSegment]] {
+        LineSegment.lines(value: phrase.value, atoms: phrase.atoms ?? [], variables: parsedVariables)
+    }
 
     /// Title line for the open card: the phrase title plus its Text Replacement
-    /// shortcut when one is configured (e.g. "SUMMARY | xsum"), so the shortcut
-    /// is visible without opening the editor. The shortcut keeps its exact
-    /// typed case since that is what the user types; the whole line shares one
-    /// text style at the call site.
+    /// shortcut when one is configured (e.g. "SUMMARY | xsum"). The shortcut keeps
+    /// its exact typed case since that is what the user types.
     static func openCardTitle(for phrase: Phrase) -> String {
         let base = phrase.title.uppercased()
-        guard let shortcut = phrase.textReplacement?.shortcut.trimmingCharacters(in: .whitespacesAndNewlines),
-              !shortcut.isEmpty else { return base }
+        guard let shortcut = textReplacementShortcut(for: phrase) else { return base }
         return base + " | " + shortcut
     }
 
-    /// True over the same area that reveals the copy icon (hovering the card but
-    /// not the chips block) — a tap right now copies the whole card, so the
-    /// background gets a subtle tint to signal that instead of leaving it
-    /// ambiguous with the dead space between chips.
-    private var isHoveringCopyAllZone: Bool {
-        !keyboardNavigationActive && isHoveringCard && !isHoveringAtomsBlock
+    private static func textReplacementShortcut(for phrase: Phrase) -> String? {
+        guard let shortcut = phrase.textReplacement?.shortcut.trimmingCharacters(in: .whitespacesAndNewlines),
+              !shortcut.isEmpty else { return nil }
+        return shortcut
     }
 
-    private var showsCopyAllTint: Bool { isHoveringCopyAllZone || isAllAtomsMultiselected }
-
-    private var isAllAtomsMultiselected: Bool {
-        guard hasAtoms else { return false }
-        let atomIDs = Set((phrase.atoms ?? []).map(\.id))
-        return selectedAtomIDs == atomIDs
+    /// e.g. "1 variable", "4 parts · xhoa", "12 words".
+    private var metaLine: String {
+        var parts: [String] = []
+        let variableCount = fillableVariables.count
+        if variableCount > 0 { parts.append(variableCount == 1 ? "1 variable" : "\(variableCount) variables") }
+        let atomCount = phrase.atoms?.count ?? 0
+        if atomCount > 0 { parts.append(atomCount == 1 ? "1 part" : "\(atomCount) parts") }
+        if parts.isEmpty {
+            let words = phrase.value.split(whereSeparator: \.isWhitespace).count
+            parts.append(words == 1 ? "1 word" : "\(words) words")
+        }
+        if let shortcut = Self.textReplacementShortcut(for: phrase) { parts.append(shortcut) }
+        return parts.joined(separator: " · ")
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: titleTypography.titleToBodySpacing) {
-            Text(Self.openCardTitle(for: phrase))
-                .font(titleTypography.titleFont)
-                .tracking(titleTypography.titleTracking)
-                .foregroundStyle(textColor.opacity(0.45))
-
-            GeometryReader { geometry in
-                linesBlock(
-                    maxWidth: geometry.size.width,
-                    typography: typography(maxWidth: geometry.size.width, maxHeight: geometry.size.height)
-                )
-                .frame(width: geometry.size.width, height: geometry.size.height, alignment: .leading)
+        let shadow = Theme.sheetShadow(scheme: colorScheme)
+        let shape = RoundedRectangle(cornerRadius: Theme.Radius.sheet)
+        return VStack(spacing: 0) {
+            header
+            ScrollView {
+                content
+                    .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { bodyHeight = $0 }
             }
+            .scrollBounceBehavior(.basedOnSize)
+            .frame(height: min(bodyHeight, maxBodyHeight))
+            footer
         }
-        .padding(60)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-        .background(
-            ZStack {
-                isPulsingCardBackground ? highlightColor : background
-                if showsCopyAllTint {
-                    highlightColor.opacity(0.06)
-                }
-            }
-            .animation(reduceMotion ? nil : QuickTextMotion.standard, value: showsCopyAllTint)
-        )
-        .clipShape(RoundedRectangle(cornerRadius: 24))
-        .overlay(
-            RoundedRectangle(cornerRadius: 24)
-                .stroke(textColor.opacity(0.16), lineWidth: 1)
-        )
-        .shadow(color: .black.opacity(0.4), radius: 40, y: 16)
-        .overlay(alignment: .topTrailing) { iconsOverlay }
-        .overlay { CopiedBadge(isVisible: isCopied, color: highlightColor) }
-        .contentShape(Rectangle())
-        .onHover { hovering in
-            isHoveringCard = hovering
-            if hovering { keyboardNavigationActive = false }
+        .background(shape.fill(Theme.bgSheet))
+        .clipShape(shape)
+        .overlay(shape.strokeBorder(Theme.borderSheet, lineWidth: 1))
+        .shadow(color: shadow.color, radius: shadow.radius, y: shadow.y)
+        .accessibilityElement(children: .contain)
+        .accessibilityAddTraits(.isModal)
+        .accessibilityLabel(Text(phrase.title))
+        .onChange(of: focusedField) { _, key in
+            if let key { activeVariableKey = key }
         }
-        .onTapGesture { copyFull() }
         .onAppear {
             if variableValues.isEmpty {
                 variableValues = initialVariableValues
@@ -199,19 +215,15 @@ struct ExpandedCardView: View {
             keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
                 handleKeyEvent(event)
             }
-            // Releasing shift should drop the multiselect highlight immediately,
-            // not just on the next click, so watch modifier-key changes directly.
+            // Releasing shift drops the multiselect highlight immediately.
             shiftReleaseMonitor = NSEvent.addLocalMonitorForEvents(matching: .flagsChanged) { event in
                 if !event.modifierFlags.contains(.shift) {
                     clearAtomSelection()
                 }
                 return event
             }
-            mouseMoveMonitor = NSEvent.addLocalMonitorForEvents(matching: .mouseMoved) { event in
-                if keyboardNavigationActive {
-                    keyboardNavigationActive = false
-                }
-                return event
+            if let first = fillableVariables.first {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { focus(first) }
             }
         }
         .onDisappear {
@@ -223,284 +235,496 @@ struct ExpandedCardView: View {
                 NSEvent.removeMonitor(monitor)
                 shiftReleaseMonitor = nil
             }
-            if let monitor = mouseMoveMonitor {
-                NSEvent.removeMonitor(monitor)
-                mouseMoveMonitor = nil
-            }
         }
     }
 
-    private func typography(maxWidth: CGFloat, maxHeight: CGFloat) -> CardTypography {
-        CardTypography(
-            baseSize: CGFloat(fontSize),
-            family: fontFamily,
-            availableWidth: maxWidth,
-            availableHeight: maxHeight,
-            contentCharacterCount: phrase.value.count,
-            contentLines: lines.map { line in
-                line.map {
-                    CardTextUnit(
-                        characterCount: $0.text.count,
-                        isChip: $0.isChip,
-                        isWhitespace: $0.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                    )
-                }
+    // MARK: - Header
+
+    private var header: some View {
+        HStack(spacing: 0) {
+            HStack(spacing: 8) {
+                Circle()
+                    .fill(dotColor)
+                    .frame(width: 7, height: 7)
+                Text(categoryName.uppercased())
+                    .font(ThemeFont.eyebrow())
+                    .tracking(11 * 0.09)
+                    .foregroundStyle(Theme.textTertiary)
+                    .lineLimit(1)
             }
-        )
+            Spacer(minLength: 12)
+            HStack(spacing: 2) {
+                if let onToggleFavorite {
+                    Button(action: onToggleFavorite) {
+                        Image(systemName: phrase.favorite ? "star.fill" : "star")
+                            .font(.system(size: 15))
+                            .foregroundStyle(phrase.favorite ? Theme.star : Theme.textSecondary)
+                    }
+                    .buttonStyle(IconButtonStyle(size: 44))
+                    .accessibilityLabel(phrase.favorite ? "Remove from favorites" : "Add to favorites")
+                }
+                if let onEdit {
+                    sheetIconButton("pencil", label: "Edit snippet", action: onEdit)
+                        .help("Edit (⌘E)")
+                }
+                if onDuplicate != nil || onDelete != nil {
+                    Menu {
+                        Button("Copy Without Closing") { copyFull(close: false) }
+                        if let onDuplicate {
+                            Button("Duplicate", action: onDuplicate)
+                        }
+                        if let onDelete {
+                            Divider()
+                            Button("Delete…", role: .destructive, action: onDelete)
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis")
+                            .font(.system(size: 15))
+                            .foregroundStyle(Theme.textSecondary)
+                            .frame(width: 44, height: 44)
+                            .contentShape(Rectangle())
+                    }
+                    .menuStyle(.button)
+                    .buttonStyle(.plain)
+                    .menuIndicator(.hidden)
+                    .fixedSize()
+                    .accessibilityLabel("More actions")
+                }
+                Rectangle()
+                    .fill(Theme.rule)
+                    .frame(width: 1, height: 20)
+                    .padding(.horizontal, 6)
+                sheetIconButton("xmark", label: "Close", action: onClose)
+            }
+        }
+        .padding(.top, 14)
+        .padding(.trailing, 16)
+        .padding(.leading, 40)
     }
 
-    private func linesBlock(maxWidth: CGFloat, typography: CardTypography) -> some View {
-        let content = VStack(alignment: .leading, spacing: typography.lineSpacing) {
+    private func sheetIconButton(_ systemName: String, label: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Image(systemName: systemName)
+                .font(.system(size: 15))
+                .foregroundStyle(Theme.textSecondary)
+        }
+        .buttonStyle(IconButtonStyle(size: 44))
+        .accessibilityLabel(label)
+    }
+
+    // MARK: - Body
+
+    private var content: some View {
+        VStack(alignment: .leading, spacing: 28) {
+            VStack(alignment: .leading, spacing: 10) {
+                Text(phrase.title)
+                    .font(ThemeFont.serif(50))
+                    .tracking(50 * -0.02)
+                    .foregroundStyle(Theme.textPrimary)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .textSelection(.enabled)
+                    .accessibilityAddTraits(.isHeader)
+                Text(metaLine)
+                    .font(.system(size: 13))
+                    .foregroundStyle(Theme.textTertiary)
+            }
+            Rectangle()
+                .fill(Theme.rule)
+                .frame(height: 1)
+            linesBlock
+            if !fillableVariables.isEmpty {
+                fillInPanel
+            }
+        }
+        .padding(.top, 18)
+        .padding(.horizontal, 64)
+        .padding(.bottom, 40)
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var linesBlock: some View {
+        VStack(alignment: .leading, spacing: 0) {
             ForEach(Array(lines.enumerated()), id: \.offset) { _, line in
-                FlowLayout(spacing: 0) {
-                    ForEach(line) { segment in
-                        if segment.atom != nil {
-                            atomChip(segment, typography: typography)
-                        } else if segment.variable != nil {
-                            variableChip(segment, typography: typography)
-                        } else {
-                            Text(segment.text)
-                                .font(typography.bodyFont)
-                                .foregroundStyle(textColor)
-                                .layoutValue(
-                                    key: FlowLayoutWhitespaceKey.self,
-                                    value: segment.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                                )
+                if line.isEmpty {
+                    Text(" ")
+                        .font(ThemeFont.serif(Self.bodySize))
+                        .padding(.vertical, Self.bodyLeading)
+                } else {
+                    FlowLayout(spacing: 0) {
+                        ForEach(line) { segment in
+                            segmentView(segment)
                         }
                     }
                 }
             }
         }
-        // Bounding box around the whole chip cluster: while the cursor is anywhere
-        // inside it (including gaps/punctuation between chips), the full-card copy
-        // icon stays hidden so it doesn't flicker as the cursor crosses those gaps.
-        return Group {
-            if hasChips {
-                content
-                    .contentShape(Rectangle())
-                    .onHover { hovering in isHoveringAtomsBlock = hovering }
-                    // Absorbs taps in the gaps between chips so only an explicit chip
-                    // click copies; the card's full-copy tap only fires outside this box.
-                    .onTapGesture {}
-            } else {
-                content
-            }
-        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    private var iconsOverlay: some View {
-        HStack(spacing: 12) {
-            if let onEdit {
-                iconButton(systemName: "pencil", isHovering: isHoveringEditIcon, action: onEdit) { hovering in
-                    isHoveringEditIcon = hovering
-                }
-            }
-            if isHoveringCard, !isHoveringAtomsBlock {
-                iconButton(systemName: "doc.on.doc", isHovering: isHoveringCopyIcon, action: copyFull) { hovering in
-                    isHoveringCopyIcon = hovering
-                }
-            }
-            iconButton(systemName: "xmark", isHovering: isHoveringCloseIcon, action: onClose) { hovering in
-                isHoveringCloseIcon = hovering
-            }
-        }
-        .padding(.top, 26)
-        .padding(.trailing, 26)
-    }
-
-    private func iconButton(systemName: String, isHovering: Bool, action: @escaping () -> Void, onHoverChange: @escaping (Bool) -> Void) -> some View {
-        Button(action: action) {
-            Image(systemName: systemName)
-                .font(.system(size: 15, weight: .semibold))
-                .frame(width: 44, height: 44)
-        }
-        .buttonStyle(.glass)
-        .tint(isHovering ? highlightColor : textColor.opacity(0.4))
-        .scaleEffect(isHovering && !reduceMotion ? 1.02 : 1)
-        .frame(width: 44, height: 44)
-        .contentShape(RoundedRectangle(cornerRadius: 12))
-        .onHover(perform: onHoverChange)
-        .animation(reduceMotion ? nil : QuickTextMotion.micro, value: isHovering)
-    }
-
-    /// `maxWidth` caps the chip so a long atom (spanning a whole sentence, say)
-    /// wraps internally instead of running off the card uncut — FlowLayout only
-    /// wraps between subviews, so a single Text needs its own width ceiling.
-    private func atomChip(_ segment: LineSegment, typography: CardTypography) -> some View {
-        let isHighlighted = selectedAtomIDs.contains(segment.id) || hoveredAtomID == segment.id
-            || isPulsingAllAtoms || singleCopiedAtomID == segment.id || isHoveringCopyAllZone
-        return Button { handleAtomTap(segment.atom!) } label: {
-            Text(segment.text)
-                .multilineTextAlignment(.leading)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-            .buttonStyle(.plain)
-            .font(typography.chipFont)
-            .padding(.horizontal, typography.chipHorizontalPadding)
-            .padding(.vertical, typography.chipVerticalPadding)
-            .frame(minHeight: typography.chipMinHeight)
-            .background(isHighlighted ? highlightColor.opacity(0.14) : chipColor.opacity(0.10))
-            .foregroundStyle(isHighlighted ? highlightColor.opacity(0.92) : textColor.opacity(0.68))
-            .overlay(
-                RoundedRectangle(cornerRadius: typography.chipCornerRadius)
-                    .strokeBorder(isHighlighted ? highlightColor.opacity(0.58) : textColor.opacity(0.20), lineWidth: 1)
-            )
-            .clipShape(RoundedRectangle(cornerRadius: typography.chipCornerRadius))
-            .onHover { hovering in hoveredAtomID = hovering ? segment.id : nil }
-            .animation(reduceMotion ? nil : QuickTextMotion.micro, value: isHighlighted)
-    }
-
-    /// Renders a `{{...}}` occurrence as a fill-in chip: unfilled shows a dashed
-    /// outline with the placeholder's display label as a hint, filled shows a solid
-    /// chip with the entered value. Tapping opens a popover — a text field for
-    /// free-form placeholders, or a list of choices for `{{a/b}}`-style/`"choice"`-type
-    /// ones. An unresolved `{{@name}}` library reference (see `PhraseVariable.isUnresolved`)
-    /// has nothing to fill, so it renders as a distinct, non-interactive chip instead.
     @ViewBuilder
-    private func variableChip(_ segment: LineSegment, typography: CardTypography) -> some View {
-        let variable = segment.variable!
-        if variable.isUnresolved {
-            unresolvedVariableChip(variable, segment: segment, typography: typography)
-        } else if variable.isCannedValue {
-            cannedValueChip(variable, segment: segment, typography: typography)
+    private func segmentView(_ segment: LineSegment) -> some View {
+        if let atom = segment.atom {
+            atomChip(segment, atom: atom)
+        } else if let variable = segment.variable {
+            if variable.isUnresolved {
+                unresolvedChip(variable, segment: segment)
+            } else if variable.isCannedValue {
+                cannedChip(variable, segment: segment)
+            } else {
+                inlineField(variable, segment: segment)
+            }
         } else {
-            let filled = variableValues[variable.key]
-            let label = variableDisplayText(variable, in: segment, replacingWith: filled ?? variable.displayLabel)
-            let isHighlighted = isPulsingAllAtoms || isHoveringCopyAllZone
-            let fillColor = isHighlighted
-                ? highlightColor.opacity(0.14)
-                : (filled != nil ? chipColor.opacity(0.10) : highlightColor.opacity(0.035))
-            let labelColor = isHighlighted
-                ? highlightColor.opacity(0.92)
-                : (filled != nil ? textColor.opacity(0.70) : highlightColor.opacity(0.86))
-            let borderColor = filled == nil
-                ? (isHighlighted ? highlightColor.opacity(0.58) : highlightColor.opacity(0.68))
-                : (isHighlighted ? highlightColor.opacity(0.58) : textColor.opacity(0.20))
-            let editorIsPresented = Binding(
-                get: { editingVariableKey == variable.key },
-                set: { isPresented in if !isPresented { editingVariableKey = nil } }
-            )
-            Button {
-                editingVariableKey = variable.key
-            } label: {
-                Text(label)
+            bodyText(segment.text)
+                .textSelection(.enabled)
+                .padding(.vertical, Self.bodyLeading)
+                .layoutValue(
+                    key: FlowLayoutWhitespaceKey.self,
+                    value: segment.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                )
+        }
+    }
+
+    private func bodyText(_ text: String) -> some View {
+        Text(text)
+            .font(ThemeFont.serif(Self.bodySize))
+            .lineSpacing(Self.bodyLeading * 2)
+            .foregroundStyle(Theme.textPrimary)
+    }
+
+    /// Splits a chip segment into the chip's own text and the punctuation that
+    /// `LineSegment.lines` attached after it so it never wraps alone.
+    private func split(_ segment: LineSegment, length: Int) -> (chip: String, trailing: String) {
+        let characters = Array(segment.text)
+        let count = min(max(length, 0), characters.count)
+        return (String(characters.prefix(count)), String(characters.dropFirst(count)))
+    }
+
+    private func atomChip(_ segment: LineSegment, atom: Atom) -> some View {
+        let parts = split(segment, length: atom.end - atom.start)
+        let isHighlighted = selectedAtomIDs.contains(atom.id) || hoveredAtomID == atom.id
+            || singleCopiedAtomID == atom.id || focusedAtomID == atom.id
+        return HStack(alignment: .firstTextBaseline, spacing: 0) {
+            Button { handleAtomTap(atom) } label: {
+                Text(parts.chip)
+                    .font(ThemeFont.serif(Self.bodySize))
+                    .foregroundStyle(isHighlighted ? Theme.hlInk : Theme.textPrimary)
                     .multilineTextAlignment(.leading)
                     .fixedSize(horizontal: false, vertical: true)
-            }
-                .buttonStyle(.plain)
-                .font(typography.chipFont)
-                .padding(.horizontal, typography.chipHorizontalPadding)
-                .padding(.vertical, typography.chipVerticalPadding)
-                .frame(minHeight: typography.chipMinHeight)
-                .background(fillColor)
-                .foregroundStyle(labelColor)
-                .clipShape(RoundedRectangle(cornerRadius: typography.chipCornerRadius))
-                .overlay(
-                    RoundedRectangle(cornerRadius: typography.chipCornerRadius)
-                        .strokeBorder(
-                            borderColor,
-                            style: filled == nil ? StrokeStyle(lineWidth: 1, dash: [4, 3]) : StrokeStyle(lineWidth: 1)
-                        )
-                )
-                .animation(reduceMotion ? nil : QuickTextMotion.standard, value: filled)
-                .popover(isPresented: editorIsPresented) {
-                    variableEditorPopover(for: variable, currentValue: filled, typography: typography)
-                }
-        }
-    }
-
-    /// A resolved `"value"`-type library reference: nothing to fill in, so it's always
-    /// solid (like an atom chip) rather than dashed. Collapsed shows `name`; Expanded
-    /// display mode (`expandedChipDisplay`) shows the full canned `value` instead. Either
-    /// way, hovering surfaces the full value as a native tooltip — the "preview option"
-    /// without switching modes (see README "Reusable variable library").
-    private func cannedValueChip(_ variable: PhraseVariable, segment: LineSegment, typography: CardTypography) -> some View {
-        let isHighlighted = isPulsingAllAtoms || isHoveringCopyAllZone
-        let baseLabel = expandedChipDisplay ? (variable.libraryValue ?? variable.displayLabel) : variable.displayLabel
-        return Text(variableDisplayText(variable, in: segment, replacingWith: baseLabel))
-            .multilineTextAlignment(.leading)
-            .fixedSize(horizontal: false, vertical: true)
-            .font(typography.chipFont)
-            .padding(.horizontal, typography.chipHorizontalPadding)
-            .padding(.vertical, typography.chipVerticalPadding)
-            .frame(minHeight: typography.chipMinHeight)
-            .background(isHighlighted ? highlightColor.opacity(0.14) : chipColor.opacity(0.10))
-            .foregroundStyle(isHighlighted ? highlightColor.opacity(0.92) : textColor.opacity(0.70))
-            .overlay(
-                RoundedRectangle(cornerRadius: typography.chipCornerRadius)
-                    .strokeBorder(isHighlighted ? highlightColor.opacity(0.58) : textColor.opacity(0.20), lineWidth: 1)
-            )
-            .clipShape(RoundedRectangle(cornerRadius: typography.chipCornerRadius))
-            .help(variable.libraryValue ?? "")
-            .animation(reduceMotion ? nil : QuickTextMotion.micro, value: isHighlighted)
-    }
-
-    /// A dangling `{{@name}}` — renamed or deleted out of the library. Visually distinct
-    /// (red-tinted dashed outline, no fill state) from both a plain unfilled placeholder
-    /// and a resolved one; not tappable, since there's nothing to fill. Still copies
-    /// through as the literal `{{@name}}` text via `PhraseVariable.substitute`'s
-    /// unfilled fallback, since it's never present in `variableValues`.
-    private func unresolvedVariableChip(_ variable: PhraseVariable, segment: LineSegment, typography: CardTypography) -> some View {
-        let isHighlighted = isPulsingAllAtoms || isHoveringCopyAllZone
-        let helpText = "Unresolved variable reference — no library variable named \u{201C}\(variable.displayLabel)\u{201D} was found. Copies through as literal text."
-        let foregroundColor = isHighlighted ? Color.red.opacity(0.92) : Color.red.opacity(0.74)
-        let backgroundColor = isHighlighted ? Color.red.opacity(0.12) : Color.red.opacity(0.035)
-        let borderColor = isHighlighted ? Color.red.opacity(0.62) : Color.red.opacity(0.50)
-        return Text(variableDisplayText(variable, in: segment, replacingWith: variable.displayLabel))
-            .multilineTextAlignment(.leading)
-            .fixedSize(horizontal: false, vertical: true)
-            .font(typography.chipFont)
-            .padding(.horizontal, typography.chipHorizontalPadding)
-            .padding(.vertical, typography.chipVerticalPadding)
-            .frame(minHeight: typography.chipMinHeight)
-            .foregroundStyle(foregroundColor)
-            .background(backgroundColor)
-            .overlay(
-                RoundedRectangle(cornerRadius: typography.chipCornerRadius)
-                    .strokeBorder(borderColor, style: StrokeStyle(lineWidth: 1, dash: [4, 3]))
-            )
-            .clipShape(RoundedRectangle(cornerRadius: typography.chipCornerRadius))
-            .animation(reduceMotion ? nil : QuickTextMotion.micro, value: isHighlighted)
-            .help(helpText)
-    }
-
-    private func variableDisplayText(_ variable: PhraseVariable, in segment: LineSegment, replacingWith label: String) -> String {
-        let placeholderLength = variable.end - variable.start
-        let suffix = String(Array(segment.text).dropFirst(placeholderLength))
-        return label + suffix
-    }
-
-    @ViewBuilder
-    private func variableEditorPopover(for variable: PhraseVariable, currentValue: String?, typography: CardTypography) -> some View {
-        if let choices = variable.choices {
-            VStack(alignment: .leading, spacing: 4) {
-                ForEach(choices, id: \.self) { choice in
-                    Button(choice) {
-                        variableValues[variable.key] = choice
-                        editingVariableKey = nil
+                    .padding(.horizontal, 3)
+                    .background(RoundedRectangle(cornerRadius: Theme.Radius.chip).fill(isHighlighted ? Theme.hlTint : Color.clear))
+                    .overlay(alignment: .bottom) {
+                        DottedRule()
+                            .stroke(isHighlighted ? Theme.hl : Theme.textTertiary, style: StrokeStyle(lineWidth: 1, dash: [2, 3]))
+                            .frame(height: 1)
                     }
-                    .font(typography.utilityFont)
-                    .foregroundStyle(textColor)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 8)
-                    .buttonStyle(.glass)
-                }
+                    .contentShape(Rectangle())
             }
-            .padding(10)
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14))
-        } else {
-            VariableFillPopover(
-                initialValue: currentValue ?? "",
-                typography: typography,
-                textColor: textColor,
-                highlightColor: highlightColor
-            ) { value in
-                variableValues[variable.key] = value
-                editingVariableKey = nil
+            .buttonStyle(.plain)
+            .onHover { hovering in hoveredAtomID = hovering ? atom.id : nil }
+            .help("Click to copy. Shift-click to select several.")
+            .accessibilityLabel("Copy \(parts.chip)")
+            if !parts.trailing.isEmpty {
+                bodyText(parts.trailing)
             }
         }
+        .padding(.vertical, Self.bodyLeading)
+        .animation(reduceMotion ? nil : Theme.Motion.hover, value: isHighlighted)
     }
+
+    /// An inline fill-in field: highlight tint, italic variable name until
+    /// filled, then the value. The active field gets a 2 pt underline and caret.
+    private func inlineField(_ variable: PhraseVariable, segment: LineSegment) -> some View {
+        let parts = split(segment, length: variable.end - variable.start)
+        let value = variableValues[variable.key] ?? ""
+        let filled = !value.isEmpty
+        let isActive = activeVariableKey == variable.key
+        return HStack(alignment: .firstTextBaseline, spacing: 0) {
+            HStack(alignment: .firstTextBaseline, spacing: 2) {
+                Text(filled ? value : variable.displayLabel)
+                    .font(ThemeFont.serif(Self.bodySize, italic: !filled))
+                    .foregroundStyle(Theme.hlInk)
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                if isActive {
+                    Rectangle()
+                        .fill(Theme.hl)
+                        .frame(width: 2, height: 24)
+                        .alignmentGuide(.firstTextBaseline) { dimensions in dimensions.height - 5 }
+                }
+            }
+            .padding(.horizontal, 8)
+            .background(
+                UnevenRoundedRectangle(topLeadingRadius: Theme.Radius.chip, topTrailingRadius: Theme.Radius.chip)
+                    .fill(Theme.hlTint)
+            )
+            .overlay(alignment: .bottom) {
+                Rectangle()
+                    .fill(isActive ? Theme.hl : Color.clear)
+                    .frame(height: 2)
+            }
+            .contentShape(Rectangle())
+            .onTapGesture { focus(variable) }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("\(variable.displayLabel): \(filled ? value : "empty")")
+            .accessibilityAddTraits(.isButton)
+            if !parts.trailing.isEmpty {
+                bodyText(parts.trailing)
+            }
+        }
+        .padding(.vertical, Self.bodyLeading)
+        .animation(reduceMotion ? nil : Theme.Motion.hover, value: isActive)
+    }
+
+    /// A resolved `"value"`-type library reference: fills itself. Collapsed shows
+    /// `name`; Expanded display mode shows the full value. Hover shows the value.
+    private func cannedChip(_ variable: PhraseVariable, segment: LineSegment) -> some View {
+        let parts = split(segment, length: variable.end - variable.start)
+        let label = expandedChipDisplay ? (variable.libraryValue ?? variable.displayLabel) : variable.displayLabel
+        return HStack(alignment: .firstTextBaseline, spacing: 0) {
+            Text(label)
+                .font(expandedChipDisplay ? ThemeFont.serif(Self.bodySize) : ThemeFont.mono(13))
+                .foregroundStyle(Theme.hlInk)
+                .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal, 6)
+                .padding(.vertical, 1)
+                .background(RoundedRectangle(cornerRadius: Theme.Radius.chip).fill(Theme.hlTint))
+                .help(variable.libraryValue ?? "")
+            if !parts.trailing.isEmpty {
+                bodyText(parts.trailing)
+            }
+        }
+        .padding(.vertical, Self.bodyLeading)
+    }
+
+    /// A dangling `{{@name}}` — renamed or deleted out of the library. Not
+    /// fillable; copies through as the literal placeholder text.
+    private func unresolvedChip(_ variable: PhraseVariable, segment: LineSegment) -> some View {
+        let parts = split(segment, length: variable.end - variable.start)
+        return HStack(alignment: .firstTextBaseline, spacing: 0) {
+            Text(variable.displayLabel)
+                .font(ThemeFont.mono(13))
+                .foregroundStyle(Theme.error)
+                .padding(.horizontal, 6)
+                .padding(.vertical, 1)
+                .overlay(
+                    RoundedRectangle(cornerRadius: Theme.Radius.chip)
+                        .strokeBorder(Theme.error.opacity(0.6), style: StrokeStyle(lineWidth: 1, dash: [4, 3]))
+                )
+                .help("Unresolved variable reference — no library variable named \u{201C}\(variable.displayLabel)\u{201D} was found. Copies through as literal text.")
+            if !parts.trailing.isEmpty {
+                bodyText(parts.trailing)
+            }
+        }
+        .padding(.vertical, Self.bodyLeading)
+    }
+
+    // MARK: - Fill in
+
+    private var fillInPanel: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack {
+                Text("FILL IN")
+                    .font(ThemeFont.eyebrow())
+                    .tracking(11 * 0.09)
+                    .foregroundStyle(Theme.textTertiary)
+                Spacer()
+                Text("\(filledCount) of \(fillableVariables.count)")
+                    .font(.system(size: 12))
+                    .monospacedDigit()
+                    .foregroundStyle(Theme.textTertiary)
+            }
+            ForEach(fillableVariables) { variable in
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("{\(variable.displayLabel)}")
+                        .font(ThemeFont.mono(12))
+                        .foregroundStyle(Theme.hlInk)
+                        .accessibilityHidden(true)
+                    if let choices = variable.choices {
+                        choiceRow(variable, choices: choices)
+                    } else {
+                        textInput(variable)
+                    }
+                }
+            }
+        }
+        .padding(.top, 22)
+        .padding(.horizontal, 24)
+        .padding(.bottom, 24)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(RoundedRectangle(cornerRadius: Theme.Radius.panel).fill(Theme.bgPanel))
+    }
+
+    private func textInput(_ variable: PhraseVariable) -> some View {
+        let isFocused = focusedField == variable.key
+        return TextField(variable.displayLabel, text: binding(for: variable.key), prompt: Text(variable.displayLabel))
+            .textFieldStyle(.plain)
+            .font(.system(size: 15))
+            .foregroundStyle(Theme.textPrimary)
+            .focused($focusedField, equals: variable.key)
+            .focusEffectDisabled()
+            .padding(.horizontal, 14)
+            .frame(height: 46)
+            .background(RoundedRectangle(cornerRadius: Theme.Radius.control).fill(Theme.bgSheet))
+            .overlay(RoundedRectangle(cornerRadius: Theme.Radius.control).strokeBorder(isFocused ? Theme.hl : Theme.borderField, lineWidth: 1))
+            .focusRing(isFocused, width: 4)
+            .animation(reduceMotion ? nil : Theme.Motion.hover, value: isFocused)
+    }
+
+    /// `{{a/b}}` and choice-type library variables: one button per option. When
+    /// the group is active, ←/→ step through the options.
+    private func choiceRow(_ variable: PhraseVariable, choices: [String]) -> some View {
+        let isActive = activeVariableKey == variable.key
+        return FlowLayout(spacing: 8) {
+            ForEach(choices, id: \.self) { choice in
+                let isOn = variableValues[variable.key] == choice
+                Button {
+                    variableValues[variable.key] = choice
+                    activeVariableKey = variable.key
+                    focusedField = nil
+                } label: {
+                    Text(choice)
+                        .font(.system(size: 14))
+                        .foregroundStyle(isOn ? Theme.hlInk : Theme.textPrimary)
+                        .padding(.horizontal, 14)
+                        .frame(height: 36)
+                        .background(RoundedRectangle(cornerRadius: Theme.Radius.control).fill(isOn ? Theme.hlTint : Theme.bgSheet))
+                        .overlay(RoundedRectangle(cornerRadius: Theme.Radius.control).strokeBorder(isOn ? Theme.hl : Theme.borderField, lineWidth: 1))
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityAddTraits(isOn ? .isSelected : [])
+            }
+        }
+        .padding(4)
+        .focusRing(isActive, cornerRadius: Theme.Radius.control + 4)
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel(variable.displayLabel)
+    }
+
+    private func binding(for key: String) -> Binding<String> {
+        Binding(
+            get: { variableValues[key] ?? "" },
+            set: { variableValues[key] = $0.isEmpty ? nil : $0 }
+        )
+    }
+
+    private func focus(_ variable: PhraseVariable) {
+        activeVariableKey = variable.key
+        focusedField = variable.choices == nil ? variable.key : nil
+    }
+
+    private func moveActiveVariable(_ delta: Int) {
+        let variables = fillableVariables
+        guard !variables.isEmpty else { return }
+        let current = activeVariableKey.flatMap { key in variables.firstIndex { $0.key == key } }
+        let next: Int
+        if let current {
+            next = (current + delta + variables.count) % variables.count
+        } else {
+            next = delta > 0 ? 0 : variables.count - 1
+        }
+        focus(variables[next])
+    }
+
+    private func stepChoice(_ variable: PhraseVariable, choices: [String], delta: Int) {
+        let current = variableValues[variable.key].flatMap { choices.firstIndex(of: $0) }
+        let next = current.map { min(max($0 + delta, 0), choices.count - 1) } ?? (delta > 0 ? 0 : choices.count - 1)
+        variableValues[variable.key] = choices[next]
+    }
+
+    // MARK: - Footer
+
+    private var footer: some View {
+        HStack(spacing: 10) {
+            HStack(spacing: 18) {
+                if !fillableVariables.isEmpty {
+                    keyHint("Tab", "Next field")
+                }
+                keyHint("Esc", "Close")
+            }
+            .font(.system(size: 12))
+            .foregroundStyle(Theme.textTertiary)
+            .accessibilityHidden(true)
+
+            Spacer(minLength: 12)
+
+            Button { copyFull(close: false) } label: {
+                HStack(spacing: 7) {
+                    Image(systemName: "doc.on.doc")
+                        .font(.system(size: 12, weight: .medium))
+                    Text("Copy")
+                }
+            }
+            .buttonStyle(OutlineButtonStyle())
+            .accessibilityHint("Copies and keeps the snippet open")
+
+            Button { copyFull(close: true) } label: {
+                HStack(spacing: 10) {
+                    Text("Copy & Close")
+                    KeyCap(text: "↩", onAccent: true)
+                }
+            }
+            .buttonStyle(AccentButtonStyle(height: 40))
+        }
+        .padding(.vertical, 16)
+        .padding(.leading, 40)
+        .padding(.trailing, 20)
+        .background(Theme.bgSheetFooter)
+        .overlay(alignment: .top) {
+            Rectangle().fill(Theme.rule).frame(height: 1)
+        }
+    }
+
+    private func keyHint(_ key: String, _ label: String) -> some View {
+        HStack(spacing: 6) {
+            KeyCap(text: key)
+            Text(label)
+        }
+    }
+
+    // MARK: - Keyboard
+
+    private func handleKeyEvent(_ event: NSEvent) -> NSEvent? {
+        // The phrase editor opens as a sheet window over this card; leave its keys alone.
+        guard NSApp.keyWindow?.sheetParent == nil else { return event }
+        if event.keyCode == 53 {
+            onClose()
+            return nil
+        }
+        guard event.modifierFlags.intersection([.command, .option, .control]).isEmpty else { return event }
+        let editingText = NSApp.keyWindow?.firstResponder is NSTextView
+        switch event.keyCode {
+        case 48: // Tab — next/previous variable, including choice groups
+            guard !fillableVariables.isEmpty else { return event }
+            moveActiveVariable(event.modifierFlags.contains(.shift) ? -1 : 1)
+            return nil
+        case 36, 76: // Return
+            if editingText && focusedField == nil { return event }
+            copySelectedAtomsOrFull()
+            return nil
+        case 123, 124: // Left / Right
+            guard !editingText else { return event }
+            let delta = event.keyCode == 123 ? -1 : 1
+            if let key = activeVariableKey,
+               let variable = fillableVariables.first(where: { $0.key == key }),
+               let choices = variable.choices {
+                stepChoice(variable, choices: choices, delta: delta)
+                return nil
+            }
+            guard hasAtoms else { return event }
+            moveAtomSelection(delta: delta, extending: event.modifierFlags.contains(.shift))
+            return nil
+        case 125, 126: // Down / Up
+            guard !editingText, hasAtoms else { return event }
+            moveAtomSelection(delta: event.keyCode == 126 ? -1 : 1, extending: event.modifierFlags.contains(.shift))
+            return nil
+        default:
+            return event
+        }
+    }
+
+    // MARK: - Atoms and copying
 
     private func handleAtomTap(_ atom: Atom) {
         if NSEvent.modifierFlags.contains(.shift) {
@@ -518,41 +742,6 @@ struct ExpandedCardView: View {
             clearAtomSelection()
             flashSingleCopiedAtom(atom.id)
             onCopyAtom(atom)
-        }
-    }
-
-    private func handleKeyEvent(_ event: NSEvent) -> NSEvent? {
-        guard event.modifierFlags.intersection([.command, .option, .control]).isEmpty else { return event }
-        // The variable fill-in popover (VariableFillPopover) has its own TextField;
-        // without this guard, Space/Return/arrows here swallow keystrokes meant for
-        // it — most notably Space, which multi-word variable values need.
-        guard editingVariableKey == nil, !(NSApp.keyWindow?.firstResponder is NSTextView) else { return event }
-        if [36, 49, 123, 124, 125, 126].contains(event.keyCode) {
-            keyboardNavigationActive = true
-            hoveredAtomID = nil
-            isHoveringCopyIcon = false
-            isHoveringCloseIcon = false
-            isHoveringEditIcon = false
-        }
-        let extending = event.modifierFlags.contains(.shift)
-        switch event.keyCode {
-        case 53:
-            onClose()
-            return nil
-        case 49:
-            copyFull()
-            return nil
-        case 36, 76:
-            copySelectedAtomsOrFull()
-            return nil
-        case 123, 126:
-            moveAtomSelection(delta: -1, extending: extending)
-            return nil
-        case 124, 125:
-            moveAtomSelection(delta: 1, extending: extending)
-            return nil
-        default:
-            return event
         }
     }
 
@@ -588,7 +777,7 @@ struct ExpandedCardView: View {
     private func copySelectedAtomsOrFull() {
         let selected = sortedAtoms.filter { selectedAtomIDs.contains($0.id) }
         if selected.isEmpty {
-            copyFull()
+            copyFull(close: true)
         } else if selected.count == 1, let atom = selected.first {
             flashSingleCopiedAtom(atom.id)
             onCopyAtom(atom)
@@ -603,9 +792,7 @@ struct ExpandedCardView: View {
         selectedAtomIDs = []
     }
 
-    /// Single-atom copy highlight: unlike shift-multiselect (which persists until
-    /// shift releases), this should pop and fade back on its own, matching the
-    /// full-card pulse's timing instead of sticking until the next tap.
+    /// Single-atom copy highlight pops and fades back on its own.
     private func flashSingleCopiedAtom(_ id: String) {
         withAnimation(reduceMotion ? nil : QuickTextMotion.micro) { singleCopiedAtomID = id }
         DispatchQueue.main.asyncAfter(deadline: .now() + CorpusStore.copyFeedbackDuration) {
@@ -614,12 +801,8 @@ struct ExpandedCardView: View {
         }
     }
 
-    /// Full-card copy (background tap or the copy icon): substitutes any filled
-    /// variables into the value, then pulses every chip (or, for plain cards with
-    /// no chips, the whole card background) to the highlight color in sync with
-    /// the "Copied" badge, since the whole value just got copied.
-    /// Canned `"value"`-type library entries are never stored in `variableValues` (there's
-    /// nothing to fill in), so they're merged in here at copy time instead.
+    /// Canned `"value"`-type library entries are never stored in `variableValues`
+    /// (there's nothing to fill in), so they're merged in at copy time.
     private var valuesForSubstitution: [String: String] {
         var values = variableValues
         for variable in parsedVariables where variable.isCannedValue {
@@ -628,23 +811,17 @@ struct ExpandedCardView: View {
         return values
     }
 
-    private func copyFull() {
-        onCopyFull(PhraseVariable.substitute(phrase.value, values: valuesForSubstitution))
-        guard hasChips else {
-            withAnimation(reduceMotion ? nil : QuickTextMotion.micro) { isPulsingCardBackground = true }
-            DispatchQueue.main.asyncAfter(deadline: .now() + CorpusStore.copyFeedbackDuration) {
-                withAnimation(reduceMotion ? nil : QuickTextMotion.standard) { isPulsingCardBackground = false }
-            }
-            return
-        }
-        withAnimation(reduceMotion ? nil : QuickTextMotion.micro) { isPulsingAllAtoms = true }
-        DispatchQueue.main.asyncAfter(deadline: .now() + CorpusStore.copyFeedbackDuration) {
-            withAnimation(reduceMotion ? nil : QuickTextMotion.standard) { isPulsingAllAtoms = false }
-        }
+    private func copyFull(close: Bool) {
+        onCopyFull(PhraseVariable.substitute(phrase.value, values: valuesForSubstitution), close)
     }
+}
 
-    private var lines: [[LineSegment]] {
-        LineSegment.lines(value: phrase.value, atoms: phrase.atoms ?? [], variables: parsedVariables)
+private struct DottedRule: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: CGPoint(x: rect.minX, y: rect.midY))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.midY))
+        return path
     }
 }
 
@@ -771,56 +948,6 @@ struct CardTypography {
 
 }
 
-/// Free-text fill-in popover for a single `{{variable}}` occurrence, shown by
-/// `ExpandedCardView.variableChip`. Choice-style `{{a/b}}` placeholders skip this
-/// in favor of a plain list of buttons.
-private struct VariableFillPopover: View {
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State private var text: String
-    @FocusState private var isFocused: Bool
-    let typography: CardTypography
-    let textColor: Color
-    let highlightColor: Color
-    let onSubmit: (String) -> Void
-
-    init(
-        initialValue: String,
-        typography: CardTypography,
-        textColor: Color,
-        highlightColor: Color,
-        onSubmit: @escaping (String) -> Void
-    ) {
-        _text = State(initialValue: initialValue)
-        self.typography = typography
-        self.textColor = textColor
-        self.highlightColor = highlightColor
-        self.onSubmit = onSubmit
-    }
-
-    var body: some View {
-        HStack(spacing: 8) {
-            TextField("Value", text: $text)
-                .font(typography.utilityFont)
-                .foregroundStyle(textColor)
-                .textFieldStyle(.plain)
-                .frame(width: 220)
-                .padding(.horizontal, 10)
-                .padding(.vertical, 8)
-                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 10))
-                .focused($isFocused)
-                .onSubmit { onSubmit(text) }
-            Button("Set") { onSubmit(text) }
-                .font(typography.utilityButtonFont)
-                .buttonStyle(.glassProminent)
-                .tint(highlightColor)
-        }
-        .padding(14)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
-        .transition(reduceMotion ? .opacity : .opacity.combined(with: .scale(scale: 0.96)).combined(with: .offset(y: 4)))
-        .onAppear { isFocused = true }
-    }
-}
-
 struct LineSegment: Identifiable {
     let id: String
     let text: String
@@ -915,201 +1042,58 @@ struct LineSegment: Identifiable {
     }
 }
 
-#Preview("Expanded Card - Atomic") {
-    ExpandedCardView(
-        phrase: PreviewData.addressPhrase,
-        fontSize: 18,
-        fontFamily: "sans",
-        isCopied: false,
-        onCopyAtom: { _ in },
-        onCopySelection: { _ in },
-        onCopyFull: { _ in },
-        onClose: {}
-    )
-    .frame(width: 900, height: 500)
-    .padding(40)
-}
-
-#Preview("Expanded Card - Plain") {
-    ExpandedCardView(
-        phrase: PreviewData.plainPhrase,
-        fontSize: 18,
-        fontFamily: "sans",
-        isCopied: false,
-        onCopyAtom: { _ in },
-        onCopySelection: { _ in },
-        onCopyFull: { _ in },
-        onClose: {}
-    )
-    .frame(width: 900, height: 500)
-    .padding(40)
-}
-
-#Preview("Expanded Card - Copied") {
-    ExpandedCardView(
-        phrase: PreviewData.addressPhrase,
-        fontSize: 18,
-        fontFamily: "sans",
-        isCopied: true,
-        onCopyAtom: { _ in },
-        onCopySelection: { _ in },
-        onCopyFull: { _ in },
-        onClose: {}
-    )
-    .frame(width: 900, height: 500)
-    .padding(40)
-}
-
-#Preview("Expanded Card - Variables") {
+#Preview("Open Card - Variables") {
     ExpandedCardView(
         phrase: PreviewData.variablePhrase,
-        fontSize: 18,
-        fontFamily: "sans",
-        isCopied: false,
-        onCopyAtom: { _ in },
-        onCopySelection: { _ in },
-        onCopyFull: { _ in },
-        onClose: {}
+        categoryName: "Prompting",
+        dotColor: Theme.collectionDot(for: "prompt-reuse") ?? Theme.textTertiary,
+        initialVariableValues: ["name": "Matt"],
+        onCopyAtom: { _ in }, onCopySelection: { _ in }, onCopyFull: { _, _ in }, onClose: {},
+        onEdit: {}, onToggleFavorite: {}, onDuplicate: {}, onDelete: {}
     )
-    .frame(width: 900, height: 500)
+    .frame(width: 820)
     .padding(40)
+    .background(Theme.bgContent)
 }
 
-#Preview("Expanded Card - Library Variables") {
+#Preview("Open Card - Atomic") {
     ExpandedCardView(
-        phrase: PreviewData.libraryVariablePhrase,
-        fontSize: 18,
-        fontFamily: "sans",
-        isCopied: false,
-        libraryVariables: PreviewData.store.libraryVariables,
-        onCopyAtom: { _ in },
-        onCopySelection: { _ in },
-        onCopyFull: { _ in },
-        onClose: {}
+        phrase: PreviewData.addressPhrase,
+        categoryName: "Personal Details",
+        dotColor: Theme.collectionDot(for: "personal") ?? Theme.textTertiary,
+        onCopyAtom: { _ in }, onCopySelection: { _ in }, onCopyFull: { _, _ in }, onClose: {},
+        onEdit: {}, onToggleFavorite: {}
     )
-    .frame(width: 900, height: 500)
+    .frame(width: 820)
     .padding(40)
+    .background(Theme.bgContent)
 }
 
-#Preview("Expanded Overlay") {
-    ExpandedOverlayView(store: PreviewData.store, phrase: PreviewData.addressPhrase)
-        .frame(width: 900, height: 600)
-}
-
-#Preview("Phase 1 — Serif and Sans at 14 and 22") {
-    ScrollView {
-        VStack(spacing: 20) {
-            ExpandedCardView(
-                phrase: PreviewData.plainPhrase,
-                fontSize: 14,
-                fontFamily: "serif",
-                isCopied: false,
-                onCopyAtom: { _ in }, onCopySelection: { _ in }, onCopyFull: { _ in }, onClose: {}
-            )
-            .frame(width: 760, height: 210)
-
-            ExpandedCardView(
-                phrase: PreviewData.plainPhrase,
-                fontSize: 14,
-                fontFamily: "sans",
-                isCopied: false,
-                onCopyAtom: { _ in }, onCopySelection: { _ in }, onCopyFull: { _ in }, onClose: {}
-            )
-            .frame(width: 760, height: 210)
-
-            ExpandedCardView(
-                phrase: PreviewData.longMixedPhrase,
-                fontSize: 22,
-                fontFamily: "serif",
-                isCopied: false,
-                initialVariableValues: ["recipient": "the review team", "date": "Friday"],
-                onCopyAtom: { _ in }, onCopySelection: { _ in }, onCopyFull: { _ in }, onClose: {}
-            )
-            .frame(width: 760, height: 360)
-
-            ExpandedCardView(
-                phrase: PreviewData.longMixedPhrase,
-                fontSize: 22,
-                fontFamily: "sans",
-                isCopied: false,
-                onCopyAtom: { _ in }, onCopySelection: { _ in }, onCopyFull: { _ in }, onClose: {}
-            )
-            .frame(width: 760, height: 360)
-        }
-        .padding(32)
-    }
-}
-
-#Preview("Phase 1 — Variable States") {
-    VStack(spacing: 20) {
-        ExpandedCardView(
-            phrase: PreviewData.variablePhrase,
-            fontSize: 18,
-            fontFamily: "serif",
-            isCopied: false,
-            initialVariableValues: ["name": "Matt", "topic": "the design refresh"],
-            onCopyAtom: { _ in }, onCopySelection: { _ in }, onCopyFull: { _ in }, onClose: {}
-        )
-        .frame(width: 860, height: 280)
-
-        ExpandedCardView(
-            phrase: PreviewData.cannedValuePhrase,
-            fontSize: 18,
-            fontFamily: "serif",
-            isCopied: false,
-            libraryVariables: PreviewData.store.libraryVariables,
-            expandedChipDisplay: false,
-            onCopyAtom: { _ in }, onCopySelection: { _ in }, onCopyFull: { _ in }, onClose: {}
-        )
-        .frame(width: 860, height: 220)
-
-        ExpandedCardView(
-            phrase: PreviewData.cannedValuePhrase,
-            fontSize: 18,
-            fontFamily: "serif",
-            isCopied: false,
-            libraryVariables: PreviewData.store.libraryVariables,
-            expandedChipDisplay: true,
-            onCopyAtom: { _ in }, onCopySelection: { _ in }, onCopyFull: { _ in }, onClose: {}
-        )
-        .frame(width: 860, height: 220)
-
+#Preview("Open Card - Library Variables") {
+    VStack(spacing: 24) {
         ExpandedCardView(
             phrase: PreviewData.libraryVariablePhrase,
-            fontSize: 18,
-            fontFamily: "sans",
-            isCopied: false,
+            categoryName: "Personal Details",
             libraryVariables: PreviewData.store.libraryVariables,
-            onCopyAtom: { _ in }, onCopySelection: { _ in }, onCopyFull: { _ in }, onClose: {}
+            onCopyAtom: { _ in }, onCopySelection: { _ in }, onCopyFull: { _, _ in }, onClose: {}
         )
-        .frame(width: 860, height: 260)
+        ExpandedCardView(
+            phrase: PreviewData.cannedValuePhrase,
+            categoryName: "Personal Details",
+            libraryVariables: PreviewData.store.libraryVariables,
+            expandedChipDisplay: true,
+            onCopyAtom: { _ in }, onCopySelection: { _ in }, onCopyFull: { _, _ in }, onClose: {}
+        )
     }
-    .padding(32)
+    .frame(width: 820)
+    .padding(40)
+    .background(Theme.bgContent)
 }
 
-#Preview("Phase 2 — Feedback States") {
-    VStack(spacing: 20) {
-        ExpandedCardView(
-            phrase: PreviewData.addressPhrase,
-            fontSize: 18,
-            fontFamily: "serif",
-            isCopied: true,
-            onCopyAtom: { _ in }, onCopySelection: { _ in }, onCopyFull: { _ in }, onClose: {}
-        )
-        .frame(width: 620, height: 300)
-
-        TileView(
-            phrase: PreviewData.plainPhrase,
-            imageURL: nil,
-            backgroundColor: Color(hex: "#2E301D"),
-            textColor: Color(hex: "#E2D6CF"),
-            fontSize: 18,
-            fontFamily: "serif",
-            cardWidth: 220,
-            isSelected: false,
-            isCopied: true
-        )
-    }
-    .padding(24)
-    .frame(width: 700)
+#Preview("Open Card - Overlay") {
+    let store = PreviewData.store
+    store.expandedPhraseID = PreviewData.variablePhrase.id
+    return ExpandedOverlayView(store: store)
+        .frame(width: 1280, height: 900)
+        .background(Theme.bgContent)
 }

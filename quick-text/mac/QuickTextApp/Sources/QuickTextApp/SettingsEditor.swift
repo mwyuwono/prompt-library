@@ -48,11 +48,11 @@ struct FloatingPanel<Content: View>: View {
 
 /// Every control here writes straight through to `store.corpus.settings` on
 /// change (via `settings`, a computed `Binding`) — there's no draft state and
-/// no Save button, so text size, card size, colors, and font apply live.
+/// no Save button. Appearance is a per-Mac UserDefaults preference instead.
 struct SettingsEditor: View {
     @EnvironmentObject private var store: CorpusStore
     let width: CGFloat
-    @State private var editingColorTarget: ColorEditTarget?
+    @AppStorage(AppAppearance.storageKey) private var appearance = AppAppearance.system.rawValue
     @State private var didCopyPath = false
     @State private var pendingSyncPlan: TextReplacementSync.SyncPlan?
     @State private var lastSyncReport: TextReplacementSync.SyncReport?
@@ -61,10 +61,6 @@ struct SettingsEditor: View {
     @State private var apiKeyStatus: String?
     @State private var isTestingKey = false
     @ObservedObject private var statsStore = DictateStatsStore.shared
-
-    private var usesTwoColumns: Bool { width >= 760 }
-    private var primaryColumnWidth: CGFloat { usesTwoColumns ? 320 : width - 44 }
-    private var colorsColumnWidth: CGFloat { usesTwoColumns ? max(width - primaryColumnWidth - 62, 300) : width - 44 }
 
     private var settings: Binding<Settings> {
         Binding(
@@ -76,22 +72,7 @@ struct SettingsEditor: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
-                if usesTwoColumns {
-                    HStack(alignment: .top, spacing: 18) {
-                        primarySettingsColumn
-                            .frame(width: primaryColumnWidth, alignment: .topLeading)
-
-                        settingsSection("Colors") {
-                            colorControls
-                        }
-                        .frame(width: colorsColumnWidth, alignment: .topLeading)
-                    }
-                } else {
-                    primarySettingsColumn
-                    settingsSection("Colors") {
-                        colorControls
-                    }
-                }
+                primarySettingsColumn
 
                 settingsSection("Dictation") {
                     dictationSection
@@ -328,18 +309,25 @@ struct SettingsEditor: View {
 
     private var primarySettingsColumn: some View {
         VStack(alignment: .leading, spacing: 14) {
-            settingsSection("Display") {
-                textSizeControl
-                cardSizeControl
-                Picker("Font", selection: settings.defaultFontFamily) {
-                    Text("Sans").tag("sans")
-                    Text("Serif").tag("serif")
+            settingsSection("Appearance") {
+                Picker("Appearance", selection: $appearance) {
+                    ForEach(AppAppearance.allCases) { option in
+                        Text(option.label).tag(option.rawValue)
+                    }
                 }
-                .frame(maxWidth: 220, alignment: .leading)
+                .pickerStyle(.segmented)
+                .labelsHidden()
+                .frame(maxWidth: 280, alignment: .leading)
+                .onChange(of: appearance) { _, raw in
+                    (AppAppearance(rawValue: raw) ?? .system).apply()
+                }
+                Text("Stored on this Mac only.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
 
             settingsSection("Behavior") {
-                Toggle("Close card automatically after copying", isOn: Binding(
+                Toggle("Close card after copying a part (atom)", isOn: Binding(
                     get: { settings.wrappedValue.closeCardOnCopy ?? Settings.defaultCloseCardOnCopy },
                     set: { settings.wrappedValue.closeCardOnCopy = $0 }
                 ))
@@ -363,113 +351,6 @@ struct SettingsEditor: View {
             content()
         }
         .quickTextSectionSurface()
-    }
-
-    private var textSizeControl: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text("Text size: \(settings.wrappedValue.defaultFontSize)").font(.caption).foregroundStyle(.secondary)
-            Slider(
-                value: Binding(
-                    get: { Double(settings.wrappedValue.defaultFontSize) },
-                    set: { settings.wrappedValue.defaultFontSize = Int($0.rounded()) }
-                ),
-                in: 14...44,
-                step: 1
-            )
-        }
-    }
-
-    private var cardSizeControl: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text("Card size: \(Int(settings.wrappedValue.cardWidth ?? Settings.defaultCardWidth))").font(.caption).foregroundStyle(.secondary)
-            Slider(
-                value: Binding(
-                    get: { settings.wrappedValue.cardWidth ?? Settings.defaultCardWidth },
-                    set: { settings.wrappedValue.cardWidth = $0 }
-                ),
-                in: 120...320,
-                step: 4
-            )
-        }
-    }
-
-    private var colorControls: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            ColorSwatchField(
-                title: "Default tile background",
-                selection: settings.defaultTileColor,
-                colors: store.palette.colors,
-                isEditing: colorEditingBinding(for: .background)
-            )
-            ColorSwatchField(
-                title: "Default tile text",
-                selection: settings.defaultTextColor,
-                colors: store.palette.colors,
-                isEditing: colorEditingBinding(for: .text)
-            )
-            ColorSwatchField(
-                title: "Highlight",
-                selection: Binding(
-                    get: { settings.wrappedValue.highlightColor ?? Settings.defaultHighlightColor },
-                    set: { settings.wrappedValue.highlightColor = $0 }
-                ),
-                colors: store.palette.colors,
-                isEditing: colorEditingBinding(for: .highlight)
-            )
-            .help("Atom-chip selection, copy pulses, hover tints, the active category chip, and card/copy-badge selection highlights.")
-            HStack(spacing: 8) {
-                ColorSwatchField(
-                    title: "Grid background",
-                    selection: Binding(
-                        get: { store.corpus.settings.gridBackgroundColor ?? "" },
-                        set: { settings.wrappedValue.gridBackgroundColor = $0 }
-                    ),
-                    colors: store.palette.colors,
-                    isEditing: colorEditingBinding(for: .gridBackground)
-                )
-                if store.corpus.settings.gridBackgroundColor != nil {
-                    Button("System") {
-                        settings.wrappedValue.gridBackgroundColor = nil
-                    }
-                    .buttonStyle(.glass)
-                    .help("Use system default")
-                }
-            }
-            ColorSwatchField(
-                title: "Expanded card background",
-                selection: Binding(
-                    get: { settings.wrappedValue.expandedCardBackgroundColor ?? Settings.defaultExpandedCardBackgroundColor },
-                    set: { settings.wrappedValue.expandedCardBackgroundColor = $0 }
-                ),
-                colors: store.palette.colors,
-                isEditing: colorEditingBinding(for: .expandedCardBackground)
-            )
-            ColorSwatchField(
-                title: "Expanded card text",
-                selection: Binding(
-                    get: { settings.wrappedValue.expandedCardTextColor ?? Settings.defaultExpandedCardTextColor },
-                    set: { settings.wrappedValue.expandedCardTextColor = $0 }
-                ),
-                colors: store.palette.colors,
-                isEditing: colorEditingBinding(for: .expandedCardText)
-            )
-            ColorSwatchField(
-                title: "Expanded card chip",
-                selection: Binding(
-                    get: { settings.wrappedValue.expandedCardChipColor ?? Settings.defaultExpandedCardChipColor },
-                    set: { settings.wrappedValue.expandedCardChipColor = $0 }
-                ),
-                colors: store.palette.colors,
-                isEditing: colorEditingBinding(for: .expandedCardChip)
-            )
-        }
-    }
-
-    private func colorEditingBinding(for target: ColorEditTarget) -> Binding<Bool> {
-        Binding(
-            get: { editingColorTarget == target },
-            set: { editingColorTarget = $0 ? target : (editingColorTarget == target ? nil : editingColorTarget) }
-        )
     }
 
     private func copyCorpusPath() {
@@ -528,20 +409,17 @@ struct CategoryRow: View {
             TextField("Name", text: nameBinding)
                 .textFieldStyle(.plain)
                 .frame(width: 240)
-            ColorSwatchField(
-                title: "BG",
-                selection: colorBinding,
-                colors: store.palette.colors,
-                isEditing: colorEditingBinding(for: .background)
-            )
-            .frame(width: 240)
-            ColorSwatchField(
-                title: "Text",
-                selection: textColorBinding,
-                colors: store.palette.colors,
-                isEditing: colorEditingBinding(for: .text)
-            )
-            .frame(width: 240)
+            // Only categories without a built-in collection pigment use this color,
+            // for their sidebar/tile dot (see CorpusStore.dotColor(for:)).
+            if Theme.collectionDot(for: category.id) == nil {
+                ColorSwatchField(
+                    title: "Dot",
+                    selection: colorBinding,
+                    colors: store.palette.colors,
+                    isEditing: colorEditingBinding(for: .background)
+                )
+                .frame(width: 240)
+            }
             Button {
                 store.deleteCategory(category.id)
             } label: {
@@ -564,13 +442,6 @@ struct CategoryRow: View {
         Binding(
             get: { category.color ?? store.corpus.settings.defaultTileColor },
             set: { store.updateCategoryColor(category.id, color: $0) }
-        )
-    }
-
-    private var textColorBinding: Binding<String> {
-        Binding(
-            get: { category.textColor ?? store.corpus.settings.defaultTextColor },
-            set: { store.updateCategoryTextColor(category.id, textColor: $0) }
         )
     }
 
