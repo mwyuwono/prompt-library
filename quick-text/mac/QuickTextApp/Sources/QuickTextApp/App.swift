@@ -11,7 +11,7 @@ struct QuickTextApp: App {
         WindowGroup(id: "main") {
             ContentView()
                 .environmentObject(store)
-                .frame(minWidth: 720, minHeight: 520)
+                .frame(minWidth: 900, minHeight: 600)
                 .onAppear {
                     appDelegate.store = store
                     // Lets AppDelegate.openWindow() recreate the window if the user
@@ -20,11 +20,16 @@ struct QuickTextApp: App {
                     appDelegate.reopenWindow = { openWindow(id: "main") }
                 }
         }
+        // Full-bleed layout: the sidebar runs under the traffic lights and the
+        // library header replaces the toolbar.
+        .windowStyle(.hiddenTitleBar)
+        .windowBackgroundDragBehavior(.enabled)
+        .defaultSize(width: 1280, height: 900)
         .commands {
             CommandGroup(after: .newItem) {
-                Button("New Phrase") { store.beginNewPhrase() }
+                Button("New Snippet") { store.beginNewPhrase() }
                     .keyboardShortcut("n", modifiers: .command)
-                Button("Edit Selected Phrase") { store.beginEditingSelectedPhrase() }
+                Button("Edit Selected Snippet") { store.beginEditingSelectedPhrase() }
                     .keyboardShortcut("e", modifiers: .command)
             }
             CommandGroup(after: .help) {
@@ -72,6 +77,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.regular)
+        AppAppearance.current.apply()
         Self.shared = self
         registerHotKey()
     }

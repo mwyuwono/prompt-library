@@ -1,8 +1,29 @@
 import SwiftUI
 
-enum SearchScope {
-    case all
-    case category
+/// Sort applied to the library's sections (the Recently Used section is always
+/// ordered by recency). Per-device, stored in UserDefaults.
+enum LibrarySort: String, CaseIterable, Identifiable {
+    case recentlyUsed
+    case title
+    case manual
+
+    var id: String { rawValue }
+
+    var label: String {
+        switch self {
+        case .recentlyUsed: "Recently Used"
+        case .title: "Title"
+        case .manual: "Manual Order"
+        }
+    }
+}
+
+/// One titled block of tiles in the library (Favorites, Recently Used, …).
+/// `title` is nil when the view shows a single untitled block.
+struct PhraseSection: Identifiable {
+    let id: String
+    let title: String?
+    let phrases: [Phrase]
 }
 
 final class CorpusStore: ObservableObject {
@@ -13,10 +34,8 @@ final class CorpusStore: ObservableObject {
     ]
     @Published var corpus = QuickTextCorpus.empty
     @Published var palette = Palette.empty
+    /// Sidebar selection: "all", "favorites", "recent", or a category id.
     @Published var activeCategoryID = "all"
-    @Published var searchScope: SearchScope = .all
-    @Published var categoryFocusMode = false
-    @Published var focusedCategoryID: String?
     @Published var searchTerm = ""
     @Published var selectedPhraseID: String?
     @Published var copiedPhraseID: String?
@@ -26,6 +45,29 @@ final class CorpusStore: ObservableObject {
     /// Surfaced by ContentView as an alert. Set on any load()/writeCorpus() failure
     /// instead of leaving those errors NSLog-only.
     @Published var errorMessage: String?
+    /// Last copy time per phrase id. Local app state (UserDefaults), never written
+    /// to the shared corpus, so usage doesn't sync or export.
+    @Published private(set) var lastUsed: [String: Date] = [:]
+    @Published var librarySort: LibrarySort = .recentlyUsed {
+        didSet { defaults.set(librarySort.rawValue, forKey: Self.librarySortKey) }
+    }
+
+    static let lastUsedKey = "QuickText.lastUsed"
+    static let librarySortKey = "QuickText.librarySort"
+    /// How many non-favorite, recently used phrases the All/collection views surface
+    /// above everything else.
+    static let recentSectionLimit = 6
+    private let defaults: UserDefaults
+
+    init(defaults: UserDefaults = .standard) {
+        self.defaults = defaults
+        if let stored = defaults.dictionary(forKey: Self.lastUsedKey) as? [String: Double] {
+            lastUsed = stored.mapValues { Date(timeIntervalSince1970: $0) }
+        }
+        if let raw = defaults.string(forKey: Self.librarySortKey), let sort = LibrarySort(rawValue: raw) {
+            librarySort = sort
+        }
+    }
 
     /// Guards writeCorpus(): without this, a failed load() (e.g. an evicted/not-yet-
     /// downloaded iCloud file) leaves `corpus` at `.empty`, and the very next mutation
@@ -50,19 +92,44 @@ final class CorpusStore: ObservableObject {
     /// Absolute path to the corpus JSON, for handing off to a coding agent for bulk edits.
     var corpusPath: String { corpusURL.path }
 
-    var tabs: [Category] {
-        var result = [Category(id: "all", name: "All", sortOrder: 0)]
-        result.append(contentsOf: corpus.categories.sorted { $0.sortOrder < $1.sortOrder })
-        if corpus.phrases.contains(where: \.favorite) {
-            result.append(Category(id: "favorites", name: "Favorites", sortOrder: 999))
-        }
-        return result
+    static let librarySidebarIDs = ["all", "favorites", "recent"]
+
+    var sortedCategories: [Category] {
+        corpus.categories.sorted { $0.sortOrder < $1.sortOrder }
     }
 
+    /// Every sidebar destination in display order (Library group, then collections).
+    var sidebarIDs: [String] {
+        Self.librarySidebarIDs + sortedCategories.map(\.id)
+    }
+
+    var trimmedSearchTerm: String {
+        searchTerm.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    var viewTitle: String {
+        switch activeCategoryID {
+        case "all": "All Snippets"
+        case "favorites": "Favorites"
+        case "recent": "Recently Used"
+        default: categoryName(for: activeCategoryID)
+        }
+    }
+
+    var viewEyebrow: String {
+        Self.librarySidebarIDs.contains(activeCategoryID) ? "Library" : "Collection"
+    }
+
+    /// Phrases in the current sidebar destination that match the search term.
     var filteredPhrases: [Phrase] {
-        let term = searchTerm.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-        let result = corpus.phrases.filter { phrase in
-            searchScope == .all || activeCategoryID == "all" || phrase.categoryId == activeCategoryID || (activeCategoryID == "favorites" && phrase.favorite)
+        let term = trimmedSearchTerm.lowercased()
+        return corpus.phrases.filter { phrase in
+            switch activeCategoryID {
+            case "all": true
+            case "favorites": phrase.favorite
+            case "recent": lastUsed[phrase.id] != nil
+            default: phrase.categoryId == activeCategoryID
+            }
         }.filter { phrase in
             if term.isEmpty { return true }
             return [phrase.title, phrase.summary ?? "", phrase.value, phrase.tags.joined(separator: " ")]
@@ -70,18 +137,104 @@ final class CorpusStore: ObservableObject {
                 .lowercased()
                 .contains(term)
         }
-        return result
+    }
+
+    /// The library as displayed. Search collapses everything into one Results
+    /// block; Favorites and Recently Used views are a single block; All and
+    /// collection views show Favorites, then Recently Used, then everything else,
+    /// each hidden when empty and never repeating a phrase.
+    var sections: [PhraseSection] {
+        let phrases = filteredPhrases
+        if !trimmedSearchTerm.isEmpty {
+            return phrases.isEmpty ? [] : [PhraseSection(id: "results", title: "Results", phrases: sorted(phrases))]
+        }
+        switch activeCategoryID {
+        case "favorites":
+            return phrases.isEmpty ? [] : [PhraseSection(id: "favorites", title: nil, phrases: sorted(phrases))]
+        case "recent":
+            return phrases.isEmpty ? [] : [PhraseSection(id: "recent", title: nil, phrases: sortedByRecency(phrases))]
+        default:
+            let favorites = sorted(phrases.filter(\.favorite))
+            let recent = Array(sortedByRecency(phrases.filter { !$0.favorite && lastUsed[$0.id] != nil }).prefix(Self.recentSectionLimit))
+            let shownIDs = Set((favorites + recent).map(\.id))
+            let rest = sorted(phrases.filter { !shownIDs.contains($0.id) })
+            var result: [PhraseSection] = []
+            if !favorites.isEmpty { result.append(PhraseSection(id: "favorites", title: "Favorites", phrases: favorites)) }
+            if !recent.isEmpty { result.append(PhraseSection(id: "recent", title: "Recently Used", phrases: recent)) }
+            if !rest.isEmpty {
+                result.append(PhraseSection(id: "rest", title: result.isEmpty ? nil : "Everything Else", phrases: rest))
+            }
+            return result
+        }
+    }
+
+    /// Row-major order across sections — the keyboard navigation order.
+    var displayedPhrases: [Phrase] {
+        sections.flatMap(\.phrases)
+    }
+
+    /// Drag-to-reorder only makes sense when the grid shows raw corpus order.
+    var canReorder: Bool {
+        librarySort == .manual && trimmedSearchTerm.isEmpty
+    }
+
+    private func sorted(_ phrases: [Phrase]) -> [Phrase] {
+        switch librarySort {
+        case .manual:
+            return phrases
+        case .title:
+            return phrases.sorted { $0.title.localizedStandardCompare($1.title) == .orderedAscending }
+        case .recentlyUsed:
+            return sortedByRecency(phrases)
+        }
+    }
+
+    /// Most recent first; never-used phrases keep corpus order after them.
+    private func sortedByRecency(_ phrases: [Phrase]) -> [Phrase] {
+        phrases.enumerated().sorted { lhs, rhs in
+            let left = lastUsed[lhs.element.id]
+            let right = lastUsed[rhs.element.id]
+            switch (left, right) {
+            case let (left?, right?): return left > right
+            case (.some, .none): return true
+            case (.none, .some): return false
+            case (.none, .none): return lhs.offset < rhs.offset
+            }
+        }.map(\.element)
     }
 
     var selectedPhrase: Phrase? {
-        filteredPhrases.first { $0.id == selectedPhraseID } ?? filteredPhrases.first
+        let phrases = displayedPhrases
+        return phrases.first { $0.id == selectedPhraseID } ?? phrases.first
+    }
+
+    /// Phrases with atoms or fill-in variables open the card on click; everything
+    /// else copies immediately. Canned value variables substitute on their own and
+    /// unresolved references copy through literally, so neither needs the card.
+    func opensCard(_ phrase: Phrase) -> Bool {
+        if !(phrase.atoms ?? []).isEmpty { return true }
+        return PhraseVariable.parse(phrase.value, library: libraryVariables)
+            .contains { !$0.isCannedValue && !$0.isUnresolved }
+    }
+
+    func toggleFavorite(_ phrase: Phrase) {
+        guard let index = corpus.phrases.firstIndex(where: { $0.id == phrase.id }) else { return }
+        corpus.phrases[index].favorite.toggle()
+        corpus.phrases[index].updatedAt = Date()
+        corpus.updatedAt = Date()
+        writeCorpus()
+    }
+
+    func recordUse(of phraseID: String, at date: Date = Date()) {
+        lastUsed[phraseID] = date
+        defaults.set(lastUsed.mapValues(\.timeIntervalSince1970), forKey: Self.lastUsedKey)
     }
 
     func load() {
         do {
             corpus = try JSONDecoder.quickText.decode(QuickTextCorpus.self, from: Data(contentsOf: corpusURL))
             palette = try JSONDecoder.quickText.decode(Palette.self, from: Data(contentsOf: paletteURL))
-            selectedPhraseID = filteredPhrases.first?.id
+            selectedPhraseID = displayedPhrases.first?.id
             loadSucceeded = true
         } catch {
             NSLog("Quick Text load failed: \(error.localizedDescription)")
@@ -96,22 +249,15 @@ final class CorpusStore: ObservableObject {
     private func reloadFromDisk() {
         let previousSelectedPhraseID = selectedPhraseID
         let previousActiveCategoryID = activeCategoryID
-        let previousSearchScope = searchScope
         let previousSearchTerm = searchTerm
-        let previousCategoryFocusMode = categoryFocusMode
-        let previousFocusedCategoryID = focusedCategoryID
 
         load()
         guard loadSucceeded else { return }
 
         searchTerm = previousSearchTerm
-        if previousActiveCategoryID == "all"
-            || previousActiveCategoryID == "favorites"
+        if Self.librarySidebarIDs.contains(previousActiveCategoryID)
             || corpus.categories.contains(where: { $0.id == previousActiveCategoryID }) {
             activeCategoryID = previousActiveCategoryID
-            searchScope = previousSearchScope
-            categoryFocusMode = previousCategoryFocusMode
-            focusedCategoryID = previousFocusedCategoryID
         }
         if let previousSelectedPhraseID, corpus.phrases.contains(where: { $0.id == previousSelectedPhraseID }) {
             selectedPhraseID = previousSelectedPhraseID
@@ -136,7 +282,6 @@ final class CorpusStore: ObservableObject {
 
     func copy(_ phrase: Phrase) {
         selectedPhraseID = phrase.id
-        exitCategoryFocus()
         copyText(resolvedCopyText(for: phrase), feedbackFor: phrase.id, autoClose: false)
     }
 
@@ -186,8 +331,13 @@ final class CorpusStore: ObservableObject {
     }
 
     /// `text` is already variable-substituted by `ExpandedCardView.copyFull()`.
-    func copyFullFromExpandedCard(_ text: String, phraseID: String) {
-        copyText(text, feedbackFor: phraseID, autoClose: closesCardOnCopy)
+    /// `closeImmediately` is the sheet's primary "Copy & Close" action; the
+    /// secondary Copy keeps the card open.
+    func copyFullFromExpandedCard(_ text: String, phraseID: String, closeImmediately: Bool = false) {
+        copyText(text, feedbackFor: phraseID, autoClose: false)
+        if closeImmediately, expandedPhraseID == phraseID {
+            expandedPhraseID = nil
+        }
     }
 
     func searchTermDidChange() {
@@ -196,55 +346,31 @@ final class CorpusStore: ObservableObject {
 
     func clearSearch() {
         searchTerm = ""
-        searchScope = .all
-        activeCategoryID = "all"
-        categoryFocusMode = false
-        focusedCategoryID = nil
         reconcileSelectedPhrase()
     }
 
     func selectTab(_ id: String) {
-        if id == "all" {
-            searchScope = .all
-            categoryFocusMode = false
-            focusedCategoryID = nil
-            activeCategoryID = "all"
-        } else {
-            searchScope = .category
-            categoryFocusMode = true
-            focusedCategoryID = id
-            activeCategoryID = id
-        }
+        activeCategoryID = id
         reconcileSelectedPhrase()
     }
 
     func isTabSelected(_ id: String) -> Bool {
-        if searchScope == .all { return id == "all" }
-        return activeCategoryID == id
+        activeCategoryID == id
     }
 
-    /// Moves the keyboard-focused category chip by `delta`, cycling through
-    /// every tab (All, each category, Favorites) in the same order they're
-    /// displayed — no special-casing for All/Favorites.
-    func moveCategoryFocus(_ delta: Int) {
-        let categories = tabs
-        guard !categories.isEmpty else { return }
-        let currentIndex = categories.firstIndex { isTabSelected($0.id) } ?? 0
-        let nextIndex = (currentIndex + delta + categories.count) % categories.count
-        selectTab(categories[nextIndex].id)
-    }
-
-    func exitCategoryFocus() {
-        categoryFocusMode = false
-        focusedCategoryID = nil
-        searchScope = .all
-        activeCategoryID = "all"
-        reconcileSelectedPhrase()
+    /// Moves the sidebar selection by `delta` through Library then Collections,
+    /// stopping at either end.
+    func moveSidebarSelection(_ delta: Int) {
+        let ids = sidebarIDs
+        guard !ids.isEmpty else { return }
+        let current = ids.firstIndex(of: activeCategoryID) ?? 0
+        selectTab(ids[min(max(current + delta, 0), ids.count - 1)])
     }
 
     private func copyText(_ text: String, feedbackFor phraseID: String, autoClose: Bool) {
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(text, forType: .string)
+        recordUse(of: phraseID)
         copiedPhraseID = phraseID
         DispatchQueue.main.asyncAfter(deadline: .now() + Self.copyFeedbackDuration) { [weak self] in
             if self?.copiedPhraseID == phraseID { self?.copiedPhraseID = nil }
@@ -314,7 +440,7 @@ final class CorpusStore: ObservableObject {
 
     func delete(_ phrase: Phrase) {
         corpus.phrases.removeAll { $0.id == phrase.id }
-        selectedPhraseID = filteredPhrases.first?.id
+        selectedPhraseID = displayedPhrases.first?.id
         writeCorpus()
     }
 
@@ -345,8 +471,10 @@ final class CorpusStore: ObservableObject {
         writeCorpus()
     }
 
+    /// Left/right: row-major through every section, continuous across section
+    /// boundaries.
     func moveSelection(_ delta: Int) {
-        let phrases = filteredPhrases
+        let phrases = displayedPhrases
         guard !phrases.isEmpty else { return }
         guard let current = phrases.firstIndex(where: { $0.id == selectedPhraseID }) else {
             selectedPhraseID = phrases.first?.id
@@ -356,8 +484,50 @@ final class CorpusStore: ObservableObject {
         selectedPhraseID = phrases[next].id
     }
 
+    /// Up/down through a grid of `columns` columns, where each section starts a new
+    /// row. Keeps the column where possible when crossing into the next or previous
+    /// section. Returns false when already on the top (or bottom) row, so the
+    /// caller can hand focus elsewhere.
+    @discardableResult
+    func moveSelectionVertically(_ direction: Int, columns: Int) -> Bool {
+        let sections = self.sections.filter { !$0.phrases.isEmpty }
+        guard !sections.isEmpty else { return false }
+        let columns = max(columns, 1)
+        guard let id = selectedPhraseID,
+              let sectionIndex = sections.firstIndex(where: { $0.phrases.contains { $0.id == id } }),
+              let index = sections[sectionIndex].phrases.firstIndex(where: { $0.id == id }) else {
+            selectedPhraseID = sections[0].phrases[0].id
+            return true
+        }
+        let phrases = sections[sectionIndex].phrases
+        let row = index / columns
+        let column = index % columns
+        let lastRow = (phrases.count - 1) / columns
+        if direction > 0 {
+            if row < lastRow {
+                selectedPhraseID = phrases[min(index + columns, phrases.count - 1)].id
+            } else if sectionIndex + 1 < sections.count {
+                let next = sections[sectionIndex + 1].phrases
+                selectedPhraseID = next[min(column, next.count - 1)].id
+            } else {
+                return false
+            }
+        } else {
+            if row > 0 {
+                selectedPhraseID = phrases[index - columns].id
+            } else if sectionIndex > 0 {
+                let previous = sections[sectionIndex - 1].phrases
+                let previousLastRow = (previous.count - 1) / columns
+                selectedPhraseID = previous[min(previousLastRow * columns + column, previous.count - 1)].id
+            } else {
+                return false
+            }
+        }
+        return true
+    }
+
     private func reconcileSelectedPhrase() {
-        let phrases = filteredPhrases
+        let phrases = displayedPhrases
         guard !phrases.isEmpty else {
             selectedPhraseID = nil
             return
@@ -384,26 +554,16 @@ final class CorpusStore: ObservableObject {
         return Color(hex: hex)
     }
 
-    /// The one accent used everywhere something is "selected/about to be
-    /// copied": atom-chip highlight, full-card copy pulse, and hover tints —
-    /// on both atomic and non-atomic cards.
-    var highlightColor: Color { color(for: corpus.settings.highlightColor ?? Settings.defaultHighlightColor) }
-    var expandedCardBackgroundColor: Color { color(for: corpus.settings.expandedCardBackgroundColor ?? Settings.defaultExpandedCardBackgroundColor) }
-    var expandedCardTextColor: Color { color(for: corpus.settings.expandedCardTextColor ?? Settings.defaultExpandedCardTextColor) }
-    var expandedCardChipColor: Color { color(for: corpus.settings.expandedCardChipColor ?? Settings.defaultExpandedCardChipColor) }
+    /// Legacy tint for surfaces not yet on `Theme` (Dictate). The redesign's
+    /// primary-action color; per-corpus color settings are no longer read.
+    var highlightColor: Color { Theme.accent }
 
-    /// Unlike the other card colors, nil here means "follow the system window
-    /// background" rather than a fixed hex default.
-    var gridBackgroundColor: Color {
-        guard let value = corpus.settings.gridBackgroundColor else { return Color(nsColor: .windowBackgroundColor) }
-        return color(for: value)
-    }
-
-    func categoryTabBackground(for tab: Category, isSelected: Bool) -> Color {
-        if isSelected {
-            return highlightColor
-        }
-        return color(for: corpus.settings.defaultTileColor)
+    /// Collection dot: the design's fixed pigment for known categories, then the
+    /// category's own stored color, then a neutral tone.
+    func dotColor(for categoryID: String) -> Color {
+        if let dot = Theme.collectionDot(for: categoryID) { return dot }
+        if let stored = category(for: categoryID)?.color { return color(for: stored) }
+        return Theme.textTertiary
     }
 
     func imageURL(for image: String?) -> URL? {
@@ -458,6 +618,7 @@ final class CorpusStore: ObservableObject {
             }
         }
         if activeCategoryID == id { activeCategoryID = "all" }
+        reconcileSelectedPhrase()
         corpus.updatedAt = Date()
         writeCorpus()
     }
