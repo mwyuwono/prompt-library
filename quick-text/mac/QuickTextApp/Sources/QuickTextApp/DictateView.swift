@@ -1,4 +1,14 @@
 import SwiftUI
+import UniformTypeIdentifiers
+
+/// In-process drag type for dictate take reordering. A dedicated type
+/// (rather than plain text) keeps transcript TextFields from accepting
+/// take drags as text insertions.
+private extension UTType {
+    static var dictateTake: UTType {
+        UTType(exportedAs: "com.weaveryuwono.quicktext.dictate-take")
+    }
+}
 
 /// Dictate mode: multi-take voice capture with per-take transcription and
 /// one-shot processing through a `voice-process` corpus master prompt.
@@ -9,6 +19,7 @@ struct DictateView: View {
     @EnvironmentObject private var store: CorpusStore
     @StateObject private var session = DictateSession()
     @State private var showingPromptManager = false
+    @State private var dropTargetID: UUID?
 
     @Environment(\.dismiss) private var dismiss
 
@@ -156,14 +167,21 @@ struct DictateView: View {
                     .foregroundStyle(.tertiary)
                     .frame(maxWidth: .infinity, minHeight: 60)
             } else {
-                ScrollView {
-                    LazyVStack(alignment: .leading, spacing: 8) {
-                        ForEach(Array(session.takes.enumerated()), id: \.element.id) { index, take in
-                            takeRow(index: index, take: take)
+                VStack(alignment: .leading, spacing: 4) {
+                    ScrollView {
+                        LazyVStack(alignment: .leading, spacing: 8) {
+                            ForEach(Array(session.takes.enumerated()), id: \.element.id) { index, take in
+                                takeRow(index: index, take: take)
+                            }
                         }
                     }
+                    .frame(maxHeight: 220)
+                    if session.takes.count > 1 {
+                        Text("Drag the grip to reorder takes — processing and Combine follow this order.")
+                            .font(.caption)
+                            .foregroundStyle(.tertiary)
+                    }
                 }
-                .frame(maxHeight: 220)
             }
         }
     }
@@ -181,6 +199,24 @@ struct DictateView: View {
 
     private func takeRow(index: Int, take: DictateTake) -> some View {
         HStack(alignment: .top, spacing: 10) {
+            Image(systemName: "line.3.horizontal")
+                .foregroundStyle(.tertiary)
+                .font(.body)
+                .padding(.top, 8)
+                .help("Drag to reorder this take")
+                .opacity(session.isRecording || session.isWorking ? 0.3 : 1.0)
+                .allowsHitTesting(!(session.isRecording || session.isWorking))
+                .onDrag {
+                    let provider = NSItemProvider()
+                    provider.registerDataRepresentation(
+                        forTypeIdentifier: UTType.dictateTake.identifier,
+                        visibility: .ownProcess
+                    ) { completion in
+                        completion(Data(take.id.uuidString.utf8), nil)
+                        return nil
+                    }
+                    return provider
+                }
             VStack(alignment: .leading, spacing: 2) {
                 Text("Take \(index + 1)")
                     .font(.headline)
@@ -271,6 +307,33 @@ struct DictateView: View {
         }
         .padding(10)
         .background(RoundedRectangle(cornerRadius: 10).fill(Color.primary.opacity(0.05)))
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color.accentColor.opacity(dropTargetID == take.id ? 0.9 : 0), lineWidth: 2)
+        )
+        .onDrop(of: [.dictateTake], isTargeted: Binding(
+            get: { dropTargetID == take.id },
+            set: {
+                if $0 {
+                    dropTargetID = take.id
+                } else if dropTargetID == take.id {
+                    dropTargetID = nil
+                }
+            }
+        )) { providers in
+            dropTargetID = nil
+            guard !(session.isRecording || session.isWorking),
+                  let provider = providers.first else { return false }
+            provider.loadDataRepresentation(forTypeIdentifier: UTType.dictateTake.identifier) { data, _ in
+                guard let data,
+                      let idString = String(data: data, encoding: .utf8),
+                      let draggedID = UUID(uuidString: idString) else { return }
+                Task { @MainActor in
+                    session.moveTake(draggedID, onto: take.id)
+                }
+            }
+            return true
+        }
     }
 
     private var processRow: some View {
@@ -292,6 +355,13 @@ struct DictateView: View {
                 .buttonStyle(.glassProminent)
                 .tint(store.highlightColor)
                 .disabled(session.readyTranscripts.isEmpty || session.isWorking || session.isRecording || selectedPrompt == nil)
+
+                Button("Combine Takes") {
+                    session.combineTakesIntoResult()
+                }
+                .buttonStyle(.glass)
+                .disabled(session.combinableTranscripts.isEmpty || session.isWorking || session.isRecording)
+                .help("Copy all take transcripts into Result as-is, without AI processing")
             }
 
             if let prompt = selectedPrompt {
@@ -332,6 +402,12 @@ struct DictateView: View {
                 }
                 .buttonStyle(.glass)
                 .disabled(session.readyTranscripts.isEmpty || session.isWorking || session.isRecording || selectedPrompt == nil)
+                Button("Combine Takes") {
+                    session.combineTakesIntoResult()
+                }
+                .buttonStyle(.glass)
+                .disabled(session.combinableTranscripts.isEmpty || session.isWorking || session.isRecording)
+                .help("Copy all take transcripts into Result as-is, without AI processing")
                 Button("Refine Result") {
                     if let prompt = selectedPrompt {
                         session.refineCurrentResult(masterPrompt: prompt.value)

@@ -2,7 +2,7 @@
 
 Local-first phrase launcher with two surfaces:
 
-- `mac/QuickTextApp`: SwiftUI Mac utility, local JSON load, global `Cmd+Shift+Space` hotkey, click-to-copy, search, category tabs, menu bar extra, add/edit/delete/duplicate phrases.
+- `mac/QuickTextApp`: SwiftUI Mac utility, local JSON load, global `Opt+Shift+Space` hotkey, click-to-copy, search, category tabs, menu bar extra, add/edit/delete/duplicate phrases.
 - `web/quick-text-component`: buildless Web Component, read-only public mode or local admin mode, same corpus and palette files.
 
 Shared data:
@@ -155,7 +155,7 @@ Quick Text can push phrases to the macOS/iOS system Text Replacement store (Syst
 
 ## Dictate mode
 
-Multi-take voice capture inside the Mac app (toolbar Dictate button, `Cmd-D`, menu-bar "Open Dictate"). Each take is transcribed immediately via `gemini-3.8-flash` inline audio; one Process run sends the joined takes plus the selected `voice-process` corpus prompt back through `gemini-3.8-flash`. Master prompts are ordinary phrases in the `voice-process` category (agent instructions default), editable like any phrase. Gemini key lives in the login Keychain (Settings > Dictation), never in the corpus. Take audio is deleted after transcription; session transcripts prune to 15 days under `~/Library/Application Support/com.weaveryuwono.quicktext/DictateTranscripts/`. No web-component parity, no text-replacement sync for voice phrases. Sources: `DictateView.swift`, `DictateSession.swift`, `GeminiClient.swift`, `GeminiKeychain.swift`, `TranscriptStore.swift`; tests in `Tests/QuickTextAppTests/DictateTests.swift`.
+Multi-take voice capture inside the Mac app (toolbar Dictate button, `Cmd-D`, menu-bar "Open Dictate"). Each take is transcribed immediately via `gemini-3.8-flash` inline audio; one Process run sends the joined takes plus the selected `voice-process` corpus prompt back through `gemini-3.8-flash`. Master prompts are ordinary phrases in the `voice-process` category (agent instructions default), editable like any phrase. Gemini key lives in the login Keychain (Settings > Dictation), never in the corpus. Take audio is deleted after transcription; session transcripts prune to 15 days under `~/Library/Application Support/com.weaveryuwono.quicktext/DictateTranscripts/`. Takes can be reordered by dragging the grip on each row — Take numbers, GenAI processing, and Combine all follow the new order. `Combine Takes` copies every take transcript into Result as-is with no model call, no token usage, and no archive write. No web-component parity, no text-replacement sync for voice phrases. Sources: `DictateView.swift`, `DictateSession.swift`, `GeminiClient.swift`, `GeminiKeychain.swift`, `TranscriptStore.swift`; tests in `Tests/QuickTextAppTests/DictateTests.swift`.
 
 ## Environment notes for future sessions
 

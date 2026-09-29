@@ -7,7 +7,7 @@ struct KeyboardShortcutsView: View {
         ShortcutSection(
             title: "App",
             shortcuts: [
-                ShortcutItem(keys: "Cmd-Shift-Space", action: "Open Quick Text"),
+                ShortcutItem(keys: "Opt-Shift-Space", action: "Open Quick Text"),
                 ShortcutItem(keys: "Cmd-N", action: "New phrase"),
                 ShortcutItem(keys: "Cmd-E", action: "Edit selected phrase"),
                 ShortcutItem(keys: "Cmd-F", action: "Focus search"),

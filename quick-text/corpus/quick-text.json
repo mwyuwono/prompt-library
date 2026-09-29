@@ -1,21 +1,21 @@
 {
   "categories" : [
     {
-      "color" : "brown-20",
+      "color" : "brown-17",
       "id" : "personal",
       "name" : "Personal Details",
       "sortOrder" : 30,
       "textColor" : "#E8DED8"
     },
     {
-      "color" : "brown-15",
+      "color" : "brown-03",
       "id" : "prompt-reuse",
       "name" : "Prompting",
       "sortOrder" : 40,
       "textColor" : "#E8DED8"
     },
     {
-      "color" : "brown-13",
+      "color" : "brown-17",
       "id" : "voice-process",
       "name" : "Voice Process",
       "sortOrder" : 50,
@@ -28,7 +28,7 @@
       "textColor" : "#E8DED8"
     },
     {
-      "color" : "brown-07",
+      "color" : "brown-17",
       "id" : "workflow-commands",
       "name" : "Workflows",
       "sortOrder" : 70,
@@ -42,14 +42,14 @@
       "textColor" : "#E8DED8"
     },
     {
-      "color" : "brown-07",
+      "color" : "brown-17",
       "id" : "bullfinch",
       "name" : "Bullfinch",
       "sortOrder" : 90,
       "textColor" : "#E8DED8"
     },
     {
-      "color" : "brown-19",
+      "color" : "brown-17",
       "id" : "elbridge",
       "name" : "Elbridge",
       "sortOrder" : 100,
@@ -618,7 +618,7 @@
       ],
       "textColor" : "brown-22",
       "title" : "Noise & artifacts",
-      "updatedAt" : "2026-07-06T20:56:20Z",
+      "updatedAt" : "2026-09-29T03:22:27Z",
       "value" : "Avoid digital AI artifacts, moire patterns, pixel jitter, or procedural noise grids. All textures and surfaces must strictly adhere to the physical realism of the requested medium, using organic details, natural lens behaviors, or authentic physical brushstrokes rather than tight, repetitive digital patterns. ",
       "visibility" : "private"
     },
@@ -1007,13 +1007,12 @@
     "cardWidth" : 220,
     "defaultFontFamily" : "serif",
     "defaultFontSize" : 28,
-    "defaultTextColor" : "brown-22",
-    "defaultTileColor" : "brown-18",
-    "expandedCardBackgroundColor" : "brown-13",
-    "expandedCardChipColor" : "brown-10",
-    "expandedCardTextColor" : "brown-22",
+    "defaultTextColor" : "brown-13",
+    "defaultTileColor" : "brown-17",
+    "expandedCardBackgroundColor" : "brown-17",
+    "expandedCardChipColor" : "brown-08",
+    "expandedCardTextColor" : "brown-13",
     "expandedChipDisplay" : false,
-    "gridBackgroundColor" : "#2F2D29",
     "managedReplacementShortcuts" : [
       "qsb",
       "xalign",
@@ -1053,7 +1052,7 @@
     "paletteSource" : "Robert Brown Fabric Collection",
     "textReplacementLastSyncAt" : "2026-09-25T14:27:20Z"
   },
-  "updatedAt" : "2026-09-25T14:27:20Z",
+  "updatedAt" : "2026-09-29T03:22:55Z",
   "variables" : [
     {
       "id" : "var-1783398724430",

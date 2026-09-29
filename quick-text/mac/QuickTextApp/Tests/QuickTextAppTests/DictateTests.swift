@@ -636,4 +636,117 @@ final class DictateTests: XCTestCase {
         XCTAssertEqual(record.takeUsages, [TokenUsage(inputTokens: 5, outputTokens: 1)])
         XCTAssertEqual(record.processingTurns?.map(\.kind), [.reprocessTakes, .refineResult])
     }
+
+    // MARK: - Take Reordering & Combine Tests
+
+    func testCombinedTranscriptJoinsPlainParagraphs() {
+        XCTAssertEqual(
+            DictateSession.combinedTranscript(["first", "second"]),
+            "first\n\nsecond")
+        XCTAssertEqual(DictateSession.combinedTranscript([]), "")
+    }
+
+    @MainActor
+    func testMoveTakeOntoReordersBothDirections() {
+        let session = DictateSession()
+        session.takes = ["a", "b", "c"].map {
+            DictateTake(audioURL: nil, transcript: $0, status: .ready)
+        }
+        let ids = session.takes.map(\.id)
+
+        // Dragging the last take onto the first lands it before the first.
+        session.moveTake(ids[2], onto: ids[0])
+        XCTAssertEqual(session.takes.map(\.id), [ids[2], ids[0], ids[1]])
+        XCTAssertEqual(session.readyTranscripts, ["c", "a", "b"])
+
+        // Dragging the first take onto the last lands it after the last.
+        session.moveTake(ids[2], onto: ids[1])
+        XCTAssertEqual(session.takes.map(\.id), [ids[0], ids[1], ids[2]])
+        XCTAssertEqual(session.readyTranscripts, ["a", "b", "c"])
+
+        // Dropping a take onto itself is a no-op.
+        session.moveTake(ids[0], onto: ids[0])
+        XCTAssertEqual(session.takes.map(\.id), [ids[0], ids[1], ids[2]])
+    }
+
+    @MainActor
+    func testMoveTakeBlockedWhileRecordingOrWorking() {
+        let session = DictateSession()
+        session.takes = ["a", "b"].map {
+            DictateTake(audioURL: nil, transcript: $0, status: .ready)
+        }
+        let ids = session.takes.map(\.id)
+
+        session.isRecording = true
+        session.moveTake(ids[1], onto: ids[0])
+        XCTAssertEqual(session.takes.map(\.id), ids)
+
+        session.isRecording = false
+        session.isWorking = true
+        session.moveTake(ids[1], onto: ids[0])
+        XCTAssertEqual(session.takes.map(\.id), ids)
+    }
+
+    @MainActor
+    func testCombineTakesIntoResultRespectsOrderSkipsEmptyAndUsesNoModelCall() {
+        let session = DictateSession()
+        session.takes = [
+            DictateTake(audioURL: nil, transcript: "first", status: .ready),
+            DictateTake(audioURL: nil, transcript: "   ", status: .ready),
+            DictateTake(audioURL: nil, transcript: nil, status: .failed("nope")),
+            DictateTake(audioURL: nil, transcript: "second", status: .ready),
+        ]
+        var modelCalls = 0
+        session.synthesize = { _, _ in
+            modelCalls += 1
+            return GeminiResponse(text: "should not happen", usage: .zero)
+        }
+
+        session.resultText = "previous result"
+        session.combineTakesIntoResult()
+        XCTAssertEqual(session.resultText, "first\n\nsecond")
+        XCTAssertEqual(modelCalls, 0)
+        XCTAssertTrue(session.processingTurns.isEmpty)
+        XCTAssertNil(session.synthesisTokenUsage)
+        XCTAssertNil(session.errorMessage)
+
+        // Reordered takes combine in the new order.
+        let ids = session.takes.map(\.id)
+        session.moveTake(ids[3], onto: ids[0])
+        session.combineTakesIntoResult()
+        XCTAssertEqual(session.resultText, "second\n\nfirst")
+        XCTAssertEqual(modelCalls, 0)
+    }
+
+    @MainActor
+    func testCombineTakesIntoResultWithNothingReadySetsError() {
+        let session = DictateSession()
+        session.combineTakesIntoResult()
+        XCTAssertEqual(session.errorMessage, "Nothing to combine yet — record at least one take.")
+        XCTAssertEqual(session.resultText, "")
+    }
+
+    @MainActor
+    func testReprocessRespectsReorderedTakes() async throws {
+        let session = DictateSession()
+        let suiteName = "test-reorder-reprocess-\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        session.statsStore = DictateStatsStore(defaults: defaults)
+        session.takes = ["aaa", "bbb", "ccc"].map {
+            DictateTake(audioURL: nil, transcript: $0, status: .ready)
+        }
+        var receivedInputs: [String] = []
+        session.synthesize = { _, input in
+            receivedInputs.append(input)
+            return GeminiResponse(text: "ok", usage: .zero)
+        }
+
+        let ids = session.takes.map(\.id)
+        session.moveTake(ids[2], onto: ids[0])
+        session.reprocessTakes(masterPrompt: "prompt")
+        try await Task.sleep(nanoseconds: 100_000_000)
+        XCTAssertEqual(receivedInputs, ["Take 1:\nccc\n\nTake 2:\naaa\n\nTake 3:\nbbb"])
+
+        defaults.removePersistentDomain(forName: suiteName)
+    }
 }
