@@ -36,6 +36,8 @@ struct ContentView: View {
     @State private var glossaryPanelOffset = CGSize.zero
     @State private var glossaryPanelDragOffset = CGSize.zero
     @State private var showingDictate = false
+    /// Owned here (not by DictateView) so takes and results survive leaving the page.
+    @StateObject private var dictateSession = DictateSession()
     @State private var contentWidth: CGFloat = 0
     @State private var windowSize = CGSize(width: 1280, height: 900)
     @State private var keyMonitor: Any?
@@ -84,9 +86,18 @@ struct ContentView: View {
                 sidebar
                     .transition(.move(edge: .leading))
             }
-            VStack(spacing: 0) {
-                header
-                library
+            ZStack {
+                if showingDictate {
+                    DictateView(session: dictateSession, sidebarVisible: $sidebarVisible, onClose: closeDictate)
+                        .environmentObject(store)
+                        .transition(dictateTransition)
+                } else {
+                    VStack(spacing: 0) {
+                        header
+                        library
+                    }
+                    .transition(.opacity)
+                }
             }
             .background(Theme.bgContent)
         }
@@ -116,7 +127,7 @@ struct ContentView: View {
             openGlossaryPanel()
         }
         .onReceive(NotificationCenter.default.publisher(for: .quickTextOpenDictate)) { _ in
-            showingDictate = true
+            openDictate()
         }
         .onChange(of: store.searchTerm) { _, _ in
             store.searchTermDidChange()
@@ -133,10 +144,6 @@ struct ContentView: View {
         }
         .sheet(item: $store.editingPhrase) { phrase in
             PhraseEditor(phrase: phrase)
-                .environmentObject(store)
-        }
-        .sheet(isPresented: $showingDictate) {
-            DictateView(parentWindowWidth: windowSize.width)
                 .environmentObject(store)
         }
         .overlay {
@@ -165,6 +172,23 @@ struct ContentView: View {
         } message: {
             Text(store.errorMessage ?? "")
         }
+    }
+
+    /// Dictate is a page in the content area: 24 pt trailing slide plus fade
+    /// (220 ms open, 160 ms close). Reduce Motion cross-fades only.
+    private var dictateTransition: AnyTransition {
+        reduceMotion ? .opacity : .opacity.combined(with: .offset(x: 24))
+    }
+
+    private func openDictate() {
+        guard !showingDictate else { return }
+        withAnimation(reduceMotion ? Theme.Motion.pageReduced : Theme.Motion.pageOpen) { showingDictate = true }
+    }
+
+    private func closeDictate() {
+        withAnimation(reduceMotion ? Theme.Motion.pageReduced : Theme.Motion.pageClose) { showingDictate = false }
+        // Focus returns to the library.
+        focusSearchSoon()
     }
 
     /// Window-level confirmation for every copy path (tile, keyboard, card).
@@ -383,7 +407,7 @@ struct ContentView: View {
 
             searchField
 
-            Button { showingDictate = true } label: {
+            Button { openDictate() } label: {
                 Image(systemName: "mic")
                     .font(.system(size: 15, weight: .regular))
                     .foregroundStyle(Theme.textSecondary)
@@ -862,8 +886,10 @@ struct ContentView: View {
     }
 
     private func handleKeyEvent(_ event: NSEvent) -> NSEvent? {
-        // Sheets (phrase editor, Dictate) are their own windows with their own keys.
+        // Sheets (phrase editor, prompt manager) are their own windows with their own keys.
         guard NSApp.keyWindow?.sheetParent == nil else { return event }
+        // The Dictate page owns its keys (Esc, ⌘[, Return).
+        guard !showingDictate else { return event }
         guard event.modifierFlags.intersection([.command, .option, .control]).isEmpty else { return event }
 
         // From the search field: Down hands off to the grid; Escape clears.

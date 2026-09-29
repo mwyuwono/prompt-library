@@ -34,6 +34,16 @@ enum Theme {
     static let star = dynamic(dark: "#D6A95C", light: "#9A7424")
     static let error = dynamic(dark: "#E5776B", light: "#B3261E")
 
+    // MARK: Dictate page
+
+    /// `rec` marks recording state and nothing else; `hl` still marks focus.
+    static let rec = dynamic(dark: "#E5604F", light: "#C13A2E")
+    static let onRec = dynamic(dark: "#1A1917", light: "#FFFFFF")
+    static let recLine = dynamic(dark: "#E5604F", darkAlpha: 0.50, light: "#C13A2E", lightAlpha: 0.45)
+    static let bgButton = dynamic(dark: "#FFFFFF", darkAlpha: 0.06, light: "#FFFFFF")
+    /// Fields inside `bgPanel`; light `bgField` equals the panel and would vanish.
+    static let bgFieldOnPanel = dynamic(dark: "#FFFFFF", darkAlpha: 0.05, light: "#FFFFFF")
+
     // MARK: Primary action
 
     static let accent = dynamic(dark: "#D67A62", light: "#111111")
@@ -112,6 +122,13 @@ enum Theme {
             : Shadow(color: Color(nsColor: nsColor("#111111", 1)).opacity(0.18), radius: 50, y: 40)
     }
 
+    static func dockShadow(scheme: ColorScheme) -> [Shadow] {
+        scheme == .dark
+            ? [Shadow(color: .black.opacity(0.55), radius: 50, y: 40)]
+            : [Shadow(color: Color(nsColor: nsColor("#111111", 1)).opacity(0.10), radius: 20, y: 18),
+               Shadow(color: Color(nsColor: nsColor("#111111", 1)).opacity(0.06), radius: 1, y: 1)]
+    }
+
     // MARK: Motion
 
     enum Motion {
@@ -119,6 +136,9 @@ enum Theme {
         static let press = Animation.easeOut(duration: 0.12)
         static let sheet = Animation.spring(response: 0.32, dampingFraction: 0.86)
         static let fade = Animation.easeOut(duration: 0.2)
+        static let pageOpen = Animation.spring(response: 0.30, dampingFraction: 0.88)
+        static let pageClose = Animation.easeOut(duration: 0.16)
+        static let pageReduced = Animation.easeInOut(duration: 0.12)
     }
 
     // MARK: Grid
@@ -238,9 +258,12 @@ extension View {
 struct AccentButtonStyle: ButtonStyle {
     var height: CGFloat = 34
     var fontSize: CGFloat = 13
+    /// Overridden only by the Dictate Stop button (`rec` / `onRec`).
+    var fill: Color = Theme.accent
+    var ink: Color = Theme.onAccent
 
     func makeBody(configuration: Configuration) -> some View {
-        AccentButtonChrome(configuration: configuration, height: height, fontSize: fontSize)
+        AccentButtonChrome(configuration: configuration, height: height, fontSize: fontSize, fill: fill, ink: ink)
     }
 }
 
@@ -248,16 +271,18 @@ private struct AccentButtonChrome: View {
     let configuration: ButtonStyleConfiguration
     let height: CGFloat
     let fontSize: CGFloat
+    let fill: Color
+    let ink: Color
     @Environment(\.isFocused) private var isFocused
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         configuration.label
             .font(.system(size: fontSize, weight: .semibold))
-            .foregroundStyle(Theme.onAccent)
+            .foregroundStyle(ink)
             .padding(.horizontal, 12)
             .frame(height: height)
-            .background(RoundedRectangle(cornerRadius: Theme.Radius.control).fill(Theme.accent))
+            .background(RoundedRectangle(cornerRadius: Theme.Radius.control).fill(fill))
             .overlay(RoundedRectangle(cornerRadius: Theme.Radius.control).fill(Color.black.opacity(configuration.isPressed ? 0.12 : 0)))
             .contentShape(RoundedRectangle(cornerRadius: Theme.Radius.control))
             .focusRing(isFocused)
@@ -269,15 +294,17 @@ private struct AccentButtonChrome: View {
 /// Outlined secondary action.
 struct OutlineButtonStyle: ButtonStyle {
     var height: CGFloat = 40
+    var fill: Color = .clear
 
     func makeBody(configuration: Configuration) -> some View {
-        OutlineButtonChrome(configuration: configuration, height: height)
+        OutlineButtonChrome(configuration: configuration, height: height, fill: fill)
     }
 }
 
 private struct OutlineButtonChrome: View {
     let configuration: ButtonStyleConfiguration
     let height: CGFloat
+    var fill: Color = .clear
     @Environment(\.isFocused) private var isFocused
     @State private var isHovering = false
 
@@ -288,6 +315,7 @@ private struct OutlineButtonChrome: View {
             .padding(.horizontal, 14)
             .frame(height: height)
             .background(RoundedRectangle(cornerRadius: Theme.Radius.control).fill(configuration.isPressed ? Theme.hlTint : (isHovering ? Theme.sidebarHover : Color.clear)))
+            .background(RoundedRectangle(cornerRadius: Theme.Radius.control).fill(fill))
             .overlay(RoundedRectangle(cornerRadius: Theme.Radius.control).strokeBorder(Theme.borderField, lineWidth: 1))
             .contentShape(RoundedRectangle(cornerRadius: Theme.Radius.control))
             .focusRing(isFocused)
