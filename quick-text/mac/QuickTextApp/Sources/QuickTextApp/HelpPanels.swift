@@ -19,8 +19,7 @@ struct KeyboardShortcutsView: View {
             title: "Library",
             shortcuts: [
                 ShortcutItem(keys: "Click", action: "Open the snippet"),
-                ShortcutItem(keys: "Double-click / Space", action: "Open the snippet"),
-                ShortcutItem(keys: "Return", action: "Copy the selected snippet"),
+                                ShortcutItem(keys: "Return", action: "Copy the selected snippet"),
                 ShortcutItem(keys: "Arrow keys", action: "Move through the grid, or the sidebar when it has focus"),
                 ShortcutItem(keys: "Tab / Shift-Tab", action: "Move between sidebar, search, and snippets"),
                 ShortcutItem(keys: "Escape", action: "Close panels, then the open snippet, then clear search, then the selection")
@@ -97,7 +96,7 @@ struct GlossaryView: View {
             terms: [
                 GlossaryTerm(name: "Phrase", definition: "A saved reusable text item. This is the canonical name for what the app stores and copies."),
                 GlossaryTerm(name: "Card", definition: "The visual tile for a phrase in the main grid."),
-                GlossaryTerm(name: "Expanded card", definition: "The open snippet: a sheet over the library showing the full value, with a Fill in panel when the phrase has variables. Opens on click for phrases with atoms or variables, and on Space or double-click for any phrase."),
+                GlossaryTerm(name: "Expanded card", definition: "The open snippet: a sheet over the library showing the full value, with a Fill in panel when the phrase has variables. Opens on click, double-click or Space."),
                 GlossaryTerm(name: "Value", definition: "The full stored text of a phrase. Full-card copy uses the value, with filled variables substituted."),
                 GlossaryTerm(name: "Category", definition: "A group used to filter and color phrases.")
             ]
