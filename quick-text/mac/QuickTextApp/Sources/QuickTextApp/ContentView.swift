@@ -638,7 +638,7 @@ struct ContentView: View {
             isSelected: isShowingSelection(phrase),
             isOpen: store.expandedPhraseID == phrase.id,
             isCopied: store.copiedPhraseID == phrase.id && store.expandedPhraseID == nil,
-            opensCard: store.opensCard(phrase),
+            opensCard: true,
             onActivate: { activate(phrase) },
             onToggleFavorite: { store.toggleFavorite(phrase) },
             onCopy: { select(phrase); store.copy(phrase) }
@@ -751,15 +751,9 @@ struct ContentView: View {
         searchFocused = false
     }
 
-    /// Click: phrases with atoms or fill-in variables open the card (first field
-    /// focused); everything else copies immediately.
+    /// Click: always opens the card. Copy is the card's Copy / Copy & Close.
     private func activate(_ phrase: Phrase) {
-        select(phrase)
-        if store.opensCard(phrase) {
-            store.expandedPhraseID = phrase.id
-        } else {
-            store.copy(phrase)
-        }
+        open(phrase)
     }
 
     private func open(_ phrase: Phrase) {

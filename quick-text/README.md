@@ -89,7 +89,7 @@ The Mac app follows the Quick Text redesign handoff (Claude Design canvas "Quick
 - **Collection dots** are keyed by category id in `Theme.collectionDot(for:)`. Categories without a built-in pigment use their stored color (Settings > Categories > Dot). Per-phrase tile/text colors and the old color/text-size/card-size settings stay in the corpus but are no longer read.
 - **Library**: sidebar (Library, Collections, Variables, Settings); sections Favorites, Recently Used (up to 6), then Everything Else, each hidden when empty; grid columns `floor((width + 20) / 320)` clamped 1–4; list view; sort by Recently Used, Title, or Manual Order (drag-to-reorder only in Manual Order without a search).
 - **Recently Used** is local app state (`UserDefaults` key `QuickText.lastUsed`), never the shared corpus, so usage doesn't sync or export. Appearance (System/Light/Dark), layout, sort, and sidebar visibility are per-Mac `UserDefaults` too.
-- **Click** copies a phrase with no atoms and no fill-in variables; otherwise it opens the card. Space or double-click always opens; Return copies the selection.
+- **Click** (or Space) always opens the card; copy from there with Copy or Copy & Close. Return on a selected tile copies it directly.
 - **Open card**: sheet over a blurred scrim with the full value in the reading serif, inline variable fields, a Fill in panel (Tab / Shift-Tab between fields, ←/→ through choice options), Copy (stays open), and Copy & Close (Return). There is no paste-into-front-app action, so the handoff's Paste button is Copy & Close.
 
 ## Atomic phrase cards

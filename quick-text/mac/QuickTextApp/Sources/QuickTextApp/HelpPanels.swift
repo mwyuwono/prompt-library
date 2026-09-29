@@ -18,7 +18,7 @@ struct KeyboardShortcutsView: View {
         ShortcutSection(
             title: "Library",
             shortcuts: [
-                ShortcutItem(keys: "Click", action: "Copy the snippet, or open it when it has variables or parts"),
+                ShortcutItem(keys: "Click", action: "Open the snippet"),
                 ShortcutItem(keys: "Double-click / Space", action: "Open the snippet"),
                 ShortcutItem(keys: "Return", action: "Copy the selected snippet"),
                 ShortcutItem(keys: "Arrow keys", action: "Move through the grid, or the sidebar when it has focus"),
