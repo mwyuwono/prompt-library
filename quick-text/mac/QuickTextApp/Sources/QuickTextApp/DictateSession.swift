@@ -86,11 +86,45 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
         takes.compactMap { $0.status == .ready ? $0.transcript : nil }
     }
 
-    /// Testable join: numbered takes in record order, blank line separated.
+    /// Testable join: numbered takes in current list order, blank line separated.
     nonisolated static func joinedTranscript(_ transcripts: [String]) -> String {
         transcripts.enumerated()
             .map { "Take \($0.offset + 1):\n\($0.element)" }
             .joined(separator: "\n\n")
+    }
+
+    /// Takes with usable text, in current list order. Backs the no-AI combine
+    /// action; empty transcripts are skipped.
+    var combinableTranscripts: [String] {
+        takes.compactMap { take -> String? in
+            guard take.status == .ready else { return nil }
+            guard let text = take.transcript?.trimmingCharacters(in: .whitespacesAndNewlines),
+                  !text.isEmpty else { return nil }
+            return text
+        }
+    }
+
+    /// Testable join for the no-AI combine action: plain paragraphs in the
+    /// given order, blank line separated, no `Take N:` headers.
+    nonisolated static func combinedTranscript(_ transcripts: [String]) -> String {
+        transcripts.joined(separator: "\n\n")
+    }
+
+    /// Reorders takes via drag and drop. Dropping a take onto a later row
+    /// places it after that row; dropping onto an earlier row places it
+    /// before, so every position (including last) is reachable. Take numbers
+    /// follow the new order and processing uses it as-is.
+    func moveTake(_ draggedID: UUID, onto targetID: UUID) {
+        guard !isRecording, !isWorking,
+              let from = takes.firstIndex(where: { $0.id == draggedID }),
+              let to = takes.firstIndex(where: { $0.id == targetID }),
+              from != to else { return }
+        let element = takes.remove(at: from)
+        if let targetIndex = takes.firstIndex(where: { $0.id == targetID }) {
+            takes.insert(element, at: from < to ? targetIndex + 1 : targetIndex)
+        } else {
+            takes.append(element)
+        }
     }
 
     // MARK: - Recording
@@ -292,6 +326,20 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
             return
         }
         runProcessing(kind: .refineResult, masterPrompt: masterPrompt, input: currentResult)
+    }
+
+    /// Copies every take transcript into the result editor in current list
+    /// order, with no model call, no token usage, and no transcript-archive
+    /// write. This intentionally replaces the editor text, matching the
+    /// reprocess action above.
+    func combineTakesIntoResult() {
+        let parts = combinableTranscripts
+        guard !parts.isEmpty else {
+            errorMessage = "Nothing to combine yet — record at least one take."
+            return
+        }
+        errorMessage = nil
+        resultText = Self.combinedTranscript(parts)
     }
 
     /// Legacy call site compatibility. New UI should choose an explicit action.

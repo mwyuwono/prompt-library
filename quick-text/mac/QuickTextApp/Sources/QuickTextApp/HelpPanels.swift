@@ -7,7 +7,7 @@ struct KeyboardShortcutsView: View {
         ShortcutSection(
             title: "App",
             shortcuts: [
-                ShortcutItem(keys: "Cmd-Shift-Space", action: "Open Quick Text"),
+                ShortcutItem(keys: "Opt-Shift-Space", action: "Open Quick Text"),
                 ShortcutItem(keys: "Cmd-N", action: "New snippet"),
                 ShortcutItem(keys: "Cmd-E", action: "Edit selected snippet"),
                 ShortcutItem(keys: "Cmd-K / Cmd-F / /", action: "Focus search"),
@@ -19,7 +19,7 @@ struct KeyboardShortcutsView: View {
             title: "Library",
             shortcuts: [
                 ShortcutItem(keys: "Click", action: "Open the snippet"),
-                                ShortcutItem(keys: "Return", action: "Copy the selected snippet"),
+                ShortcutItem(keys: "Return", action: "Copy the selected snippet"),
                 ShortcutItem(keys: "Arrow keys", action: "Move through the grid, or the sidebar when it has focus"),
                 ShortcutItem(keys: "Tab / Shift-Tab", action: "Move between sidebar, search, and snippets"),
                 ShortcutItem(keys: "Escape", action: "Close panels, then the open snippet, then clear search, then the selection")

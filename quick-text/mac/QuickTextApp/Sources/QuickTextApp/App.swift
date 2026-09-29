@@ -48,7 +48,7 @@ struct QuickTextApp: App {
             }
         }
 
-        MenuBarExtra("Quick Text", systemImage: "text.badge.plus") {
+        MenuBarExtra("Quick Text", systemImage: "character.textbox.badge.sparkles") {
             Button("Open Quick Text") { AppDelegate.openWindow() }
             Button("Open Dictate") {
                 AppDelegate.openWindow()
@@ -95,7 +95,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             window.makeKeyAndOrderFront(nil)
         } else {
             // User closed the window — recreate it via the SwiftUI environment
-            // (**verify**: confirm Cmd-Shift-Space restores the window after close).
+            // (**verify**: confirm Opt-Shift-Space restores the window after close).
             shared?.reopenWindow?()
         }
         NotificationCenter.default.post(name: .quickTextFocusSearch, object: nil)
@@ -103,7 +103,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func registerHotKey() {
         let hotKeyID = EventHotKeyID(signature: OSType("QTXT".fourCharCodeValue), id: 1)
-        let modifiers = UInt32(cmdKey | shiftKey)
+        let modifiers = UInt32(optionKey | shiftKey)
         RegisterEventHotKey(49, modifiers, hotKeyID, GetApplicationEventTarget(), 0, &hotKeyRef)
 
         var eventType = EventTypeSpec(eventClass: OSType(kEventClassKeyboard), eventKind: UInt32(kEventHotKeyPressed))
