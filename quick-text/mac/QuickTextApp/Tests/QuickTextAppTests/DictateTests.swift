@@ -1,5 +1,6 @@
 import XCTest
 import AppKit
+import AVFoundation
 @testable import QuickTextApp
 
 /// Covers the testable seams of Dictate mode without touching the mic,
@@ -748,5 +749,373 @@ final class DictateTests: XCTestCase {
         XCTAssertEqual(receivedInputs, ["Take 1:\nccc\n\nTake 2:\naaa\n\nTake 3:\nbbb"])
 
         defaults.removePersistentDomain(forName: suiteName)
+    }
+
+    // MARK: - Live Transcription
+
+    func testLivePCMConverterResamplesMicrophoneFormat() throws {
+        for (sampleRate, channels) in [(44_100.0, AVAudioChannelCount(1)),
+                                       (48_000.0, AVAudioChannelCount(1)),
+                                       (48_000.0, AVAudioChannelCount(2))] {
+            let source = try XCTUnwrap(AVAudioFormat(
+                commonFormat: .pcmFormatFloat32, sampleRate: sampleRate,
+                channels: channels, interleaved: false))
+            let converter = try XCTUnwrap(LivePCM16Converter(from: source))
+            let input = try XCTUnwrap(AVAudioPCMBuffer(pcmFormat: source, frameCapacity: 4096))
+            input.frameLength = 4096
+            let samples = try XCTUnwrap(input.floatChannelData)
+            for channel in 0..<Int(channels) {
+                for index in 0..<4096 {
+                    samples[channel][index] = sin(Float(index) * 0.05) * 0.3
+                }
+            }
+            let pcm = try converter.convert(input)
+            XCTAssertGreaterThan(pcm.count, 2_000)
+            XCTAssertLessThan(pcm.count, 4_000)
+            XCTAssertTrue(pcm.contains { $0 != 0 })
+        }
+    }
+
+    /// Scripted driver: no socket, no mic. Fails on start or replays events.
+    final class FakeLiveDriver: LiveTranscriptionDriver {
+        enum Behavior {
+            case failToConnect
+            case replay([GeminiLiveClient.LiveEvent])
+        }
+
+        let behavior: Behavior
+        private(set) var sentAudioCount = 0
+        private(set) var didStop = false
+
+        init(_ behavior: Behavior) { self.behavior = behavior }
+
+        func start(apiKey: String) async throws {
+            if case .failToConnect = behavior {
+                throw DictateError.network(URLError(.notConnectedToInternet))
+            }
+        }
+
+        func sendAudio(_ pcmChunk: Data) { sentAudioCount += 1 }
+
+        func events() -> AsyncStream<GeminiLiveClient.LiveEvent> {
+            AsyncStream { continuation in
+                if case .replay(let events) = behavior {
+                    for event in events { continuation.yield(event) }
+                }
+                continuation.finish()
+            }
+        }
+
+        func stop() { didStop = true }
+    }
+
+    func testLiveSetupMessageRequestsTranscription() {
+        let message = GeminiLiveClient.setupMessage()
+        let setup = message["setup"] as? [String: Any]
+        XCTAssertEqual(setup?["model"] as? String, "models/gemini-3.5-transcribe-live")
+        XCTAssertEqual((setup?["generationConfig"] as? [String: Any])?["responseModalities"] as? [String], ["TEXT"])
+        XCTAssertEqual((setup?["inputAudioTranscription"] as? [String: Any])?["languageCodes"] as? [String], [])
+        let url = GeminiLiveClient.endpointURL(apiKey: "a+b/c?d")
+        XCTAssertTrue(url?.absoluteString.contains("v1beta.GenerativeService.BidiGenerateContent") == true)
+        XCTAssertEqual(URLComponents(url: url!, resolvingAgainstBaseURL: false)?.queryItems?.first?.value, "a+b/c?d")
+        let audio = GeminiLiveClient.audioMessage(pcmData: Data([0, 1]))["realtimeInput"] as? [String: Any]
+        XCTAssertEqual((audio?["audio"] as? [String: String])?["data"], "AAE=")
+        XCTAssertNil(audio?["mediaChunks"])
+        XCTAssertEqual((GeminiLiveClient.audioStreamEndMessage()["realtimeInput"] as? [String: Bool])?["audioStreamEnd"], true)
+    }
+
+    func testLiveSetupCompleteGateIgnoresOtherFrames() async throws {
+        let frames = [
+            Data(#"{"serverContent":{"interimInputTranscription":{"text":"early"}}}"#.utf8),
+            Data(#"{"setupComplete":{}}"#.utf8)
+        ]
+        var index = 0
+        try await GeminiLiveClient.awaitSetupComplete {
+            defer { index += 1 }
+            return frames[index]
+        }
+        XCTAssertEqual(index, 2)
+        XCTAssertFalse(GeminiLiveClient.isSetupComplete(Data(#"{"serverContent":{}}"#.utf8)))
+    }
+
+    func testLiveSetupRejectionAndTimeoutHaveDistinctStages() async {
+        do {
+            try await GeminiLiveClient.awaitSetupComplete {
+                Data(#"{"error":{"code":1008,"status":"PERMISSION_DENIED","message":"Model unavailable"}}"#.utf8)
+            }
+            XCTFail("expected setup rejection")
+        } catch {
+            XCTAssertEqual(error.localizedDescription,
+                           "Live Setup rejected: 1008 PERMISSION_DENIED: Model unavailable")
+        }
+
+        do {
+            try await GeminiLiveClient.awaitSetupComplete(
+                receive: {
+                    try await Task.sleep(nanoseconds: 1_000_000_000)
+                    return Data(#"{"setupComplete":{}}"#.utf8)
+                }, timeoutNanoseconds: 1_000_000, onTimeout: {})
+            XCTFail("expected setup timeout")
+        } catch {
+            XCTAssertEqual((error as? LiveConnectionError)?.stage, .setupTimeout)
+        }
+    }
+
+    func testLiveStageLabelsAndWebSocketCloseDetails() {
+        let stages: [LiveConnectionStage] = [
+            .openTimeout, .setupSend, .setupAcknowledgement, .setupRejected,
+            .setupTimeout, .realtimeSend, .receiveClose
+        ]
+        for stage in stages {
+            let error = LiveConnectionError(stage: stage, detail: "sample failure",
+                                            closeCode: nil, closeReason: nil)
+            XCTAssertTrue(error.localizedDescription.contains("Live \(stage.rawValue): sample failure"))
+        }
+        let closed = LiveConnectionError(stage: .receiveClose, detail: "socket closed",
+                                         closeCode: .policyViolation,
+                                         closeReason: Data("not permitted".utf8))
+        XCTAssertTrue(closed.localizedDescription.contains("close code 1008"))
+        XCTAssertTrue(closed.localizedDescription.contains("reason: not permitted"))
+        let receiveError = LiveConnectionError.transport(
+            .setupAcknowledgement, error: URLError(.networkConnectionLost), task: nil)
+        XCTAssertEqual(receiveError.stage, .setupAcknowledgement)
+        XCTAssertTrue(receiveError.localizedDescription.contains("Live Setup acknowledgement:"))
+        XCTAssertEqual(GeminiLiveClient.emptyStreamError().localizedDescription,
+                       "Live Receive/close: No transcript received within 3 seconds after audioStreamEnd.")
+    }
+
+    func testLiveParsesInterimFinalAndUsage() {
+        let interim = Data(#"{"serverContent":{"interimInputTranscription":{"text":"hello"},"turnComplete":false}}"#.utf8)
+        let interimUpdate = GeminiLiveClient.parseServerMessage(interim)
+        XCTAssertEqual(interimUpdate?.transcriptChunk, "hello")
+        XCTAssertEqual(interimUpdate?.isFinal, false)
+
+        let final = Data(#"{"serverContent":{"inputTranscription":{"text":"hello world"},"usageMetadata":{"promptTokenCount":100,"candidatesTokenCount":5}}}"#.utf8)
+        let finalUpdate = GeminiLiveClient.parseServerMessage(final)
+        XCTAssertEqual(finalUpdate?.transcriptChunk, "hello world")
+        XCTAssertEqual(finalUpdate?.isFinal, true)
+        XCTAssertEqual(finalUpdate?.usage, TokenUsage(inputTokens: 100, outputTokens: 5))
+
+        XCTAssertNil(GeminiLiveClient.parseServerMessage(Data(#"{"setupComplete":{}}"#.utf8)))
+        XCTAssertNil(GeminiLiveClient.parseServerMessage(Data("not json".utf8)))
+    }
+
+    func testLiveTranscriptAssemblerReplacesRevisedInterimAndJoinsFinalSegments() {
+        var transcript = LiveTranscriptAssembler()
+        transcript.accept("Four score and seven years ago, our fathers", isFinal: false)
+        transcript.accept("Four score and seven years ago our fathers set", isFinal: false)
+        transcript.accept("Four score and seven years ago our fathers brought forth on this continent", isFinal: false)
+        XCTAssertEqual(transcript.text,
+                       "Four score and seven years ago our fathers brought forth on this continent")
+        transcript.accept("", isFinal: true) // turnComplete must not commit a speculative hypothesis
+        transcript.accept("Four score and seven years ago, our fathers brought forth on this continent.", isFinal: true)
+        XCTAssertEqual(transcript.text,
+                       "Four score and seven years ago, our fathers brought forth on this continent.")
+
+        transcript.accept("a new", isFinal: false)
+        XCTAssertEqual(transcript.text,
+                       "Four score and seven years ago, our fathers brought forth on this continent. a new")
+        transcript.accept("a new nation", isFinal: true)
+        XCTAssertEqual(transcript.text,
+                       "Four score and seven years ago, our fathers brought forth on this continent. a new nation")
+        transcript.accept("Four score and seven years ago, our fathers brought forth on this continent, a new nation.", isFinal: true)
+        XCTAssertEqual(transcript.text,
+                       "Four score and seven years ago, our fathers brought forth on this continent, a new nation.")
+    }
+
+    func testLiveSocketOpenerSignalsOpenEitherOrder() async {
+        // Signal before waiting.
+        let early = LiveSocketOpener()
+        early.notifyOpened()
+        await early.waitForOpen()
+
+        // Signal after waiting starts.
+        let late = LiveSocketOpener()
+        async let waiter: Void = late.waitForOpen()
+        late.notifyOpened()
+        await waiter
+    }
+
+    func testLiveSocketOpenerTimesOut() async {
+        let opener = LiveSocketOpener()
+        do {
+            try await opener.waitForOpen(timeoutNanoseconds: 1_000_000)
+            XCTFail("expected a timeout")
+        } catch {
+            guard case DictateError.network(let underlying as URLError) = error else {
+                XCTFail("expected DictateError.network(URLError), got \(error)")
+                return
+            }
+            XCTAssertEqual(underlying.code, .timedOut)
+        }
+    }
+
+    func testTranscriptionModeDefaultsToAfterTake() {
+        UserDefaults.standard.removeObject(forKey: TranscriptionMode.storageKey)
+        XCTAssertEqual(TranscriptionMode.stored, .afterTake)
+        TranscriptionMode.stored = .realTime
+        XCTAssertEqual(TranscriptionMode.stored, .realTime)
+        TranscriptionMode.stored = .afterTake
+    }
+
+    @MainActor
+    func testLiveFailureFallsBackToRestTake() async throws {
+        let session = DictateSession()
+        let dir = try tempDir()
+        let audioURL = dir.appendingPathComponent("live-fallback.m4a")
+        try Data("fake-audio".utf8).write(to: audioURL)
+        let take = DictateTake(audioURL: audioURL, transcript: nil, status: .recording)
+        session.takes = [take]
+
+        var restCalls = 0
+        session.transcribe = { _, _ in
+            restCalls += 1
+            return GeminiResponse(text: "restored", usage: TokenUsage(inputTokens: 10, outputTokens: 1))
+        }
+
+        let outcome = await session.pumpLiveTake(driver: FakeLiveDriver(.failToConnect), takeID: take.id, apiKey: "test-key")
+        XCTAssertEqual(outcome.text, "")
+        session.finalizeLiveTake(outcome, takeID: take.id, audioURL: audioURL)
+        try await Task.sleep(nanoseconds: 100_000_000)
+
+        XCTAssertEqual(restCalls, 1)
+        XCTAssertEqual(session.takes.first?.transcript, "restored")
+        XCTAssertEqual(session.takes.first?.status, .ready)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: audioURL.path))
+    }
+
+    @MainActor
+    func testLiveFallbackNoticeIncludesStreamError() async throws {
+        let session = DictateSession()
+        let dir = try tempDir()
+        session.transcribe = { _, _ in
+            GeminiResponse(text: "restored", usage: .zero)
+        }
+
+        let withErrorURL = dir.appendingPathComponent("live-fallback-error.m4a")
+        try Data("fake-audio".utf8).write(to: withErrorURL)
+        let withError = DictateTake(audioURL: withErrorURL, transcript: nil, status: .recording)
+        session.takes = [withError]
+        session.finalizeLiveTake(
+            LiveTakeOutcome(text: "", errorMessage: "The operation couldn’t be completed."),
+            takeID: withError.id, audioURL: withErrorURL)
+        XCTAssertEqual(
+            session.errorMessage,
+            "Real-time transcription dropped (The operation couldn’t be completed.) — transcribing after take.")
+
+        let bareURL = dir.appendingPathComponent("live-fallback-bare.m4a")
+        try Data("fake-audio".utf8).write(to: bareURL)
+        let bare = DictateTake(audioURL: bareURL, transcript: nil, status: .recording)
+        session.takes = [bare]
+        session.finalizeLiveTake(
+            LiveTakeOutcome(text: "   ", errorMessage: nil),
+            takeID: bare.id, audioURL: bareURL)
+        XCTAssertEqual(
+            session.errorMessage,
+            "Real-time transcription dropped — transcribing after take.")
+        try await Task.sleep(nanoseconds: 100_000_000)
+    }
+
+    @MainActor
+    func testLivePartialTranscriptNoticeKeepsDiagnosticStage() throws {
+        let session = DictateSession()
+        let dir = try tempDir()
+        let audioURL = dir.appendingPathComponent("live-partial.m4a")
+        try Data("fake-audio".utf8).write(to: audioURL)
+        let take = DictateTake(audioURL: audioURL, transcript: nil, status: .recording)
+        session.takes = [take]
+        session.finalizeLiveTake(
+            LiveTakeOutcome(text: "partial", errorMessage: "Live Receive/close: socket closed"),
+            takeID: take.id, audioURL: audioURL)
+        XCTAssertEqual(session.takes.first?.transcript, "partial")
+        XCTAssertEqual(session.errorMessage,
+                       "Real-time connection dropped (Live Receive/close: socket closed) — kept the streamed text.")
+    }
+
+    @MainActor
+    func testLiveSuccessSkipsRestTake() async throws {
+        let session = DictateSession()
+        let dir = try tempDir()
+        let audioURL = dir.appendingPathComponent("live-success.m4a")
+        try Data("fake-audio".utf8).write(to: audioURL)
+        let take = DictateTake(audioURL: audioURL, transcript: nil, status: .recording)
+        session.takes = [take]
+
+        var restCalls = 0
+        session.transcribe = { _, _ in
+            restCalls += 1
+            return GeminiResponse(text: "unused", usage: .zero)
+        }
+
+        let driver = FakeLiveDriver(.replay([
+            .transcript(text: "hello", isFinal: false),
+            .transcript(text: "hello world", isFinal: true),
+            .usage(TokenUsage(inputTokens: 100, outputTokens: 5))
+        ]))
+        let outcome = await session.pumpLiveTake(driver: driver, takeID: take.id, apiKey: "test-key")
+        XCTAssertEqual(outcome.text, "hello world")
+        XCTAssertTrue(outcome.receivedFinal)
+        // Interim text lands on the recording take live.
+        XCTAssertEqual(session.takes.first?.transcript, "hello world")
+
+        session.finalizeLiveTake(outcome, takeID: take.id, audioURL: audioURL)
+        XCTAssertEqual(restCalls, 0)
+        XCTAssertEqual(session.takes.first?.status, .ready)
+        XCTAssertEqual(session.takes.first?.tokenUsage, TokenUsage(inputTokens: 100, outputTokens: 5))
+        XCTAssertFalse(FileManager.default.fileExists(atPath: audioURL.path))
+    }
+
+    @MainActor
+    func testLiveRevisedInterimPersistsOnlyFinalSentence() async throws {
+        let session = DictateSession()
+        let dir = try tempDir()
+        let audioURL = dir.appendingPathComponent("live-revised-interim.m4a")
+        try Data("fake-audio".utf8).write(to: audioURL)
+        let take = DictateTake(audioURL: audioURL, transcript: nil, status: .recording)
+        session.takes = [take]
+        session.transcribe = { _, _ in
+            XCTFail("REST fallback should not run")
+            return GeminiResponse(text: "", usage: .zero)
+        }
+        let driver = FakeLiveDriver(.replay([
+            .transcript(text: "Four score and seven years ago, our fathers", isFinal: false),
+            .transcript(text: "Four score and seven years ago our fathers set", isFinal: false),
+            .transcript(text: "Four score and seven years ago our fathers brought forth on this continent", isFinal: false),
+            .transcript(text: "Four score and seven years ago, our fathers brought forth on this continent.", isFinal: true)
+        ]))
+        let outcome = await session.pumpLiveTake(driver: driver, takeID: take.id, apiKey: "test-key")
+        session.finalizeLiveTake(outcome, takeID: take.id, audioURL: audioURL)
+        XCTAssertEqual(session.takes.first?.transcript,
+                       "Four score and seven years ago, our fathers brought forth on this continent.")
+    }
+
+    // MARK: - Take Transcript Sizing
+
+    /// The take card must grow to fit the whole transcript: with a zero-size
+    /// starting frame (as in the view), a multi-line transcript has to measure
+    /// several lines taller than a single line, otherwise the last line renders
+    /// clipped behind the card edge.
+    @MainActor
+    func testTakeTranscriptViewFitsFullContent() {
+        let font = NSFont.systemFont(ofSize: 19)
+        let style = NSMutableParagraphStyle()
+        style.lineSpacing = 7
+        let attributes: [NSAttributedString.Key: Any] = [.font: font, .paragraphStyle: style]
+
+        let longView = AutoHeightTextView.baseTextView(font: font, label: "Take 1 transcript")
+        longView.textStorage?.setAttributedString(NSAttributedString(
+            string: "This is just an example of the general sentiment I want to convey, you can rework the language as needed. Keep it concise, and also find a way to mention that I have a referral from a former McKinsey colleague.",
+            attributes: attributes))
+
+        let shortView = AutoHeightTextView.baseTextView(font: font, label: "Take 1 transcript")
+        shortView.textStorage?.setAttributedString(NSAttributedString(string: "Hi.", attributes: attributes))
+
+        guard let full = AutoHeightTextView.fittingHeight(textView: longView, width: 300),
+              let single = AutoHeightTextView.fittingHeight(textView: shortView, width: 300) else {
+            XCTFail("fittingHeight returned nil for a finite width")
+            return
+        }
+        XCTAssertGreaterThan(full, single * 3)
+        XCTAssertNil(AutoHeightTextView.fittingHeight(textView: shortView, width: 0))
     }
 }

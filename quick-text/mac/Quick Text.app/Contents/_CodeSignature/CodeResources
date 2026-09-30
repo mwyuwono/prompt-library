@@ -12,6 +12,10 @@
 		<data>
 		Pe/TNe4H8QsSvNxcLPKJLzE+jpk=
 		</data>
+		<key>Resources/DockIcon.png</key>
+		<data>
+		1r1auxICt//u8WdlyI5HEOEfMnc=
+		</data>
 		<key>Resources/QuickText.icns</key>
 		<data>
 		Bcqp6/+RdjxIM0skJt1hCzYUhos=
@@ -31,6 +35,13 @@
 			<key>hash2</key>
 			<data>
 			zXplAISZ1L/qvAAuVRlmA9fOX45jm3vsYQjp1Ef14nY=
+			</data>
+		</dict>
+		<key>Resources/DockIcon.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			z55gxdh0ehQsp98qmr2+Eyu43umotO2CZtb/Y/bV0Qo=
 			</data>
 		</dict>
 		<key>Resources/QuickText.icns</key>

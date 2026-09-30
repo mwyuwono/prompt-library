@@ -19,6 +19,110 @@ struct DictateTake: Identifiable {
     var status: Status
 }
 
+/// Accumulated result of one live take. Empty text signals REST fallback.
+struct LiveTakeOutcome {
+    var text = ""
+    var usage: TokenUsage = .zero
+    var receivedFinal = false
+    var errorMessage: String?
+}
+
+/// Thread-safe peak holder: the mic tap writes from the audio thread while
+/// the meter loop reads on the main actor.
+final class LivePeakHolder {
+    private let lock = NSLock()
+    private var _value: Float = 0
+
+    var value: Float {
+        get { lock.withLock { _value } }
+        set { lock.withLock { _value = newValue } }
+    }
+}
+
+/// AVAudioConverter's simple convert(to:from:) cannot resample a microphone
+/// buffer. The input-block form supplies one buffer and retains converter state
+/// across taps, producing raw 16 kHz mono PCM for Gemini Live.
+final class LivePCM16Converter {
+    private let converter: AVAudioConverter
+    private let outputFormat: AVAudioFormat
+    private let inputSampleRate: Double
+
+    init?(from inputFormat: AVAudioFormat) {
+        guard let outputFormat = AVAudioFormat(
+            commonFormat: .pcmFormatInt16,
+            sampleRate: Double(GeminiLiveClient.streamSampleRate),
+            channels: 1,
+            interleaved: true),
+              let converter = AVAudioConverter(from: inputFormat, to: outputFormat) else { return nil }
+        self.converter = converter
+        self.outputFormat = outputFormat
+        self.inputSampleRate = inputFormat.sampleRate
+    }
+
+    func convert(_ input: AVAudioPCMBuffer) throws -> Data {
+        let estimatedFrames = Double(input.frameLength) * outputFormat.sampleRate / inputSampleRate
+        let capacity = AVAudioFrameCount(ceil(estimatedFrames) + 256)
+        guard let output = AVAudioPCMBuffer(pcmFormat: outputFormat, frameCapacity: capacity) else {
+            throw DictateError.badResponse("live PCM buffer")
+        }
+        var supplied = false
+        var conversionError: NSError?
+        let status = converter.convert(to: output, error: &conversionError) { _, status in
+            guard !supplied else {
+                status.pointee = .noDataNow
+                return nil
+            }
+            supplied = true
+            status.pointee = .haveData
+            return input
+        }
+        if let conversionError { throw conversionError }
+        if status == .error { throw DictateError.badResponse("live PCM conversion") }
+        guard output.frameLength > 0, let samples = output.int16ChannelData?[0] else { return Data() }
+        return Data(bytes: samples, count: Int(output.frameLength) * MemoryLayout<Int16>.size)
+    }
+}
+
+final class LiveCaptureStats {
+    private let lock = NSLock()
+    private var tapCount = 0
+    private var convertedChunks = 0
+    private var convertedBytes = 0
+    private var conversionErrors = 0
+    private var lastConversionError: String?
+
+    func reset() {
+        lock.withLock {
+            tapCount = 0
+            convertedChunks = 0
+            convertedBytes = 0
+            conversionErrors = 0
+            lastConversionError = nil
+        }
+    }
+
+    func tapped() { lock.withLock { tapCount += 1 } }
+    func converted(bytes: Int) {
+        lock.withLock {
+            convertedChunks += 1
+            convertedBytes += bytes
+        }
+    }
+    func failed(_ error: Error) {
+        lock.withLock {
+            conversionErrors += 1
+            lastConversionError = error.localizedDescription
+        }
+    }
+    var summary: String {
+        lock.withLock {
+            var result = "capture taps \(tapCount), PCM chunks \(convertedChunks), PCM bytes \(convertedBytes), conversion errors \(conversionErrors)"
+            if let lastConversionError { result += " (last: \(lastConversionError))" }
+            return result
+        }
+    }
+}
+
 /// Multi-take dictate session: record turns, transcribe each immediately,
 /// synthesize once via the selected `voice-process` master prompt. Runs on
 /// the main actor; network closures are injectable for tests.
@@ -35,6 +139,9 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
     @Published var recordingLevel: Float = 0
     @Published var isWorking = false
     @Published var selectedProcessID = DictateSession.defaultProcessID
+    /// Refreshed from stored settings at each capture start; Live mode shows
+    /// interim transcripts and falls back to the file + REST path on failure.
+    @Published var transcriptionMode: TranscriptionMode = .stored
     @Published var resultText = ""
     /// Kept as a compatibility/UI convenience for the last model turn.
     @Published var synthesisTokenUsage: TokenUsage? = nil
@@ -61,6 +168,15 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
     var statsStore: DictateStatsStore = .shared
     private var recorder: AVAudioRecorder?
     private var audioPlayer: AVAudioPlayer?
+
+    /// Injectable live transport; tests substitute scripted fakes.
+    var makeLiveDriver: () -> any LiveTranscriptionDriver = { GeminiLiveWebSocketDriver() }
+    private var liveEngine: AVAudioEngine?
+    private var liveDriver: (any LiveTranscriptionDriver)?
+    private var liveTask: Task<LiveTakeOutcome, Never>?
+    private var liveStartDate: Date?
+    private let livePeak = LivePeakHolder()
+    private let liveCaptureStats = LiveCaptureStats()
     private var recordingMonitorTask: Task<Void, Never>?
     @Published var playingTakeID: UUID?
 
@@ -152,6 +268,17 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
     }
 
     private func beginCapture() throws {
+        // The Settings switch applies to the next take.
+        transcriptionMode = .stored
+        if transcriptionMode == .realTime {
+            try beginLiveCapture()
+        } else {
+            try beginRecorderCapture()
+        }
+    }
+
+    /// Original path, unchanged: record AAC to a file, transcribe on stop.
+    private func beginRecorderCapture() throws {
         let url = FileManager.default.temporaryDirectory
             .appendingPathComponent("dictate-\(UUID().uuidString).m4a")
         let settings: [String: Any] = [
@@ -170,7 +297,79 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
         startRecordingMonitor()
     }
 
+    /// Live path: one mic tap feeds the socket (16 kHz PCM), a parallel AAC
+    /// file (the REST fallback), and the level meter. A missing API key fails
+    /// fast here instead of recording a take that cannot stream.
+    private func beginLiveCapture() throws {
+        _ = try Self.loadKey()
+        let engine = AVAudioEngine()
+        let input = engine.inputNode
+        let hardwareFormat = input.outputFormat(forBus: 0)
+        guard let converter = LivePCM16Converter(from: hardwareFormat) else {
+            throw DictateError.badResponse("live audio format")
+        }
+        liveCaptureStats.reset()
+        let url = FileManager.default.temporaryDirectory
+            .appendingPathComponent("dictate-\(UUID().uuidString).m4a")
+        let file = try AVAudioFile(forWriting: url, settings: [
+            AVFormatIDKey: kAudioFormatMPEG4AAC,
+            AVSampleRateKey: 44_100,
+            AVNumberOfChannelsKey: 1,
+            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
+        ])
+        let driver = makeLiveDriver()
+        let peak = livePeak
+        let captureStats = liveCaptureStats
+        let take = DictateTake(audioURL: url, transcript: nil, status: .recording)
+        input.installTap(onBus: 0, bufferSize: 4096, format: hardwareFormat) { buffer, _ in
+            captureStats.tapped()
+            try? file.write(from: buffer)
+            if buffer.format.commonFormat == .pcmFormatFloat32,
+               let channel = buffer.floatChannelData?[0] {
+                var maxSample: Float = 0
+                for i in 0..<Int(buffer.frameLength) {
+                    maxSample = max(maxSample, abs(channel[i]))
+                }
+                peak.value = maxSample
+            }
+            do {
+                let pcm = try converter.convert(buffer)
+                guard !pcm.isEmpty else { return }
+                captureStats.converted(bytes: pcm.count)
+                driver.sendAudio(pcm)
+            } catch {
+                captureStats.failed(error)
+                return
+            }
+        }
+        engine.prepare()
+        try engine.start()
+        liveEngine = engine
+        liveDriver = driver
+        liveStartDate = Date()
+        livePeak.value = 0
+        takes.append(take)
+        isRecording = true
+        recordingElapsed = 0
+        recordingLevel = 0
+        startRecordingMonitor()
+        let takeID = take.id
+        liveTask = Task { [weak self] in
+            guard let self else { return LiveTakeOutcome() }
+            do {
+                let key = try Self.loadKey()
+                return await self.pumpLiveTake(driver: driver, takeID: takeID, apiKey: key)
+            } catch {
+                return LiveTakeOutcome(errorMessage: error.localizedDescription)
+            }
+        }
+    }
+
     func stopRecording() {
+        if liveTask != nil {
+            stopLiveCapture()
+            return
+        }
         let duration = recorder?.currentTime
         recorder?.stop()
         recorder = nil
@@ -180,6 +379,115 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
         takes[index].duration = duration
         takes[index].status = .transcribing
         transcribeTake(at: index)
+    }
+
+    /// Stops the engine synchronously so timing freezes, then finalizes from
+    /// the streamed result — or the parallel file when the stream came up dry.
+    private func stopLiveCapture() {
+        let duration = liveStartDate.map { Date().timeIntervalSince($0) } ?? recordingElapsed
+        if let engine = liveEngine {
+            engine.inputNode.removeTap(onBus: 0)
+            engine.stop()
+        }
+        liveEngine = nil
+        isRecording = false
+        stopRecordingMonitor()
+        guard let index = takes.lastIndex(where: { $0.status == .recording }) else {
+            liveDriver?.stop()
+            liveDriver = nil
+            liveTask?.cancel()
+            liveTask = nil
+            return
+        }
+        takes[index].duration = duration
+        takes[index].status = .transcribing
+        let id = takes[index].id
+        let url = takes[index].audioURL
+        let driver = liveDriver
+        driver?.stop()
+        liveDriver = nil
+        let task = liveTask
+        liveTask = nil
+        Task { [weak self] in
+            var outcome = await task?.value ?? LiveTakeOutcome()
+            if outcome.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                let counts = [self?.liveCaptureStats.summary, driver?.diagnostics]
+                    .compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: "; ")
+                outcome.errorMessage = [outcome.errorMessage, counts]
+                    .compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: " — ")
+            }
+            self?.finalizeLiveTake(outcome, takeID: id, audioURL: url)
+        }
+    }
+
+    /// Pumps one live take: connects, applies interim transcripts to the take
+    /// as they arrive, and returns the accumulated outcome for finalization.
+    /// An empty outcome (connection or setup failure) signals REST fallback.
+    func pumpLiveTake(driver: any LiveTranscriptionDriver, takeID: UUID, apiKey: String) async -> LiveTakeOutcome {
+        var outcome = LiveTakeOutcome()
+        var transcript = LiveTranscriptAssembler()
+        do {
+            try await driver.start(apiKey: apiKey)
+        } catch {
+            outcome.errorMessage = error.localizedDescription
+            return outcome
+        }
+        for await event in driver.events() {
+            switch event {
+            case .transcript(let chunk, let isFinal):
+                transcript.accept(chunk, isFinal: isFinal)
+                outcome.text = transcript.text
+                if isFinal { outcome.receivedFinal = true }
+                applyLiveTranscript(outcome.text, usage: outcome.usage, to: takeID)
+            case .usage(let usage):
+                outcome.usage += usage
+                applyLiveTranscript(outcome.text, usage: outcome.usage, to: takeID)
+            case .error(let error):
+                outcome.errorMessage = error.localizedDescription
+            }
+        }
+        return outcome
+    }
+
+    private func applyLiveTranscript(_ text: String, usage: TokenUsage, to takeID: UUID) {
+        guard let index = takes.firstIndex(where: { $0.id == takeID }),
+              takes[index].status == .recording else { return }
+        takes[index].transcript = text
+        takes[index].tokenUsage = usage.totalTokens > 0 ? usage : nil
+    }
+
+    /// Finalizes a live take. Streamed text wins (no second audio charge);
+    /// an empty stream falls back to the parallel file via the normal path.
+    func finalizeLiveTake(_ outcome: LiveTakeOutcome, takeID: UUID, audioURL: URL?) {
+        guard let index = takes.firstIndex(where: { $0.id == takeID }) else { return }
+        let text = outcome.text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !text.isEmpty else {
+            if let detail = outcome.errorMessage?.trimmingCharacters(in: .whitespacesAndNewlines),
+               !detail.isEmpty {
+                errorMessage = "Real-time transcription dropped (\(detail)) — transcribing after take."
+            } else {
+                errorMessage = "Real-time transcription dropped — transcribing after take."
+            }
+            transcribeTake(at: index)
+            return
+        }
+        takes[index].transcript = outcome.text
+        takes[index].tokenUsage = outcome.usage.totalTokens > 0 ? outcome.usage : nil
+        takes[index].status = .ready
+        if outcome.usage.totalTokens > 0 {
+            statsStore.recordUsage(outcome.usage, pricing: .transcribe)
+        }
+        if outcome.errorMessage != nil {
+            let detail = outcome.errorMessage?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            errorMessage = detail.isEmpty
+                ? "Real-time connection dropped — kept the streamed text."
+                : "Real-time connection dropped (\(detail)) — kept the streamed text."
+        }
+        // Audio is discarded once its transcript exists, same as REST takes.
+        if let url = audioURL {
+            try? FileManager.default.removeItem(at: url)
+        }
+        takes[index].audioURL = nil
     }
 
     private func startRecordingMonitor() {
@@ -200,6 +508,13 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
     }
 
     private func updateRecordingMeter() {
+        if liveEngine != nil {
+            if let start = liveStartDate {
+                recordingElapsed = Date().timeIntervalSince(start)
+            }
+            recordingLevel = min(1, livePeak.value * 3)
+            return
+        }
         guard let recorder, recorder.isRecording else { return }
         recorder.updateMeters()
         recordingElapsed = recorder.currentTime
@@ -387,6 +702,16 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
 
     func newSession() {
         stopPlayback()
+        if let engine = liveEngine {
+            engine.inputNode.removeTap(onBus: 0)
+            engine.stop()
+        }
+        liveEngine = nil
+        liveDriver?.stop()
+        liveDriver = nil
+        liveTask?.cancel()
+        liveTask = nil
+        isRecording = false
         stopRecordingMonitor()
         for take in takes {
             if let url = take.audioURL {

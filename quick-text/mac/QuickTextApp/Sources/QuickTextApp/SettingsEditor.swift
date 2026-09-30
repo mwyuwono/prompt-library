@@ -169,6 +169,26 @@ struct SettingsEditor: View {
                 }
             }
 
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Transcription")
+                    .font(.subheadline.weight(.semibold))
+                Picker("Transcription", selection: Binding(
+                    get: { TranscriptionMode.stored },
+                    set: { TranscriptionMode.stored = $0 }
+                )) {
+                    ForEach(TranscriptionMode.allCases) { mode in
+                        Text(mode.title).tag(mode)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .frame(maxWidth: 320)
+                .labelsHidden()
+                Text("After take sends the whole recording at once. Real-time streams audio and shows words while you speak; if the stream drops, the take is transcribed after recording instead.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: 480, alignment: .leading)
+            }
+
             Divider()
 
             dictateUsageAndCostCard

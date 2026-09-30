@@ -79,7 +79,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.setActivationPolicy(.regular)
         AppAppearance.current.apply()
         Self.shared = self
+        applyDockIcon()
         registerHotKey()
+    }
+
+    /// Dock-only icon override: the txt artwork replaces the Dock (and
+    /// Cmd-Tab) tile at runtime. The bundle `.icns` — what Finder shows —
+    /// and the MenuBarExtra SF Symbol are left untouched.
+    private func applyDockIcon() {
+        guard let url = Bundle.main.url(forResource: "DockIcon", withExtension: "png"),
+              let image = NSImage(contentsOf: url) else { return }
+        NSApp.applicationIconImage = image
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {

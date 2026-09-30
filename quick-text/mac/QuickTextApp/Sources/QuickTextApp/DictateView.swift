@@ -482,7 +482,20 @@ struct DictateView: View {
     private func takeBody(index: Int, take: DictateTake) -> some View {
         switch take.status {
         case .recording:
-            waveform
+            VStack(alignment: .leading, spacing: 10) {
+                waveform
+                let interim = (take.transcript ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+                if !interim.isEmpty {
+                    // Real-time mode: words appear while recording. Read-only
+                    // until the take is ready, like the waveform above.
+                    Text(interim)
+                        .font(ThemeFont.serif(19))
+                        .lineSpacing(7)
+                        .foregroundStyle(Theme.textPrimary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .accessibilityLabel("Take \(index + 1) live transcript")
+                }
+            }
         case .transcribing:
             HStack(spacing: 8) {
                 ProgressView().controlSize(.small)
@@ -588,7 +601,7 @@ struct DictateView: View {
                 Button {
                     if let prompt = selectedPrompt { session.reprocessTakes(masterPrompt: prompt.value) }
                 } label: {
-                    Text("Reprocess Takes").frame(maxWidth: .infinity)
+                    Text("Process Takes").frame(maxWidth: .infinity)
                 }
                 .buttonStyle(AccentButtonStyle(height: 38, fontSize: 13.5))
                 .dimWhenDisabled()
@@ -817,21 +830,51 @@ struct AutoHeightTextView: NSViewRepresentable {
 
     func makeCoordinator() -> Coordinator { Coordinator(self) }
 
-    func makeNSView(context: Context) -> NSTextView {
+    /// Shared factory so the sizing flags are testable without a SwiftUI context.
+    static func baseTextView(font: NSFont, label: String) -> FocusReportingTextView {
         let view = FocusReportingTextView(frame: .zero)
-        view.onFocusChange = { [weak coordinator = context.coordinator] focused in
-            coordinator?.parent.onFocusChange(focused)
-        }
+        view.font = font
         view.drawsBackground = false
         view.isRichText = false
         view.allowsUndo = true
         view.isHorizontallyResizable = false
-        view.isVerticallyResizable = false
+        // Vertical growth is required: with `isVerticallyResizable == false`
+        // the container tracks the view's current (too-short) frame during
+        // measurement and the last line renders clipped behind the card edge.
+        view.isVerticallyResizable = true
+        view.autoresizingMask = [.width]
+        view.maxSize = NSSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
         view.textContainerInset = .zero
         view.textContainer?.lineFragmentPadding = 0
         view.textContainer?.widthTracksTextView = true
+        view.textContainer?.heightTracksTextView = false
+        view.setAccessibilityLabel(label)
+        return view
+    }
+
+    /// Full-content height for `width`, or nil when the width is unresolved.
+    static func fittingHeight(textView: NSTextView, width: CGFloat) -> CGFloat? {
+        guard width > 0, width.isFinite,
+              let container = textView.textContainer, let layout = textView.layoutManager else { return nil }
+        // The container tracks the view size, so stage the proposal width on
+        // the view first; otherwise a zero/stale frame corrupts the measurement
+        // (a zero frame measured a paragraph as one line — the clipped take).
+        var frame = textView.frame
+        frame.size.width = width
+        textView.frame = frame
+        container.containerSize = NSSize(width: width, height: .greatestFiniteMagnitude)
+        layout.ensureLayout(for: container)
+        let height = ceil(layout.usedRect(for: container).height)
+        guard let font = textView.font else { return height }
+        return max(height, ceil(font.pointSize * 1.4))
+    }
+
+    func makeNSView(context: Context) -> NSTextView {
+        let view = Self.baseTextView(font: font, label: accessibilityLabel)
+        view.onFocusChange = { [weak coordinator = context.coordinator] focused in
+            coordinator?.parent.onFocusChange(focused)
+        }
         view.delegate = context.coordinator
-        view.setAccessibilityLabel(accessibilityLabel)
         return view
     }
 
@@ -844,6 +887,7 @@ struct AutoHeightTextView: NSViewRepresentable {
         let attributes: [NSAttributedString.Key: Any] = [
             .font: font, .foregroundColor: color, .paragraphStyle: style
         ]
+        if view.font != font { view.font = font }
         if view.string != text { view.string = text }
         view.textStorage?.setAttributes(attributes, range: NSRange(location: 0, length: view.string.utf16.count))
         view.typingAttributes = attributes
@@ -852,12 +896,9 @@ struct AutoHeightTextView: NSViewRepresentable {
     }
 
     func sizeThatFits(_ proposal: ProposedViewSize, nsView: NSTextView, context: Context) -> CGSize? {
-        guard let width = proposal.width, width > 0, width.isFinite,
-              let container = nsView.textContainer, let layout = nsView.layoutManager else { return nil }
-        container.containerSize = NSSize(width: width, height: .greatestFiniteMagnitude)
-        layout.ensureLayout(for: container)
-        let height = ceil(layout.usedRect(for: container).height)
-        return CGSize(width: width, height: max(height, ceil(font.pointSize * 1.4)))
+        guard let width = proposal.width,
+              let height = Self.fittingHeight(textView: nsView, width: width) else { return nil }
+        return CGSize(width: width, height: height)
     }
 
     final class Coordinator: NSObject, NSTextViewDelegate {
@@ -873,7 +914,7 @@ struct AutoHeightTextView: NSViewRepresentable {
     }
 }
 
-private final class FocusReportingTextView: NSTextView {
+final class FocusReportingTextView: NSTextView {
     var onFocusChange: ((Bool) -> Void)?
 
     override func becomeFirstResponder() -> Bool {

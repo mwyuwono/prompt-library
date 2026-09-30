@@ -1,21 +1,21 @@
 {
   "categories" : [
     {
-      "color" : "brown-17",
+      "color" : "brown-20",
       "id" : "personal",
       "name" : "Personal Details",
       "sortOrder" : 30,
       "textColor" : "#E8DED8"
     },
     {
-      "color" : "brown-03",
+      "color" : "brown-15",
       "id" : "prompt-reuse",
       "name" : "Prompting",
       "sortOrder" : 40,
       "textColor" : "#E8DED8"
     },
     {
-      "color" : "brown-17",
+      "color" : "brown-13",
       "id" : "voice-process",
       "name" : "Voice Process",
       "sortOrder" : 50,
@@ -28,7 +28,7 @@
       "textColor" : "#E8DED8"
     },
     {
-      "color" : "brown-17",
+      "color" : "brown-07",
       "id" : "workflow-commands",
       "name" : "Workflows",
       "sortOrder" : 70,
@@ -42,14 +42,14 @@
       "textColor" : "#E8DED8"
     },
     {
-      "color" : "brown-17",
+      "color" : "brown-07",
       "id" : "bullfinch",
       "name" : "Bullfinch",
       "sortOrder" : 90,
       "textColor" : "#E8DED8"
     },
     {
-      "color" : "brown-17",
+      "color" : "brown-19",
       "id" : "elbridge",
       "name" : "Elbridge",
       "sortOrder" : 100,
@@ -618,7 +618,7 @@
       ],
       "textColor" : "brown-22",
       "title" : "Noise & artifacts",
-      "updatedAt" : "2026-09-29T03:22:27Z",
+      "updatedAt" : "2026-07-06T20:56:20Z",
       "value" : "Avoid digital AI artifacts, moire patterns, pixel jitter, or procedural noise grids. All textures and surfaces must strictly adhere to the physical realism of the requested medium, using organic details, natural lens behaviors, or authentic physical brushstrokes rather than tight, repetitive digital patterns. ",
       "visibility" : "private"
     },
@@ -992,14 +992,14 @@
 
       ],
       "textReplacement" : {
-        "lastSyncedAt" : "2026-09-30T01:01:11Z",
-        "lastSyncedValue" : "I’ll proceed in a new chat. Prepare a handoff file in the project's working directory (or scratchpad). Include: objective, status, relevant context, constraints, decisions, open issues, and next steps. Be dense and factual—zero narrative. Only include details absent from files, git history, or memory. Flag unverified items.\n\nReply with a resume prompt inside a code block (max 3 lines) containing the file path. This prompt must instruct the new session to read the file, verify its claims against the current state, and execute the next step.\n\nIf possible, copy the resume prompt to my clipboard and let me know its ready for me to paste. ",
+        "lastSyncedAt" : "2026-09-25T14:27:20Z",
+        "lastSyncedValue" : "Prepare a handoff so this task can continue in a new chat with no access to this conversation.\n\n1. Write a Markdown handoff file in the project's working directory (or the scratchpad if there isn't one). Name it `HANDOFF-<task-slug>-<YYYY-MM-DD>.md`. Include:\n   - **Objective**: the end goal and what \"done\" looks like.\n   - **Status**: what is finished, what is partly done, and what hasn't started.\n   - **Context**: key file paths, URLs, IDs, commands, and environment details. Point to canonical sources instead of copying them.\n   - **Constraints**: the user's rules and preferences, and anything the user has ruled out.\n   - **Decisions**: each technical choice, with a one-line reason and any alternatives already rejected.\n   - **Open issues**: unresolved bugs, unanswered questions, and assumptions that haven't been checked.\n   - **Next step**: one specific action to take first, followed by the rest of the queue in order.\n2. Be dense and factual, with no narrative. Only include what the new session can't get from files, git history, or memory. Mark anything unverified as unverified.\n3. Reply with the file path and a resume prompt of 3 lines or fewer inside a code block. The prompt should tell the new session to read the file first, check the file's claims against the current state, and then carry out the next step.",
         "shortcut" : "xhandoff",
         "syncEnabled" : true
       },
-      "title" : "Handoff task to a new chat",
-      "updatedAt" : "2026-09-30T01:01:01Z",
-      "value" : "I’ll proceed in a new chat. Prepare a handoff file in the project's working directory (or scratchpad). Include: objective, status, relevant context, constraints, decisions, open issues, and next steps. Be dense and factual—zero narrative. Only include details absent from files, git history, or memory. Flag unverified items.\n\nReply with a resume prompt inside a code block (max 3 lines) containing the file path. This prompt must instruct the new session to read the file, verify its claims against the current state, and execute the next step.\n\nIf possible, copy the resume prompt to my clipboard and let me know its ready for me to paste. ",
+      "title" : "Provide a new chat file",
+      "updatedAt" : "2026-09-25T14:27:11Z",
+      "value" : "Prepare a handoff so this task can continue in a new chat with no access to this conversation.\n\n1. Write a Markdown handoff file in the project's working directory (or the scratchpad if there isn't one). Name it `HANDOFF-<task-slug>-<YYYY-MM-DD>.md`. Include:\n   - **Objective**: the end goal and what \"done\" looks like.\n   - **Status**: what is finished, what is partly done, and what hasn't started.\n   - **Context**: key file paths, URLs, IDs, commands, and environment details. Point to canonical sources instead of copying them.\n   - **Constraints**: the user's rules and preferences, and anything the user has ruled out.\n   - **Decisions**: each technical choice, with a one-line reason and any alternatives already rejected.\n   - **Open issues**: unresolved bugs, unanswered questions, and assumptions that haven't been checked.\n   - **Next step**: one specific action to take first, followed by the rest of the queue in order.\n2. Be dense and factual, with no narrative. Only include what the new session can't get from files, git history, or memory. Mark anything unverified as unverified.\n3. Reply with the file path and a resume prompt of 3 lines or fewer inside a code block. The prompt should tell the new session to read the file first, check the file's claims against the current state, and then carry out the next step.",
       "visibility" : "public"
     }
   ],
@@ -1007,12 +1007,13 @@
     "cardWidth" : 220,
     "defaultFontFamily" : "serif",
     "defaultFontSize" : 28,
-    "defaultTextColor" : "brown-13",
-    "defaultTileColor" : "brown-17",
-    "expandedCardBackgroundColor" : "brown-17",
-    "expandedCardChipColor" : "brown-08",
-    "expandedCardTextColor" : "brown-13",
+    "defaultTextColor" : "brown-22",
+    "defaultTileColor" : "brown-18",
+    "expandedCardBackgroundColor" : "brown-13",
+    "expandedCardChipColor" : "brown-10",
+    "expandedCardTextColor" : "brown-22",
     "expandedChipDisplay" : false,
+    "gridBackgroundColor" : "#2F2D29",
     "managedReplacementShortcuts" : [
       "qsb",
       "xalign",
@@ -1050,9 +1051,9 @@
       "xtune"
     ],
     "paletteSource" : "Robert Brown Fabric Collection",
-    "textReplacementLastSyncAt" : "2026-09-30T01:01:11Z"
+    "textReplacementLastSyncAt" : "2026-09-25T14:27:20Z"
   },
-  "updatedAt" : "2026-09-30T01:01:11Z",
+  "updatedAt" : "2026-09-25T14:27:20Z",
   "variables" : [
     {
       "id" : "var-1783398724430",
