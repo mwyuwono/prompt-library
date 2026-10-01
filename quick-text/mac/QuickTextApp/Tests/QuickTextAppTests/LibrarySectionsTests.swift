@@ -127,4 +127,18 @@ final class LibrarySectionsTests: XCTestCase {
         let reloaded = CorpusStore(defaults: defaults)
         XCTAssertNotNil(reloaded.lastUsed["a"])
     }
+
+    /// Grid card body shows the summary when present, else the value preview.
+    func testCardTextPrefersSummaryOverValuePreview() {
+        var withSummary = phrase("a", value: "The full pasted value")
+        withSummary.summary = "Does the thing"
+        XCTAssertEqual(String(TileView.cardText(for: withSummary, library: [], term: "").characters), "Does the thing")
+
+        let withoutSummary = phrase("b", value: "The full pasted value")
+        XCTAssertEqual(String(TileView.cardText(for: withoutSummary, library: [], term: "").characters), "The full pasted value")
+
+        var blankSummary = phrase("c", value: "The full pasted value")
+        blankSummary.summary = "  "
+        XCTAssertEqual(String(TileView.cardText(for: blankSummary, library: [], term: "").characters), "The full pasted value")
+    }
 }

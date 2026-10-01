@@ -24,10 +24,7 @@ struct TileView: View {
 
     private var showsFooter: Bool { isHovering || isSelected }
 
-    private var title: String {
-        if let summary = phrase.summary, !summary.isEmpty { return summary }
-        return phrase.title
-    }
+    private var title: String { phrase.title }
 
     var body: some View {
         Button(action: onActivate) {
@@ -83,7 +80,7 @@ struct TileView: View {
                 .lineLimit(2)
                 .multilineTextAlignment(.leading)
 
-            Text(Self.previewText(for: phrase, library: libraryVariables, term: searchTerm))
+            Text(Self.cardText(for: phrase, library: libraryVariables, term: searchTerm))
                 .font(.system(size: 13))
                 .lineSpacing(4)
                 .foregroundStyle(Theme.textSecondary)
@@ -130,6 +127,16 @@ struct TileView: View {
         if phrase.favorite { states.append("favorite") }
         if isSelected { states.append("selected") }
         return states.joined(separator: ", ")
+    }
+
+    /// Grid card body: the summary when present (search matches are marked),
+    /// else the first lines of the phrase value.
+    static func cardText(for phrase: Phrase, library: [LibraryVariable], term: String) -> AttributedString {
+        if let summary = phrase.summary,
+           !summary.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            return SearchMark.string(summary, term: term)
+        }
+        return previewText(for: phrase, library: library, term: term)
     }
 
     /// First lines of the phrase value. Variables render as mono chips in the

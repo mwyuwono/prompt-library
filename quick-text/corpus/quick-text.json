@@ -165,7 +165,7 @@
       "createdAt" : "2026-07-02T22:22:56Z",
       "favorite" : false,
       "id" : "elbridge-condo-docs-check",
-      "summary" : "",
+      "summary" : "Grounds answers in the Elbridge governing documents",
       "tags" : [
         "condo-docs",
         "sources"
@@ -175,7 +175,7 @@
         "syncEnabled" : true
       },
       "title" : "Elbridge governing docs",
-      "updatedAt" : "2026-07-09T19:51:34Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Ground this in the Elbridge Master Deed and Declaration of Trust before answering. Include source links for any Drive files used.",
       "visibility" : "private"
     },
@@ -221,12 +221,12 @@
       "createdAt" : "2026-07-02T04:00:00Z",
       "favorite" : false,
       "id" : "personal-address-placeholder",
-      "summary" : "",
+      "summary" : "Fills in the home address",
       "tags" : [
         "address"
       ],
       "title" : "Home address ",
-      "updatedAt" : "2026-07-03T02:13:18Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Matt Weaver-Yuwono\nStanton Yuwono \n20 Mechanic Square, Unit 5\nMarblehead, MA 01945 ",
       "visibility" : "local-only"
     },
@@ -235,6 +235,7 @@
       "createdAt" : "2026-07-02T21:07:02Z",
       "favorite" : false,
       "id" : "prompt-reuse-llmmeta",
+      "summary" : "Drafts a portable meta-prompt for a new goal",
       "tags" : [
         "llmmeta"
       ],
@@ -243,7 +244,7 @@
         "syncEnabled" : true
       },
       "title" : "Provide a meta prompt. Goal:",
-      "updatedAt" : "2026-07-09T19:48:30Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Create a concise, high-performance meta-prompt to achieve my goal in a new chat. Write for an LLM using imperative language, without conversational filler or explanation. Keep it generic and portable, and refer to external materials with indirect labels such as \"the attached image” rather than specific filenames. \n\nGoal: ",
       "visibility" : "private"
     },
@@ -252,6 +253,7 @@
       "createdAt" : "2026-07-02T21:07:02Z",
       "favorite" : false,
       "id" : "prompt-reuse-llmsum",
+      "summary" : "Turns this session into a reusable workflow prompt",
       "tags" : [
         "llmsum"
       ],
@@ -262,7 +264,7 @@
         "syncEnabled" : true
       },
       "title" : "Make workflow reusable",
-      "updatedAt" : "2026-09-23T00:19:18Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "I want to turn this into a reusable workflow that is equally effective when used with different source material. Create an LLM-optimized meta-prompt that captures the effective instructions, constraints, decisions, and workflow patterns from this session so they can be reused in a new chat. Keep it generic and portable. Refer to external materials only with indirect labels such as \"the room image” or \"the artwork image,\" rather than specific filenames. Optimize for faithful replication of the setup.",
       "visibility" : "public"
     },
@@ -271,6 +273,7 @@
       "createdAt" : "2026-07-02T21:07:02Z",
       "favorite" : false,
       "id" : "prompt-reuse-samefiles",
+      "summary" : "States the same attachments carry over",
       "tags" : [
         "samefiles"
       ],
@@ -279,7 +282,7 @@
         "syncEnabled" : true
       },
       "title" : "Same attachments provided",
-      "updatedAt" : "2026-07-09T19:53:31Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Assume the same attachments or reference materials will be provided in the subsequent chat. ",
       "visibility" : "public"
     },
@@ -288,6 +291,7 @@
       "createdAt" : "2026-07-02T21:07:02Z",
       "favorite" : false,
       "id" : "instruction-editing-llmformat",
+      "summary" : "Tightens text for an LLM audience",
       "tags" : [
         "llmformat"
       ],
@@ -298,7 +302,7 @@
         "syncEnabled" : true
       },
       "title" : "Write for an LLM",
-      "updatedAt" : "2026-09-10T16:23:33Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Write for concision and clarity without changing the meaning or effectiveness. Write for an LLM audience, using direct imperative language and removing human-oriented explanation or filler.",
       "visibility" : "public"
     },
@@ -307,7 +311,7 @@
       "createdAt" : "2026-07-02T21:07:02Z",
       "favorite" : false,
       "id" : "instruction-editing-noneg",
-      "summary" : "",
+      "summary" : "Rewrites instructions in positive form",
       "tags" : [
         "noneg"
       ],
@@ -316,7 +320,7 @@
         "syncEnabled" : true
       },
       "title" : "Restate as positive instructions; Avoid negative constructions",
-      "updatedAt" : "2026-07-09T19:55:02Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Rewrite the instructions using positive, action-oriented requirements. Define what to do, what to produce, and how to perform the task using direct affirmative language. Avoid negative constructions",
       "visibility" : "public"
     },
@@ -325,6 +329,7 @@
       "createdAt" : "2026-07-02T21:07:02Z",
       "favorite" : false,
       "id" : "instruction-editing-nofiles",
+      "summary" : "Makes output portable with no filenames",
       "tags" : [
         "nofiles"
       ],
@@ -333,7 +338,7 @@
         "syncEnabled" : true
       },
       "title" : "Provide a portable response. No file names.",
-      "updatedAt" : "2026-07-09T19:55:58Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Make the output self-contained and portable for reuse in a new context. Refer to provided materials indirectly, using labels such as \"the document,\" \"the subject,\" \"the image,\" or \"the reference material.\" Do not include filenames, system paths, chat-specific labels, or environment-specific references.",
       "visibility" : "public"
     },
@@ -342,6 +347,7 @@
       "createdAt" : "2026-07-02T21:07:02Z",
       "favorite" : false,
       "id" : "response-style-nocontext",
+      "summary" : "Demands a self-contained response",
       "tags" : [
         "nocontext"
       ],
@@ -350,7 +356,7 @@
         "syncEnabled" : true
       },
       "title" : "Respond with full context",
-      "updatedAt" : "2026-07-09T19:56:45Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Generate a self-contained response that can be understood without prior conversation context. Include any necessary assumptions or framing directly in the response, and avoid references to earlier messages.",
       "visibility" : "public"
     },
@@ -359,6 +365,7 @@
       "createdAt" : "2026-07-02T21:07:02Z",
       "favorite" : false,
       "id" : "response-style-nointro",
+      "summary" : "Strips commentary and filler",
       "tags" : [
         "nointro"
       ],
@@ -367,7 +374,7 @@
         "syncEnabled" : true
       },
       "title" : "Avoid commentary & filler",
-      "updatedAt" : "2026-07-09T19:56:58Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Provide only the requested output. Omit introductions, acknowledgments, setup commentary, and closing remarks.",
       "visibility" : "public"
     },
@@ -376,7 +383,7 @@
       "createdAt" : "2026-07-02T21:07:02Z",
       "favorite" : false,
       "id" : "response-style-ptext",
-      "summary" : "",
+      "summary" : "Forces prose-only formatting",
       "tags" : [
         "ptext"
       ],
@@ -385,7 +392,7 @@
         "syncEnabled" : true
       },
       "title" : "Prose formatting only. No lists.",
-      "updatedAt" : "2026-07-09T22:32:30Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Respond in prose only, with no lists, tables, headers, or bullet points. Write naturally for spoken readability.",
       "visibility" : "public"
     },
@@ -406,6 +413,7 @@
       "createdAt" : "2026-07-02T21:07:02Z",
       "favorite" : false,
       "id" : "workflow-commands-llmapprove",
+      "summary" : "Approves and executes the proposed action",
       "tags" : [
         "llmapprove"
       ],
@@ -414,7 +422,7 @@
         "syncEnabled" : true
       },
       "title" : "Approve proposed actions",
-      "updatedAt" : "2026-07-09T19:58:11Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "I approve the proposed action. Execute the prompt.",
       "visibility" : "public"
     },
@@ -423,6 +431,7 @@
       "createdAt" : "2026-07-02T21:07:02Z",
       "favorite" : false,
       "id" : "workflow-commands-llmlearn",
+      "summary" : "Extracts durable learnings from the session",
       "tags" : [
         "llmlearn"
       ],
@@ -433,7 +442,7 @@
         "syncEnabled" : true
       },
       "title" : "Capture durable learnings",
-      "updatedAt" : "2026-09-17T12:34:36Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Review this session for durable learnings.\n\nCapture:\n\nReusable rules, constraints, decisions, conventions, and preferences.\nFailure modes, debugging insights, and avoidable complexity.\nImplicit best practices and proactive default behaviors.\nPersistent project knowledge, workflow improvements, documentation, tests, runbooks, and backlog items.\n\nExclude temporary, speculative, redundant, or low-value details.\n\nRoute each learning to the right destination. Use project instructions only for durable guidance that should shape future agent behavior.\n\nPropose minimal exact changes: add, revise, consolidate, or remove. Avoid duplication, overfitting, and bloat.",
       "visibility" : "public"
     },
@@ -442,6 +451,7 @@
       "createdAt" : "2026-07-02T21:07:02Z",
       "favorite" : false,
       "id" : "workflow-commands-bfwf",
+      "summary" : "Files material to the Bullfinch Watch Folder",
       "tags" : [
         "bfwf"
       ],
@@ -450,7 +460,7 @@
         "syncEnabled" : true
       },
       "title" : "Bullfinch Watch Folder",
-      "updatedAt" : "2026-07-02T22:14:10Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Add this material to the Bullfinch Watch Folder in Google Drive. Include a concise note explaining the relevant context, source, and intended follow-up.",
       "visibility" : "private"
     },
@@ -459,6 +469,7 @@
       "createdAt" : "2026-07-02T21:07:02Z",
       "favorite" : true,
       "id" : "workflow-commands-compush",
+      "summary" : "Commits, merges, and pushes outstanding work",
       "tags" : [
         "compush"
       ],
@@ -469,7 +480,7 @@
         "syncEnabled" : true
       },
       "title" : "Github: Commit, Push, Merge",
-      "updatedAt" : "2026-08-31T11:54:25Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Commit all outstanding changes. Validate, merge, and delete any existing non-main branches (local + remote), then push main. If no secondary branches exist, skip straight to pushing main.",
       "visibility" : "public"
     },
@@ -478,6 +489,7 @@
       "createdAt" : "2026-07-02T21:07:02Z",
       "favorite" : false,
       "id" : "image-quality-llmnoise",
+      "summary" : "Suppresses AI artifacts for physical realism",
       "tags" : [
         "llmnoise"
       ],
@@ -486,7 +498,7 @@
         "syncEnabled" : true
       },
       "title" : "Minimize AI artifacts",
-      "updatedAt" : "2026-07-02T22:13:01Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Avoid digital AI artifacts, moire patterns, pixel jitter, procedural noise grids, and repetitive synthetic textures. Ensure all textures, surfaces, and visual details match the physical realism of the requested medium, using organic variation, natural lens behavior, or authentic material-specific marks.",
       "visibility" : "private"
     },
@@ -495,7 +507,7 @@
       "createdAt" : "2026-07-02T21:52:52Z",
       "favorite" : true,
       "id" : "prompt-reuse-subjectagnostic-copy-1783029172",
-      "summary" : "",
+      "summary" : "Generalizes this chat into a reusable prompt",
       "tags" : [
         "subjectagnostic"
       ],
@@ -504,7 +516,7 @@
         "syncEnabled" : true
       },
       "title" : "Turn a chat into a reusable prompt",
-      "updatedAt" : "2026-07-03T01:25:07Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Convert this chat into a durable, reusable meta-prompt.\n\nExtract Core Mechanism: Retain the underlying task, transformations, style, tone, constraints, output format, and workflow that made the original prompt effective.\n\nAbstract Specifics: Replace all case-specific details (subjects, places, persons, objects, mediums) with clear variables and static anchors.\n\nPrevent Overfitting: Ensure the generalized prompt functions effectively when applied to entirely different subjects or use cases.\n\nProvide the meta prompt. ",
       "visibility" : "private"
     },
@@ -531,7 +543,7 @@
       "createdAt" : "2026-07-02T22:11:35Z",
       "favorite" : false,
       "id" : "phrase-1783030203",
-      "summary" : "",
+      "summary" : "Opens Bullfinch with a quick start",
       "tags" : [
 
       ],
@@ -543,7 +555,7 @@
         "syncEnabled" : true
       },
       "title" : "Start Bullfinch",
-      "updatedAt" : "2026-09-03T16:32:22Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Quick start Bullfinch.",
       "visibility" : "private"
     },
@@ -590,7 +602,7 @@
       "favorite" : false,
       "id" : "phrase-1783371056",
       "image" : "",
-      "summary" : "",
+      "summary" : "Asks clarifying questions before proceeding",
       "tags" : [
 
       ],
@@ -602,7 +614,7 @@
         "syncEnabled" : true
       },
       "title" : "Interview before proceeding",
-      "updatedAt" : "2026-09-17T13:09:14Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Before you proceed, ask any questions needed for clarification. If you don’t have questions, proceed. ",
       "visibility" : "public"
     },
@@ -612,13 +624,13 @@
       "createdAt" : "2026-07-06T20:56:20Z",
       "favorite" : false,
       "id" : "phrase-1783371344",
-      "summary" : "",
+      "summary" : "Suppresses digital noise and artifacts",
       "tags" : [
 
       ],
       "textColor" : "brown-22",
       "title" : "Noise & artifacts",
-      "updatedAt" : "2026-09-29T03:22:27Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Avoid digital AI artifacts, moire patterns, pixel jitter, or procedural noise grids. All textures and surfaces must strictly adhere to the physical realism of the requested medium, using organic details, natural lens behaviors, or authentic physical brushstrokes rather than tight, repetitive digital patterns. ",
       "visibility" : "private"
     },
@@ -629,13 +641,13 @@
       "favorite" : false,
       "id" : "phrase-1783521575",
       "image" : "",
-      "summary" : "",
+      "summary" : "Cuts chat filler to save tokens",
       "tags" : [
 
       ],
       "textColor" : "brown-22",
       "title" : "Save tokens",
-      "updatedAt" : "2026-07-08T14:39:57Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Spend tokens on analysis, implementation, and verification rather than chat. Omit conversational filler, praise, apologies, and restatements of my request. Do not narrate routine steps.",
       "visibility" : "public"
     },
@@ -645,12 +657,12 @@
       "favorite" : false,
       "id" : "phrase-2A8A519F-258E-4ED6-B025-4BBE67B78465",
       "image" : "",
-      "summary" : "",
+      "summary" : "Changes the subject's body type",
       "tags" : [
 
       ],
       "title" : "Change body type",
-      "updatedAt" : "2026-07-09T22:33:48Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Change the subject’s body type to {{@Swimmer's build}}.",
       "visibility" : "private"
     },
@@ -659,7 +671,7 @@
       "createdAt" : "2026-07-11T14:35:33Z",
       "favorite" : false,
       "id" : "phrase-98CB45C4-D08F-48E4-9050-BAC03ACC8387",
-      "summary" : "",
+      "summary" : "Recommends the cheapest capable LLM",
       "tags" : [
 
       ],
@@ -668,7 +680,7 @@
         "syncEnabled" : false
       },
       "title" : "Request optimal model guidance",
-      "updatedAt" : "2026-07-11T14:35:33Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Recommend the most lightweight, cost-effective LLM that meets the task's reasoning and context requirements. Optimize for minimum token usage while maintaining high-quality results.",
       "visibility" : "public"
     },
@@ -677,7 +689,7 @@
       "createdAt" : "2026-07-14T17:56:00Z",
       "favorite" : false,
       "id" : "phrase-9B782C0F-EBEB-4FAD-88C3-2FF9DCCCCBE9",
-      "summary" : "",
+      "summary" : "Breaks a behavior into tunable labeled parts",
       "tags" : [
 
       ],
@@ -686,7 +698,7 @@
         "syncEnabled" : true
       },
       "title" : "Help me fine-tune a behavior. ",
-      "updatedAt" : "2026-07-14T17:56:00Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "I want to adjust the behavior of this element: [Describe the element\/interaction or paste the code here]. \n\nPlease analyze its current behavior and break it down into labeled, adjustable components (for example: [A] Trigger, [B] Keyframes\/States, [C] Timing\/Duration, [D] Easing\/Curve, [E] Visual Properties). \n\nOnce you provide this breakdown, I will give you feedback using those labels so I can easily say \"Change A to...\" or \"Adjust C to...\". ",
       "visibility" : "public"
     },
@@ -695,7 +707,7 @@
       "createdAt" : "2026-07-15T20:33:27Z",
       "favorite" : false,
       "id" : "phrase-901BD7E9-D061-4219-B916-46FA7C774C6C",
-      "summary" : "",
+      "summary" : "Labels choices with 3-digit codes",
       "tags" : [
 
       ],
@@ -706,7 +718,7 @@
         "syncEnabled" : true
       },
       "title" : "Label everything for easy reference",
-      "updatedAt" : "2026-09-11T21:52:44Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "When asking for a decision or approval, assign a unique 3-digit code to each choice so I can respond using only the code.\nTo prevent typos, choices must differ by at least two digits and avoid simple sequential numbers.",
       "visibility" : "public"
     },
@@ -715,7 +727,7 @@
       "createdAt" : "2026-07-16T18:00:16Z",
       "favorite" : false,
       "id" : "phrase-74887694-BA5A-4409-9D93-A2A6E29C277B",
-      "summary" : "",
+      "summary" : "Converts a source into audio",
       "tags" : [
 
       ],
@@ -724,7 +736,7 @@
         "syncEnabled" : true
       },
       "title" : "Audio content: Invoke skill to create",
-      "updatedAt" : "2026-07-16T18:00:16Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Use $listen-to-content on the source below.\n\nI authorize ElevenLabs to process this source for speech synthesis.\n\nSOURCE:\n",
       "visibility" : "public"
     },
@@ -733,7 +745,7 @@
       "createdAt" : "2026-07-24T13:42:34Z",
       "favorite" : false,
       "id" : "phrase-E97D29EC-7EA4-41AC-A282-6D3D3A0D7195",
-      "summary" : "",
+      "summary" : "Edits the uploaded image in its own style",
       "tags" : [
 
       ],
@@ -742,7 +754,7 @@
         "syncEnabled" : true
       },
       "title" : "Use uploaded image for style",
-      "updatedAt" : "2026-07-24T13:42:34Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "We will edit the uploaded image, maintaining its current style. Tell me when you are ready for the editing instructions. ",
       "visibility" : "public"
     },
@@ -751,7 +763,7 @@
       "createdAt" : "2026-07-24T14:06:42Z",
       "favorite" : false,
       "id" : "phrase-EBD760C3-622A-4774-8F75-4D5803FD0D34",
-      "summary" : "",
+      "summary" : "Reuses only the subject and composition",
       "tags" : [
 
       ],
@@ -760,7 +772,7 @@
         "syncEnabled" : true
       },
       "title" : "Use only subject & composition ",
-      "updatedAt" : "2026-07-24T14:06:42Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Use this subject and composition. ",
       "visibility" : "public"
     },
@@ -770,7 +782,7 @@
       "favorite" : false,
       "id" : "phrase-7D696D8C-7EB0-4FDC-ACDE-DFB604908D8F",
       "image" : "",
-      "summary" : "",
+      "summary" : "Distills a reference image's style into a prompt",
       "tags" : [
 
       ],
@@ -781,7 +793,7 @@
         "syncEnabled" : true
       },
       "title" : "Analyze style alignment & refine",
-      "updatedAt" : "2026-07-29T02:32:54Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Evaluate how well the generated image matches the aesthetic and visual style of the reference image. Based on that evaluation, write a precise system-level prompt (meta prompt) that can be pasted into a fresh chat to recreate that exact reference style more accurately.",
       "visibility" : "public"
     },
@@ -790,7 +802,7 @@
       "createdAt" : "2026-08-14T17:40:36Z",
       "favorite" : false,
       "id" : "phrase-2E7918E5-DED5-407C-BE82-E15D765EBFDD",
-      "summary" : "",
+      "summary" : "Lists the artwork's dominant hex colors",
       "tags" : [
 
       ],
@@ -801,7 +813,7 @@
         "syncEnabled" : true
       },
       "title" : "Extract a color palette",
-      "updatedAt" : "2026-08-14T17:41:32Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Provide the hex codes of the most dominant colors in this artwork with no intro or commentary.",
       "visibility" : "private"
     },
@@ -810,7 +822,7 @@
       "createdAt" : "2026-08-14T17:51:40Z",
       "favorite" : false,
       "id" : "phrase-89BAE550-6738-427F-984A-08FDB0CAC5A6",
-      "summary" : "",
+      "summary" : "Darkens each local color without overlays",
       "tags" : [
 
       ],
@@ -821,7 +833,7 @@
         "syncEnabled" : true
       },
       "title" : "Color Value Stepdown",
-      "updatedAt" : "2026-08-14T17:51:40Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Using the attached image as a strict guide for composition, pattern, and texture, the directive is to deepen the overall luminance of the image. This change must be achieved strictly by shifting the value of each individual local color downward, rather than by applying a global dark overlay, a vignette, or a translucent veil. The specific color and value instructions include a local value remapping, where each distinct color swatch is shifted down by one to two value stops, or twenty to thirty percent luminance; this is to ensure that the lightest highlights become midtones and the midtones shift toward deep earth tones. Critically, there must be a zero overlay effect, meaning no flat dark tint, atmospheric haze, vignetting, or semi-transparent layer is to be applied over the top. The output should be a source-faithful version where every individual pigment is fundamentally darker.",
       "visibility" : "private"
     },
@@ -850,7 +862,7 @@
       "createdAt" : "2026-09-10T16:27:24Z",
       "favorite" : false,
       "id" : "phrase-5508D3CB-7C0A-4424-A9E5-95452C1CFF1E",
-      "summary" : "",
+      "summary" : "Wraps the entire response in one code block",
       "tags" : [
 
       ],
@@ -861,7 +873,7 @@
         "syncEnabled" : true
       },
       "title" : "Provide results in Code Block",
-      "updatedAt" : "2026-09-10T16:27:24Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Your ENTIRE response—including all code, inline comments, explanations, setup instructions, and usage examples—MUST be contained within a SINGLE markdown code block. Do NOT break the response into separate sections, distinct code blocks, or conversational text outside the block. \nPlace all narrative context, instructions, or documentation as code comments (e.g., `#` or `\/\/`) inside the single code block so the entire output can be copied and pasted at once without syntax errors.\n",
       "visibility" : "private"
     },
@@ -932,11 +944,12 @@
       "createdAt" : "2026-09-21T22:35:18Z",
       "favorite" : false,
       "id" : "voice-process-custom-F5BCFD13-61C5-4DF6-8126-348CB1C4A749",
+      "summary" : "Rewrites dictation as a clear text message",
       "tags" : [
 
       ],
       "title" : "General Synthesis",
-      "updatedAt" : "2026-09-21T22:35:29Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Task: Transform the following raw dictation into a clear, natural, and well-structured text message.\n\nCore Objective: Reorganize the text completely to maximize logical flow and clarity. Relocate, merge, split, or rewrite sentences across paragraphs whenever it improves the structure. Do not feel constrained by the original sentence order.\n\nFormatting Rules:\nOutput plain text only. Do not use bullet points, special characters, or markdown symbols that could cause copy-paste issues.\n\nUse standard paragraph breaks (blank lines) between sections.\nIf headings are necessary, place each heading on its own line, followed immediately by a blank line before the section text. Keep headings brief and natural for SMS.\n\nEditorial & Style Standards:\nTone & Voice: Preserve my natural voice, style, and level of concision while sounding direct, confident, and polished. Write as if I had composed the ideal version myself.\n\nGrammar & Usage: Adhere to rigorous standard American English. Avoid decorative adjectives, litotes, and negative constructions. Use em dashes sparingly.\n\nSentence Structure: Vary sentence structures to reduce repetitive \"I\" openings without dropping key details. Ensure each paragraph advances a single, clear idea.\n\nDirect Editing: Execute all structural changes cleanly without adding meta-commentary, notes, or explanations.",
       "visibility" : "private"
     },
@@ -946,7 +959,7 @@
       "favorite" : true,
       "id" : "phrase-05534FFE-6401-4A0A-897F-C7AF546225EF",
       "image" : "",
-      "summary" : "",
+      "summary" : "Proofreads for clarity, flow, and structure",
       "tags" : [
 
       ],
@@ -957,7 +970,7 @@
         "syncEnabled" : true
       },
       "title" : "Proof text",
-      "updatedAt" : "2026-09-22T16:18:49Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Revise my writing for clarity, flow, and structure.\n\nReorganize freely: move, merge, split, or reorder sentences and clauses across paragraphs whenever it strengthens logical buildup. Original order is not sacred. Rewrite sentences as needed to fit their new position.\n\nPreserve my tone, style, and concision — write as if I'd produced the improved version myself.\n\nStandards: concise, direct, confident. Chicago Manual of Style, American English. No litotes, ornamental adjectives, or excessive em dashes. Reduce repetitive \"I\" through restructuring, not deletion. Each paragraph advances one idea. Make changes without comment.",
       "visibility" : "public"
     },
@@ -966,7 +979,7 @@
       "createdAt" : "2026-09-22T16:30:48Z",
       "favorite" : true,
       "id" : "phrase-2A91A318-3EB6-4B15-8FDD-308EBCA1C7BB",
-      "summary" : "",
+      "summary" : "Reveals the file in Finder",
       "tags" : [
 
       ],
@@ -977,7 +990,7 @@
         "syncEnabled" : true
       },
       "title" : "Show in finder",
-      "updatedAt" : "2026-09-22T16:30:48Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "Reveal the relevant file in finder. ",
       "visibility" : "public"
     },
@@ -987,7 +1000,7 @@
       "favorite" : true,
       "id" : "phrase-96019A1B-7ADD-4D4A-AB3B-3748E66216F2",
       "image" : "",
-      "summary" : "",
+      "summary" : "Prepares a handoff for a new chat",
       "tags" : [
 
       ],
@@ -998,7 +1011,7 @@
         "syncEnabled" : true
       },
       "title" : "Handoff task to a new chat",
-      "updatedAt" : "2026-09-30T16:46:45Z",
+      "updatedAt" : "2026-10-01T02:10:00Z",
       "value" : "I’ll proceed in a new chat. Prepare a handoff file in the project's working directory (or scratchpad). Include: objective, status, relevant context, constraints, decisions, open issues, and next steps. Be dense and factual—zero narrative. Only include details absent from files, git history, or memory. Flag unverified items.\n\nReply with a resume prompt inside a code block (max 3 lines) containing the file path. This prompt must instruct the new session to read the file, verify its claims against the current state, and execute the next step.\n\nIf possible, copy the resume prompt to my clipboard and let me know its ready for me to paste. ",
       "visibility" : "public"
     }
@@ -1052,7 +1065,7 @@
     "paletteSource" : "Robert Brown Fabric Collection",
     "textReplacementLastSyncAt" : "2026-09-30T01:01:11Z"
   },
-  "updatedAt" : "2026-09-30T16:46:45Z",
+  "updatedAt" : "2026-10-01T02:10:00Z",
   "variables" : [
     {
       "id" : "var-1783398724430",
