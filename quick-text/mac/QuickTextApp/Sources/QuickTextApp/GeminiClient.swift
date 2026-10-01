@@ -192,7 +192,9 @@ struct GeminiClient {
 
         var output = intValue(from: target, keys: [
             "total_output_tokens", "output_tokens", "completion_tokens",
-            "candidatesTokenCount", "candidates_token_count", "outputTokens", "outputTokenCount"
+            "candidatesTokenCount", "candidates_token_count",
+            "responseTokenCount", "response_token_count", "responseTokens",
+            "outputTokens", "outputTokenCount"
         ]) ?? 0
 
         let thought = intValue(from: target, keys: [

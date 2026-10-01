@@ -38,6 +38,10 @@ struct ContentView: View {
     @State private var showingDictate = false
     /// Owned here (not by DictateView) so takes and results survive leaving the page.
     @StateObject private var dictateSession = DictateSession()
+    /// Sidebar-initiated sync uses the same compute → preview → apply flow as
+    /// Settings' Sync Now, without opening the Settings panel.
+    @State private var pendingSidebarSyncPlan: TextReplacementSync.SyncPlan?
+    @State private var isSyncingShortcuts = false
     @State private var contentWidth: CGFloat = 0
     @State private var windowSize = CGSize(width: 1280, height: 900)
     @State private var keyMonitor: Any?
@@ -88,7 +92,7 @@ struct ContentView: View {
             }
             ZStack {
                 if showingDictate {
-                    DictateView(session: dictateSession, sidebarVisible: $sidebarVisible, onClose: closeDictate)
+                    DictateView(session: dictateSession, sidebarVisible: $sidebarVisible, onClose: { closeDictate() })
                         .environmentObject(store)
                         .transition(dictateTransition)
                 } else {
@@ -146,6 +150,26 @@ struct ContentView: View {
             PhraseEditor(phrase: phrase)
                 .environmentObject(store)
         }
+        .sheet(isPresented: Binding(get: { pendingSidebarSyncPlan != nil }, set: { if !$0 { pendingSidebarSyncPlan = nil } })) {
+            if let plan = pendingSidebarSyncPlan {
+                TextReplacementSyncPreviewSheet(
+                    plan: plan,
+                    onCancel: { pendingSidebarSyncPlan = nil },
+                    onConfirm: {
+                        // Same off-main-thread contract as Settings' Sync Now:
+                        // the KeyboardServices reply needs the main queue free.
+                        isSyncingShortcuts = true
+                        pendingSidebarSyncPlan = nil
+                        store.applyTextReplacementSync(plan) { report in
+                            isSyncingShortcuts = false
+                            if let reason = report.failureReason {
+                                store.errorMessage = reason
+                            }
+                        }
+                    }
+                )
+            }
+        }
         .overlay {
             ExpandedOverlayView(store: store, onDelete: { deleteCandidate = $0 })
         }
@@ -185,10 +209,10 @@ struct ContentView: View {
         withAnimation(reduceMotion ? Theme.Motion.pageReduced : Theme.Motion.pageOpen) { showingDictate = true }
     }
 
-    private func closeDictate() {
+    private func closeDictate(focusSearchAfterClose: Bool = true) {
         withAnimation(reduceMotion ? Theme.Motion.pageReduced : Theme.Motion.pageClose) { showingDictate = false }
         // Focus returns to the library.
-        focusSearchSoon()
+        if focusSearchAfterClose { focusSearchSoon() }
     }
 
     /// Window-level confirmation for every copy path (tile, keyboard, card).
@@ -345,6 +369,10 @@ struct ContentView: View {
                 SidebarRow(title: "Settings", systemImage: "gearshape", isSelected: showingSettings, showsFocus: false) {
                     openSettingsPanel()
                 }
+                SidebarRow(title: isSyncingShortcuts ? "Syncing…" : "Sync Shortcuts", systemImage: "arrow.triangle.2.circlepath", isSelected: false, showsFocus: false) {
+                    syncShortcutsFromSidebar()
+                }
+                .help("Sync text replacement shortcuts (same as Settings > Text Replacements > Sync Now)")
             }
             .padding(.top, 14)
             .overlay(alignment: .top) {
@@ -382,6 +410,14 @@ struct ContentView: View {
         store.selectTab(id)
         focusedModule = .sidebar
         searchFocused = false
+        if showingDictate {
+            // Leaving while recording stops the take first, so audio is never
+            // lost silently. Session state (takes, result) is owned by
+            // `dictateSession` above, so it survives the page closing and is
+            // restored intact when Dictate reopens.
+            if dictateSession.isRecording { dictateSession.stopRecording() }
+            closeDictate(focusSearchAfterClose: false)
+        }
     }
 
     // MARK: - Header
@@ -808,6 +844,14 @@ struct ContentView: View {
         showingKeyboardShortcuts = false
         showingGlossary = false
         showingSettings = true
+    }
+
+    /// Sidebar shortcut to the existing text-replacement sync: computes the
+    /// same plan as Settings' Sync Now and shows the same preview sheet, so a
+    /// write never lands without review.
+    private func syncShortcutsFromSidebar() {
+        guard !isSyncingShortcuts, pendingSidebarSyncPlan == nil else { return }
+        pendingSidebarSyncPlan = store.computeTextReplacementSyncPlan()
     }
 
     private func openVariablesPanel() {

@@ -206,26 +206,33 @@ enum GeminiLiveClient {
     static func parseServerMessage(_ data: Data) -> LiveServerUpdate? {
         guard let json = try? JSONSerialization.jsonObject(with: data),
               let dict = json as? [String: Any] else { return nil }
-        guard let content = dict["serverContent"] as? [String: Any] else { return nil }
         var update = LiveServerUpdate()
-        if let input = content["inputTranscription"] as? [String: Any],
-           let text = input["text"] as? String, !text.isEmpty {
-            update.transcriptChunk = text
-            update.isFinal = true
-        } else if let interim = content["interimInputTranscription"] as? [String: Any],
-                  let text = interim["text"] as? String, !text.isEmpty {
-            update.transcriptChunk = text
-        } else if let legacy = content["transcription"] as? [String: Any],
-                  let text = legacy["text"] as? String, !text.isEmpty {
-            update.transcriptChunk = text
+        // A usage-only frame carries no serverContent; transcribe frames do.
+        let content = dict["serverContent"] as? [String: Any]
+        if let content {
+            if let input = content["inputTranscription"] as? [String: Any],
+               let text = input["text"] as? String, !text.isEmpty {
+                update.transcriptChunk = text
+                update.isFinal = true
+            } else if let interim = content["interimInputTranscription"] as? [String: Any],
+                      let text = interim["text"] as? String, !text.isEmpty {
+                update.transcriptChunk = text
+            } else if let legacy = content["transcription"] as? [String: Any],
+                      let text = legacy["text"] as? String, !text.isEmpty {
+                update.transcriptChunk = text
+            }
+            // `outputTranscription` / model turns are ignored on purpose: this
+            // flow has no model speech, and model text must never pollute the take.
+            if (content["turnComplete"] as? Bool) == true
+                || (content["generationComplete"] as? Bool) == true {
+                update.isFinal = true
+            }
         }
-        // `outputTranscription` / model turns are ignored on purpose: this
-        // flow has no model speech, and model text must never pollute the take.
-        if (content["turnComplete"] as? Bool) == true
-            || (content["generationComplete"] as? Bool) == true {
-            update.isFinal = true
-        }
-        if let usageDict = content["usageMetadata"] as? [String: Any] {
+        // Per https://ai.google.dev/api/live, `usageMetadata` is a top-level
+        // sibling of `serverContent` on BidiGenerateContentServerMessage, not a
+        // child of it. Accept the nested shape too for tolerance.
+        if let usageDict = (dict["usageMetadata"] as? [String: Any])
+            ?? (content?["usageMetadata"] as? [String: Any]) {
             let usage = GeminiClient.extractTokenUsage(from: usageDict)
             if usage.totalTokens > 0 { update.usage = usage }
         }

@@ -30,18 +30,25 @@ public struct TokenUsage: Codable, Equatable, Hashable {
 
     // MARK: - Cost Calculation
     //
-    // gemini-3.8-flash (used for both transcription takes and synthesis/processing):
+    // gemini-3.8-flash (After-take / REST-fallback transcription and all
+    // synthesis/processing):
     //   Introductory pricing (through Dec 31, 2026):
     //     Input:   $0.75 / 1,000,000 tokens
     //     Output:  $3.75 / 1,000,000 tokens
     //   Standard pricing (effective Jan 1, 2027):
     //     Input:   $1.50 / 1,000,000 tokens
     //     Output:  $7.50 / 1,000,000 tokens
-    //   Source: https://ai.google.dev/gemini-api/docs/latest-model
+    // gemini-3.5-transcribe-live (Real-time streaming transcription):
+    //     Input:   $3.50 / 1,000,000 audio tokens (or ~$0.005/min)
+    //     Output:  $21.00 / 1,000,000 text tokens (or ~$0.004/min),
+    //              thinking tokens included at the output rate.
+    //   Blended estimate: ~$0.009/min. No introductory/standard split published.
+    //   Source: https://ai.google.dev/gemini-api/docs/pricing
     //
     public enum ModelPricing: Equatable {
-        case transcribe   // gemini-3.8-flash (introductory through 2026, standard from 2027)
+        case transcribe   // After-take / REST fallback via gemini-3.8-flash (same rates as .flash)
         case flash        // gemini-3.8-flash (introductory through 2026, standard from 2027)
+        case liveTranscribe // gemini-3.5-transcribe-live ($3.50 / $21.00 per 1M, no date split)
         case introductory // gemini-3.8-flash introductory ($0.75 / $3.75 per 1M)
         case standard     // gemini-3.8-flash standard ($1.50 / $7.50 per 1M)
 
@@ -68,6 +75,8 @@ public struct TokenUsage: Codable, Equatable, Hashable {
                 return 0.75 / 1_000_000.0
             case .standard:
                 return 1.50 / 1_000_000.0
+            case .liveTranscribe:
+                return 3.50 / 1_000_000.0
             case .transcribe, .flash:
                 return date >= Self.standardPricingEffectiveDate ? (1.50 / 1_000_000.0) : (0.75 / 1_000_000.0)
             }
@@ -83,6 +92,8 @@ public struct TokenUsage: Codable, Equatable, Hashable {
                 return 3.75 / 1_000_000.0
             case .standard:
                 return 7.50 / 1_000_000.0
+            case .liveTranscribe:
+                return 21.00 / 1_000_000.0
             case .transcribe, .flash:
                 return date >= Self.standardPricingEffectiveDate ? (7.50 / 1_000_000.0) : (3.75 / 1_000_000.0)
             }

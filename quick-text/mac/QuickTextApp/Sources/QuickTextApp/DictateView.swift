@@ -887,9 +887,16 @@ struct AutoHeightTextView: NSViewRepresentable {
         let attributes: [NSAttributedString.Key: Any] = [
             .font: font, .foregroundColor: color, .paragraphStyle: style
         ]
-        if view.font != font { view.font = font }
-        if view.string != text { view.string = text }
+        var contentChanged = false
+        if view.font != font { view.font = font; contentChanged = true }
+        if view.string != text { view.string = text; contentChanged = true }
         view.textStorage?.setAttributes(attributes, range: NSRange(location: 0, length: view.string.utf16.count))
+        if contentChanged {
+            // Programmatic updates (transcription arriving, live interim text)
+            // don't go through the delegate, so re-measure: without this the
+            // card keeps its stale height and the text paints over the next card.
+            view.invalidateIntrinsicContentSize()
+        }
         view.typingAttributes = attributes
         view.insertionPointColor = caretColor.nsColor(env)
         view.selectedTextAttributes = [.backgroundColor: selectionColor.nsColor(env)]

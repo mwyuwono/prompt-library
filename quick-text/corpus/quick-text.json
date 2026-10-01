@@ -998,7 +998,7 @@
         "syncEnabled" : true
       },
       "title" : "Handoff task to a new chat",
-      "updatedAt" : "2026-09-30T01:01:01Z",
+      "updatedAt" : "2026-09-30T16:46:45Z",
       "value" : "I’ll proceed in a new chat. Prepare a handoff file in the project's working directory (or scratchpad). Include: objective, status, relevant context, constraints, decisions, open issues, and next steps. Be dense and factual—zero narrative. Only include details absent from files, git history, or memory. Flag unverified items.\n\nReply with a resume prompt inside a code block (max 3 lines) containing the file path. This prompt must instruct the new session to read the file, verify its claims against the current state, and execute the next step.\n\nIf possible, copy the resume prompt to my clipboard and let me know its ready for me to paste. ",
       "visibility" : "public"
     }
@@ -1052,7 +1052,7 @@
     "paletteSource" : "Robert Brown Fabric Collection",
     "textReplacementLastSyncAt" : "2026-09-30T01:01:11Z"
   },
-  "updatedAt" : "2026-09-30T01:01:11Z",
+  "updatedAt" : "2026-09-30T16:46:45Z",
   "variables" : [
     {
       "id" : "var-1783398724430",

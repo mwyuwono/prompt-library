@@ -18,6 +18,7 @@ enum TranscriptStore {
         var result: String
         var tokenUsage: TokenUsage?
         var transcriptionUsage: TokenUsage?
+        var liveTranscriptionUsage: TokenUsage? = nil
         var synthesisUsage: TokenUsage?
         var takeUsages: [TokenUsage]?
         var processingTurns: [DictateProcessingTurn]?
@@ -30,6 +31,7 @@ enum TranscriptStore {
         result: String,
         tokenUsage: TokenUsage? = nil,
         transcriptionUsage: TokenUsage? = nil,
+        liveTranscriptionUsage: TokenUsage? = nil,
         synthesisUsage: TokenUsage? = nil,
         takeUsages: [TokenUsage]? = nil,
         processingTurns: [DictateProcessingTurn]? = nil,
@@ -42,13 +44,20 @@ enum TranscriptStore {
         // A processing/refinement chain can finish more than once in a second.
         // Keep every billable turn rather than overwriting a same-second record.
         let url = dir.appendingPathComponent("dictate-\(UUID().uuidString).json")
-        let cost = estimatedCost ?? tokenUsage?.estimatedCost
+        let cost = estimatedCost ?? Self.splitEstimatedCost(
+            transcriptionUsage: transcriptionUsage,
+            synthesisUsage: synthesisUsage,
+            processingTurns: processingTurns,
+            tokenUsage: tokenUsage,
+            at: date
+        )
         let record = SessionRecord(
             savedAt: date,
             takes: takes,
             result: result,
             tokenUsage: tokenUsage,
             transcriptionUsage: transcriptionUsage,
+            liveTranscriptionUsage: liveTranscriptionUsage,
             synthesisUsage: synthesisUsage,
             takeUsages: takeUsages,
             processingTurns: processingTurns,
@@ -59,6 +68,31 @@ enum TranscriptStore {
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
         try encoder.encode(record).write(to: url, options: .atomic)
         return url
+    }
+
+    /// Fallback cost when the caller omits a precomputed total. Transcription is
+    /// priced at the model selected in Settings (`TranscriptionMode.stored`) so
+    /// saved estimates follow the selection; synthesis uses gemini-3.8-flash
+    /// rates, preferring frozen per-turn costs when the full turn history is
+    /// present. With only a combined total and no split, the whole total is
+    /// priced at Flash rates.
+    static func splitEstimatedCost(
+        transcriptionUsage: TokenUsage?,
+        synthesisUsage: TokenUsage?,
+        processingTurns: [DictateProcessingTurn]?,
+        tokenUsage: TokenUsage?,
+        at date: Date
+    ) -> Double? {
+        if let transcription = transcriptionUsage {
+            var cost = transcription.estimatedCost(pricing: TranscriptionMode.stored.pricing, at: date)
+            if let turns = processingTurns, !turns.isEmpty {
+                cost += turns.reduce(0) { $0 + $1.estimatedCost }
+            } else if let synthesis = synthesisUsage {
+                cost += synthesis.estimatedCost(pricing: .flash, at: date)
+            }
+            return cost
+        }
+        return tokenUsage?.estimatedCost(pricing: .flash, at: date)
     }
 
     /// Deletes session files whose modification date is older than the cutoff.

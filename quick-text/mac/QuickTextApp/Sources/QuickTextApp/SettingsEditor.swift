@@ -183,7 +183,7 @@ struct SettingsEditor: View {
                 .pickerStyle(.segmented)
                 .frame(maxWidth: 320)
                 .labelsHidden()
-                Text("After take sends the whole recording at once. Real-time streams audio and shows words while you speak; if the stream drops, the take is transcribed after recording instead.")
+                Text("After take sends the whole recording at once. Real-time streams audio and shows words while you speak; if the stream drops, the take is transcribed after recording instead. Cost estimates use the selected model's rates (see Usage & Cost below).")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: 480, alignment: .leading)
@@ -240,7 +240,7 @@ struct SettingsEditor: View {
                 }
             }
 
-            Text("Calculated using gemini-3.8-flash pricing ($0.75/M input, $3.75/M output introductory through 2026; $1.50/M input, $7.50/M output standard effective Jan 1, 2027).")
+            Text("After-take transcription and processing use gemini-3.8-flash ($0.75/M input, $3.75/M output introductory through 2026; $1.50/M input, $7.50/M output standard from Jan 1, 2027). Real-time takes use gemini-3.5-transcribe-live ($3.50/M audio input, $21.00/M text output).")
                 .font(.caption2)
                 .foregroundStyle(.tertiary)
         }

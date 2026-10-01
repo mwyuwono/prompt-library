@@ -17,6 +17,10 @@ struct DictateTake: Identifiable {
     var tokenUsage: TokenUsage?
     var duration: TimeInterval? = nil
     var status: Status
+    /// True when this take's usage was reported by the Real-time Live stream
+    /// (`gemini-3.5-transcribe-live`); false for After-take / REST takes
+    /// (`gemini-3.8-flash`). Drives the per-model cost split.
+    var isLive: Bool = false
 }
 
 /// Accumulated result of one live take. Empty text signals REST fallback.
@@ -152,6 +156,13 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
         takes.compactMap(\.tokenUsage).reduce(.zero, +)
     }
 
+    /// Takes that actually streamed. Cost estimates follow the selected
+    /// transcription model, not the take source; this is retained as
+    /// actual-usage metadata for saved records.
+    var liveTranscriptionTokenUsage: TokenUsage {
+        takes.filter(\.isLive).compactMap(\.tokenUsage).reduce(.zero, +)
+    }
+
     var sessionTokenUsage: TokenUsage {
         transcriptionTokenUsage + processingTokenUsage
     }
@@ -160,8 +171,10 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
         processingTurns.map(\.usage).reduce(.zero, +)
     }
 
+    /// Pricing follows the transcription model selected in Settings: the whole
+    /// transcription total is estimated at that model's rate.
     var sessionEstimatedCost: Double {
-        transcriptionTokenUsage.estimatedCost(pricing: .transcribe) +
+        transcriptionTokenUsage.estimatedCost(pricing: TranscriptionMode.stored.pricing) +
         processingTurns.reduce(0) { $0 + $1.estimatedCost }
     }
 
@@ -473,9 +486,10 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
         }
         takes[index].transcript = outcome.text
         takes[index].tokenUsage = outcome.usage.totalTokens > 0 ? outcome.usage : nil
+        takes[index].isLive = true
         takes[index].status = .ready
         if outcome.usage.totalTokens > 0 {
-            statsStore.recordUsage(outcome.usage, pricing: .transcribe)
+            statsStore.recordUsage(outcome.usage, pricing: TranscriptionMode.stored.pricing)
         }
         if outcome.errorMessage != nil {
             let detail = outcome.errorMessage?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
@@ -553,8 +567,9 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
                 guard let i = takes.firstIndex(where: { $0.id == id }) else { return }
                 takes[i].transcript = response.text
                 takes[i].tokenUsage = response.usage
+                takes[i].isLive = false
                 takes[i].status = .ready
-                statsStore.recordUsage(response.usage, pricing: .transcribe)
+                statsStore.recordUsage(response.usage, pricing: TranscriptionMode.stored.pricing)
                 // Audio is discarded once its transcript exists.
                 try? FileManager.default.removeItem(at: audioURL)
                 takes[i].audioURL = nil
@@ -681,6 +696,7 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
                     result: response.text,
                     tokenUsage: sessionTokenUsage,
                     transcriptionUsage: transcriptionTokenUsage,
+                    liveTranscriptionUsage: liveTranscriptionTokenUsage,
                     synthesisUsage: response.usage,
                     takeUsages: takes.compactMap(\.tokenUsage),
                     processingTurns: processingTurns,

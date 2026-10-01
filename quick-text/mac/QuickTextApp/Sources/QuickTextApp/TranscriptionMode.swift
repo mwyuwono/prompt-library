@@ -17,6 +17,16 @@ enum TranscriptionMode: String, CaseIterable, Identifiable {
         }
     }
 
+    /// Billing rate applied to transcription usage while this mode is selected:
+    /// After take is transcribed via gemini-3.8-flash, Real-time streams via
+    /// gemini-3.5-transcribe-live.
+    var pricing: TokenUsage.ModelPricing {
+        switch self {
+        case .afterTake: return .transcribe
+        case .realTime: return .liveTranscribe
+        }
+    }
+
     static let storageKey = "quicktext.dictate.transcriptionMode"
 
     /// Defaults to `afterTake` so upgrades keep current behavior.

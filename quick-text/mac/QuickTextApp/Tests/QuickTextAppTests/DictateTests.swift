@@ -469,6 +469,10 @@ final class DictateTests: XCTestCase {
 
     @MainActor
     func testDictateSessionAccumulatesMultipleTakesAndSynthesisLive() async throws {
+        // Cost assertions below assume After-take rates; pin the selection.
+        let previousMode = TranscriptionMode.stored
+        defer { TranscriptionMode.stored = previousMode }
+        TranscriptionMode.stored = .afterTake
         let session = DictateSession()
         let suiteName = "test-multi-takes-\(UUID().uuidString)"
         let testDefaults = UserDefaults(suiteName: suiteName)!
@@ -890,14 +894,87 @@ final class DictateTests: XCTestCase {
         XCTAssertEqual(interimUpdate?.transcriptChunk, "hello")
         XCTAssertEqual(interimUpdate?.isFinal, false)
 
-        let final = Data(#"{"serverContent":{"inputTranscription":{"text":"hello world"},"usageMetadata":{"promptTokenCount":100,"candidatesTokenCount":5}}}"#.utf8)
+        // Official Live envelope: usageMetadata is a top-level sibling of
+        // serverContent (https://ai.google.dev/api/live), using the Live
+        // UsageMetadata fields promptTokenCount / responseTokenCount.
+        let final = Data(#"{"serverContent":{"inputTranscription":{"text":"hello world"}},"usageMetadata":{"promptTokenCount":100,"responseTokenCount":5,"totalTokenCount":105}}"#.utf8)
         let finalUpdate = GeminiLiveClient.parseServerMessage(final)
         XCTAssertEqual(finalUpdate?.transcriptChunk, "hello world")
         XCTAssertEqual(finalUpdate?.isFinal, true)
         XCTAssertEqual(finalUpdate?.usage, TokenUsage(inputTokens: 100, outputTokens: 5))
 
+        // Nested placement kept for tolerance.
+        let nested = Data(#"{"serverContent":{"inputTranscription":{"text":"hi"},"usageMetadata":{"promptTokenCount":7,"responseTokenCount":2}}}"#.utf8)
+        XCTAssertEqual(GeminiLiveClient.parseServerMessage(nested)?.usage, TokenUsage(inputTokens: 7, outputTokens: 2))
+
+        // usageMetadata-only frame still surfaces usage with no transcript.
+        let usageOnly = Data(#"{"usageMetadata":{"promptTokenCount":50,"responseTokenCount":3}}"#.utf8)
+        XCTAssertEqual(GeminiLiveClient.parseServerMessage(usageOnly)?.usage, TokenUsage(inputTokens: 50, outputTokens: 3))
+
         XCTAssertNil(GeminiLiveClient.parseServerMessage(Data(#"{"setupComplete":{}}"#.utf8)))
         XCTAssertNil(GeminiLiveClient.parseServerMessage(Data("not json".utf8)))
+    }
+
+    func testLiveTranscribePricingMatchesOfficialRates() {
+        // https://ai.google.dev/gemini-api/docs/pricing: $3.50/M audio input,
+        // $21.00/M text output, with no introductory/standard split.
+        XCTAssertEqual(TokenUsage.ModelPricing.liveTranscribe.inputRatePerToken, 3.50 / 1_000_000.0, accuracy: 1e-12)
+        XCTAssertEqual(TokenUsage.ModelPricing.liveTranscribe.outputRatePerToken, 21.00 / 1_000_000.0, accuracy: 1e-12)
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "UTC")!
+        var comp = DateComponents()
+        comp.year = 2027
+        comp.month = 6
+        comp.day = 15
+        let date2027 = calendar.date(from: comp)!
+        XCTAssertEqual(TokenUsage.ModelPricing.liveTranscribe.inputRatePerToken(at: date2027), 3.50 / 1_000_000.0, accuracy: 1e-12)
+        XCTAssertEqual(TokenUsage.ModelPricing.liveTranscribe.outputRatePerToken(at: date2027), 21.00 / 1_000_000.0, accuracy: 1e-12)
+        let cost = TokenUsage(inputTokens: 1_000_000, outputTokens: 1_000_000).estimatedCost(pricing: .liveTranscribe)
+        XCTAssertEqual(cost, 3.50 + 21.00, accuracy: 1e-9)
+    }
+
+    @MainActor
+    func testSessionEstimatedCostFollowsSelectedTranscriptionModel() {
+        let previous = TranscriptionMode.stored
+        defer { TranscriptionMode.stored = previous }
+        let session = DictateSession()
+        session.takes = [
+            DictateTake(audioURL: nil, transcript: "live", tokenUsage: TokenUsage(inputTokens: 1_000, outputTokens: 100), status: .ready, isLive: true),
+            DictateTake(audioURL: nil, transcript: "rest", tokenUsage: TokenUsage(inputTokens: 1_000, outputTokens: 100), status: .ready, isLive: false)
+        ]
+        TranscriptionMode.stored = .realTime
+        XCTAssertEqual(
+            session.sessionEstimatedCost,
+            TokenUsage.estimatedCost(inputTokens: 2_000, outputTokens: 200, pricing: .liveTranscribe),
+            accuracy: 1e-9)
+        TranscriptionMode.stored = .afterTake
+        XCTAssertEqual(
+            session.sessionEstimatedCost,
+            TokenUsage.estimatedCost(inputTokens: 2_000, outputTokens: 200, pricing: .transcribe),
+            accuracy: 1e-9)
+    }
+
+    func testSaveSessionFallbackFollowsSelectedModel() throws {
+        let previous = TranscriptionMode.stored
+        defer { TranscriptionMode.stored = previous }
+        let dir = try tempDir()
+        let transcription = TokenUsage(inputTokens: 2_000, outputTokens: 200)
+        let live = TokenUsage(inputTokens: 1_000, outputTokens: 100)
+        let synthesis = TokenUsage(inputTokens: 500, outputTokens: 50)
+        TranscriptionMode.stored = .realTime
+        let url = try TranscriptStore.saveSession(
+            takes: ["take"], result: "result",
+            tokenUsage: TokenUsage(inputTokens: 2_500, outputTokens: 250),
+            transcriptionUsage: transcription,
+            liveTranscriptionUsage: live,
+            synthesisUsage: synthesis,
+            in: dir
+        )
+        let record = try JSONDecoder.quickText.decode(TranscriptStore.SessionRecord.self, from: Data(contentsOf: url))
+        let expected = transcription.estimatedCost(pricing: .liveTranscribe)
+            + synthesis.estimatedCost(pricing: .flash)
+        XCTAssertEqual(record.liveTranscriptionUsage, live)
+        XCTAssertEqual(record.estimatedCost!, expected, accuracy: 1e-9)
     }
 
     func testLiveTranscriptAssemblerReplacesRevisedInterimAndJoinsFinalSegments() {
@@ -1062,6 +1139,7 @@ final class DictateTests: XCTestCase {
         XCTAssertEqual(restCalls, 0)
         XCTAssertEqual(session.takes.first?.status, .ready)
         XCTAssertEqual(session.takes.first?.tokenUsage, TokenUsage(inputTokens: 100, outputTokens: 5))
+        XCTAssertEqual(session.takes.first?.isLive, true)
         XCTAssertFalse(FileManager.default.fileExists(atPath: audioURL.path))
     }
 
@@ -1117,5 +1195,25 @@ final class DictateTests: XCTestCase {
         }
         XCTAssertGreaterThan(full, single * 3)
         XCTAssertNil(AutoHeightTextView.fittingHeight(textView: shortView, width: 0))
+    }
+
+    /// Transcription arrives programmatically (transcribing → ready), bypassing
+    /// the typing delegate — the card must still re-measure taller, otherwise
+    /// Take 1's text paints over Take 2.
+    @MainActor
+    func testTakeTranscriptViewGrowsOnProgrammaticUpdate() {
+        let font = NSFont.systemFont(ofSize: 19)
+        let view = AutoHeightTextView.baseTextView(font: font, label: "Take 1 transcript")
+        view.string = "Hi."
+        guard let before = AutoHeightTextView.fittingHeight(textView: view, width: 300) else {
+            XCTFail("fittingHeight returned nil for a finite width")
+            return
+        }
+        view.string = "This is just an example of the general sentiment I want to convey, you can rework the language as needed. Keep it concise, and also find a way to mention that I have a referral from a former McKinsey colleague."
+        guard let after = AutoHeightTextView.fittingHeight(textView: view, width: 300) else {
+            XCTFail("fittingHeight returned nil after programmatic update")
+            return
+        }
+        XCTAssertGreaterThan(after, before * 3)
     }
 }
