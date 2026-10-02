@@ -1,9 +1,8 @@
 # Quick Text
 
-Local-first phrase launcher with two surfaces:
+Local-first phrase launcher (Mac app; the web component was removed 2026-10-02):
 
 - `mac/QuickTextApp`: SwiftUI Mac utility, local JSON load, global `Opt+Shift+Space` hotkey, click-to-open card with copy, search, sidebar library (All / Favorites / Recently Used / collections), menu bar extra, add/edit/delete/duplicate phrases.
-- `web/quick-text-component`: buildless Web Component, read-only public mode or local admin mode, same corpus and palette files.
 
 Shared data:
 
@@ -22,13 +21,6 @@ Commands:
 npm run quicktext:validate
 npm run quicktext:export-public
 npm run quicktext:extract-palette
-```
-
-Web demo:
-
-```bash
-python3 -m http.server 8000
-open http://localhost:8000/quick-text/web/quick-text-component/demo.html
 ```
 
 Mac app from source:
@@ -51,17 +43,6 @@ The installed app reads and writes this shared corpus:
 ```
 
 The app watches `quick-text.json` for external changes (Bullfinch, coding agents, manual edits) and reloads automatically, preserving the current selection/search/category where still valid. No need to quit and reopen.
-
-Embed:
-
-```html
-<script type="module" src="/quick-text/web/quick-text-component/quick-text.js"></script>
-<quick-text-launcher
-  mode="public"
-  corpus-url="/quick-text/corpus/quick-text.public.json"
-  palette-url="/quick-text/corpus/palette.json">
-</quick-text-launcher>
-```
 
 Public publishing uses `quick-text.public.json`, generated from phrases where `visibility` is `public`.
 
@@ -110,13 +91,13 @@ A phrase can optionally carry an `atoms` array so part of its `value` can be cop
 - A phrase with `atoms` expands into a card on click instead of copying. Clicking a chip copies just that atom's slice of `value`; clicking the card background (not a chip) copies the full `value`. Escape or an outside click collapses without copying.
 - Text between/around atoms (punctuation, spaces, line breaks) is preserved in the expanded view and is only included when copying the full value.
 - `npm run quicktext:validate` checks atom `id` uniqueness, valid `start`/`end` bounds, and no overlaps.
-- Implemented in both surfaces: `web/quick-text-component/quick-text.js` (`segmentsForValue`, the atomic overlay, and an "Add atom from selection" admin editor) and `mac/QuickTextApp` (`ExpandedCardView`/`ExpandedOverlayView` — the shared preview/expand mechanism for every card, atomic or plain — and `PhraseEditor`'s `SelectableTextEditor`-backed atom editor).
+- Implemented in `mac/QuickTextApp` (`ExpandedCardView`/`ExpandedOverlayView` — the shared preview/expand mechanism for every card, atomic or plain — and `PhraseEditor`'s `SelectableTextEditor`-backed atom editor).
 - **Offset semantics differ slightly by platform**: the web component indexes UTF-16 code units (native JS string indexing); the Mac app indexes `Character` (grapheme cluster) counts via `Array(value)`. These match for ASCII text (the only atomic phrase in the corpus today), but a value with emoji or combining characters could get different atom slices on each surface. Worth normalizing before adding a non-ASCII atomic phrase.
 - Editing `atoms` by hand: offsets are into the *current* `value` exactly as stored (including trailing whitespace/newlines) — if you edit `value`, existing atom offsets are not automatically remapped on either surface, so re-derive them after significant text edits.
 
 ## Variable placeholders
 
-Quick Text phrase text may include literal `{{...}}` placeholders (e.g. `{{setting}}`), including option-style placeholders such as `{{option one/option two}}`. Placeholders are fillable at copy time on both surfaces:
+Quick Text phrase text may include literal `{{...}}` placeholders (e.g. `{{setting}}`), including option-style placeholders such as `{{option one/option two}}`. Placeholders are fillable at copy time in the Mac app:
 
 - A phrase whose `value` contains `{{...}}` placeholders (with or without `atoms`) expands into a card on click, same as an atomic phrase, instead of copying immediately.
 - Each unique placeholder renders as its own chip inside the expanded card: a dashed outline with the placeholder key as a hint when unfilled, a solid chip with the entered value once filled. Clicking an unfilled or filled chip reopens it for editing.
@@ -124,11 +105,11 @@ Quick Text phrase text may include literal `{{...}}` placeholders (e.g. `{{setti
 - Clicking the card background (not a chip) copies `value` with every filled placeholder substituted in; any placeholder left unfilled copies through as the literal `{{...}}` text rather than blocking the copy or prompting for the rest. A placeholder that appears more than once in the same `value` shares one fill across all its occurrences.
 - Atoms and variables can coexist in the same phrase and render as distinct chip styles side by side (atom chips solid/bold from the start, variable chips dashed until filled). Atom offsets and atom copy behavior are unaffected by variable fills — copying an atom always copies its literal slice of `value`.
 - Fill-in values are session-only, like everything else client-side here: they are not written back to the corpus and reset when the card is closed (Mac) or the page reloads (web).
-- Implemented in both surfaces: `web/quick-text-component/quick-text.js` (`parseVariables`, `substituteVariables`, and the `var-chip`/`var-editor` overlay elements alongside the existing atom chips) and `mac/QuickTextApp` (`PhraseVariable.parse`/`.substitute`, and `ExpandedCardView.variableChip`/`variableEditorPopover` alongside `atomChip`). The Mac phrase editor's `PhraseEditor.detectedVariables` and the web admin editor's "Variables detected" list still just preview what will be fillable — they don't do the filling.
+- Implemented in `mac/QuickTextApp` (`PhraseVariable.parse`/`.substitute`, and `ExpandedCardView.variableChip`/`variableEditorPopover` alongside `atomChip`). The Mac phrase editor's `PhraseEditor.detectedVariables` and the web admin editor's "Variables detected" list still just preview what will be fillable — they don't do the filling.
 
 ### Reusable variable library (Mac shipped; web not yet implemented)
 
-Everything under "Variable placeholders" above is scoped to one phrase: an inline `{{name}}` or `{{a/b}}` placeholder only exists inside that phrase's own `value` text, and two phrases can't share one. The original ask (from an earlier Antigravity session — see git history on this file and on `corpus/quick-text.json` around commit `16c28f1`, which added an inert `variables: [{id, name, options}]` stub to the corpus that nothing ever read) was for **named variables decoupled from any one phrase**, reusable across many phrases, maintained in their own library, with a controlled propagation story when a shared variable is edited. That's now built on the Mac app; the web component (`web/quick-text-component/quick-text.js`) does not implement any of this yet and still only has phrase-local placeholders.
+Everything under "Variable placeholders" above is scoped to one phrase: an inline `{{name}}` or `{{a/b}}` placeholder only exists inside that phrase's own `value` text, and two phrases can't share one. The original ask (from an earlier Antigravity session — see git history on this file and on `corpus/quick-text.json` around commit `16c28f1`, which added an inert `variables: [{id, name, options}]` stub to the corpus that nothing ever read) was for **named variables decoupled from any one phrase**, reusable across many phrases, maintained in their own library, with a controlled propagation story when a shared variable is edited. That's now built on the Mac app.
 
 - **Syntax distinguishes inline vs. library by an `@` sigil**: `{{name}}` and `{{a/b}}` keep meaning exactly what they mean above — a one-off, phrase-local placeholder, never touching the library. `{{@name}}` resolves `name` against the shared library instead. Both forms are permanent, coexisting syntaxes — there's no migration step and inline placeholders aren't deprecated.
 - **Corpus schema**: a real top-level `variables` array (replacing the old inert stub — nothing referenced it, so it was dropped rather than migrated), each entry `{ id, name, type: "text" | "choice" | "value", options?: string[], value?: string }` — `id` is stable and never reused; `name` is the human-facing key authors type inside `{{@name}}` and must be unique (case-insensitive) among library entries; `options` is required and non-empty when `type` is `"choice"`; `value` is required and non-empty when `type` is `"value"`. `npm run quicktext:validate` (`quick-text/scripts/validate-corpus.mjs`) checks all of this.
