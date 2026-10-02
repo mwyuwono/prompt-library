@@ -119,6 +119,7 @@ final class DictateTests: XCTestCase {
     @MainActor
     func testUpdateTranscriptAndCopyTake() {
         let session = DictateSession()
+        session.transcriptDirectory = makeTranscriptDirectory()
         let take = DictateTake(audioURL: nil, transcript: "original text", status: .ready)
         session.takes = [take]
 
@@ -418,6 +419,7 @@ final class DictateTests: XCTestCase {
     @MainActor
     func testDictateSessionAccumulatesTokenUsageLiveAndResets() async throws {
         let session = DictateSession()
+        session.transcriptDirectory = makeTranscriptDirectory()
         let testDefaults = UserDefaults(suiteName: "test-session-\(UUID().uuidString)")!
         session.statsStore = DictateStatsStore(defaults: testDefaults)
 
@@ -459,6 +461,8 @@ final class DictateTests: XCTestCase {
         XCTAssertEqual(session.transcriptionTokenUsage, TokenUsage(inputTokens: 800, outputTokens: 40))
         XCTAssertEqual(session.synthesisTokenUsage, TokenUsage(inputTokens: 1000, outputTokens: 200))
         XCTAssertEqual(session.sessionTokenUsage, TokenUsage(inputTokens: 1800, outputTokens: 240))
+        let archived = try FileManager.default.contentsOfDirectory(at: session.transcriptDirectory!, includingPropertiesForKeys: nil)
+        XCTAssertEqual(archived.count, 1, "processing archives into the injected directory")
 
         // Reset
         session.newSession()
@@ -476,6 +480,7 @@ final class DictateTests: XCTestCase {
         defer { TranscriptionMode.stored = previousMode }
         TranscriptionMode.stored = .afterTake
         let session = DictateSession()
+        session.transcriptDirectory = makeTranscriptDirectory()
         let suiteName = "test-multi-takes-\(UUID().uuidString)"
         let testDefaults = UserDefaults(suiteName: suiteName)!
         let store = DictateStatsStore(defaults: testDefaults)
@@ -600,6 +605,7 @@ final class DictateTests: XCTestCase {
     @MainActor
     func testReprocessTakesAndRefineCurrentResultUseDistinctInputsAndUsage() async throws {
         let session = DictateSession()
+        session.transcriptDirectory = makeTranscriptDirectory()
         let defaults = UserDefaults(suiteName: "test-refine-\(UUID().uuidString)")!
         session.statsStore = DictateStatsStore(defaults: defaults)
         session.takes = [
@@ -657,6 +663,7 @@ final class DictateTests: XCTestCase {
     @MainActor
     func testMoveTakeOntoReordersBothDirections() {
         let session = DictateSession()
+        session.transcriptDirectory = makeTranscriptDirectory()
         session.takes = ["a", "b", "c"].map {
             DictateTake(audioURL: nil, transcript: $0, status: .ready)
         }
@@ -680,6 +687,7 @@ final class DictateTests: XCTestCase {
     @MainActor
     func testMoveTakeBlockedWhileRecordingOrWorking() {
         let session = DictateSession()
+        session.transcriptDirectory = makeTranscriptDirectory()
         session.takes = ["a", "b"].map {
             DictateTake(audioURL: nil, transcript: $0, status: .ready)
         }
@@ -698,6 +706,7 @@ final class DictateTests: XCTestCase {
     @MainActor
     func testCombineTakesIntoResultRespectsOrderSkipsEmptyAndUsesNoModelCall() {
         let session = DictateSession()
+        session.transcriptDirectory = makeTranscriptDirectory()
         session.takes = [
             DictateTake(audioURL: nil, transcript: "first", status: .ready),
             DictateTake(audioURL: nil, transcript: "   ", status: .ready),
@@ -729,6 +738,7 @@ final class DictateTests: XCTestCase {
     @MainActor
     func testCombineTakesIntoResultWithNothingReadySetsError() {
         let session = DictateSession()
+        session.transcriptDirectory = makeTranscriptDirectory()
         session.combineTakesIntoResult()
         XCTAssertEqual(session.errorMessage, "Nothing to combine yet — record at least one take.")
         XCTAssertEqual(session.resultText, "")
@@ -737,6 +747,7 @@ final class DictateTests: XCTestCase {
     @MainActor
     func testReprocessRespectsReorderedTakes() async throws {
         let session = DictateSession()
+        session.transcriptDirectory = makeTranscriptDirectory()
         let suiteName = "test-reorder-reprocess-\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suiteName)!
         session.statsStore = DictateStatsStore(defaults: defaults)
@@ -941,6 +952,7 @@ final class DictateTests: XCTestCase {
         let previous = TranscriptionMode.stored
         defer { TranscriptionMode.stored = previous }
         let session = DictateSession()
+        session.transcriptDirectory = makeTranscriptDirectory()
         session.takes = [
             DictateTake(audioURL: nil, transcript: "live", tokenUsage: TokenUsage(inputTokens: 1_000, outputTokens: 100), status: .ready, isLive: true),
             DictateTake(audioURL: nil, transcript: "rest", tokenUsage: TokenUsage(inputTokens: 1_000, outputTokens: 100), status: .ready, isLive: false)
@@ -1041,6 +1053,7 @@ final class DictateTests: XCTestCase {
     @MainActor
     func testLiveFailureFallsBackToRestTake() async throws {
         let session = DictateSession()
+        session.transcriptDirectory = makeTranscriptDirectory()
         let dir = try tempDir()
         let audioURL = dir.appendingPathComponent("live-fallback.m4a")
         try Data("fake-audio".utf8).write(to: audioURL)
@@ -1067,6 +1080,7 @@ final class DictateTests: XCTestCase {
     @MainActor
     func testLiveFallbackNoticeIncludesStreamError() async throws {
         let session = DictateSession()
+        session.transcriptDirectory = makeTranscriptDirectory()
         let dir = try tempDir()
         session.transcribe = { _, _ in
             GeminiResponse(text: "restored", usage: .zero)
@@ -1099,6 +1113,7 @@ final class DictateTests: XCTestCase {
     @MainActor
     func testLivePartialTranscriptNoticeKeepsDiagnosticStage() throws {
         let session = DictateSession()
+        session.transcriptDirectory = makeTranscriptDirectory()
         let dir = try tempDir()
         let audioURL = dir.appendingPathComponent("live-partial.m4a")
         try Data("fake-audio".utf8).write(to: audioURL)
@@ -1115,6 +1130,7 @@ final class DictateTests: XCTestCase {
     @MainActor
     func testLiveSuccessSkipsRestTake() async throws {
         let session = DictateSession()
+        session.transcriptDirectory = makeTranscriptDirectory()
         let dir = try tempDir()
         let audioURL = dir.appendingPathComponent("live-success.m4a")
         try Data("fake-audio".utf8).write(to: audioURL)
@@ -1149,6 +1165,7 @@ final class DictateTests: XCTestCase {
     @MainActor
     func testLiveRevisedInterimPersistsOnlyFinalSentence() async throws {
         let session = DictateSession()
+        session.transcriptDirectory = makeTranscriptDirectory()
         let dir = try tempDir()
         let audioURL = dir.appendingPathComponent("live-revised-interim.m4a")
         try Data("fake-audio".utf8).write(to: audioURL)
@@ -1335,5 +1352,16 @@ final class DictateTests: XCTestCase {
             return
         }
         XCTAssertEqual(box.value ?? -1, measured, accuracy: 0.5)
+    }
+}
+
+extension XCTestCase {
+    /// Temp archive for `DictateSession.transcriptDirectory`, removed after
+    /// the test, so processing never writes into the real transcript history.
+    func makeTranscriptDirectory() -> URL {
+        let dir = FileManager.default.temporaryDirectory
+            .appendingPathComponent("dictate-transcripts-\(UUID().uuidString)", isDirectory: true)
+        addTeardownBlock { try? FileManager.default.removeItem(at: dir) }
+        return dir
     }
 }

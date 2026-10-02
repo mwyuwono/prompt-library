@@ -189,6 +189,10 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
     }
 
     var statsStore: DictateStatsStore = .shared
+    /// Where processed sessions are archived and pruned; nil uses
+    /// `TranscriptStore.directory`. Tests point this at a temp directory so
+    /// they never touch the real archive.
+    var transcriptDirectory: URL? = nil
     private var recorder: AVAudioRecorder?
     private var audioPlayer: AVAudioPlayer?
 
@@ -731,9 +735,10 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
             synthesisUsage: response.usage,
             takeUsages: takes.compactMap(\.tokenUsage),
             processingTurns: processingTurns,
-            estimatedCost: sessionEstimatedCost
+            estimatedCost: sessionEstimatedCost,
+            in: transcriptDirectory
         )
-        _ = try? TranscriptStore.prune()
+        _ = try? TranscriptStore.prune(in: transcriptDirectory)
         return response.text
     }
 

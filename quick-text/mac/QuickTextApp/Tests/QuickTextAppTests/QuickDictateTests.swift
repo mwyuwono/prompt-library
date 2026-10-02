@@ -130,6 +130,7 @@ final class QuickDictateTests: XCTestCase {
     @MainActor
     private func makeSession() -> DictateSession {
         let session = DictateSession()
+        session.transcriptDirectory = makeTranscriptDirectory()
         session.statsStore = DictateStatsStore(defaults: UserDefaults(suiteName: "quick-dictate-\(UUID().uuidString)")!)
         session.transcribe = { _, _ in
             GeminiResponse(text: "  um so send it tuesday  ", usage: TokenUsage(inputTokens: 100, outputTokens: 10))
