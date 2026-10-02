@@ -48,7 +48,7 @@ struct GeminiClient {
     /// Transcribes a voice take using `gemini-3.8-flash` inline audio with low thinking effort.
     func transcribe(audioData: Data, mimeType: String) async throws -> GeminiResponse {
         let input: [[String: Any]] = [
-            ["type": "text", "text": "Generate a transcript of the speech. Return only the transcript, no commentary."],
+            ["type": "text", "text": "Generate a transcript of the speech. Return only the transcript, no commentary. If the audio contains no intelligible speech, return an empty response; never guess or invent words."],
             ["type": "audio", "data": audioData.base64EncodedString(), "mime_type": mimeType]
         ]
         return try await createInteraction(

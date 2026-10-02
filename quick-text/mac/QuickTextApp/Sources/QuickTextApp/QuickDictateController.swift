@@ -5,11 +5,13 @@ import SwiftUI
 
 enum QuickDictateError: LocalizedError, Equatable {
     case nothingRecorded
+    case noSpeech
     case transcriptionFailed(String)
 
     var errorDescription: String? {
         switch self {
         case .nothingRecorded: return "Didn't catch anything — try again."
+        case .noSpeech: return "Didn't hear any speech — nothing inserted."
         case .transcriptionFailed(let message): return message
         }
     }

@@ -141,6 +141,16 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
     @Published var isRecording = false
     @Published var recordingElapsed: TimeInterval = 0
     @Published var recordingLevel: Float = 0
+    /// Loudest meter reading of the current take (0...1, same scale as
+    /// `recordingLevel`). Quick Dictate uses it to drop silent takes before
+    /// they reach the model, which otherwise invents speech from silence.
+    var peakRecordingLevel: Float = 0
+    /// Below this peak a take is treated as silence (~-42 dBFS average
+    /// power on the After-take meter): room tone stays under it, speech at
+    /// laptop distance clears it comfortably.
+    nonisolated static let speechLevelThreshold: Float = 0.3
+    /// Shorter takes are accidental taps, not dictation.
+    nonisolated static let minimumSpeechDuration: TimeInterval = 0.4
     @Published var isWorking = false
     @Published var selectedProcessID = DictateSession.defaultProcessID
     /// Refreshed from stored settings at each capture start; Live mode shows
@@ -307,6 +317,7 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
         isRecording = true
         recordingElapsed = 0
         recordingLevel = 0
+        peakRecordingLevel = 0
         startRecordingMonitor()
     }
 
@@ -365,6 +376,7 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
         isRecording = true
         recordingElapsed = 0
         recordingLevel = 0
+        peakRecordingLevel = 0
         startRecordingMonitor()
         let takeID = take.id
         liveTask = Task { [weak self] in
@@ -527,6 +539,7 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
                 recordingElapsed = Date().timeIntervalSince(start)
             }
             recordingLevel = min(1, livePeak.value * 3)
+            peakRecordingLevel = max(peakRecordingLevel, recordingLevel)
             return
         }
         guard let recorder, recorder.isRecording else { return }
@@ -536,6 +549,12 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
         // Convert it to a quiet, visually useful 0...1 level.
         let power = max(-60, recorder.averagePower(forChannel: 0))
         recordingLevel = min(1, max(0, (power + 60) / 60))
+        peakRecordingLevel = max(peakRecordingLevel, recordingLevel)
+    }
+
+    /// Whether the in-flight take plausibly contains speech.
+    var currentTakeHasSpeech: Bool {
+        recordingElapsed >= Self.minimumSpeechDuration && peakRecordingLevel >= Self.speechLevelThreshold
     }
 
     // MARK: - Transcription
@@ -723,7 +742,15 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
     /// Stops the in-flight take (if any) and waits for its transcript. Quick
     /// Dictate sessions hold a single take, so the last take is the one.
     func finishQuickTranscript() async throws -> String {
-        if isRecording { stopRecording() }
+        if isRecording {
+            // A silent or near-instant take never reaches the model:
+            // transcription models hallucinate whole sentences from silence.
+            guard currentTakeHasSpeech else {
+                newSession()
+                throw QuickDictateError.noSpeech
+            }
+            stopRecording()
+        }
         for await snapshot in $takes.values {
             guard let take = snapshot.last else { throw QuickDictateError.nothingRecorded }
             switch take.status {

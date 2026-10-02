@@ -152,6 +152,8 @@ final class QuickDictateTests: XCTestCase {
         let session = makeSession()
         session.takes = [try recordingTake()]
         session.isRecording = true
+        session.recordingElapsed = 2
+        session.peakRecordingLevel = 0.7
         let transcript = try await session.finishQuickTranscript()
         XCTAssertEqual(transcript, "um so send it tuesday")
         XCTAssertFalse(session.isRecording)
@@ -163,11 +165,47 @@ final class QuickDictateTests: XCTestCase {
         session.transcribe = { _, _ in throw DictateError.badResponse("boom") }
         session.takes = [try recordingTake()]
         session.isRecording = true
+        session.recordingElapsed = 2
+        session.peakRecordingLevel = 0.7
         do {
             _ = try await session.finishQuickTranscript()
             XCTFail("expected failure")
         } catch let error as QuickDictateError {
             guard case .transcriptionFailed = error else { return XCTFail("wrong error \(error)") }
+        }
+    }
+
+    @MainActor
+    func testSilentTakeIsDroppedWithoutCallingTheModel() async throws {
+        let session = makeSession()
+        session.transcribe = { _, _ in XCTFail("silence must not be transcribed"); return GeminiResponse(text: "", usage: .zero) }
+        session.takes = [try recordingTake()]
+        session.isRecording = true
+        session.recordingElapsed = 2
+        session.peakRecordingLevel = 0.1
+        do {
+            _ = try await session.finishQuickTranscript()
+            XCTFail("expected noSpeech")
+        } catch {
+            XCTAssertEqual(error as? QuickDictateError, .noSpeech)
+        }
+        XCTAssertTrue(session.takes.isEmpty)
+        XCTAssertFalse(session.isRecording)
+    }
+
+    @MainActor
+    func testInstantTakeIsDroppedEvenIfLoud() async throws {
+        let session = makeSession()
+        session.transcribe = { _, _ in XCTFail("an accidental tap must not be transcribed"); return GeminiResponse(text: "", usage: .zero) }
+        session.takes = [try recordingTake()]
+        session.isRecording = true
+        session.recordingElapsed = 0.2
+        session.peakRecordingLevel = 0.9
+        do {
+            _ = try await session.finishQuickTranscript()
+            XCTFail("expected noSpeech")
+        } catch {
+            XCTAssertEqual(error as? QuickDictateError, .noSpeech)
         }
     }
 
