@@ -30,7 +30,8 @@ final class CorpusStore: ObservableObject {
     static let builtInDictationPromptIDs: Set<String> = [
         DictateSession.defaultProcessID,
         "voice-process-text-message",
-        "voice-process-email"
+        "voice-process-email",
+        QuickDictateSettings.cleanTranscriptID
     ]
     @Published var corpus = QuickTextCorpus.empty
     @Published var palette = Palette.empty

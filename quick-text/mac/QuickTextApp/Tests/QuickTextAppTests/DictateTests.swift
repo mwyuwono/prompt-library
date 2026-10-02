@@ -113,6 +113,7 @@ final class DictateTests: XCTestCase {
         XCTAssertTrue(ids.contains(DictateSession.defaultProcessID))
         XCTAssertTrue(ids.contains("voice-process-text-message"))
         XCTAssertTrue(ids.contains("voice-process-email"))
+        XCTAssertTrue(ids.contains(QuickDictateSettings.cleanTranscriptID))
     }
 
     @MainActor
@@ -558,7 +559,8 @@ final class DictateTests: XCTestCase {
         XCTAssertEqual(builtIns, Set([
             DictateSession.defaultProcessID,
             "voice-process-text-message",
-            "voice-process-email"
+            "voice-process-email",
+            QuickDictateSettings.cleanTranscriptID
         ]))
 
         let custom = Phrase(
