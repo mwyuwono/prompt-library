@@ -4,6 +4,7 @@ import UniformTypeIdentifiers
 #Preview("Content View") {
     ContentView()
         .environmentObject(PreviewData.store)
+        .environmentObject(DictateSession())
         .frame(width: 1280, height: 900)
 }
 
@@ -36,8 +37,9 @@ struct ContentView: View {
     @State private var glossaryPanelOffset = CGSize.zero
     @State private var glossaryPanelDragOffset = CGSize.zero
     @State private var showingDictate = false
-    /// Owned here (not by DictateView) so takes and results survive leaving the page.
-    @StateObject private var dictateSession = DictateSession()
+    /// Owned by the app (not DictateView) so takes and results survive leaving
+    /// the page, and Quick Dictate can hand takes to it.
+    @EnvironmentObject private var dictateSession: DictateSession
     /// Sidebar-initiated sync uses the same compute → preview → apply flow as
     /// Settings' Sync Now, without opening the Settings panel.
     @State private var pendingSidebarSyncPlan: TextReplacementSync.SyncPlan?

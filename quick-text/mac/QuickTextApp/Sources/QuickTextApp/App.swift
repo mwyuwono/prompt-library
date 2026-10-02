@@ -5,15 +5,20 @@ import SwiftUI
 struct QuickTextApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @StateObject private var store = CorpusStore()
+    /// The Dictate page's session. Owned at app level (not by ContentView) so
+    /// Quick Dictate can hand takes to it.
+    @StateObject private var dictateSession = DictateSession()
     @Environment(\.openWindow) private var openWindow
 
     var body: some Scene {
         WindowGroup(id: "main") {
             ContentView()
                 .environmentObject(store)
+                .environmentObject(dictateSession)
                 .frame(minWidth: 900, minHeight: 600)
                 .onAppear {
                     appDelegate.store = store
+                    appDelegate.dictateSession = dictateSession
                     // Lets AppDelegate.openWindow() recreate the window if the user
                     // closed it — NSApp.windows alone can't do that, only the SwiftUI
                     // environment's openWindow action can (**verify** on device).
@@ -56,6 +61,8 @@ struct QuickTextApp: App {
                     NotificationCenter.default.post(name: .quickTextOpenDictate, object: nil)
                 }
             }
+            Button("Quick Dictate") { appDelegate.quickDictate.toggleHandsFree() }
+            Button("Copy Last Dictation") { appDelegate.quickDictate.copyLast() }
             Button("New Phrase") {
                 AppDelegate.openWindow()
                 store.beginNewPhrase()
@@ -66,13 +73,29 @@ struct QuickTextApp: App {
     }
 }
 
+@MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
     weak var store: CorpusStore?
+    weak var dictateSession: DictateSession?
+    /// System-wide dictation (Fn/Globe or Opt-Shift-D), see QuickDictateController.
+    lazy var quickDictate: QuickDictateController = {
+        let controller = QuickDictateController()
+        controller.storeProvider = { [weak self] in self?.store }
+        controller.mainSessionProvider = { [weak self] in self?.dictateSession }
+        controller.openDictate = {
+            AppDelegate.openWindow()
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: .quickTextOpenDictate, object: nil)
+            }
+        }
+        return controller
+    }()
     /// Set by `QuickTextApp.body`'s `onAppear` so the static `openWindow()` below can
     /// recreate the WindowGroup's window when none is eligible to reuse.
     var reopenWindow: (() -> Void)?
     static weak var shared: AppDelegate?
     private var hotKeyRef: EventHotKeyRef?
+    private var dictateHotKeyRef: EventHotKeyRef?
     private var eventHandler: EventHandlerRef?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -81,6 +104,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         Self.shared = self
         applyDockIcon()
         registerHotKey()
+        quickDictate.refreshFnMonitor()
+    }
+
+    /// Picks up an Input Monitoring grant made while the app was in the background.
+    func applicationDidBecomeActive(_ notification: Notification) {
+        quickDictate.refreshFnMonitor()
     }
 
     /// Dock-only icon override: the txt artwork replaces the Dock (and
@@ -115,16 +144,32 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let hotKeyID = EventHotKeyID(signature: OSType("QTXT".fourCharCodeValue), id: 1)
         let modifiers = UInt32(optionKey | shiftKey)
         RegisterEventHotKey(49, modifiers, hotKeyID, GetApplicationEventTarget(), 0, &hotKeyRef)
+        // Opt-Shift-D: Quick Dictate fallback that needs no Input Monitoring.
+        // Press and release both feed the same hold/tap recognizer as Fn.
+        let dictateID = EventHotKeyID(signature: OSType("QTXT".fourCharCodeValue), id: 2)
+        RegisterEventHotKey(UInt32(kVK_ANSI_D), modifiers, dictateID, GetApplicationEventTarget(), 0, &dictateHotKeyRef)
 
-        var eventType = EventTypeSpec(eventClass: OSType(kEventClassKeyboard), eventKind: UInt32(kEventHotKeyPressed))
+        var eventTypes = [
+            EventTypeSpec(eventClass: OSType(kEventClassKeyboard), eventKind: UInt32(kEventHotKeyPressed)),
+            EventTypeSpec(eventClass: OSType(kEventClassKeyboard), eventKind: UInt32(kEventHotKeyReleased))
+        ]
         InstallEventHandler(GetApplicationEventTarget(), { _, event, _ in
             var hotKeyID = EventHotKeyID()
             GetEventParameter(event, EventParamName(kEventParamDirectObject), EventParamType(typeEventHotKeyID), nil, MemoryLayout<EventHotKeyID>.size, nil, &hotKeyID)
-            if hotKeyID.id == 1 {
+            let pressed = GetEventKind(event) == UInt32(kEventHotKeyPressed)
+            switch hotKeyID.id {
+            case 1 where pressed:
                 DispatchQueue.main.async { AppDelegate.openWindow() }
+            case 2:
+                DispatchQueue.main.async {
+                    guard let controller = AppDelegate.shared?.quickDictate else { return }
+                    pressed ? controller.triggerDown() : controller.triggerUp()
+                }
+            default:
+                break
             }
             return noErr
-        }, 1, &eventType, nil, &eventHandler)
+        }, eventTypes.count, &eventTypes, nil, &eventHandler)
     }
 }
 

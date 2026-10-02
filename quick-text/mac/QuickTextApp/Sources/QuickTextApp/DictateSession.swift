@@ -680,33 +680,81 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
         isWorking = true
         Task {
             do {
-                let response = try await synthesize(masterPrompt, input)
-                resultText = response.text
-                synthesisTokenUsage = response.usage
-                let turn = DictateProcessingTurn(
-                    kind: kind,
-                    usage: response.usage,
-                    estimatedCost: response.usage.estimatedCost(pricing: .flash)
-                )
-                processingTurns.append(turn)
-                statsStore.recordUsage(response.usage, pricing: .flash)
-                let transcripts = readyTranscripts
-                _ = try? TranscriptStore.saveSession(
-                    takes: transcripts,
-                    result: response.text,
-                    tokenUsage: sessionTokenUsage,
-                    transcriptionUsage: transcriptionTokenUsage,
-                    liveTranscriptionUsage: liveTranscriptionTokenUsage,
-                    synthesisUsage: response.usage,
-                    takeUsages: takes.compactMap(\.tokenUsage),
-                    processingTurns: processingTurns,
-                    estimatedCost: sessionEstimatedCost
-                )
-                _ = try? TranscriptStore.prune()
+                _ = try await performProcessing(kind: kind, masterPrompt: masterPrompt, input: input)
             } catch {
                 errorMessage = error.localizedDescription
             }
             isWorking = false
+        }
+    }
+
+    /// One model turn: sets the result, records usage, and archives the
+    /// session. Shared by the Dictate page and Quick Dictate.
+    @discardableResult
+    private func performProcessing(kind: DictateProcessingTurn.Kind, masterPrompt: String, input: String) async throws -> String {
+        let response = try await synthesize(masterPrompt, input)
+        resultText = response.text
+        synthesisTokenUsage = response.usage
+        let turn = DictateProcessingTurn(
+            kind: kind,
+            usage: response.usage,
+            estimatedCost: response.usage.estimatedCost(pricing: .flash)
+        )
+        processingTurns.append(turn)
+        statsStore.recordUsage(response.usage, pricing: .flash)
+        let transcripts = readyTranscripts
+        _ = try? TranscriptStore.saveSession(
+            takes: transcripts,
+            result: response.text,
+            tokenUsage: sessionTokenUsage,
+            transcriptionUsage: transcriptionTokenUsage,
+            liveTranscriptionUsage: liveTranscriptionTokenUsage,
+            synthesisUsage: response.usage,
+            takeUsages: takes.compactMap(\.tokenUsage),
+            processingTurns: processingTurns,
+            estimatedCost: sessionEstimatedCost
+        )
+        _ = try? TranscriptStore.prune()
+        return response.text
+    }
+
+    // MARK: - Quick Dictate
+
+    /// Stops the in-flight take (if any) and waits for its transcript. Quick
+    /// Dictate sessions hold a single take, so the last take is the one.
+    func finishQuickTranscript() async throws -> String {
+        if isRecording { stopRecording() }
+        for await snapshot in $takes.values {
+            guard let take = snapshot.last else { throw QuickDictateError.nothingRecorded }
+            switch take.status {
+            case .ready:
+                return (take.transcript ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+            case .failed(let message):
+                throw QuickDictateError.transcriptionFailed(message)
+            case .recording, .transcribing:
+                continue
+            }
+        }
+        throw QuickDictateError.nothingRecorded
+    }
+
+    /// Runs one processing turn over a quick take. A nil or empty prompt
+    /// returns the transcript untouched (Raw), with no model call.
+    func processQuickTranscript(_ transcript: String, masterPrompt: String?) async throws -> String {
+        guard let masterPrompt, !masterPrompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            resultText = transcript
+            return transcript
+        }
+        return try await performProcessing(kind: .reprocessTakes, masterPrompt: masterPrompt, input: transcript)
+    }
+
+    /// Hands a finished quick take to this (Dictate page) session: appended
+    /// after any existing takes, and its result, if any, replaces the editor.
+    func adoptQuickTake(_ take: DictateTake, result: String?) {
+        guard take.status == .ready else { return }
+        takes.append(take)
+        if let result, !result.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            resultText = result
         }
     }
 

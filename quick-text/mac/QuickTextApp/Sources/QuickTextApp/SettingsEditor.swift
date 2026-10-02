@@ -189,6 +189,10 @@ struct SettingsEditor: View {
                     .frame(maxWidth: 480, alignment: .leading)
             }
 
+            if let quickDictate = AppDelegate.shared?.quickDictate {
+                QuickDictateSettingsSection(controller: quickDictate)
+            }
+
             Divider()
 
             dictateUsageAndCostCard

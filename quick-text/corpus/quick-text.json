@@ -899,6 +899,20 @@
     },
     {
       "categoryId" : "voice-process",
+      "createdAt" : "2026-10-02T12:00:00Z",
+      "favorite" : false,
+      "id" : "voice-process-clean-transcript",
+      "summary" : "Light cleanup for Quick Dictate",
+      "tags" : [
+        "voice"
+      ],
+      "title" : "Clean Transcript",
+      "updatedAt" : "2026-10-02T12:00:00Z",
+      "value" : "Clean up this dictated text for direct insertion where the speaker's cursor is. Remove filler words, false starts, and repeated words. Fix punctuation, capitalization, and obvious transcription errors. Apply spoken self-corrections (\"actually, make that Tuesday\"). Keep the speaker's exact wording, tone, and meaning otherwise; do not summarize, rephrase, or add anything. Output only the cleaned text, with no preamble, quotes, or markdown.",
+      "visibility" : "private"
+    },
+    {
+      "categoryId" : "voice-process",
       "createdAt" : "2026-09-20T16:40:42Z",
       "favorite" : false,
       "id" : "voice-process-agent-instructions",
@@ -1065,7 +1079,7 @@
     "paletteSource" : "Robert Brown Fabric Collection",
     "textReplacementLastSyncAt" : "2026-09-30T01:01:11Z"
   },
-  "updatedAt" : "2026-10-01T02:10:00Z",
+  "updatedAt" : "2026-10-02T12:00:00Z",
   "variables" : [
     {
       "id" : "var-1783398724430",
