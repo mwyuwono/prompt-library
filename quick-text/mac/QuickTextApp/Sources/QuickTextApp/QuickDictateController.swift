@@ -122,6 +122,7 @@ final class QuickDictateController: ObservableObject {
     private var runID = UUID()
     private var lastTake: DictateTake?
     private var hideTask: Task<Void, Never>?
+    private var isHovering = false
     private var cancellables: Set<AnyCancellable> = []
 
     init() {
@@ -346,6 +347,7 @@ final class QuickDictateController: ObservableObject {
 
     private func hidePanel() {
         hideTask?.cancel()
+        isHovering = false
         panel?.dismiss()
     }
 
@@ -353,7 +355,7 @@ final class QuickDictateController: ObservableObject {
         hideTask?.cancel()
         hideTask = Task { [weak self] in
             try? await Task.sleep(for: delay)
-            guard !Task.isCancelled, let self, !self.phase.isActive else { return }
+            guard !Task.isCancelled, let self, !self.phase.isActive, !self.isHovering else { return }
             self.phase = .idle
             self.panel?.dismiss()
         }
@@ -361,6 +363,7 @@ final class QuickDictateController: ObservableObject {
 
     /// Hovering the pill keeps a finished result on screen.
     func holdOpen(_ hovering: Bool) {
+        isHovering = hovering
         if hovering {
             hideTask?.cancel()
         } else if !phase.isActive, phase != .idle {

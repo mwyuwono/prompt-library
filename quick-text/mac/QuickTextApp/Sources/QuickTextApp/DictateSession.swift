@@ -766,6 +766,10 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
 
     func newSession() {
         stopPlayback()
+        // An After-take capture must release the mic too, or a cancelled
+        // Quick Dictate take keeps recording in the background.
+        recorder?.stop()
+        recorder = nil
         if let engine = liveEngine {
             engine.inputNode.removeTap(onBus: 0)
             engine.stop()

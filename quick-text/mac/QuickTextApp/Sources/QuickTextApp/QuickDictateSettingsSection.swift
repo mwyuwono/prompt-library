@@ -113,6 +113,12 @@ struct QuickDictateSettingsSection: View {
                 ForEach(QuickDictatePermission.allCases) { permission in
                     permissionRow(permission)
                 }
+                if useFnKey, FnKeyMonitor.systemDictationConflicts {
+                    Label("macOS Dictation also responds to Fn. Set System Settings › Keyboard › Dictation › Shortcut to Off (or a non-Fn key).", systemImage: "exclamationmark.triangle")
+                        .font(.caption)
+                        .foregroundStyle(Theme.error)
+                        .frame(maxWidth: 480, alignment: .leading)
+                }
                 if useFnKey, FnKeyMonitor.globeKeyConflicts {
                     Label("Set System Settings › Keyboard › “Press 🌐 key to” to Do Nothing, or macOS will also react to each Fn press.", systemImage: "exclamationmark.triangle")
                         .font(.caption)

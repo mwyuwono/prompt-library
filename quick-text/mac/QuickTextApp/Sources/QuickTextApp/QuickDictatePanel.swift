@@ -24,7 +24,8 @@ final class QuickDictatePanel: NSPanel {
         hidesOnDeactivate = false
         isMovableByWindowBackground = false
         becomesKeyOnlyIfNeeded = true
-        let host = NSHostingView(rootView: QuickDictatePill(controller: controller))
+        let host = PillHostingView(rootView: QuickDictatePill(controller: controller))
+        host.onHover = { [weak controller] in controller?.holdOpen($0) }
         host.sizingOptions = []
         host.frame = NSRect(origin: .zero, size: Self.size)
         contentView = host
@@ -59,6 +60,26 @@ final class QuickDictatePanel: NSPanel {
     }
 }
 
+/// SwiftUI's `onHover` only fires while the app is active, and Quick
+/// Dictate never activates. An always-on tracking area reports hover, and
+/// first-mouse lets the pill's buttons respond to a single click.
+final class PillHostingView: NSHostingView<QuickDictatePill> {
+    var onHover: (Bool) -> Void = { _ in }
+    private var hoverArea: NSTrackingArea?
+
+    override func updateTrackingAreas() {
+        super.updateTrackingAreas()
+        if let hoverArea { removeTrackingArea(hoverArea) }
+        let area = NSTrackingArea(rect: .zero, options: [.mouseEnteredAndExited, .activeAlways, .inVisibleRect], owner: self)
+        addTrackingArea(area)
+        hoverArea = area
+    }
+
+    override func mouseEntered(with event: NSEvent) { onHover(true) }
+    override func mouseExited(with event: NSEvent) { onHover(false) }
+    override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
+}
+
 /// Pill content: matches the Dictate page's record dock (tile surface,
 /// 16 pt radius, dock shadow, `rec` red while listening).
 struct QuickDictatePill: View {
@@ -76,7 +97,6 @@ struct QuickDictatePill: View {
         .overlay(RoundedRectangle(cornerRadius: 16).strokeBorder(Theme.borderTile, lineWidth: 1))
         .shadow(color: shadows[0].color, radius: min(shadows[0].radius, 8), y: min(shadows[0].y, 4))
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .onHover { controller.holdOpen($0) }
         .animation(Theme.Motion.fade, value: controller.phase)
     }
 
@@ -89,7 +109,7 @@ struct QuickDictatePill: View {
             iconButton("xmark", label: "Cancel") { controller.cancel() }
             LevelBars(levels: controller.levels)
             if controller.liveText.isEmpty {
-                Text(handsFree ? "Listening — tap Fn to finish" : "Listening — release to finish")
+                Text(handsFree ? "Listening — tap again to finish" : "Listening — release to finish")
                     .font(.system(size: 13))
                     .foregroundStyle(Theme.textSecondary)
                     .frame(maxWidth: .infinity, alignment: .leading)

@@ -179,4 +179,14 @@ final class FnKeyMonitor {
     }
 
     static var globeKeyConflicts: Bool { (globeKeyUsage ?? 0) != 0 }
+
+    /// macOS Dictation on with its keyboard shortcut enabled (symbolic hot
+    /// key 164) also answers Fn presses, typing its own transcript and
+    /// competing for the mic.
+    static var systemDictationConflicts: Bool {
+        guard UserDefaults(suiteName: "com.apple.assistant.support")?.bool(forKey: "Dictation Enabled") == true else { return false }
+        let hotKeys = UserDefaults(suiteName: "com.apple.symbolichotkeys")?.dictionary(forKey: "AppleSymbolicHotKeys")
+        let dictation = hotKeys?["164"] as? [String: Any]
+        return (dictation?["enabled"] as? Bool) ?? (dictation?["enabled"] as? Int == 1)
+    }
 }
