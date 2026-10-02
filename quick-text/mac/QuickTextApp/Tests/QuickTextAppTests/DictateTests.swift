@@ -1,6 +1,7 @@
 import XCTest
 import AppKit
 import AVFoundation
+import SwiftUI
 @testable import QuickTextApp
 
 /// Covers the testable seams of Dictate mode without touching the mic,
@@ -1215,5 +1216,122 @@ final class DictateTests: XCTestCase {
             return
         }
         XCTAssertGreaterThan(after, before * 3)
+    }
+
+    // MARK: - Pinned height with scroll fallback
+
+    /// Displayed height is the measured height capped at maxHeight: a long
+    /// transcription pins at the cap instead of growing unbounded.
+    func testPinnedHeightIsCappedAtMaxHeight() {
+        XCTAssertEqual(AutoHeightTextView.pinnedHeight(measured: 2400, maxHeight: 480), 480)
+        XCTAssertEqual(AutoHeightTextView.pinnedHeight(measured: 480, maxHeight: 480), 480)
+        XCTAssertEqual(AutoHeightTextView.pinnedHeight(measured: 120, maxHeight: 480), 120)
+    }
+
+    /// Pin writes are thresholded so layout converges instead of churning on
+    /// sub-point jitter from repeated re-measures.
+    func testHeightPinUpdateThreshold() {
+        XCTAssertTrue(AutoHeightTextView.heightNeedsUpdate(old: nil, new: 120))
+        XCTAssertFalse(AutoHeightTextView.heightNeedsUpdate(old: 120, new: 120.2))
+        XCTAssertTrue(AutoHeightTextView.heightNeedsUpdate(old: 120, new: 121))
+        XCTAssertFalse(AutoHeightTextView.heightNeedsUpdate(old: 480, new: 480))
+    }
+
+    /// The scroll container keeps the full transcript in the text system
+    /// while the displayed height stays capped: scroll, not overflow.
+    @MainActor
+    func testCappedTakeKeepsFullTextForScrolling() {
+        let font = NSFont.systemFont(ofSize: 19)
+        let scroll = AutoHeightTextView.makeScrollView(font: font, label: "Take 1 transcript")
+        guard let doc = scroll.documentView as? NSTextView else {
+            XCTFail("take scroll view has no text document")
+            return
+        }
+        let long = String(repeating: "The mail room and the trash room. ", count: 200)
+        doc.string = long
+        guard let measured = AutoHeightTextView.fittingHeight(textView: doc, width: 300) else {
+            XCTFail("fittingHeight returned nil for a finite width")
+            return
+        }
+        XCTAssertGreaterThan(measured, AutoHeightTextView.defaultMaxHeight)
+        XCTAssertEqual(
+            AutoHeightTextView.pinnedHeight(measured: measured, maxHeight: AutoHeightTextView.defaultMaxHeight),
+            AutoHeightTextView.defaultMaxHeight)
+        XCTAssertEqual(doc.string, long)
+    }
+
+    /// Re-applying identical attributes must not change the measured height.
+    /// Redundant text-system mutation ahead of a re-measure is what let a
+    /// transient short value stick and paint over the next take, so the
+    /// update fast path skips it — this test pins that premise.
+    @MainActor
+    func testIdenticalAttributeReapplicationKeepsMeasuredHeight() {
+        let font = NSFont.systemFont(ofSize: 19)
+        let view = AutoHeightTextView.baseTextView(font: font, label: "Take 1 transcript")
+        view.string = String(repeating: "Space number two, main entrance. ", count: 60)
+        let style = NSMutableParagraphStyle()
+        style.lineSpacing = 7
+        let attributes: [NSAttributedString.Key: Any] = [.font: font, .paragraphStyle: style]
+        view.textStorage?.setAttributes(attributes, range: NSRange(location: 0, length: view.string.utf16.count))
+        guard let first = AutoHeightTextView.fittingHeight(textView: view, width: 300) else {
+            XCTFail("fittingHeight returned nil for a finite width")
+            return
+        }
+        view.textStorage?.setAttributes(attributes, range: NSRange(location: 0, length: view.string.utf16.count))
+        guard let second = AutoHeightTextView.fittingHeight(textView: view, width: 300) else {
+            XCTFail("fittingHeight returned nil after re-applying attributes")
+            return
+        }
+        XCTAssertEqual(first, second)
+    }
+
+    /// Appearance changes must re-apply styling: the no-op fast path in
+    /// updateNSView keys on the full applied signature including scheme.
+    func testAppliedStyleDistinguishesAppearanceChange() {
+        let color = Color.gray
+        let light = AutoHeightTextView.AppliedStyle(
+            fontName: "Helvetica", pointSize: 19, lineSpacing: 7,
+            textColor: color, caretColor: color, selectionColor: color, scheme: .light)
+        XCTAssertEqual(light, light)
+        XCTAssertNotEqual(light, AutoHeightTextView.AppliedStyle(
+            fontName: "Helvetica", pointSize: 19, lineSpacing: 7,
+            textColor: color, caretColor: color, selectionColor: color, scheme: .dark))
+    }
+
+    /// The coordinator pins the measured height back into SwiftUI state, so a
+    /// later re-layout keeps the card at content height without re-measuring.
+    @MainActor
+    func testCoordinatorPinsMeasuredHeight() async {
+        let font = NSFont.systemFont(ofSize: 19)
+        final class PinBox: @unchecked Sendable { var value: CGFloat? = nil }
+        let box = PinBox()
+        let written = expectation(description: "pinned height written")
+        let binding = Binding<CGFloat?>(
+            get: { box.value },
+            set: { box.value = $0; written.fulfill() })
+        let parent = AutoHeightTextView(
+            text: .constant("Hi."),
+            contentHeight: binding,
+            font: font,
+            lineSpacing: 7,
+            textColor: .primary,
+            caretColor: .accentColor,
+            selectionColor: .accentColor,
+            accessibilityLabel: "Take 1 transcript",
+            colorScheme: .light)
+        let coordinator = AutoHeightTextView.Coordinator(parent)
+        let scroll = AutoHeightTextView.makeScrollView(font: font, label: "Take 1 transcript")
+        guard let doc = scroll.documentView as? NSTextView else {
+            XCTFail("take scroll view has no text document")
+            return
+        }
+        doc.string = "Hi."
+        coordinator.syncHeight(scrollView: scroll, width: 300)
+        await fulfillment(of: [written], timeout: 2)
+        guard let measured = AutoHeightTextView.fittingHeight(textView: doc, width: 300) else {
+            XCTFail("fittingHeight returned nil for a finite width")
+            return
+        }
+        XCTAssertEqual(box.value ?? -1, measured, accuracy: 0.5)
     }
 }

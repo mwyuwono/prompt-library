@@ -374,7 +374,7 @@
         "syncEnabled" : true
       },
       "title" : "Avoid commentary & filler",
-      "updatedAt" : "2026-10-01T02:10:00Z",
+      "updatedAt" : "2026-10-01T02:27:25Z",
       "value" : "Provide only the requested output. Omit introductions, acknowledgments, setup commentary, and closing remarks.",
       "visibility" : "public"
     },
@@ -1065,7 +1065,7 @@
     "paletteSource" : "Robert Brown Fabric Collection",
     "textReplacementLastSyncAt" : "2026-09-30T01:01:11Z"
   },
-  "updatedAt" : "2026-10-01T02:10:00Z",
+  "updatedAt" : "2026-10-01T02:27:25Z",
   "variables" : [
     {
       "id" : "var-1783398724430",

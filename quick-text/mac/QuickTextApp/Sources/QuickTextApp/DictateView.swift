@@ -30,6 +30,12 @@ struct DictateView: View {
     @State private var promptExpanded = true
     @State private var pageWidth: CGFloat = 1200
     @State private var levels: [Float] = []
+    /// Pinned display heights for the transcript editors, keyed by take.
+    /// Measured from the text system and written back here, so a later
+    /// re-layout reuses a known-good value instead of re-measuring a
+    /// just-mutated view (the stale short value painted text over takes).
+    @State private var takeTextHeights: [UUID: CGFloat] = [:]
+    @State private var resultTextHeight: CGFloat? = nil
 
     private let columnGap: CGFloat = 48
     private let sideColumnWidth: CGFloat = 460
@@ -63,6 +69,12 @@ struct DictateView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { pageWidth = $0 }
+                .onChange(of: pageWidth) {
+                    // A width change invalidates every pinned height: clear so
+                    // the next layout re-measures at the new width.
+                    takeTextHeights = [:]
+                    resultTextHeight = nil
+                }
                 .onChange(of: session.isRecording) { _, recording in
                     if recording {
                         levels = []
@@ -307,6 +319,12 @@ struct DictateView: View {
                         takeCard(index: index, take: take).id(take.id)
                     }
                 }
+                .onChange(of: session.takes.count) {
+                    // Drop pins for deleted takes.
+                    takeTextHeights = takeTextHeights.filter { id, _ in
+                        session.takes.contains(where: { $0.id == id })
+                    }
+                }
             }
         }
     }
@@ -506,14 +524,20 @@ struct DictateView: View {
         case .ready:
             AutoHeightTextView(
                 text: transcriptBinding(takeID: take.id),
+                contentHeight: Binding(
+                    get: { takeTextHeights[take.id] },
+                    set: { takeTextHeights[take.id] = $0 }
+                ),
                 font: nsSerif(19),
                 lineSpacing: 7,
                 textColor: Theme.textPrimary,
                 caretColor: Theme.hl,
                 selectionColor: Theme.hlSelection,
                 accessibilityLabel: "Take \(index + 1) transcript",
+                colorScheme: scheme,
                 onFocusChange: { focusedTakeID = $0 ? take.id : (focusedTakeID == take.id ? nil : focusedTakeID) }
             )
+            .frame(height: takeTextHeights[take.id])
         case .failed(let message):
             VStack(alignment: .leading, spacing: 10) {
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
@@ -673,13 +697,16 @@ struct DictateView: View {
         ZStack(alignment: .topLeading) {
             AutoHeightTextView(
                 text: $session.resultText,
+                contentHeight: $resultTextHeight,
                 font: .monospacedSystemFont(ofSize: 12.5, weight: .regular),
                 lineSpacing: 6,
                 textColor: Theme.textPrimary,
                 caretColor: Theme.hl,
                 selectionColor: Theme.hlSelection,
-                accessibilityLabel: "Result"
+                accessibilityLabel: "Result",
+                colorScheme: scheme
             )
+            .frame(height: resultTextHeight)
             if session.resultText.isEmpty {
                 Text("Result will appear here after processing, or type and edit directly…")
                     .font(.system(size: 14))
@@ -816,19 +843,59 @@ private extension View {
 
 // MARK: - Auto-height text
 
-/// Editable text that sizes to its content with no inner scroll, so the page
-/// stays the only scroll region. Wheel events pass up to the page scroll view.
+/// Editable transcript that grows with its content up to `maxHeight`, then
+/// scrolls internally. Display height is measured from the text system and
+/// pinned into `contentHeight`, so a later re-layout reuses a known-good
+/// value instead of re-measuring a just-mutated view (a stale short value
+/// painted transcript text over the next take). When fitted, wheel events
+/// pass up to the page scroll view.
 struct AutoHeightTextView: NSViewRepresentable {
+    /// Height cap before a take scrolls instead of growing. A full
+    /// transcription is thousands of points tall; uncapped cards push the
+    /// rest of the page away, and any stale measurement overlaps neighbors.
+    static let defaultMaxHeight: CGFloat = 480
+    /// Pin writes smaller than this are layout noise, not content change.
+    static let heightEpsilon: CGFloat = 0.5
+
     @Binding var text: String
+    @Binding var contentHeight: CGFloat?
     var font: NSFont
     var lineSpacing: CGFloat
     var textColor: Color
     var caretColor: Color
     var selectionColor: Color
     var accessibilityLabel: String
+    var colorScheme: ColorScheme
+    var maxHeight: CGFloat = defaultMaxHeight
     var onFocusChange: (Bool) -> Void = { _ in }
 
     func makeCoordinator() -> Coordinator { Coordinator(self) }
+
+    /// Displayed height for a measured full-content height: capped, never
+    /// the full thousands of points of a long transcription.
+    static func pinnedHeight(measured: CGFloat, maxHeight: CGFloat) -> CGFloat {
+        min(measured, maxHeight)
+    }
+
+    /// Whether a fresh measurement should overwrite the pinned height.
+    static func heightNeedsUpdate(old: CGFloat?, new: CGFloat) -> Bool {
+        guard let old else { return true }
+        return abs(old - new) >= heightEpsilon
+    }
+
+    /// The styling applied to the text system. Compared on every update so
+    /// identical re-renders leave the text system (and its layout) alone.
+    /// Without this, the 10 Hz recording meter dirtied layout ahead of every
+    /// re-measure and a transient short value stuck.
+    struct AppliedStyle: Equatable {
+        var fontName: String
+        var pointSize: CGFloat
+        var lineSpacing: CGFloat
+        var textColor: Color
+        var caretColor: Color
+        var selectionColor: Color
+        var scheme: ColorScheme
+    }
 
     /// Shared factory so the sizing flags are testable without a SwiftUI context.
     static func baseTextView(font: NSFont, label: String) -> FocusReportingTextView {
@@ -869,54 +936,117 @@ struct AutoHeightTextView: NSViewRepresentable {
         return max(height, ceil(font.pointSize * 1.4))
     }
 
-    func makeNSView(context: Context) -> NSTextView {
-        let view = Self.baseTextView(font: font, label: accessibilityLabel)
+    /// Shared factory so the scroll container is testable without SwiftUI.
+    static func makeScrollView(font: NSFont, label: String) -> TakeScrollView {
+        let scroll = TakeScrollView(frame: .zero)
+        scroll.drawsBackground = false
+        scroll.borderType = .noBorder
+        scroll.hasVerticalScroller = true
+        scroll.autohidesScrollers = true
+        scroll.hasHorizontalScroller = false
+        scroll.documentView = baseTextView(font: font, label: label)
+        return scroll
+    }
+
+    func makeNSView(context: Context) -> TakeScrollView {
+        let scroll = Self.makeScrollView(font: font, label: accessibilityLabel)
+        guard let view = scroll.documentView as? FocusReportingTextView else { return scroll }
         view.onFocusChange = { [weak coordinator = context.coordinator] focused in
             coordinator?.parent.onFocusChange(focused)
         }
         view.delegate = context.coordinator
-        return view
+        return scroll
     }
 
-    func updateNSView(_ view: NSTextView, context: Context) {
+    func updateNSView(_ scrollView: TakeScrollView, context: Context) {
         context.coordinator.parent = self
-        let env = context.environment
-        let style = NSMutableParagraphStyle()
-        style.lineSpacing = lineSpacing
-        let color = textColor.nsColor(env)
-        let attributes: [NSAttributedString.Key: Any] = [
-            .font: font, .foregroundColor: color, .paragraphStyle: style
-        ]
-        var contentChanged = false
-        if view.font != font { view.font = font; contentChanged = true }
-        if view.string != text { view.string = text; contentChanged = true }
-        view.textStorage?.setAttributes(attributes, range: NSRange(location: 0, length: view.string.utf16.count))
-        if contentChanged {
-            // Programmatic updates (transcription arriving, live interim text)
-            // don't go through the delegate, so re-measure: without this the
-            // card keeps its stale height and the text paints over the next card.
-            view.invalidateIntrinsicContentSize()
+        guard let view = scrollView.documentView as? FocusReportingTextView else { return }
+        view.setAccessibilityLabel(accessibilityLabel)
+        let signature = AppliedStyle(
+            fontName: font.fontName, pointSize: font.pointSize, lineSpacing: lineSpacing,
+            textColor: textColor, caretColor: caretColor, selectionColor: selectionColor,
+            scheme: colorScheme
+        )
+        // Programmatic updates (transcription arriving) don't go through the
+        // delegate. Typing does. Either way the height is re-pinned below, so
+        // the card tracks content without relying on layout invalidation.
+        let stringChanged = view.string != text
+        if stringChanged { view.string = text }
+        if stringChanged || context.coordinator.lastSignature != signature {
+            view.font = font
+            let style = NSMutableParagraphStyle()
+            style.lineSpacing = lineSpacing
+            let color = textColor.nsColor(context.environment)
+            let attributes: [NSAttributedString.Key: Any] = [
+                .font: font, .foregroundColor: color, .paragraphStyle: style
+            ]
+            view.textStorage?.setAttributes(attributes, range: NSRange(location: 0, length: view.string.utf16.count))
+            view.typingAttributes = attributes
+            view.insertionPointColor = caretColor.nsColor(context.environment)
+            view.selectedTextAttributes = [.backgroundColor: selectionColor.nsColor(context.environment)]
+            context.coordinator.lastSignature = signature
         }
-        view.typingAttributes = attributes
-        view.insertionPointColor = caretColor.nsColor(env)
-        view.selectedTextAttributes = [.backgroundColor: selectionColor.nsColor(env)]
+        context.coordinator.syncHeight(scrollView: scrollView, width: nil)
     }
 
-    func sizeThatFits(_ proposal: ProposedViewSize, nsView: NSTextView, context: Context) -> CGSize? {
-        guard let width = proposal.width,
-              let height = Self.fittingHeight(textView: nsView, width: width) else { return nil }
-        return CGSize(width: width, height: height)
+    func sizeThatFits(_ proposal: ProposedViewSize, nsView: TakeScrollView, context: Context) -> CGSize? {
+        guard let width = proposal.width, width > 0, width.isFinite,
+              let doc = nsView.documentView as? FocusReportingTextView,
+              let measured = Self.fittingHeight(textView: doc, width: width) else { return nil }
+        let capped = Self.pinnedHeight(measured: measured, maxHeight: maxHeight)
+        context.coordinator.adoptMeasured(capped, width: width)
+        return CGSize(width: width, height: capped)
     }
 
     final class Coordinator: NSObject, NSTextViewDelegate {
         var parent: AutoHeightTextView
+        var lastSignature: AppliedStyle?
+        var lastWidth: CGFloat = 0
 
         init(_ parent: AutoHeightTextView) { self.parent = parent }
 
         func textDidChange(_ notification: Notification) {
             guard let view = notification.object as? NSTextView else { return }
             parent.text = view.string
-            view.invalidateIntrinsicContentSize()
+            if let scroll = view.enclosingScrollView as? TakeScrollView {
+                syncHeight(scrollView: scroll, width: nil)
+            }
+        }
+
+        /// Measure at the live width and pin the capped height into SwiftUI
+        /// state. The write goes out async: this runs inside view updates.
+        func syncHeight(scrollView: TakeScrollView, width: CGFloat?) {
+            guard let doc = scrollView.documentView as? FocusReportingTextView else { return }
+            let measureWidth = width ?? scrollView.contentView.bounds.width
+            guard measureWidth > 0, measureWidth.isFinite else { return }
+            doc.frame.size.width = measureWidth
+            guard let measured = AutoHeightTextView.fittingHeight(textView: doc, width: measureWidth) else { return }
+            adoptMeasured(AutoHeightTextView.pinnedHeight(measured: measured, maxHeight: parent.maxHeight), width: measureWidth)
+        }
+
+        /// Adopt a fresh measurement on width change or real content change.
+        /// Sub-point jitter is ignored so layout settles instead of churning.
+        func adoptMeasured(_ capped: CGFloat, width: CGFloat) {
+            let widthChanged = abs(width - lastWidth) >= 1
+            lastWidth = width
+            guard widthChanged || AutoHeightTextView.heightNeedsUpdate(old: parent.$contentHeight.wrappedValue, new: capped) else { return }
+            let binding = parent.$contentHeight
+            DispatchQueue.main.async { binding.wrappedValue = capped }
+        }
+    }
+}
+
+/// Scroll container for a take transcript. Clips the document to the
+/// SwiftUI-assigned rect, so a stale height can only clip, never paint over
+/// the next card. Forwards wheel events up the chain when everything fits,
+/// preserving page scrolling; otherwise scrolls the take itself.
+final class TakeScrollView: NSScrollView {
+    override func scrollWheel(with event: NSEvent) {
+        let docHeight = (documentView as? NSTextView)?.frame.height ?? 0
+        if docHeight > contentView.bounds.height + 1 {
+            super.scrollWheel(with: event)
+        } else {
+            nextResponder?.scrollWheel(with: event)
         }
     }
 }
