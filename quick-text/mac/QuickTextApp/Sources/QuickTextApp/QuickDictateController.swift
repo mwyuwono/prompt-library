@@ -35,7 +35,7 @@ enum QuickDictateOutput: String, CaseIterable, Identifiable {
 /// Quick Dictate preferences (UserDefaults; never in the corpus).
 enum QuickDictateSettings {
     static let enabledKey = "quicktext.quickDictate.enabled"
-    static let useFnKeyKey = "quicktext.quickDictate.useFnKey"
+    static let triggerKeyKey = "quicktext.quickDictate.triggerKey"
     static let outputKey = "quicktext.quickDictate.output"
     static let processIDKey = "quicktext.quickDictate.processID"
 
@@ -57,9 +57,9 @@ enum QuickDictateSettings {
         set { UserDefaults.standard.set(newValue, forKey: enabledKey) }
     }
 
-    static var useFnKey: Bool {
-        get { UserDefaults.standard.object(forKey: useFnKeyKey) as? Bool ?? true }
-        set { UserDefaults.standard.set(newValue, forKey: useFnKeyKey) }
+    static var triggerKey: QuickDictateTriggerKey {
+        get { UserDefaults.standard.string(forKey: triggerKeyKey).flatMap(QuickDictateTriggerKey.init(rawValue:)) ?? .rightOption }
+        set { UserDefaults.standard.set(newValue.rawValue, forKey: triggerKeyKey) }
     }
 
     static var output: QuickDictateOutput {
@@ -73,7 +73,8 @@ enum QuickDictateSettings {
     }
 }
 
-/// System-wide dictation: Fn/Globe (or Opt-Shift-D) → floating pill →
+/// System-wide dictation: hold the trigger key (Right Option by default) or
+/// Opt-Shift-D → floating pill →
 /// transcribe → optional cleanup → insert at the cursor / clipboard / Dictate.
 /// Owns its own `DictateSession` so it never disturbs takes on the Dictate page.
 @MainActor
@@ -116,7 +117,7 @@ final class QuickDictateController: ObservableObject {
     var openDictate: () -> Void = {}
 
     private var recognizer = TriggerGestureRecognizer()
-    private let fnMonitor = FnKeyMonitor()
+    private let keyMonitor = TriggerKeyMonitor()
     private var panel: QuickDictatePanel?
     private var target: TextInserter.Target?
     private var runID = UUID()
@@ -126,25 +127,26 @@ final class QuickDictateController: ObservableObject {
     private var cancellables: Set<AnyCancellable> = []
 
     init() {
-        fnMonitor.onTriggerDown = { [weak self] in self?.triggerDown() }
-        fnMonitor.onTriggerUp = { [weak self] in self?.triggerUp() }
-        fnMonitor.onOtherKeyDown = { [weak self] isEscape in self?.otherKeyDown(isEscape: isEscape) }
+        keyMonitor.onTriggerDown = { [weak self] in self?.triggerDown() }
+        keyMonitor.onTriggerUp = { [weak self] in self?.triggerUp() }
+        keyMonitor.onOtherKeyDown = { [weak self] isEscape in self?.otherKeyDown(isEscape: isEscape) }
         observeSession()
     }
 
     // MARK: - Trigger wiring
 
-    var isFnKeyActive: Bool { fnMonitor.isRunning }
+    var isTriggerKeyActive: Bool { keyMonitor.isRunning }
 
-    /// (Re)applies the Fn setting. Safe to call repeatedly, e.g. after the
-    /// user grants Input Monitoring.
+    /// (Re)applies the trigger-key setting. Safe to call repeatedly, e.g.
+    /// after the user grants Input Monitoring or picks another key.
     @discardableResult
-    func refreshFnMonitor() -> Bool {
-        guard QuickDictateSettings.enabled, QuickDictateSettings.useFnKey else {
-            fnMonitor.stop()
+    func refreshTriggerMonitor() -> Bool {
+        keyMonitor.triggerKey = QuickDictateSettings.triggerKey
+        guard QuickDictateSettings.enabled, QuickDictateSettings.triggerKey != .none else {
+            keyMonitor.stop()
             return false
         }
-        return fnMonitor.start()
+        return keyMonitor.start()
     }
 
     func triggerDown() {

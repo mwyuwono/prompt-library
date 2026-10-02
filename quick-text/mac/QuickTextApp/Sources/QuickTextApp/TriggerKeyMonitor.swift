@@ -2,13 +2,13 @@ import AppKit
 import Carbon
 
 /// Pure hold/tap state machine behind the Quick Dictate trigger. Fed by the
-/// Fn/Globe event tap and by the Opt-Shift-D Carbon fallback alike, so both
+/// trigger-key event tap and by the Opt-Shift-D Carbon fallback alike, so both
 /// triggers behave identically and the logic is testable without events.
 ///
 /// - Hold: press starts recording; release after `tapThreshold` finishes.
 /// - Tap: a release inside `tapThreshold` switches to hands-free; the next
 ///   tap finishes.
-/// - Fn used as a modifier (any other key while held) cancels silently.
+/// - The trigger used as a modifier (any other key while held) cancels silently.
 /// - Esc cancels from any active state.
 struct TriggerGestureRecognizer {
     enum Output: Equatable {
@@ -76,7 +76,7 @@ struct TriggerGestureRecognizer {
                 phase = .idle
                 return .cancel
             }
-            // Fn+key while hands-free (e.g. Fn+arrow): leave the take running.
+            // Trigger+key while hands-free (e.g. Fn+arrow): leave the take running.
             phase = .handsFree
             return nil
         }
@@ -89,20 +89,73 @@ struct TriggerGestureRecognizer {
     mutating func adoptHandsFree() { phase = .handsFree }
 }
 
-/// Listen-only Fn/Globe key tap. Needs Input Monitoring; `start()` returns
-/// false when it isn't granted so the caller can rely on the Carbon fallback.
-final class FnKeyMonitor {
-    /// kVK_Function: the Fn/Globe key's flagsChanged keycode.
-    static let functionKeyCode: Int64 = 63
+/// The single key Quick Dictate listens for. Both arrive as flagsChanged
+/// events, so either works with a listen-only tap.
+enum QuickDictateTriggerKey: String, CaseIterable, Identifiable {
+    /// Right Option alone. Reaches every app on any keyboard, unlike Fn,
+    /// which external keyboards keep to themselves and system services
+    /// (Siri, Gemini) may intercept.
+    case rightOption
+    case fn
+    /// No key trigger: Opt-Shift-D and the menu bar only.
+    case none
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .rightOption: return "Right Option"
+        case .fn: return "Fn/Globe"
+        case .none: return "None (Opt-Shift-D only)"
+        }
+    }
+
+    var keyCode: Int64? {
+        switch self {
+        case .rightOption: return 61 // kVK_RightOption
+        case .fn: return 63 // kVK_Function
+        case .none: return nil
+        }
+    }
+
+    /// The modifier flag a held trigger adds to every other key event.
+    var modifierFlag: CGEventFlags {
+        switch self {
+        case .rightOption: return .maskAlternate
+        case .fn, .none: return .maskSecondaryFn
+        }
+    }
+
+    /// NX_DEVICERALTKEYMASK: distinguishes Right Option from Left Option,
+    /// which share `.maskAlternate`.
+    private static let rightOptionDeviceMask: UInt64 = 0x40
+
+    func isDown(_ flags: CGEventFlags) -> Bool {
+        switch self {
+        case .rightOption: return flags.rawValue & Self.rightOptionDeviceMask != 0
+        case .fn: return flags.contains(.maskSecondaryFn)
+        case .none: return false
+        }
+    }
+}
+
+/// Listen-only tap for the trigger key. Needs Input Monitoring; `start()`
+/// returns false when it isn't granted so the caller can rely on the Carbon
+/// fallback.
+final class TriggerKeyMonitor {
     static let escapeKeyCode: Int64 = 53
 
     var onTriggerDown: () -> Void = {}
     var onTriggerUp: () -> Void = {}
     var onOtherKeyDown: (_ isEscape: Bool) -> Void = { _ in }
 
+    var triggerKey: QuickDictateTriggerKey = .rightOption {
+        didSet { if triggerKey != oldValue { triggerDown = false } }
+    }
+
     private var tap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
-    private var fnDown = false
+    private var triggerDown = false
 
     static var hasInputMonitoringAccess: Bool { CGPreflightListenEventAccess() }
 
@@ -118,7 +171,7 @@ final class FnKeyMonitor {
         let mask = (1 << CGEventType.flagsChanged.rawValue) | (1 << CGEventType.keyDown.rawValue)
         let callback: CGEventTapCallBack = { _, type, event, userInfo in
             guard let userInfo else { return Unmanaged.passUnretained(event) }
-            let monitor = Unmanaged<FnKeyMonitor>.fromOpaque(userInfo).takeUnretainedValue()
+            let monitor = Unmanaged<TriggerKeyMonitor>.fromOpaque(userInfo).takeUnretainedValue()
             monitor.handle(type: type, event: event)
             return Unmanaged.passUnretained(event)
         }
@@ -143,7 +196,7 @@ final class FnKeyMonitor {
         if let runLoopSource { CFRunLoopRemoveSource(CFRunLoopGetMain(), runLoopSource, .commonModes) }
         tap = nil
         runLoopSource = nil
-        fnDown = false
+        triggerDown = false
     }
 
     private func handle(type: CGEventType, event: CGEvent) {
@@ -152,19 +205,18 @@ final class FnKeyMonitor {
             if let tap { CGEvent.tapEnable(tap: tap, enable: true) }
         case .flagsChanged:
             let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
-            if keyCode == Self.functionKeyCode {
-                let isDown = event.flags.contains(.maskSecondaryFn)
-                guard isDown != fnDown else { return }
-                fnDown = isDown
+            if keyCode == triggerKey.keyCode {
+                let isDown = triggerKey.isDown(event.flags)
+                guard isDown != triggerDown else { return }
+                triggerDown = isDown
                 isDown ? onTriggerDown() : onTriggerUp()
-            } else if fnDown {
-                // Another modifier joined Fn (Fn+Shift…): a shortcut, not dictation.
-                let modifiers: CGEventFlags = [.maskCommand, .maskControl, .maskAlternate, .maskShift]
-                if !event.flags.intersection(modifiers).isEmpty { onOtherKeyDown(false) }
+            } else if triggerDown, Self.otherModifierJoined(event.flags, trigger: triggerKey) {
+                // Another modifier joined the trigger (e.g. Right Option+Cmd): a shortcut, not dictation.
+                onOtherKeyDown(false)
             }
         case .keyDown:
             let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
-            if let isEscape = Self.classifyKeyDown(keyCode: keyCode, flags: event.flags) {
+            if let isEscape = Self.classifyKeyDown(keyCode: keyCode, flags: event.flags, trigger: triggerKey) {
                 onOtherKeyDown(isEscape)
             }
         default:
@@ -172,17 +224,26 @@ final class FnKeyMonitor {
         }
     }
 
-    /// Which key presses count while dictating: Esc always; any other key
-    /// only when it carries the Fn flag, i.e. the user is really holding
-    /// Fn as a modifier. Keystrokes other apps synthesize in response to
-    /// Fn (Gemini posts Cmd-C to grab the selection) carry no Fn flag and
-    /// must not cancel the take. Returns nil to ignore the event.
-    static func classifyKeyDown(keyCode: Int64, flags: CGEventFlags) -> Bool? {
-        if keyCode == escapeKeyCode { return true }
-        return flags.contains(.maskSecondaryFn) ? false : nil
+    static func otherModifierJoined(_ flags: CGEventFlags, trigger: QuickDictateTriggerKey) -> Bool {
+        let others = CGEventFlags([.maskCommand, .maskControl, .maskAlternate, .maskShift])
+            .subtracting(trigger.modifierFlag)
+        return !flags.intersection(others).isEmpty
     }
 
-    // MARK: - System Globe-key setting
+    /// Which key presses count while dictating: Esc always; any other key
+    /// only when it carries the trigger's modifier flag, i.e. the user is
+    /// really holding the trigger as a modifier (Right Option+E for é).
+    /// Keystrokes other apps synthesize (Gemini posts Cmd-C on Fn) carry no
+    /// such flag and must not cancel the take. Returns nil to ignore.
+    static func classifyKeyDown(keyCode: Int64, flags: CGEventFlags, trigger: QuickDictateTriggerKey) -> Bool? {
+        if keyCode == escapeKeyCode { return true }
+        return flags.contains(trigger.modifierFlag) ? false : nil
+    }
+
+}
+
+/// Fn-specific system conflicts, surfaced in Settings when Fn is the trigger.
+enum FnKeyConflicts {
 
     /// System Settings › Keyboard › "Press 🌐 key to". Anything other than
     /// "Do Nothing" (0) makes macOS act on the same press Quick Dictate uses.

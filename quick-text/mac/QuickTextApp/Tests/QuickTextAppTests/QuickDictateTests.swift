@@ -59,13 +59,31 @@ final class QuickDictateTests: XCTestCase {
         XCTAssertEqual(recognizer.triggerUp(at: 5.1), .finish)
     }
 
-    func testOnlyFnFlaggedKeysCountAsModifierUse() {
+    func testOnlyTriggerFlaggedKeysCountAsModifierUse() {
         // Real Fn+arrow carries the Fn flag.
-        XCTAssertEqual(FnKeyMonitor.classifyKeyDown(keyCode: 124, flags: .maskSecondaryFn), false)
+        XCTAssertEqual(TriggerKeyMonitor.classifyKeyDown(keyCode: 124, flags: .maskSecondaryFn, trigger: .fn), false)
         // Another app's synthesized Cmd-C (no Fn flag) is ignored.
-        XCTAssertNil(FnKeyMonitor.classifyKeyDown(keyCode: 8, flags: .maskCommand))
+        XCTAssertNil(TriggerKeyMonitor.classifyKeyDown(keyCode: 8, flags: .maskCommand, trigger: .fn))
+        // Right Option+E (é) is the trigger used as a modifier.
+        XCTAssertEqual(TriggerKeyMonitor.classifyKeyDown(keyCode: 14, flags: .maskAlternate, trigger: .rightOption), false)
+        XCTAssertNil(TriggerKeyMonitor.classifyKeyDown(keyCode: 8, flags: .maskCommand, trigger: .rightOption))
         // Esc always counts.
-        XCTAssertEqual(FnKeyMonitor.classifyKeyDown(keyCode: FnKeyMonitor.escapeKeyCode, flags: []), true)
+        XCTAssertEqual(TriggerKeyMonitor.classifyKeyDown(keyCode: TriggerKeyMonitor.escapeKeyCode, flags: [], trigger: .rightOption), true)
+    }
+
+    func testRightOptionIsDistinguishedFromLeftOption() {
+        let rightDown = CGEventFlags(rawValue: CGEventFlags.maskAlternate.rawValue | 0x40)
+        let leftDown = CGEventFlags(rawValue: CGEventFlags.maskAlternate.rawValue | 0x20)
+        XCTAssertTrue(QuickDictateTriggerKey.rightOption.isDown(rightDown))
+        XCTAssertFalse(QuickDictateTriggerKey.rightOption.isDown(leftDown))
+        XCTAssertFalse(QuickDictateTriggerKey.rightOption.isDown([]))
+        XCTAssertEqual(QuickDictateTriggerKey.rightOption.keyCode, 61)
+    }
+
+    func testOtherModifierJoiningTriggerExcludesTriggersOwnFlag() {
+        XCTAssertFalse(TriggerKeyMonitor.otherModifierJoined(.maskAlternate, trigger: .rightOption))
+        XCTAssertTrue(TriggerKeyMonitor.otherModifierJoined([.maskAlternate, .maskCommand], trigger: .rightOption))
+        XCTAssertTrue(TriggerKeyMonitor.otherModifierJoined(.maskShift, trigger: .fn))
     }
 
     // MARK: - Clipboard borrow/restore

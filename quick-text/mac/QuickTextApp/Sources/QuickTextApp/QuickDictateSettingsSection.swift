@@ -23,7 +23,7 @@ enum QuickDictatePermission: CaseIterable, Identifiable {
         switch self {
         case .microphone: return "Record your voice."
         case .accessibility: return "Insert text at the cursor in other apps."
-        case .inputMonitoring: return "Hear the Fn/Globe key. Without it, use Opt-Shift-D."
+        case .inputMonitoring: return "Hear the trigger key. Without it, use Opt-Shift-D."
         }
     }
 
@@ -31,7 +31,7 @@ enum QuickDictatePermission: CaseIterable, Identifiable {
         switch self {
         case .microphone: return AVAudioApplication.shared.recordPermission == .granted
         case .accessibility: return TextInserter.isAccessibilityTrusted
-        case .inputMonitoring: return FnKeyMonitor.hasInputMonitoringAccess
+        case .inputMonitoring: return TriggerKeyMonitor.hasInputMonitoringAccess
         }
     }
 
@@ -50,7 +50,7 @@ enum QuickDictatePermission: CaseIterable, Identifiable {
         switch self {
         case .microphone: AVAudioApplication.requestRecordPermission { _ in }
         case .accessibility: TextInserter.requestAccessibilityAccess()
-        case .inputMonitoring: FnKeyMonitor.requestInputMonitoringAccess()
+        case .inputMonitoring: TriggerKeyMonitor.requestInputMonitoringAccess()
         }
         if let settingsURL { NSWorkspace.shared.open(settingsURL) }
     }
@@ -59,7 +59,7 @@ enum QuickDictatePermission: CaseIterable, Identifiable {
 struct QuickDictateSettingsSection: View {
     @ObservedObject var controller: QuickDictateController
     @AppStorage(QuickDictateSettings.enabledKey) private var enabled = true
-    @AppStorage(QuickDictateSettings.useFnKeyKey) private var useFnKey = true
+    @AppStorage(QuickDictateSettings.triggerKeyKey) private var triggerKey = QuickDictateTriggerKey.rightOption.rawValue
     @AppStorage(QuickDictateSettings.outputKey) private var output = QuickDictateOutput.insert.rawValue
     /// Bumped to re-read permission state after the user returns from System Settings.
     @State private var refreshToken = 0
@@ -75,7 +75,7 @@ struct QuickDictateSettingsSection: View {
                     .controlSize(.small)
                     .labelsHidden()
             }
-            Text("Dictate into any app. Hold Fn/Globe to talk and release to insert, or tap it for hands-free and tap again to finish. Esc cancels. Opt-Shift-D works the same way without Input Monitoring.")
+            Text("Dictate into any app. Hold the trigger key to talk and release to insert, or tap it for hands-free and tap again to finish. Esc cancels. Opt-Shift-D works the same way without Input Monitoring.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .frame(maxWidth: 480, alignment: .leading)
@@ -83,8 +83,13 @@ struct QuickDictateSettingsSection: View {
             Grid(alignment: .leading, horizontalSpacing: 16, verticalSpacing: 8) {
                 GridRow {
                     Text("Trigger").font(.caption).foregroundStyle(.secondary)
-                    Toggle("Fn/Globe key", isOn: $useFnKey)
-                        .controlSize(.small)
+                    Picker("Trigger", selection: $triggerKey) {
+                        ForEach(QuickDictateTriggerKey.allCases) { key in
+                            Text(key.title).tag(key.rawValue)
+                        }
+                    }
+                    .labelsHidden()
+                    .frame(maxWidth: 220)
                 }
                 GridRow {
                     Text("Output").font(.caption).foregroundStyle(.secondary)
@@ -113,13 +118,13 @@ struct QuickDictateSettingsSection: View {
                 ForEach(QuickDictatePermission.allCases) { permission in
                     permissionRow(permission)
                 }
-                if useFnKey, FnKeyMonitor.systemDictationConflicts {
+                if triggerKey == QuickDictateTriggerKey.fn.rawValue, FnKeyConflicts.systemDictationConflicts {
                     Label("macOS Dictation also responds to Fn. Set System Settings › Keyboard › Dictation › Shortcut to Off (or a non-Fn key).", systemImage: "exclamationmark.triangle")
                         .font(.caption)
                         .foregroundStyle(Theme.error)
                         .frame(maxWidth: 480, alignment: .leading)
                 }
-                if useFnKey, FnKeyMonitor.globeKeyConflicts {
+                if triggerKey == QuickDictateTriggerKey.fn.rawValue, FnKeyConflicts.globeKeyConflicts {
                     Label("Set System Settings › Keyboard › “Press 🌐 key to” to Do Nothing, or macOS will also react to each Fn press.", systemImage: "exclamationmark.triangle")
                         .font(.caption)
                         .foregroundStyle(Theme.error)
@@ -134,8 +139,8 @@ struct QuickDictateSettingsSection: View {
             RoundedRectangle(cornerRadius: QuickTextDesign.controlRadius)
                 .stroke(Color.primary.opacity(0.08), lineWidth: 1)
         )
-        .onChange(of: enabled) { controller.refreshFnMonitor(); refreshToken += 1 }
-        .onChange(of: useFnKey) { controller.refreshFnMonitor(); refreshToken += 1 }
+        .onChange(of: enabled) { controller.refreshTriggerMonitor(); refreshToken += 1 }
+        .onChange(of: triggerKey) { controller.refreshTriggerMonitor(); refreshToken += 1 }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
             refreshToken += 1
         }

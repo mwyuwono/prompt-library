@@ -77,7 +77,7 @@ struct QuickTextApp: App {
 final class AppDelegate: NSObject, NSApplicationDelegate {
     weak var store: CorpusStore?
     weak var dictateSession: DictateSession?
-    /// System-wide dictation (Fn/Globe or Opt-Shift-D), see QuickDictateController.
+    /// System-wide dictation (Right Option, Fn, or Opt-Shift-D), see QuickDictateController.
     lazy var quickDictate: QuickDictateController = {
         let controller = QuickDictateController()
         controller.storeProvider = { [weak self] in self?.store }
@@ -104,12 +104,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         Self.shared = self
         applyDockIcon()
         registerHotKey()
-        quickDictate.refreshFnMonitor()
+        quickDictate.refreshTriggerMonitor()
     }
 
     /// Picks up an Input Monitoring grant made while the app was in the background.
     func applicationDidBecomeActive(_ notification: Notification) {
-        quickDictate.refreshFnMonitor()
+        quickDictate.refreshTriggerMonitor()
     }
 
     /// Dock-only icon override: the txt artwork replaces the Dock (and
@@ -145,7 +145,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let modifiers = UInt32(optionKey | shiftKey)
         RegisterEventHotKey(49, modifiers, hotKeyID, GetApplicationEventTarget(), 0, &hotKeyRef)
         // Opt-Shift-D: Quick Dictate fallback that needs no Input Monitoring.
-        // Press and release both feed the same hold/tap recognizer as Fn.
+        // Press and release both feed the same hold/tap recognizer as the trigger key.
         let dictateID = EventHotKeyID(signature: OSType("QTXT".fourCharCodeValue), id: 2)
         RegisterEventHotKey(UInt32(kVK_ANSI_D), modifiers, dictateID, GetApplicationEventTarget(), 0, &dictateHotKeyRef)
 
