@@ -59,6 +59,15 @@ final class QuickDictateTests: XCTestCase {
         XCTAssertEqual(recognizer.triggerUp(at: 5.1), .finish)
     }
 
+    func testOnlyFnFlaggedKeysCountAsModifierUse() {
+        // Real Fn+arrow carries the Fn flag.
+        XCTAssertEqual(FnKeyMonitor.classifyKeyDown(keyCode: 124, flags: .maskSecondaryFn), false)
+        // Another app's synthesized Cmd-C (no Fn flag) is ignored.
+        XCTAssertNil(FnKeyMonitor.classifyKeyDown(keyCode: 8, flags: .maskCommand))
+        // Esc always counts.
+        XCTAssertEqual(FnKeyMonitor.classifyKeyDown(keyCode: FnKeyMonitor.escapeKeyCode, flags: []), true)
+    }
+
     // MARK: - Clipboard borrow/restore
 
     @MainActor

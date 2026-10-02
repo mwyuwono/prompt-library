@@ -164,10 +164,22 @@ final class FnKeyMonitor {
             }
         case .keyDown:
             let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
-            onOtherKeyDown(keyCode == Self.escapeKeyCode)
+            if let isEscape = Self.classifyKeyDown(keyCode: keyCode, flags: event.flags) {
+                onOtherKeyDown(isEscape)
+            }
         default:
             break
         }
+    }
+
+    /// Which key presses count while dictating: Esc always; any other key
+    /// only when it carries the Fn flag, i.e. the user is really holding
+    /// Fn as a modifier. Keystrokes other apps synthesize in response to
+    /// Fn (Gemini posts Cmd-C to grab the selection) carry no Fn flag and
+    /// must not cancel the take. Returns nil to ignore the event.
+    static func classifyKeyDown(keyCode: Int64, flags: CGEventFlags) -> Bool? {
+        if keyCode == escapeKeyCode { return true }
+        return flags.contains(.maskSecondaryFn) ? false : nil
     }
 
     // MARK: - System Globe-key setting
