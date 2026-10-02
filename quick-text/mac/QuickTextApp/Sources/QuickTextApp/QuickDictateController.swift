@@ -206,6 +206,7 @@ final class QuickDictateController: ObservableObject {
 
     func finish() {
         guard case .listening = phase else { return }
+        LatencyTrace.mark("release", "process=\(processID)")
         recognizer.reset()
         phase = .transcribing
         let run = runID
@@ -246,6 +247,7 @@ final class QuickDictateController: ObservableObject {
     private func complete(run: UUID) async {
         do {
             let transcript = try await session.finishQuickTranscript()
+            LatencyTrace.mark("take-ready", "chars=\(transcript.count)")
             guard run == runID else { return }
             guard !transcript.isEmpty else { throw QuickDictateError.nothingRecorded }
             lastTake = session.takes.last
@@ -255,8 +257,10 @@ final class QuickDictateController: ObservableObject {
             var note: String?
             if let prompt = resolvedPrompt() {
                 phase = .processing
+                LatencyTrace.mark("cleanup-start")
                 do {
                     text = try await session.processQuickTranscript(transcript, masterPrompt: prompt)
+                    LatencyTrace.mark("cleanup-done")
                     guard run == runID else { return }
                 } catch {
                     guard run == runID else { return }
@@ -271,6 +275,7 @@ final class QuickDictateController: ObservableObject {
                 return
             }
             var outcome = await TextInserter.deliver(text, to: target ?? TextInserter.captureTarget(), insert: output == .insert)
+            LatencyTrace.mark("delivered")
             guard run == runID else { return }
             if let note, case .copied = outcome { outcome = .copied(reason: note) }
             phase = .done(outcome)

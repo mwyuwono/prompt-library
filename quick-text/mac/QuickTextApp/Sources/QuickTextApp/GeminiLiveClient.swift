@@ -340,6 +340,7 @@ final class GeminiLiveWebSocketDriver: LiveTranscriptionDriver {
     private var sending = false
     private var stopRequested = false
     private var receivedTranscript = false
+    private var gate = LiveFinalizationGate()
     private var queuedAudioChunks = 0
     private var sentAudioChunks = 0
     private var sentAudioBytes = 0
@@ -461,8 +462,16 @@ final class GeminiLiveWebSocketDriver: LiveTranscriptionDriver {
             }
             guard let message = next.0 else {
                 if next.1 {
-                    // Leave time for the final input transcription before closing.
-                    try? await Task.sleep(nanoseconds: 3_000_000_000)
+                    // Wait for the server to finish the turn (see LiveFinalizationGate)
+                    // instead of a fixed delay; the ceiling still bounds it.
+                    let endSent = DispatchTime.now().uptimeNanoseconds
+                    sendLock.withLock { gate.markEndSent(at: endSent) }
+                    while !Task.isCancelled {
+                        let now = DispatchTime.now().uptimeNanoseconds
+                        if sendLock.withLock({ gate.shouldClose(at: now) }) { break }
+                        try? await Task.sleep(nanoseconds: 25_000_000)
+                    }
+                    LatencyTrace.mark("sleep-3s-over")
                     let hasTranscript = sendLock.withLock { receivedTranscript }
                     if !hasTranscript {
                         continuation?.yield(.error(GeminiLiveClient.emptyStreamError()))
@@ -479,6 +488,7 @@ final class GeminiLiveWebSocketDriver: LiveTranscriptionDriver {
                     throw URLError(.notConnectedToInternet)
                 }
                 try await task.send(.string(message.json))
+                if message.audioBytes == 0 { LatencyTrace.mark("audioStreamEnd-sent") }
                 if message.audioBytes > 0 {
                     sendLock.withLock {
                         sentAudioChunks += 1
@@ -510,6 +520,13 @@ final class GeminiLiveWebSocketDriver: LiveTranscriptionDriver {
                 }
                 guard let data,
                       let update = GeminiLiveClient.parseServerMessage(data) else { continue }
+                sendLock.withLock {
+                    gate.noteFrame(at: DispatchTime.now().uptimeNanoseconds,
+                                   isFinal: update.isFinal, hasText: update.transcriptChunk != nil)
+                }
+                if sendLock.withLock({ stopRequested }) {
+                    LatencyTrace.mark("server-frame", "final=\(update.isFinal) chunk=\(update.transcriptChunk?.count ?? 0)")
+                }
                 if let chunk = update.transcriptChunk {
                     sendLock.withLock { receivedTranscript = true }
                     continuation?.yield(.transcript(text: chunk, isFinal: update.isFinal))
@@ -526,5 +543,40 @@ final class GeminiLiveWebSocketDriver: LiveTranscriptionDriver {
                 return
             }
         }
+    }
+}
+
+/// Decides when a stopped live take may close its socket. Closes at once on
+/// the turn-complete frame (an empty final) that follows `audioStreamEnd`;
+/// failing that, after a quiet spell once a final was seen; never later than
+/// the ceiling. Interim text is not treated as complete without a final.
+struct LiveFinalizationGate {
+    var quiet: UInt64 = 800_000_000
+    var ceiling: UInt64 = 2_000_000_000
+    private(set) var endSentAt: UInt64?
+    private var lastFrameAt: UInt64?
+    private var finalSeen = false
+    private var turnCompleteAfterEnd = false
+
+    init(quiet: UInt64 = 800_000_000, ceiling: UInt64 = 2_000_000_000) {
+        self.quiet = quiet
+        self.ceiling = ceiling
+    }
+
+    mutating func markEndSent(at now: UInt64) { endSentAt = now }
+
+    mutating func noteFrame(at now: UInt64, isFinal: Bool, hasText: Bool) {
+        lastFrameAt = now
+        guard isFinal else { return }
+        finalSeen = true
+        if endSentAt != nil, !hasText { turnCompleteAfterEnd = true }
+    }
+
+    func shouldClose(at now: UInt64) -> Bool {
+        guard let end = endSentAt else { return false }
+        if now &- end >= ceiling { return true }
+        if turnCompleteAfterEnd { return true }
+        guard finalSeen else { return false }
+        return now &- max(lastFrameAt ?? end, end) >= quiet
     }
 }

@@ -413,6 +413,7 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
     /// Stops the engine synchronously so timing freezes, then finalizes from
     /// the streamed result — or the parallel file when the stream came up dry.
     private func stopLiveCapture() {
+        LatencyTrace.mark("stop-live-capture")
         let duration = liveStartDate.map { Date().timeIntervalSince($0) } ?? recordingElapsed
         if let engine = liveEngine {
             engine.inputNode.removeTap(onBus: 0)
@@ -445,6 +446,7 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
                 outcome.errorMessage = [outcome.errorMessage, counts]
                     .compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: " — ")
             }
+            LatencyTrace.mark("live-stream-ended", "chars=\(outcome.text.count) final=\(outcome.receivedFinal) err=\(outcome.errorMessage != nil)")
             self?.finalizeLiveTake(outcome, takeID: id, audioURL: url)
         }
     }
@@ -491,6 +493,7 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
         guard let index = takes.firstIndex(where: { $0.id == takeID }) else { return }
         let text = outcome.text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else {
+            LatencyTrace.mark("rest-fallback")
             if let detail = outcome.errorMessage?.trimmingCharacters(in: .whitespacesAndNewlines),
                !detail.isEmpty {
                 errorMessage = "Real-time transcription dropped (\(detail)) — transcribing after take."

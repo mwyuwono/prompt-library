@@ -1364,4 +1364,38 @@ extension XCTestCase {
         addTeardownBlock { try? FileManager.default.removeItem(at: dir) }
         return dir
     }
+
+    // MARK: - Live finalization gate
+
+    func testGateClosesImmediatelyOnTurnCompleteAfterEnd() {
+        var gate = LiveFinalizationGate()
+        gate.markEndSent(at: 0)
+        gate.noteFrame(at: 100_000_000, isFinal: true, hasText: true)
+        XCTAssertFalse(gate.shouldClose(at: 150_000_000))
+        gate.noteFrame(at: 100_000_000, isFinal: true, hasText: false)
+        XCTAssertTrue(gate.shouldClose(at: 150_000_000))
+    }
+
+    func testGateWaitsQuietWindowWhenFinalCameBeforeEnd() {
+        var gate = LiveFinalizationGate()
+        gate.noteFrame(at: 0, isFinal: true, hasText: true)
+        gate.noteFrame(at: 10, isFinal: true, hasText: false) // turn ended pre-release
+        gate.markEndSent(at: 60_000_000)
+        XCTAssertFalse(gate.shouldClose(at: 500_000_000))
+        XCTAssertTrue(gate.shouldClose(at: 900_000_000))
+    }
+
+    func testGateInterimAloneNeverClosesBeforeCeiling() {
+        var gate = LiveFinalizationGate()
+        gate.markEndSent(at: 0)
+        gate.noteFrame(at: 100_000_000, isFinal: false, hasText: true)
+        XCTAssertFalse(gate.shouldClose(at: 1_900_000_000))
+        XCTAssertTrue(gate.shouldClose(at: 2_000_000_000))
+    }
+
+    func testGateNeverClosesBeforeEndSent() {
+        var gate = LiveFinalizationGate()
+        gate.noteFrame(at: 0, isFinal: true, hasText: false)
+        XCTAssertFalse(gate.shouldClose(at: 10_000_000_000))
+    }
 }
