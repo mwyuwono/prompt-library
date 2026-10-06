@@ -119,6 +119,16 @@ enum PreviewData {
         atoms: nil
     )
 
+    /// Grid/list preview: a linked shortcut plus a summary long enough to
+    /// prove cards no longer truncate it.
+    static let shortcutPhrase: Phrase = {
+        var phrase = plainPhrase
+        phrase.id = "preview-shortcut"
+        phrase.summary = "Direct task brief with enough words to spill past the old two-line card limit, proving the full summary now shows"
+        phrase.textReplacement = TextReplacementLink(shortcut: "xbrief", syncEnabled: true)
+        return phrase
+    }()
+
     static let store: CorpusStore = {
         let store = CorpusStore()
         store.corpus = QuickTextCorpus(

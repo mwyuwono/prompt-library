@@ -17,7 +17,8 @@ enum TranscriptionMode: String, CaseIterable, Identifiable {
         }
     }
 
-    /// Billing rate applied to transcription usage while this mode is selected:
+    /// Reference rate for this mode's primary route. Accounting captures the
+    /// actual request model; REST fallback always uses Flash rates.
     /// After take is transcribed via gemini-3.8-flash, Real-time streams via
     /// gemini-3.5-transcribe-live.
     var pricing: TokenUsage.ModelPricing {

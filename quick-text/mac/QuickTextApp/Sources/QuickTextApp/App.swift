@@ -102,9 +102,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.setActivationPolicy(.regular)
         AppAppearance.current.apply()
         Self.shared = self
+        _ = DictateStatsStore.shared
         applyDockIcon()
         registerHotKey()
         quickDictate.refreshTriggerMonitor()
+    }
+
+    func applicationWillTerminate(_ notification: Notification) {
+        DictateStatsStore.shared.flushPersistence()
     }
 
     /// Picks up an Input Monitoring grant made while the app was in the background.

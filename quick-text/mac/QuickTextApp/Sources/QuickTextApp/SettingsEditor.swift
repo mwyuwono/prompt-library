@@ -183,7 +183,7 @@ struct SettingsEditor: View {
                 .pickerStyle(.segmented)
                 .frame(maxWidth: 320)
                 .labelsHidden()
-                Text("After take sends the whole recording at once. Real-time streams audio and shows words while you speak; if the stream drops, the take is transcribed after recording instead. Cost estimates use the selected model's rates (see Usage & Cost below).")
+                Text("After take sends the whole recording at once. Real-time streams audio and shows words while you speak; if the stream drops, the take is transcribed after recording instead. Cost estimates use the model called for each attempt (see lifetime usage and cost below).")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: 480, alignment: .leading)
@@ -200,60 +200,7 @@ struct SettingsEditor: View {
     }
 
     private var dictateUsageAndCostCard: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack {
-                Text("Usage & Cost")
-                    .font(.subheadline.weight(.semibold))
-                Spacer()
-                Button("Reset Lifetime Stats") {
-                    statsStore.reset()
-                }
-                .buttonStyle(.glass)
-                .controlSize(.small)
-                .disabled(statsStore.cumulativeTotalTokens == 0)
-            }
-
-            Grid(alignment: .leading, horizontalSpacing: 24, verticalSpacing: 6) {
-                GridRow {
-                    Text("Input tokens:")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    Text("\(statsStore.cumulativeInputTokens.formatted())")
-                        .font(.caption.monospacedDigit())
-                }
-                GridRow {
-                    Text("Output tokens:")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    Text("\(statsStore.cumulativeOutputTokens.formatted())")
-                        .font(.caption.monospacedDigit())
-                }
-                GridRow {
-                    Text("Total tokens:")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    Text("\(statsStore.cumulativeTotalTokens.formatted())")
-                        .font(.caption.monospacedDigit().weight(.medium))
-                }
-                GridRow {
-                    Text("Estimated spend:")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    Text(TokenUsage.formatCost(statsStore.cumulativeEstimatedCost))
-                        .font(.caption.monospacedDigit().weight(.semibold))
-                }
-            }
-
-            Text("After-take transcription and processing use gemini-3.8-flash ($0.75/M input, $3.75/M output introductory through 2026; $1.50/M input, $7.50/M output standard from Jan 1, 2027). Real-time takes use gemini-3.5-transcribe-live ($3.50/M audio input, $21.00/M text output).")
-                .font(.caption2)
-                .foregroundStyle(.tertiary)
-        }
-        .padding(12)
-        .background(RoundedRectangle(cornerRadius: QuickTextDesign.controlRadius).fill(Color.primary.opacity(0.03)))
-        .overlay(
-            RoundedRectangle(cornerRadius: QuickTextDesign.controlRadius)
-                .stroke(Color.primary.opacity(0.08), lineWidth: 1)
-        )
+        DictateUsageAndCostCard(statsStore: statsStore)
     }
 
     // MARK: - Text Replacements (see docs/text-replacement-sync-plan.md)

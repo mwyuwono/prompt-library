@@ -31,10 +31,12 @@ enum DictateError: LocalizedError {
 public struct GeminiResponse: Equatable {
     public let text: String
     public let usage: TokenUsage
+    public let usageReported: Bool
 
-    public init(text: String, usage: TokenUsage) {
+    public init(text: String, usage: TokenUsage, usageReported: Bool = true) {
         self.text = text
         self.usage = usage
+        self.usageReported = usageReported
     }
 }
 
@@ -116,7 +118,15 @@ struct GeminiClient {
     static func extractResponse(from data: Data) throws -> GeminiResponse {
         let text = try extractOutputText(from: data)
         let usage = extractTokenUsage(from: data)
-        return GeminiResponse(text: text, usage: usage)
+        let object = try JSONSerialization.jsonObject(with: data)
+        func containsUsage(_ value: Any) -> Bool {
+            if let dictionary = value as? [String: Any] {
+                if ["usage", "usageMetadata", "usage_metadata"].contains(where: { dictionary[$0] is [String: Any] }) { return true }
+                return dictionary.values.contains(where: containsUsage)
+            }
+            return (value as? [Any])?.contains(where: containsUsage) ?? false
+        }
+        return GeminiResponse(text: text, usage: usage, usageReported: containsUsage(object))
     }
 
     static func extractTokenUsage(from data: Data) -> TokenUsage {

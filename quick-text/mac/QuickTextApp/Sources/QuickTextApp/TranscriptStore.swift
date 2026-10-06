@@ -12,6 +12,11 @@ enum TranscriptStore {
             .appendingPathComponent("com.weaveryuwono.quicktext/DictateTranscripts", isDirectory: true)
     }
 
+    struct TakeEventReference: Codable, Equatable {
+        var takeID: UUID
+        var eventIDs: [UUID]
+    }
+
     struct SessionRecord: Codable, Equatable {
         var savedAt: Date
         var takes: [String]
@@ -23,6 +28,9 @@ enum TranscriptStore {
         var takeUsages: [TokenUsage]?
         var processingTurns: [DictateProcessingTurn]?
         var estimatedCost: Double?
+        var accountingVersion: Int? = nil
+        var usageEvents: [DictateUsageEvent]? = nil
+        var takeEventReferences: [TakeEventReference]? = nil
     }
 
     @discardableResult
@@ -36,6 +44,8 @@ enum TranscriptStore {
         takeUsages: [TokenUsage]? = nil,
         processingTurns: [DictateProcessingTurn]? = nil,
         estimatedCost: Double? = nil,
+        usageEvents: [DictateUsageEvent]? = nil,
+        takeEventReferences: [TakeEventReference]? = nil,
         date: Date = Date(),
         in directory: URL? = nil
     ) throws -> URL {
@@ -44,8 +54,13 @@ enum TranscriptStore {
         // A processing/refinement chain can finish more than once in a second.
         // Keep every billable turn rather than overwriting a same-second record.
         let url = dir.appendingPathComponent("dictate-\(UUID().uuidString).json")
-        let cost = estimatedCost ?? Self.splitEstimatedCost(
+        let eventCost = usageEvents.map { events in
+            var seen = Set<UUID>()
+            return events.filter { seen.insert($0.id).inserted }.reduce(0.0) { $0 + ($1.estimatedCost ?? 0) }
+        }
+        let cost = estimatedCost ?? eventCost ?? Self.splitEstimatedCost(
             transcriptionUsage: transcriptionUsage,
+            liveTranscriptionUsage: liveTranscriptionUsage,
             synthesisUsage: synthesisUsage,
             processingTurns: processingTurns,
             tokenUsage: tokenUsage,
@@ -61,7 +76,10 @@ enum TranscriptStore {
             synthesisUsage: synthesisUsage,
             takeUsages: takeUsages,
             processingTurns: processingTurns,
-            estimatedCost: cost
+            estimatedCost: cost,
+            accountingVersion: usageEvents == nil ? nil : 1,
+            usageEvents: usageEvents,
+            takeEventReferences: takeEventReferences
         )
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .iso8601
@@ -70,21 +88,22 @@ enum TranscriptStore {
         return url
     }
 
-    /// Fallback cost when the caller omits a precomputed total. Transcription is
-    /// priced at the model selected in Settings (`TranscriptionMode.stored`) so
-    /// saved estimates follow the selection; synthesis uses gemini-3.8-flash
-    /// rates, preferring frozen per-turn costs when the full turn history is
-    /// present. With only a combined total and no split, the whole total is
-    /// priced at Flash rates.
+    /// Compatibility for callers without an event ledger. Use available source
+    /// metadata at the save date; never consult current Settings. Existing saved
+    /// estimates are retained when records are decoded.
     static func splitEstimatedCost(
         transcriptionUsage: TokenUsage?,
+        liveTranscriptionUsage: TokenUsage? = nil,
         synthesisUsage: TokenUsage?,
         processingTurns: [DictateProcessingTurn]?,
         tokenUsage: TokenUsage?,
         at date: Date
     ) -> Double? {
         if let transcription = transcriptionUsage {
-            var cost = transcription.estimatedCost(pricing: TranscriptionMode.stored.pricing, at: date)
+            let live = liveTranscriptionUsage ?? .zero
+            let rest = TokenUsage(inputTokens: transcription.inputTokens - live.inputTokens,
+                                  outputTokens: transcription.outputTokens - live.outputTokens)
+            var cost = live.estimatedCost(pricing: .liveTranscribe, at: date) + rest.estimatedCost(pricing: .flash, at: date)
             if let turns = processingTurns, !turns.isEmpty {
                 cost += turns.reduce(0) { $0 + $1.estimatedCost }
             } else if let synthesis = synthesisUsage {

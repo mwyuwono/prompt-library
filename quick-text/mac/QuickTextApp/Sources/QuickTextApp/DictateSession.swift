@@ -12,6 +12,10 @@ struct DictateTake: Identifiable {
     }
 
     let id = UUID()
+    var liveRequestID = UUID()
+    var createdAt = Date()
+    var restSource: DictateUsageSource = .afterTakeREST
+    var usageEvents: [DictateUsageEvent] = []
     var audioURL: URL?
     var transcript: String?
     var tokenUsage: TokenUsage?
@@ -29,6 +33,8 @@ struct LiveTakeOutcome {
     var usage: TokenUsage = .zero
     var receivedFinal = false
     var errorMessage: String?
+    var usageReported = false
+    var event: DictateUsageEvent?
 }
 
 /// Thread-safe peak holder: the mic tap writes from the audio thread while
@@ -161,16 +167,20 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
     @Published var synthesisTokenUsage: TokenUsage? = nil
     @Published private(set) var processingTurns: [DictateProcessingTurn] = []
     @Published var errorMessage: String?
+    private(set) var sessionID = UUID()
+    @Published private(set) var usageEvents: [DictateUsageEvent] = []
+    private var finalizedLiveIDs: Set<UUID> = []
 
     var transcriptionTokenUsage: TokenUsage {
         takes.compactMap(\.tokenUsage).reduce(.zero, +)
     }
 
-    /// Takes that actually streamed. Cost estimates follow the selected
-    /// transcription model, not the take source; this is retained as
-    /// actual-usage metadata for saved records.
+    /// Reported Live usage, including an unsuccessful stream before REST fallback.
     var liveTranscriptionTokenUsage: TokenUsage {
-        takes.filter(\.isLive).compactMap(\.tokenUsage).reduce(.zero, +)
+        takes.reduce(.zero) { total, take in
+            if take.usageEvents.isEmpty { return total + (take.isLive ? take.tokenUsage ?? .zero : .zero) }
+            return total + take.usageEvents.filter { $0.source == .realTimeLive }.reduce(.zero) { $0 + ($1.usage ?? .zero) }
+        }
     }
 
     var sessionTokenUsage: TokenUsage {
@@ -181,11 +191,23 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
         processingTurns.map(\.usage).reduce(.zero, +)
     }
 
-    /// Pricing follows the transcription model selected in Settings: the whole
-    /// transcription total is estimated at that model's rate.
+    /// Actual call costs remain frozen even if Settings changes or a take is removed.
     var sessionEstimatedCost: Double {
-        transcriptionTokenUsage.estimatedCost(pricing: TranscriptionMode.stored.pricing) +
-        processingTurns.reduce(0) { $0 + $1.estimatedCost }
+        let recorded = usageEvents.reduce(0) { $0 + ($1.estimatedCost ?? 0) }
+        let untrackedTakes = takes.filter { $0.usageEvents.isEmpty }.reduce(0.0) {
+            $0 + ($1.tokenUsage?.estimatedCost(pricing: $1.isLive ? .liveTranscribe : .flash, at: $1.createdAt) ?? 0)
+        }
+        let eventTurnIDs = Set(usageEvents.compactMap(\.processingTurnID))
+        return recorded + untrackedTakes + processingTurns.filter { !eventTurnIDs.contains($0.id) }.reduce(0) { $0 + $1.estimatedCost }
+    }
+
+    private func recordEvent(_ event: DictateUsageEvent) {
+        statsStore.record(event)
+        guard event.sessionID == sessionID, !usageEvents.contains(where: { $0.id == event.id }) else { return }
+        usageEvents.append(event)
+        if let index = takes.firstIndex(where: { $0.id == event.takeID }) {
+            takes[index].usageEvents.append(event)
+        }
     }
 
     var statsStore: DictateStatsStore = .shared
@@ -195,6 +217,15 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
     var transcriptDirectory: URL? = nil
     private var recorder: AVAudioRecorder?
     private var audioPlayer: AVAudioPlayer?
+    /// Outstanding built-in-mic flip for the in-flight take; restored on stop.
+    private var micOverride: MicrophonePreference.Override?
+
+    override init() {
+        super.init()
+        // A take that crashed or quit mid-flip leaves the system default on
+        // the built-in mic; put the user's input back at launch.
+        MicrophonePreference.restoreInterruptedOverrideIfNeeded()
+    }
 
     /// Injectable live transport; tests substitute scripted fakes.
     var makeLiveDriver: () -> any LiveTranscriptionDriver = { GeminiLiveWebSocketDriver() }
@@ -297,10 +328,19 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
     private func beginCapture() throws {
         // The Settings switch applies to the next take.
         transcriptionMode = .stored
-        if transcriptionMode == .realTime {
-            try beginLiveCapture()
-        } else {
-            try beginRecorderCapture()
+        // Prefer the built-in mic over Bluetooth (AirPods) for the take.
+        // Sub-millisecond HAL switch, before the recorder opens the device.
+        micOverride = MicrophonePreference.beginPreferredInput()
+        do {
+            if transcriptionMode == .realTime {
+                try beginLiveCapture()
+            } else {
+                try beginRecorderCapture()
+            }
+        } catch {
+            MicrophonePreference.restore(micOverride)
+            micOverride = nil
+            throw error
         }
     }
 
@@ -348,7 +388,8 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
         let driver = makeLiveDriver()
         let peak = livePeak
         let captureStats = liveCaptureStats
-        let take = DictateTake(audioURL: url, transcript: nil, status: .recording)
+        var take = DictateTake(audioURL: url, transcript: nil, status: .recording)
+        take.restSource = .realTimeRESTFallback
         input.installTap(onBus: 0, bufferSize: 4096, format: hardwareFormat) { buffer, _ in
             captureStats.tapped()
             try? file.write(from: buffer)
@@ -402,6 +443,8 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
         let duration = recorder?.currentTime
         recorder?.stop()
         recorder = nil
+        MicrophonePreference.restore(micOverride)
+        micOverride = nil
         isRecording = false
         stopRecordingMonitor()
         guard let index = takes.lastIndex(where: { $0.status == .recording }) else { return }
@@ -420,6 +463,8 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
             engine.stop()
         }
         liveEngine = nil
+        MicrophonePreference.restore(micOverride)
+        micOverride = nil
         isRecording = false
         stopRecordingMonitor()
         guard let index = takes.lastIndex(where: { $0.status == .recording }) else {
@@ -456,6 +501,21 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
     /// An empty outcome (connection or setup failure) signals REST fallback.
     func pumpLiveTake(driver: any LiveTranscriptionDriver, takeID: UUID, apiKey: String) async -> LiveTakeOutcome {
         var outcome = LiveTakeOutcome()
+        let requestID = takes.first(where: { $0.id == takeID })?.liveRequestID ?? UUID()
+        let requestSessionID = sessionID
+        let startedAt = Date()
+        let modelID = driver.modelID
+        defer {
+            let event = DictateUsageEvent(id: requestID, sessionID: requestSessionID, takeID: takeID,
+                                         source: .realTimeLive, modelID: modelID, startedAt: startedAt,
+                                         outcome: Task.isCancelled ? .cancelled : (outcome.errorMessage == nil && !outcome.text.isEmpty ? .succeeded : .failed),
+                                         usage: outcome.usageReported ? outcome.usage : nil,
+                                         capturedDurationSeconds: takes.first(where: { $0.id == takeID })?.duration)
+            recordEvent(event)
+        }
+        // Carry the same request ID to finalization so it cannot charge twice.
+        outcome.event = DictateUsageEvent(id: requestID, sessionID: requestSessionID, takeID: takeID,
+                                         source: .realTimeLive, modelID: modelID, startedAt: startedAt, usage: nil)
         var transcript = LiveTranscriptAssembler()
         do {
             try await driver.start(apiKey: apiKey)
@@ -471,6 +531,7 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
                 if isFinal { outcome.receivedFinal = true }
                 applyLiveTranscript(outcome.text, usage: outcome.usage, to: takeID)
             case .usage(let usage):
+                outcome.usageReported = true
                 outcome.usage += usage
                 applyLiveTranscript(outcome.text, usage: outcome.usage, to: takeID)
             case .error(let error):
@@ -491,8 +552,22 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
     /// an empty stream falls back to the parallel file via the normal path.
     func finalizeLiveTake(_ outcome: LiveTakeOutcome, takeID: UUID, audioURL: URL?) {
         guard let index = takes.firstIndex(where: { $0.id == takeID }) else { return }
+        guard finalizedLiveIDs.insert(takeID).inserted else { return }
         let text = outcome.text.trimmingCharacters(in: .whitespacesAndNewlines)
+        // pumpLiveTake records even a cancelled/deleted take. Direct finalization
+        // also supports tests and any already-completed transport result.
+        if !takes[index].usageEvents.contains(where: { $0.source == .realTimeLive }) {
+            let context = outcome.event
+            recordEvent(DictateUsageEvent(id: context?.id ?? takes[index].liveRequestID,
+                                         sessionID: context?.sessionID ?? sessionID, takeID: takeID,
+                                         source: .realTimeLive, modelID: context?.modelID ?? GeminiLiveClient.liveModel,
+                                         startedAt: context?.startedAt ?? takes[index].createdAt,
+                                         outcome: outcome.errorMessage == nil && !text.isEmpty ? .succeeded : .failed,
+                                         usage: outcome.usageReported || outcome.usage.totalTokens > 0 ? outcome.usage : nil,
+                                         capturedDurationSeconds: takes[index].duration))
+        }
         guard !text.isEmpty else {
+            takes[index].restSource = .realTimeRESTFallback
             LatencyTrace.mark("rest-fallback")
             if let detail = outcome.errorMessage?.trimmingCharacters(in: .whitespacesAndNewlines),
                !detail.isEmpty {
@@ -507,9 +582,6 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
         takes[index].tokenUsage = outcome.usage.totalTokens > 0 ? outcome.usage : nil
         takes[index].isLive = true
         takes[index].status = .ready
-        if outcome.usage.totalTokens > 0 {
-            statsStore.recordUsage(outcome.usage, pricing: TranscriptionMode.stored.pricing)
-        }
         if outcome.errorMessage != nil {
             let detail = outcome.errorMessage?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
             errorMessage = detail.isEmpty
@@ -587,19 +659,30 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
             return
         }
         let id = takes[index].id
+        let requestID = UUID()
+        let requestSessionID = sessionID
+        let source = takes[index].restSource
+        let startedAt = Date()
+        let duration = takes[index].duration
         Task {
             do {
                 let response = try await transcribe(data, Self.audioMIMEType)
+                recordEvent(DictateUsageEvent(id: requestID, sessionID: requestSessionID, takeID: id,
+                                             source: source, modelID: GeminiClient.transcribeModel, startedAt: startedAt,
+                                             usage: response.usageReported ? response.usage : nil, capturedDurationSeconds: duration))
                 guard let i = takes.firstIndex(where: { $0.id == id }) else { return }
                 takes[i].transcript = response.text
-                takes[i].tokenUsage = response.usage
+                // A fallback take owns both the partial Live and REST usage.
+                takes[i].tokenUsage = takes[i].usageEvents.reduce(.zero) { $0 + ($1.usage ?? .zero) }
                 takes[i].isLive = false
                 takes[i].status = .ready
-                statsStore.recordUsage(response.usage, pricing: TranscriptionMode.stored.pricing)
-                // Audio is discarded once its transcript exists.
                 try? FileManager.default.removeItem(at: audioURL)
                 takes[i].audioURL = nil
             } catch {
+                recordEvent(DictateUsageEvent(id: requestID, sessionID: requestSessionID, takeID: id,
+                                             source: source, modelID: GeminiClient.transcribeModel, startedAt: startedAt,
+                                             outcome: Task.isCancelled ? .cancelled : .failed, usage: nil,
+                                             capturedDurationSeconds: duration))
                 guard let i = takes.firstIndex(where: { $0.id == id }) else { return }
                 takes[i].status = .failed(error.localizedDescription)
             }
@@ -718,16 +801,31 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
     /// session. Shared by the Dictate page and Quick Dictate.
     @discardableResult
     private func performProcessing(kind: DictateProcessingTurn.Kind, masterPrompt: String, input: String) async throws -> String {
-        let response = try await synthesize(masterPrompt, input)
+        let startedAt = Date()
+        let turnID = UUID()
+        let requestSessionID = sessionID
+        let eventID = UUID()
+        let response: GeminiResponse
+        do {
+            response = try await synthesize(masterPrompt, input)
+        } catch {
+            recordEvent(DictateUsageEvent(id: eventID, sessionID: requestSessionID, processingTurnID: turnID,
+                                         source: .processing, modelID: GeminiClient.processModel, startedAt: startedAt,
+                                         outcome: Task.isCancelled ? .cancelled : .failed, usage: nil))
+            throw error
+        }
+        let event = DictateUsageEvent(id: eventID, sessionID: requestSessionID, processingTurnID: turnID,
+                                     source: .processing, modelID: GeminiClient.processModel, startedAt: startedAt,
+                                     usage: response.usageReported ? response.usage : nil)
+        recordEvent(event)
+        // A response from a reset session still counts for lifetime usage, but
+        // must not overwrite a new session's editor or archive.
+        guard sessionID == requestSessionID else { throw CancellationError() }
         resultText = response.text
         synthesisTokenUsage = response.usage
-        let turn = DictateProcessingTurn(
-            kind: kind,
-            usage: response.usage,
-            estimatedCost: response.usage.estimatedCost(pricing: .flash)
-        )
+        let turn = DictateProcessingTurn(id: turnID, kind: kind, createdAt: startedAt,
+                                        usage: response.usage, estimatedCost: event.estimatedCost ?? 0)
         processingTurns.append(turn)
-        statsStore.recordUsage(response.usage, pricing: .flash)
         let transcripts = readyTranscripts
         _ = try? TranscriptStore.saveSession(
             takes: transcripts,
@@ -739,6 +837,8 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
             takeUsages: takes.compactMap(\.tokenUsage),
             processingTurns: processingTurns,
             estimatedCost: sessionEstimatedCost,
+            usageEvents: usageEvents,
+            takeEventReferences: takes.map { TranscriptStore.TakeEventReference(takeID: $0.id, eventIDs: $0.usageEvents.map(\.id)) },
             in: transcriptDirectory
         )
         _ = try? TranscriptStore.prune(in: transcriptDirectory)
@@ -787,7 +887,11 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
     /// after any existing takes, and its result, if any, replaces the editor.
     func adoptQuickTake(_ take: DictateTake, result: String?) {
         guard take.status == .ready else { return }
+        guard !takes.contains(where: { $0.id == take.id }) else { return }
         takes.append(take)
+        for event in take.usageEvents where !usageEvents.contains(where: { $0.id == event.id }) {
+            usageEvents.append(event)
+        }
         if let result, !result.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             resultText = result
         }
@@ -822,6 +926,9 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
             }
         }
         takes = []
+        sessionID = UUID()
+        usageEvents = []
+        finalizedLiveIDs = []
         resultText = ""
         recordingElapsed = 0
         recordingLevel = 0

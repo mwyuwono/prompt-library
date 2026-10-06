@@ -347,7 +347,7 @@
       "createdAt" : "2026-07-02T21:07:02Z",
       "favorite" : false,
       "id" : "response-style-nocontext",
-      "summary" : "Demands a self-contained response",
+      "summary" : "Generates a self-contained response that makes sense without prior conversation context.",
       "tags" : [
         "nocontext"
       ],
@@ -356,7 +356,7 @@
         "syncEnabled" : true
       },
       "title" : "Respond with full context",
-      "updatedAt" : "2026-10-01T02:10:00Z",
+      "updatedAt" : "2026-10-06T16:29:40Z",
       "value" : "Generate a self-contained response that can be understood without prior conversation context. Include any necessary assumptions or framing directly in the response, and avoid references to earlier messages.",
       "visibility" : "public"
     },
@@ -1079,7 +1079,7 @@
     "paletteSource" : "Robert Brown Fabric Collection",
     "textReplacementLastSyncAt" : "2026-09-30T01:01:11Z"
   },
-  "updatedAt" : "2026-10-02T12:00:00Z",
+  "updatedAt" : "2026-10-06T16:29:40Z",
   "variables" : [
     {
       "id" : "var-1783398724430",

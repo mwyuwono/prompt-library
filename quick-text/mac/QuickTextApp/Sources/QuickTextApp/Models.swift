@@ -112,6 +112,18 @@ struct TextReplacementLink: Codable, Equatable {
     var lastSyncedValue: String? = nil
 }
 
+extension Phrase {
+    /// Grid/list eyebrow text: the linked text replacement shortcut as typed
+    /// (e.g. "xsum"), shown in place of the category name. Never uppercased,
+    /// since it is typed literally to expand. Returns "" when the phrase has
+    /// no shortcut, in which case cards leave the label blank.
+    var eyebrowShortcut: String {
+        guard let shortcut = textReplacement?.shortcut.trimmingCharacters(in: .whitespacesAndNewlines),
+              !shortcut.isEmpty else { return "" }
+        return shortcut
+    }
+}
+
 struct Atom: Codable, Identifiable, Equatable {
     var id: String
     var start: Int

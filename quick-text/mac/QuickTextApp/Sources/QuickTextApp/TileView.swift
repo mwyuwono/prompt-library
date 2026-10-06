@@ -1,9 +1,12 @@
 import SwiftUI
 
-/// Library grid tile. Neutral surface; category shows as a dot plus an
-/// uppercase label. States (see `TileButtonStyle`): rest, hover, selected,
-/// pressed, and open (the source of the open card behind the sheet). A copy
-/// flashes the tile in `hlTintSolid`.
+/// Library grid tile. Neutral surface; the eyebrow shows the phrase's text
+/// replacement shortcut (as typed, mono) in place of the category, with a
+/// collection dot. Cards without a shortcut show the dot plus blank space.
+/// The summary body is never truncated: cards grow past `tileHeight` as needed.
+/// States (see `TileButtonStyle`): rest, hover, selected, pressed, and open
+/// (the source of the open card behind the sheet). A copy flashes the tile
+/// in `hlTintSolid`.
 struct TileView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     let phrase: Phrase
@@ -26,12 +29,22 @@ struct TileView: View {
 
     private var title: String { phrase.title }
 
+    /// Eyebrow text: the text replacement shortcut in place of the category
+    /// name (see `Phrase.eyebrowShortcut`).
+    private var shortcutLabel: String { phrase.eyebrowShortcut }
+
+    /// VoiceOver names what the eyebrow shows: the shortcut when present,
+    /// otherwise the category for context.
+    private var eyebrowForAccessibility: String {
+        shortcutLabel.isEmpty ? categoryName : shortcutLabel
+    }
+
     var body: some View {
         Button(action: onActivate) {
             label
         }
         .buttonStyle(TileButtonStyle(isHovering: isHovering, isSelected: isSelected, isOpen: isOpen, isCopied: isCopied))
-        .accessibilityLabel(Text(title + ", " + categoryName))
+        .accessibilityLabel(Text(title + ", " + eyebrowForAccessibility))
         .accessibilityValue(Text(accessibilityState))
         .accessibilityHint(Text(opensCard ? "Opens the snippet" : "Copies the snippet"))
         .overlay(alignment: .topTrailing) {
@@ -64,11 +77,12 @@ struct TileView: View {
                 Circle()
                     .fill(dotColor)
                     .frame(width: 7, height: 7)
-                Text(categoryName.uppercased())
-                    .font(ThemeFont.eyebrow(10.5))
-                    .tracking(10.5 * 0.09)
-                    .foregroundStyle(Theme.textTertiary)
-                    .lineLimit(1)
+                if !shortcutLabel.isEmpty {
+                    Text(shortcutLabel)
+                        .font(ThemeFont.mono(11))
+                        .foregroundStyle(Theme.textTertiary)
+                        .lineLimit(1)
+                }
                 Spacer(minLength: 44)
             }
             .frame(height: 16)
@@ -84,7 +98,6 @@ struct TileView: View {
                 .font(.system(size: 13))
                 .lineSpacing(4)
                 .foregroundStyle(Theme.textSecondary)
-                .lineLimit(showsFooter ? 2 : 3)
                 .multilineTextAlignment(.leading)
 
             Spacer(minLength: 0)
@@ -93,7 +106,7 @@ struct TileView: View {
         .padding(.top, 20)
         .padding(.bottom, showsFooter ? 16 + 30 + 10 : 20)
         .frame(maxWidth: .infinity, alignment: .topLeading)
-        .frame(height: Theme.tileHeight, alignment: .topLeading)
+        .frame(minHeight: Theme.tileHeight, alignment: .topLeading)
     }
 
     private var footer: some View {
@@ -209,7 +222,10 @@ private struct TileChrome: View {
     }
 }
 
-/// Compact list-view row: same states as the tile, one line of preview.
+/// Compact list-view row: same states as the tile. The summary-derived title
+/// is never truncated (rows grow past 52 pt as needed); the trailing label
+/// shows the text replacement shortcut in place of the category, blank when
+/// the phrase has none.
 struct PhraseRowView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     let phrase: Phrase
@@ -229,6 +245,16 @@ struct PhraseRowView: View {
         return phrase.title
     }
 
+    /// Eyebrow text: the text replacement shortcut in place of the category
+    /// name (see `Phrase.eyebrowShortcut`).
+    private var shortcutLabel: String { phrase.eyebrowShortcut }
+
+    /// VoiceOver names what the trailing label shows: the shortcut when
+    /// present, otherwise the category for context.
+    private var eyebrowForAccessibility: String {
+        shortcutLabel.isEmpty ? categoryName : shortcutLabel
+    }
+
     var body: some View {
         Button(action: onActivate) {
             HStack(spacing: 14) {
@@ -238,26 +264,26 @@ struct PhraseRowView: View {
                 Text(SearchMark.string(title, term: searchTerm))
                     .font(ThemeFont.serif(19, weight: .medium))
                     .foregroundStyle(Theme.textPrimary)
-                    .lineLimit(1)
                     .frame(width: 260, alignment: .leading)
                 Text(TileView.previewText(for: phrase, library: libraryVariables, term: searchTerm))
                     .font(.system(size: 13))
                     .foregroundStyle(Theme.textSecondary)
                     .lineLimit(1)
                 Spacer(minLength: 12)
-                Text(categoryName.uppercased())
-                    .font(ThemeFont.eyebrow(10.5))
-                    .tracking(10.5 * 0.09)
-                    .foregroundStyle(Theme.textTertiary)
-                    .lineLimit(1)
+                if !shortcutLabel.isEmpty {
+                    Text(shortcutLabel)
+                        .font(ThemeFont.mono(11))
+                        .foregroundStyle(Theme.textTertiary)
+                        .lineLimit(1)
+                }
                 Color.clear.frame(width: 32)
             }
             .padding(.horizontal, 18)
-            .frame(height: 52)
+            .frame(minHeight: 52)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .buttonStyle(TileButtonStyle(isHovering: isHovering, isSelected: isSelected, isOpen: isOpen, isCopied: isCopied))
-        .accessibilityLabel(Text(title + ", " + categoryName))
+        .accessibilityLabel(Text(title + ", " + eyebrowForAccessibility))
         .accessibilityValue(Text([phrase.favorite ? "favorite" : nil, isSelected ? "selected" : nil].compactMap { $0 }.joined(separator: ", ")))
         .overlay(alignment: .trailing) {
             Button(action: onToggleFavorite) {
@@ -277,7 +303,7 @@ struct PhraseRowView: View {
 }
 
 #Preview("Tile States") {
-    let phrases = [PreviewData.plainPhrase, PreviewData.addressPhrase, PreviewData.variablePhrase, PreviewData.longMixedPhrase]
+    let phrases = [PreviewData.shortcutPhrase, PreviewData.addressPhrase, PreviewData.variablePhrase, PreviewData.longMixedPhrase]
     return VStack(spacing: 24) {
         LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 20), count: 3), spacing: 20) {
             TileView(phrase: phrases[0], categoryName: "Personal Details", dotColor: Theme.collectionDot(for: "personal")!, isSelected: false, isCopied: false)

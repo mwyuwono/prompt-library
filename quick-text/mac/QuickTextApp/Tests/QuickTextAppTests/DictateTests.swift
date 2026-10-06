@@ -948,7 +948,7 @@ final class DictateTests: XCTestCase {
     }
 
     @MainActor
-    func testSessionEstimatedCostFollowsSelectedTranscriptionModel() {
+    func testSessionEstimatedCostUsesActualTakeSources() {
         let previous = TranscriptionMode.stored
         defer { TranscriptionMode.stored = previous }
         let session = DictateSession()
@@ -960,16 +960,16 @@ final class DictateTests: XCTestCase {
         TranscriptionMode.stored = .realTime
         XCTAssertEqual(
             session.sessionEstimatedCost,
-            TokenUsage.estimatedCost(inputTokens: 2_000, outputTokens: 200, pricing: .liveTranscribe),
+            TokenUsage.estimatedCost(inputTokens: 1_000, outputTokens: 100, pricing: .liveTranscribe) + TokenUsage.estimatedCost(inputTokens: 1_000, outputTokens: 100, pricing: .flash),
             accuracy: 1e-9)
         TranscriptionMode.stored = .afterTake
         XCTAssertEqual(
             session.sessionEstimatedCost,
-            TokenUsage.estimatedCost(inputTokens: 2_000, outputTokens: 200, pricing: .transcribe),
+            TokenUsage.estimatedCost(inputTokens: 1_000, outputTokens: 100, pricing: .liveTranscribe) + TokenUsage.estimatedCost(inputTokens: 1_000, outputTokens: 100, pricing: .flash),
             accuracy: 1e-9)
     }
 
-    func testSaveSessionFallbackFollowsSelectedModel() throws {
+    func testSaveSessionFallbackUsesLiveAndRestMetadata() throws {
         let previous = TranscriptionMode.stored
         defer { TranscriptionMode.stored = previous }
         let dir = try tempDir()
@@ -986,7 +986,8 @@ final class DictateTests: XCTestCase {
             in: dir
         )
         let record = try JSONDecoder.quickText.decode(TranscriptStore.SessionRecord.self, from: Data(contentsOf: url))
-        let expected = transcription.estimatedCost(pricing: .liveTranscribe)
+        let expected = live.estimatedCost(pricing: .liveTranscribe)
+            + live.estimatedCost(pricing: .flash)
             + synthesis.estimatedCost(pricing: .flash)
         XCTAssertEqual(record.liveTranscriptionUsage, live)
         XCTAssertEqual(record.estimatedCost!, expected, accuracy: 1e-9)

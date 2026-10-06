@@ -2,7 +2,7 @@ import Foundation
 import Combine
 
 /// Tracks token counts from Gemini Interactions API calls.
-public struct TokenUsage: Codable, Equatable, Hashable {
+public struct TokenUsage: Codable, Equatable, Hashable, Sendable {
     public var inputTokens: Int
     public var outputTokens: Int
 
@@ -170,55 +170,5 @@ public struct DictateProcessingTurn: Codable, Equatable, Identifiable {
         self.createdAt = createdAt
         self.usage = usage
         self.estimatedCost = estimatedCost
-    }
-}
-
-/// Manages cumulative lifetime token usage and spend across all Dictate sessions.
-/// Persisted in `UserDefaults` so local usage does not dirty `quick-text.json`.
-@MainActor
-public final class DictateStatsStore: ObservableObject {
-    public static let shared = DictateStatsStore()
-
-    private let defaults: UserDefaults
-    private let inputKey = "quicktext.dictate.cumulativeInputTokens"
-    private let outputKey = "quicktext.dictate.cumulativeOutputTokens"
-    private let costKey = "quicktext.dictate.cumulativeEstimatedCost"
-
-    @Published public private(set) var cumulativeInputTokens: Int
-    @Published public private(set) var cumulativeOutputTokens: Int
-    @Published public private(set) var cumulativeEstimatedCost: Double
-
-    public init(defaults: UserDefaults = .standard) {
-        self.defaults = defaults
-        self.cumulativeInputTokens = defaults.integer(forKey: inputKey)
-        self.cumulativeOutputTokens = defaults.integer(forKey: outputKey)
-        self.cumulativeEstimatedCost = defaults.double(forKey: costKey)
-    }
-
-    public var cumulativeTotalTokens: Int {
-        cumulativeInputTokens + cumulativeOutputTokens
-    }
-
-    public func recordUsage(_ usage: TokenUsage) {
-        recordUsage(usage, pricing: .flash)
-    }
-
-    public func recordUsage(_ usage: TokenUsage, pricing: TokenUsage.ModelPricing) {
-        guard usage.inputTokens > 0 || usage.outputTokens > 0 else { return }
-        cumulativeInputTokens += usage.inputTokens
-        cumulativeOutputTokens += usage.outputTokens
-        cumulativeEstimatedCost += usage.estimatedCost(pricing: pricing)
-        defaults.set(cumulativeInputTokens, forKey: inputKey)
-        defaults.set(cumulativeOutputTokens, forKey: outputKey)
-        defaults.set(cumulativeEstimatedCost, forKey: costKey)
-    }
-
-    public func reset() {
-        cumulativeInputTokens = 0
-        cumulativeOutputTokens = 0
-        cumulativeEstimatedCost = 0
-        defaults.set(0, forKey: inputKey)
-        defaults.set(0, forKey: outputKey)
-        defaults.set(0, forKey: costKey)
     }
 }

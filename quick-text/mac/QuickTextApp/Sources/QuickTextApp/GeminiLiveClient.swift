@@ -234,7 +234,7 @@ enum GeminiLiveClient {
         if let usageDict = (dict["usageMetadata"] as? [String: Any])
             ?? (content?["usageMetadata"] as? [String: Any]) {
             let usage = GeminiClient.extractTokenUsage(from: usageDict)
-            if usage.totalTokens > 0 { update.usage = usage }
+            update.usage = usage
         }
         if update.transcriptChunk == nil && !update.isFinal && update.usage == nil { return nil }
         return update
@@ -244,6 +244,7 @@ enum GeminiLiveClient {
 /// Injectable transport for a live take. Production uses `Driver` (WebSocket);
 /// tests substitute scripted fakes.
 protocol LiveTranscriptionDriver: AnyObject {
+    var modelID: String { get }
     /// Connects and waits for setupComplete. Throws when the socket or setup fails, in
     /// which case the session falls back to the file + REST path.
     func start(apiKey: String) async throws
@@ -258,6 +259,7 @@ protocol LiveTranscriptionDriver: AnyObject {
 }
 
 extension LiveTranscriptionDriver {
+    var modelID: String { GeminiLiveClient.liveModel }
     var diagnostics: String { "" }
 }
 
