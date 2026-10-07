@@ -61,6 +61,7 @@ struct QuickDictateSettingsSection: View {
     @AppStorage(QuickDictateSettings.enabledKey) private var enabled = true
     @AppStorage(QuickDictateSettings.triggerKeyKey) private var triggerKey = QuickDictateTriggerKey.rightOption.rawValue
     @AppStorage(QuickDictateSettings.outputKey) private var output = QuickDictateOutput.insert.rawValue
+    @AppStorage(QuickDictateSettings.hudStyleKey) private var hudStyle = QuickDictateHUDStyle.regular.rawValue
     /// Bumped to re-read permission state after the user returns from System Settings.
     @State private var refreshToken = 0
 
@@ -98,6 +99,17 @@ struct QuickDictateSettingsSection: View {
                             Text(option.title).tag(option.rawValue)
                         }
                     }
+                    .labelsHidden()
+                    .frame(maxWidth: 220)
+                }
+                GridRow {
+                    Text("Display").font(.caption).foregroundStyle(.secondary)
+                    Picker("Display", selection: $hudStyle) {
+                        ForEach(QuickDictateHUDStyle.allCases) { style in
+                            Text(style.title).tag(style.rawValue)
+                        }
+                    }
+                    .pickerStyle(.segmented)
                     .labelsHidden()
                     .frame(maxWidth: 220)
                 }
