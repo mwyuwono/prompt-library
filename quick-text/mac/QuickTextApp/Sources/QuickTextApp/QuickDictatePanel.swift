@@ -5,15 +5,19 @@ import SwiftUI
 /// the user's app keeps focus and the cursor stays where the text will land.
 @MainActor
 final class QuickDictatePanel: NSPanel {
-    private static let topInset: CGFloat = 16
+    /// Gap between the card edge and the usable screen edge (below the menu
+    /// bar, above the Dock).
+    private static let edgeInset: CGFloat = 12
+    /// Transparent margin around the card so the glow and shadow are never
+    /// clipped by the window edge. Must exceed blur radius + shadow offset.
+    static let bleed: CGFloat = 48
 
-    /// Window sizes leave transparent room for the card to grow (up to four
-    /// transcript lines) and for the glow bleed. The panel sits at the top of the
-    /// screen and content anchors to the top, so the card grows downward.
+    /// Window = card at its largest + bleed on every side. Regular fits four
+    /// transcript lines.
     private static func size(for style: QuickDictateHUDStyle) -> NSSize {
         switch style {
-        case .regular: return NSSize(width: 480, height: 240)
-        case .compact: return NSSize(width: 400, height: 96)
+        case .regular: return NSSize(width: 440 + bleed * 2, height: 176 + bleed * 2)
+        case .compact: return NSSize(width: 360 + bleed * 2, height: 48 + bleed * 2)
         }
     }
 
@@ -49,7 +53,7 @@ final class QuickDictatePanel: NSPanel {
         setContentSize(size)
         let screen = NSScreen.screens.first { NSMouseInRect(NSEvent.mouseLocation, $0.frame, false) } ?? NSScreen.main
         if let visible = screen?.visibleFrame {
-            setFrameOrigin(NSPoint(x: visible.midX - size.width / 2, y: visible.maxY - Self.topInset - size.height))
+            setFrameOrigin(QuickDictateSettings.hudPosition.origin(windowSize: size, in: visible, edgeInset: Self.edgeInset, bleed: Self.bleed))
         }
         alphaValue = 0
         orderFrontRegardless()
@@ -98,9 +102,11 @@ final class PillHostingView: NSHostingView<QuickDictateHUD> {
 struct QuickDictateHUD: View {
     @ObservedObject var controller: QuickDictateController
     @AppStorage(QuickDictateSettings.hudStyleKey) private var styleRaw = QuickDictateHUDStyle.regular.rawValue
+    @AppStorage(QuickDictateSettings.hudPositionKey) private var positionRaw = QuickDictateHUDPosition.topCenter.rawValue
 
     var body: some View {
         let style = QuickDictateHUDStyle(rawValue: styleRaw) ?? .regular
+        let position = QuickDictateHUDPosition(rawValue: positionRaw) ?? .topCenter
         Group {
             if style == .compact {
                 QuickDictateCompactPill(controller: controller)
@@ -108,8 +114,9 @@ struct QuickDictateHUD: View {
                 QuickDictateCard(controller: controller)
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .padding(.top, 14)
+        // The card hugs the screen edge it sits on and grows away from it.
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: position.isTop ? .top : .bottom)
+        .padding(QuickDictatePanel.bleed)
         .animation(Theme.Motion.fade, value: controller.phase)
     }
 }
@@ -152,7 +159,7 @@ private struct HUDSurface<S: InsettableShape>: ViewModifier {
                     let angle = reduceMotion ? 0 : (t / mode.period).truncatingRemainder(dividingBy: 1) * 360
                     let gradient = AngularGradient(colors: mode.colors, center: .center, angle: .degrees(angle))
                     ZStack {
-                        shape.stroke(gradient, lineWidth: 6).blur(radius: 10).opacity(0.7 * mode.strength)
+                        shape.stroke(gradient, lineWidth: 5).blur(radius: 8).opacity(0.7 * mode.strength)
                         shape.stroke(gradient, lineWidth: 1.5).opacity(mode.strength)
                     }
                 }
