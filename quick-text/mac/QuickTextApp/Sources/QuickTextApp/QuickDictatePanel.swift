@@ -3,8 +3,16 @@ import SwiftUI
 
 /// Floating, non-activating pill for Quick Dictate. It never becomes key, so
 /// the user's app keeps focus and the cursor stays where the text will land.
+/// The window is larger than the card (see `bleed`); only the card itself
+/// takes the mouse, so the transparent margin never blocks the menu bar or Dock.
 @MainActor
 final class QuickDictatePanel: NSPanel {
+    private weak var controller: QuickDictateController?
+    /// Card frame in the content view, top-left origin, as SwiftUI reports it.
+    private var cardRect: CGRect = .zero
+    private var isHoveringCard = false
+    private var mouseMonitors: [Any] = []
+
     /// Gap between the card edge and the usable screen edge (below the menu
     /// bar, above the Dock).
     private static let edgeInset: CGFloat = 12
@@ -38,8 +46,12 @@ final class QuickDictatePanel: NSPanel {
         hidesOnDeactivate = false
         isMovableByWindowBackground = false
         becomesKeyOnlyIfNeeded = true
-        let host = PillHostingView(rootView: QuickDictateHUD(controller: controller))
-        host.onHover = { [weak controller] in controller?.holdOpen($0) }
+        ignoresMouseEvents = true
+        self.controller = controller
+        let host = PillHostingView(rootView: QuickDictateHUD(controller: controller) { [weak self] rect in
+            self?.cardRect = rect
+            self?.updateMouseTarget()
+        })
         host.sizingOptions = []
         host.frame = NSRect(origin: .zero, size: size)
         contentView = host
@@ -47,6 +59,49 @@ final class QuickDictatePanel: NSPanel {
 
     override var canBecomeKey: Bool { false }
     override var canBecomeMain: Bool { false }
+
+    /// The bleed deliberately overhangs the screen edge; don't let AppKit
+    /// push the window back on screen and shift the card off its inset.
+    override func constrainFrameRect(_ frameRect: NSRect, to screen: NSScreen?) -> NSRect { frameRect }
+
+    private var cardScreenRect: NSRect {
+        NSRect(x: frame.minX + cardRect.minX, y: frame.maxY - cardRect.maxY, width: cardRect.width, height: cardRect.height)
+    }
+
+    /// Takes the mouse only while it is over the card, and drives hover-to-hold
+    /// from the same check.
+    private func updateMouseTarget() {
+        guard isVisible else { return }
+        let inside = !cardRect.isEmpty && cardScreenRect.contains(NSEvent.mouseLocation)
+        ignoresMouseEvents = !inside
+        if inside != isHoveringCard {
+            isHoveringCard = inside
+            controller?.holdOpen(inside)
+        }
+    }
+
+    private func startMouseTracking() {
+        guard mouseMonitors.isEmpty else { return }
+        let mask: NSEvent.EventTypeMask = [.mouseMoved, .leftMouseDragged]
+        if let global = NSEvent.addGlobalMonitorForEvents(matching: mask, handler: { [weak self] _ in
+            MainActor.assumeIsolated { self?.updateMouseTarget() }
+        }) {
+            mouseMonitors.append(global)
+        }
+        if let local = NSEvent.addLocalMonitorForEvents(matching: mask, handler: { [weak self] event in
+            self?.updateMouseTarget()
+            return event
+        }) {
+            mouseMonitors.append(local)
+        }
+    }
+
+    private func stopMouseTracking() {
+        mouseMonitors.forEach(NSEvent.removeMonitor)
+        mouseMonitors.removeAll()
+        isHoveringCard = false
+        ignoresMouseEvents = true
+    }
 
     func present() {
         let size = Self.size(for: QuickDictateSettings.hudStyle)
@@ -57,6 +112,8 @@ final class QuickDictatePanel: NSPanel {
         }
         alphaValue = 0
         orderFrontRegardless()
+        startMouseTracking()
+        updateMouseTarget()
         NSAnimationContext.runAnimationGroup { context in
             context.duration = 0.15
             animator().alphaValue = 1
@@ -71,28 +128,16 @@ final class QuickDictatePanel: NSPanel {
             Task { @MainActor in
                 guard let self, self.alphaValue == 0 else { return }
                 self.orderOut(nil)
+                self.stopMouseTracking()
             }
         })
     }
 }
 
-/// SwiftUI's `onHover` only fires while the app is active, and Quick
-/// Dictate never activates. An always-on tracking area reports hover, and
-/// first-mouse lets the pill's buttons respond to a single click.
+/// First-mouse lets the pill's buttons respond to a single click, since
+/// Quick Dictate never activates. Hover is tracked by the panel against the
+/// card frame, because SwiftUI's `onHover` only fires while the app is active.
 final class PillHostingView: NSHostingView<QuickDictateHUD> {
-    var onHover: (Bool) -> Void = { _ in }
-    private var hoverArea: NSTrackingArea?
-
-    override func updateTrackingAreas() {
-        super.updateTrackingAreas()
-        if let hoverArea { removeTrackingArea(hoverArea) }
-        let area = NSTrackingArea(rect: .zero, options: [.mouseEnteredAndExited, .activeAlways, .inVisibleRect], owner: self)
-        addTrackingArea(area)
-        hoverArea = area
-    }
-
-    override func mouseEntered(with event: NSEvent) { onHover(true) }
-    override func mouseExited(with event: NSEvent) { onHover(false) }
     override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
 }
 
@@ -101,6 +146,8 @@ final class PillHostingView: NSHostingView<QuickDictateHUD> {
 /// on a system material with an animated gradient edge while active.
 struct QuickDictateHUD: View {
     @ObservedObject var controller: QuickDictateController
+    /// Reports the card's frame so the panel can pass clicks through the bleed.
+    var onCardFrame: (CGRect) -> Void = { _ in }
     @AppStorage(QuickDictateSettings.hudStyleKey) private var styleRaw = QuickDictateHUDStyle.regular.rawValue
     @AppStorage(QuickDictateSettings.hudPositionKey) private var positionRaw = QuickDictateHUDPosition.topCenter.rawValue
 
@@ -114,6 +161,7 @@ struct QuickDictateHUD: View {
                 QuickDictateCard(controller: controller)
             }
         }
+        .onGeometryChange(for: CGRect.self) { $0.frame(in: .global) } action: { onCardFrame($0) }
         // The card hugs the screen edge it sits on and grows away from it.
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: position.isTop ? .top : .bottom)
         .padding(QuickDictatePanel.bleed)
