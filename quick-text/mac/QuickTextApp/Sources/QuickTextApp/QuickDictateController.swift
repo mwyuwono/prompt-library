@@ -34,6 +34,45 @@ enum QuickDictateHUDStyle: String, CaseIterable, Identifiable {
     }
 }
 
+/// Where the dictation HUD sits. Positions are relative to the screen's
+/// usable area, so they clear the menu bar and the Dock.
+enum QuickDictateHUDPosition: String, CaseIterable, Identifiable {
+    case topLeft, topCenter, topRight, bottomLeft, bottomCenter, bottomRight
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .topLeft: return "Top left"
+        case .topCenter: return "Top middle"
+        case .topRight: return "Top right"
+        case .bottomLeft: return "Bottom left"
+        case .bottomCenter: return "Bottom middle"
+        case .bottomRight: return "Bottom right"
+        }
+    }
+
+    var isTop: Bool {
+        switch self {
+        case .topLeft, .topCenter, .topRight: return true
+        case .bottomLeft, .bottomCenter, .bottomRight: return false
+        }
+    }
+
+    /// Window origin placing the card `edgeInset` from the usable-area edges.
+    /// The window is the card plus `bleed` on every side.
+    func origin(windowSize: NSSize, in visible: NSRect, edgeInset: CGFloat, bleed: CGFloat) -> NSPoint {
+        let x: CGFloat
+        switch self {
+        case .topLeft, .bottomLeft: x = visible.minX + edgeInset - bleed
+        case .topCenter, .bottomCenter: x = visible.midX - windowSize.width / 2
+        case .topRight, .bottomRight: x = visible.maxX - edgeInset + bleed - windowSize.width
+        }
+        let y = isTop ? visible.maxY - edgeInset + bleed - windowSize.height : visible.minY + edgeInset - bleed
+        return NSPoint(x: x, y: y)
+    }
+}
+
 enum QuickDictateOutput: String, CaseIterable, Identifiable {
     case insert
     case copy
@@ -57,6 +96,7 @@ enum QuickDictateSettings {
     static let outputKey = "quicktext.quickDictate.output"
     static let processIDKey = "quicktext.quickDictate.processID"
     static let hudStyleKey = "quicktext.quickDictate.hudStyle"
+    static let hudPositionKey = "quicktext.quickDictate.hudPosition"
 
     /// Built-in light-cleanup prompt. Falls back to `cleanTranscriptPrompt`
     /// when the corpus doesn't carry it yet.
@@ -89,6 +129,11 @@ enum QuickDictateSettings {
     static var hudStyle: QuickDictateHUDStyle {
         get { UserDefaults.standard.string(forKey: hudStyleKey).flatMap(QuickDictateHUDStyle.init(rawValue:)) ?? .regular }
         set { UserDefaults.standard.set(newValue.rawValue, forKey: hudStyleKey) }
+    }
+
+    static var hudPosition: QuickDictateHUDPosition {
+        get { UserDefaults.standard.string(forKey: hudPositionKey).flatMap(QuickDictateHUDPosition.init(rawValue:)) ?? .topCenter }
+        set { UserDefaults.standard.set(newValue.rawValue, forKey: hudPositionKey) }
     }
 
     static var processID: String {
