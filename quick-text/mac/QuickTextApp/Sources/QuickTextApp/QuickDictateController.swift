@@ -18,6 +18,22 @@ enum QuickDictateError: LocalizedError, Equatable {
 }
 
 /// Where a finished Quick Dictate take goes.
+/// Dictation HUD layout: a card with a multi-line live transcript, or a
+/// single-line capsule.
+enum QuickDictateHUDStyle: String, CaseIterable, Identifiable {
+    case regular
+    case compact
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .regular: return "Regular"
+        case .compact: return "Compact"
+        }
+    }
+}
+
 enum QuickDictateOutput: String, CaseIterable, Identifiable {
     case insert
     case copy
@@ -40,6 +56,7 @@ enum QuickDictateSettings {
     static let triggerKeyKey = "quicktext.quickDictate.triggerKey"
     static let outputKey = "quicktext.quickDictate.output"
     static let processIDKey = "quicktext.quickDictate.processID"
+    static let hudStyleKey = "quicktext.quickDictate.hudStyle"
 
     /// Built-in light-cleanup prompt. Falls back to `cleanTranscriptPrompt`
     /// when the corpus doesn't carry it yet.
@@ -67,6 +84,11 @@ enum QuickDictateSettings {
     static var output: QuickDictateOutput {
         get { UserDefaults.standard.string(forKey: outputKey).flatMap(QuickDictateOutput.init(rawValue:)) ?? .insert }
         set { UserDefaults.standard.set(newValue.rawValue, forKey: outputKey) }
+    }
+
+    static var hudStyle: QuickDictateHUDStyle {
+        get { UserDefaults.standard.string(forKey: hudStyleKey).flatMap(QuickDictateHUDStyle.init(rawValue:)) ?? .regular }
+        set { UserDefaults.standard.set(newValue.rawValue, forKey: hudStyleKey) }
     }
 
     static var processID: String {
