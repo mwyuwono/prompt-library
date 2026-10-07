@@ -121,15 +121,19 @@ final class CorpusStore: ObservableObject {
         Self.librarySidebarIDs.contains(activeCategoryID) ? "Library" : "Collection"
     }
 
-    /// Phrases in the current sidebar destination that match the search term.
+    /// Phrases that match the search term across the whole library, or — when
+    /// not searching — the phrases in the current sidebar destination.
     var filteredPhrases: [Phrase] {
         let term = trimmedSearchTerm.lowercased()
         return corpus.phrases.filter { phrase in
+            // A search spans all categories and tabs; the destination filter
+            // applies only while browsing.
+            if !term.isEmpty { return true }
             switch activeCategoryID {
-            case "all": true
-            case "favorites": phrase.favorite
-            case "recent": lastUsed[phrase.id] != nil
-            default: phrase.categoryId == activeCategoryID
+            case "all": return true
+            case "favorites": return phrase.favorite
+            case "recent": return lastUsed[phrase.id] != nil
+            default: return phrase.categoryId == activeCategoryID
             }
         }.filter { phrase in
             if term.isEmpty { return true }

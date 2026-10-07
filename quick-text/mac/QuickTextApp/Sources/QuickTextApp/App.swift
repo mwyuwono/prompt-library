@@ -103,7 +103,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         AppAppearance.current.apply()
         Self.shared = self
         _ = DictateStatsStore.shared
-        applyDockIcon()
         registerHotKey()
         quickDictate.refreshTriggerMonitor()
     }
@@ -115,15 +114,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     /// Picks up an Input Monitoring grant made while the app was in the background.
     func applicationDidBecomeActive(_ notification: Notification) {
         quickDictate.refreshTriggerMonitor()
-    }
-
-    /// Dock-only icon override: the txt artwork replaces the Dock (and
-    /// Cmd-Tab) tile at runtime. The bundle `.icns` — what Finder shows —
-    /// and the MenuBarExtra SF Symbol are left untouched.
-    private func applyDockIcon() {
-        guard let url = Bundle.main.url(forResource: "DockIcon", withExtension: "png"),
-              let image = NSImage(contentsOf: url) else { return }
-        NSApp.applicationIconImage = image
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
@@ -184,4 +174,3 @@ extension Notification.Name {
     static let quickTextShowKeyboardShortcuts = Notification.Name("quickTextShowKeyboardShortcuts")
     static let quickTextShowGlossary = Notification.Name("quickTextShowGlossary")
 }
-

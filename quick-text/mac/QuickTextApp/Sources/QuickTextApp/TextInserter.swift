@@ -72,7 +72,9 @@ enum TextInserter {
             copy(text)
             return .copied(reason: "Allow Accessibility to insert at the cursor.")
         }
-        if target.isSecureField || IsSecureEventInputEnabled() {
+        // Secure Event Input is system-wide and can be enabled by another app;
+        // only the captured field's accessibility subrole identifies a password target.
+        if target.isSecureField {
             copy(text)
             return .copied(reason: "Password field — copied instead.")
         }

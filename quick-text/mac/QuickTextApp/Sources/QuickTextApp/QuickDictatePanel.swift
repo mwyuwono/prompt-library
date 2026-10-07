@@ -5,10 +5,11 @@ import SwiftUI
 /// the user's app keeps focus and the cursor stays where the text will land.
 @MainActor
 final class QuickDictatePanel: NSPanel {
-    private static let bottomInset: CGFloat = 96
+    private static let topInset: CGFloat = 16
 
     /// Window sizes leave transparent room for the card to grow (up to four
-    /// transcript lines) and for the glow bleed. Content anchors to the bottom.
+    /// transcript lines) and for the glow bleed. The panel sits at the top of the
+    /// screen and content anchors to the top, so the card grows downward.
     private static func size(for style: QuickDictateHUDStyle) -> NSSize {
         switch style {
         case .regular: return NSSize(width: 480, height: 240)
@@ -48,7 +49,7 @@ final class QuickDictatePanel: NSPanel {
         setContentSize(size)
         let screen = NSScreen.screens.first { NSMouseInRect(NSEvent.mouseLocation, $0.frame, false) } ?? NSScreen.main
         if let visible = screen?.visibleFrame {
-            setFrameOrigin(NSPoint(x: visible.midX - size.width / 2, y: visible.minY + Self.bottomInset))
+            setFrameOrigin(NSPoint(x: visible.midX - size.width / 2, y: visible.maxY - Self.topInset - size.height))
         }
         alphaValue = 0
         orderFrontRegardless()
@@ -107,8 +108,8 @@ struct QuickDictateHUD: View {
                 QuickDictateCard(controller: controller)
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-        .padding(.bottom, 14)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .padding(.top, 14)
         .animation(Theme.Motion.fade, value: controller.phase)
     }
 }

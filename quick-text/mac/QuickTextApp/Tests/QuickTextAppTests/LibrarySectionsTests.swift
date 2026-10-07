@@ -88,6 +88,21 @@ final class LibrarySectionsTests: XCTestCase {
         XCTAssertEqual(store.displayedPhrases.map(\.id), ["b"])
     }
 
+    func testSearchSpansAllCategories() {
+        let store = makeStore([
+            phrase("a", value: "needle here"),
+            phrase("b", category: "other", value: "plain"),
+            phrase("c", category: "other", favorite: true, value: "also plain"),
+        ])
+        store.selectTab("other")
+        store.searchTerm = "needle"
+        XCTAssertEqual(store.sections.map(\.title), ["Results"])
+        XCTAssertEqual(store.displayedPhrases.map(\.id), ["a"])
+        // Same for the smart groups: a search is library-wide, not tab-scoped.
+        store.selectTab("favorites")
+        XCTAssertEqual(store.displayedPhrases.map(\.id), ["a"])
+    }
+
     func testVerticalMovementKeepsColumnAcrossSections() {
         // Favorites: f1 f2 f3 | f4  — Everything Else: r1 r2 r3
         let favorites = (1...4).map { phrase("f\($0)", favorite: true) }
