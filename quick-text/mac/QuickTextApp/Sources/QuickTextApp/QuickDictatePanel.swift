@@ -162,6 +162,7 @@ private struct HUDSurface<S: InsettableShape>: ViewModifier {
 }
 
 /// Shared state content, parameterised by layout.
+@MainActor
 private struct HUDParts {
     let controller: QuickDictateController
 
