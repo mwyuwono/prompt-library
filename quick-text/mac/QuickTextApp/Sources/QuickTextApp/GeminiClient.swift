@@ -10,6 +10,7 @@ import Foundation
 
 enum DictateError: LocalizedError {
     case missingAPIKey
+    case missingAudio
     case network(Error)
     case apiError(status: Int, message: String)
     case badResponse(String)
@@ -18,6 +19,8 @@ enum DictateError: LocalizedError {
         switch self {
         case .missingAPIKey:
             return "No Gemini API key saved. Add it in Settings > Dictation."
+        case .missingAudio:
+            return "This take has no audio to save."
         case .network(let error):
             return "Network error: \(error.localizedDescription)"
         case .apiError(let status, let message):

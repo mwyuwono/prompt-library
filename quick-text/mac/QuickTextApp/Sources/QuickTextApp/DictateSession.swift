@@ -215,6 +215,10 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
     /// `TranscriptStore.directory`. Tests point this at a temp directory so
     /// they never touch the real archive.
     var transcriptDirectory: URL? = nil
+    /// Where failed-take audio is preserved; nil uses
+    /// `FailedTakeAudioStore.directory`. Tests point this at a temp directory
+    /// so they never touch the real store.
+    var failedTakeAudioDirectory: URL? = nil
     private var recorder: AVAudioRecorder?
     private var audioPlayer: AVAudioPlayer?
     /// Outstanding built-in-mic flip for the in-flight take; restored on stop.
@@ -684,9 +688,39 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
                                              outcome: Task.isCancelled ? .cancelled : .failed, usage: nil,
                                              capturedDurationSeconds: duration))
                 guard let i = takes.firstIndex(where: { $0.id == id }) else { return }
+                preserveTakeAudio(at: i, sourceURL: audioURL)
                 takes[i].status = .failed(error.localizedDescription)
             }
         }
+    }
+
+    /// Moves a failed take's recording out of temp storage so a safety-block
+    /// false alarm or network error never loses the audio. Best effort: when
+    /// the copy fails the take keeps its original file and stays retryable.
+    private func preserveTakeAudio(at index: Int, sourceURL: URL) {
+        guard FileManager.default.fileExists(atPath: sourceURL.path),
+              !FailedTakeAudioStore.isPreserved(sourceURL, in: failedTakeAudioDirectory) else { return }
+        do {
+            let stored = try FailedTakeAudioStore.preserve(
+                sourceURL, createdAt: takes[index].createdAt, in: failedTakeAudioDirectory)
+            try? FileManager.default.removeItem(at: sourceURL)
+            takes[index].audioURL = stored
+        } catch {
+            // Keep the temp file; Retry and Play still work until it is swept.
+        }
+    }
+
+    /// Copies a take's recording to a user-chosen location ("Save Audio…").
+    /// The take keeps its audio afterwards, so saving never destroys the
+    /// ability to retry or play it.
+    func exportTakeAudio(_ take: DictateTake, to destination: URL) throws {
+        guard let source = take.audioURL else {
+            throw DictateError.missingAudio
+        }
+        if FileManager.default.fileExists(atPath: destination.path) {
+            try FileManager.default.removeItem(at: destination)
+        }
+        try FileManager.default.copyItem(at: source, to: destination)
     }
 
     func deleteTake(_ take: DictateTake) {
@@ -921,7 +955,11 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
         isRecording = false
         stopRecordingMonitor()
         for take in takes {
-            if let url = take.audioURL {
+            // Preserved failed-take audio survives new sessions: it is the
+            // user's only recoverable copy, and deleting the take explicitly
+            // is the way to remove it.
+            if let url = take.audioURL,
+               !FailedTakeAudioStore.isPreserved(url, in: failedTakeAudioDirectory) {
                 try? FileManager.default.removeItem(at: url)
             }
         }

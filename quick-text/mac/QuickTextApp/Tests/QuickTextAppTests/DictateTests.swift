@@ -1354,16 +1354,131 @@ final class DictateTests: XCTestCase {
         }
         XCTAssertEqual(box.value ?? -1, measured, accuracy: 0.5)
     }
-}
 
-extension XCTestCase {
-    /// Temp archive for `DictateSession.transcriptDirectory`, removed after
-    /// the test, so processing never writes into the real transcript history.
-    func makeTranscriptDirectory() -> URL {
+    // MARK: - Failed-take audio recovery
+
+    /// A take directory for preserved audio that never touches the real
+    /// store; removed after the test.
+    func makeFailedTakeAudioDirectory() -> URL {
         let dir = FileManager.default.temporaryDirectory
-            .appendingPathComponent("dictate-transcripts-\(UUID().uuidString)", isDirectory: true)
+            .appendingPathComponent("failed-take-audio-\(UUID().uuidString)", isDirectory: true)
+        try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         addTeardownBlock { try? FileManager.default.removeItem(at: dir) }
         return dir
+    }
+
+    @MainActor
+    func testFailedTakeAudioIsPreservedAndSurvivesNewSession() async throws {
+        let session = DictateSession()
+        session.transcriptDirectory = makeTranscriptDirectory()
+        session.failedTakeAudioDirectory = makeFailedTakeAudioDirectory()
+        let suiteName = "test-preserve-\(UUID().uuidString)"
+        session.statsStore = DictateStatsStore(defaults: UserDefaults(suiteName: suiteName)!)
+        defer { UserDefaults.standard.removePersistentDomain(forName: suiteName) }
+        session.transcribe = { _, _ in
+            throw DictateError.apiError(status: 400, message: "input was blocked")
+        }
+
+        let tempAudio = FileManager.default.temporaryDirectory
+            .appendingPathComponent("blocked-\(UUID().uuidString).m4a")
+        let bytes = Data("blocked-audio".utf8)
+        try bytes.write(to: tempAudio)
+        session.takes = [DictateTake(audioURL: tempAudio, transcript: nil, status: .recording)]
+        session.stopRecording()
+        try await Task.sleep(nanoseconds: 200_000_000)
+
+        guard case .failed = session.takes.first?.status else {
+            return XCTFail("take should be failed after a blocked transcription")
+        }
+        let preserved = try XCTUnwrap(session.takes.first?.audioURL)
+        XCTAssertTrue(
+            FailedTakeAudioStore.isPreserved(preserved, in: session.failedTakeAudioDirectory))
+        XCTAssertEqual(try Data(contentsOf: preserved), bytes)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: tempAudio.path))
+
+        // A new session must not sweep the only recoverable copy.
+        session.newSession()
+        XCTAssertEqual(session.takes.count, 0)
+        XCTAssertTrue(
+            FileManager.default.fileExists(atPath: preserved.path),
+            "new sessions must not delete preserved failed-take audio")
+    }
+
+    @MainActor
+    func testRetryStillPossibleAfterPreservation() async throws {
+        let session = DictateSession()
+        session.transcriptDirectory = makeTranscriptDirectory()
+        session.failedTakeAudioDirectory = makeFailedTakeAudioDirectory()
+        let suiteName = "test-retry-\(UUID().uuidString)"
+        session.statsStore = DictateStatsStore(defaults: UserDefaults(suiteName: suiteName)!)
+        defer { UserDefaults.standard.removePersistentDomain(forName: suiteName) }
+        var attempts = 0
+        session.transcribe = { _, _ in
+            attempts += 1
+            if attempts == 1 { throw DictateError.apiError(status: 400, message: "input was blocked") }
+            return GeminiResponse(text: "recovered", usage: .zero)
+        }
+
+        let tempAudio = FileManager.default.temporaryDirectory
+            .appendingPathComponent("retry-\(UUID().uuidString).m4a")
+        try Data("retry-audio".utf8).write(to: tempAudio)
+        session.takes = [DictateTake(audioURL: tempAudio, transcript: nil, status: .recording)]
+        session.stopRecording()
+        try await Task.sleep(nanoseconds: 200_000_000)
+        guard case .failed = session.takes.first?.status else {
+            return XCTFail("first attempt should fail")
+        }
+
+        session.retryTake(session.takes[0])
+        try await Task.sleep(nanoseconds: 200_000_000)
+        XCTAssertEqual(session.takes.first?.status, .ready)
+        XCTAssertEqual(session.takes.first?.transcript, "recovered")
+        XCTAssertNil(session.takes.first?.audioURL, "success still discards the audio")
+    }
+
+    @MainActor
+    func testDeleteTakeRemovesPreservedAudio() throws {
+        let session = DictateSession()
+        let dir = makeFailedTakeAudioDirectory()
+        let preserved = dir.appendingPathComponent("failed-take-test.m4a")
+        try Data("doomed".utf8).write(to: preserved)
+        let take = DictateTake(audioURL: preserved, transcript: nil, status: .failed("blocked"))
+        session.takes = [take]
+
+        session.deleteTake(take)
+
+        XCTAssertEqual(session.takes.count, 0)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: preserved.path))
+    }
+
+    @MainActor
+    func testExportTakeAudioCopiesRecording() throws {
+        let session = DictateSession()
+        let dir = makeFailedTakeAudioDirectory()
+        let source = dir.appendingPathComponent("failed-take-export.m4a")
+        let bytes = Data("export-me".utf8)
+        try bytes.write(to: source)
+        let take = DictateTake(audioURL: source, transcript: nil, status: .failed("blocked"))
+
+        let destination = dir.appendingPathComponent("saved-take.m4a")
+        try session.exportTakeAudio(take, to: destination)
+        XCTAssertEqual(try Data(contentsOf: destination), bytes)
+        // Exporting keeps the take intact for retry and playback.
+        XCTAssertEqual(take.audioURL, source)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: source.path))
+
+        // Saving over an existing file replaces it instead of throwing.
+        try session.exportTakeAudio(take, to: destination)
+        XCTAssertEqual(try Data(contentsOf: destination), bytes)
+
+        let silent = DictateTake(audioURL: nil, transcript: nil, status: .failed("blocked"))
+        XCTAssertThrowsError(try session.exportTakeAudio(silent, to: destination))
+    }
+
+    func testSuggestedFilenameFormat() {
+        let name = FailedTakeAudioStore.suggestedFilename(takeNumber: 1, date: Date(timeIntervalSince1970: 0))
+        XCTAssertTrue(name.hasPrefix("QuickText-Take1-"))
+        XCTAssertTrue(name.hasSuffix(".m4a"))
     }
 
     // MARK: - Live finalization gate
@@ -1399,4 +1514,16 @@ extension XCTestCase {
         gate.noteFrame(at: 0, isFinal: true, hasText: false)
         XCTAssertFalse(gate.shouldClose(at: 10_000_000_000))
     }
+}
+
+extension XCTestCase {
+    /// Temp archive for `DictateSession.transcriptDirectory`, removed after
+    /// the test, so processing never writes into the real transcript history.
+    func makeTranscriptDirectory() -> URL {
+        let dir = FileManager.default.temporaryDirectory
+            .appendingPathComponent("dictate-transcripts-\(UUID().uuidString)", isDirectory: true)
+        addTeardownBlock { try? FileManager.default.removeItem(at: dir) }
+        return dir
+    }
+
 }

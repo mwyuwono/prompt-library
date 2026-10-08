@@ -546,10 +546,40 @@ struct DictateView: View {
                         .font(.system(size: 13))
                         .foregroundStyle(Theme.textSecondary)
                 }
-                Button("Retry") { session.retryTake(take) }
-                    .buttonStyle(OutlineButtonStyle(height: 30, fill: Theme.bgButton))
-                    .disabled(take.audioURL == nil)
+                if take.audioURL != nil {
+                    Text("Audio kept — save it to transcribe with another tool.")
+                        .font(.system(size: 12))
+                        .foregroundStyle(Theme.textTertiary)
+                }
+                HStack(spacing: 10) {
+                    Button("Retry") { session.retryTake(take) }
+                        .buttonStyle(OutlineButtonStyle(height: 30, fill: Theme.bgButton))
+                        .disabled(take.audioURL == nil)
+                    if take.audioURL != nil {
+                        Button("Save Audio…") { saveTakeAudio(take, index: index) }
+                            .buttonStyle(OutlineButtonStyle(height: 30, fill: Theme.bgButton))
+                            .help("Save Take \(index + 1)'s recording to a file")
+                    }
+                }
             }
+        }
+    }
+
+    /// Saves a failed take's preserved recording via a save panel. The take
+    /// keeps its audio, so this never affects Retry or playback.
+    private func saveTakeAudio(_ take: DictateTake, index: Int) {
+        guard take.audioURL != nil else { return }
+        let panel = NSSavePanel()
+        panel.allowedContentTypes = [.mpeg4Audio]
+        panel.canCreateDirectories = true
+        panel.nameFieldStringValue = FailedTakeAudioStore.suggestedFilename(
+            takeNumber: index + 1, date: take.createdAt)
+        panel.directoryURL = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first
+        guard panel.runModal() == .OK, let destination = panel.url else { return }
+        do {
+            try session.exportTakeAudio(take, to: destination)
+        } catch {
+            session.errorMessage = "Could not save Take \(index + 1) audio: \(error.localizedDescription)"
         }
     }
 
