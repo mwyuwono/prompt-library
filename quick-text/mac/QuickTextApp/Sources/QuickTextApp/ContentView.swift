@@ -24,6 +24,9 @@ struct ContentView: View {
     @FocusState private var searchFocused: Bool
     @AppStorage("QuickText.sidebarVisible") private var sidebarVisible = true
     @AppStorage("QuickText.libraryLayout") private var layoutRaw = LibraryLayout.grid.rawValue
+    @State private var showingDictionary = false
+    @State private var dictionaryPanelOffset = CGSize.zero
+    @State private var dictionaryPanelDragOffset = CGSize.zero
     @State private var showingSettings = false
     @State private var settingsPanelOffset = CGSize.zero
     @State private var settingsPanelDragOffset = CGSize.zero
@@ -83,7 +86,7 @@ struct ContentView: View {
     }
 
     private var anyPanelOpen: Bool {
-        showingSettings || showingVariablesLibrary || showingKeyboardShortcuts || showingGlossary
+        showingDictionary || showingSettings || showingVariablesLibrary || showingKeyboardShortcuts || showingGlossary
     }
 
     var body: some View {
@@ -268,6 +271,32 @@ struct ContentView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .zIndex(2)
             }
+            if showingDictionary {
+                FloatingPanel(
+                    title: "Dictation Dictionary",
+                    systemImage: "character.book.closed",
+                    onClose: closeFloatingPanels,
+                    onDragEnded: {
+                        dictionaryPanelOffset.width += dictionaryPanelDragOffset.width
+                        dictionaryPanelOffset.height += dictionaryPanelDragOffset.height
+                        dictionaryPanelDragOffset = .zero
+                    },
+                    dragOffset: $dictionaryPanelDragOffset
+                ) {
+                    DictationDictionaryEditor(
+                        width: standardPanelWidth,
+                        height: min(560, windowSize.height * 0.75)
+                    )
+                }
+                .frame(width: standardPanelWidth)
+                .offset(
+                    x: dictionaryPanelOffset.width + dictionaryPanelDragOffset.width,
+                    y: dictionaryPanelOffset.height + dictionaryPanelDragOffset.height
+                )
+                .padding(.top, 64)
+                .padding(.trailing, 12)
+                .zIndex(2)
+            }
             if showingSettings {
                 FloatingPanel(
                     onClose: closeFloatingPanels,
@@ -367,6 +396,9 @@ struct ContentView: View {
                     SidebarRow(title: "Variables", systemImage: "curlybraces", isSelected: showingVariablesLibrary, showsFocus: false) {
                         openVariablesPanel()
                     }
+                }
+                SidebarRow(title: "Dictionary", systemImage: "character.book.closed", isSelected: showingDictionary, showsFocus: false) {
+                    openDictionaryPanel()
                 }
                 SidebarRow(title: "Settings", systemImage: "gearshape", isSelected: showingSettings, showsFocus: false) {
                     openSettingsPanel()
@@ -802,6 +834,7 @@ struct ContentView: View {
             .disabled(store.selectedPhrase == nil)
         Divider()
         Button("Variables Library") { openVariablesPanel() }
+        Button("Dictionary") { openDictionaryPanel() }
         Button("Settings") { openSettingsPanel() }
     }
 
@@ -841,7 +874,13 @@ struct ContentView: View {
         store.expandedPhraseID == nil && !anyPanelOpen && store.editingPhrase == nil && !searchFocused && !isEditingText
     }
 
+    private func openDictionaryPanel() {
+        closeFloatingPanels()
+        showingDictionary = true
+    }
+
     private func openSettingsPanel() {
+        showingDictionary = false
         showingVariablesLibrary = false
         showingKeyboardShortcuts = false
         showingGlossary = false
@@ -857,6 +896,7 @@ struct ContentView: View {
     }
 
     private func openVariablesPanel() {
+        showingDictionary = false
         showingSettings = false
         showingKeyboardShortcuts = false
         showingGlossary = false
@@ -864,6 +904,7 @@ struct ContentView: View {
     }
 
     private func openKeyboardShortcutsPanel() {
+        showingDictionary = false
         showingSettings = false
         showingVariablesLibrary = false
         showingGlossary = false
@@ -871,6 +912,7 @@ struct ContentView: View {
     }
 
     private func openGlossaryPanel() {
+        showingDictionary = false
         showingSettings = false
         showingVariablesLibrary = false
         showingKeyboardShortcuts = false
@@ -878,6 +920,7 @@ struct ContentView: View {
     }
 
     private func closeFloatingPanels() {
+        showingDictionary = false
         showingSettings = false
         showingVariablesLibrary = false
         showingKeyboardShortcuts = false

@@ -50,7 +50,7 @@ struct GeminiClient {
     /// Transcribes a voice take using `gemini-3.8-flash` inline audio with low thinking effort.
     func transcribe(audioData: Data, mimeType: String) async throws -> GeminiResponse {
         let input: [[String: Any]] = [
-            ["type": "text", "text": "Generate a transcript of the speech. Return only the transcript, no commentary. If the audio contains no intelligible speech, return an empty response; never guess or invent words."],
+            ["type": "text", "text": Self.transcriptionPrompt()],
             ["type": "audio", "data": audioData.base64EncodedString(), "mime_type": mimeType]
         ]
         return try await createInteraction(
@@ -63,13 +63,24 @@ struct GeminiClient {
     /// Low thinking effort keeps text synthesis cost-conscious and latency low.
     func process(masterPrompt: String, transcript: String) async throws -> GeminiResponse {
         let input: [[String: String]] = [
-            ["type": "text", "text": masterPrompt + "\n\n--- Transcribed audio ---\n" + transcript]
+            ["type": "text", "text": Self.processingPrompt(masterPrompt: masterPrompt, transcript: transcript)]
         ]
         return try await createInteraction(
             model: Self.processModel,
             input: input.map { $0 as [String: Any] },
             generationConfig: ["thinking_level": "low"]
         )
+    }
+
+    static func transcriptionPrompt(entries: [DictationDictionaryEntry] = DictationDictionary.load()) -> String {
+        "Generate a transcript of the speech. Return only the transcript, no commentary. If the audio contains no intelligible speech, return an empty response; never guess or invent words."
+            + DictationDictionary.spellingGuidance(entries: entries)
+    }
+
+    static func processingPrompt(masterPrompt: String, transcript: String,
+                                 entries: [DictationDictionaryEntry] = DictationDictionary.load()) -> String {
+        masterPrompt + DictationDictionary.spellingGuidance(entries: entries)
+            + "\n\n--- Transcribed audio ---\n" + transcript
     }
 
     /// Minimal text round-trip used by Settings > Dictation to verify a key.

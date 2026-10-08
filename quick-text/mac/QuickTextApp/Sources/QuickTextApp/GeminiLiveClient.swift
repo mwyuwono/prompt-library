@@ -169,11 +169,16 @@ enum GeminiLiveClient {
     // MARK: - Outbound messages (testable)
 
     /// The dedicated Live Transcription model streams text for microphone input.
-    static func setupMessage(model: String = liveModel) -> [String: Any] {
-        ["setup": [
+    static func setupMessage(model: String = liveModel,
+                             vocabulary: [String] = DictationDictionary.vocabulary) -> [String: Any] {
+        var transcription: [String: Any] = ["languageCodes": [String]()]
+        if !vocabulary.isEmpty {
+            transcription["customVocabulary"] = Array(vocabulary.prefix(DictationDictionary.maximumEntries))
+        }
+        return ["setup": [
             "model": model,
             "generationConfig": ["responseModalities": ["TEXT"]],
-            "inputAudioTranscription": ["languageCodes": [String]()]
+            "inputAudioTranscription": transcription
         ]]
     }
 
