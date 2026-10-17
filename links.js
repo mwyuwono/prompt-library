@@ -84,10 +84,17 @@ class LinksManager {
             this.hamburger.addEventListener('click', () => this.openModal());
         }
 
+        // Mobile action bar AI tools button
+        document.addEventListener('tools-toggle', () => {
+            if (this.modal?.open) this.closeModal();
+            else this.openModal();
+        });
+
         // Listen for component events
         if (this.modal) {
             // Close event - component handles ESC key internally
             this.modal.addEventListener('close', () => {
+                this.syncToolsButton(false);
                 // Restore body scroll when modal closes
                 document.body.style.overflow = '';
                 document.body.style.position = '';
@@ -118,6 +125,15 @@ class LinksManager {
         
         // Use component's show method
         this.modal.show();
+        this.syncToolsButton(true);
+    }
+
+    /**
+     * Reflect the modal state on the mobile action bar's AI tools button
+     */
+    syncToolsButton(isOpen) {
+        const controlsBar = document.getElementById('controlsBar');
+        if (controlsBar) controlsBar.toolsOpen = isOpen;
     }
 
     /**

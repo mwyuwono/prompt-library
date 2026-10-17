@@ -978,7 +978,13 @@ mark {
 /* ============================== MOBILE ============================== */
 
 @media (max-width: 768px) {
-    .header-top { padding: var(--space-md) 16px; }
+    .header-top {
+        padding: var(--space-md) 16px;
+        position: relative;
+        border-bottom-color: var(--paper-deep);
+    }
+    body:not(.private-vault-page) #openLinksModal { display: none; }
+    .main-content { padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px)); }
     .header-nav { order: 3; gap: var(--space-sm); }
     .hamburger  { display: flex; }
 
@@ -986,7 +992,6 @@ mark {
     .btn-filters,
     #toggleFiltersBtn  { display: none; }
 
-    .header-logo-text  { display: none; }
     .btn-filters-text  { display: none; }
     .header-actions    { gap: var(--space-sm); }
 

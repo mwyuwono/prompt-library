@@ -22,6 +22,10 @@ export class WyControlsBar extends LitElement {
         isScrolled: { type: Boolean, state: true },
         scrollState: { type: String, state: true },
         _mobileSearchOpen: { type: Boolean, state: true },
+        toolsButton: { type: Boolean, attribute: 'tools-button' },
+        toolsOpen: { type: Boolean, attribute: 'tools-open' },
+        _sheetOpen: { type: Boolean, state: true },
+        _isMobile: { type: Boolean, state: true },
     };
 
     constructor() {
@@ -42,6 +46,11 @@ export class WyControlsBar extends LitElement {
         this.isScrolled = false;
         this.scrollState = 'normal';
         this._mobileSearchOpen = false;
+        this.toolsButton = false;
+        this.toolsOpen = false;
+        this._sheetOpen = false;
+        this._isMobile = this._matchesMobile();
+        this._handleSheetKeydown = this._handleSheetKeydown.bind(this);
         this._scrollEnterThreshold = 64;
         this._scrollExitThreshold = 12;
         this._minScrollableDistance = 96;
@@ -63,6 +72,7 @@ export class WyControlsBar extends LitElement {
     disconnectedCallback() {
         super.disconnectedCallback();
         window.removeEventListener('resize', this._handleViewportChange);
+        document.removeEventListener('keydown', this._handleSheetKeydown);
         if (this._scrollFrame) {
             cancelAnimationFrame(this._scrollFrame);
             this._scrollFrame = 0;
@@ -80,7 +90,17 @@ export class WyControlsBar extends LitElement {
         }, { passive: true });
     }
 
+    _matchesMobile() {
+        return typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
+    }
+
     _handleViewportChange() {
+        const isMobile = this._matchesMobile();
+        if (isMobile !== this._isMobile) {
+            this._isMobile = isMobile;
+            this._sheetOpen = false;
+            this._mobileSearchOpen = false;
+        }
         this._handleScroll();
         this._syncScrolledHostSurface();
     }
@@ -233,19 +253,193 @@ export class WyControlsBar extends LitElement {
         if (changedProperties.has('_mobileSearchOpen')) {
             if (this._mobileSearchOpen) {
                 this.setAttribute('data-mobile-search', '');
-                // Focus the input after animation
-                setTimeout(() => {
-                    this.querySelector('.search-input')?.focus();
-                }, 260);
+                if (this._isMobile) {
+                    this.querySelector('.m-search-input')?.focus();
+                } else {
+                    // Focus the input after animation
+                    setTimeout(() => {
+                        this.querySelector('.search-input')?.focus();
+                    }, 260);
+                }
             } else {
                 this.removeAttribute('data-mobile-search');
             }
         }
+        if (changedProperties.has('_sheetOpen')) {
+            if (this._sheetOpen) {
+                document.addEventListener('keydown', this._handleSheetKeydown);
+                requestAnimationFrame(() => {
+                    this.querySelector('.m-tile[aria-pressed="true"]')?.focus();
+                });
+            } else {
+                document.removeEventListener('keydown', this._handleSheetKeydown);
+            }
+        }
+        if (changedProperties.has('_isMobile')) {
+            if (this._isMobile) this.setAttribute('data-mobile-bar', '');
+            else this.removeAttribute('data-mobile-bar');
+        }
         this._bindChipsTrackScroll();
+    }
+
+    _activeFilterLabel() {
+        if (this.showFeaturedOnly) return 'Featured';
+        if (this.showHiddenOnly) return 'Hidden';
+        return this.activeCategory === 'all' ? 'All prompts' : this.activeCategory;
+    }
+
+    _mobileFilterOptions() {
+        const options = [];
+        if (this.showFeaturedFilter) {
+            options.push({ label: 'Featured', active: this.showFeaturedOnly, select: () => { if (!this.showFeaturedOnly) this._toggleFeatured(); } });
+        }
+        if (this.showHiddenFilter) {
+            options.push({ label: 'Hidden', active: this.showHiddenOnly, select: () => { if (!this.showHiddenOnly) this._toggleHidden(); } });
+        }
+        const noFlag = !this.showFeaturedOnly && !this.showHiddenOnly;
+        options.push({ label: 'All', active: this.activeCategory === 'all' && noFlag, select: () => this._setCategory('all') });
+        this.categories.forEach(cat => {
+            options.push({ label: cat, active: this.activeCategory === cat && noFlag, select: () => this._setCategory(cat) });
+        });
+        return options;
+    }
+
+    _renderMobile() {
+        const sortLabel = this.sortMode === 'modified' ? 'Date modified' : 'Custom';
+        return html`
+      ${this._sheetOpen ? html`
+        <div class="m-scrim" @click="${this._closeSheet}"></div>
+        <div class="m-sheet" id="mobileFilterSheet" role="dialog" aria-modal="true" aria-label="Filter prompts">
+          <div class="m-eyebrow">Category</div>
+          <div class="m-tiles">
+            ${this._mobileFilterOptions().map(option => html`
+              <button
+                type="button"
+                class="m-tile"
+                aria-pressed="${option.active}"
+                @click="${() => { option.select(); this._closeSheet(); }}"
+              >${option.label}</button>
+            `)}
+          </div>
+          <div class="m-order">
+            <span class="m-eyebrow">Order</span>
+            <div class="m-segmented" role="group" aria-label="Prompt order">
+              <button type="button" aria-pressed="${this.sortMode !== 'modified'}" @click="${() => this._applySortMode('custom')}">Custom</button>
+              <button type="button" aria-pressed="${this.sortMode === 'modified'}" @click="${() => this._applySortMode('modified')}">Date modified</button>
+            </div>
+          </div>
+        </div>
+      ` : ''}
+      <div class="m-bar ${this._mobileSearchOpen ? 'is-searching' : ''}" role="toolbar" aria-label="Browse prompts">
+        ${this._mobileSearchOpen ? html`
+          <span class="m-icon m-search-icon" aria-hidden="true">search</span>
+          <input
+            type="search"
+            class="search-input m-search-input"
+            placeholder="Search prompts…"
+            .value="${this.searchValue}"
+            @input="${this._handleSearch}"
+            @keydown="${this._handleMobileSearchKeydown}"
+            aria-label="Search prompts"
+            enterkeyhint="search"
+          >
+          <button type="button" class="m-btn" @click="${this._closeMobileSearch}" aria-label="Close search">
+            <span class="m-icon" aria-hidden="true">close</span>
+          </button>
+        ` : html`
+          <button type="button" class="m-btn" @click="${this._openMobileSearch}" aria-label="Search prompts">
+            <span class="m-icon" aria-hidden="true">search</span>
+          </button>
+          <span class="m-divider" aria-hidden="true"></span>
+          <button
+            type="button"
+            class="m-category"
+            aria-haspopup="dialog"
+            aria-expanded="${this._sheetOpen}"
+            aria-controls="mobileFilterSheet"
+            @click="${this._toggleSheet}"
+          >
+            <span class="m-category-label">${this._activeFilterLabel()}</span>
+            <span class="m-icon" aria-hidden="true">${this._sheetOpen ? 'expand_more' : 'expand_less'}</span>
+          </button>
+          <span class="m-divider" aria-hidden="true"></span>
+          <button
+            type="button"
+            class="m-btn"
+            aria-label="Order by date modified"
+            aria-pressed="${this.sortMode === 'modified'}"
+            title="Order: ${sortLabel}"
+            @click="${() => this._applySortMode(this.sortMode === 'modified' ? 'custom' : 'modified')}"
+          >
+            <span class="m-icon" aria-hidden="true">swap_vert</span>
+          </button>
+          ${this.toolsButton ? html`
+            <button
+              type="button"
+              class="m-btn"
+              aria-label="AI tools"
+              aria-haspopup="dialog"
+              aria-expanded="${this.toolsOpen}"
+              @click="${this._toggleTools}"
+            >
+              <span class="m-icon" aria-hidden="true">${this.toolsOpen ? 'close' : 'apps'}</span>
+            </button>
+          ` : ''}
+        `}
+      </div>
+    `;
+    }
+
+    _toggleSheet() {
+        if (!this._sheetOpen && this.toolsOpen) this._dispatchToolsToggle();
+        this._sheetOpen = !this._sheetOpen;
+    }
+
+    _closeSheet() {
+        if (!this._sheetOpen) return;
+        this._sheetOpen = false;
+        requestAnimationFrame(() => this.querySelector('.m-category')?.focus());
+    }
+
+    _handleSheetKeydown(e) {
+        if (e.key === 'Escape' && this._sheetOpen) {
+            e.preventDefault();
+            this._closeSheet();
+        }
+    }
+
+    _toggleTools() {
+        if (this._sheetOpen) this._sheetOpen = false;
+        this._dispatchToolsToggle();
+    }
+
+    _dispatchToolsToggle() {
+        this.dispatchEvent(new CustomEvent('tools-toggle', { bubbles: true, composed: true }));
+    }
+
+    _openMobileSearch() {
+        this._sheetOpen = false;
+        if (this.toolsOpen) this._dispatchToolsToggle();
+        this._mobileSearchOpen = true;
+    }
+
+    _handleMobileSearchKeydown(e) {
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            this._closeMobileSearch();
+        } else if (e.key === 'Enter') {
+            e.target.blur();
+        }
+    }
+
+    _applySortMode(mode) {
+        this.sortMode = mode === 'modified' ? 'modified' : 'custom';
+        this._notifyChange();
     }
 
     render() {
         this._syncStateAttributes();
+        if (this._isMobile) return this._renderMobile();
         const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
         const showToggles = !this.isScrolled && (!this.hideViewToggle || !this.hideDetailsToggle);
 

@@ -3853,3 +3853,504 @@ wy-modal .wy-modal-footer {
     padding: 12px 24px calc(24px + env(safe-area-inset-bottom, 0px));
   }
 }
+
+/* ==========================================================================
+   Mobile action bar (wy-controls-bar ≤768px) and AI Tools sheet
+   Loaded last so these rules win over the earlier mobile blocks.
+   ========================================================================== */
+@keyframes wy-m-sheet-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes wy-m-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@media (max-width: 768px) {
+  wy-controls-bar[data-mobile-bar] {
+    position: static;
+    z-index: auto;
+    padding: 0;
+    min-height: 0;
+    background: transparent;
+  }
+
+  wy-controls-bar[data-mobile-bar]::after {
+    display: none;
+  }
+
+  wy-controls-bar .m-icon {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 22px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    white-space: nowrap;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: 'liga';
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ---- Bar ---- */
+  wy-controls-bar .m-bar {
+    position: fixed;
+    left: var(--s-4);
+    right: var(--s-4);
+    bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+    z-index: 1500;
+    height: 56px;
+    box-sizing: border-box;
+    padding: 0 6px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    border-radius: var(--radius-pill);
+    background: var(--ink);
+    color: var(--paper);
+    box-shadow: 0 12px 40px color-mix(in srgb, var(--ink) 24%, transparent);
+  }
+
+  wy-controls-bar .m-btn,
+  wy-controls-bar .m-category {
+    position: relative;
+    overflow: hidden;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: color var(--dur-1) var(--ease);
+  }
+
+  wy-controls-bar .m-btn {
+    flex: none;
+    width: 44px;
+  }
+
+  wy-controls-bar .m-category {
+    flex: 1 1 auto;
+    min-width: 0;
+    gap: 6px;
+  }
+
+  wy-controls-bar .m-btn::before,
+  wy-controls-bar .m-category::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--paper);
+    opacity: 0;
+    transition: opacity var(--dur-1) var(--ease);
+    pointer-events: none;
+  }
+
+  wy-controls-bar .m-btn:hover::before,
+  wy-controls-bar .m-category:hover::before {
+    opacity: var(--state-focus-opacity);
+  }
+
+  wy-controls-bar .m-btn:active::before,
+  wy-controls-bar .m-category:active::before {
+    opacity: var(--state-dragged-opacity);
+  }
+
+  wy-controls-bar .m-btn:focus-visible,
+  wy-controls-bar .m-category:focus-visible {
+    outline: 2px solid var(--paper);
+    outline-offset: -2px;
+  }
+
+  wy-controls-bar .m-btn[aria-pressed="true"],
+  wy-controls-bar .m-btn[aria-expanded="true"] {
+    color: var(--ink);
+  }
+
+  wy-controls-bar .m-btn[aria-pressed="true"]::before,
+  wy-controls-bar .m-btn[aria-expanded="true"]::before {
+    opacity: 1;
+  }
+
+  wy-controls-bar .m-btn[aria-pressed="true"]:focus-visible,
+  wy-controls-bar .m-btn[aria-expanded="true"]:focus-visible {
+    outline-color: var(--ink-mute);
+  }
+
+  wy-controls-bar .m-category-label {
+    position: relative;
+    z-index: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: var(--ff-serif);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 1.2;
+  }
+
+  wy-controls-bar .m-category .m-icon {
+    font-size: 20px;
+  }
+
+  wy-controls-bar .m-divider {
+    flex: none;
+    width: 1px;
+    height: 24px;
+    background: color-mix(in srgb, var(--paper) 24%, transparent);
+  }
+
+  /* Search state */
+  wy-controls-bar .m-bar.is-searching {
+    padding-left: var(--s-4);
+    gap: var(--s-2);
+  }
+
+  wy-controls-bar .m-search-icon {
+    flex: none;
+    color: color-mix(in srgb, var(--paper) 70%, transparent);
+  }
+
+  wy-controls-bar[data-mobile-bar] .m-bar .m-search-input {
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 0;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    cursor: text;
+    background: transparent;
+    color: var(--paper);
+    font-family: var(--ff-sans);
+    font-size: 16px;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  wy-controls-bar[data-mobile-bar] .m-bar .m-search-input::placeholder {
+    color: color-mix(in srgb, var(--paper) 60%, transparent);
+  }
+
+  wy-controls-bar .m-search-input::-webkit-search-cancel-button {
+    display: none;
+  }
+
+  /* ---- Filter sheet ---- */
+  wy-controls-bar .m-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 1400;
+    background: color-mix(in srgb, var(--ink) 40%, transparent);
+    animation: wy-m-fade-in var(--dur-1) var(--ease);
+  }
+
+  wy-controls-bar .m-sheet {
+    position: fixed;
+    left: var(--s-2);
+    right: var(--s-2);
+    bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+    z-index: 1500;
+    max-height: calc(100dvh - 96px - 64px - env(safe-area-inset-bottom, 0px));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    box-sizing: border-box;
+    padding: 20px var(--s-4) var(--s-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-3);
+    border-radius: var(--radius-3);
+    background: var(--paper);
+    color: var(--ink);
+    box-shadow: 0 12px 40px color-mix(in srgb, var(--ink) 16%, transparent);
+    animation: wy-m-sheet-in var(--dur-2) var(--ease);
+  }
+
+  wy-controls-bar .m-eyebrow {
+    font-family: var(--ff-sans);
+    font-size: var(--fs-ui-xs);
+    font-weight: 500;
+    letter-spacing: var(--tr-eyebrow);
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+
+  wy-controls-bar .m-tiles {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  wy-controls-bar .m-tile,
+  wy-controls-bar .m-segmented button {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    font-family: var(--ff-sans);
+    font-weight: 500;
+    transition: color var(--dur-1) var(--ease), border-color var(--dur-1) var(--ease);
+  }
+
+  wy-controls-bar .m-tile {
+    height: 48px;
+    box-sizing: border-box;
+    padding: 0 14px;
+    border: 1px solid var(--paper-edge);
+    border-radius: var(--radius-2);
+    background: var(--field-bg);
+    color: var(--ink);
+    font-size: 14px;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  wy-controls-bar .m-tile::before,
+  wy-controls-bar .m-segmented button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--ink);
+    opacity: 0;
+    transition: opacity var(--dur-1) var(--ease);
+    pointer-events: none;
+  }
+
+  wy-controls-bar .m-tile:hover::before,
+  wy-controls-bar .m-segmented button:hover::before {
+    opacity: var(--state-hover-opacity);
+  }
+
+  wy-controls-bar .m-tile:focus-visible,
+  wy-controls-bar .m-segmented button:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+
+  wy-controls-bar .m-tile[aria-pressed="true"] {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+
+  wy-controls-bar .m-order {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-3);
+    padding-top: var(--s-3);
+    border-top: 1px solid var(--paper-edge);
+  }
+
+  wy-controls-bar .m-segmented {
+    display: flex;
+    gap: 2px;
+    padding: 3px;
+    border: 1px solid var(--paper-edge);
+    border-radius: var(--radius-pill);
+  }
+
+  wy-controls-bar .m-segmented button {
+    height: 38px;
+    padding: 0 var(--s-4);
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    color: var(--ink);
+    font-size: 13px;
+  }
+
+  wy-controls-bar .m-segmented button[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  /* Keep transient notices clear of the bar */
+  wy-toast,
+  wy-copy-confirm {
+    bottom: calc(100px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* ---- AI Tools sheet (wy-links-modal) ---- */
+  wy-links-modal .modal-overlay {
+    z-index: 1400;
+    padding: 0;
+    background-color: color-mix(in srgb, var(--ink) 40%, transparent);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  wy-links-modal .modal-container {
+    position: fixed;
+    left: var(--s-2);
+    right: var(--s-2);
+    top: calc(64px + env(safe-area-inset-top, 0px));
+    bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+    width: auto;
+    max-width: none;
+    height: auto;
+    max-height: none;
+    border: 0;
+    border-radius: var(--radius-3);
+    box-shadow: 0 12px 40px color-mix(in srgb, var(--ink) 16%, transparent);
+    transform: translateY(12px);
+  }
+
+  wy-links-modal[open] .modal-container {
+    transform: translateY(0);
+  }
+
+  wy-links-modal .modal-content {
+    height: 100%;
+    box-sizing: border-box;
+    padding: 20px var(--s-4) var(--s-4);
+    overscroll-behavior: contain;
+  }
+
+  wy-links-modal .sections-container {
+    gap: var(--s-4);
+  }
+
+  wy-links-modal .section-header {
+    font-family: var(--ff-sans);
+    font-size: var(--fs-ui-xs);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: var(--tr-eyebrow);
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin: 0 0 var(--s-2);
+  }
+
+  wy-links-modal .chips-container {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  wy-links-modal .link-dropdown {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  wy-links-modal .link-chip {
+    width: 100%;
+    min-width: 0;
+    height: 44px;
+    box-sizing: border-box;
+    padding: 0 10px 0 14px;
+    gap: 6px;
+    justify-content: flex-start;
+    border-radius: var(--radius-2);
+    background-color: var(--field-bg);
+    color: var(--ink);
+    font-size: 14px;
+    letter-spacing: 0;
+    text-transform: none;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  wy-links-modal .link-chip:not(.link-chip--dropdown) {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 30px;
+  }
+
+  wy-links-modal .link-chip:not(.link-chip--dropdown)::after {
+    content: 'north_east';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Material Symbols Outlined';
+    font-size: 16px;
+    line-height: 1;
+    color: var(--ink-mute);
+    font-feature-settings: 'liga';
+  }
+
+  wy-links-modal .link-chip--dropdown .link-chip__label {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  wy-links-modal .link-chip:hover {
+    border-color: var(--paper-edge);
+  }
+
+  wy-links-modal .link-chip::before {
+    background-color: var(--ink);
+  }
+
+  wy-links-modal .link-chip:hover::before {
+    opacity: var(--state-hover-opacity);
+  }
+
+  wy-links-modal .link-menu {
+    position: static;
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    margin-top: var(--s-1);
+    box-shadow: none;
+    border-radius: var(--radius-2);
+  }
+
+  wy-links-modal .link-menu__item {
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  wy-links-modal .palette-entry-section {
+    padding-bottom: var(--s-4);
+    margin-bottom: 0;
+    border-bottom-color: var(--paper-edge);
+  }
+
+  wy-links-modal .palette-entry-btn {
+    width: 100%;
+    height: 44px;
+    border-radius: var(--radius-2);
+    border-color: var(--paper-edge);
+    background: var(--field-bg);
+    font-size: 14px;
+  }
+
+  /* On the public page the bar's close button and the sheet context replace the title and X */
+  body:not(.private-vault-page) wy-links-modal .title-wrapper,
+  body:not(.private-vault-page) wy-links-modal .close-button {
+    display: none;
+  }
+
+  body.private-vault-page wy-links-modal .title-wrapper {
+    margin-bottom: var(--s-4);
+  }
+
+  body.private-vault-page wy-links-modal .modal-title {
+    font-size: 1.375rem;
+  }
+
+  body.private-vault-page wy-links-modal .close-button {
+    top: var(--s-2);
+    right: var(--s-2);
+  }
+}
