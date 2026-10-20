@@ -890,6 +890,8 @@ var WyControlsBar = class extends i4 {
   }
   _mobileFilterOptions() {
     const options = [];
+    const noFlag = !this.showFeaturedOnly && !this.showHiddenOnly;
+    options.push({ label: "All", active: this.activeCategory === "all" && noFlag, select: () => this._setCategory("all") });
     if (this.showFeaturedFilter) {
       options.push({ label: "Featured", active: this.showFeaturedOnly, select: () => {
         if (!this.showFeaturedOnly) this._toggleFeatured();
@@ -900,22 +902,13 @@ var WyControlsBar = class extends i4 {
         if (!this.showHiddenOnly) this._toggleHidden();
       } });
     }
-    const noFlag = !this.showFeaturedOnly && !this.showHiddenOnly;
-    options.push({ label: "All", active: this.activeCategory === "all" && noFlag, select: () => this._setCategory("all") });
     this.categories.forEach((cat) => {
-      options.push({ label: cat, active: this.activeCategory === cat && noFlag, select: () => this._setCategory(cat) });
+      options.push({ label: cat, category: true, active: this.activeCategory === cat && noFlag, select: () => this._setCategory(cat) });
     });
     return options;
   }
-  _renderMobile() {
-    const sortLabel = this.sortMode === "modified" ? "Date modified" : "Custom";
+  _renderMobileTile(option) {
     return b2`
-      ${this._sheetOpen ? b2`
-        <div class="m-scrim" @click="${this._closeSheet}"></div>
-        <div class="m-sheet" id="mobileFilterSheet" role="dialog" aria-modal="true" aria-label="Filter prompts">
-          <div class="m-eyebrow">Category</div>
-          <div class="m-tiles">
-            ${this._mobileFilterOptions().map((option) => b2`
               <button
                 type="button"
                 class="m-tile"
@@ -925,7 +918,20 @@ var WyControlsBar = class extends i4 {
       this._closeSheet();
     }}"
               >${option.label}</button>
-            `)}
+            `;
+  }
+  _renderMobile() {
+    const sortLabel = this.sortMode === "modified" ? "Date modified" : "Custom";
+    return b2`
+      ${this._sheetOpen ? b2`
+        <div class="m-scrim" @click="${this._closeSheet}"></div>
+        <div class="m-sheet" id="mobileFilterSheet" role="dialog" aria-modal="true" aria-label="Filter prompts">
+          <div class="m-eyebrow">Category</div>
+          <div class="m-tiles">
+            ${this._mobileFilterOptions().filter((o6) => !o6.category).map((option) => this._renderMobileTile(option))}
+            <a class="m-tile m-tile-link" href="./private.html" style="text-decoration: none;">Private</a>
+            <span class="m-rule" aria-hidden="true"></span>
+            ${this._mobileFilterOptions().filter((o6) => o6.category).map((option) => this._renderMobileTile(option))}
           </div>
           <div class="m-order">
             <span class="m-eyebrow">Order</span>
@@ -988,7 +994,9 @@ var WyControlsBar = class extends i4 {
               aria-expanded="${this.toolsOpen}"
               @click="${this._toggleTools}"
             >
-              <span class="m-icon" aria-hidden="true">${this.toolsOpen ? "close" : "apps"}</span>
+              ${this.toolsOpen ? b2`<span class="m-icon" aria-hidden="true">close</span>` : b2`
+                <svg class="m-dots" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><circle cx="6" cy="6" r="1.7"/><circle cx="12" cy="6" r="1.7"/><circle cx="18" cy="6" r="1.7"/><circle cx="6" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="18" cy="12" r="1.7"/><circle cx="6" cy="18" r="1.7"/><circle cx="12" cy="18" r="1.7"/><circle cx="18" cy="18" r="1.7"/></svg>
+              `}
             </button>
           ` : ""}
         `}

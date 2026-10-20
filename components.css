@@ -4354,3 +4354,305 @@ wy-modal .wy-modal-footer {
     right: var(--s-2);
   }
 }
+
+/* ==========================================================================
+   Phone (<=640px): floating glass pill (wy-controls-bar), upward category
+   menu card, and the prompt detail pill (wy-prompt-modal). Tokens --eg-* live
+   in styles.css. Everything here is scoped to this breakpoint.
+   ========================================================================== */
+@media (max-width: 640px) {
+  /* ---- Pill ---- */
+  wy-controls-bar .m-bar {
+    left: 16px;
+    right: 16px;
+    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    height: 56px;
+    padding: 6px;
+    gap: 0;
+    background: var(--eg-glass);
+    color: var(--ink);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    backdrop-filter: blur(24px) saturate(160%);
+    box-shadow: none;
+  }
+
+  wy-controls-bar .m-bar.is-searching {
+    padding-left: 6px;
+  }
+
+  wy-controls-bar .m-btn,
+  wy-controls-bar .m-category {
+    height: 44px;
+    color: var(--ink);
+  }
+
+  wy-controls-bar .m-btn::before,
+  wy-controls-bar .m-category::before {
+    background: var(--eg-fill);
+  }
+
+  wy-controls-bar .m-btn:focus-visible,
+  wy-controls-bar .m-category:focus-visible {
+    outline-color: var(--ink);
+  }
+
+  wy-controls-bar .m-btn[aria-pressed="true"]:focus-visible,
+  wy-controls-bar .m-btn[aria-expanded="true"]:focus-visible {
+    outline-color: var(--ink);
+  }
+
+  wy-controls-bar .m-category {
+    gap: 8px;
+  }
+
+  wy-controls-bar .m-category-label {
+    font-family: var(--ff-serif);
+    font-style: normal;
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 28px;
+    letter-spacing: -0.01em;
+  }
+
+  wy-controls-bar .m-category .m-icon {
+    font-size: 22px;
+  }
+
+  wy-controls-bar .m-divider {
+    background: color-mix(in srgb, var(--ink) 15%, transparent);
+  }
+
+  wy-controls-bar .m-dots {
+    width: 22px;
+    height: 22px;
+    display: block;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ---- Upward menu card ---- */
+  wy-controls-bar .m-scrim {
+    background: color-mix(in srgb, var(--ink) 35%, transparent);
+  }
+
+  wy-controls-bar .m-sheet {
+    left: 16px;
+    right: 16px;
+    bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+    max-height: calc(100dvh - 88px - 96px - env(safe-area-inset-bottom, 0px));
+    padding: 8px;
+    gap: 0;
+    border-radius: var(--eg-radius-lg);
+    background: var(--eg-raised);
+    box-shadow: none;
+  }
+
+  wy-controls-bar .m-eyebrow,
+  wy-controls-bar .m-order {
+    display: none;
+  }
+
+  wy-controls-bar .m-tiles {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  wy-controls-bar .m-tile {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 48px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: var(--eg-radius-md);
+    background: transparent;
+    color: var(--ink);
+    font-size: 17px;
+    font-weight: 400;
+    letter-spacing: -0.2px;
+    text-decoration: none;
+  }
+
+  wy-controls-bar .m-tile[aria-pressed="true"] {
+    background: var(--eg-fill);
+    border-color: transparent;
+    color: var(--ink);
+  }
+
+  wy-controls-bar .m-tile[aria-pressed="true"]::after {
+    content: "";
+    flex: none;
+    width: 18px;
+    height: 18px;
+    background: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+
+  wy-controls-bar .m-tile-link {
+    display: flex;
+  }
+
+  wy-controls-bar .m-rule {
+    display: block;
+    flex: none;
+    height: 1px;
+    margin: 8px 16px;
+    background: var(--paper-edge);
+  }
+
+  /* ---- Prompt detail: floating glass pill ---- */
+  wy-prompt-modal .modal-container {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    border-radius: 0;
+  }
+
+  wy-prompt-modal .header {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    top: auto;
+    z-index: 3;
+    height: 56px;
+    padding: 0;
+    gap: 0;
+    box-sizing: border-box;
+    background: none;
+    border: 0;
+  }
+
+  wy-prompt-modal .header-top {
+    height: 100%;
+    box-sizing: border-box;
+    padding: 6px;
+    gap: 4px;
+    align-items: center;
+    border-radius: var(--radius-pill);
+    background: var(--eg-glass);
+    color: var(--ink);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    backdrop-filter: blur(24px) saturate(160%);
+  }
+
+  wy-prompt-modal .header-actions {
+    order: -1;
+    flex: none;
+  }
+
+  wy-prompt-modal .header-actions-left {
+    order: 0;
+    flex: 1 1 auto;
+    min-width: 0;
+    flex-wrap: nowrap;
+    gap: 4px;
+    justify-content: flex-end;
+  }
+
+  wy-prompt-modal .category-badge {
+    display: none;
+  }
+
+  wy-prompt-modal .icon-btn {
+    width: 44px;
+    height: 44px;
+    color: var(--ink);
+  }
+
+  wy-prompt-modal .icon-btn.filled {
+    background: transparent;
+  }
+
+  wy-prompt-modal .icon-btn.filled:hover {
+    background: var(--eg-fill);
+  }
+
+  wy-prompt-modal .labeled-btn.primary {
+    flex: 1 1 auto;
+    height: 44px;
+    min-width: 0;
+    padding: 0 16px;
+    justify-content: center;
+    border-radius: var(--radius-pill);
+    background: var(--eg-accent);
+    color: var(--white);
+    font-size: 15px;
+    letter-spacing: -0.2px;
+    text-transform: none;
+  }
+
+  wy-prompt-modal .labeled-btn.primary .material-symbols-outlined {
+    display: none;
+  }
+
+  wy-prompt-modal .labeled-btn.primary:hover {
+    background: var(--eg-accent);
+  }
+
+  wy-prompt-modal .content {
+    padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
+  }
+
+  wy-prompt-modal .title-group h2 {
+    font-size: 44px;
+    line-height: 48px;
+    letter-spacing: -0.02em;
+  }
+
+  /* Variants: horizontal scroller of cards; selected = ink fill plus check */
+  wy-prompt-modal .visual-variation-grid,
+  wy-prompt-modal .visual-selector-rail .visual-variation-grid {
+    display: flex;
+    grid-template-columns: none;
+    overflow-x: auto;
+    gap: 12px;
+    margin: 0 -16px;
+    padding: 4px 16px 8px;
+    scrollbar-width: none;
+  }
+
+  wy-prompt-modal .visual-variation-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  wy-prompt-modal .visual-variation-tile {
+    flex: 0 0 152px;
+    width: 152px;
+    padding: 12px;
+    background: var(--eg-raised);
+    border-radius: var(--eg-radius-lg);
+  }
+
+  wy-prompt-modal .visual-variation-tile.selected {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  wy-prompt-modal .visual-variation-tile.selected .visual-variation-name,
+  wy-prompt-modal .visual-variation-tile.selected .visual-variation-description {
+    color: inherit;
+  }
+
+  wy-prompt-modal .visual-variation-mark {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 22px;
+    height: 22px;
+    border-radius: var(--radius-pill);
+    background: var(--paper);
+  }
+
+  wy-prompt-modal .visual-variation-mark::after {
+    content: "";
+    position: absolute;
+    inset: 4px;
+    background: var(--ink);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+}

@@ -290,18 +290,29 @@ export class WyControlsBar extends LitElement {
 
     _mobileFilterOptions() {
         const options = [];
+        const noFlag = !this.showFeaturedOnly && !this.showHiddenOnly;
+        options.push({ label: 'All', active: this.activeCategory === 'all' && noFlag, select: () => this._setCategory('all') });
         if (this.showFeaturedFilter) {
             options.push({ label: 'Featured', active: this.showFeaturedOnly, select: () => { if (!this.showFeaturedOnly) this._toggleFeatured(); } });
         }
         if (this.showHiddenFilter) {
             options.push({ label: 'Hidden', active: this.showHiddenOnly, select: () => { if (!this.showHiddenOnly) this._toggleHidden(); } });
         }
-        const noFlag = !this.showFeaturedOnly && !this.showHiddenOnly;
-        options.push({ label: 'All', active: this.activeCategory === 'all' && noFlag, select: () => this._setCategory('all') });
         this.categories.forEach(cat => {
-            options.push({ label: cat, active: this.activeCategory === cat && noFlag, select: () => this._setCategory(cat) });
+            options.push({ label: cat, category: true, active: this.activeCategory === cat && noFlag, select: () => this._setCategory(cat) });
         });
         return options;
+    }
+
+    _renderMobileTile(option) {
+        return html`
+              <button
+                type="button"
+                class="m-tile"
+                aria-pressed="${option.active}"
+                @click="${() => { option.select(); this._closeSheet(); }}"
+              >${option.label}</button>
+            `;
     }
 
     _renderMobile() {
@@ -312,14 +323,10 @@ export class WyControlsBar extends LitElement {
         <div class="m-sheet" id="mobileFilterSheet" role="dialog" aria-modal="true" aria-label="Filter prompts">
           <div class="m-eyebrow">Category</div>
           <div class="m-tiles">
-            ${this._mobileFilterOptions().map(option => html`
-              <button
-                type="button"
-                class="m-tile"
-                aria-pressed="${option.active}"
-                @click="${() => { option.select(); this._closeSheet(); }}"
-              >${option.label}</button>
-            `)}
+            ${this._mobileFilterOptions().filter(o => !o.category).map(option => this._renderMobileTile(option))}
+            <a class="m-tile m-tile-link" href="./private.html" style="text-decoration: none;">Private</a>
+            <span class="m-rule" aria-hidden="true"></span>
+            ${this._mobileFilterOptions().filter(o => o.category).map(option => this._renderMobileTile(option))}
           </div>
           <div class="m-order">
             <span class="m-eyebrow">Order</span>
@@ -382,7 +389,9 @@ export class WyControlsBar extends LitElement {
               aria-expanded="${this.toolsOpen}"
               @click="${this._toggleTools}"
             >
-              <span class="m-icon" aria-hidden="true">${this.toolsOpen ? 'close' : 'apps'}</span>
+              ${this.toolsOpen ? html`<span class="m-icon" aria-hidden="true">close</span>` : html`
+                <svg class="m-dots" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><circle cx="6" cy="6" r="1.7"/><circle cx="12" cy="6" r="1.7"/><circle cx="18" cy="6" r="1.7"/><circle cx="6" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="18" cy="12" r="1.7"/><circle cx="6" cy="18" r="1.7"/><circle cx="12" cy="18" r="1.7"/><circle cx="18" cy="18" r="1.7"/></svg>
+              `}
             </button>
           ` : ''}
         `}
