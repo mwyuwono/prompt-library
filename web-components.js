@@ -6946,6 +6946,7 @@ var WyLinksModal = class extends i4 {
     requestAnimationFrame(() => {
       const closeButton = this.querySelector(".close-button");
       if (closeButton) {
+        void closeButton.offsetHeight;
         closeButton.focus();
       }
     });
@@ -6962,26 +6963,34 @@ var WyLinksModal = class extends i4 {
   render() {
     return b2`
       <div class="modal-overlay" @click="${this._handleOverlayClick}">
-        <div class="modal-container" @click="${this._handleContainerClick}">
-          <button 
-            class="close-button" 
-            @click="${this._handleClose}"
-            aria-label="Close modal"
-          >
-            <span class="material-symbols-outlined">close</span>
-          </button>
-          
+        <div
+          class="modal-container"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="wy-links-modal-title"
+          @click="${this._handleContainerClick}"
+        >
+          <span class="handle" aria-hidden="true"></span>
           <div class="modal-content">
             <div class="title-wrapper">
-              <h1 class="modal-title">${this.title}</h1>
+              <h1 class="modal-title" id="wy-links-modal-title">${this.title}</h1>
+              <button
+                class="close-button"
+                type="button"
+                @click="${this._handleClose}"
+                aria-label="Close modal"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+              </button>
             </div>
-            
+
             <div class="sections-container">
               ${this.showPaletteEntry ? b2`
                 <div class="palette-entry-section">
-                  <button class="palette-entry-btn" @click="${this._handlePaletteClick}" aria-label="Open color palettes">
-                    <span class="material-symbols-outlined">palette</span>
-                    Color Palettes
+                  <h2 class="section-header section-header--mobile">Tools</h2>
+                  <button class="link-chip palette-entry-btn" @click="${this._handlePaletteClick}" aria-label="Open color palettes">
+                    <svg class="palette-entry-btn__icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3a9 9 0 0 0 0 18c1.1 0 1.6-.8 1.4-1.6-.3-1.2.5-2.4 1.8-2.4H18a3 3 0 0 0 3-3c0-4.9-4-9-9-9Z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7.5" r="1"/><circle cx="14.5" cy="7.5" r="1"/></svg>
+                    <span class="link-chip__label">Color palettes</span>
                   </button>
                 </div>
               ` : ""}
@@ -7065,13 +7074,15 @@ var WyLinksModal = class extends i4 {
         </div>
       `;
     }
+    const isFavorite = link.active === true;
     return b2`
       <button
-        class="link-chip"
+        class="link-chip${isFavorite ? " link-chip--fav" : ""}"
         @click="${(e6) => this._handleLinkClick(e6, link)}"
         aria-label="Open ${link.name}"
       >
-        ${link.name}
+        ${isFavorite ? b2`<svg class="link-chip__fav" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.2s-7.4-4.5-9.4-8.9C1.3 8.2 3.3 4.8 6.6 4.8c2.1 0 3.6 1.2 4.6 2.7 1-1.5 2.5-2.7 4.6-2.7 3.3 0 5.3 3.4 4 6.5-2 4.4-9.4 8.9-9.4 8.9z" fill="currentColor" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>` : ""}
+        <span class="link-chip__label">${link.name}</span>
       </button>
     `;
   }

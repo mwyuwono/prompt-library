@@ -723,8 +723,19 @@ wy-toast {
       }
     }
 
-/* wy-links-modal */
+/* wy-links-modal: AI tools modal (desktop) and bottom sheet (max-width 640px). Editorial Glass values scoped as --eg-*. */
 wy-links-modal {
+      --eg-surface-paper: #f5f5f2;
+      --eg-surface-raised: #ffffff;
+      --eg-surface-fill: #e8e8e3;
+      --eg-surface-glass: #ffffffcc;
+      --eg-ink: #1c1d1a;
+      --eg-ink-muted: #66695f;
+      --eg-accent: #253122;
+      --eg-radius-lg: 18px;
+      --eg-radius-pill: 9999px;
+      --eg-font-display: "Playfair Display", "Lora", Georgia, serif;
+      --eg-font-sans: var(--ff-sans, "Inter", system-ui, sans-serif);
       display: block;
       position: relative;
     }
@@ -748,55 +759,57 @@ wy-links-modal {
       font-feature-settings: 'liga';
     }
 
-    /* Modal overlay - matches mockup backdrop */
+    /* Scrim */
     wy-links-modal .modal-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: color-mix(in srgb, var(--ink) 9%, transparent);
-      backdrop-filter: blur(16px) saturate(180%);
-      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      background-color: color-mix(in srgb, var(--eg-ink) 30%, transparent);
       z-index: 2000;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 1rem; /* p-4 from mockup */
+      padding: 24px;
+      box-sizing: border-box;
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
       transition: opacity var(--dur-2) var(--ease),
-                  visibility var(--dur-2) var(--ease);
+                  visibility 0s linear var(--dur-2);
     }
 
+    /* Visibility flips at once on open so focus can move into the card */
     wy-links-modal[open] .modal-overlay {
       opacity: 1;
       visibility: visible;
       pointer-events: auto;
+      transition: opacity var(--dur-2) var(--ease),
+                  visibility 0s;
     }
 
     wy-links-modal[open] {
       display: block;
     }
 
-    /* Modal container - matches mockup exactly */
+    /* Card: raised surface, no border or shadow */
     wy-links-modal .modal-container {
       position: relative;
-      width: 100%;
-      max-width: 56rem; /* max-w-4xl = 896px */
-      max-height: 90vh; /* Constrain height to enable scrolling */
-      background: var(--paper, #F7F4EE);
-      border-radius: 0;
-      box-shadow: var(--shadow-modal); /* shadow-2xl */
+      box-sizing: border-box;
+      width: 720px;
+      max-width: calc(100% - 48px);
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      padding: 28px 32px 32px;
+      background: var(--eg-surface-raised);
+      border-radius: var(--eg-radius-lg);
       overflow: hidden;
-      border: 1px solid var(--paper-edge, #DDD6C8);
-      transform: scale(0.95) translateY(20px);
+      transform: scale(0.95) translateY(12px);
       opacity: 0;
       transition: transform var(--dur-3) var(--ease),
                   opacity var(--dur-2) var(--ease);
-      display: flex;
-      flex-direction: column;
     }
 
     wy-links-modal[open] .modal-container {
@@ -804,230 +817,226 @@ wy-links-modal {
       opacity: 1;
     }
 
-    /* Content wrapper with padding - matches mockup p-8 */
+    /* Grab handle: mobile sheet only */
+    wy-links-modal .handle {
+      display: none;
+      flex: none;
+      width: 36px;
+      height: 4px;
+      margin: 0 auto 12px;
+      border-radius: var(--eg-radius-pill);
+      background: var(--eg-ink-muted);
+    }
+
     wy-links-modal .modal-content {
-      padding: var(--spacing-xl, 2rem);
-      padding-bottom: calc(var(--spacing-xl, 2rem) + env(safe-area-inset-bottom, 0px));
       display: flex;
       flex-direction: column;
       flex: 1;
-      min-height: 0; /* Allow shrinking below content size for scroll */
+      min-height: 0;
       overflow-y: auto;
       overflow-x: hidden;
     }
 
-    @media (max-width: 600px) {
-      wy-links-modal .modal-overlay {
-        padding: 0;
-        align-items: flex-end;
-      }
-
-      wy-links-modal .modal-container {
-        max-width: 100%;
-        max-height: 100%;
-        height: 100%;
-        border-radius: 0;
-      }
-
-      wy-links-modal .modal-content {
-        padding: var(--spacing-lg, 1.5rem);
-        /* Extra padding for mobile browser controls (toolbar, home indicator) */
-        padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
-        height: 100%;
-        box-sizing: border-box;
-      }
-
-      wy-links-modal .close-button {
-        top: var(--spacing-lg, 1.5rem);
-        right: var(--spacing-lg, 1.5rem);
-      }
-
-      wy-links-modal .modal-title {
-        font-size: 1.75rem;
-      }
-
-      wy-links-modal .title-wrapper {
-        margin-bottom: var(--spacing-xl, 2rem);
-      }
-
-      wy-links-modal .sections-container {
-        gap: 2rem;
-      }
-    }
-
-    /* Close button - matches mockup exactly */
-    wy-links-modal .close-button {
-      position: absolute;
-      top: var(--spacing-xl, 2rem);
-      right: var(--spacing-xl, 2rem);
-      background: none;
-      border: none;
-      padding: 8px;
+    wy-links-modal .title-wrapper {
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-shrink: 0;
+    }
+
+    wy-links-modal .modal-title {
+      margin: 0;
+      font-family: var(--eg-font-display);
+      font-size: 28px;
+      font-weight: 600;
+      line-height: 34px;
+      letter-spacing: -0.015em;
+      color: var(--eg-ink);
+    }
+
+    /* Close: glass circle on desktop, fill circle on mobile */
+    wy-links-modal .close-button {
+      position: relative;
+      flex: none;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: 0;
+      border-radius: var(--eg-radius-pill);
+      background: var(--eg-surface-glass);
+      color: var(--eg-ink);
+      display: grid;
+      place-items: center;
       cursor: pointer;
-      color: var(--wy-links-modal-close-color, #A8A29E); /* stone-400 from reference */
-      transition: color var(--dur-1) var(--ease);
       overflow: hidden;
-      z-index: 10;
-      border-radius: 50%;
+      transition: transform var(--dur-1) var(--ease);
     }
 
     wy-links-modal .close-button::before {
       content: '';
       position: absolute;
       inset: 0;
-      background-color: var(--ink);
+      border-radius: inherit;
+      background-color: color-mix(in srgb, var(--eg-ink) 8%, transparent);
       opacity: 0;
       transition: opacity var(--dur-1) var(--ease);
       pointer-events: none;
     }
 
     wy-links-modal .close-button:hover::before {
-      opacity: var(--state-hover-opacity);
+      opacity: 1;
     }
 
-    wy-links-modal .close-button:hover {
-      color: var(--ink); /* hover:text-primary */
+    wy-links-modal .close-button:active {
+      transform: scale(0.95);
     }
 
     wy-links-modal .close-button:focus-visible {
-      outline: 3px solid var(--ink);
+      outline: 2px solid var(--eg-accent);
       outline-offset: 2px;
     }
 
-    wy-links-modal .close-button .material-symbols-outlined {
-      font-size: 2rem; /* text-2xl */
+    wy-links-modal .close-button svg {
       position: relative;
-      z-index: 1;
+      width: 18px;
+      height: 18px;
+      display: block;
     }
 
-    /* Title wrapper with mb-12 */
-    wy-links-modal .title-wrapper {
-      margin-bottom: var(--spacing-2xl, 3rem);
-      flex-shrink: 0; /* Title stays fixed, doesn't shrink */
-    }
-
-    /* Title - matches mockup exactly */
-    wy-links-modal .modal-title {
-      font-family: var(--font-serif); /* Lora */
-      font-size: 2.25rem; /* text-4xl = 36px */
-      font-weight: 500; /* font-medium */
-      line-height: 1.2;
-      color: var(--wy-links-modal-title-color, #1C1917); /* stone-900 from reference */
-      margin: 0;
-    }
-
-    wy-links-modal .empty-state {
-      color: var(--ink-mute);
-      margin: 0;
-      padding: var(--s-6, 32px);
-      text-align: center;
-    }
-
-    /* Sections container - matches space-y-10 */
+    /* Groups */
     wy-links-modal .sections-container {
       display: flex;
       flex-direction: column;
-      gap: 2.5rem; /* 40px = 2.5rem */
+      gap: 20px;
     }
 
-    /* Section */
     wy-links-modal .section {
       display: flex;
       flex-direction: column;
     }
 
-    /* Section header - matches mockup exactly */
     wy-links-modal .section-header {
-      font-family: var(--font-serif); /* Lora */
-      font-size: 1.25rem; /* text-xl = 20px */
-      font-weight: 500; /* font-medium */
-      line-height: 1.2;
-      color: var(--wy-links-modal-header-color, #292524); /* stone-800 from reference */
-      margin: 0 0 1.25rem 0; /* 20px = 1.25rem */
+      margin: 0 0 8px;
+      font-family: var(--eg-font-sans);
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 14px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--eg-ink-muted);
     }
 
-    /* Chips container - matches flex flex-wrap gap-3 */
+    wy-links-modal .section-header--mobile {
+      display: none;
+    }
+
     wy-links-modal .chips-container {
       display: flex;
       flex-wrap: wrap;
-      gap: calc(var(--spacing-sm, 0.5rem) * 1.5); /* 12px = 1.5 * 8px */
+      gap: 6px;
     }
 
-    /* Link chip button - matches mockup exactly */
+    wy-links-modal .empty-state {
+      color: var(--eg-ink-muted);
+      margin: 0;
+      padding: 32px;
+      text-align: center;
+    }
+
+    /* Chips */
     wy-links-modal .link-chip {
+      position: relative;
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      padding: calc(var(--spacing-sm, 0.5rem) * 1.25) var(--spacing-lg, 1.5rem); /* 10px 24px = 1.25 * 8px, 24px */
-      border-radius: 0;
-      font-family: var(--ff-sans, 'Inter', sans-serif);
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      font-size: 0.875rem; /* text-sm = 14px */
-      font-weight: 500; /* font-medium */
-      cursor: pointer;
-      border: 1px solid var(--paper-edge, #DDD6C8);
-      background-color: transparent;
-      color: var(--wy-links-modal-chip-text-color, #44403C); /* stone-700 from reference */
+      gap: 6px;
+      height: 34px;
+      padding: 0 14px;
+      border: 0;
+      border-radius: var(--eg-radius-pill);
+      background: var(--eg-surface-fill);
+      color: var(--eg-ink);
+      font: 400 14px/20px var(--eg-font-sans);
+      letter-spacing: -0.2px;
+      white-space: nowrap;
       text-decoration: none;
-      transition:
-        transform var(--dur-1) var(--ease),
-        border-color var(--dur-1) var(--ease);
-      position: relative;
-      overflow: hidden;
+      cursor: pointer;
+      transition: transform var(--dur-1) var(--ease);
     }
 
-    /* Chip hover state layer */
     wy-links-modal .link-chip::before {
       content: '';
       position: absolute;
       inset: 0;
-      background-color: color-mix(in srgb, var(--wy-button-primary-bg, var(--ink)) 15%, transparent);
+      border-radius: inherit;
+      background-color: color-mix(in srgb, var(--eg-ink) 18%, transparent);
       opacity: 0;
       transition: opacity var(--dur-1) var(--ease);
       pointer-events: none;
+    }
+
+    wy-links-modal .link-chip > * {
+      position: relative;
+      z-index: 1;
     }
 
     wy-links-modal .link-chip:hover::before {
       opacity: 1;
     }
 
-    wy-links-modal .link-chip:hover {
-      border-color: color-mix(in srgb, var(--ink, #1A1A1A) 40%, var(--paper-edge, #DDD6C8));
-    }
-
-    /* Chip pressed state */
     wy-links-modal .link-chip:active {
       transform: scale(0.97);
     }
 
-    /* Focus state */
     wy-links-modal .link-chip:focus-visible {
-      outline: 3px solid var(--ink);
+      outline: 2px solid var(--eg-accent);
       outline-offset: 2px;
     }
 
+    /* Favorites: ink fill on desktop; heart on mobile */
+    wy-links-modal .link-chip--fav {
+      background: var(--eg-ink);
+      color: var(--eg-surface-paper);
+    }
+
+    wy-links-modal .link-chip--fav::before {
+      background-color: color-mix(in srgb, var(--eg-surface-paper) 14%, transparent);
+    }
+
+    wy-links-modal .link-chip__fav {
+      display: none;
+      flex: none;
+      width: 16px;
+      height: 16px;
+      color: var(--eg-ink);
+    }
+
+    /* Palette entry */
+    wy-links-modal .palette-entry-section {
+      margin-bottom: 4px;
+    }
+
+    wy-links-modal .palette-entry-btn__icon {
+      flex: none;
+      width: 18px;
+      height: 18px;
+      color: var(--eg-ink);
+    }
+
+    /* Dropdown chips */
     wy-links-modal .link-dropdown {
       position: relative;
       display: inline-flex;
     }
 
     wy-links-modal .link-chip--dropdown {
-      gap: var(--spacing-xs, 0.25rem);
-      padding-right: var(--spacing-md, 1rem);
-    }
-
-    wy-links-modal .link-chip__label,
-    wy-links-modal .link-chip__icon {
-      position: relative;
-      z-index: 1;
+      padding-right: 10px;
     }
 
     wy-links-modal .link-chip__icon {
-      font-size: 1.25rem;
+      font-size: 18px;
+      color: var(--eg-ink-muted);
       transition: transform var(--dur-1) var(--ease);
     }
 
@@ -1037,48 +1046,139 @@ wy-links-modal {
 
     wy-links-modal .link-menu {
       position: absolute;
-      top: calc(100% + var(--spacing-xs, 0.25rem));
+      top: calc(100% + 6px);
       left: 0;
       z-index: 20;
       min-width: 15rem;
-      padding: var(--spacing-xs, 0.25rem);
-      border: 1px solid var(--paper-edge, #DDD6C8);
-      background: var(--paper, #F7F4EE);
+      padding: 6px;
+      background: var(--eg-surface-raised);
+      border-radius: 12px;
       box-shadow: var(--shadow-modal);
     }
 
     wy-links-modal .link-menu__item {
+      position: relative;
       display: flex;
       width: 100%;
       align-items: center;
-      justify-content: flex-start;
-      min-height: 2.75rem;
-      padding: var(--spacing-sm, 0.5rem) var(--spacing-md, 1rem);
-      border: none;
-      border-radius: 0;
+      min-height: 40px;
+      padding: 0 12px;
+      border: 0;
+      border-radius: 8px;
       background: transparent;
-      color: var(--wy-links-modal-chip-text-color, #44403C);
-      cursor: pointer;
-      font-family: var(--ff-sans, 'Inter', sans-serif);
-      font-size: 0.875rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      line-height: 1.2;
+      color: var(--eg-ink);
+      font: 400 14px/20px var(--eg-font-sans);
+      letter-spacing: -0.2px;
       text-align: left;
-      text-transform: uppercase;
-      transition: background-color var(--dur-1) var(--ease);
+      cursor: pointer;
     }
 
-    wy-links-modal .link-menu__item:hover {
-      background: color-mix(in srgb, var(--wy-button-primary-bg, var(--ink)) 12%, transparent);
+    wy-links-modal .link-menu__item::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background-color: color-mix(in srgb, var(--eg-ink) 8%, transparent);
+      opacity: 0;
+      transition: opacity var(--dur-1) var(--ease);
+      pointer-events: none;
+    }
+
+    wy-links-modal .link-menu__item > * {
+      position: relative;
+    }
+
+    wy-links-modal .link-menu__item:hover::before {
+      opacity: 1;
     }
 
     wy-links-modal .link-menu__item:focus-visible {
-      outline: 3px solid var(--ink);
-      outline-offset: -3px;
+      outline: 2px solid var(--eg-accent);
+      outline-offset: -2px;
     }
 
-    @media (max-width: 600px) {
+    /* Mobile bottom sheet */
+    @media (max-width: 640px) {
+      wy-links-modal .modal-overlay {
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: stretch;
+        padding: 0 8px calc(8px + env(safe-area-inset-bottom, 0px));
+        background-color: color-mix(in srgb, var(--eg-ink) 40%, transparent);
+      }
+
+      wy-links-modal .modal-container {
+        width: auto;
+        max-width: none;
+        max-height: calc(100% - 80px);
+        padding: 12px 16px 24px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        scrollbar-width: none;
+        transform: translateY(24px);
+      }
+
+      wy-links-modal .modal-container::-webkit-scrollbar {
+        display: none;
+      }
+
+      wy-links-modal[open] .modal-container {
+        transform: translateY(0);
+      }
+
+      wy-links-modal .handle {
+        display: block;
+      }
+
+      wy-links-modal .modal-content {
+        flex: none;
+        overflow: visible;
+      }
+
+      wy-links-modal .title-wrapper {
+        margin-bottom: 24px;
+      }
+
+      wy-links-modal .modal-title {
+        letter-spacing: -0.01em;
+      }
+
+      wy-links-modal .sections-container {
+        gap: 24px;
+      }
+
+      wy-links-modal .palette-entry-section {
+        margin-bottom: 0;
+      }
+
+      wy-links-modal .section-header--mobile {
+        display: block;
+      }
+
+      wy-links-modal .link-chip {
+        height: 40px;
+        gap: 8px;
+        padding: 0 16px;
+        letter-spacing: -0.2px;
+      }
+
+      wy-links-modal .chips-container {
+        gap: 8px;
+      }
+
+      wy-links-modal .link-chip--fav {
+        background: var(--eg-surface-fill);
+        color: var(--eg-ink);
+      }
+
+      wy-links-modal .link-chip--fav::before {
+        background-color: color-mix(in srgb, var(--eg-ink) 18%, transparent);
+      }
+
+      wy-links-modal .link-chip__fav {
+        display: block;
+      }
+
       wy-links-modal .link-dropdown {
         align-items: flex-start;
         flex-direction: column;
@@ -1088,47 +1188,9 @@ wy-links-modal {
         position: static;
         width: max-content;
         min-width: 0;
-        max-width: calc(100vw - (var(--spacing-md, 1rem) * 2));
-        margin-top: var(--spacing-xs, 0.25rem);
+        max-width: calc(100vw - 32px);
+        margin-top: 4px;
       }
-    }
-
-    /* Palette entry */
-    wy-links-modal .palette-entry-section {
-      padding-bottom: var(--spacing-lg, 24px);
-      border-bottom: 1px solid color-mix(in srgb, var(--ink) 8%, transparent);
-      margin-bottom: var(--spacing-lg, 24px);
-    }
-
-    wy-links-modal .palette-entry-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--spacing-sm, 8px);
-      height: 40px;
-      padding: 0 var(--spacing-md, 16px) 0 var(--spacing-sm, 8px);
-      border: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
-      border-radius: var(--radius-pill, 999px);
-      background: transparent;
-      color: var(--ink, #1A1A1A);
-      font-family: var(--ff-sans, 'Inter', sans-serif);
-      font-size: 0.9375rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 120ms ease;
-    }
-
-    wy-links-modal .palette-entry-btn:hover {
-      background: color-mix(in srgb, var(--ink) 6%, transparent);
-    }
-
-    wy-links-modal .palette-entry-btn:focus-visible {
-      outline: 3px solid var(--ink);
-      outline-offset: 2px;
-    }
-
-    wy-links-modal .palette-entry-btn .material-symbols-outlined {
-      font-size: 20px;
-      opacity: 0.7;
     }
 
 /* wy-controls-bar */
@@ -4183,175 +4245,6 @@ wy-modal .wy-modal-footer {
   wy-toast,
   wy-copy-confirm {
     bottom: calc(100px + env(safe-area-inset-bottom, 0px));
-  }
-
-  /* ---- AI Tools sheet (wy-links-modal) ---- */
-  wy-links-modal .modal-overlay {
-    z-index: 1400;
-    padding: 0;
-    background-color: color-mix(in srgb, var(--ink) 40%, transparent);
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-  }
-
-  wy-links-modal .modal-container {
-    position: fixed;
-    left: var(--s-2);
-    right: var(--s-2);
-    top: calc(64px + env(safe-area-inset-top, 0px));
-    bottom: calc(96px + env(safe-area-inset-bottom, 0px));
-    width: auto;
-    max-width: none;
-    height: auto;
-    max-height: none;
-    border: 0;
-    border-radius: var(--radius-3);
-    box-shadow: 0 12px 40px color-mix(in srgb, var(--ink) 16%, transparent);
-    transform: translateY(12px);
-  }
-
-  wy-links-modal[open] .modal-container {
-    transform: translateY(0);
-  }
-
-  wy-links-modal .modal-content {
-    height: 100%;
-    box-sizing: border-box;
-    padding: 20px var(--s-4) var(--s-4);
-    overscroll-behavior: contain;
-  }
-
-  wy-links-modal .sections-container {
-    gap: var(--s-4);
-  }
-
-  wy-links-modal .section-header {
-    font-family: var(--ff-sans);
-    font-size: var(--fs-ui-xs);
-    font-weight: 500;
-    line-height: 1.2;
-    letter-spacing: var(--tr-eyebrow);
-    text-transform: uppercase;
-    color: var(--ink-mute);
-    margin: 0 0 var(--s-2);
-  }
-
-  wy-links-modal .chips-container {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 6px;
-  }
-
-  wy-links-modal .link-dropdown {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-  }
-
-  wy-links-modal .link-chip {
-    width: 100%;
-    min-width: 0;
-    height: 44px;
-    box-sizing: border-box;
-    padding: 0 10px 0 14px;
-    gap: 6px;
-    justify-content: flex-start;
-    border-radius: var(--radius-2);
-    background-color: var(--field-bg);
-    color: var(--ink);
-    font-size: 14px;
-    letter-spacing: 0;
-    text-transform: none;
-    text-align: left;
-    white-space: nowrap;
-  }
-
-  wy-links-modal .link-chip:not(.link-chip--dropdown) {
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding-right: 30px;
-  }
-
-  wy-links-modal .link-chip:not(.link-chip--dropdown)::after {
-    content: 'north_east';
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-family: 'Material Symbols Outlined';
-    font-size: 16px;
-    line-height: 1;
-    color: var(--ink-mute);
-    font-feature-settings: 'liga';
-  }
-
-  wy-links-modal .link-chip--dropdown .link-chip__label {
-    flex: 1;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  wy-links-modal .link-chip:hover {
-    border-color: var(--paper-edge);
-  }
-
-  wy-links-modal .link-chip::before {
-    background-color: var(--ink);
-  }
-
-  wy-links-modal .link-chip:hover::before {
-    opacity: var(--state-hover-opacity);
-  }
-
-  wy-links-modal .link-menu {
-    position: static;
-    width: auto;
-    min-width: 0;
-    max-width: none;
-    margin-top: var(--s-1);
-    box-shadow: none;
-    border-radius: var(--radius-2);
-  }
-
-  wy-links-modal .link-menu__item {
-    letter-spacing: 0;
-    text-transform: none;
-  }
-
-  wy-links-modal .palette-entry-section {
-    padding-bottom: var(--s-4);
-    margin-bottom: 0;
-    border-bottom-color: var(--paper-edge);
-  }
-
-  wy-links-modal .palette-entry-btn {
-    width: 100%;
-    height: 44px;
-    border-radius: var(--radius-2);
-    border-color: var(--paper-edge);
-    background: var(--field-bg);
-    font-size: 14px;
-  }
-
-  /* On the public page the bar's close button and the sheet context replace the title and X */
-  body:not(.private-vault-page) wy-links-modal .title-wrapper,
-  body:not(.private-vault-page) wy-links-modal .close-button {
-    display: none;
-  }
-
-  body.private-vault-page wy-links-modal .title-wrapper {
-    margin-bottom: var(--s-4);
-  }
-
-  body.private-vault-page wy-links-modal .modal-title {
-    font-size: 1.375rem;
-  }
-
-  body.private-vault-page wy-links-modal .close-button {
-    top: var(--s-2);
-    right: var(--s-2);
   }
 }
 
