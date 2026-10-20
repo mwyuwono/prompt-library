@@ -212,15 +212,12 @@ export class WyLinksModal extends LitElement {
       `;
     }
 
-    const isFavorite = link.active === true;
-
     return html`
       <button
-        class="link-chip${isFavorite ? ' link-chip--fav' : ''}"
+        class="link-chip"
         @click="${(e) => this._handleLinkClick(e, link)}"
         aria-label="Open ${link.name}"
       >
-        ${isFavorite ? html`<svg class="link-chip__fav" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.2s-7.4-4.5-9.4-8.9C1.3 8.2 3.3 4.8 6.6 4.8c2.1 0 3.6 1.2 4.6 2.7 1-1.5 2.5-2.7 4.6-2.7 3.3 0 5.3 3.4 4 6.5-2 4.4-9.4 8.9-9.4 8.9z" fill="currentColor" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>` : ''}
         <span class="link-chip__label">${link.name}</span>
       </button>
     `;

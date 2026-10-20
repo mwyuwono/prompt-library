@@ -90,11 +90,6 @@ body {
 
 .header-actions { display: flex; align-items: center; gap: var(--space-md); }
 
-body.controls-floating .header-logo-text { display: none; }
-body.controls-floating:not(.private-vault-page) .header-top .quick-links,
-body.controls-floating:not(.private-vault-page) .header-top .quick-link-btn,
-body.controls-floating:not(.private-vault-page) #adminButton { display: none; }
-
 .vault-link {
     flex: 0 0 auto;
     width: 32px;
@@ -205,9 +200,6 @@ wy-button:not(:defined) {
     z-index: 1;
     background: var(--paper);
     transition: margin-top var(--dur-1) var(--ease);
-}
-.controls-bar[data-scrolled] ~ .prompt-area {
-    margin-top: calc(-1 * var(--wy-controls-bar-height, 64px));
 }
 
 /* ============================== GRID ============================== */
@@ -1008,7 +1000,6 @@ mark {
         transition: max-height var(--dur-2) var(--ease), opacity var(--dur-1) var(--ease);
     }
     .controls-bar.show            { display: block; max-height: none; opacity: 1; }
-    .controls-bar[data-scrolled]  { overflow: visible; }
     .controls-bar                 { --wy-controls-bar-padding: var(--space-sm) 16px; }
 
     .search-hint  { display: none; }
@@ -1224,8 +1215,8 @@ mark {
     body,
     .prompt-area { background-color: var(--eg-surface-paper); }
 
-    /* Glass navigation bar (page header only; the prompt modal has its own .header-top) */
-    .page-wrapper > .header-top {
+    /* Private vault keeps its glass header bar */
+    body.private-vault-page .page-wrapper > .header-top {
         width: min(1440px, calc(100% - 48px));
         margin: 16px auto 0;
         top: 16px;
@@ -1246,6 +1237,19 @@ mark {
         line-height: 28px;
         color: var(--eg-ink);
     }
+    /* Index: the floating pill replaces the top bar; links, lock and admin move to a footer strip */
+    body:not(.private-vault-page) .page-wrapper > .header-top {
+        order: 1;
+        position: static;
+        padding: 16px 24px 24px;
+        justify-content: flex-end;
+        border-bottom: 0;
+        background: transparent;
+        color: var(--eg-ink);
+    }
+    body:not(.private-vault-page) .header-top .quick-links { display: flex; }
+    body:not(.private-vault-page) .main-content { padding-bottom: 0; }
+
     .page-wrapper > .header-top .quick-link-btn {
         font-family: var(--eg-font-sans);
         font-size: 14px;
@@ -1266,11 +1270,12 @@ mark {
     .vault-link:hover,
     .vault-link:focus-visible { border-color: transparent; }
 
-    /* Tools row: search, segmented filter, order */
+    /* The floating pill (components.css) replaces the tools row; the grid clears it */
     .controls-bar {
-        padding: 48px 24px 32px;
-        background-color: var(--eg-surface-paper);
+        padding: 0;
+        background-color: transparent;
     }
+    body:not(.private-vault-page) .prompt-area { padding-top: 104px; }
 
     /* Prompt grid: uniform tiles, 4 columns */
     .view-grid .prompt-grid,
@@ -1320,7 +1325,7 @@ mark {
         background-color: var(--eg-surface-fill);
     }
 
-    /* Favorite-style glass control over the image */
+    /* Glass control over the image */
     .prompt-grid .card-visibility-tools { top: 20px; right: 20px; }
     .prompt-grid .prompt-hidden-toggle {
         width: 36px;

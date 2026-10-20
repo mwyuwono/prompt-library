@@ -994,24 +994,6 @@ wy-links-modal {
       outline-offset: 2px;
     }
 
-    /* Favorites: ink fill on desktop; heart on mobile */
-    wy-links-modal .link-chip--fav {
-      background: var(--eg-ink);
-      color: var(--eg-surface-paper);
-    }
-
-    wy-links-modal .link-chip--fav::before {
-      background-color: color-mix(in srgb, var(--eg-surface-paper) 14%, transparent);
-    }
-
-    wy-links-modal .link-chip__fav {
-      display: none;
-      flex: none;
-      width: 16px;
-      height: 16px;
-      color: var(--eg-ink);
-    }
-
     /* Palette entry */
     wy-links-modal .palette-entry-section {
       margin-bottom: 4px;
@@ -1166,19 +1148,6 @@ wy-links-modal {
         gap: 8px;
       }
 
-      wy-links-modal .link-chip--fav {
-        background: var(--eg-surface-fill);
-        color: var(--eg-ink);
-      }
-
-      wy-links-modal .link-chip--fav::before {
-        background-color: color-mix(in srgb, var(--eg-ink) 18%, transparent);
-      }
-
-      wy-links-modal .link-chip__fav {
-        display: block;
-      }
-
       wy-links-modal .link-dropdown {
         align-items: flex-start;
         flex-direction: column;
@@ -1190,668 +1159,6 @@ wy-links-modal {
         min-width: 0;
         max-width: calc(100vw - 32px);
         margin-top: 4px;
-      }
-    }
-
-/* wy-controls-bar */
-wy-controls-bar {
-      display: block;
-      background-color: transparent;
-      padding: var(--s-3, 12px) var(--s-7, 32px);
-      width: 100%;
-      box-sizing: border-box;
-      position: relative;
-
-      --wy-controls-floating-top: 16px;
-      --wy-controls-floating-right: auto;
-      --wy-controls-floating-left: 50%;
-      --wy-controls-floating-z-index: 100;
-      --wy-controls-floating-width: auto;
-      --wy-controls-floating-max-width: min(900px, calc(100% - 32px));
-      --wy-controls-return-duration: var(--dur-1, 150ms);
-      --wy-controls-return-opacity-duration: 140ms;
-      --wy-controls-radius: var(--radius-pill, 999px);
-    }
-
-    /* Bottom hairline */
-    wy-controls-bar::after {
-      content: '';
-      position: absolute;
-      left: var(--wy-controls-rule-inset, var(--s-7, 32px));
-      right: var(--wy-controls-rule-inset, var(--s-7, 32px));
-      bottom: 0;
-      height: 1px;
-      background: var(--paper-edge, #E8E2DA);
-    }
-
-    wy-controls-bar[data-scrolled] {
-      position: fixed;
-      top: var(--wy-controls-floating-top, 16px);
-      left: var(--wy-controls-floating-left, 50%);
-      transform: var(--wy-controls-floating-transform, translateX(-50%));
-      z-index: var(--wy-controls-floating-z-index, 100);
-      width: var(--wy-controls-floating-width, auto);
-      max-width: var(--wy-controls-floating-max-width, min(900px, calc(100% - 32px)));
-      background: var(--paper, #F7F4EE);
-      border: 0;
-      border-radius: 0;
-      padding: var(--wy-controls-padding-scrolled, var(--s-2, 8px) var(--s-5, 24px));
-      box-shadow: none;
-      transition:
-        top 300ms cubic-bezier(0.2, 0, 0, 1),
-        transform 300ms cubic-bezier(0.2, 0, 0, 1),
-        padding 300ms cubic-bezier(0.2, 0, 0, 1),
-        box-shadow 300ms cubic-bezier(0.2, 0, 0, 1),
-        opacity 200ms cubic-bezier(0.2, 0, 0, 1);
-    }
-
-    wy-controls-bar[data-scrolled]::after {
-      display: none;
-    }
-
-    wy-controls-bar[data-scroll-state="returning"] {
-      opacity: 0.08;
-      transform: var(--wy-controls-floating-return-transform, translateX(-50%) translateY(-4px) scale(0.995));
-      box-shadow: none;
-      transition:
-        top var(--wy-controls-return-duration, 150ms) cubic-bezier(0.2, 0, 0, 1),
-        transform var(--wy-controls-return-duration, 150ms) cubic-bezier(0.2, 0, 0, 1),
-        padding var(--wy-controls-return-duration, 150ms) cubic-bezier(0.2, 0, 0, 1),
-        box-shadow var(--wy-controls-return-duration, 150ms) cubic-bezier(0.2, 0, 0, 1),
-        opacity var(--wy-controls-return-opacity-duration, 140ms) cubic-bezier(0.2, 0, 0, 1);
-    }
-
-    /* ---- Controls container ---- */
-    wy-controls-bar .controls-container {
-      display: flex;
-      flex-wrap: nowrap;
-      align-items: center;
-      gap: var(--s-5, 24px);
-      max-width: 1600px;
-      margin: 0 auto;
-    }
-
-    wy-controls-bar[data-scrolled] .controls-container {
-      gap: var(--s-4, 16px);
-      max-width: 100%;
-    }
-
-    /* ---- Search ---- */
-    wy-controls-bar .search-section {
-      flex: 0 0 auto;
-      width: 260px;
-      position: relative;
-      transition: width 250ms cubic-bezier(0.2, 0, 0, 1);
-    }
-
-    wy-controls-bar[data-scrolled] .search-section {
-      width: 280px;
-    }
-
-    wy-controls-bar .search-input {
-      width: 100%;
-      height: 36px;
-      padding: 0 var(--s-4, 16px) 0 40px;
-      background: transparent;
-      color: var(--ink, #1A1A1A);
-      border: 1px solid var(--paper-edge, #DDD6C8);
-      border-radius: var(--wy-controls-radius, 999px);
-      font-family: var(--ff-sans, 'Inter', system-ui, sans-serif);
-      font-size: 13px;
-      font-weight: 400;
-      outline: none;
-      box-sizing: border-box;
-      transition:
-        background 150ms cubic-bezier(0.2, 0, 0, 1),
-        border-color 150ms cubic-bezier(0.2, 0, 0, 1),
-        box-shadow 150ms cubic-bezier(0.2, 0, 0, 1);
-    }
-
-    wy-controls-bar .search-input::placeholder {
-      color: var(--ink-mute, #868685);
-      font-weight: 300;
-    }
-
-    wy-controls-bar .search-input:hover {
-      border-color: var(--ink-soft, #A8A49C);
-    }
-
-    wy-controls-bar .search-input:focus {
-      background: transparent;
-      border-color: var(--ink, #1A1A1A);
-      box-shadow: none;
-    }
-
-    wy-controls-bar .search-icon {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-family: 'Material Symbols Outlined';
-      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
-      font-size: 18px;
-      line-height: 1;
-      color: var(--ink-mute, #868685);
-      pointer-events: none;
-      user-select: none;
-      transition: color 150ms cubic-bezier(0.2, 0, 0, 1);
-    }
-
-    wy-controls-bar .search-section:focus-within .search-icon {
-      color: var(--ink, #282828);
-    }
-
-    wy-controls-bar .search-clear {
-      position: absolute;
-      right: 8px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 22px;
-      height: 22px;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      background: transparent;
-      border: none;
-      border-radius: 50%;
-      color: var(--ink-mute, #868685);
-      cursor: pointer;
-      padding: 0;
-      font-family: 'Material Symbols Outlined';
-      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
-      font-size: 16px;
-      line-height: 1;
-      transition: background 150ms cubic-bezier(0.2, 0, 0, 1), color 150ms cubic-bezier(0.2, 0, 0, 1);
-    }
-
-    wy-controls-bar .search-clear:hover {
-      background: color-mix(in srgb, var(--ink, #282828) 8%, transparent);
-      color: var(--ink, #282828);
-    }
-
-    wy-controls-bar .search-section.has-value .search-clear {
-      display: flex;
-    }
-
-    /* ---- Divider ---- */
-    wy-controls-bar .divider {
-      width: 1px;
-      height: 20px;
-      background: var(--paper-edge, #E8E2DA);
-      flex-shrink: 0;
-    }
-
-    /* ---- Toggles ---- */
-    wy-controls-bar .toggle-section {
-      display: flex;
-      align-items: center;
-      gap: var(--s-5, 24px);
-      flex-shrink: 0;
-    }
-
-    wy-controls-bar[data-scrolled] .toggle-section {
-      display: none;
-    }
-
-    /* View toggle pill */
-    wy-controls-bar .view-toggle {
-      display: inline-flex;
-      align-items: center;
-      background: transparent;
-      border: 1px solid var(--paper-edge, #DDD6C8);
-      border-radius: var(--wy-controls-radius, 999px);
-      padding: 2px;
-      height: 32px;
-      box-sizing: border-box;
-    }
-
-    wy-controls-bar .view-btn {
-      width: 26px;
-      height: 26px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: transparent;
-      border: none;
-      border-radius: var(--wy-controls-radius, 999px);
-      color: var(--ink-mute, #868685);
-      cursor: pointer;
-      padding: 0;
-      font-family: 'Material Symbols Outlined';
-      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
-      font-size: 16px;
-      line-height: 1;
-      transition: background 150ms cubic-bezier(0.2, 0, 0, 1), color 150ms cubic-bezier(0.2, 0, 0, 1);
-    }
-
-    wy-controls-bar .view-btn:hover {
-      color: var(--ink, #282828);
-    }
-
-    wy-controls-bar .view-btn.active {
-      background: var(--ink, #1A1A1A);
-      color: var(--paper, #F7F4EE);
-      box-shadow: none;
-    }
-
-    /* Details toggle (custom checkbox) */
-    wy-controls-bar .details-toggle-control {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--s-2, 8px);
-      cursor: pointer;
-      user-select: none;
-    }
-
-    wy-controls-bar .details-toggle-control input[type="checkbox"] {
-      position: absolute;
-      opacity: 0;
-      width: 0;
-      height: 0;
-      pointer-events: none;
-    }
-
-    wy-controls-bar .toggle-track {
-      width: 28px;
-      height: 16px;
-      background: var(--paper-edge, #E8E2DA);
-      border-radius: 9999px;
-      position: relative;
-      flex-shrink: 0;
-      transition: background 150ms cubic-bezier(0.2, 0, 0, 1);
-    }
-
-    wy-controls-bar .toggle-thumb {
-      position: absolute;
-      top: 2px;
-      left: 2px;
-      width: 12px;
-      height: 12px;
-      background: var(--white, #fff);
-      border-radius: 50%;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-      transition: transform 150ms cubic-bezier(0.2, 0, 0, 1);
-    }
-
-    wy-controls-bar .details-toggle-control.is-on .toggle-track {
-      background: var(--ink, #282828);
-    }
-
-    wy-controls-bar .details-toggle-control.is-on .toggle-thumb {
-      transform: translateX(12px);
-    }
-
-    wy-controls-bar .toggle-label {
-      font-family: var(--ff-sans, 'Inter', system-ui, sans-serif);
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--ink-mute, #868685);
-      white-space: nowrap;
-    }
-
-    wy-controls-bar .sort-control {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--s-2, 8px);
-      flex-shrink: 0;
-    }
-
-    wy-controls-bar .sort-label {
-      font-family: var(--ff-sans, 'Inter', system-ui, sans-serif);
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--ink-mute, #868685);
-    }
-
-    wy-controls-bar .sort-select {
-      height: 32px;
-      padding: 0 28px 0 12px;
-      border: 1px solid var(--paper-edge, #DDD6C8);
-      border-radius: var(--wy-controls-radius, 999px);
-      background: var(--paper, #F7F4EE);
-      color: var(--ink, #1A1A1A);
-      font-family: var(--ff-sans, 'Inter', system-ui, sans-serif);
-      font-size: 11px;
-      font-weight: 500;
-      cursor: pointer;
-      outline: none;
-    }
-
-    wy-controls-bar .sort-select:focus-visible {
-      border-color: var(--ink, #1A1A1A);
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--ink, #1A1A1A) 8%, transparent);
-    }
-
-    /* ---- Category chips ---- */
-    wy-controls-bar .category-section {
-      flex: 1 1 auto;
-      min-width: 0;
-      position: relative;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: var(--s-2, 8px);
-    }
-
-    wy-controls-bar .chips-track {
-      flex: 1 1 auto;
-      min-width: 0;
-      display: flex;
-      align-items: center;
-      gap: var(--s-2, 8px);
-      overflow-x: auto;
-      padding: 2px 24px 2px 0;
-      scroll-behavior: smooth;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-      -webkit-overflow-scrolling: touch;
-      -webkit-mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
-      mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
-    }
-
-    wy-controls-bar .chips-track.is-chips-scrolled {
-      -webkit-mask-image: linear-gradient(to right, transparent 0, black 28px, black calc(100% - 28px), transparent 100%);
-      mask-image: linear-gradient(to right, transparent 0, black 28px, black calc(100% - 28px), transparent 100%);
-    }
-
-    wy-controls-bar .chips-track::-webkit-scrollbar {
-      display: none;
-    }
-
-    wy-controls-bar[data-scrolled] .category-section {
-      flex: 0 1 auto;
-      max-width: 600px;
-      transition: max-width 300ms cubic-bezier(0.2, 0, 0, 1);
-    }
-
-    wy-controls-bar .chip {
-      flex-shrink: 0;
-      height: 28px;
-      padding: 0 14px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: transparent;
-      color: var(--ink-mute, #6B6B6A);
-      border: 1px solid var(--paper-edge, #DDD6C8);
-      border-radius: var(--wy-controls-radius, 999px);
-      font-family: var(--ff-sans, 'Inter', system-ui, sans-serif);
-      font-size: 11px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      white-space: nowrap;
-      cursor: pointer;
-      transition:
-        color 150ms cubic-bezier(0.2, 0, 0, 1),
-        background 150ms cubic-bezier(0.2, 0, 0, 1),
-        border-color 150ms cubic-bezier(0.2, 0, 0, 1),
-        transform 150ms cubic-bezier(0.2, 0, 0, 1);
-    }
-
-    wy-controls-bar .chip:hover {
-      color: var(--ink, #282828);
-      border-color: color-mix(in srgb, var(--ink, #282828) 25%, var(--paper-edge, #E8E2DA));
-      background: color-mix(in srgb, var(--ink, #282828) 3%, transparent);
-    }
-
-    wy-controls-bar .chip:active {
-      transform: scale(0.98);
-    }
-
-    wy-controls-bar .chip.active {
-      background: var(--ink, #282828);
-      color: var(--paper, #FFFAF5);
-      border-color: var(--ink, #282828);
-    }
-
-    wy-controls-bar .chip.active:hover {
-      background: color-mix(in srgb, var(--ink, #282828) 92%, var(--paper, #FFFAF5));
-    }
-
-    /* Featured dot marker */
-    wy-controls-bar .chip--featured::before {
-      content: '';
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: currentColor;
-      opacity: 0.9;
-      flex-shrink: 0;
-    }
-
-    wy-controls-bar .chip--hidden::before {
-      content: 'visibility_off';
-      font-family: 'Material Symbols Outlined';
-      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
-      font-size: 14px;
-      line-height: 1;
-      letter-spacing: 0;
-      text-transform: none;
-      flex-shrink: 0;
-    }
-
-    /* ---- Mobile cancel button ---- */
-    wy-controls-bar .mobile-cancel {
-      flex: 0 0 auto;
-      display: none;
-      height: 36px;
-      padding: 0 var(--s-2, 8px);
-      background: transparent;
-      border: none;
-      font-family: var(--ff-sans, 'Inter', system-ui, sans-serif);
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--ink, #282828);
-      cursor: pointer;
-    }
-
-    /* ---- Mobile (≤768px) ---- */
-    @media (max-width: 768px) {
-      wy-controls-bar {
-        padding: var(--s-3, 12px) var(--s-4, 16px);
-      }
-
-      wy-controls-bar::after {
-        left: var(--s-4, 16px);
-        right: var(--s-4, 16px);
-      }
-
-      wy-controls-bar[data-scrolled] {
-        position: relative;
-        top: auto;
-        left: auto;
-        transform: none;
-        width: 100%;
-        max-width: 100%;
-        border-radius: 0;
-        padding: var(--s-3, 12px) var(--s-4, 16px);
-        background: transparent;
-        box-shadow: none;
-      }
-
-      wy-controls-bar[data-scrolled]::after {
-        display: block;
-        left: var(--s-4, 16px);
-        right: var(--s-4, 16px);
-      }
-
-      wy-controls-bar .controls-container {
-        gap: var(--s-3, 12px);
-      }
-
-      wy-controls-bar .divider,
-      wy-controls-bar .toggle-section {
-        display: none;
-      }
-
-      wy-controls-bar .sort-label {
-        display: none;
-      }
-
-      wy-controls-bar .sort-select {
-        width: 96px;
-        padding-left: 10px;
-      }
-
-      /* Collapsed: search is an icon button */
-      wy-controls-bar .search-section {
-        flex: 0 0 auto;
-        width: 36px;
-        transition:
-          width 250ms cubic-bezier(0.2, 0, 0, 1),
-          flex 250ms cubic-bezier(0.2, 0, 0, 1);
-      }
-
-      wy-controls-bar .search-input {
-        width: 36px;
-        height: 36px;
-        padding: 0;
-        background: transparent;
-        color: transparent;
-        border-radius: var(--wy-controls-radius, 999px);
-        font-size: 16px;
-        cursor: pointer;
-        transition:
-          width 250ms cubic-bezier(0.2, 0, 0, 1),
-          padding 250ms cubic-bezier(0.2, 0, 0, 1),
-          background 250ms cubic-bezier(0.2, 0, 0, 1),
-          color 150ms cubic-bezier(0.2, 0, 0, 1) 100ms,
-          border-radius 250ms cubic-bezier(0.2, 0, 0, 1),
-          border-color 150ms cubic-bezier(0.2, 0, 0, 1),
-          box-shadow 150ms cubic-bezier(0.2, 0, 0, 1);
-      }
-
-      wy-controls-bar .search-input::placeholder {
-        color: transparent;
-        transition: color 150ms cubic-bezier(0.2, 0, 0, 1);
-      }
-
-      wy-controls-bar .search-icon {
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: var(--ink, #282828);
-        transition:
-          left 250ms cubic-bezier(0.2, 0, 0, 1),
-          transform 250ms cubic-bezier(0.2, 0, 0, 1),
-          color 150ms cubic-bezier(0.2, 0, 0, 1);
-      }
-
-      wy-controls-bar .search-clear,
-      wy-controls-bar .search-section.has-value .search-clear {
-        display: none;
-      }
-
-      /* Category section: flex fills remaining space */
-      wy-controls-bar .category-section {
-        flex: 1 1 auto;
-        min-width: 0;
-        transition:
-          opacity 250ms cubic-bezier(0.2, 0, 0, 1),
-          transform 250ms cubic-bezier(0.2, 0, 0, 1),
-          max-width 250ms cubic-bezier(0.2, 0, 0, 1);
-      }
-
-      /* Search open state */
-      wy-controls-bar[data-mobile-search] .search-section {
-        flex: 1 1 auto;
-        width: auto;
-      }
-
-      wy-controls-bar[data-mobile-search] .search-input {
-        width: 100%;
-        padding: 0 var(--s-4, 16px) 0 40px;
-        background: transparent;
-        color: var(--ink, #1A1A1A);
-        border: 1px solid var(--paper-edge, #DDD6C8);
-        border-radius: var(--wy-controls-radius, 999px);
-        cursor: text;
-      }
-
-      wy-controls-bar[data-mobile-search] .search-input::placeholder {
-        color: var(--ink-mute, #868685);
-      }
-
-      wy-controls-bar[data-mobile-search] .search-icon {
-        left: 14px;
-        transform: translate(0, -50%);
-        color: var(--ink-mute, #868685);
-      }
-
-      wy-controls-bar[data-mobile-search] .search-section.has-value .search-clear {
-        display: flex;
-      }
-
-      wy-controls-bar[data-mobile-search] .category-section {
-        opacity: 0;
-        max-width: 0;
-        transform: translateX(12px);
-        pointer-events: none;
-        overflow: hidden;
-      }
-
-      wy-controls-bar[data-mobile-search] .sort-control {
-        display: none;
-      }
-
-      wy-controls-bar[data-mobile-search] .mobile-cancel {
-        display: inline-flex;
-        align-items: center;
-      }
-    }
-
-    /* ---- Tablet narrow (769–900px) ---- */
-    @media (min-width: 769px) and (max-width: 900px) {
-      wy-controls-bar .controls-container {
-        flex-wrap: wrap;
-        gap: var(--s-2, 8px) var(--s-1, 4px);
-      }
-
-      wy-controls-bar .search-section {
-        flex: 1 1 auto;
-        width: auto;
-        min-width: 120px;
-        max-width: 240px;
-      }
-
-      wy-controls-bar .divider { display: none; }
-
-      wy-controls-bar .toggle-label { display: none; }
-
-      wy-controls-bar .sort-label { display: none; }
-
-      wy-controls-bar .toggle-section { gap: var(--s-2, 8px); }
-
-      wy-controls-bar .category-section {
-        flex: 0 0 100%;
-        order: 1;
-      }
-    }
-
-    /* ---- Tablet (901–1023px) ---- */
-    @media (min-width: 901px) and (max-width: 1023px) {
-      wy-controls-bar {
-        padding: var(--s-2, 8px) var(--s-5, 24px);
-      }
-
-      wy-controls-bar .controls-container {
-        gap: var(--s-2, 8px);
-      }
-
-      wy-controls-bar .search-section {
-        width: 160px;
-      }
-
-      wy-controls-bar .toggle-section {
-        gap: var(--s-3, 12px);
-      }
-
-      wy-controls-bar .toggle-label {
-        display: none;
       }
     }
 
@@ -3930,8 +3237,7 @@ wy-modal .wy-modal-footer {
   to   { opacity: 1; }
 }
 
-@media (max-width: 768px) {
-  wy-controls-bar[data-mobile-bar] {
+wy-controls-bar[data-mobile-bar] {
     position: static;
     z-index: auto;
     padding: 0;
@@ -4241,7 +3547,8 @@ wy-modal .wy-modal-footer {
     color: var(--paper);
   }
 
-  /* Keep transient notices clear of the bar */
+/* Transient notices clear the phone bottom bar only */
+@media (max-width: 640px) {
   wy-toast,
   wy-copy-confirm {
     bottom: calc(100px + env(safe-area-inset-bottom, 0px));
@@ -4249,12 +3556,16 @@ wy-modal .wy-modal-footer {
 }
 
 /* ==========================================================================
-   Phone (<=640px): floating glass pill (wy-controls-bar), upward category
-   menu card, and the prompt detail pill (wy-prompt-modal). Tokens --eg-* live
-   in styles.css. Everything here is scoped to this breakpoint.
+   Floating glass pill (wy-controls-bar). Base rules apply at every width:
+   phone (<=640px) docks at the bottom with an upward category card; the
+   desktop block below (>640px) docks at the top with a downward card.
+   Tokens --eg-* live in styles.css.
    ========================================================================== */
-@media (max-width: 640px) {
   /* ---- Pill ---- */
+  wy-controls-bar .m-logo {
+    display: none;
+  }
+
   wy-controls-bar .m-bar {
     left: 16px;
     right: 16px;
@@ -4396,6 +3707,126 @@ wy-modal .wy-modal-footer {
     background: var(--paper-edge);
   }
 
+/* Desktop (>640px): the pill docks at the top; the category card opens downward */
+@media (min-width: 641px) {
+  wy-controls-bar {
+    display: block;
+    padding: 0;
+    background: transparent;
+  }
+
+  wy-controls-bar .m-bar {
+    top: 16px;
+    bottom: auto;
+    left: 0;
+    right: 0;
+    margin-inline: auto;
+    width: 640px;
+    max-width: calc(100% - 32px);
+    background: var(--eg-surface-glass);
+    color: var(--eg-ink);
+  }
+
+  wy-controls-bar .m-logo {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-pill);
+    color: var(--eg-ink);
+    text-decoration: none;
+  }
+
+  wy-controls-bar .m-logo img {
+    display: block;
+    width: 34px;
+    height: auto;
+  }
+
+  wy-controls-bar .m-logo:focus-visible {
+    outline: 2px solid var(--eg-accent);
+    outline-offset: 2px;
+  }
+
+  wy-controls-bar .m-bar.is-searching .m-logo {
+    display: none;
+  }
+
+  wy-controls-bar .m-category-label {
+    font-family: var(--eg-font-display);
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 28px;
+    letter-spacing: -0.01em;
+  }
+
+  /* Phone sets the chevron for an upward card; flip it for the downward card */
+  wy-controls-bar .m-category .m-icon {
+    font-size: 18px;
+    transform: rotate(180deg);
+  }
+
+  wy-controls-bar .m-scrim {
+    display: none;
+  }
+
+  wy-controls-bar .m-sheet {
+    top: 80px;
+    bottom: auto;
+    left: 0;
+    right: 0;
+    margin-inline: auto;
+    width: 320px;
+    max-width: calc(100% - 32px);
+    max-height: calc(100dvh - 96px);
+    background: var(--eg-surface-raised);
+    border-radius: var(--eg-radius-lg);
+  }
+
+  /* Private page: the pill sits inline above the vault grid, card anchored under it */
+  body.private-vault-page wy-controls-bar {
+    position: relative;
+    z-index: 20;
+    padding: 16px 24px;
+  }
+
+  body.private-vault-page wy-controls-bar .m-bar {
+    position: relative;
+    top: auto;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+  }
+
+  body.private-vault-page wy-controls-bar .m-logo {
+    display: none;
+  }
+
+  body.private-vault-page wy-controls-bar .m-sheet {
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    right: auto;
+    width: 320px;
+    max-width: none;
+    margin: 0 0 0 -160px;
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    wy-controls-bar .m-bar {
+      background: var(--eg-surface-raised);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+  }
+}
+
+@media (max-width: 640px) {
   /* ---- Prompt detail: floating glass pill ---- */
   wy-prompt-modal .modal-container {
     width: 100%;
@@ -4548,6 +3979,9 @@ wy-modal .wy-modal-footer {
     -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
     mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
   }
+
+
+
 }
 
 /* ==========================================================================
@@ -4557,118 +3991,6 @@ wy-modal .wy-modal-footer {
    desktop rules in this file.
    ========================================================================== */
 @media (min-width: 641px) {
-    /* ---- Controls bar: search field and segmented filter on fill ---- */
-    wy-controls-bar::after,
-    wy-controls-bar .divider { display: none; }
-
-    wy-controls-bar .controls-container {
-        max-width: 1392px;
-        gap: 16px;
-    }
-
-    wy-controls-bar .search-section,
-    wy-controls-bar[data-scrolled] .search-section {
-        flex: 0 1 360px;
-        width: 360px;
-        min-width: 220px;
-    }
-
-    wy-controls-bar .search-input {
-        height: 36px;
-        padding: 0 16px 0 40px;
-        border: 0;
-        border-radius: 9999px;
-        background: var(--eg-surface-fill);
-        color: var(--eg-ink);
-        font-family: var(--eg-font-sans);
-        font-size: 15px;
-        line-height: 20px;
-        letter-spacing: -0.2px;
-    }
-    wy-controls-bar .search-input::placeholder { color: var(--eg-ink-muted); font-weight: 400; }
-    wy-controls-bar .search-input:hover,
-    wy-controls-bar .search-input:focus {
-        border: 0;
-        background: var(--eg-surface-fill);
-        box-shadow: none;
-    }
-    wy-controls-bar .search-input:focus-visible,
-    wy-controls-bar .search-input:focus {
-        outline: 2px solid var(--eg-accent);
-        outline-offset: 2px;
-    }
-    wy-controls-bar .search-icon { color: var(--eg-ink-muted); }
-
-    wy-controls-bar .sort-control { order: 3; }
-    wy-controls-bar .sort-label {
-        font-family: var(--eg-font-sans);
-        font-size: 14px;
-        font-weight: 400;
-        letter-spacing: -0.2px;
-        text-transform: none;
-        color: var(--eg-ink-muted);
-    }
-    wy-controls-bar .sort-select {
-        height: 36px;
-        padding: 0 32px 0 16px;
-        border: 0;
-        background-color: var(--eg-surface-fill);
-        color: var(--eg-ink);
-        font-family: var(--eg-font-sans);
-        font-size: 14px;
-        font-weight: 400;
-        letter-spacing: -0.2px;
-    }
-    wy-controls-bar .sort-select:focus-visible {
-        border-color: transparent;
-        box-shadow: none;
-        outline: 2px solid var(--eg-accent);
-        outline-offset: 2px;
-    }
-
-    wy-controls-bar .category-section { order: 2; }
-    wy-controls-bar .chips-track {
-        display: inline-flex;
-        width: max-content;
-        max-width: 100%;
-        gap: 4px;
-        padding: 4px;
-        border-radius: 9999px;
-        background: var(--eg-surface-fill);
-    }
-    wy-controls-bar .chip,
-    wy-controls-bar .chip.active,
-    wy-controls-bar .chip.active:hover {
-        height: 28px;
-        padding: 0 12px;
-        gap: 6px;
-        border: 0;
-        border-radius: 9999px;
-        font-family: var(--eg-font-sans);
-        font-size: 14px;
-        font-weight: 400;
-        line-height: 20px;
-        letter-spacing: -0.2px;
-        text-transform: none;
-        color: var(--eg-ink-muted);
-        background: transparent;
-    }
-    wy-controls-bar .chip:hover {
-        color: var(--eg-ink);
-        background: transparent;
-        border-color: transparent;
-    }
-    wy-controls-bar .chip.active,
-    wy-controls-bar .chip.active:hover {
-        color: var(--eg-ink);
-        background: var(--eg-surface-raised);
-        border-color: transparent;
-    }
-    wy-controls-bar .chip:focus-visible {
-        outline: 2px solid var(--eg-accent);
-        outline-offset: 2px;
-    }
-
     /* ---- Prompt detail (wy-prompt-modal, visual-selector layout) ---- */
     wy-prompt-modal .modal-container.visual-selector-modal {
         width: min(calc(100vw - 48px), 1280px);

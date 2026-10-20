@@ -654,215 +654,32 @@ var WyControlsBar = class extends i4 {
     this.activeCategory = "all";
     this.categories = ["Productivity", "Expertise", "Travel & Shopping"];
     this.searchValue = "";
-    this.hideViewToggle = false;
-    this.hideDetailsToggle = false;
     this.showFeaturedFilter = false;
     this.showHiddenFilter = false;
     this.showFeaturedOnly = false;
     this.showHiddenOnly = false;
     this.sortMode = "custom";
-    this.chipVariant = "";
-    this.isScrolled = false;
-    this.scrollState = "normal";
-    this._mobileSearchOpen = false;
     this.toolsButton = false;
     this.toolsOpen = false;
+    this._mobileSearchOpen = false;
     this._sheetOpen = false;
-    this._isMobile = this._matchesMobile();
     this._handleSheetKeydown = this._handleSheetKeydown.bind(this);
-    this._scrollEnterThreshold = 64;
-    this._scrollExitThreshold = 12;
-    this._minScrollableDistance = 96;
-    this._returnDuration = 160;
-    this._scrollFrame = 0;
-    this._returnTimer = 0;
+    this._handleOutsidePointer = this._handleOutsidePointer.bind(this);
   }
   connectedCallback() {
     super.connectedCallback();
-    this._handleScroll = this._handleScroll.bind(this);
-    this._handleViewportChange = this._handleViewportChange.bind(this);
-    window.addEventListener("resize", this._handleViewportChange, { passive: true });
-    setTimeout(() => {
-      this._setupScrollListener();
-    }, 100);
+    this.setAttribute("data-mobile-bar", "");
   }
   disconnectedCallback() {
     super.disconnectedCallback();
-    window.removeEventListener("resize", this._handleViewportChange);
     document.removeEventListener("keydown", this._handleSheetKeydown);
-    if (this._scrollFrame) {
-      cancelAnimationFrame(this._scrollFrame);
-      this._scrollFrame = 0;
-    }
-    clearTimeout(this._returnTimer);
-    this._removeScrollListener();
-  }
-  _bindChipsTrackScroll() {
-    const track = this.querySelector(".chips-track");
-    if (!track || this._boundChipsTrack === track) return;
-    this._boundChipsTrack = track;
-    track.addEventListener("scroll", () => {
-      track.classList.toggle("is-chips-scrolled", track.scrollLeft > 0);
-    }, { passive: true });
-  }
-  _matchesMobile() {
-    return typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches;
-  }
-  _handleViewportChange() {
-    const isMobile = this._matchesMobile();
-    if (isMobile !== this._isMobile) {
-      this._isMobile = isMobile;
-      this._sheetOpen = false;
-      this._mobileSearchOpen = false;
-    }
-    this._handleScroll();
-    this._syncScrolledHostSurface();
-  }
-  _setupScrollListener() {
-    this._removeScrollListener();
-    this._scrollContainer = this._findScrollableContainer();
-    if (this._scrollContainer === window) {
-      window.addEventListener("scroll", this._handleScroll, { passive: true });
-    } else if (this._scrollContainer) {
-      this._scrollContainer.addEventListener("scroll", this._handleScroll, { passive: true });
-    }
-    this._handleScroll();
-  }
-  _removeScrollListener() {
-    if (this._scrollContainer === window) {
-      window.removeEventListener("scroll", this._handleScroll);
-    } else if (this._scrollContainer) {
-      this._scrollContainer.removeEventListener("scroll", this._handleScroll);
-    }
-  }
-  _findScrollableContainer() {
-    const promptArea = document.querySelector(".prompt-area");
-    if (promptArea) {
-      const style = window.getComputedStyle(promptArea);
-      if (style.overflowY === "auto" || style.overflowY === "scroll") return promptArea;
-    }
-    const mainContent = document.querySelector(".main-content");
-    if (mainContent) {
-      const style = window.getComputedStyle(mainContent);
-      if (style.overflowY === "auto" || style.overflowY === "scroll") return mainContent;
-    }
-    const siblings = this.parentElement?.querySelectorAll('[class*="scroll"], [class*="area"]');
-    if (siblings) {
-      for (const sibling of siblings) {
-        const style = window.getComputedStyle(sibling);
-        if (style.overflowY === "auto" || style.overflowY === "scroll") return sibling;
-      }
-    }
-    let element = this.parentElement;
-    while (element && element !== document.body) {
-      const style = window.getComputedStyle(element);
-      if (style.overflowY === "auto" || style.overflowY === "scroll") return element;
-      element = element.parentElement;
-    }
-    const bodyStyle = window.getComputedStyle(document.body);
-    if (bodyStyle.overflowY === "auto" || bodyStyle.overflowY === "scroll") return document.body;
-    return window;
-  }
-  _getScrollMetrics() {
-    let rawScrollY = 0;
-    let maxScroll = 0;
-    if (this._scrollContainer === window) {
-      const documentElement = document.documentElement;
-      const body = document.body;
-      rawScrollY = window.scrollY || documentElement.scrollTop || body.scrollTop || 0;
-      maxScroll = Math.max(0, Math.max(documentElement.scrollHeight, body.scrollHeight) - window.innerHeight);
-    } else {
-      rawScrollY = this._scrollContainer ? this._scrollContainer.scrollTop : 0;
-      maxScroll = this._scrollContainer ? Math.max(0, this._scrollContainer.scrollHeight - this._scrollContainer.clientHeight) : 0;
-    }
-    return { scrollY: Math.min(Math.max(rawScrollY, 0), maxScroll), maxScroll };
-  }
-  _handleScroll() {
-    if (this._scrollFrame) return;
-    this._scrollFrame = requestAnimationFrame(() => {
-      this._scrollFrame = 0;
-      this._updateScrollState();
-    });
-  }
-  _updateScrollState() {
-    const { scrollY, maxScroll } = this._getScrollMetrics();
-    const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches;
-    const canFloat = !isMobile && maxScroll >= this._minScrollableDistance;
-    if (!canFloat) {
-      this._setScrollState("normal");
-      return;
-    }
-    if (this.scrollState === "normal" || this.scrollState === "returning") {
-      if (scrollY >= this._scrollEnterThreshold) this._setScrollState("floating");
-      return;
-    }
-    if (this.scrollState === "floating" && scrollY <= this._scrollExitThreshold) {
-      this._setScrollState("returning");
-    }
-  }
-  _setScrollState(nextState) {
-    if (this.scrollState === nextState) return;
-    clearTimeout(this._returnTimer);
-    this.scrollState = nextState;
-    this.isScrolled = nextState !== "normal";
-    this._syncStateAttributes();
-    this.requestUpdate();
-    if (nextState === "returning") {
-      this._returnTimer = setTimeout(() => {
-        if (this.scrollState === "returning") this._setScrollState("normal");
-      }, this._returnDuration);
-    }
-  }
-  _syncStateAttributes() {
-    if (this.isScrolled) this.setAttribute("data-scrolled", "");
-    else this.removeAttribute("data-scrolled");
-    this.setAttribute("data-scroll-state", this.scrollState);
-    this._syncScrolledHostSurface();
-  }
-  _syncScrolledHostSurface() {
-    const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches;
-    if (this.isScrolled && !isMobile) {
-      this.style.setProperty("background", "var(--paper, #FFFAF5)");
-      this.style.setProperty("backdrop-filter", "none");
-      this.style.setProperty("-webkit-backdrop-filter", "none");
-      this.style.setProperty("position", "fixed");
-      this.style.setProperty("top", "var(--wy-controls-floating-top, 16px)");
-      this.style.setProperty("right", "var(--wy-controls-floating-right, auto)");
-      this.style.setProperty("left", "var(--wy-controls-floating-left, 50%)");
-      this.style.setProperty("z-index", "var(--wy-controls-floating-z-index, 100)");
-      this.style.setProperty("width", "var(--wy-controls-floating-width, auto)");
-      this.style.setProperty("max-width", "var(--wy-controls-floating-max-width, min(900px, calc(100% - 32px)))");
-      this.style.setProperty("margin-inline", "0");
-      this.style.setProperty(
-        "transform",
-        this.scrollState === "returning" ? "var(--wy-controls-floating-return-transform, translateX(-50%) translateY(-4px) scale(0.995))" : "var(--wy-controls-floating-transform, translateX(-50%))"
-      );
-    } else {
-      this.style.removeProperty("background");
-      this.style.removeProperty("backdrop-filter");
-      this.style.removeProperty("-webkit-backdrop-filter");
-      this.style.removeProperty("position");
-      this.style.removeProperty("top");
-      this.style.removeProperty("right");
-      this.style.removeProperty("left");
-      this.style.removeProperty("z-index");
-      this.style.removeProperty("width");
-      this.style.removeProperty("max-width");
-      this.style.removeProperty("margin-inline");
-      this.style.removeProperty("transform");
-    }
+    document.removeEventListener("pointerdown", this._handleOutsidePointer);
   }
   updated(changedProperties) {
     if (changedProperties.has("_mobileSearchOpen")) {
       if (this._mobileSearchOpen) {
         this.setAttribute("data-mobile-search", "");
-        if (this._isMobile) {
-          this.querySelector(".m-search-input")?.focus();
-        } else {
-          setTimeout(() => {
-            this.querySelector(".search-input")?.focus();
-          }, 260);
-        }
+        this.querySelector(".search-input")?.focus();
       } else {
         this.removeAttribute("data-mobile-search");
       }
@@ -870,18 +687,15 @@ var WyControlsBar = class extends i4 {
     if (changedProperties.has("_sheetOpen")) {
       if (this._sheetOpen) {
         document.addEventListener("keydown", this._handleSheetKeydown);
+        document.addEventListener("pointerdown", this._handleOutsidePointer);
         requestAnimationFrame(() => {
           this.querySelector('.m-tile[aria-pressed="true"]')?.focus();
         });
       } else {
         document.removeEventListener("keydown", this._handleSheetKeydown);
+        document.removeEventListener("pointerdown", this._handleOutsidePointer);
       }
     }
-    if (changedProperties.has("_isMobile")) {
-      if (this._isMobile) this.setAttribute("data-mobile-bar", "");
-      else this.removeAttribute("data-mobile-bar");
-    }
-    this._bindChipsTrackScroll();
   }
   _activeFilterLabel() {
     if (this.showFeaturedOnly) return "Featured";
@@ -907,20 +721,20 @@ var WyControlsBar = class extends i4 {
     });
     return options;
   }
-  _renderMobileTile(option) {
+  _renderMenuTile(option) {
     return b2`
-              <button
-                type="button"
-                class="m-tile"
-                aria-pressed="${option.active}"
-                @click="${() => {
+      <button
+        type="button"
+        class="m-tile"
+        aria-pressed="${option.active}"
+        @click="${() => {
       option.select();
       this._closeSheet();
     }}"
-              >${option.label}</button>
-            `;
+      >${option.label}</button>
+    `;
   }
-  _renderMobile() {
+  render() {
     const sortLabel = this.sortMode === "modified" ? "Date modified" : "Custom";
     return b2`
       ${this._sheetOpen ? b2`
@@ -928,17 +742,10 @@ var WyControlsBar = class extends i4 {
         <div class="m-sheet" id="mobileFilterSheet" role="dialog" aria-modal="true" aria-label="Filter prompts">
           <div class="m-eyebrow">Category</div>
           <div class="m-tiles">
-            ${this._mobileFilterOptions().filter((o6) => !o6.category).map((option) => this._renderMobileTile(option))}
+            ${this._mobileFilterOptions().filter((o6) => !o6.category).map((option) => this._renderMenuTile(option))}
             <a class="m-tile m-tile-link" href="./private.html" style="text-decoration: none;">Private</a>
             <span class="m-rule" aria-hidden="true"></span>
-            ${this._mobileFilterOptions().filter((o6) => o6.category).map((option) => this._renderMobileTile(option))}
-          </div>
-          <div class="m-order">
-            <span class="m-eyebrow">Order</span>
-            <div class="m-segmented" role="group" aria-label="Prompt order">
-              <button type="button" aria-pressed="${this.sortMode !== "modified"}" @click="${() => this._applySortMode("custom")}">Custom</button>
-              <button type="button" aria-pressed="${this.sortMode === "modified"}" @click="${() => this._applySortMode("modified")}">Date modified</button>
-            </div>
+            ${this._mobileFilterOptions().filter((o6) => o6.category).map((option) => this._renderMenuTile(option))}
           </div>
         </div>
       ` : ""}
@@ -951,7 +758,7 @@ var WyControlsBar = class extends i4 {
             placeholder="Search prompts…"
             .value="${this.searchValue}"
             @input="${this._handleSearch}"
-            @keydown="${this._handleMobileSearchKeydown}"
+            @keydown="${this._handleSearchKeydown}"
             aria-label="Search prompts"
             enterkeyhint="search"
           >
@@ -959,6 +766,9 @@ var WyControlsBar = class extends i4 {
             <span class="m-icon" aria-hidden="true">close</span>
           </button>
         ` : b2`
+          <a class="m-logo" href="./" aria-label="Prompts home">
+            <img src="public/images/prompts-logo.svg" alt="" width="34" height="34">
+          </a>
           <button type="button" class="m-btn" @click="${this._openMobileSearch}" aria-label="Search prompts">
             <span class="m-icon" aria-hidden="true">search</span>
           </button>
@@ -1018,6 +828,10 @@ var WyControlsBar = class extends i4 {
       this._closeSheet();
     }
   }
+  _handleOutsidePointer(e6) {
+    if (!this._sheetOpen || e6.composedPath().includes(this)) return;
+    this._sheetOpen = false;
+  }
   _toggleTools() {
     if (this._sheetOpen) this._sheetOpen = false;
     this._dispatchToolsToggle();
@@ -1030,7 +844,11 @@ var WyControlsBar = class extends i4 {
     if (this.toolsOpen) this._dispatchToolsToggle();
     this._mobileSearchOpen = true;
   }
-  _handleMobileSearchKeydown(e6) {
+  /** Public: expand the pill into search (used by the Ctrl/Cmd+K shortcut). */
+  openSearch() {
+    this._openMobileSearch();
+  }
+  _handleSearchKeydown(e6) {
     if (e6.key === "Escape") {
       e6.preventDefault();
       this._closeMobileSearch();
@@ -1042,143 +860,9 @@ var WyControlsBar = class extends i4 {
     this.sortMode = mode === "modified" ? "modified" : "custom";
     this._notifyChange();
   }
-  render() {
-    this._syncStateAttributes();
-    if (this._isMobile) return this._renderMobile();
-    const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches;
-    const showToggles = !this.isScrolled && (!this.hideViewToggle || !this.hideDetailsToggle);
-    return b2`
-      <div class="controls-container">
-
-        <div class="search-section ${this.searchValue ? "has-value" : ""}">
-          <input
-            type="search"
-            class="search-input"
-            placeholder="Search prompts…"
-            .value="${this.searchValue}"
-            @input="${this._handleSearch}"
-            @focus="${this._handleSearchFocus}"
-            @click="${this._handleSearchFocus}"
-            aria-label="Search prompts"
-          >
-          <span class="search-icon" aria-hidden="true">search</span>
-          <button
-            class="search-clear"
-            @click="${this._clearSearch}"
-            aria-label="Clear search"
-            tabindex="${this.searchValue ? "0" : "-1"}"
-          >close</button>
-        </div>
-
-        ${showToggles ? b2`
-          <div class="divider"></div>
-          <div class="toggle-section">
-            ${!this.hideViewToggle ? b2`
-              <div class="view-toggle" role="group" aria-label="View mode">
-                <button
-                  class="view-btn ${this.viewMode === "list" ? "active" : ""}"
-                  @click="${() => this._setViewMode("list")}"
-                  aria-label="List view"
-                  aria-pressed="${this.viewMode === "list"}"
-                >format_list_bulleted</button>
-                <button
-                  class="view-btn ${this.viewMode === "grid" ? "active" : ""}"
-                  @click="${() => this._setViewMode("grid")}"
-                  aria-label="Grid view"
-                  aria-pressed="${this.viewMode === "grid"}"
-                >grid_view</button>
-              </div>
-            ` : ""}
-            ${!this.hideDetailsToggle ? b2`
-              <label
-                class="details-toggle-control ${this.showDetails ? "is-on" : ""}"
-                @click="${this._toggleDetails}"
-              >
-                <input
-                  type="checkbox"
-                  ?checked="${this.showDetails}"
-                  tabindex="0"
-                  aria-label="Show descriptions"
-                >
-                <span class="toggle-track">
-                  <span class="toggle-thumb"></span>
-                </span>
-                <span class="toggle-label">Descriptions</span>
-              </label>
-            ` : ""}
-          </div>
-          <div class="divider"></div>
-        ` : this.isScrolled ? b2`<div class="divider"></div>` : ""}
-
-        <label class="sort-control">
-          <span class="sort-label">Order</span>
-          <select
-            class="sort-select"
-            .value="${this.sortMode}"
-            @change="${this._setSortMode}"
-            aria-label="Prompt order"
-          >
-            <option value="custom">Custom</option>
-            <option value="modified">Date modified</option>
-          </select>
-        </label>
-
-        <div class="divider"></div>
-
-        <div class="category-section">
-          <div class="chips-track" role="tablist">
-            ${this.showFeaturedFilter ? b2`
-              <button
-                class="chip chip--featured ${this.showFeaturedOnly ? "active" : ""}"
-                aria-pressed="${this.showFeaturedOnly}"
-                @click="${this._toggleFeatured}"
-              >Featured</button>
-            ` : ""}
-            ${this.showHiddenFilter ? b2`
-              <button
-                class="chip chip--hidden ${this.showHiddenOnly ? "active" : ""}"
-                aria-pressed="${this.showHiddenOnly}"
-                @click="${this._toggleHidden}"
-              >Hidden</button>
-            ` : ""}
-            <button
-              class="chip ${this.activeCategory === "all" && !this.showFeaturedOnly && !this.showHiddenOnly ? "active" : ""}"
-              aria-pressed="${this.activeCategory === "all" && !this.showFeaturedOnly && !this.showHiddenOnly}"
-              @click="${() => this._setCategory("all")}"
-            >All</button>
-            ${this.categories.map((cat) => b2`
-              <button
-                class="chip ${this.activeCategory === cat && !this.showFeaturedOnly && !this.showHiddenOnly ? "active" : ""}"
-                aria-pressed="${this.activeCategory === cat && !this.showFeaturedOnly && !this.showHiddenOnly}"
-                @click="${() => this._setCategory(cat)}"
-              >${cat}</button>
-            `)}
-          </div>
-        </div>
-
-        <button
-          class="mobile-cancel"
-          @click="${this._closeMobileSearch}"
-          aria-label="Close search"
-        >Cancel</button>
-
-      </div>
-    `;
-  }
   _handleSearch(e6) {
     this.searchValue = e6.target.value;
     this._notifyChange();
-  }
-  _handleSearchFocus() {
-    const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches;
-    if (isMobile && !this._mobileSearchOpen) {
-      this._mobileSearchOpen = true;
-    }
-  }
-  _clearSearch() {
-    this.searchValue = "";
-    this._notifyChange();
-    this.querySelector(".search-input")?.focus();
   }
   dismissSearch({ clear = false } = {}) {
     const searchInput = this.querySelector(".search-input");
@@ -1191,15 +875,6 @@ var WyControlsBar = class extends i4 {
   }
   _closeMobileSearch() {
     this.dismissSearch({ clear: true });
-  }
-  _setViewMode(mode) {
-    this.viewMode = mode;
-    this._notifyChange();
-  }
-  _toggleDetails(e6) {
-    e6.preventDefault();
-    this.showDetails = !this.showDetails;
-    this._notifyChange();
   }
   _setCategory(cat) {
     this.activeCategory = cat;
@@ -1215,10 +890,6 @@ var WyControlsBar = class extends i4 {
   _toggleHidden() {
     this.showHiddenOnly = !this.showHiddenOnly;
     if (this.showHiddenOnly) this.showFeaturedOnly = false;
-    this._notifyChange();
-  }
-  _setSortMode(e6) {
-    this.sortMode = e6.target.value === "modified" ? "modified" : "custom";
     this._notifyChange();
   }
   _notifyChange() {
@@ -1243,21 +914,15 @@ __publicField(WyControlsBar, "properties", {
   activeCategory: { type: String, attribute: "active-category" },
   categories: { type: Array },
   searchValue: { type: String, attribute: "search-value" },
-  hideViewToggle: { type: Boolean, attribute: "hide-view-toggle" },
-  hideDetailsToggle: { type: Boolean, attribute: "hide-details-toggle" },
   showFeaturedFilter: { type: Boolean, attribute: "show-featured-filter" },
   showHiddenFilter: { type: Boolean, attribute: "show-hidden-filter" },
   showFeaturedOnly: { type: Boolean, attribute: "show-featured-only" },
   showHiddenOnly: { type: Boolean, attribute: "show-hidden-only" },
   sortMode: { type: String, attribute: "sort-mode" },
-  chipVariant: { type: String, attribute: "chip-variant" },
-  isScrolled: { type: Boolean, state: true },
-  scrollState: { type: String, state: true },
-  _mobileSearchOpen: { type: Boolean, state: true },
   toolsButton: { type: Boolean, attribute: "tools-button" },
   toolsOpen: { type: Boolean, attribute: "tools-open" },
-  _sheetOpen: { type: Boolean, state: true },
-  _isMobile: { type: Boolean, state: true }
+  _mobileSearchOpen: { type: Boolean, state: true },
+  _sheetOpen: { type: Boolean, state: true }
 });
 customElements.define("wy-controls-bar", WyControlsBar);
 
@@ -7074,14 +6739,12 @@ var WyLinksModal = class extends i4 {
         </div>
       `;
     }
-    const isFavorite = link.active === true;
     return b2`
       <button
-        class="link-chip${isFavorite ? " link-chip--fav" : ""}"
+        class="link-chip"
         @click="${(e6) => this._handleLinkClick(e6, link)}"
         aria-label="Open ${link.name}"
       >
-        ${isFavorite ? b2`<svg class="link-chip__fav" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.2s-7.4-4.5-9.4-8.9C1.3 8.2 3.3 4.8 6.6 4.8c2.1 0 3.6 1.2 4.6 2.7 1-1.5 2.5-2.7 4.6-2.7 3.3 0 5.3 3.4 4 6.5-2 4.4-9.4 8.9-9.4 8.9z" fill="currentColor" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>` : ""}
         <span class="link-chip__label">${link.name}</span>
       </button>
     `;

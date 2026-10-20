@@ -1,339 +1,136 @@
 import { LitElement, html } from 'lit';
 
+/**
+ * wy-controls-bar
+ *
+ * Floating glass pill used at every viewport. On phones it sits at the bottom
+ * with an upward category card; above 640px it sits at the top with a downward
+ * category menu (see components.css, pill blocks).
+ *
+ * Events: `filter-change` (detail: search, category, showFeaturedOnly,
+ * showHiddenOnly, sortMode, showDetails, viewMode) and `tools-toggle`.
+ */
 export class WyControlsBar extends LitElement {
   createRenderRoot() {
     return this;
   }
 
-    static properties = {
-        viewMode: { type: String, attribute: 'view-mode' },
-        showDetails: { type: Boolean, attribute: 'show-details' },
-        activeCategory: { type: String, attribute: 'active-category' },
-        categories: { type: Array },
-        searchValue: { type: String, attribute: 'search-value' },
-        hideViewToggle: { type: Boolean, attribute: 'hide-view-toggle' },
-        hideDetailsToggle: { type: Boolean, attribute: 'hide-details-toggle' },
-        showFeaturedFilter: { type: Boolean, attribute: 'show-featured-filter' },
-        showHiddenFilter: { type: Boolean, attribute: 'show-hidden-filter' },
-        showFeaturedOnly: { type: Boolean, attribute: 'show-featured-only' },
-        showHiddenOnly: { type: Boolean, attribute: 'show-hidden-only' },
-        sortMode: { type: String, attribute: 'sort-mode' },
-        chipVariant: { type: String, attribute: 'chip-variant' },
-        isScrolled: { type: Boolean, state: true },
-        scrollState: { type: String, state: true },
-        _mobileSearchOpen: { type: Boolean, state: true },
-        toolsButton: { type: Boolean, attribute: 'tools-button' },
-        toolsOpen: { type: Boolean, attribute: 'tools-open' },
-        _sheetOpen: { type: Boolean, state: true },
-        _isMobile: { type: Boolean, state: true },
-    };
+  static properties = {
+    viewMode: { type: String, attribute: 'view-mode' },
+    showDetails: { type: Boolean, attribute: 'show-details' },
+    activeCategory: { type: String, attribute: 'active-category' },
+    categories: { type: Array },
+    searchValue: { type: String, attribute: 'search-value' },
+    showFeaturedFilter: { type: Boolean, attribute: 'show-featured-filter' },
+    showHiddenFilter: { type: Boolean, attribute: 'show-hidden-filter' },
+    showFeaturedOnly: { type: Boolean, attribute: 'show-featured-only' },
+    showHiddenOnly: { type: Boolean, attribute: 'show-hidden-only' },
+    sortMode: { type: String, attribute: 'sort-mode' },
+    toolsButton: { type: Boolean, attribute: 'tools-button' },
+    toolsOpen: { type: Boolean, attribute: 'tools-open' },
+    _mobileSearchOpen: { type: Boolean, state: true },
+    _sheetOpen: { type: Boolean, state: true },
+  };
 
-    constructor() {
-        super();
-        this.viewMode = 'grid';
-        this.showDetails = false;
-        this.activeCategory = 'all';
-        this.categories = ['Productivity', 'Expertise', 'Travel & Shopping'];
-        this.searchValue = '';
-        this.hideViewToggle = false;
-        this.hideDetailsToggle = false;
-        this.showFeaturedFilter = false;
-        this.showHiddenFilter = false;
-        this.showFeaturedOnly = false;
-        this.showHiddenOnly = false;
-        this.sortMode = 'custom';
-        this.chipVariant = '';
-        this.isScrolled = false;
-        this.scrollState = 'normal';
-        this._mobileSearchOpen = false;
-        this.toolsButton = false;
-        this.toolsOpen = false;
-        this._sheetOpen = false;
-        this._isMobile = this._matchesMobile();
-        this._handleSheetKeydown = this._handleSheetKeydown.bind(this);
-        this._scrollEnterThreshold = 64;
-        this._scrollExitThreshold = 12;
-        this._minScrollableDistance = 96;
-        this._returnDuration = 160;
-        this._scrollFrame = 0;
-        this._returnTimer = 0;
+  constructor() {
+    super();
+    this.viewMode = 'grid';
+    this.showDetails = false;
+    this.activeCategory = 'all';
+    this.categories = ['Productivity', 'Expertise', 'Travel & Shopping'];
+    this.searchValue = '';
+    this.showFeaturedFilter = false;
+    this.showHiddenFilter = false;
+    this.showFeaturedOnly = false;
+    this.showHiddenOnly = false;
+    this.sortMode = 'custom';
+    this.toolsButton = false;
+    this.toolsOpen = false;
+    this._mobileSearchOpen = false;
+    this._sheetOpen = false;
+    this._handleSheetKeydown = this._handleSheetKeydown.bind(this);
+    this._handleOutsidePointer = this._handleOutsidePointer.bind(this);
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.setAttribute('data-mobile-bar', '');
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    document.removeEventListener('keydown', this._handleSheetKeydown);
+    document.removeEventListener('pointerdown', this._handleOutsidePointer);
+  }
+
+  updated(changedProperties) {
+    if (changedProperties.has('_mobileSearchOpen')) {
+      if (this._mobileSearchOpen) {
+        this.setAttribute('data-mobile-search', '');
+        this.querySelector('.search-input')?.focus();
+      } else {
+        this.removeAttribute('data-mobile-search');
+      }
     }
-
-    connectedCallback() {
-        super.connectedCallback();
-        this._handleScroll = this._handleScroll.bind(this);
-        this._handleViewportChange = this._handleViewportChange.bind(this);
-        window.addEventListener('resize', this._handleViewportChange, { passive: true });
-        setTimeout(() => {
-            this._setupScrollListener();
-        }, 100);
-    }
-
-    disconnectedCallback() {
-        super.disconnectedCallback();
-        window.removeEventListener('resize', this._handleViewportChange);
+    if (changedProperties.has('_sheetOpen')) {
+      if (this._sheetOpen) {
+        document.addEventListener('keydown', this._handleSheetKeydown);
+        document.addEventListener('pointerdown', this._handleOutsidePointer);
+        requestAnimationFrame(() => {
+          this.querySelector('.m-tile[aria-pressed="true"]')?.focus();
+        });
+      } else {
         document.removeEventListener('keydown', this._handleSheetKeydown);
-        if (this._scrollFrame) {
-            cancelAnimationFrame(this._scrollFrame);
-            this._scrollFrame = 0;
-        }
-        clearTimeout(this._returnTimer);
-        this._removeScrollListener();
+        document.removeEventListener('pointerdown', this._handleOutsidePointer);
+      }
     }
+  }
 
-    _bindChipsTrackScroll() {
-        const track = this.querySelector('.chips-track');
-        if (!track || this._boundChipsTrack === track) return;
-        this._boundChipsTrack = track;
-        track.addEventListener('scroll', () => {
-            track.classList.toggle('is-chips-scrolled', track.scrollLeft > 0);
-        }, { passive: true });
+  _activeFilterLabel() {
+    if (this.showFeaturedOnly) return 'Featured';
+    if (this.showHiddenOnly) return 'Hidden';
+    return this.activeCategory === 'all' ? 'All prompts' : this.activeCategory;
+  }
+
+  _mobileFilterOptions() {
+    const options = [];
+    const noFlag = !this.showFeaturedOnly && !this.showHiddenOnly;
+    options.push({ label: 'All', active: this.activeCategory === 'all' && noFlag, select: () => this._setCategory('all') });
+    if (this.showFeaturedFilter) {
+      options.push({ label: 'Featured', active: this.showFeaturedOnly, select: () => { if (!this.showFeaturedOnly) this._toggleFeatured(); } });
     }
-
-    _matchesMobile() {
-        return typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
+    if (this.showHiddenFilter) {
+      options.push({ label: 'Hidden', active: this.showHiddenOnly, select: () => { if (!this.showHiddenOnly) this._toggleHidden(); } });
     }
+    this.categories.forEach(cat => {
+      options.push({ label: cat, category: true, active: this.activeCategory === cat && noFlag, select: () => this._setCategory(cat) });
+    });
+    return options;
+  }
 
-    _handleViewportChange() {
-        const isMobile = this._matchesMobile();
-        if (isMobile !== this._isMobile) {
-            this._isMobile = isMobile;
-            this._sheetOpen = false;
-            this._mobileSearchOpen = false;
-        }
-        this._handleScroll();
-        this._syncScrolledHostSurface();
-    }
+  _renderMenuTile(option) {
+    return html`
+      <button
+        type="button"
+        class="m-tile"
+        aria-pressed="${option.active}"
+        @click="${() => { option.select(); this._closeSheet(); }}"
+      >${option.label}</button>
+    `;
+  }
 
-    _setupScrollListener() {
-        this._removeScrollListener();
-        this._scrollContainer = this._findScrollableContainer();
-        if (this._scrollContainer === window) {
-            window.addEventListener('scroll', this._handleScroll, { passive: true });
-        } else if (this._scrollContainer) {
-            this._scrollContainer.addEventListener('scroll', this._handleScroll, { passive: true });
-        }
-        this._handleScroll();
-    }
-
-    _removeScrollListener() {
-        if (this._scrollContainer === window) {
-            window.removeEventListener('scroll', this._handleScroll);
-        } else if (this._scrollContainer) {
-            this._scrollContainer.removeEventListener('scroll', this._handleScroll);
-        }
-    }
-
-    _findScrollableContainer() {
-        const promptArea = document.querySelector('.prompt-area');
-        if (promptArea) {
-            const style = window.getComputedStyle(promptArea);
-            if (style.overflowY === 'auto' || style.overflowY === 'scroll') return promptArea;
-        }
-        const mainContent = document.querySelector('.main-content');
-        if (mainContent) {
-            const style = window.getComputedStyle(mainContent);
-            if (style.overflowY === 'auto' || style.overflowY === 'scroll') return mainContent;
-        }
-        const siblings = this.parentElement?.querySelectorAll('[class*="scroll"], [class*="area"]');
-        if (siblings) {
-            for (const sibling of siblings) {
-                const style = window.getComputedStyle(sibling);
-                if (style.overflowY === 'auto' || style.overflowY === 'scroll') return sibling;
-            }
-        }
-        let element = this.parentElement;
-        while (element && element !== document.body) {
-            const style = window.getComputedStyle(element);
-            if (style.overflowY === 'auto' || style.overflowY === 'scroll') return element;
-            element = element.parentElement;
-        }
-        const bodyStyle = window.getComputedStyle(document.body);
-        if (bodyStyle.overflowY === 'auto' || bodyStyle.overflowY === 'scroll') return document.body;
-        return window;
-    }
-
-    _getScrollMetrics() {
-        let rawScrollY = 0;
-        let maxScroll = 0;
-        if (this._scrollContainer === window) {
-            const documentElement = document.documentElement;
-            const body = document.body;
-            rawScrollY = window.scrollY || documentElement.scrollTop || body.scrollTop || 0;
-            maxScroll = Math.max(0, Math.max(documentElement.scrollHeight, body.scrollHeight) - window.innerHeight);
-        } else {
-            rawScrollY = this._scrollContainer ? this._scrollContainer.scrollTop : 0;
-            maxScroll = this._scrollContainer
-                ? Math.max(0, this._scrollContainer.scrollHeight - this._scrollContainer.clientHeight)
-                : 0;
-        }
-        return { scrollY: Math.min(Math.max(rawScrollY, 0), maxScroll), maxScroll };
-    }
-
-    _handleScroll() {
-        if (this._scrollFrame) return;
-        this._scrollFrame = requestAnimationFrame(() => {
-            this._scrollFrame = 0;
-            this._updateScrollState();
-        });
-    }
-
-    _updateScrollState() {
-        const { scrollY, maxScroll } = this._getScrollMetrics();
-        const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
-        const canFloat = !isMobile && maxScroll >= this._minScrollableDistance;
-        if (!canFloat) { this._setScrollState('normal'); return; }
-        if (this.scrollState === 'normal' || this.scrollState === 'returning') {
-            if (scrollY >= this._scrollEnterThreshold) this._setScrollState('floating');
-            return;
-        }
-        if (this.scrollState === 'floating' && scrollY <= this._scrollExitThreshold) {
-            this._setScrollState('returning');
-        }
-    }
-
-    _setScrollState(nextState) {
-        if (this.scrollState === nextState) return;
-        clearTimeout(this._returnTimer);
-        this.scrollState = nextState;
-        this.isScrolled = nextState !== 'normal';
-        this._syncStateAttributes();
-        this.requestUpdate();
-        if (nextState === 'returning') {
-            this._returnTimer = setTimeout(() => {
-                if (this.scrollState === 'returning') this._setScrollState('normal');
-            }, this._returnDuration);
-        }
-    }
-
-    _syncStateAttributes() {
-        if (this.isScrolled) this.setAttribute('data-scrolled', '');
-        else this.removeAttribute('data-scrolled');
-        this.setAttribute('data-scroll-state', this.scrollState);
-        this._syncScrolledHostSurface();
-    }
-
-    _syncScrolledHostSurface() {
-        const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
-        if (this.isScrolled && !isMobile) {
-            this.style.setProperty('background', 'var(--paper, #FFFAF5)');
-            this.style.setProperty('backdrop-filter', 'none');
-            this.style.setProperty('-webkit-backdrop-filter', 'none');
-            this.style.setProperty('position', 'fixed');
-            this.style.setProperty('top', 'var(--wy-controls-floating-top, 16px)');
-            this.style.setProperty('right', 'var(--wy-controls-floating-right, auto)');
-            this.style.setProperty('left', 'var(--wy-controls-floating-left, 50%)');
-            this.style.setProperty('z-index', 'var(--wy-controls-floating-z-index, 100)');
-            this.style.setProperty('width', 'var(--wy-controls-floating-width, auto)');
-            this.style.setProperty('max-width', 'var(--wy-controls-floating-max-width, min(900px, calc(100% - 32px)))');
-            this.style.setProperty('margin-inline', '0');
-            this.style.setProperty(
-                'transform',
-                this.scrollState === 'returning'
-                    ? 'var(--wy-controls-floating-return-transform, translateX(-50%) translateY(-4px) scale(0.995))'
-                    : 'var(--wy-controls-floating-transform, translateX(-50%))'
-            );
-        } else {
-            this.style.removeProperty('background');
-            this.style.removeProperty('backdrop-filter');
-            this.style.removeProperty('-webkit-backdrop-filter');
-            this.style.removeProperty('position');
-            this.style.removeProperty('top');
-            this.style.removeProperty('right');
-            this.style.removeProperty('left');
-            this.style.removeProperty('z-index');
-            this.style.removeProperty('width');
-            this.style.removeProperty('max-width');
-            this.style.removeProperty('margin-inline');
-            this.style.removeProperty('transform');
-        }
-    }
-
-    updated(changedProperties) {
-        if (changedProperties.has('_mobileSearchOpen')) {
-            if (this._mobileSearchOpen) {
-                this.setAttribute('data-mobile-search', '');
-                if (this._isMobile) {
-                    this.querySelector('.m-search-input')?.focus();
-                } else {
-                    // Focus the input after animation
-                    setTimeout(() => {
-                        this.querySelector('.search-input')?.focus();
-                    }, 260);
-                }
-            } else {
-                this.removeAttribute('data-mobile-search');
-            }
-        }
-        if (changedProperties.has('_sheetOpen')) {
-            if (this._sheetOpen) {
-                document.addEventListener('keydown', this._handleSheetKeydown);
-                requestAnimationFrame(() => {
-                    this.querySelector('.m-tile[aria-pressed="true"]')?.focus();
-                });
-            } else {
-                document.removeEventListener('keydown', this._handleSheetKeydown);
-            }
-        }
-        if (changedProperties.has('_isMobile')) {
-            if (this._isMobile) this.setAttribute('data-mobile-bar', '');
-            else this.removeAttribute('data-mobile-bar');
-        }
-        this._bindChipsTrackScroll();
-    }
-
-    _activeFilterLabel() {
-        if (this.showFeaturedOnly) return 'Featured';
-        if (this.showHiddenOnly) return 'Hidden';
-        return this.activeCategory === 'all' ? 'All prompts' : this.activeCategory;
-    }
-
-    _mobileFilterOptions() {
-        const options = [];
-        const noFlag = !this.showFeaturedOnly && !this.showHiddenOnly;
-        options.push({ label: 'All', active: this.activeCategory === 'all' && noFlag, select: () => this._setCategory('all') });
-        if (this.showFeaturedFilter) {
-            options.push({ label: 'Featured', active: this.showFeaturedOnly, select: () => { if (!this.showFeaturedOnly) this._toggleFeatured(); } });
-        }
-        if (this.showHiddenFilter) {
-            options.push({ label: 'Hidden', active: this.showHiddenOnly, select: () => { if (!this.showHiddenOnly) this._toggleHidden(); } });
-        }
-        this.categories.forEach(cat => {
-            options.push({ label: cat, category: true, active: this.activeCategory === cat && noFlag, select: () => this._setCategory(cat) });
-        });
-        return options;
-    }
-
-    _renderMobileTile(option) {
-        return html`
-              <button
-                type="button"
-                class="m-tile"
-                aria-pressed="${option.active}"
-                @click="${() => { option.select(); this._closeSheet(); }}"
-              >${option.label}</button>
-            `;
-    }
-
-    _renderMobile() {
-        const sortLabel = this.sortMode === 'modified' ? 'Date modified' : 'Custom';
-        return html`
+  render() {
+    const sortLabel = this.sortMode === 'modified' ? 'Date modified' : 'Custom';
+    return html`
       ${this._sheetOpen ? html`
         <div class="m-scrim" @click="${this._closeSheet}"></div>
         <div class="m-sheet" id="mobileFilterSheet" role="dialog" aria-modal="true" aria-label="Filter prompts">
           <div class="m-eyebrow">Category</div>
           <div class="m-tiles">
-            ${this._mobileFilterOptions().filter(o => !o.category).map(option => this._renderMobileTile(option))}
+            ${this._mobileFilterOptions().filter(o => !o.category).map(option => this._renderMenuTile(option))}
             <a class="m-tile m-tile-link" href="./private.html" style="text-decoration: none;">Private</a>
             <span class="m-rule" aria-hidden="true"></span>
-            ${this._mobileFilterOptions().filter(o => o.category).map(option => this._renderMobileTile(option))}
-          </div>
-          <div class="m-order">
-            <span class="m-eyebrow">Order</span>
-            <div class="m-segmented" role="group" aria-label="Prompt order">
-              <button type="button" aria-pressed="${this.sortMode !== 'modified'}" @click="${() => this._applySortMode('custom')}">Custom</button>
-              <button type="button" aria-pressed="${this.sortMode === 'modified'}" @click="${() => this._applySortMode('modified')}">Date modified</button>
-            </div>
+            ${this._mobileFilterOptions().filter(o => o.category).map(option => this._renderMenuTile(option))}
           </div>
         </div>
       ` : ''}
@@ -346,7 +143,7 @@ export class WyControlsBar extends LitElement {
             placeholder="Search prompts…"
             .value="${this.searchValue}"
             @input="${this._handleSearch}"
-            @keydown="${this._handleMobileSearchKeydown}"
+            @keydown="${this._handleSearchKeydown}"
             aria-label="Search prompts"
             enterkeyhint="search"
           >
@@ -354,6 +151,9 @@ export class WyControlsBar extends LitElement {
             <span class="m-icon" aria-hidden="true">close</span>
           </button>
         ` : html`
+          <a class="m-logo" href="./" aria-label="Prompts home">
+            <img src="public/images/prompts-logo.svg" alt="" width="34" height="34">
+          </a>
           <button type="button" class="m-btn" @click="${this._openMobileSearch}" aria-label="Search prompts">
             <span class="m-icon" aria-hidden="true">search</span>
           </button>
@@ -397,262 +197,118 @@ export class WyControlsBar extends LitElement {
         `}
       </div>
     `;
+  }
+
+  _toggleSheet() {
+    if (!this._sheetOpen && this.toolsOpen) this._dispatchToolsToggle();
+    this._sheetOpen = !this._sheetOpen;
+  }
+
+  _closeSheet() {
+    if (!this._sheetOpen) return;
+    this._sheetOpen = false;
+    requestAnimationFrame(() => this.querySelector('.m-category')?.focus());
+  }
+
+  _handleSheetKeydown(e) {
+    if (e.key === 'Escape' && this._sheetOpen) {
+      e.preventDefault();
+      this._closeSheet();
     }
+  }
 
-    _toggleSheet() {
-        if (!this._sheetOpen && this.toolsOpen) this._dispatchToolsToggle();
-        this._sheetOpen = !this._sheetOpen;
+  _handleOutsidePointer(e) {
+    if (!this._sheetOpen || e.composedPath().includes(this)) return;
+    this._sheetOpen = false;
+  }
+
+  _toggleTools() {
+    if (this._sheetOpen) this._sheetOpen = false;
+    this._dispatchToolsToggle();
+  }
+
+  _dispatchToolsToggle() {
+    this.dispatchEvent(new CustomEvent('tools-toggle', { bubbles: true, composed: true }));
+  }
+
+  _openMobileSearch() {
+    this._sheetOpen = false;
+    if (this.toolsOpen) this._dispatchToolsToggle();
+    this._mobileSearchOpen = true;
+  }
+
+  /** Public: expand the pill into search (used by the Ctrl/Cmd+K shortcut). */
+  openSearch() {
+    this._openMobileSearch();
+  }
+
+  _handleSearchKeydown(e) {
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      this._closeMobileSearch();
+    } else if (e.key === 'Enter') {
+      e.target.blur();
     }
+  }
 
-    _closeSheet() {
-        if (!this._sheetOpen) return;
-        this._sheetOpen = false;
-        requestAnimationFrame(() => this.querySelector('.m-category')?.focus());
+  _applySortMode(mode) {
+    this.sortMode = mode === 'modified' ? 'modified' : 'custom';
+    this._notifyChange();
+  }
+
+  _handleSearch(e) {
+    this.searchValue = e.target.value;
+    this._notifyChange();
+  }
+
+  dismissSearch({ clear = false } = {}) {
+    const searchInput = this.querySelector('.search-input');
+    if (clear) {
+      this.searchValue = '';
+      this._notifyChange();
     }
+    this._mobileSearchOpen = false;
+    searchInput?.blur();
+  }
 
-    _handleSheetKeydown(e) {
-        if (e.key === 'Escape' && this._sheetOpen) {
-            e.preventDefault();
-            this._closeSheet();
-        }
-    }
+  _closeMobileSearch() {
+    this.dismissSearch({ clear: true });
+  }
 
-    _toggleTools() {
-        if (this._sheetOpen) this._sheetOpen = false;
-        this._dispatchToolsToggle();
-    }
+  _setCategory(cat) {
+    this.activeCategory = cat;
+    if (this.showFeaturedOnly) this.showFeaturedOnly = false;
+    if (this.showHiddenOnly) this.showHiddenOnly = false;
+    this._notifyChange();
+  }
 
-    _dispatchToolsToggle() {
-        this.dispatchEvent(new CustomEvent('tools-toggle', { bubbles: true, composed: true }));
-    }
+  _toggleFeatured() {
+    this.showFeaturedOnly = !this.showFeaturedOnly;
+    if (this.showFeaturedOnly) this.showHiddenOnly = false;
+    this._notifyChange();
+  }
 
-    _openMobileSearch() {
-        this._sheetOpen = false;
-        if (this.toolsOpen) this._dispatchToolsToggle();
-        this._mobileSearchOpen = true;
-    }
+  _toggleHidden() {
+    this.showHiddenOnly = !this.showHiddenOnly;
+    if (this.showHiddenOnly) this.showFeaturedOnly = false;
+    this._notifyChange();
+  }
 
-    _handleMobileSearchKeydown(e) {
-        if (e.key === 'Escape') {
-            e.preventDefault();
-            this._closeMobileSearch();
-        } else if (e.key === 'Enter') {
-            e.target.blur();
-        }
-    }
-
-    _applySortMode(mode) {
-        this.sortMode = mode === 'modified' ? 'modified' : 'custom';
-        this._notifyChange();
-    }
-
-    render() {
-        this._syncStateAttributes();
-        if (this._isMobile) return this._renderMobile();
-        const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
-        const showToggles = !this.isScrolled && (!this.hideViewToggle || !this.hideDetailsToggle);
-
-        return html`
-      <div class="controls-container">
-
-        <div class="search-section ${this.searchValue ? 'has-value' : ''}">
-          <input
-            type="search"
-            class="search-input"
-            placeholder="Search prompts…"
-            .value="${this.searchValue}"
-            @input="${this._handleSearch}"
-            @focus="${this._handleSearchFocus}"
-            @click="${this._handleSearchFocus}"
-            aria-label="Search prompts"
-          >
-          <span class="search-icon" aria-hidden="true">search</span>
-          <button
-            class="search-clear"
-            @click="${this._clearSearch}"
-            aria-label="Clear search"
-            tabindex="${this.searchValue ? '0' : '-1'}"
-          >close</button>
-        </div>
-
-        ${showToggles ? html`
-          <div class="divider"></div>
-          <div class="toggle-section">
-            ${!this.hideViewToggle ? html`
-              <div class="view-toggle" role="group" aria-label="View mode">
-                <button
-                  class="view-btn ${this.viewMode === 'list' ? 'active' : ''}"
-                  @click="${() => this._setViewMode('list')}"
-                  aria-label="List view"
-                  aria-pressed="${this.viewMode === 'list'}"
-                >format_list_bulleted</button>
-                <button
-                  class="view-btn ${this.viewMode === 'grid' ? 'active' : ''}"
-                  @click="${() => this._setViewMode('grid')}"
-                  aria-label="Grid view"
-                  aria-pressed="${this.viewMode === 'grid'}"
-                >grid_view</button>
-              </div>
-            ` : ''}
-            ${!this.hideDetailsToggle ? html`
-              <label
-                class="details-toggle-control ${this.showDetails ? 'is-on' : ''}"
-                @click="${this._toggleDetails}"
-              >
-                <input
-                  type="checkbox"
-                  ?checked="${this.showDetails}"
-                  tabindex="0"
-                  aria-label="Show descriptions"
-                >
-                <span class="toggle-track">
-                  <span class="toggle-thumb"></span>
-                </span>
-                <span class="toggle-label">Descriptions</span>
-              </label>
-            ` : ''}
-          </div>
-          <div class="divider"></div>
-        ` : this.isScrolled ? html`<div class="divider"></div>` : ''}
-
-        <label class="sort-control">
-          <span class="sort-label">Order</span>
-          <select
-            class="sort-select"
-            .value="${this.sortMode}"
-            @change="${this._setSortMode}"
-            aria-label="Prompt order"
-          >
-            <option value="custom">Custom</option>
-            <option value="modified">Date modified</option>
-          </select>
-        </label>
-
-        <div class="divider"></div>
-
-        <div class="category-section">
-          <div class="chips-track" role="tablist">
-            ${this.showFeaturedFilter ? html`
-              <button
-                class="chip chip--featured ${this.showFeaturedOnly ? 'active' : ''}"
-                aria-pressed="${this.showFeaturedOnly}"
-                @click="${this._toggleFeatured}"
-              >Featured</button>
-            ` : ''}
-            ${this.showHiddenFilter ? html`
-              <button
-                class="chip chip--hidden ${this.showHiddenOnly ? 'active' : ''}"
-                aria-pressed="${this.showHiddenOnly}"
-                @click="${this._toggleHidden}"
-              >Hidden</button>
-            ` : ''}
-            <button
-              class="chip ${this.activeCategory === 'all' && !this.showFeaturedOnly && !this.showHiddenOnly ? 'active' : ''}"
-              aria-pressed="${this.activeCategory === 'all' && !this.showFeaturedOnly && !this.showHiddenOnly}"
-              @click="${() => this._setCategory('all')}"
-            >All</button>
-            ${this.categories.map(cat => html`
-              <button
-                class="chip ${this.activeCategory === cat && !this.showFeaturedOnly && !this.showHiddenOnly ? 'active' : ''}"
-                aria-pressed="${this.activeCategory === cat && !this.showFeaturedOnly && !this.showHiddenOnly}"
-                @click="${() => this._setCategory(cat)}"
-              >${cat}</button>
-            `)}
-          </div>
-        </div>
-
-        <button
-          class="mobile-cancel"
-          @click="${this._closeMobileSearch}"
-          aria-label="Close search"
-        >Cancel</button>
-
-      </div>
-    `;
-    }
-
-    _handleSearch(e) {
-        this.searchValue = e.target.value;
-        this._notifyChange();
-    }
-
-    _handleSearchFocus() {
-        const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
-        if (isMobile && !this._mobileSearchOpen) {
-            this._mobileSearchOpen = true;
-        }
-    }
-
-    _clearSearch() {
-        this.searchValue = '';
-        this._notifyChange();
-        this.querySelector('.search-input')?.focus();
-    }
-
-    dismissSearch({ clear = false } = {}) {
-        const searchInput = this.querySelector('.search-input');
-        if (clear) {
-            this.searchValue = '';
-            this._notifyChange();
-        }
-        this._mobileSearchOpen = false;
-        searchInput?.blur();
-    }
-
-    _closeMobileSearch() {
-        this.dismissSearch({ clear: true });
-    }
-
-    _setViewMode(mode) {
-        this.viewMode = mode;
-        this._notifyChange();
-    }
-
-    _toggleDetails(e) {
-        e.preventDefault();
-        this.showDetails = !this.showDetails;
-        this._notifyChange();
-    }
-
-    _setCategory(cat) {
-        this.activeCategory = cat;
-        if (this.showFeaturedOnly) this.showFeaturedOnly = false;
-        if (this.showHiddenOnly) this.showHiddenOnly = false;
-        this._notifyChange();
-    }
-
-    _toggleFeatured() {
-        this.showFeaturedOnly = !this.showFeaturedOnly;
-        if (this.showFeaturedOnly) this.showHiddenOnly = false;
-        this._notifyChange();
-    }
-
-    _toggleHidden() {
-        this.showHiddenOnly = !this.showHiddenOnly;
-        if (this.showHiddenOnly) this.showFeaturedOnly = false;
-        this._notifyChange();
-    }
-
-    _setSortMode(e) {
-        this.sortMode = e.target.value === 'modified' ? 'modified' : 'custom';
-        this._notifyChange();
-    }
-
-    _notifyChange() {
-        this.dispatchEvent(new CustomEvent('filter-change', {
-            detail: {
-                search: this.searchValue,
-                viewMode: this.viewMode,
-                showDetails: this.showDetails,
-                category: this.activeCategory,
-                showFeaturedOnly: this.showFeaturedOnly,
-                showHiddenOnly: this.showHiddenOnly,
-                sortMode: this.sortMode
-            },
-            bubbles: true,
-            composed: true
-        }));
-    }
+  _notifyChange() {
+    this.dispatchEvent(new CustomEvent('filter-change', {
+      detail: {
+        search: this.searchValue,
+        viewMode: this.viewMode,
+        showDetails: this.showDetails,
+        category: this.activeCategory,
+        showFeaturedOnly: this.showFeaturedOnly,
+        showHiddenOnly: this.showHiddenOnly,
+        sortMode: this.sortMode
+      },
+      bubbles: true,
+      composed: true
+    }));
+  }
 }
 
 customElements.define('wy-controls-bar', WyControlsBar);
