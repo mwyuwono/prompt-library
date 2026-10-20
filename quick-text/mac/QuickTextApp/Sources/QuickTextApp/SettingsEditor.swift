@@ -69,14 +69,42 @@ struct SettingsEditor: View {
         )
     }
 
+    /// Two-column grid at wide panel widths so content fills the panel instead of
+    /// leaving the right side empty; single column below 700pt (same as before).
+    private var isWideGrid: Bool { width >= 700 }
+
+    private var settingsColumns: [GridItem] {
+        Array(repeating: GridItem(.flexible(), spacing: 12), count: isWideGrid ? 2 : 1)
+    }
+
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 18) {
-                primarySettingsColumn
-
-                settingsSection("Dictation") {
-                    dictationSection
+            LazyVGrid(columns: settingsColumns, alignment: .leading, spacing: 12) {
+                settingsSection("Appearance") {
+                    appearanceSection
                 }
+
+                settingsSection("Behavior") {
+                    behaviorSection
+                }
+
+                settingsSection("Dictation · API Key") {
+                    apiKeySection
+                }
+
+                settingsSection("Transcription") {
+                    transcriptionSection
+                }
+
+                settingsSection("Quick Dictate") {
+                    if let quickDictate = AppDelegate.shared?.quickDictate {
+                        QuickDictateSettingsSection(controller: quickDictate)
+                    }
+                }
+                .gridCellColumns(isWideGrid ? 2 : 1)
+
+                dictateUsageAndCostCard
+                    .gridCellColumns(isWideGrid ? 2 : 1)
 
                 settingsSection("Text Replacements") {
                     textReplacementsSection
@@ -113,16 +141,15 @@ struct SettingsEditor: View {
 
     // MARK: - Dictation (Gemini API key, Keychain only — never in the corpus)
 
-    private var dictationSection: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Powers Dictate mode transcription and processing. Stored in the login Keychain, never in Quick Text data.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                HStack(spacing: 10) {
-                    SecureField(GeminiKeychain.hasKey ? "Key saved — paste a new one to replace" : "Paste Gemini API key", text: $apiKeyInput)
-                        .textFieldStyle(.roundedBorder)
-                        .frame(maxWidth: 320)
+    private var apiKeySection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Powers Dictate mode transcription and processing. Stored in the login Keychain, never in Quick Text data.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            HStack(spacing: 10) {
+                SecureField(GeminiKeychain.hasKey ? "Key saved — paste a new one to replace" : "Paste Gemini API key", text: $apiKeyInput)
+                    .textFieldStyle(.roundedBorder)
+                    .frame(maxWidth: 280)
                     Button("Save") {
                         do {
                             try GeminiKeychain.save(apiKeyInput)
@@ -167,35 +194,29 @@ struct SettingsEditor: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
-            }
+        }
+    }
 
-            VStack(alignment: .leading, spacing: 6) {
-                Text("Transcription")
-                    .font(.subheadline.weight(.semibold))
-                Picker("Transcription", selection: Binding(
-                    get: { TranscriptionMode.stored },
-                    set: { TranscriptionMode.stored = $0 }
-                )) {
-                    ForEach(TranscriptionMode.allCases) { mode in
-                        Text(mode.title).tag(mode)
-                    }
+    private var transcriptionSection: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Picker("Transcription", selection: Binding(
+                get: { TranscriptionMode.stored },
+                set: { TranscriptionMode.stored = $0 }
+            )) {
+                ForEach(TranscriptionMode.allCases) { mode in
+                    Text(mode.title).tag(mode)
                 }
-                .pickerStyle(.segmented)
-                .frame(maxWidth: 320)
-                .labelsHidden()
+            }
+            .pickerStyle(.segmented)
+            .frame(maxWidth: 280)
+            .labelsHidden()
+            DisclosureGroup("How do the two modes differ?") {
                 Text("After take sends the whole recording at once. Real-time streams audio and shows words while you speak; if the stream drops, the take is transcribed after recording instead. Cost estimates use the model called for each attempt (see lifetime usage and cost below).")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: 480, alignment: .leading)
             }
-
-            if let quickDictate = AppDelegate.shared?.quickDictate {
-                QuickDictateSettingsSection(controller: quickDictate)
-            }
-
-            Divider()
-
-            dictateUsageAndCostCard
+            .font(.caption)
         }
     }
 
@@ -278,38 +299,38 @@ struct SettingsEditor: View {
         }
     }
 
-    private var primarySettingsColumn: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            settingsSection("Appearance") {
-                Picker("Appearance", selection: $appearance) {
-                    ForEach(AppAppearance.allCases) { option in
-                        Text(option.label).tag(option.rawValue)
-                    }
+    private var appearanceSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Picker("Appearance", selection: $appearance) {
+                ForEach(AppAppearance.allCases) { option in
+                    Text(option.label).tag(option.rawValue)
                 }
-                .pickerStyle(.segmented)
-                .labelsHidden()
-                .frame(maxWidth: 280, alignment: .leading)
-                .onChange(of: appearance) { _, raw in
-                    (AppAppearance(rawValue: raw) ?? .system).apply()
-                }
-                Text("Stored on this Mac only.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
             }
+            .pickerStyle(.segmented)
+            .labelsHidden()
+            .frame(maxWidth: 280, alignment: .leading)
+            .onChange(of: appearance) { _, raw in
+                (AppAppearance(rawValue: raw) ?? .system).apply()
+            }
+            Text("Stored on this Mac only.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+    }
 
-            settingsSection("Behavior") {
-                Toggle("Close card after copying a part (atom)", isOn: Binding(
-                    get: { settings.wrappedValue.closeCardOnCopy ?? Settings.defaultCloseCardOnCopy },
-                    set: { settings.wrappedValue.closeCardOnCopy = $0 }
-                ))
-                Button {
-                    copyCorpusPath()
-                } label: {
-                    Label(didCopyPath ? "Path copied" : "Copy corpus file path", systemImage: didCopyPath ? "checkmark" : "doc.on.doc")
-                }
-                .buttonStyle(.glass)
-                .help("Copies the path to quick-text.json, for handing off to a coding agent for bulk edits.")
+    private var behaviorSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Toggle("Close card after copying a part (atom)", isOn: Binding(
+                get: { settings.wrappedValue.closeCardOnCopy ?? Settings.defaultCloseCardOnCopy },
+                set: { settings.wrappedValue.closeCardOnCopy = $0 }
+            ))
+            Button {
+                copyCorpusPath()
+            } label: {
+                Label(didCopyPath ? "Path copied" : "Copy corpus file path", systemImage: didCopyPath ? "checkmark" : "doc.on.doc")
             }
+            .buttonStyle(.glass)
+            .help("Copies the path to quick-text.json, for handing off to a coding agent for bulk edits.")
         }
     }
 

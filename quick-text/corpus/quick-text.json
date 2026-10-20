@@ -296,14 +296,14 @@
         "llmformat"
       ],
       "textReplacement" : {
-        "lastSyncedAt" : "2026-09-10T16:23:39Z",
-        "lastSyncedValue" : "Write for concision and clarity without changing the meaning or effectiveness. Write for an LLM audience, using direct imperative language and removing human-oriented explanation or filler.",
+        "lastSyncedAt" : "2026-10-15T19:42:12Z",
+        "lastSyncedValue" : "Write for a frontier LLM using direct, concise, imperative language. Preserve only instructions that materially improve task execution beyond what the model can reasonably infer from the request or supplied materials.\n\nExclude general domain knowledge, standard practices, self-evident requirements, redundant instructions, and human-oriented explanations. Optimize for minimum sufficient context, not comprehensiveness. Treat every sentence as consuming a limited context budget.\n\nRefer to external inputs using generic, indirect labels (e.g., \"the source image\"). Return only the reusable prompt, without commentary.",
         "shortcut" : "xllm",
         "syncEnabled" : true
       },
       "title" : "Write for an LLM",
-      "updatedAt" : "2026-10-01T02:10:00Z",
-      "value" : "Write for concision and clarity without changing the meaning or effectiveness. Write for an LLM audience, using direct imperative language and removing human-oriented explanation or filler.",
+      "updatedAt" : "2026-10-15T19:42:06Z",
+      "value" : "Write for a frontier LLM using direct, concise, imperative language. Preserve only instructions that materially improve task execution beyond what the model can reasonably infer from the request or supplied materials.\n\nExclude general domain knowledge, standard practices, self-evident requirements, redundant instructions, and human-oriented explanations. Optimize for minimum sufficient context, not comprehensiveness. Treat every sentence as consuming a limited context budget.\n\nRefer to external inputs using generic, indirect labels (e.g., \"the source image\"). Return only the reusable prompt, without commentary.",
       "visibility" : "public"
     },
     {
@@ -867,14 +867,14 @@
 
       ],
       "textReplacement" : {
-        "lastSyncedAt" : "2026-09-10T16:27:31Z",
-        "lastSyncedValue" : "Your ENTIRE response—including all code, inline comments, explanations, setup instructions, and usage examples—MUST be contained within a SINGLE markdown code block. Do NOT break the response into separate sections, distinct code blocks, or conversational text outside the block. \nPlace all narrative context, instructions, or documentation as code comments (e.g., `#` or `\/\/`) inside the single code block so the entire output can be copied and pasted at once without syntax errors.\n",
+        "lastSyncedAt" : "2026-10-10T22:45:05Z",
+        "lastSyncedValue" : "Provide only the requested output. Omit introductions, acknowledgments, setup commentary, and closing remarks.\n\nYour response, including code and inline comments, MUST be contained within a SINGLE markdown code block. Do NOT break the response into separate sections, distinct code blocks, or conversational text outside the block. \nPlace any neccessary narrative context, instructions, or documentation as code comments (e.g., `#` or `\/\/`) inside the single code block so the entire output can be copied and pasted at once without syntax errors.",
         "shortcut" : "xblock",
         "syncEnabled" : true
       },
       "title" : "Provide results in Code Block",
-      "updatedAt" : "2026-10-01T02:10:00Z",
-      "value" : "Your ENTIRE response—including all code, inline comments, explanations, setup instructions, and usage examples—MUST be contained within a SINGLE markdown code block. Do NOT break the response into separate sections, distinct code blocks, or conversational text outside the block. \nPlace all narrative context, instructions, or documentation as code comments (e.g., `#` or `\/\/`) inside the single code block so the entire output can be copied and pasted at once without syntax errors.\n",
+      "updatedAt" : "2026-10-10T22:44:59Z",
+      "value" : "Provide only the requested output. Omit introductions, acknowledgments, setup commentary, and closing remarks.\n\nYour response, including code and inline comments, MUST be contained within a SINGLE markdown code block. Do NOT break the response into separate sections, distinct code blocks, or conversational text outside the block. \nPlace any neccessary narrative context, instructions, or documentation as code comments (e.g., `#` or `\/\/`) inside the single code block so the entire output can be copied and pasted at once without syntax errors.",
       "visibility" : "private"
     },
     {
@@ -1019,14 +1019,14 @@
 
       ],
       "textReplacement" : {
-        "lastSyncedAt" : "2026-09-30T01:01:11Z",
-        "lastSyncedValue" : "I’ll proceed in a new chat. Prepare a handoff file in the project's working directory (or scratchpad). Include: objective, status, relevant context, constraints, decisions, open issues, and next steps. Be dense and factual—zero narrative. Only include details absent from files, git history, or memory. Flag unverified items.\n\nReply with a resume prompt inside a code block (max 3 lines) containing the file path. This prompt must instruct the new session to read the file, verify its claims against the current state, and execute the next step.\n\nIf possible, copy the resume prompt to my clipboard and let me know its ready for me to paste. ",
+        "lastSyncedAt" : "2026-10-15T18:11:31Z",
+        "lastSyncedValue" : "I’ll proceed in a new chat. Prepare a handoff file in the project's working directory (or scratchpad). Include: objective, status, relevant context, constraints, decisions, open issues, and next steps. Be dense and factual—zero narrative. Only include details absent from files, git history, or memory. Flag unverified items.\n\nReply with a resume prompt inside a code block (max 3 lines) containing the file path. This prompt must instruct the new session to read the file, verify its claims against the current state, and execute.\n\nIf possible, copy the resume prompt to my clipboard and let me know its ready for me to paste. ",
         "shortcut" : "xhandoff",
         "syncEnabled" : true
       },
       "title" : "Handoff task to a new chat",
-      "updatedAt" : "2026-10-01T02:10:00Z",
-      "value" : "I’ll proceed in a new chat. Prepare a handoff file in the project's working directory (or scratchpad). Include: objective, status, relevant context, constraints, decisions, open issues, and next steps. Be dense and factual—zero narrative. Only include details absent from files, git history, or memory. Flag unverified items.\n\nReply with a resume prompt inside a code block (max 3 lines) containing the file path. This prompt must instruct the new session to read the file, verify its claims against the current state, and execute the next step.\n\nIf possible, copy the resume prompt to my clipboard and let me know its ready for me to paste. ",
+      "updatedAt" : "2026-10-15T18:11:23Z",
+      "value" : "I’ll proceed in a new chat. Prepare a handoff file in the project's working directory (or scratchpad). Include: objective, status, relevant context, constraints, decisions, open issues, and next steps. Be dense and factual—zero narrative. Only include details absent from files, git history, or memory. Flag unverified items.\n\nReply with a resume prompt inside a code block (max 3 lines) containing the file path. This prompt must instruct the new session to read the file, verify its claims against the current state, and execute.\n\nIf possible, copy the resume prompt to my clipboard and let me know its ready for me to paste. ",
       "visibility" : "public"
     }
   ],
@@ -1077,9 +1077,9 @@
       "xtune"
     ],
     "paletteSource" : "Robert Brown Fabric Collection",
-    "textReplacementLastSyncAt" : "2026-09-30T01:01:11Z"
+    "textReplacementLastSyncAt" : "2026-10-15T19:42:12Z"
   },
-  "updatedAt" : "2026-10-06T16:29:40Z",
+  "updatedAt" : "2026-10-15T19:42:12Z",
   "variables" : [
     {
       "id" : "var-1783398724430",

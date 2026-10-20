@@ -18,8 +18,12 @@ struct DictateUsageAndCostCard: View {
                     Text("Lifetime usage & cost").font(.subheadline.weight(.semibold))
                     Text(cost(statsStore.cumulativeEstimatedCost))
                         .font(.title3.monospacedDigit().weight(.semibold))
-                    Text("Estimated · Google billing may differ")
-                        .font(.caption).foregroundStyle(.secondary)
+                    HStack(spacing: 6) {
+                        Text("Estimated · Google billing may differ")
+                            .font(.caption).foregroundStyle(.secondary)
+                        Link("Open Google Cloud Billing", destination: URL(string: "https://console.cloud.google.com/billing/01C1D7-4513B5-767BD1/reports?project=gen-lang-client-0995209463")!)
+                            .font(.caption)
+                    }
                 }
                 Spacer()
                 Button("Reset…") { confirmReset = true }
