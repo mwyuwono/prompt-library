@@ -878,7 +878,8 @@ Server will start on http://localhost:3001`;
             return;
         }
 
-        const isSingleColumn = window.matchMedia('(max-width: 899px)').matches;
+        // Tiles sit on a uniform 4/3/2-column grid at every width (styles.css), so masonry row-spans never apply.
+        const isSingleColumn = true;
         this.clearMasonryFillers();
         const cards = Array.from(this.promptGrid.querySelectorAll('.prompt-card'));
 
