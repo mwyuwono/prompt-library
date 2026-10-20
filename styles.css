@@ -1088,3 +1088,162 @@ mark {
     .variable-count-badge.hidden { display: none; }
     .card-image                  { display: none; }
 }
+
+/* ==========================================================================
+   DESKTOP — EDITORIAL GLASS (viewport above 640px)
+   Values from the Editorial Glass canvas tokens.css; scoped as --eg-* because
+   the local tokens differ. Appended last so these rules win ties over the
+   earlier desktop rules in this file and in components.css.
+   ========================================================================== */
+@media (min-width: 641px) {
+    :root {
+        --eg-surface-paper: #f5f5f2;
+        --eg-surface-raised: #ffffff;
+        --eg-surface-fill: #e8e8e3;
+        --eg-surface-glass: #ffffffcc;
+        --eg-ink: #1c1d1a;
+        --eg-ink-muted: #66695f;
+        --eg-accent: #253122;
+        --eg-accent-ink: #ffffff;
+        --eg-radius-md: 11px;
+        --eg-radius-lg: 18px;
+        --eg-font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+        --eg-font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+
+    body,
+    .prompt-area { background-color: var(--eg-surface-paper); }
+
+    /* Glass navigation bar (page header only; the prompt modal has its own .header-top) */
+    .page-wrapper > .header-top {
+        width: min(1440px, calc(100% - 48px));
+        margin: 16px auto 0;
+        top: 16px;
+        min-height: 56px;
+        padding: 8px 12px 8px 24px;
+        border: 0;
+        border-radius: var(--eg-radius-lg);
+        background: var(--eg-surface-glass);
+        -webkit-backdrop-filter: blur(24px) saturate(160%);
+        backdrop-filter: blur(24px) saturate(160%);
+        color: var(--eg-ink);
+    }
+    .header-logo-text {
+        font-family: var(--eg-font-display);
+        font-style: normal;
+        font-weight: 600;
+        font-size: 22px;
+        line-height: 28px;
+        color: var(--eg-ink);
+    }
+    .page-wrapper > .header-top .quick-link-btn {
+        font-family: var(--eg-font-sans);
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 20px;
+        letter-spacing: -0.2px;
+        text-transform: none;
+        color: var(--eg-ink);
+    }
+    .page-wrapper > .header-top .quick-link-btn:hover { border-bottom-color: transparent; opacity: 0.7; }
+    .vault-link {
+        width: 36px;
+        height: 36px;
+        border: 0;
+        background: var(--eg-surface-fill);
+        color: var(--eg-ink);
+    }
+    .vault-link:hover,
+    .vault-link:focus-visible { border-color: transparent; }
+
+    /* Tools row: search, segmented filter, order */
+    .controls-bar {
+        padding: 48px 24px 32px;
+        background-color: var(--eg-surface-paper);
+    }
+
+    /* Prompt grid: uniform tiles, 4 columns */
+    .view-grid .prompt-grid,
+    .prompt-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-auto-rows: auto;
+        grid-auto-flow: row;
+        gap: 20px;
+        width: 100%;
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 0 24px 96px;
+        box-sizing: border-box;
+        background: none;
+        background-clip: border-box;
+    }
+    @media (min-width: 641px) and (max-width: 1068px) {
+        .view-grid .prompt-grid,
+        .prompt-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+    @media (min-width: 641px) and (max-width: 833px) {
+        .view-grid .prompt-grid,
+        .prompt-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    }
+
+    .prompt-grid > .prompt-card,
+    .prompt-grid > .prompt-card:not(.has-image):not([data-has-image="true"]) {
+        display: grid;
+        grid-template-rows: auto 1fr;
+        gap: 12px;
+        align-self: stretch;
+        height: auto;
+        padding: 12px;
+        background: var(--eg-surface-raised);
+        border: 0;
+        border-radius: var(--eg-radius-lg);
+        opacity: 1;
+    }
+    .prompt-grid > .prompt-card:hover,
+    .prompt-grid > .prompt-card:active { opacity: 1; }
+
+    .prompt-grid .card-thumbnail {
+        aspect-ratio: 4 / 3;
+        margin: 0;
+        border-radius: var(--eg-radius-md);
+        background-color: var(--eg-surface-fill);
+    }
+
+    /* Favorite-style glass control over the image */
+    .prompt-grid .card-visibility-tools { top: 20px; right: 20px; }
+    .prompt-grid .prompt-hidden-toggle {
+        width: 36px;
+        height: 36px;
+        border: 0;
+        background: var(--eg-surface-glass);
+        color: var(--eg-ink);
+        -webkit-backdrop-filter: blur(24px) saturate(160%);
+        backdrop-filter: blur(24px) saturate(160%);
+    }
+    .prompt-grid .prompt-hidden-toggle:hover { background: var(--eg-surface-raised); border: 0; }
+
+    .prompt-grid .card-content {
+        gap: 0;
+        padding: 4px 4px 8px;
+    }
+    .prompt-grid .card-title {
+        font-family: var(--eg-font-display);
+        font-size: 22px;
+        line-height: 28px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        margin: 0;
+        color: var(--eg-ink);
+    }
+    .prompt-grid .card-description {
+        max-width: none;
+        margin: 8px 0 0;
+        font-family: var(--eg-font-sans);
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: -0.01em;
+        color: var(--eg-ink-muted);
+    }
+    .prompt-grid .card-footer { display: none; }
+}

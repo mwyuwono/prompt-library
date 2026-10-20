@@ -4354,3 +4354,399 @@ wy-modal .wy-modal-footer {
     right: var(--s-2);
   }
 }
+
+/* ==========================================================================
+   DESKTOP — EDITORIAL GLASS (viewport above 640px)
+   wy-controls-bar and wy-prompt-modal. Tokens (--eg-*) are defined in
+   styles.css. Appended last so these rules win ties over the earlier
+   desktop rules in this file.
+   ========================================================================== */
+@media (min-width: 641px) {
+    /* ---- Controls bar: search field and segmented filter on fill ---- */
+    wy-controls-bar::after,
+    wy-controls-bar .divider { display: none; }
+
+    wy-controls-bar .controls-container {
+        max-width: 1392px;
+        gap: 16px;
+    }
+
+    wy-controls-bar .search-section,
+    wy-controls-bar[data-scrolled] .search-section {
+        flex: 0 1 360px;
+        width: 360px;
+        min-width: 220px;
+    }
+
+    wy-controls-bar .search-input {
+        height: 36px;
+        padding: 0 16px 0 40px;
+        border: 0;
+        border-radius: 9999px;
+        background: var(--eg-surface-fill);
+        color: var(--eg-ink);
+        font-family: var(--eg-font-sans);
+        font-size: 15px;
+        line-height: 20px;
+        letter-spacing: -0.2px;
+    }
+    wy-controls-bar .search-input::placeholder { color: var(--eg-ink-muted); font-weight: 400; }
+    wy-controls-bar .search-input:hover,
+    wy-controls-bar .search-input:focus {
+        border: 0;
+        background: var(--eg-surface-fill);
+        box-shadow: none;
+    }
+    wy-controls-bar .search-input:focus-visible,
+    wy-controls-bar .search-input:focus {
+        outline: 2px solid var(--eg-accent);
+        outline-offset: 2px;
+    }
+    wy-controls-bar .search-icon { color: var(--eg-ink-muted); }
+
+    wy-controls-bar .sort-control { order: 3; }
+    wy-controls-bar .sort-label {
+        font-family: var(--eg-font-sans);
+        font-size: 14px;
+        font-weight: 400;
+        letter-spacing: -0.2px;
+        text-transform: none;
+        color: var(--eg-ink-muted);
+    }
+    wy-controls-bar .sort-select {
+        height: 36px;
+        padding: 0 32px 0 16px;
+        border: 0;
+        background-color: var(--eg-surface-fill);
+        color: var(--eg-ink);
+        font-family: var(--eg-font-sans);
+        font-size: 14px;
+        font-weight: 400;
+        letter-spacing: -0.2px;
+    }
+    wy-controls-bar .sort-select:focus-visible {
+        border-color: transparent;
+        box-shadow: none;
+        outline: 2px solid var(--eg-accent);
+        outline-offset: 2px;
+    }
+
+    wy-controls-bar .category-section { order: 2; }
+    wy-controls-bar .chips-track {
+        display: inline-flex;
+        width: max-content;
+        max-width: 100%;
+        gap: 4px;
+        padding: 4px;
+        border-radius: 9999px;
+        background: var(--eg-surface-fill);
+    }
+    wy-controls-bar .chip,
+    wy-controls-bar .chip.active,
+    wy-controls-bar .chip.active:hover {
+        height: 28px;
+        padding: 0 12px;
+        gap: 6px;
+        border: 0;
+        border-radius: 9999px;
+        font-family: var(--eg-font-sans);
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 20px;
+        letter-spacing: -0.2px;
+        text-transform: none;
+        color: var(--eg-ink-muted);
+        background: transparent;
+    }
+    wy-controls-bar .chip:hover {
+        color: var(--eg-ink);
+        background: transparent;
+        border-color: transparent;
+    }
+    wy-controls-bar .chip.active,
+    wy-controls-bar .chip.active:hover {
+        color: var(--eg-ink);
+        background: var(--eg-surface-raised);
+        border-color: transparent;
+    }
+    wy-controls-bar .chip:focus-visible {
+        outline: 2px solid var(--eg-accent);
+        outline-offset: 2px;
+    }
+
+    /* ---- Prompt detail (wy-prompt-modal, visual-selector layout) ---- */
+    wy-prompt-modal .modal-container.visual-selector-modal {
+        width: min(calc(100vw - 48px), 1280px);
+        max-width: 1280px;
+        max-height: calc(100dvh - 48px);
+        background: var(--eg-surface-paper);
+        border: 0;
+        border-radius: var(--eg-radius-lg);
+        color: var(--eg-ink);
+    }
+
+    wy-prompt-modal .header {
+        padding: 24px 40px 8px;
+    }
+    wy-prompt-modal .header-actions-left,
+    wy-prompt-modal .header-actions { gap: 8px; }
+
+    wy-prompt-modal .icon-btn.filled,
+    wy-prompt-modal .icon-btn.filled:hover {
+        width: 40px;
+        height: 40px;
+        border: 0;
+        border-radius: 9999px;
+        background: var(--eg-surface-glass);
+        color: var(--eg-ink);
+    }
+    wy-prompt-modal .icon-btn.filled:hover { background: var(--eg-surface-raised); }
+    wy-prompt-modal .icon-btn.filled:focus-visible,
+    wy-prompt-modal .labeled-btn:focus-visible {
+        outline: 2px solid var(--eg-accent);
+        outline-offset: 2px;
+    }
+
+    wy-prompt-modal .labeled-btn.primary,
+    wy-prompt-modal .labeled-btn.primary:hover {
+        height: 36px;
+        padding: 0 24px;
+        border-radius: 9999px;
+        background: var(--eg-accent);
+        color: var(--eg-accent-ink);
+        font-size: 15px;
+        font-weight: 400;
+        letter-spacing: -0.2px;
+        text-transform: none;
+    }
+    wy-prompt-modal .labeled-btn.primary:hover { opacity: 0.92; transform: none; }
+
+    wy-prompt-modal .content { padding-top: 0; }
+
+    wy-prompt-modal .title-group h2 {
+        font-family: var(--eg-font-display);
+        font-size: 44px;
+        line-height: 48px;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        margin: 0;
+        color: var(--eg-ink);
+    }
+    wy-prompt-modal .header-main { margin-bottom: 0; }
+
+    /* Instructions: eyebrow label, 17px body */
+    wy-prompt-modal .prompt-instructions-heading {
+        margin: 24px 0 0;
+        font-family: var(--eg-font-sans);
+        font-size: 11px;
+        line-height: 14px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--eg-ink-muted);
+    }
+    wy-prompt-modal .prompt-instructions-copy {
+        margin-top: 8px;
+        font-family: var(--eg-font-sans);
+        font-size: 17px;
+        line-height: 26px;
+        letter-spacing: -0.2px;
+        color: var(--eg-ink);
+    }
+
+    wy-prompt-modal .visual-selector-layout {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 480px);
+        gap: 48px;
+        padding: 0 40px 40px;
+    }
+
+    /* Hero: 4:3 frame with radius 11px */
+    wy-prompt-modal .visual-selected-panel { gap: 16px; margin-top: 24px; margin-bottom: 0; }
+    wy-prompt-modal .variation-image {
+        margin: 0;
+        aspect-ratio: 4 / 3;
+        border-radius: var(--eg-radius-md);
+        overflow: hidden;
+        background: var(--eg-surface-fill);
+    }
+    wy-prompt-modal .variation-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 0;
+    }
+
+    /* Variant select row */
+    wy-prompt-modal .variation-name {
+        font-family: var(--eg-font-sans);
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--eg-ink);
+    }
+
+    /* Tabs */
+    wy-prompt-modal .tabs-container { padding: 0; margin-top: 24px; }
+    wy-prompt-modal .tab-item {
+        font-family: var(--eg-font-sans);
+        font-size: 15px;
+        font-weight: 400;
+        letter-spacing: -0.2px;
+        color: var(--eg-ink-muted);
+    }
+    wy-prompt-modal .tab-item.active { color: var(--eg-ink); font-weight: 400; }
+    wy-prompt-modal .clear-btn { color: var(--eg-ink); font-family: var(--eg-font-sans); }
+
+    wy-prompt-modal .visual-selector-main .body { padding-top: 16px; }
+
+    /* Variant rail: raised panel with 3 columns */
+    wy-prompt-modal .visual-selector-rail {
+        top: 0;
+        max-height: calc(100dvh - 140px);
+        padding: 24px;
+        gap: 16px;
+        background: var(--eg-surface-raised);
+        border: 0;
+        border-radius: var(--eg-radius-lg);
+    }
+    wy-prompt-modal .visual-selector-rail .visual-variation-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 20px 16px;
+    }
+    wy-prompt-modal .variation-description-heading {
+        margin: 0;
+        font-family: var(--eg-font-sans);
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--eg-ink-muted);
+    }
+
+    wy-prompt-modal .visual-variation-media,
+    wy-prompt-modal .visual-variation-text-tile {
+        aspect-ratio: 4 / 3;
+        border-radius: var(--eg-radius-md);
+        background: var(--eg-surface-fill);
+    }
+    wy-prompt-modal .visual-variation-text-tile { min-height: 0; }
+    wy-prompt-modal .visual-variation-tile.selected .visual-variation-media,
+    wy-prompt-modal .visual-variation-tile.selected .visual-variation-text-tile {
+        outline: 2px solid var(--eg-ink);
+        outline-offset: 2px;
+    }
+    wy-prompt-modal .visual-variation-copy {
+        margin-top: 12px;
+        padding: 0;
+        gap: 4px;
+    }
+    wy-prompt-modal .visual-variation-name {
+        font-family: var(--eg-font-display);
+        font-style: normal;
+        font-size: 19px;
+        font-weight: 600;
+        line-height: 24px;
+        color: var(--eg-ink);
+    }
+    wy-prompt-modal .visual-variation-mark { display: none; }
+    wy-prompt-modal .visual-variation-description {
+        font-family: var(--eg-font-sans);
+        font-size: 14px;
+        line-height: 20px;
+        color: var(--eg-ink-muted);
+    }
+}
+
+/* Stacked detail layout between 641px and 1068px: rail moves below the main column */
+@media (min-width: 641px) and (max-width: 1068px) {
+    wy-prompt-modal .visual-selector-layout { grid-template-columns: minmax(0, 1fr); }
+    wy-prompt-modal .visual-selector-rail { position: static; max-height: none; }
+}
+
+/* Standard (single-column) prompt detail: same surface and radius as the visual layout */
+@media (min-width: 641px) {
+    wy-prompt-modal .modal-container {
+        background: var(--eg-surface-paper);
+        border: 0;
+        border-radius: var(--eg-radius-lg);
+    }
+    wy-prompt-modal .variation-selector-container {
+        margin: 24px 40px 0;
+        padding: 20px 24px;
+        background: var(--eg-surface-raised);
+        border: 0;
+        border-radius: var(--eg-radius-lg);
+    }
+    wy-prompt-modal .body > .variation-selector-container { margin: 24px 0 0; }
+    wy-prompt-modal .variation-select-native {
+        min-height: 44px;
+        padding: 0 48px 0 20px;
+        border: 0;
+        border-radius: 9999px;
+        background-color: var(--eg-surface-fill);
+        color: var(--eg-ink);
+        font-family: var(--eg-font-sans);
+        font-size: 15px;
+        font-weight: 400;
+        letter-spacing: -0.2px;
+    }
+    wy-prompt-modal .variation-select-wrap .material-symbols-outlined { right: 16px; color: var(--eg-ink-muted); }
+}
+
+/* Fullscreen prompt detail: a 1440 page with the main column and a 660px variant rail (design: PromptDetail) */
+@media (min-width: 641px) {
+    wy-prompt-modal .modal-container.fullscreen {
+        inset: 0;
+        width: 100%;
+        max-width: none;
+        height: 100dvh;
+        max-height: none;
+        background: var(--eg-surface-paper);
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+    wy-prompt-modal .modal-container.fullscreen .header,
+    wy-prompt-modal .modal-container.fullscreen .content {
+        width: min(100%, 1440px);
+        margin-inline: auto;
+        box-sizing: border-box;
+    }
+    wy-prompt-modal .modal-container.fullscreen .header { padding: 24px 48px 8px; }
+    wy-prompt-modal .modal-container.fullscreen.visual-selector-modal .visual-selector-layout {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 660px);
+        gap: 48px;
+        padding: 0 48px 48px;
+    }
+    wy-prompt-modal .modal-container.fullscreen .visual-selector-rail {
+        max-height: calc(100dvh - 140px);
+    }
+    wy-prompt-modal .modal-container.fullscreen .visual-selector-rail .visual-variation-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    wy-prompt-modal .modal-container.fullscreen .variation-image img {
+        max-height: none;
+    }
+}
+
+@media (min-width: 834px) and (max-width: 1068px) {
+    wy-prompt-modal .modal-container.fullscreen.visual-selector-modal .visual-selector-layout {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 340px);
+        gap: 32px;
+        padding: 0 40px 40px;
+    }
+    wy-prompt-modal .modal-container.fullscreen .visual-selector-rail .visual-variation-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 641px) and (max-width: 833px) {
+    wy-prompt-modal .modal-container.fullscreen.visual-selector-modal .visual-selector-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    wy-prompt-modal .modal-container.fullscreen .visual-selector-rail {
+        position: static;
+        max-height: none;
+    }
+}
