@@ -1085,7 +1085,6 @@ mark {
 @media (max-width: 640px) {
     /* Design tokens without a local equivalent (Editorial Glass canvas values) */
     :root {
-        --eg-raised: #ffffff;
         --eg-fill: #e8e8e3;
         --eg-glass: rgb(255 255 255 / 80%);
         --eg-accent: #253122;
@@ -1096,7 +1095,10 @@ mark {
     /* No top header on the library screen; the floating pill replaces it */
     body:not(.private-vault-page) .page-wrapper > .header-top { display: none; }
 
-    .main-content { padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px)); }
+    /* The document scrolls: no bounded inner scroller, rows pass under the bottom pill */
+    .page-wrapper { height: auto; min-height: 100%; }
+    .main-content { overflow: clip; padding-bottom: 0; }
+    .main-container { height: auto; }
 
     .controls-bar {
         padding: 0;
@@ -1104,40 +1106,36 @@ mark {
         --wy-controls-bar-padding: 0;
     }
 
-    .prompt-area { padding-top: var(--space-lg); }
+    .prompt-area {
+        flex: none;
+        overflow: visible;
+        padding-top: var(--s-2);
+    }
 
-    /* One raised sheet of rows separated by hairline rules */
+    /* Paper rows: no raised sheet; hairline rules between rows, 16px gutters */
     .view-grid .prompt-grid {
         display: flex;
         flex-direction: column;
         gap: 0;
-        margin: 0 16px;
-        padding: 0 16px;
-        background: var(--eg-raised);
-        background-clip: border-box;
-        border-radius: var(--eg-radius-lg);
+        margin: 0;
+        padding: 0 16px calc(112px + env(safe-area-inset-bottom, 0px));
+        background: none;
+        border-radius: 0;
     }
 
     .prompt-card {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) 88px;
-        grid-template-rows: auto;
-        column-gap: 16px;
-        align-items: start;
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
         position: relative;
         padding: 16px 0;
         background: transparent;
     }
 
-    .prompt-card + .prompt-card { border-top: 1px solid var(--paper-edge); }
-
-    .prompt-card:not(.has-image):not([data-has-image="true"]) {
-        grid-template-columns: minmax(0, 1fr);
-    }
+    .prompt-card + .prompt-card { border-top: var(--hair) solid var(--paper-edge); }
 
     .prompt-card .card-thumbnail {
-        grid-column: 2;
-        grid-row: 1;
+        flex: 0 0 88px;
         width: 88px;
         height: 88px;
         margin: 0;
@@ -1162,8 +1160,7 @@ mark {
     }
 
     .prompt-card .card-content {
-        grid-column: 1;
-        grid-row: 1;
+        flex: 1 1 auto;
         min-width: 0;
         padding: 0;
     }
