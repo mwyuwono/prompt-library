@@ -293,6 +293,37 @@
     "customOrder": 9
   },
   {
+    "id": "clay-form-study-guides",
+    "title": "Clay Form Study & Measurement Guides",
+    "description": "Builds a neutral clay form study and measured guide lines from a finished painting.",
+    "image": "https://prompt-library-assets-009019643313.s3.amazonaws.com/prompt-previews/clay-form-study-guides-preview.jpg",
+    "category": "Art",
+    "icon": "straighten",
+    "featured": false,
+    "slug": "clay-form-study-measurement-guides",
+    "relatedPromptIds": [
+      "contour-form-study"
+    ],
+    "template": "",
+    "variables": [],
+    "steps": [
+      {
+        "id": "clay-form-study",
+        "name": "Clay Form Study",
+        "instructions": "1. Upload the finished painting.\n2. Answer any clarification questions the model asks.\n3. Reply \"continue\" once the clay form study is accepted.",
+        "template": "ROLE\nYou are an anatomical analyst and form-study illustrator helping an oil painter understand the 3D structure of a subject before and during painting. The attached image is a finished oil painting I am copying as a precise reproduction. Your job is not to make an attractive picture. Your job is to make an accurate structural study of THIS subject as depicted.\n\nNON-NEGOTIABLE RULES\n1. Match the reference exactly: same crop, aspect ratio, camera angle, pose, head tilt, and light direction. Nothing may be added, removed, rotated, mirrored, or re-centered. I will flip back and forth between your image and the reference, so features must land in the same positions.\n2. Measure this subject. Do not idealize, symmetrize, or correct toward textbook proportions. Keep the subject's actual asymmetries (uneven eye heights, tilted brow line, off-center features, shoulder tilt). The painting's drawing is the target, even where it departs from standard anatomy. If something looks anatomically implausible, say so in the text notes. Do not fix it in the image.\n3. Show only what is visible or directly implied by the visible form. Anatomy outside the crop must not be invented. If a guide needs to extend into hidden areas, mark it \"inferred\" or leave it out.\n4. Ignore the painting's color, brushwork, medium, hair detail, clothing pattern, and skin texture. They are not part of the study.\n\nBEFORE GENERATING (clarification gate)\nFirst look at the reference and tell me in 3 to 6 lines: the crop (e.g., close head / bust / torso / full figure), the pose and head direction, and the light direction. Then ask me up to 3 questions, ONLY if the answer would change the anatomy you draw. Examples: hair, hats, or drapery hiding structure; ambiguous head turn or pose; an unclear light source; or a stylized area where I may want the painted version and not a corrected one. If nothing is ambiguous, state your assumptions and proceed without asking.\n\nIMAGE A: FORM STUDY (no guides)\nRender the subject as a neutral, matte, single-material gray clay or mannequin sculpture. No skin texture, color, or hair strands. Use simplified hair, clothing, and drapery as sculpted masses only where they affect form. Show clear planar structure (for a head: forehead, temple, brow ridge, cheekbone, nose planes, mouth/muzzle mass, jaw, chin, and the neck's cylinder; for the body: the major masses of ribcage, pelvis, shoulders, and limbs). Light it from the same direction as the reference, with soft but readable form shadows so volume reads clearly. Plain neutral background. No text.\n\nDO NOT, unless I ask in a later message: produce extra views (profile, 3/4, rotation), add cast-shadow shape maps, or add color."
+      },
+      {
+        "id": "guide-overlay-report",
+        "name": "Guide Overlay & Text Report",
+        "instructions": "1. Reply \"continue\" after the clay form study.\n2. Use the legend and checklist to check your canvas.",
+        "template": "IMAGE B: GUIDE OVERLAY\nTake Image A exactly as it is (no changes to the form, position, or lighting) and add thin, precise, color-coded guide lines on top. Choose guide density by what the crop shows, and cap it at about 15 to 20 lines in total so the image stays readable.\n- HEAD (always, when a head is visible): centerline of the face following the form (curving over the forehead, nose, mouth, and chin); brow line, eye line, nose-base line, mouth line, and chin line, each following the head's actual tilt and turn; plumb lines dropping from the inner eye corners, the pupils, and the mouth corners; the axes of the eyes and of the brows, with their tilt; and eye-width intervals across the face. Mark the key skull landmarks with small dots only (brow ridge, cheekbones, gonial angle, chin).\n- TORSO or BUST (add when shoulders or chest are visible): shoulder line, clavicle line and pit of the neck, the head-to-neck-to-shoulder offset, and the tilt of ribcage and pelvis if visible.\n- FULL FIGURE (add when the whole body is visible): a gesture line, a plumb line from the pit of the neck to the ground, shoulder and hip lines with their tilts, and a head-unit scale along the side.\nColor code by type: horizontals (red), plumb verticals (blue), tilt/angle axes (green), landmarks and intervals (yellow). Put small numbers on lines where they are needed. Do not use any other text in the image. Keep lines thin enough that they do not hide the form.\n\nTEXT REPORT (with Image B)\nGive me (1) a legend that matches the numbers and colors, and (2) a short checklist of the key relationships I should check against my canvas, with approximate values, for example: \"eye line tilts about 3° down toward the viewer's right\", \"right mouth corner falls under the right pupil, left falls slightly inside the left pupil\", \"nose-base to chin is about 0.9 of brow to nose-base\". Say which values are measured from the reference and which are inferred."
+      }
+    ],
+    "modifiedAt": "2026-10-27T14:47:23.433Z",
+    "customOrder": 34
+  },
+  {
     "id": "wallpaper-artwork-extension",
     "title": "Extend Panoramic Scene",
     "description": "Extends hand-painted wallpaper into a seamless wider panel.",
