@@ -264,6 +264,7 @@ final class QuickDictateController: ObservableObject {
         levels = []
         elapsed = 0
         liveText = ""
+        lastText = nil
         lastTake = nil
         phase = .listening(handsFree: handsFree)
         if handsFree { recognizer.adoptHandsFree() }
@@ -349,10 +350,17 @@ final class QuickDictateController: ObservableObject {
             scheduleHide(after: note == nil ? .seconds(2.5) : .seconds(5))
         } catch {
             guard run == runID else { return }
-            session.newSession()
-            phase = .failed(error.localizedDescription)
-            scheduleHide(after: .seconds(6))
+            preservePreviewAfterFailure(liveText, message: error.localizedDescription)
         }
+    }
+
+    func preservePreviewAfterFailure(_ preview: String, message: String) {
+        let recovered = preview.trimmingCharacters(in: .whitespacesAndNewlines)
+        lastText = recovered.isEmpty ? nil : recovered
+        lastTake = recovered.isEmpty ? nil : DictateTake(transcript: recovered, status: .ready)
+        session.newSession()
+        phase = .failed(recovered.isEmpty ? message : "Dictation failed — preview preserved. Copy or open in Dictate.")
+        if recovered.isEmpty { scheduleHide(after: .seconds(6)) }
     }
 
     /// The selected prompt's text, or nil for Raw.
@@ -396,8 +404,11 @@ final class QuickDictateController: ObservableObject {
             .store(in: &cancellables)
         session.$takes
             .sink { [weak self] takes in
-                guard let self, case .listening = self.phase else { return }
-                self.liveText = takes.last?.transcript ?? ""
+                guard let self else { return }
+                guard self.phase.isActive else { return }
+                if let text = takes.last?.transcript, !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    self.liveText = text
+                }
             }
             .store(in: &cancellables)
         // Capture failures (mic denied, missing key) surface before any take exists.
@@ -443,6 +454,7 @@ final class QuickDictateController: ObservableObject {
         if hovering {
             hideTask?.cancel()
         } else if !phase.isActive, phase != .idle {
+            if case .failed = phase, lastText != nil { return }
             scheduleHide(after: .seconds(2))
         }
     }

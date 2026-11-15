@@ -345,6 +345,9 @@ private struct QuickDictateCard: View {
                     Spacer(minLength: 8)
                     parts.resultActions
                 }
+                if let text = controller.lastText, !text.isEmpty {
+                    transcript(text, placeholder: "", lines: 4)
+                }
             }
         }
         .padding(EdgeInsets(top: 14, leading: 16, bottom: 12, trailing: 16))

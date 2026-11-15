@@ -90,6 +90,11 @@ body {
 
 .header-actions { display: flex; align-items: center; gap: var(--space-md); }
 
+body.controls-floating .header-logo-text { display: none; }
+body.controls-floating:not(.private-vault-page) .header-top .quick-links,
+body.controls-floating:not(.private-vault-page) .header-top .quick-link-btn,
+body.controls-floating:not(.private-vault-page) #adminButton { display: none; }
+
 .vault-link {
     flex: 0 0 auto;
     width: 32px;
@@ -200,6 +205,9 @@ wy-button:not(:defined) {
     z-index: 1;
     background: var(--paper);
     transition: margin-top var(--dur-1) var(--ease);
+}
+.controls-bar[data-scrolled] ~ .prompt-area {
+    margin-top: calc(-1 * var(--wy-controls-bar-height, 64px));
 }
 
 /* ============================== GRID ============================== */
@@ -1000,6 +1008,7 @@ mark {
         transition: max-height var(--dur-2) var(--ease), opacity var(--dur-1) var(--ease);
     }
     .controls-bar.show            { display: block; max-height: none; opacity: 1; }
+    .controls-bar[data-scrolled]  { overflow: visible; }
     .controls-bar                 { --wy-controls-bar-padding: var(--space-sm) 16px; }
 
     .search-hint  { display: none; }
@@ -1078,284 +1087,4 @@ mark {
 
     .variable-count-badge.hidden { display: none; }
     .card-image                  { display: none; }
-}
-
-/* ============================== PHONE LIBRARY (<=640px) ============================== */
-
-@media (max-width: 640px) {
-    /* Design tokens without a local equivalent (Editorial Glass canvas values) */
-    :root {
-        --eg-fill: #e8e8e3;
-        --eg-glass: rgb(255 255 255 / 80%);
-        --eg-accent: #253122;
-        --eg-radius-lg: 18px;
-        --eg-radius-md: 11px;
-    }
-
-    /* No top header on the library screen; the floating pill replaces it */
-    body:not(.private-vault-page) .page-wrapper > .header-top { display: none; }
-
-    /* The document scrolls: no bounded inner scroller, rows pass under the bottom pill */
-    .page-wrapper { height: auto; min-height: 100%; }
-    .main-content { overflow: clip; padding-bottom: 0; }
-    .main-container { height: auto; }
-
-    .controls-bar {
-        padding: 0;
-        background: transparent;
-        --wy-controls-bar-padding: 0;
-    }
-
-    .prompt-area {
-        flex: none;
-        overflow: visible;
-        padding-top: var(--s-2);
-    }
-
-    /* Paper rows: no raised sheet; hairline rules between rows, 16px gutters */
-    .view-grid .prompt-grid {
-        display: flex;
-        flex-direction: column;
-        gap: 0;
-        margin: 0;
-        padding: 0 16px calc(112px + env(safe-area-inset-bottom, 0px));
-        background: none;
-        border-radius: 0;
-    }
-
-    .prompt-card {
-        display: flex;
-        align-items: flex-start;
-        gap: 16px;
-        position: relative;
-        padding: 16px 0;
-        background: transparent;
-    }
-
-    .prompt-card + .prompt-card { border-top: var(--hair) solid var(--paper-edge); }
-
-    .prompt-card .card-thumbnail {
-        flex: 0 0 88px;
-        width: 88px;
-        height: 88px;
-        margin: 0;
-        max-height: none;
-        aspect-ratio: auto;
-        border-radius: var(--eg-radius-md);
-        background: var(--paper-deep);
-        overflow: hidden;
-    }
-
-    .prompt-card .card-thumbnail img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .prompt-card .card-visibility-tools {
-        position: absolute;
-        top: 60px;
-        right: 8px;
-        z-index: 1;
-    }
-
-    .prompt-card .card-content {
-        flex: 1 1 auto;
-        min-width: 0;
-        padding: 0;
-    }
-
-    .prompt-card .card-title {
-        font-family: var(--ff-serif);
-        font-size: 22px;
-        line-height: 28px;
-        font-weight: 600;
-        letter-spacing: -0.01em;
-        margin: 0;
-    }
-
-    .prompt-card .card-description {
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        margin-top: 4px;
-        font-size: 15px;
-        line-height: 22px;
-        letter-spacing: -0.2px;
-        color: var(--ink-mute);
-    }
-}
-
-/* ==========================================================================
-   DESKTOP — EDITORIAL GLASS (viewport above 640px)
-   Values from the Editorial Glass canvas tokens.css; scoped as --eg-* because
-   the local tokens differ. Appended last so these rules win ties over the
-   earlier desktop rules in this file and in components.css.
-   ========================================================================== */
-@media (min-width: 641px) {
-    :root {
-        --eg-surface-paper: #f5f5f2;
-        --eg-surface-raised: #ffffff;
-        --eg-surface-fill: #e8e8e3;
-        --eg-surface-glass: #ffffffcc;
-        --eg-ink: #1c1d1a;
-        --eg-ink-muted: #66695f;
-        --eg-accent: #253122;
-        --eg-accent-ink: #ffffff;
-        --eg-radius-md: 11px;
-        --eg-radius-lg: 18px;
-        --eg-font-display: "Playfair Display", Georgia, "Times New Roman", serif;
-        --eg-font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-    }
-
-    body,
-    .prompt-area { background-color: var(--eg-surface-paper); }
-
-    /* Private vault keeps its glass header bar */
-    body.private-vault-page .page-wrapper > .header-top {
-        width: min(1440px, calc(100% - 48px));
-        margin: 16px auto 0;
-        top: 16px;
-        min-height: 56px;
-        padding: 8px 12px 8px 24px;
-        border: 0;
-        border-radius: var(--eg-radius-lg);
-        background: var(--eg-surface-glass);
-        -webkit-backdrop-filter: blur(24px) saturate(160%);
-        backdrop-filter: blur(24px) saturate(160%);
-        color: var(--eg-ink);
-    }
-    .header-logo-text {
-        font-family: var(--eg-font-display);
-        font-style: normal;
-        font-weight: 600;
-        font-size: 22px;
-        line-height: 28px;
-        color: var(--eg-ink);
-    }
-    /* Index: the floating pill replaces the top bar; links, lock and admin move to a footer strip */
-    body:not(.private-vault-page) .page-wrapper > .header-top {
-        order: 1;
-        position: static;
-        padding: 16px 24px 24px;
-        justify-content: flex-end;
-        border-bottom: 0;
-        background: transparent;
-        color: var(--eg-ink);
-    }
-    body:not(.private-vault-page) .header-top .quick-links { display: flex; }
-    body:not(.private-vault-page) .main-content { padding-bottom: 0; }
-
-    .page-wrapper > .header-top .quick-link-btn {
-        font-family: var(--eg-font-sans);
-        font-size: 14px;
-        font-weight: 400;
-        line-height: 20px;
-        letter-spacing: -0.2px;
-        text-transform: none;
-        color: var(--eg-ink);
-    }
-    .page-wrapper > .header-top .quick-link-btn:hover { border-bottom-color: transparent; opacity: 0.7; }
-    .vault-link {
-        width: 36px;
-        height: 36px;
-        border: 0;
-        background: var(--eg-surface-fill);
-        color: var(--eg-ink);
-    }
-    .vault-link:hover,
-    .vault-link:focus-visible { border-color: transparent; }
-
-    /* The floating pill (components.css) replaces the tools row; the grid clears it */
-    .controls-bar {
-        padding: 0;
-        background-color: transparent;
-    }
-    body:not(.private-vault-page) .prompt-area { padding-top: 104px; }
-
-    /* Prompt grid: uniform tiles, 4 columns */
-    .view-grid .prompt-grid,
-    .prompt-grid {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        grid-auto-rows: auto;
-        grid-auto-flow: row;
-        gap: 20px;
-        width: 100%;
-        max-width: 1440px;
-        margin: 0 auto;
-        padding: 0 24px 96px;
-        box-sizing: border-box;
-        background: none;
-        background-clip: border-box;
-    }
-    @media (min-width: 641px) and (max-width: 1068px) {
-        .view-grid .prompt-grid,
-        .prompt-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    }
-    @media (min-width: 641px) and (max-width: 833px) {
-        .view-grid .prompt-grid,
-        .prompt-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-    }
-
-    .prompt-grid > .prompt-card,
-    .prompt-grid > .prompt-card:not(.has-image):not([data-has-image="true"]) {
-        display: grid;
-        grid-template-rows: auto 1fr;
-        gap: 12px;
-        align-self: stretch;
-        height: auto;
-        padding: 12px;
-        background: var(--eg-surface-raised);
-        border: 0;
-        border-radius: var(--eg-radius-lg);
-        opacity: 1;
-    }
-    .prompt-grid > .prompt-card:hover,
-    .prompt-grid > .prompt-card:active { opacity: 1; }
-
-    .prompt-grid .card-thumbnail {
-        aspect-ratio: 4 / 3;
-        margin: 0;
-        border-radius: var(--eg-radius-md);
-        background-color: var(--eg-surface-fill);
-    }
-
-    /* Glass control over the image */
-    .prompt-grid .card-visibility-tools { top: 20px; right: 20px; }
-    .prompt-grid .prompt-hidden-toggle {
-        width: 36px;
-        height: 36px;
-        border: 0;
-        background: var(--eg-surface-glass);
-        color: var(--eg-ink);
-        -webkit-backdrop-filter: blur(24px) saturate(160%);
-        backdrop-filter: blur(24px) saturate(160%);
-    }
-    .prompt-grid .prompt-hidden-toggle:hover { background: var(--eg-surface-raised); border: 0; }
-
-    .prompt-grid .card-content {
-        gap: 0;
-        padding: 4px 4px 8px;
-    }
-    .prompt-grid .card-title {
-        font-family: var(--eg-font-display);
-        font-size: 22px;
-        line-height: 28px;
-        font-weight: 600;
-        letter-spacing: -0.01em;
-        margin: 0;
-        color: var(--eg-ink);
-    }
-    .prompt-grid .card-description {
-        max-width: none;
-        margin: 8px 0 0;
-        font-family: var(--eg-font-sans);
-        font-size: 14px;
-        line-height: 20px;
-        letter-spacing: -0.01em;
-        color: var(--eg-ink-muted);
-    }
-    .prompt-grid .card-footer { display: none; }
 }

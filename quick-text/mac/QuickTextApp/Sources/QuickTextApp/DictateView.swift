@@ -370,7 +370,9 @@ struct DictateView: View {
                 takeBody(index: index, take: take)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .fixedSize(horizontal: false, vertical: true)
         }
+        .fixedSize(horizontal: false, vertical: true)
         .padding(EdgeInsets(top: 16, leading: 14, bottom: 18, trailing: 20))
         .background(RoundedRectangle(cornerRadius: Theme.Radius.tile).fill(Theme.bgTile))
         .overlay(RoundedRectangle(cornerRadius: Theme.Radius.tile).strokeBorder(border, lineWidth: 1))
@@ -509,6 +511,7 @@ struct DictateView: View {
                     Text(interim)
                         .font(ThemeFont.serif(19))
                         .lineSpacing(7)
+                        .fixedSize(horizontal: false, vertical: true)
                         .foregroundStyle(Theme.textPrimary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .accessibilityLabel("Take \(index + 1) live transcript")
@@ -1032,6 +1035,7 @@ struct AutoHeightTextView: NSViewRepresentable {
         var parent: AutoHeightTextView
         var lastSignature: AppliedStyle?
         var lastWidth: CGFloat = 0
+        private var measurementRevision = 0
 
         init(_ parent: AutoHeightTextView) { self.parent = parent }
 
@@ -1059,9 +1063,14 @@ struct AutoHeightTextView: NSViewRepresentable {
         func adoptMeasured(_ capped: CGFloat, width: CGFloat) {
             let widthChanged = abs(width - lastWidth) >= 1
             lastWidth = width
+            measurementRevision += 1
+            let revision = measurementRevision
             guard widthChanged || AutoHeightTextView.heightNeedsUpdate(old: parent.$contentHeight.wrappedValue, new: capped) else { return }
-            let binding = parent.$contentHeight
-            DispatchQueue.main.async { binding.wrappedValue = capped }
+            DispatchQueue.main.async { [weak self] in
+                guard let self, self.measurementRevision == revision else { return }
+                guard AutoHeightTextView.heightNeedsUpdate(old: self.parent.contentHeight, new: capped) else { return }
+                self.parent.contentHeight = capped
+            }
         }
     }
 }

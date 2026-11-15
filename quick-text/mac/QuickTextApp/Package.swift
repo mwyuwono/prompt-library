@@ -10,7 +10,8 @@ let package = Package(
     dependencies: [],
     targets: [
         .executableTarget(
-            name: "QuickTextApp"
+            name: "QuickTextApp",
+            resources: [.process("Resources")]
         ),
         // @testable import of an executable target works on Apple platforms'
         // toolchains (SwiftPM, macOS) — **verify** on this project's toolchain;

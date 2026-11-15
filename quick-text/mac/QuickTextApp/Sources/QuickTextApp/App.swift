@@ -97,6 +97,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var hotKeyRef: EventHotKeyRef?
     private var dictateHotKeyRef: EventHotKeyRef?
     private var eventHandler: EventHandlerRef?
+    private let rightCommandTap = RightCommandDoubleTapMonitor()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.regular)
@@ -105,6 +106,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         _ = DictateStatsStore.shared
         registerHotKey()
         quickDictate.refreshTriggerMonitor()
+        rightCommandTap.onDoubleTap = { AppDelegate.openWindow() }
+        rightCommandTap.refresh()
     }
 
     func applicationWillTerminate(_ notification: Notification) {
@@ -114,6 +117,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     /// Picks up an Input Monitoring grant made while the app was in the background.
     func applicationDidBecomeActive(_ notification: Notification) {
         quickDictate.refreshTriggerMonitor()
+        rightCommandTap.refresh()
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {

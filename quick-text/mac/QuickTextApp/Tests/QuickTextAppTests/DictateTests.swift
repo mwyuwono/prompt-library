@@ -9,6 +9,32 @@ import SwiftUI
 //  take joining, and Gemini response parsing.
 final class DictateTests: XCTestCase {
 
+    @MainActor func testRecognizedPreviewOverridesSilenceGate() {
+        let session = DictateSession()
+        session.recordingElapsed = 0
+        session.peakRecordingLevel = 0
+        session.takes = [DictateTake(transcript: "Words already recognized", status: .recording)]
+        XCTAssertTrue(session.currentTakeHasSpeech)
+        session.takes[0].transcript = "  \n"
+        XCTAssertFalse(session.currentTakeHasSpeech)
+        session.recordingElapsed = 1
+        session.peakRecordingLevel = 0.5
+        XCTAssertTrue(session.currentTakeHasSpeech)
+    }
+
+    @MainActor func testFailedQuickDictationPreservesPreviewForDictate() {
+        let controller = QuickDictateController()
+        let mainSession = DictateSession()
+        controller.mainSessionProvider = { mainSession }
+        controller.preservePreviewAfterFailure("  Captured words  ", message: "Failed")
+        XCTAssertEqual(controller.lastText, "Captured words")
+        controller.openInDictate()
+        XCTAssertEqual(mainSession.takes.last?.transcript, "Captured words")
+        XCTAssertEqual(mainSession.resultText, "Captured words")
+        controller.preservePreviewAfterFailure("  ", message: "Failed")
+        XCTAssertNil(controller.lastText)
+    }
+
     private func tempDir() throws -> URL {
         let dir = FileManager.default.temporaryDirectory
             .appendingPathComponent("dictate-tests-\(UUID().uuidString)", isDirectory: true)
@@ -1353,6 +1379,26 @@ final class DictateTests: XCTestCase {
             return
         }
         XCTAssertEqual(box.value ?? -1, measured, accuracy: 0.5)
+    }
+
+    @MainActor
+    func testCoordinatorDiscardsStaleQueuedHeight() async {
+        final class PinBox { var value: CGFloat? = 100 }
+        let box = PinBox()
+        let parent = AutoHeightTextView(
+            text: .constant(""),
+            contentHeight: Binding(get: { box.value }, set: { box.value = $0 }),
+            font: NSFont.systemFont(ofSize: 19), lineSpacing: 7,
+            textColor: .primary, caretColor: .accentColor, selectionColor: .accentColor,
+            accessibilityLabel: "Take 1 transcript", colorScheme: .light)
+        let coordinator = AutoHeightTextView.Coordinator(parent)
+        coordinator.adoptMeasured(200, width: 300)
+        coordinator.adoptMeasured(100, width: 300)
+        await Task.yield()
+        let settled = expectation(description: "queued measurements processed")
+        DispatchQueue.main.async { settled.fulfill() }
+        await fulfillment(of: [settled], timeout: 2)
+        XCTAssertEqual(box.value, 100)
     }
 
     // MARK: - Failed-take audio recovery

@@ -22,7 +22,6 @@ struct TileView: View {
     var opensCard: Bool = false
     var onActivate: () -> Void = {}
     var onToggleFavorite: () -> Void = {}
-    var onCopy: () -> Void = {}
     @State private var isHovering = false
 
     private var showsFooter: Bool { isHovering || isSelected }
@@ -61,12 +60,6 @@ struct TileView: View {
             .padding(.trailing, 8)
             .opacity(phrase.favorite || showsFooter ? 1 : 0)
         }
-        .overlay(alignment: .bottom) {
-            if showsFooter {
-                footer
-                    .transition(.opacity)
-            }
-        }
         .onHover { isHovering = $0 }
         .animation(reduceMotion ? nil : Theme.Motion.hover, value: showsFooter)
     }
@@ -104,35 +97,9 @@ struct TileView: View {
         }
         .padding(.horizontal, 22)
         .padding(.top, 20)
-        .padding(.bottom, showsFooter ? 16 + 30 + 10 : 20)
+        .padding(.bottom, 20)
         .frame(maxWidth: .infinity, alignment: .topLeading)
         .frame(minHeight: Theme.tileHeight, alignment: .topLeading)
-    }
-
-    private var footer: some View {
-        HStack {
-            Button(action: onCopy) {
-                HStack(spacing: 6) {
-                    Image(systemName: "doc.on.doc")
-                        .font(.system(size: 11, weight: .semibold))
-                    Text("Copy")
-                }
-            }
-            .buttonStyle(AccentButtonStyle(height: 30, fontSize: 12))
-            .accessibilityLabel("Copy \(title)")
-
-            Spacer()
-
-            HStack(spacing: 6) {
-                KeyCap(text: opensCard ? "Space" : "↩")
-                Text(opensCard ? "Open" : "Copy")
-            }
-            .font(.system(size: 11.5))
-            .foregroundStyle(Theme.textTertiary)
-            .accessibilityHidden(true)
-        }
-        .padding(.horizontal, 22)
-        .padding(.bottom, 16)
     }
 
     private var accessibilityState: String {

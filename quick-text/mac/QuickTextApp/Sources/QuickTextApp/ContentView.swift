@@ -734,8 +734,7 @@ struct ContentView: View {
             isCopied: store.copiedPhraseID == phrase.id && store.expandedPhraseID == nil,
             opensCard: true,
             onActivate: { activate(phrase) },
-            onToggleFavorite: { store.toggleFavorite(phrase) },
-            onCopy: { select(phrase); store.copy(phrase) }
+            onToggleFavorite: { store.toggleFavorite(phrase) }
         )
         .id(phrase.id)
         .simultaneousGesture(TapGesture(count: 2).onEnded { open(phrase) })

@@ -67,8 +67,6 @@ export class WyLinksModal extends LitElement {
     requestAnimationFrame(() => {
       const closeButton = this.querySelector('.close-button');
       if (closeButton) {
-        // Flush styles first: the overlay leaves visibility:hidden only once [open] is applied.
-        void closeButton.offsetHeight;
         closeButton.focus();
       }
     });
@@ -87,34 +85,26 @@ export class WyLinksModal extends LitElement {
   render() {
     return html`
       <div class="modal-overlay" @click="${this._handleOverlayClick}">
-        <div
-          class="modal-container"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="wy-links-modal-title"
-          @click="${this._handleContainerClick}"
-        >
-          <span class="handle" aria-hidden="true"></span>
+        <div class="modal-container" @click="${this._handleContainerClick}">
+          <button 
+            class="close-button" 
+            @click="${this._handleClose}"
+            aria-label="Close modal"
+          >
+            <span class="material-symbols-outlined">close</span>
+          </button>
+          
           <div class="modal-content">
             <div class="title-wrapper">
-              <h1 class="modal-title" id="wy-links-modal-title">${this.title}</h1>
-              <button
-                class="close-button"
-                type="button"
-                @click="${this._handleClose}"
-                aria-label="Close modal"
-              >
-                <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
-              </button>
+              <h1 class="modal-title">${this.title}</h1>
             </div>
-
+            
             <div class="sections-container">
               ${this.showPaletteEntry ? html`
                 <div class="palette-entry-section">
-                  <h2 class="section-header section-header--mobile">Tools</h2>
-                  <button class="link-chip palette-entry-btn" @click="${this._handlePaletteClick}" aria-label="Open color palettes">
-                    <svg class="palette-entry-btn__icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3a9 9 0 0 0 0 18c1.1 0 1.6-.8 1.4-1.6-.3-1.2.5-2.4 1.8-2.4H18a3 3 0 0 0 3-3c0-4.9-4-9-9-9Z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7.5" r="1"/><circle cx="14.5" cy="7.5" r="1"/></svg>
-                    <span class="link-chip__label">Color palettes</span>
+                  <button class="palette-entry-btn" @click="${this._handlePaletteClick}" aria-label="Open color palettes">
+                    <span class="material-symbols-outlined">palette</span>
+                    Color Palettes
                   </button>
                 </div>
               ` : ''}
@@ -218,7 +208,7 @@ export class WyLinksModal extends LitElement {
         @click="${(e) => this._handleLinkClick(e, link)}"
         aria-label="Open ${link.name}"
       >
-        <span class="link-chip__label">${link.name}</span>
+        ${link.name}
       </button>
     `;
   }

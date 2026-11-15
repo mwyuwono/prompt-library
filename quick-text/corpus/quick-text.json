@@ -1028,6 +1028,26 @@
       "updatedAt" : "2026-10-15T18:11:23Z",
       "value" : "I’ll proceed in a new chat. Prepare a handoff file in the project's working directory (or scratchpad). Include: objective, status, relevant context, constraints, decisions, open issues, and next steps. Be dense and factual—zero narrative. Only include details absent from files, git history, or memory. Flag unverified items.\n\nReply with a resume prompt inside a code block (max 3 lines) containing the file path. This prompt must instruct the new session to read the file, verify its claims against the current state, and execute.\n\nIf possible, copy the resume prompt to my clipboard and let me know its ready for me to paste. ",
       "visibility" : "public"
+    },
+    {
+      "categoryId" : "prompt-reuse",
+      "createdAt" : "2026-10-21T15:36:24Z",
+      "favorite" : false,
+      "id" : "phrase-DFF7F5B7-876D-4D50-9D85-DE2F4CA6BC53",
+      "summary" : "Delegate this task to a background agent.",
+      "tags" : [
+
+      ],
+      "textReplacement" : {
+        "lastSyncedAt" : "2026-11-10T21:14:01Z",
+        "lastSyncedValue" : "If appropriate, delegate to one or more background agents. Choose the model by weighing cost against quality: use a cheaper model for routine, well-scoped work, and reserve a more expensive model for tasks that genuinely need its capability. Don’t default to the most expensive model when a smaller one can complete the task correctly.",
+        "shortcut" : "xbg",
+        "syncEnabled" : true
+      },
+      "title" : "Use Background Agent",
+      "updatedAt" : "2026-11-10T17:13:28Z",
+      "value" : "If appropriate, delegate to one or more background agents. Choose the model by weighing cost against quality: use a cheaper model for routine, well-scoped work, and reserve a more expensive model for tasks that genuinely need its capability. Don’t default to the most expensive model when a smaller one can complete the task correctly.",
+      "visibility" : "public"
     }
   ],
   "settings" : {
@@ -1047,6 +1067,7 @@
       "xattach",
       "xaudio",
       "xbfwf",
+      "xbg",
       "xblock",
       "xcomp",
       "xcontext",
@@ -1077,9 +1098,9 @@
       "xtune"
     ],
     "paletteSource" : "Robert Brown Fabric Collection",
-    "textReplacementLastSyncAt" : "2026-10-15T19:42:12Z"
+    "textReplacementLastSyncAt" : "2026-11-10T21:14:01Z"
   },
-  "updatedAt" : "2026-10-15T19:42:12Z",
+  "updatedAt" : "2026-11-10T21:14:01Z",
   "variables" : [
     {
       "id" : "var-1783398724430",

@@ -637,7 +637,8 @@ final class DictateSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
 
     /// Whether the in-flight take plausibly contains speech.
     var currentTakeHasSpeech: Bool {
-        recordingElapsed >= Self.minimumSpeechDuration && peakRecordingLevel >= Self.speechLevelThreshold
+        let recognizedText = takes.last?.transcript?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        return !recognizedText.isEmpty || (recordingElapsed >= Self.minimumSpeechDuration && peakRecordingLevel >= Self.speechLevelThreshold)
     }
 
     // MARK: - Transcription

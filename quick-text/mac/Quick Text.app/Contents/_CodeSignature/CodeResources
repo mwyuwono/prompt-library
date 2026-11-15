@@ -18,7 +18,11 @@
 		</data>
 		<key>Resources/QuickText.icns</key>
 		<data>
-		Bcqp6/+RdjxIM0skJt1hCzYUhos=
+		j2YvgbPKeq8Y7baKDTr8GUMRbFA=
+		</data>
+		<key>Resources/success.mp3</key>
+		<data>
+		5HaQ5U4CO/qcYsmPf+OnuYTIGZQ=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -48,7 +52,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			zRqheIP8+sHP8PZ3oLzRdmJXFT++frD0hmpITGIE7gM=
+			Q7fao5tPafuKPx8Ne80mN+qyg4f4D6shURWnF2tIsis=
+			</data>
+		</dict>
+		<key>Resources/success.mp3</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			T53Pym9RrsvBOqffcasyRhKiHINl9/om5XQR3HSKxck=
 			</data>
 		</dict>
 	</dict>

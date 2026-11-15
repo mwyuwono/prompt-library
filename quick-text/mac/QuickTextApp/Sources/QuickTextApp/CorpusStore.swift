@@ -375,6 +375,7 @@ final class CorpusStore: ObservableObject {
     private func copyText(_ text: String, feedbackFor phraseID: String, autoClose: Bool) {
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(text, forType: .string)
+        CopySound.play()
         recordUse(of: phraseID)
         copiedPhraseID = phraseID
         DispatchQueue.main.asyncAfter(deadline: .now() + Self.copyFeedbackDuration) { [weak self] in
