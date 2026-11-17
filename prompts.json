@@ -1,5 +1,26 @@
 [
   {
+    "customOrder": 10,
+    "id": "topic-interview",
+    "title": "Topic Interview",
+    "description": "Interviews you about a topic and summarizes your answers.",
+    "category": "Productivity",
+    "icon": "forum",
+    "slug": "topic-interview",
+    "image": "https://prompt-library-assets-009019643313.s3.amazonaws.com/prompt-previews/topic-interview-20261116.jpg",
+    "template": "Topic: {{topic}}\n\nInterview me to develop a comprehensive understanding of this topic.\n\nAsk one question at a time, adapting each question to my answers. Explore relevant context, goals, details, examples, constraints, and unresolved points. Ask follow-up questions when an answer needs clarification, and avoid repeating questions I’ve already answered.\n\nContinue the interview until I say I’m finished. Do not produce the final summary before then.\n\nWhen I say I’m finished, create a clear, organized summary based on everything I provided throughout the interview. Preserve important details and nuance. Distinguish my statements from any inferences, identify meaningful gaps or unresolved questions, and do not invent information.\n\nBegin with your first question.",
+    "variables": [
+      {
+        "name": "topic",
+        "label": "Topic",
+        "placeholder": "Enter the topic to explore",
+        "value": ""
+      }
+    ],
+    "featured": false,
+    "modifiedAt": "2026-11-16T15:38:57.103Z"
+  },
+  {
     "id": "audio-essay",
     "title": "Audio Essay",
     "description": "Creates audio-optimized essays from a topic, either as a two-step research workflow or as a simple one-shot essay prompt.",
