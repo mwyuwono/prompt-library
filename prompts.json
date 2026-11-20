@@ -876,12 +876,18 @@
     "category": "Writing",
     "icon": "music_note",
     "featured": false,
-    "template": "### Task\nAnnotate the provided text to match the specific musical performance style of a target artist.\n\n### Inputs\n\n**Artist:** {{artist}}\n\n**Lyrics to Process:** \"\"\"\n{{lyrics}}\n\"\"\"\n\n### Instructions\n\n**Style Header:** Begin with the sentence: \"In the style of the artist with first name [First Name] and last name [Last Name], who is known for...\" followed by a precise description of their cadence, delivery, and instrumentation.\n\n**Annotation:** Rewrite the provided lyrics, inserting detailed performance notes between lines and words. Capture the artist's specific quirks (e.g., vocal runs, spoken word sections, specific ad-libs, breathing patterns).\n\n### Strict Guardrails\n\nALL non-lyrical text (headers, cues, moods, ad-libs) MUST be inside square brackets [ ].\n\n**Example:** [Verse 1 - Fast Tempo] text text [Audible breath] text...\n\nDo not output any preamble or post-script conversation.\n",
+    "template": "### Task\nWrite a Suno-ready style description and annotated lyrics that match the musical performance style of a target artist and, if provided, a specific reference song.\n\n### Inputs\n\n**Artist:** {{artist}}\n\n**Reference Song:** {{songName}}\n\n**Lyrics to Process:** \"\"\"\n{{lyrics}}\n\"\"\"\n\n### Instructions\n\n**Style:** Write a precise description of the artist's cadence, vocal delivery, genre, tempo, mood, production, and instrumentation. If a reference song is provided, tailor the description to that song's specific sound rather than the artist's general catalog.\n\n**Annotated Lyrics:** Rewrite the provided lyrics, inserting detailed performance notes between lines and words. Capture the artist's specific quirks (e.g., vocal runs, spoken word sections, specific ad-libs, breathing patterns). The annotated lyrics, including all bracketed notes, must not exceed 4,000 characters. If needed, shorten or simplify annotations to stay within the limit; never cut lyrics.\n\n### Strict Guardrails\n\n- Never include the artist's name, the reference song's title, or any other artist, band, album, or song name anywhere in the output. Describe the sound only.\n- ALL non-lyrical text in the lyrics (section headers, cues, moods, ad-libs) MUST be inside square brackets [ ]. Example: [Verse 1 - Fast Tempo] text text [Audible breath] text...\n\n### Output Format\n\nOutput exactly two code blocks and nothing else:\n\n1. The style description.\n2. The annotated lyrics.\n\nDo not add headings, labels, explanations, preamble, or closing commentary outside the code blocks.\n",
     "variables": [
       {
         "name": "artist",
         "label": "Artist",
         "placeholder": "e.g., Freddie Mercury",
+        "value": ""
+      },
+      {
+        "name": "songName",
+        "label": "Reference Song (optional)",
+        "placeholder": "e.g., Bohemian Rhapsody",
         "value": ""
       },
       {
@@ -894,7 +900,7 @@
       }
     ],
     "slug": "song-creator-suno",
-    "modifiedAt": "2026-07-07T12:42:40-04:00",
+    "modifiedAt": "2026-11-20T03:49:17.035Z",
     "customOrder": 2
   },
   {
