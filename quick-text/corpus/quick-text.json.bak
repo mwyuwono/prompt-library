@@ -249,13 +249,14 @@
       "visibility" : "private"
     },
     {
-      "categoryId" : "prompt-reuse",
-      "createdAt" : "2026-07-02T21:07:02Z",
+      "categoryId" : "workflow-commands",
+      "createdAt" : "2026-11-16T05:01:16Z",
       "favorite" : false,
-      "id" : "prompt-reuse-llmsum",
-      "summary" : "Turns this session into a reusable workflow prompt",
+      "id" : "workflow-chat-handoff",
+      "summary" : "Summarizes a chat so work can continue in a new thread",
       "tags" : [
-        "llmsum"
+        "handoff",
+        "summary"
       ],
       "textReplacement" : {
         "lastSyncedAt" : "2026-09-23T00:19:25Z",
@@ -263,10 +264,10 @@
         "shortcut" : "xsum",
         "syncEnabled" : true
       },
-      "title" : "Make workflow reusable",
-      "updatedAt" : "2026-10-01T02:10:00Z",
-      "value" : "I want to turn this into a reusable workflow that is equally effective when used with different source material. Create an LLM-optimized meta-prompt that captures the effective instructions, constraints, decisions, and workflow patterns from this session so they can be reused in a new chat. Keep it generic and portable. Refer to external materials only with indirect labels such as \"the room image” or \"the artwork image,\" rather than specific filenames. Optimize for faithful replication of the setup.",
-      "visibility" : "public"
+      "title" : "Summarize chat for a new thread",
+      "updatedAt" : "2026-11-16T05:01:16Z",
+      "value" : "Create a self-contained handoff that I can paste into a new chat to continue this task. Write it directly for the assistant taking over.\n\nCapture the goal and current scope; essential background and facts; relevant requirements, preferences and constraints; decisions and their reasons when needed; work completed and its results; the current state; unresolved questions, uncertainties and blockers; and the specific next steps. Preserve details needed to continue accurately, including important wording, figures, and dependencies. Distinguish verified facts from assumptions and proposed or incomplete work. Omit tangents and avoid inventing missing information.\n\nRefer to provided materials only indirectly, using clear labels such as “the document,” “the subject,” “the image,” or “the reference material.” Do not include filenames, system paths, chat-specific labels, or environment-specific references. Explain what each necessary material contains and how it is used, and identify any material that must be provided again. If essential context is unavailable, say so rather than implying the handoff includes it.\n\nOutput only the handoff, organized for quick use in a new chat.",
+      "visibility" : "private"
     },
     {
       "categoryId" : "prompt-reuse",
@@ -507,7 +508,7 @@
       "createdAt" : "2026-07-02T21:52:52Z",
       "favorite" : true,
       "id" : "prompt-reuse-subjectagnostic-copy-1783029172",
-      "summary" : "Generalizes this chat into a reusable prompt",
+      "summary" : "Turns this chat into a reusable workflow prompt",
       "tags" : [
         "subjectagnostic"
       ],
@@ -516,8 +517,8 @@
         "syncEnabled" : true
       },
       "title" : "Turn a chat into a reusable prompt",
-      "updatedAt" : "2026-10-01T02:10:00Z",
-      "value" : "Convert this chat into a durable, reusable meta-prompt.\n\nExtract Core Mechanism: Retain the underlying task, transformations, style, tone, constraints, output format, and workflow that made the original prompt effective.\n\nAbstract Specifics: Replace all case-specific details (subjects, places, persons, objects, mediums) with clear variables and static anchors.\n\nPrevent Overfitting: Ensure the generalized prompt functions effectively when applied to entirely different subjects or use cases.\n\nProvide the meta prompt. ",
+      "updatedAt" : "2026-11-16T05:01:16Z",
+      "value" : "Turn this chat into a reusable prompt for a new chat. Capture the task, effective transformations, workflow, decisions, constraints, style, tone and output format needed to reproduce the result.\n\nDistinguish essential fixed instructions and anchors from details that should change. Replace case-specific subjects and inputs with clear variables or indirect labels such as “the image” or “the reference material”; retain details essential to the method. Avoid specific filenames and unnecessary assumptions. Make the prompt portable across suitable subjects and source materials without overfitting to this chat.\n\nOutput only the reusable prompt.",
       "visibility" : "private"
     },
     {
@@ -1039,14 +1040,14 @@
 
       ],
       "textReplacement" : {
-        "lastSyncedAt" : "2026-10-29T14:45:26Z",
-        "lastSyncedValue" : "Delegate to one or more background agents. Choose the model by weighing cost against quality: use a cheaper model for routine, well-scoped work, and reserve a more expensive model for tasks that genuinely need its capability. Don’t default to the most expensive model when a smaller one can complete the task correctly.",
+        "lastSyncedAt" : "2026-11-10T21:14:01Z",
+        "lastSyncedValue" : "If appropriate, delegate to one or more background agents. Choose the model by weighing cost against quality: use a cheaper model for routine, well-scoped work, and reserve a more expensive model for tasks that genuinely need its capability. Don’t default to the most expensive model when a smaller one can complete the task correctly.",
         "shortcut" : "xbg",
         "syncEnabled" : true
       },
       "title" : "Use Background Agent",
-      "updatedAt" : "2026-10-29T14:45:22Z",
-      "value" : "Delegate to one or more background agents. Choose the model by weighing cost against quality: use a cheaper model for routine, well-scoped work, and reserve a more expensive model for tasks that genuinely need its capability. Don’t default to the most expensive model when a smaller one can complete the task correctly.",
+      "updatedAt" : "2026-11-10T17:13:28Z",
+      "value" : "If appropriate, delegate to one or more background agents. Choose the model by weighing cost against quality: use a cheaper model for routine, well-scoped work, and reserve a more expensive model for tasks that genuinely need its capability. Don’t default to the most expensive model when a smaller one can complete the task correctly.",
       "visibility" : "public"
     }
   ],
@@ -1098,9 +1099,9 @@
       "xtune"
     ],
     "paletteSource" : "Robert Brown Fabric Collection",
-    "textReplacementLastSyncAt" : "2026-10-29T14:45:26Z"
+    "textReplacementLastSyncAt" : "2026-11-10T21:14:01Z"
   },
-  "updatedAt" : "2026-10-29T14:45:26Z",
+  "updatedAt" : "2026-11-10T21:14:01Z",
   "variables" : [
     {
       "id" : "var-1783398724430",
